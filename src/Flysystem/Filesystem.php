@@ -4,298 +4,297 @@ namespace Flysystem;
 
 class Filesystem
 {
-	/**
-	 * @var  AdapterInterface  $adapter
-	 */
-	protected $adapter;
+    /**
+     * @var  AdapterInterface  $adapter
+     */
+    protected $adapter;
 
-	/**
-	 * @var  CacheInterface  $cache
-	 */
-	protected $cache;
+    /**
+     * @var  CacheInterface  $cache
+     */
+    protected $cache;
 
-	/**
-	 * @var  string  $visibility
-	 */
-	protected $visibility;
+    /**
+     * @var  string  $visibility
+     */
+    protected $visibility;
 
-	/**
-	 * Constructor
-	 *
-	 * @param   AdapterInterface  $adapter
-	 * @param   CacheInterface    $cache
-	 */
-	public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = AdapterInterface::VISIBILITY_PUBLIC)
-	{
-		$this->adapter = $adapter;
-		$this->cache = $cache ?: new Cache\Memory;
-		$this->cache->load();
-		$this->visibility = $visibility;
-	}
+    /**
+     * Constructor
+     *
+     * @param AdapterInterface $adapter
+     * @param CacheInterface   $cache
+     */
+    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = AdapterInterface::VISIBILITY_PUBLIC)
+    {
+        $this->adapter = $adapter;
+        $this->cache = $cache ?: new Cache\Memory;
+        $this->cache->load();
+        $this->visibility = $visibility;
+    }
 
-	/**
-	 * Check wether a path exists
-	 *
-	 * @param   string   $path  path to check
-	 * @return  boolean  wether the path exists
-	 */
-	public function has($path)
-	{
-		if ($this->cache->has($path)) {
-			return true;
-		}
+    /**
+     * Check wether a path exists
+     *
+     * @param  string  $path path to check
+     * @return boolean wether the path exists
+     */
+    public function has($path)
+    {
+        if ($this->cache->has($path)) {
+            return true;
+        }
 
-		if ($this->cache->isComplete() or ($data = $this->adapter->has($path)) === false) {
-			return false;
-		}
+        if ($this->cache->isComplete() or ($data = $this->adapter->has($path)) === false) {
+            return false;
+        }
 
-		$this->cache->updateObject($path, $data === true ? [] : $data, true);
+        $this->cache->updateObject($path, $data === true ? [] : $data, true);
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Write a file
-	 *
-	 * @param   string   $path      path to file
-	 * @param   string   $contents  file contents
-	 * @throws  FileExistsException
-	 * @return  boolean  success boolean
-	 */
-	public function write($path, $contents, $visibility = null)
-	{
-		$this->assertAbsent($path);
+    /**
+     * Write a file
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
+    public function write($path, $contents, $visibility = null)
+    {
+        $this->assertAbsent($path);
 
+        if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+            return false;
+        }
 
-		if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
-			return false;
-		}
+        $this->cache->updateObject($path, $data, true);
+        $this->cache->ensureParentDirectories($path);
 
-		$this->cache->updateObject($path, $data, true);
-		$this->cache->ensureParentDirectories($path);
+        return true;
+    }
 
-		return true;
-	}
+    /**
+     * Update a file
+     *
+     * @param  string                $path     path to file
+     * @param  string                $contents file contents
+     * @throws FileNotFoundException
+     * @return boolean               success boolean
+     */
+    public function update($path, $contents)
+    {
+        $this->assertPresent($path);
+        $data = $this->adapter->update($path, $contents);
 
-	/**
-	 * Update a file
-	 *
-	 * @param   string   $path      path to file
-	 * @param   string   $contents  file contents
-	 * @throws  FileNotFoundException
-	 * @return  boolean  success boolean
-	 */
-	public function update($path, $contents)
-	{
-		$this->assertPresent($path);
-		$data = $this->adapter->update($path, $contents);
+        if ($data === false) {
+            return false;
+        }
 
-		if ($data === false) {
-			return false;
-		}
+        $this->cache->updateObject($path, $data, true);
 
-		$this->cache->updateObject($path, $data, true);
+        return true;
+    }
 
-		return true;
-	}
+    /**
+     * Write a file
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return string                file contents
+     */
+    public function read($path)
+    {
+        $this->assertPresent($path);
 
-	/**
-	 * Write a file
-	 *
-	 * @param   string  $path      path to file
-	 * @throws  FileNotFoundException
-	 * @return  string  file contents
-	 */
-	public function read($path)
-	{
-		$this->assertPresent($path);
+        if ($contents = $this->cache->read($path)) {
+            return $contents;
+        }
 
-		if ($contents = $this->cache->read($path)) {
-			return $contents;
-		}
+        if ( ! $data = $this->adapter->read($path)) {
+            return false;
+        }
 
-		if ( ! $data = $this->adapter->read($path)) {
-			return false;
-		}
+        $this->cache->updateObject($path, $data, true);
 
-		$this->cache->updateObject($path, $data, true);
+        return $data['contents'];
+    }
 
-		return $data['contents'];
-	}
+    /**
+     * Write a file
+     *
+     * @param  string                $path    path to file
+     * @param  string                $newpath new path
+     * @throws FileExistsException
+     * @throws FileNotFoundException
+     * @return boolean               success boolean
+     */
+    public function rename($path, $newpath)
+    {
+        $this->assertPresent($path);
+        $this->assertAbsent($newpath);
+        $this->cache->rename($path, $newpath);
 
-	/**
-	 * Write a file
-	 *
-	 * @param   string   $path      path to file
-	 * @param   string   $newpath   new path
-	 * @throws  FileExistsException
-	 * @throws  FileNotFoundException
-	 * @return  boolean  success boolean
-	 */
-	public function rename($path, $newpath)
-	{
-		$this->assertPresent($path);
-		$this->assertAbsent($newpath);
-		$this->cache->rename($path, $newpath);
+        return $this->adapter->rename($path, $newpath);
+    }
 
-		return $this->adapter->rename($path, $newpath);
-	}
+    /**
+     * Delete a file
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return boolean               success boolean
+     */
+    public function delete($path)
+    {
+        $this->assertPresent($path);
+        $this->cache->delete($path);
 
-	/**
-	 * Delete a file
-	 *
-	 * @param   string   $path      path to file
-	 * @throws  FileNotFoundException
-	 * @return  boolean  success boolean
-	 */
-	public function delete($path)
-	{
-		$this->assertPresent($path);
-		$this->cache->delete($path);
+        return $this->adapter->delete($path);
+    }
 
-		return $this->adapter->delete($path);
-	}
+    /**
+     * Delete a directory
+     *
+     * @param  string  $path path to directory
+     * @return boolean success boolean
+     */
+    public function deleteDir($dirname)
+    {
+        $this->cache->deleteDir($path);
 
-	/**
-	 * Delete a directory
-	 *
-	 * @param   string   $path      path to directory
-	 * @return  boolean  success boolean
-	 */
-	public function deleteDir($dirname)
-	{
-		$this->cache->deleteDir($path);
+        return $this->adapter->deleteDir($path);
+    }
 
-		return $this->adapter->deleteDir($path);
-	}
+    /**
+     * List the filesystem contents
+     *
+     * @return array contents
+     */
+    public function listContents()
+    {
+        if ($this->cache->isComplete()) {
+            return $this->cache->listContents();
+        }
 
-	/**
-	 * List the filesystem contents
-	 *
-	 * @return  array  contents
-	 */
-	public function listContents()
-	{
-		if ($this->cache->isComplete()) {
-			return $this->cache->listContents();
-		}
+        $contents = $this->adapter->listContents();
 
-		$contents = $this->adapter->listContents();
+        return $this->cache->storeContents($contents);
+    }
 
-		return $this->cache->storeContents($contents);
-	}
+    /**
+     * Get a file's mimetype
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return string                file mimetype
+     */
+    public function getMimetype($path)
+    {
+        $this->assertPresent($path);
 
-	/**
-	 * Get a file's mimetype
-	 *
-	 * @param   string  $path  path to file
-	 * @throws  FileNotFoundException
-	 * @return  string  file mimetype
-	 */
-	public function getMimetype($path)
-	{
-		$this->assertPresent($path);
+        if ($mimetype = $this->cache->getMimetype($path)) {
+            return $mimetype;
+        }
 
-		if ($mimetype = $this->cache->getMimetype($path)) {
-			return $mimetype;
-		}
+        if ( ! $data = $this->adapter->getMimetype($path)) {
+            return false;
+        }
 
-		if ( ! $data = $this->adapter->getMimetype($path)) {
-			return false;
-		}
+        $data = $this->cache->updateObject($path, $data, true);
 
-		$data = $this->cache->updateObject($path, $data, true);
+        return $data['mimetype'];
+    }
 
-		return $data['mimetype'];
-	}
+    public function getVisibility($path)
+    {
+        if ($visibility = $this->cache->getVisibility($path)) {
+            return $visibility;
+        }
 
-	public function getVisibility($path)
-	{
-		if ($visibility = $this->cache->getVisibility($path)) {
-			return $visibility;
-		}
+        if (($data = $this->adapter->getVisibility($path)) === false) {
+            return false;
+        }
 
-		if (($data = $this->adapter->getVisibility($path)) === false) {
-			return false;
-		}
+        $this->cache->updateObject($path, $data, true);
 
-		$this->cache->updateObject($path, $data, true);
+        return $data['visibility'];
+    }
 
-		return $data['visibility'];
-	}
+    public function setVisibility($path, $visibility)
+    {
+        if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
+            return false;
+        }
 
-	public function setVisibility($path, $visibility)
-	{
-		if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
-			return false;
-		}
+        $this->cache->updateObject($path, $data, true);
 
-		$this->cache->updateObject($path, $data, true);
+        return $data['visibility'];
+    }
 
-		return $data['visibility'];
-	}
+    public function getHandler($path)
+    {
+        $metadata = $this->getMetadata($path);
 
-	public function getHandler($path)
-	{
-		$metadata = $this->getMetadata($path);
+        return $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
+    }
 
-		return $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
-	}
+    /**
+     * Get a file's metadata
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return array                 file metadata
+     */
+    public function getMetadata($path)
+    {
+        $this->assertPresent($path);
 
-	/**
-	 * Get a file's metadata
-	 *
-	 * @param   string  $path  path to file
-	 * @throws  FileNotFoundException
-	 * @return  array  file metadata
-	 */
-	public function getMetadata($path)
-	{
-		$this->assertPresent($path);
+        if ($metadata = $this->cache->getMetadata($path)) {
+            return $metadata;
+        }
 
-		if ($metadata = $this->cache->getMetadata($path)) {
-			return $metadata;
-		}
+        if ( ! $metadata = $this->adapter->getMetadata($path)) {
+            return false;
+        }
 
-		if ( ! $metadata = $this->adapter->getMetadata($path)) {
-			return false;
-		}
+        $this->cache->updateObject($path, $metadata, true);
 
-		$this->cache->updateObject($path, $metadata, true);
+        return $metadata;
+    }
 
-		return $metadata;
-	}
+    public function flushCache()
+    {
+        $this->cache->flush();
 
-	public function flushCache()
-	{
-		$this->cache->flush();
+        return $this;
+    }
 
-		return $this;
-	}
+    /**
+     * Assert a file is present
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     */
+    protected function assertPresent($path)
+    {
+        if ( ! $this->has($path)) {
+            throw new FileNotFoundException($path);
+        }
+    }
 
-	/**
-	 * Assert a file is present
-	 *
-	 * @param   string  $path      path to file
-	 * @throws  FileNotFoundException
-	 */
-	protected function assertPresent($path)
-	{
-		if ( ! $this->has($path)) {
-			throw new FileNotFoundException($path);
-		}
-	}
-
-	/**
-	 * Assert a file is absent
-	 *
-	 * @param   string  $path      path to file
-	 * @throws  FileExistsException
-	 */
-	protected function assertAbsent($path)
-	{
-		if ($this->has($path)) {
-			throw new FileExistsException($path);
-		}
-	}
+    /**
+     * Assert a file is absent
+     *
+     * @param  string              $path path to file
+     * @throws FileExistsException
+     */
+    protected function assertAbsent($path)
+    {
+        if ($this->has($path)) {
+            throw new FileExistsException($path);
+        }
+    }
 }
