@@ -43,7 +43,7 @@ class Filesystem
 			return false;
 		}
 
-		$this->updateObject($path, $data === true ? [] : $data, true);
+		$this->cache->updateObject($path, $data === true ? [] : $data, true);
 
 		return true;
 	}

@@ -8,17 +8,17 @@ use Aws\Common\Enum\Region;
 include './vendor/autoload.php';
 
 
-// $client = S3Client::factory(array(
-// 	'key'    => 'AKIAIXAHCYKGCJGPTEIQ',
-// 	'secret' => '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',
-// 	'region' => Region::EU_WEST_1, //'eu-west-1',
-// ));
+$client = S3Client::factory(array(
+	'key'    => 'AKIAIXAHCYKGCJGPTEIQ',
+	'secret' => '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',
+	'region' => Region::EU_WEST_1, //'eu-west-1',
+));
 
 
-//$adapter = new Adapter\AwsS3($client, 'frenky.io-filemanager', null, ['ACL' => 'public-read']);
+$adapter = new Adapter\AwsS3($client, 'frenky.io-filemanager', null, ['ACL' => 'public-read']);
 $adapter = new Adapter\Local(__DIR__.'/resources');
-$cache = new Cache\Predis(null, 'flysystem.local');
-$cache->flush();
+$cache = new Cache\Predis(null, 'flysystem.aws');
+// $cache->flush();
 $filesystem = new Filesystem($adapter, $cache);
 
 echo json_encode($filesystem->listContents(), JSON_PRETTY_PRINT);

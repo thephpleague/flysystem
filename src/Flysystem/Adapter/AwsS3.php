@@ -103,6 +103,16 @@ class AwsS3 extends AbstractAdapter
 		return $this->getMetadata($path);
 	}
 
+	public function getSize($path)
+	{
+		return $this->getMetadata($path);
+	}
+
+	public function getTimestamp($path)
+	{
+		return $this->getMetadata($path);
+	}
+
 	public function listContents()
 	{
 		$result = $this->client->listObjects([
