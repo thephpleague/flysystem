@@ -1,0 +1,21 @@
+{
+    "name": "frenkynet/flysystem",
+    "description": "Filesystem abstraction, but easy.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frenky.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Flysystem": "src/"
+        }
+    },
+    "require-dev": {
+        "aws/aws-sdk-php": "~2.4.7",
+        "predis/predis": "~0.8.4",
+        "mockery/mockery": "~0.8.0"
+    }
+}
