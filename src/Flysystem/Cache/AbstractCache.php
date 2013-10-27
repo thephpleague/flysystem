@@ -107,13 +107,14 @@ abstract class AbstractCache implements CacheInterface
 			return $this->cache[$path]['mimetype'];
 		}
 
-		if ($contents = $this->read($path)) {
-			$mimetype = Util::contentMimetype($contents);
-
-			$this->cache[$path]['mimetype'] = $mimetype;
-
-			return compact('mimetype');
+		if ( ! $contents = $this->read($path)) {
+			return false;
 		}
+
+		$mimetype = Util::contentMimetype($contents);
+		$this->cache[$path]['mimetype'] = $mimetype;
+
+		return compact('mimetype');
 	}
 
 	public function getSize($path)
@@ -127,6 +128,13 @@ abstract class AbstractCache implements CacheInterface
 	{
 		if (isset($this->cache[$path]['mimetype'])) {
 			return $this->cache[$path]['mimetype'];
+		}
+	}
+
+	public function getVisibility($path)
+	{
+		if (isset($this->cache[$path]['visibility'])) {
+			return $this->cache[$path]['visibility'];
 		}
 	}
 

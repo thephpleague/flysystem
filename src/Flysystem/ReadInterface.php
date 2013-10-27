@@ -11,4 +11,5 @@ interface ReadInterface
 	public function getSize($path);
 	public function getMimetype($path);
 	public function getTimestamp($path);
+	public function getVisibility($path);
 }

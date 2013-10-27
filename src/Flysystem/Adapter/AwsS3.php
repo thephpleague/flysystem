@@ -4,6 +4,9 @@ namespace Flysystem\Adapter;
 
 use Aws\S3\S3Client;
 use Aws\S3\Exception\S3Exception;
+use Aws\S3\Enum\Group;
+use Aws\S3\Enum\Permission;
+use Flysystem\AdapterInterface;
 use Flysystem\Util;
 
 class AwsS3 extends AbstractAdapter
@@ -33,12 +36,13 @@ class AwsS3 extends AbstractAdapter
 		return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
 	}
 
-	public function write($path, $contents)
+	public function write($path, $contents, $visibility)
 	{
 		$options = $this->getOptions($path, [
 			'Body' => $contents,
 			'ContentType' => Util::contentMimetype($contents),
 			'ContentLength' => Util::contentSize($contents),
+			'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
 		]);
 
 		$this->client->putObject($options);
@@ -111,6 +115,35 @@ class AwsS3 extends AbstractAdapter
 	public function getTimestamp($path)
 	{
 		return $this->getMetadata($path);
+	}
+
+	public function getVisibility($path)
+	{
+		$options = $this->getOptions($path);
+		$result = $this->client->getObjectAcl($options)->getAll();
+
+		foreach ($result['Grants'] as $grant) {
+			if (isset($grant['Grantee']['URI']) and $grant['Grantee']['URI'] === Group::ALL_USERS) {
+				if ($grant['Permission'] !== Permission::READ) {
+					break;
+				}
+
+				return ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
+			}
+		}
+
+		return ['visibility' => AdapterInterface::VISIBILITY_PRIVATE];
+	}
+
+	public function setVisibility($path, $visibility)
+	{
+		$options = $this->getOptions($path, [
+			'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
+		]);
+
+		$this->client->putObjectAcl($options);
+
+		return compact('visibility');
 	}
 
 	public function listContents()

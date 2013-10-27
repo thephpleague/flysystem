@@ -8,11 +8,17 @@ use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Flysystem\Util;
+use Flysystem\AdapterInterface;
 
 class Local extends AbstractAdapter
 {
 	const TYPE_INFO= 'info';
 	const TYPE_PATH = 'path';
+
+	protected static $permissions = [
+		'public' => 0644,
+		'private' => 0600,
+	];
 
 	public function __construct($root)
 	{
@@ -31,7 +37,7 @@ class Local extends AbstractAdapter
 		return file_exists($this->prefix($path));
 	}
 
-	public function write($path, $contents)
+	public function write($path, $contents, $visibility)
 	{
 		$location = $this->prefix($path);
 
@@ -40,11 +46,12 @@ class Local extends AbstractAdapter
 		}
 
 		$size = file_put_contents($location, $contents, LOCK_EX);
+		$this->setVisibility($path, $visibility);
 
-		return array_merge($pathinfo, [
+		return [
 			'contents' => $contents,
 			'type' => 'file',
-		]);
+		];
 	}
 
 	public function update($path, $contents)
@@ -110,7 +117,24 @@ class Local extends AbstractAdapter
 
 	public function getTimestamp($path)
 	{
+		return $this->getMetadata($path);
+	}
 
+	public function getVisibility($path)
+	{
+		$location = $this->prefix($path);
+		$permissions = octdec(substr(sprintf('%o', fileperms($location)), -4));
+		$visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
+
+		return compact('visibility');
+	}
+
+	public function setVisibility($path, $visibility)
+	{
+		$location = $this->prefix($path);
+		chmod($location, static::$permissions[$visibility]);
+
+		return compact('visibility');
 	}
 
 	public function createDir($dirname)

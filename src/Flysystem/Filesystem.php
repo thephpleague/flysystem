@@ -15,16 +15,22 @@ class Filesystem
 	protected $cache;
 
 	/**
+	 * @var  string  $visibility
+	 */
+	protected $visibility;
+
+	/**
 	 * Constructor
 	 *
 	 * @param   AdapterInterface  $adapter
 	 * @param   CacheInterface    $cache
 	 */
-	public function __construct(AdapterInterface $adapter, CacheInterface $cache = null)
+	public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = AdapterInterface::VISIBILITY_PUBLIC)
 	{
 		$this->adapter = $adapter;
 		$this->cache = $cache ?: new Cache\Memory;
 		$this->cache->load();
+		$this->visibility = $visibility;
 	}
 
 	/**
@@ -39,7 +45,7 @@ class Filesystem
 			return true;
 		}
 
-		if ($this->cache->isComplete() or $data = $this->adapter->has($path) === false) {
+		if ($this->cache->isComplete() or ($data = $this->adapter->has($path)) === false) {
 			return false;
 		}
 
@@ -56,11 +62,12 @@ class Filesystem
 	 * @throws  FileExistsException
 	 * @return  boolean  success boolean
 	 */
-	public function write($path, $contents)
+	public function write($path, $contents, $visibility = null)
 	{
 		$this->assertAbsent($path);
 
-		if ( ! $data = $this->adapter->write($path, $contents)) {
+
+		if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
 			return false;
 		}
 
@@ -200,6 +207,32 @@ class Filesystem
 		$data = $this->cache->updateObject($path, $data, true);
 
 		return $data['mimetype'];
+	}
+
+	public function getVisibility($path)
+	{
+		if ($visibility = $this->cache->getVisibility($path)) {
+			return $visibility;
+		}
+
+		if (($data = $this->adapter->getVisibility($path)) === false) {
+			return false;
+		}
+
+		$this->cache->updateObject($path, $data, true);
+
+		return $data['visibility'];
+	}
+
+	public function setVisibility($path, $visibility)
+	{
+		if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
+			return false;
+		}
+
+		$this->cache->updateObject($path, $data, true);
+
+		return $data['visibility'];
 	}
 
 	public function getHandler($path)
