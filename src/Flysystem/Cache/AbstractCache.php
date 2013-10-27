@@ -121,8 +121,8 @@ abstract class AbstractCache implements CacheInterface
 
     public function getTimestamp($path)
     {
-        if (isset($this->cache[$path]['mimetype'])) {
-            return $this->cache[$path]['mimetype'];
+        if (isset($this->cache[$path]['timestamp'])) {
+            return $this->cache[$path]['timestamp'];
         }
     }
 

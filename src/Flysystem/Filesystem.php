@@ -218,6 +218,30 @@ class Filesystem
         return $data['mimetype'];
     }
 
+     /**
+     * Get a file's timestamp
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return string                file mimetype
+     */
+    public function getTimestamp($path)
+    {
+        $this->assertPresent($path);
+
+        if ($mimetype = $this->cache->getTimestamp($path)) {
+            return $mimetype;
+        }
+
+        if ( ! $data = $this->adapter->getTimestamp($path)) {
+            return false;
+        }
+
+        $data = $this->cache->updateObject($path, $data, true);
+
+        return $data['timestamp'];
+    }
+
     public function getVisibility($path)
     {
         if ($visibility = $this->cache->getVisibility($path)) {
@@ -231,6 +255,21 @@ class Filesystem
         $this->cache->updateObject($path, $data, true);
 
         return $data['visibility'];
+    }
+
+    public function getSize($path)
+    {
+        if ($visibility = $this->cache->getSize($path)) {
+            return $visibility;
+        }
+
+        if (($data = $this->adapter->getSize($path)) === false) {
+            return false;
+        }
+
+        $this->cache->updateObject($path, $data, true);
+
+        return $data['size'];
     }
 
     public function setVisibility($path, $visibility)

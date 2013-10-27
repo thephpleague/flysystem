@@ -16,6 +16,20 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		}
 	}
 
+	public function metaProvider()
+	{
+		$adapter = new Adapter\Local(__DIR__.'/files');
+		$cache = new Cache\Memory;
+		$filesystem = new Filesystem($adapter, $cache);
+
+		return [
+			[$filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int'],
+			[$filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string'],
+			[$filesystem, $adapter, $cache, 'getSize', 'size', 'int'],
+			[$filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string'],
+		];
+	}
+
 	public function testInstantiable()
 	{
 		$instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'files'), $cache = new Cache\Memory);
@@ -146,16 +160,18 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider filesystemProvider
+	 * @dataProvider metaProvider
 	 */
-	public function testGetMimetype($filesystem, $adapter, $cache)
+	public function testGetMimetype($filesystem, $adapter, $cache, $method, $key, $type)
 	{
 		$filesystem->write('this.txt', 'something');
-		$this->assertEquals('text/plain', $filesystem->getMimetype('this.txt'));
-		$cache->updateObject('this.txt', ['mimetype' => 'injected']);
-		$this->assertEquals('injected', $filesystem->getMimetype('this.txt'));
+		$value = $filesystem->{$method}('this.txt');
+		$this->assertInternalType($type, $value);
+		$cache->updateObject('this.txt', [$key => 'injected']);
+		$this->assertEquals('injected', $filesystem->{$method}('this.txt'));
 		$cache->flush();
-		$this->assertEquals('text/plain', $filesystem->getMimetype('this.txt'));
+		$this->assertEquals($value, $filesystem->{$method}('this.txt'));
 		$filesystem->delete('this.txt');
+		$cache->flush();
 	}
 }
