@@ -58,7 +58,7 @@ class Filesystem
 	 */
 	public function write($path, $contents)
 	{
-		$this->assertAbsent($newpath);
+		$this->assertAbsent($path);
 
 		if ( ! $data = $this->adapter->write($path, $contents)) {
 			return false;
