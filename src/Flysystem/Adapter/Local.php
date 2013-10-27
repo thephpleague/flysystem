@@ -12,9 +12,6 @@ use Flysystem\AdapterInterface;
 
 class Local extends AbstractAdapter
 {
-    const TYPE_INFO= 'info';
-    const TYPE_PATH = 'path';
-
     protected static $permissions = [
         'public' => 0644,
         'private' => 0000,
@@ -41,8 +38,8 @@ class Local extends AbstractAdapter
     {
         $location = $this->prefix($path);
 
-        if ($dirname = dirname($path) !== '.') {
-            $this->ensureDirectory($dirname);
+        if ( ! is_dir($dirname = dirname($location))) {
+            mkdir($dirname, 0777, true);
         }
 
         $size = file_put_contents($location, $contents, LOCK_EX);
@@ -81,9 +78,7 @@ class Local extends AbstractAdapter
 
     public function listContents()
     {
-        $paths = $this->directoryContents('', false);
-
-        return array_map([$this, 'getMetadata'], $paths);
+        return $this->directoryContents('', true);
     }
 
     public function getMetadata($path)
@@ -112,7 +107,7 @@ class Local extends AbstractAdapter
         $location = $this->prefix($path);
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
 
-        return $finfo->file($location);
+        return ['mimetype' => $finfo->file($location)];
     }
 
     public function getTimestamp($path)
@@ -150,14 +145,19 @@ class Local extends AbstractAdapter
 
     public function deleteDir($dirname)
     {
-        $contents = $this->directoryContents($dirname, static::TYPE_PATH);
+        $location = $this->prefix($dirname);
+        $contents = $this->directoryContents($dirname, true);
         $contents = array_reverse($contents);
 
         foreach ($contents as $file) {
-            $this->delete($file);
+            if ($file['type'] === 'file') {
+                unlink($location.DIRECTORY_SEPARATOR.$file['path']);
+            } else {
+                rmdir($location.DIRECTORY_SEPARATOR.$file['path']);
+            }
         }
 
-        return unlink($this->prefix($dirname));
+        return rmdir($location);
     }
 
     public function hasDir($dirname)
@@ -165,7 +165,7 @@ class Local extends AbstractAdapter
         return is_dir($this->prefix($dirname));
     }
 
-    protected function directoryContents($path = '', $info = self::TYPE_INFO)
+    protected function directoryContents($path = '', $info = true)
     {
         $result = [];
         $path = $this->prefix($path).DIRECTORY_SEPARATOR;

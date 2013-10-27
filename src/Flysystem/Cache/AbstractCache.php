@@ -71,7 +71,7 @@ abstract class AbstractCache implements CacheInterface
         unset($this->cache[$path]);
         $object['path'] = $newpath;
         $object = array_merge($object, Util::pathinfo($newpath));
-        $this->cache[$new] = $object;
+        $this->cache[$newpath] = $object;
 
         $this->autosave();
     }
@@ -109,7 +109,7 @@ abstract class AbstractCache implements CacheInterface
         $mimetype = Util::contentMimetype($contents);
         $this->cache[$path]['mimetype'] = $mimetype;
 
-        return compact('mimetype');
+        return $mimetype;
     }
 
     public function getSize($path)

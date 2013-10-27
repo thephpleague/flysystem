@@ -33,6 +33,16 @@ class Filesystem
         $this->visibility = $visibility;
     }
 
+    public function getAdapter()
+    {
+        return $this->adapter;
+    }
+
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
     /**
      * Check wether a path exists
      *
@@ -163,9 +173,9 @@ class Filesystem
      */
     public function deleteDir($dirname)
     {
-        $this->cache->deleteDir($path);
+        $this->cache->deleteDir($dirname);
 
-        return $this->adapter->deleteDir($path);
+        return $this->adapter->deleteDir($dirname);
     }
 
     /**
@@ -232,13 +242,6 @@ class Filesystem
         $this->cache->updateObject($path, $data, true);
 
         return $data['visibility'];
-    }
-
-    public function getHandler($path)
-    {
-        $metadata = $this->getMetadata($path);
-
-        return $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
     }
 
     /**

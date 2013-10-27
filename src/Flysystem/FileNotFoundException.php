@@ -12,11 +12,11 @@ class FileNotFoundException extends LogicException
     public function __construct($path, $code = 0, Exception $previous = null)
     {
         $this->path = $path;
-        parent::__construct('File not found at path: '.$path, $code, $previous);
+        parent::__construct('File not found at path: '.$this->getPath(), $code, $previous);
     }
 
     public function getPath()
     {
-        return $path;
+        return $this->path;
     }
 }
