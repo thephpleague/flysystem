@@ -29,6 +29,7 @@ namespace Flysystem {
 			$this->assertFalse($adapter->write('pleasefail.txt', 'content', 'public'));
 			$this->assertFalse($adapter->update('pleasefail.txt', 'content'));
 			$this->assertFalse($adapter->read('pleasefail.txt'));
+			$this->assertFalse($adapter->deleteDir('non-existing'));
 		}
 	}
 
