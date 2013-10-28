@@ -16,6 +16,7 @@
 	<filter>
 		<blacklist>
 			<directory suffix=".php">./vendor/</directory>
+			<directory suffix=".php">./tests/</directory>
 		</blacklist>
 	</filter>
 	<listeners>
