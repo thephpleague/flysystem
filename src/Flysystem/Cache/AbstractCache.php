@@ -13,9 +13,21 @@ abstract class AbstractCache implements CacheInterface
 
     public function __destruct()
     {
-        if (! $this->autosave) {
+        if ( ! $this->autosave) {
             $this->save();
         }
+    }
+
+    public function getAutosave()
+    {
+        return $this->autosave;
+    }
+
+    public function setAutosave($autosave)
+    {
+        $this->autosave = $autosave;
+
+        return $this;
     }
 
     public function storeContents(array $contents)
@@ -64,7 +76,7 @@ abstract class AbstractCache implements CacheInterface
     public function rename($path, $newpath)
     {
         if ( ! isset($this->cache[$path])) {
-            return;
+            return false;
         }
 
         $object = $this->cache[$path];
@@ -135,7 +147,7 @@ abstract class AbstractCache implements CacheInterface
 
     public function getMetadata($path)
     {
-        if (isset($this->cache[$path]['filename'])) {
+        if (isset($this->cache[$path]['type'])) {
             return $this->cache[$path];
         }
     }
@@ -153,18 +165,7 @@ abstract class AbstractCache implements CacheInterface
         return $this;
     }
 
-    protected function indexPaths(array $contents)
-    {
-        $result = array();
-
-        foreach ($contents as $object) {
-            $result[$object['path']] = $object;
-        }
-
-        return $result;
-    }
-
-    protected function cleanContents($contents)
+    public function cleanContents(array $contents)
     {
         foreach ($contents as $path => $object) {
             if (isset($object['contents'])) {
@@ -191,10 +192,12 @@ abstract class AbstractCache implements CacheInterface
 
     public function getForStorage()
     {
-        return json_encode([$this->complete, $this->cleanContents($this->cache)]);
+        $cleaned = $this->cleanContents($this->cache);
+
+        return json_encode([$this->complete, $cleaned]);
     }
 
-    protected function setFromStorage($serialized)
+    public function setFromStorage($serialized)
     {
         list($complete, $cache) = json_decode($serialized, true);
         $this->complete = $complete;

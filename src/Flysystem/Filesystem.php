@@ -145,9 +145,14 @@ class Filesystem
     {
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
+
+        if ($this->adapter->rename($path, $newpath) === false) {
+            return false;
+        }
+
         $this->cache->rename($path, $newpath);
 
-        return $this->adapter->rename($path, $newpath);
+        return true;
     }
 
     /**
@@ -160,9 +165,14 @@ class Filesystem
     public function delete($path)
     {
         $this->assertPresent($path);
+
+        if ($this->adapter->delete($path) === false) {
+            return false;
+        }
+
         $this->cache->delete($path);
 
-        return $this->adapter->delete($path);
+        return true;
     }
 
     /**
@@ -173,9 +183,20 @@ class Filesystem
      */
     public function deleteDir($dirname)
     {
+        if ($this->adapter->deleteDir($dirname) === false) {
+            return false;
+        }
+
         $this->cache->deleteDir($dirname);
 
-        return $this->adapter->deleteDir($dirname);
+        return true;
+    }
+
+    public function createDir($dirname)
+    {
+        $data = $this->adapter->createDir($dirname);
+
+        $this->cache->updateObject($dirname, $data, true);
     }
 
     /**
@@ -244,6 +265,8 @@ class Filesystem
 
     public function getVisibility($path)
     {
+        $this->assertPresent($path);
+
         if ($visibility = $this->cache->getVisibility($path)) {
             return $visibility;
         }
@@ -302,9 +325,7 @@ class Filesystem
             return false;
         }
 
-        $this->cache->updateObject($path, $metadata, true);
-
-        return $metadata;
+        return $this->cache->updateObject($path, $metadata, true);
     }
 
     public function flushCache()

@@ -52,4 +52,22 @@ abstract class Util
 
         return $finfo->buffer($content);
     }
+
+    public static function emulateDirectories(array $listing)
+    {
+        $directories = array();
+
+        foreach ($listing as $object) {
+            if ( ! empty($object['dirname']))
+                $directories[] = $object['dirname'];
+        }
+
+        $directories = array_unique($directories);
+
+        foreach ($directories as $directory) {
+            $listing[] = Util::pathinfo($directory);
+        }
+
+        return $listing;
+    }
 }

@@ -13,4 +13,11 @@ class Memory extends AbstractCache
     {
         // There is nothing to load
     }
+
+    public function flush()
+    {
+    	clearstatcache();
+
+    	return parent::flush();
+    }
 }

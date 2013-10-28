@@ -45,6 +45,7 @@ class AwsS3 extends AbstractAdapter
         ]);
 
         $this->client->putObject($options);
+        $options['visibility'] = $visibility;
 
         return $this->normalizeObject($options);
     }
@@ -90,7 +91,7 @@ class AwsS3 extends AbstractAdapter
 
     public function createDir($path)
     {
-        return compact('path');
+        return ['path' => $path, 'type' => $dir];
     }
 
     public function getMetadata($path)
@@ -157,7 +158,7 @@ class AwsS3 extends AbstractAdapter
 
         $result = array_map([$this, 'normalizeObject'], $result['Contents']);
 
-        return $this->emulateDirectories($result);
+        return Util::emulateDirectories($result);
     }
 
     protected function normalizeObject($object, $path = null)

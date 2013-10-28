@@ -6,6 +6,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 {
 	public function setup()
 	{
+		clearstatcache();
 		$fs = new Adapter\Local(__DIR__.'/files');
 		foreach (array_reverse($fs->listContents()) as $info) {
 			if (is_file(__DIR__.'/files/'.$info['path'])) {
@@ -162,16 +163,159 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider metaProvider
 	 */
-	public function testGetMimetype($filesystem, $adapter, $cache, $method, $key, $type)
+	public function testGetters($filesystem, $adapter, $cache, $method, $key, $type)
 	{
-		$filesystem->write('this.txt', 'something');
-		$value = $filesystem->{$method}('this.txt');
+		$filesystem->write('test.txt', 'something');
+		$cache->flush();
+		$this->assertEquals('something', $filesystem->read('test.txt'));
+		$value = $filesystem->{$method}('test.txt');
 		$this->assertInternalType($type, $value);
-		$cache->updateObject('this.txt', [$key => 'injected']);
-		$this->assertEquals('injected', $filesystem->{$method}('this.txt'));
+		$cache->updateObject('test.txt', [$key => 'injected']);
+		$this->assertEquals('injected', $filesystem->{$method}('test.txt'));
 		$cache->flush();
-		$this->assertEquals($value, $filesystem->{$method}('this.txt'));
-		$filesystem->delete('this.txt');
+		$this->assertEquals($value, $filesystem->{$method}('test.txt'));
+		$filesystem->delete('test.txt');
 		$cache->flush();
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testWriteReadUpdate($filesystem, $adapter, $cache)
+	{
+		$filesystem->write('test.txt', 'first');
+		$this->assertEquals('first', $filesystem->read('test.txt'));
+		$this->assertEquals('first', $cache->read('test.txt'));
+		$cache->flush();
+		$this->assertEquals('first', $filesystem->read('test.txt'));
+		$filesystem->update('test.txt', 'second');
+		$this->assertEquals('second', $filesystem->read('test.txt'));
+		$this->assertEquals('second', $cache->read('test.txt'));
+		$cache->flush();
+		$this->assertEquals('second', $filesystem->read('test.txt'));
+		$filesystem->delete('test.txt');
+		$cache->flush();
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testVisibility($filesystem, $adapter, $cache)
+	{
+		$filesystem->write('test.txt', 'something', 'private');
+		$this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $filesystem->getVisibility('test.txt'));
+		$this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $cache->getVisibility('test.txt'));
+		$filesystem->flushCache();
+		$this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $filesystem->getVisibility('test.txt'));
+		$filesystem->setVisibility('test.txt', AdapterInterface::VISIBILITY_PUBLIC);
+		$this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $filesystem->getVisibility('test.txt'));
+		$this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $cache->getVisibility('test.txt'));
+		$filesystem->flushCache();
+		$this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $filesystem->getVisibility('test.txt'));
+		$filesystem->delete('test.txt');
+		$cache->flush();
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testGetMetadata($filesystem)
+	{
+		$filesystem->write('test.txt', 'contents');
+		$meta = $filesystem->getMetadata('test.txt');
+		$this->assertInternalType('array', $meta);
+		$filesystem->flushCache();
+		$meta = $filesystem->getMetadata('test.txt');
+		$this->assertInternalType('array', $meta);
+		$this->assertArrayHasKey('filename', $meta);
+		$this->assertArrayHasKey('dirname', $meta);
+		$this->assertArrayHasKey('path', $meta);
+		$this->assertArrayHasKey('type', $meta);
+		$this->assertArrayHasKey('basename', $meta);
+		$this->assertArrayHasKey('extension', $meta);
+		$filesystem->delete('test.txt');
+	}
+
+	public function testRenameFailure()
+	{
+		$cache = new Cache\Memory(__DIR__);
+		$this->assertFalse($cache->rename('something', 'to.this'));
+	}
+
+	public function testCacheStorage()
+	{
+		$cache = new Cache\Memory(__DIR__);
+		$input = [['contents' => 'hehe', 'filename' => 'with contents'], ['filename' => 'no contents']];
+		$expected = [['filename' => 'with contents'], ['filename' => 'no contents']];
+		$json = json_encode([false, []]);
+		$output = $cache->cleanContents($input);
+		$this->assertEquals($expected, $output);
+		$this->assertEquals($json, $cache->getForStorage());
+		$input = json_encode([true, []]);
+		$cache->setFromStorage($input);
+		$this->assertEquals($input, $cache->getForStorage());
+	}
+
+	public function testAutosave()
+	{
+		$cache = new Cache\Memory(__DIR__);
+		$this->assertTrue($cache->getAutosave());
+		$cache->setAutosave(false);
+		$this->assertFalse($cache->getAutosave());
+	}
+
+	public function failProvider()
+	{
+		return [
+			['rename', true],
+			['write', false],
+			['update', true],
+			['read', true],
+			['delete', true],
+			['deleteDir', true],
+			['getMimetype', true],
+			['getTimestamp', true],
+			['getSize', true],
+			['getVisibility', true],
+			['setVisibility', true],
+			['getMetadata', true],
+		];
+	}
+
+	/**
+	 * @dataProvider failProvider
+	 */
+	public function testAdapterFail($method, $mockfile, $mockcache = null)
+	{
+		$mock = \Mockery::mock('Flysystem\Adapter\AbstractAdapter');
+		$cachemock = \Mockery::mock('Flysystem\Cache\AbstractCache');
+		$cachemock->shouldReceive('load')->andReturn([]);
+		$cachemock->shouldReceive('has')->andReturn(false);
+		$cachemock->shouldReceive('isComplete')->andReturn(false);
+		$cachemock->shouldReceive('updateObject')->andReturn(false);
+		$mock->shouldReceive('__toString')->andReturn('Flysystem\Adapter\AbstractAdapter');
+		$cachemock->shouldReceive('__toString')->andReturn('Flysystem\Cache\AbstractCache');
+		$filesystem = new Filesystem($mock, $cachemock);
+		$mock->shouldReceive('has')->with('other.txt')->andReturn(false);
+		$cachemock->shouldReceive($method)->andReturn(false);
+
+		if ($mockfile) {
+			// $filesystem->getCache()->updateObject('dummy.txt', ['type' => 'file']);
+			$mock->shouldReceive('has')->with('dummy.txt')->andReturn(true);
+		} else {
+			$mock->shouldReceive('has')->with('dummy.txt')->andReturn(false);
+		}
+		$mock->shouldReceive($method)->andReturn(false);
+		$this->assertFalse($filesystem->{$method}('dummy.txt', 'other.txt'));
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testCreateDir($filesystem)
+	{
+		$filesystem->createDir('dirname');
+		$this->assertTrue(is_dir(__DIR__.'/files/dirname'));
+		$filesystem->deleteDir('dirname');
 	}
 }

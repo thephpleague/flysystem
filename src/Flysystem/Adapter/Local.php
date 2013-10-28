@@ -42,12 +42,18 @@ class Local extends AbstractAdapter
             mkdir($dirname, 0777, true);
         }
 
-        $size = file_put_contents($location, $contents, LOCK_EX);
+        if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
+            return false;
+        }
+
         $this->setVisibility($path, $visibility);
 
         return [
             'contents' => $contents,
             'type' => 'file',
+            'size' => $size,
+            'visibility' => $visibility,
+            'mimetype' => Util::contentMimetype($contents),
         ];
     }
 
@@ -55,12 +61,24 @@ class Local extends AbstractAdapter
     {
         $location = $this->prefix($path);
 
-        return file_put_contents($location, $contents, LOCK_EX);
+        if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
+            return false;
+        }
+
+        return [
+            'size' => $size,
+            'contents' => $contents,
+            'mimetype' => Util::contentMimetype($contents),
+        ];
     }
 
     public function read($path)
     {
-        return ['contents' => file_get_contents($this->prefix($path))];
+        if (($contents = file_get_contents($this->prefix($path))) === false) {
+            return false;
+        }
+
+        return ['contents' => $contents];
     }
 
     public function rename($path, $newpath)
@@ -86,15 +104,7 @@ class Local extends AbstractAdapter
         $location = $this->prefix($path);
         $info = new SplFileInfo($location);
 
-        $meta['type'] = $info->getType();
-        $meta['path'] = $path;
-
-        if ($meta['type'] === 'file') {
-            $meta['timestamp'] = $info->getMTime();
-            $meta['size'] = $info->getSize();
-        }
-
-        return $meta;
+        return $this->normalizeFileInfo($path, $info);
     }
 
     public function getSize($path)
@@ -118,6 +128,7 @@ class Local extends AbstractAdapter
     public function getVisibility($path)
     {
         $location = $this->prefix($path);
+        clearstatcache(false, $location);
         $permissions = octdec(substr(sprintf('%o', fileperms($location)), -4));
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
 
@@ -158,11 +169,6 @@ class Local extends AbstractAdapter
         }
 
         return rmdir($location);
-    }
-
-    public function hasDir($dirname)
-    {
-        return is_dir($this->prefix($dirname));
     }
 
     protected function directoryContents($path = '', $info = true)
