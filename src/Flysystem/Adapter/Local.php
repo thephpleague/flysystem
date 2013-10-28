@@ -157,6 +157,11 @@ class Local extends AbstractAdapter
     public function deleteDir($dirname)
     {
         $location = $this->prefix($dirname);
+
+        if ( ! is_dir($location)) {
+            return false;
+        }
+
         $contents = $this->directoryContents($dirname, true);
         $contents = array_reverse($contents);
 
