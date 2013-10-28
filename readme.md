@@ -15,6 +15,11 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 * Local
 * Amazon Web Services - S3
 
+#### Planned Adapters
+
+* Dropbox
+* PR's welcome?
+
 ## Caching
 
 * Memory (array caching)
@@ -54,7 +59,7 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache);
 
 // Or supply a client
 $client = new Predis\Client;
-$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($client);
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($client));
 ```
 
 ## General Usage
