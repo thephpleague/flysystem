@@ -43,7 +43,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem = new Filesystem($adapter, $cache);
 
 		return [
-			[$filesystem, $adapter, $cache]
+			[$filesystem, $adapter, $cache],
 		];
 	}
 
@@ -317,5 +317,26 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem->createDir('dirname');
 		$this->assertTrue(is_dir(__DIR__.'/files/dirname'));
 		$filesystem->deleteDir('dirname');
+	}
+
+	public function testNullCache()
+	{
+		$filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\NullCache);
+		$filesystem->write('test.txt', 'contents');
+		$this->assertTrue($filesystem->has('test.txt'));
+		$this->assertInternalType('array', $filesystem->listContents());
+		$cache = $filesystem->getCache();
+		$cache->setComplete(true);
+		$cache->flush();
+		$cache->autosave();
+		$this->assertFalse($cache->isComplete());
+		$this->assertFalse($cache->read('something'));
+		$this->assertFalse($cache->getMetadata('something'));
+		$this->assertFalse($cache->getMimetype('something'));
+		$this->assertFalse($cache->getSize('something'));
+		$this->assertFalse($cache->getTimestamp('something'));
+		$this->assertFalse($cache->getVisibility('something'));
+		$this->assertFalse($cache->listContents());
+		$filesystem->delete('test.txt');
 	}
 }
