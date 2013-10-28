@@ -33,11 +33,21 @@ class Filesystem implements AdapterInterface
         $this->visibility = $visibility;
     }
 
+    /**
+     * Get the Adapter
+     *
+     * @return  AdapterInterface  adapter
+     */
     public function getAdapter()
     {
         return $this->adapter;
     }
 
+    /**
+     * Get the Cache
+     *
+     * @return  CacheInterface  adapter
+     */
     public function getCache()
     {
         return $this->cache;
@@ -192,6 +202,12 @@ class Filesystem implements AdapterInterface
         return true;
     }
 
+    /**
+     * Create a directory
+     *
+     * @param   string  $dirname  directory name
+     * @return  void
+     */
     public function createDir($dirname)
     {
         $data = $this->adapter->createDir($dirname);
@@ -263,6 +279,12 @@ class Filesystem implements AdapterInterface
         return $data['timestamp'];
     }
 
+    /**
+     * Get a file's visibility
+     *
+     * @param   string  $path  path to file
+     * @return  string  visibility (public|private)
+     */
     public function getVisibility($path)
     {
         $this->assertPresent($path);
@@ -280,6 +302,12 @@ class Filesystem implements AdapterInterface
         return $data['visibility'];
     }
 
+    /**
+     * Get a file's size
+     *
+     * @param   string  $path  path to file
+     * @return  int     file size
+     */
     public function getSize($path)
     {
         if ($visibility = $this->cache->getSize($path)) {
@@ -295,6 +323,13 @@ class Filesystem implements AdapterInterface
         return $data['size'];
     }
 
+    /**
+     * Get a file's size
+     *
+     * @param   string   $path        path to file
+     * @param   string   $visibility  visibility
+     * @return  boolean  success boolean
+     */
     public function setVisibility($path, $visibility)
     {
         if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
@@ -328,6 +363,11 @@ class Filesystem implements AdapterInterface
         return $this->cache->updateObject($path, $metadata, true);
     }
 
+    /**
+     * Flush the cache
+     *
+     * @return  $this
+     */
     public function flushCache()
     {
         $this->cache->flush();
