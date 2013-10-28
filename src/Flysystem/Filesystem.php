@@ -2,7 +2,7 @@
 
 namespace Flysystem;
 
-class Filesystem
+class Filesystem implements AdapterInterface
 {
     /**
      * @var  AdapterInterface  $adapter
