@@ -7,5 +7,6 @@ php:
 before_script:
   - composer self-update
   - composer install --dev -o
+  - mkdir tests/files
 
 script: phpunit --coverage-text
