@@ -12,10 +12,10 @@ use Flysystem\AdapterInterface;
 
 class Local extends AbstractAdapter
 {
-    protected static $permissions = [
+    protected static $permissions = array(
         'public' => 0644,
         'private' => 0000,
-    ];
+    );
 
     public function __construct($root)
     {
@@ -48,13 +48,13 @@ class Local extends AbstractAdapter
 
         $this->setVisibility($path, $visibility);
 
-        return [
+        return array(
             'contents' => $contents,
             'type' => 'file',
             'size' => $size,
             'visibility' => $visibility,
             'mimetype' => Util::contentMimetype($contents),
-        ];
+        );
     }
 
     public function update($path, $contents)
@@ -65,11 +65,11 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return [
+        return array(
             'size' => $size,
             'contents' => $contents,
             'mimetype' => Util::contentMimetype($contents),
-        ];
+        );
     }
 
     public function read($path)
@@ -78,7 +78,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return ['contents' => $contents];
+        return array('contents' => $contents);
     }
 
     public function rename($path, $newpath)
@@ -117,7 +117,7 @@ class Local extends AbstractAdapter
         $location = $this->prefix($path);
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
 
-        return ['mimetype' => $finfo->file($location)];
+        return array('mimetype' => $finfo->file($location));
     }
 
     public function getTimestamp($path)
@@ -151,7 +151,7 @@ class Local extends AbstractAdapter
             mkdir($location, 0777, true);
         }
 
-        return ['path' => $dirname, 'type' => 'dir'];
+        return array('path' => $dirname, 'type' => 'dir');
     }
 
     public function deleteDir($dirname)
@@ -178,7 +178,7 @@ class Local extends AbstractAdapter
 
     protected function directoryContents($path = '', $info = true)
     {
-        $result = [];
+        $result = array();
         $path = $this->prefix($path).DIRECTORY_SEPARATOR;
         $length = strlen($path);
         $iterator = $this->getDirectoryIterator($path);
@@ -193,7 +193,7 @@ class Local extends AbstractAdapter
 
     protected function normalizeFileInfo($path, $file)
     {
-        $normalized = ['type' => $file->getType(), 'path' => $path];
+        $normalized = array('type' => $file->getType(), 'path' => $path);
 
         if ($normalized['type'] === 'file') {
             $normalized['timestamp'] = $file->getMTime();

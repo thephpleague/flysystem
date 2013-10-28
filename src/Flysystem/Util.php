@@ -32,7 +32,7 @@ abstract class Util
      */
     public static function map(array $object, array $map)
     {
-        $result = [];
+        $result = array();
 
         foreach ($map as $from => $to) {
             if ( ! isset($object[$from]))

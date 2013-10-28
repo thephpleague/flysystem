@@ -17,18 +17,23 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		}
 	}
 
+	public function teardown()
+	{
+		$this->setup();
+	}
+
 	public function metaProvider()
 	{
 		$adapter = new Adapter\Local(__DIR__.'/files');
 		$cache = new Cache\Memory;
 		$filesystem = new Filesystem($adapter, $cache);
 
-		return [
-			[$filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int'],
-			[$filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string'],
-			[$filesystem, $adapter, $cache, 'getSize', 'size', 'int'],
-			[$filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string'],
-		];
+		return array(
+			array($filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int'),
+			array($filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string'),
+			array($filesystem, $adapter, $cache, 'getSize', 'size', 'int'),
+			array($filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string'),
+		);
 	}
 
 	public function testInstantiable()
@@ -42,9 +47,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$cache = new Cache\Memory;
 		$filesystem = new Filesystem($adapter, $cache);
 
-		return [
-			[$filesystem, $adapter, $cache],
-		];
+		return array(
+			array($filesystem, $adapter, $cache),
+		);
 	}
 
 	/**
@@ -170,7 +175,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertEquals('something', $filesystem->read('test.txt'));
 		$value = $filesystem->{$method}('test.txt');
 		$this->assertInternalType($type, $value);
-		$cache->updateObject('test.txt', [$key => 'injected']);
+		$cache->updateObject('test.txt', array($key => 'injected'));
 		$this->assertEquals('injected', $filesystem->{$method}('test.txt'));
 		$cache->flush();
 		$this->assertEquals($value, $filesystem->{$method}('test.txt'));
@@ -245,13 +250,13 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	public function testCacheStorage()
 	{
 		$cache = new Cache\Memory(__DIR__);
-		$input = [['contents' => 'hehe', 'filename' => 'with contents'], ['filename' => 'no contents']];
-		$expected = [['filename' => 'with contents'], ['filename' => 'no contents']];
-		$json = json_encode([false, []]);
+		$input = array(array('contents' => 'hehe', 'filename' => 'with contents'), array('filename' => 'no contents'));
+		$expected = array(array('filename' => 'with contents'), array('filename' => 'no contents'));
+		$json = json_encode(array(false, array()));
 		$output = $cache->cleanContents($input);
 		$this->assertEquals($expected, $output);
 		$this->assertEquals($json, $cache->getForStorage());
-		$input = json_encode([true, []]);
+		$input = json_encode(array(true, array()));
 		$cache->setFromStorage($input);
 		$this->assertEquals($input, $cache->getForStorage());
 	}
@@ -266,20 +271,20 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
 	public function failProvider()
 	{
-		return [
-			['rename', true],
-			['write', false],
-			['update', true],
-			['read', true],
-			['delete', true],
-			['deleteDir', true],
-			['getMimetype', true],
-			['getTimestamp', true],
-			['getSize', true],
-			['getVisibility', true],
-			['setVisibility', true],
-			['getMetadata', true],
-		];
+		return array(
+			array('rename', true),
+			array('write', false),
+			array('update', true),
+			array('read', true),
+			array('delete', true),
+			array('deleteDir', true),
+			array('getMimetype', true),
+			array('getTimestamp', true),
+			array('getSize', true),
+			array('getVisibility', true),
+			array('setVisibility', true),
+			array('getMetadata', true),
+		);
 	}
 
 	/**
@@ -289,7 +294,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	{
 		$mock = \Mockery::mock('Flysystem\Adapter\AbstractAdapter');
 		$cachemock = \Mockery::mock('Flysystem\Cache\AbstractCache');
-		$cachemock->shouldReceive('load')->andReturn([]);
+		$cachemock->shouldReceive('load')->andReturn(array());
 		$cachemock->shouldReceive('has')->andReturn(false);
 		$cachemock->shouldReceive('isComplete')->andReturn(false);
 		$cachemock->shouldReceive('updateObject')->andReturn(false);
@@ -298,13 +303,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem = new Filesystem($mock, $cachemock);
 		$mock->shouldReceive('has')->with('other.txt')->andReturn(false);
 		$cachemock->shouldReceive($method)->andReturn(false);
-
-		if ($mockfile) {
-			// $filesystem->getCache()->updateObject('dummy.txt', ['type' => 'file']);
-			$mock->shouldReceive('has')->with('dummy.txt')->andReturn(true);
-		} else {
-			$mock->shouldReceive('has')->with('dummy.txt')->andReturn(false);
-		}
+		$mock->shouldReceive('has')->with('dummy.txt')->andReturn($mockfile);
 		$mock->shouldReceive($method)->andReturn(false);
 		$this->assertFalse($filesystem->{$method}('dummy.txt', 'other.txt'));
 	}
@@ -338,5 +337,39 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($cache->getVisibility('something'));
 		$this->assertFalse($cache->listContents());
 		$filesystem->delete('test.txt');
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testListPaths($filesystem)
+	{
+		$filesystem->write('test.txt', 'something');
+		$filesystem->flushCache();
+		$listing = $filesystem->listPaths();
+		$this->assertContainsOnly('string', $listing, true);
+	}
+
+	/**
+	 * @dataProvider filesystemProvider
+	 */
+	public function testListWith($filesystem)
+	{
+		$filesystem->write('test.txt', 'something');
+		$filesystem->flushCache();
+		$listing = $filesystem->listWith('mimetype');
+		$this->assertContainsOnly('array', $listing, true);
+		$first = reset($listing);
+		$this->assertArrayHasKey('mimetype', $first);
+	}
+
+	/**
+	 * @dataProvider  filesystemProvider
+	 * @expectedException  InvalidArgumentException
+	 */
+	public function testListWithInvalid($filesystem)
+	{
+		$filesystem->write('test.txt', 'something');
+		$listing = $filesystem->listWith('unknowntype');
 	}
 }

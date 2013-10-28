@@ -10,12 +10,12 @@ use Flysystem\Util;
 
 class AwsS3 extends AbstractAdapter
 {
-    protected static $resultMap = [
+    protected static $resultMap = array(
         'Body'          => 'contents',
         'ContentLength' => 'size',
         'ContentType'   => 'mimetype',
         'Size'          => 'size',
-    ];
+    );
 
     protected $bucket;
     protected $client;
@@ -37,12 +37,12 @@ class AwsS3 extends AbstractAdapter
 
     public function write($path, $contents, $visibility)
     {
-        $options = $this->getOptions($path, [
+        $options = $this->getOptions($path, array(
             'Body' => $contents,
             'ContentType' => Util::contentMimetype($contents),
             'ContentLength' => Util::contentSize($contents),
             'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
-        ]);
+        ));
 
         $this->client->putObject($options);
         $options['visibility'] = $visibility;
@@ -65,10 +65,10 @@ class AwsS3 extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-        $options = $this->getOptions($newpath, [
+        $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->prefix($path),
-        ]);
+        ));
 
         $result = $this->client->copyObject($options)->getAll();
         $result = $this->normalizeObject($result, $newpath);
@@ -91,7 +91,7 @@ class AwsS3 extends AbstractAdapter
 
     public function createDir($path)
     {
-        return ['path' => $path, 'type' => $dir];
+        return array('path' => $path, 'type' => $dir);
     }
 
     public function getMetadata($path)
@@ -137,9 +137,9 @@ class AwsS3 extends AbstractAdapter
 
     public function setVisibility($path, $visibility)
     {
-        $options = $this->getOptions($path, [
+        $options = $this->getOptions($path, array(
             'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
-        ]);
+        ));
 
         $this->client->putObjectAcl($options);
 
@@ -148,22 +148,22 @@ class AwsS3 extends AbstractAdapter
 
     public function listContents()
     {
-        $result = $this->client->listObjects([
+        $result = $this->client->listObjects(array(
             'Bucket' => $this->bucket,
-        ])->getAll(['Contents']);
+        ))->getAll(['Contents']);
 
         if ( ! isset($result['Contents'])) {
-            return [];
+            return array();
         }
 
-        $result = array_map([$this, 'normalizeObject'], $result['Contents']);
+        $result = array_map(array($this, 'normalizeObject'), $result['Contents']);
 
         return Util::emulateDirectories($result);
     }
 
     protected function normalizeObject($object, $path = null)
     {
-        $result = ['path' => $path ?: $object['Key']];
+        $result = array('path' => $path ?: $object['Key']);
 
         if (isset($object['LastModified'])) {
             $object['timestamp'] = strtotime($object['LastModified']);

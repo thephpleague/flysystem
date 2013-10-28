@@ -6,7 +6,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 {
 	public function testEmulateDirectories()
 	{
-		$input = [['dirname' => '', 'filename' => 'dummy'], ['dirname' => 'something', 'filename' => 'dummy']];
+		$input = array(array('dirname' => '', 'filename' => 'dummy'), array('dirname' => 'something', 'filename' => 'dummy'));
 		$output = Util::emulateDirectories($input);
 		$this->assertCount(3, $output);
 	}
@@ -20,10 +20,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
 	public function mapProvider()
 	{
-		return [
-			[['from.this' => 'value'], ['from.this' => 'to.this'], ['to.this' => 'value']],
-			[['from.this' => 'value', 'no.mapping' => 'lost'], ['from.this' => 'to.this'], ['to.this' => 'value']],
-		];
+		return array(
+			array(array('from.this' => 'value'), array('from.this' => 'to.this'), array('to.this' => 'value')),
+			array(array('from.this' => 'value', 'no.mapping' => 'lost'), array('from.this' => 'to.this'), array('to.this' => 'value')),
+		);
 	}
 
 	/**

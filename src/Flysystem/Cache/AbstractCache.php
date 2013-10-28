@@ -194,7 +194,7 @@ abstract class AbstractCache implements CacheInterface
     {
         $cleaned = $this->cleanContents($this->cache);
 
-        return json_encode([$this->complete, $cleaned]);
+        return json_encode(array($this->complete, $cleaned));
     }
 
     public function setFromStorage($serialized)

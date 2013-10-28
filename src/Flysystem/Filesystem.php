@@ -2,6 +2,8 @@
 
 namespace Flysystem;
 
+use InvalidArgumentException;
+
 class Filesystem implements AdapterInterface
 {
     /**
@@ -69,7 +71,7 @@ class Filesystem implements AdapterInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $data === true ? [] : $data, true);
+        $this->cache->updateObject($path, $data === true ? array() : $data, true);
 
         return true;
     }
@@ -229,6 +231,65 @@ class Filesystem implements AdapterInterface
         $contents = $this->adapter->listContents();
 
         return $this->cache->storeContents($contents);
+    }
+
+    /**
+     * List all paths
+     *
+     * @return  array  paths
+     */
+    public function listPaths()
+    {
+        $result = array();
+        $contents = $this->listContents();
+
+        foreach ($contents as $object) {
+            $result[] = $object['path'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * List contents with metadata
+     *
+     * @param   ...string|array  $key  metadata key
+     * @return  array            listing with metadata
+     */
+    public function listWith($key)
+    {
+        $keys = is_array($key) ? $key : func_get_args();
+        $contents = $this->listContents();
+
+        foreach ($contents as $index => $object) {
+            if ($object['type'] === 'file') {
+                $contents[$index] = array_merge($object, $this->getWithMetadata($object['path'], $keys));
+            }
+        }
+
+        return $contents;
+    }
+
+    /**
+     * Get metadata for an object with required metadata
+     *
+     * @param   string  $path      path to file
+     * @param   array   $metadata  metadata keys
+     * @return  array   metadata
+     */
+    public function getWithMetadata($path, array $metadata)
+    {
+        $object = $this->getMetadata($path);
+
+        foreach ($metadata as $key) {
+            if ( ! method_exists($this, $method = 'get'.ucfirst($key))) {
+                throw new InvalidArgumentException('Could not fetch metadata: '.$key);
+            }
+
+            $object[$key] = $this->{$method}($path);
+        }
+
+        return $object;
     }
 
     /**
