@@ -1,4 +1,4 @@
-# Flysystem
+# Flysystem [![Build Status](https://travis-ci.org/FrenkyNet/Flysystem.png)](https://travis-ci.org/FrenkyNet/Flysystem)
 
 Flysystem is a filesystem abstraction which allows you to easiliy swap out a local filesystem for a remote one.
 
