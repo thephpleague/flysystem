@@ -166,7 +166,7 @@ class AwsS3 extends AbstractAdapter
         $result = array('path' => $path ?: $object['Key']);
 
         if (isset($object['LastModified'])) {
-            $object['timestamp'] = strtotime($object['LastModified']);
+            $result['timestamp'] = strtotime($object['LastModified']);
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), ['type' => 'file']);

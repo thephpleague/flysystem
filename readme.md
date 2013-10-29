@@ -14,10 +14,11 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 
 * Local
 * Amazon Web Services - S3
+* Dropbox
 
 #### Planned Adapters
 
-* Dropbox
+* Azure
 * PR's welcome?
 
 ## Caching
