@@ -15,12 +15,23 @@ abstract class Util
     public static function pathinfo($path)
     {
         $pathinfo = pathinfo($path) + compact('path');
-
-        if ($pathinfo['dirname'] === '.') {
-            $pathinfo['dirname'] = '';
-        }
+        $pathinfo['dirname'] = static::normalizeDirname($pathinfo['dirname']);
 
         return $pathinfo;
+    }
+
+    public static function normalizeDirname($dirname)
+    {
+        if ($dirname === '.') {
+            return '';
+        }
+
+        return $dirname;
+    }
+
+    public static function dirname($path)
+    {
+        return static::normalizeDirname(dirname($path));
     }
 
     /**

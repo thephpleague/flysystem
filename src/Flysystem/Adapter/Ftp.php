@@ -149,6 +149,7 @@ class Ftp extends AbstractAdapter
 
     public function write($path, $contents, $visibility = null)
     {
+        $this->ensureDirectory(Util::dirname($path));
         $mimetype = Util::contentMimetype($contents);
         $stream = fopen('data://'.$mimetype.','.$contents, 'r');
         $result = ftp_fput($this->connection, $path, $stream, FTP_BINARY);
@@ -172,22 +173,43 @@ class Ftp extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-
+        return ftp_rename($this->connection, $path, $newpath);
     }
 
     public function delete($path)
     {
-
+        return ftp_delete($this->connection, $path);
     }
 
     public function deleteDir($dirname)
     {
+        $contents = array_reverse($this->listDirectoryContents($dirname));
 
+        foreach ($contents as $object) {
+            if ($object['type'] === 'file') {
+                ftp_delete($this->connection, $dirname.$this->separator.$object['path']);
+            } else {
+                ftp_rmdir($this->connection, $dirname.$this->separator.$object['path']);
+            }
+        }
+
+        ftp_rmdir($this->connection, $dirname);
     }
 
     public function createDir($dirname)
     {
+        if ( ! ftp_mkdir($this->connection, $dirname)) {
+            return false;
+        }
 
+        return array('path' => $dirname);
+    }
+
+    public function ensureDirectory($dirname)
+    {
+        if ( ! $this->has($dirname)) {
+            $this->createDir($dirname);
+        }
     }
 
     public function has($path)
@@ -197,14 +219,14 @@ class Ftp extends AbstractAdapter
 
     public function getMetadata($path)
     {
-        if ( ! $object = ftp_raw($this->connection, 'STAT '.$path)) {
+        if ( ! $object = ftp_raw($this->connection, 'STAT '.$path) or count($object) < 3) {
             return false;
         }
 
         $dirname = dirname($path);
         if ($dirname === '.') $dirname = '';
 
-        return $this->normalizeObject(trim($object[1]), $dirname);
+        return $this->normalizeObject($object[1], $dirname);
     }
 
     public function getSize($path)
@@ -263,15 +285,20 @@ class Ftp extends AbstractAdapter
 
     public function listContents()
     {
-        $result = array();
-        $listing = ftp_rawlist($this->connection, './', true);
-        $listing = $this->removeDotDirectories($listing);
+        return $this->listDirectoryContents('./');
+    }
+
+    protected function listDirectoryContents($directory)
+    {
+        $listing = ftp_rawlist($this->connection, $directory, true);
 
         return $this->normalizeListing($listing);
     }
 
     protected function normalizeListing(array $listing)
     {
+        $listing = $this->removeDotDirectories($listing);
+
         $base = '';
         $result = array();
 
@@ -301,7 +328,7 @@ class Ftp extends AbstractAdapter
 
     protected function normalizeObject($item, $base)
     {
-        $item = preg_replace('#\s+#', ' ', $item);
+        $item = preg_replace('#\s+#', ' ', trim($item));
         list ($permissions, $number, $owner, $group, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
 
         $type = $this->detectType($permissions);
