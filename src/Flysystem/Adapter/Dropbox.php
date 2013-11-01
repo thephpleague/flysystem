@@ -63,7 +63,7 @@ class Dropbox extends AbstractAdapter
         $contents = stream_get_contents($stream);
         fclose($stream);
 
-        return $contents;
+        return compact('contents');
     }
 
     public function rename($path, $newpath)
