@@ -344,7 +344,8 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	 */
 	public function testListPaths($filesystem)
 	{
-		$filesystem->write('test.txt', 'something');
+		if ( ! $filesystem->has('test.txt'))
+			$filesystem->write('test.txt', 'something');
 		$filesystem->flushCache();
 		$listing = $filesystem->listPaths();
 		$this->assertContainsOnly('string', $listing, true);
@@ -355,8 +356,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	 */
 	public function testListWith($filesystem)
 	{
-		$filesystem->write('test.txt', 'something');
 		$filesystem->flushCache();
+		if ( ! $filesystem->has('test.txt'))
+			$filesystem->write('test.txt', 'something');
 		$listing = $filesystem->listWith('mimetype');
 		$this->assertContainsOnly('array', $listing, true);
 		$first = reset($listing);
@@ -369,7 +371,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	 */
 	public function testListWithInvalid($filesystem)
 	{
-		$filesystem->write('test.txt', 'something');
+		$filesystem->flushCache();
+		if ( ! $filesystem->has('test.txt'))
+			$filesystem->write('test.txt', 'something');
 		$listing = $filesystem->listWith('unknowntype');
 	}
 }

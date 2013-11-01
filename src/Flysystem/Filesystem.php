@@ -425,6 +425,19 @@ class Filesystem implements AdapterInterface
     }
 
     /**
+     * Get a file/directory handler
+     *
+     * @param   string   $path
+     * @return  Handler  file or directory handler
+     */
+    public function get($path)
+    {
+        $metadata = $this->getMetadata($path);
+
+        return $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
+    }
+
+    /**
      * Flush the cache
      *
      * @return  $this
