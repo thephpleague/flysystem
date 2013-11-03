@@ -196,4 +196,24 @@ foreach ($contents as $object) {
 }
 ```
 
+### List paths
+
+```php
+$paths = $filemanager->listPaths();
+
+foreach ($paths as $path) {
+	echo $path;
+}
+```
+
+### List with ensured presence of precific metadata
+
+```php
+$listing = $filesystem->listWith('mimetype', 'size', 'timestamp');
+
+foreach ($listing as $object) {
+	echo $object['path'].' has mimetype: '.$object['mimetype'];
+}
+```
+
 # Enjoy.
