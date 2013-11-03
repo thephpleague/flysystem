@@ -318,9 +318,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem->deleteDir('dirname');
 	}
 
-	public function testNullCache()
+	public function testNoop()
 	{
-		$filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\NullCache);
+		$filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\Noop);
 		$filesystem->write('test.txt', 'contents');
 		$this->assertTrue($filesystem->has('test.txt'));
 		$this->assertInternalType('array', $filesystem->listContents());
