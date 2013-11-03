@@ -15,8 +15,9 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 * Local
 * Amazon Web Services - S3
 * Dropbox
+* Ftp
 
-#### Planned Adapters
+### Planned Adapters
 
 * Azure
 * PR's welcome?
@@ -49,6 +50,36 @@ $client = S3Client::factory(array(
 $filesystem = new Filesystem(new Adapter($client, 'bucket-name', 'optional-prefix'));
 ```
 
+## Dropbox Setup
+
+```php
+use Dropbox\Client;
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Dropbox as Adapter;
+
+$client = new Client($token, $appName);
+$filesystem = new Filesystem(new Adapter($client), 'optional/path/prefix');
+```
+
+## Ftp Setup
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Ftp as Adapter;
+
+$client = new Client($token, $appName);
+$filesystem = new Filesystem(new Adapter(array(
+	'host' => 'ftp.example.com',
+	'port' => 21,
+	'username' => 'username',
+	'password' => 'password',
+	'root' => 'path/to/root',
+	'passive' => true,
+	'ssl' => true,
+	'timeout' => 30,
+)));
+```
+
 ## Predis Caching Setup
 
 ```php
@@ -65,55 +96,55 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($cl
 
 ## General Usage
 
-### Write Files
+__Write Files__
 
 ```php
 $filemanager->write('filename.txt', 'contents');
 ```
 
-### Read Files
+__Read Files__
 
 ```php
 $contents = $filemanager->read('filename.txt');
 ```
 
-### Update Files
+__Update Files__
 
 ```php
 $filemanager->update('filename.txt', 'new contents');
 ```
 
-### Delete Files
+__Delete Files__
 
 ```php
 $filemanager->delete('filename.txt');
 ```
 
-### Rename Files
+__Rename Files__
 
 ```php
 $filemanager->rename('filename.txt', 'newname.txt');
 ```
 
-### Get Mimetypes
+__Get Mimetypes__
 
 ```php
 $mimetype = $filemanager->getMimetype('filename.txt');
 ```
 
-### Get Timestamps
+__Get Timestamps__
 
 ```php
 $timestamp = $filemanager->getTimestamp('filename.txt');
 ```
 
-### Get File Sizes
+__Get File Sizes__
 
 ```php
 $size = $filemanager->getSize('filename.txt');
 ```
 
-### Create Directories
+__Create Directories__
 
 ```php
 $filemanager->createDir('nested/directory');
@@ -124,13 +155,13 @@ Directories are also made implicitly when writing to a deeper path
 $filemanager->write('path/to/filename.txt', 'contents');
 ```
 
-### Delete Directories
+__Delete Directories__
 
 ```php
 $filemanager->deleteDir('path/to/directory');
 ```
 
-### Manage Visibility
+__Manage Visibility__
 
 Visibility is the abstraction of file permissions across multiple platforms. Visibility can be either public or private.
 
