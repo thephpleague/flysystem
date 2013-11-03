@@ -2,7 +2,7 @@
 
 namespace Flysystem\Cache;
 
-class NullCache extends AbstractCache
+class Noop extends AbstractCache
 {
 	protected $autosave = false;
 

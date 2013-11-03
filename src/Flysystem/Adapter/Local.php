@@ -17,6 +17,11 @@ class Local extends AbstractAdapter
         'private' => 0000,
     );
 
+    /**
+     * Constructor
+     *
+     * @param  string  $root
+     */
     public function __construct($root)
     {
         $root = realpath($root);
@@ -24,11 +29,23 @@ class Local extends AbstractAdapter
         $this->root = Util::normalizePrefix($root, DIRECTORY_SEPARATOR);
     }
 
+    /**
+     * Prefix a path with the root
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
     protected function prefix($path)
     {
         return $this->root.Util::normalizePath($path, DIRECTORY_SEPARATOR);
     }
 
+    /**
+     * Check wether a file is present
+     *
+     * @param   string   $path
+     * @return  boolean
+     */
     public function has($path)
     {
         return file_exists($this->prefix($path));
