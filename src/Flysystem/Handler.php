@@ -7,7 +7,7 @@ abstract class Handler
     protected $path;
     protected $filesystem;
 
-    public function __construct(Filesystem $filesystem, $path)
+    public function __construct(Filesystem $filesystem = null, $path = null)
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
@@ -28,5 +28,19 @@ abstract class Handler
         $metadata = $this->filesystem->getMetadata($this->path);
 
         return $metadata['type'];
+    }
+
+    public function setFilesystem(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+
+        return $this;
+    }
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
     }
 }

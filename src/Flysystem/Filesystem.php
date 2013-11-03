@@ -430,11 +430,18 @@ class Filesystem implements AdapterInterface
      * @param   string   $path
      * @return  Handler  file or directory handler
      */
-    public function get($path)
+    public function get($path, Handler $handler = null)
     {
-        $metadata = $this->getMetadata($path);
+        if ( ! $handler) {
+            $metadata = $this->getMetadata($path);
 
-        return $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
+            $handler = $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
+        }
+
+        $handler->setPath($path);
+        $handler->setFilesystem($this);
+
+        return $handler;
     }
 
     /**
