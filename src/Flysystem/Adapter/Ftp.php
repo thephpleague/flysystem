@@ -21,6 +21,10 @@ class Ftp extends AbstractAdapter
     public function __construct(array $config)
     {
         $this->setConfig($config);
+
+        if (isset($config['autoconnect']) and $config['autoconnect'] === true) {
+            $this->connect();
+        }
     }
 
     public function setConfig(array $config)
@@ -32,6 +36,8 @@ class Ftp extends AbstractAdapter
 
             $this->{'set'.ucfirst($setting)}($config[$setting]);
         }
+
+        return $this;
     }
 
     public function setHost($host)
@@ -152,7 +158,7 @@ class Ftp extends AbstractAdapter
         $this->ensureDirectory(Util::dirname($path));
         $mimetype = Util::contentMimetype($contents);
         $stream = fopen('data://'.$mimetype.','.$contents, 'r');
-        $result = ftp_fput($this->connection, $path, $stream, FTP_BINARY);
+        $result = ftp_fput($this->getConnection(), $path, $stream, FTP_BINARY);
         fclose($stream);
 
         if ( ! $result) {
@@ -173,12 +179,12 @@ class Ftp extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-        return ftp_rename($this->connection, $path, $newpath);
+        return ftp_rename($this->getConnection(), $path, $newpath);
     }
 
     public function delete($path)
     {
-        return ftp_delete($this->connection, $path);
+        return ftp_delete($this->getConnection(), $path);
     }
 
     public function deleteDir($dirname)
@@ -187,18 +193,18 @@ class Ftp extends AbstractAdapter
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                ftp_delete($this->connection, $dirname.$this->separator.$object['path']);
+                ftp_delete($this->getConnection(), $dirname.$this->separator.$object['path']);
             } else {
-                ftp_rmdir($this->connection, $dirname.$this->separator.$object['path']);
+                ftp_rmdir($this->getConnection(), $dirname.$this->separator.$object['path']);
             }
         }
 
-        ftp_rmdir($this->connection, $dirname);
+        ftp_rmdir($this->getConnection(), $dirname);
     }
 
     public function createDir($dirname)
     {
-        if ( ! ftp_mkdir($this->connection, $dirname)) {
+        if ( ! ftp_mkdir($this->getConnection(), $dirname)) {
             return false;
         }
 
@@ -219,7 +225,7 @@ class Ftp extends AbstractAdapter
 
     public function getMetadata($path)
     {
-        if ( ! $object = ftp_raw($this->connection, 'STAT '.$path) or count($object) < 3) {
+        if ( ! $object = ftp_raw($this->getConnection(), 'STAT '.$path) or count($object) < 3) {
             return false;
         }
 
@@ -253,7 +259,7 @@ class Ftp extends AbstractAdapter
     public function read($path)
     {
         $stream = fopen('php://temp', 'w+');
-        $result = ftp_fget($this->connection, $stream, $path, FTP_BINARY);
+        $result = ftp_fget($this->getConnection(), $stream, $path, FTP_BINARY);
 
         if ( ! $result) {
             fclose($stream);
@@ -271,7 +277,7 @@ class Ftp extends AbstractAdapter
     {
         $mode = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 0644 : 0000;
 
-        if ( ! ftp_chmod($this->connection, $mode, $path)) {
+        if ( ! ftp_chmod($this->getConnection(), $mode, $path)) {
             return false;
         }
 
@@ -280,7 +286,7 @@ class Ftp extends AbstractAdapter
 
     public function getVisibility($path)
     {
-        throw new \Exception('not implemented');
+        return $this->getMetadata($path);
     }
 
     public function listContents()
@@ -290,7 +296,7 @@ class Ftp extends AbstractAdapter
 
     protected function listDirectoryContents($directory)
     {
-        $listing = ftp_rawlist($this->connection, $directory, true);
+        $listing = ftp_rawlist($this->getConnection(), $directory, true);
 
         return $this->normalizeListing($listing);
     }
