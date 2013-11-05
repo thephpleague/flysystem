@@ -3,9 +3,6 @@
 		backupStaticAttributes="false"
 		bootstrap="./phpunit.php"
 		colors="true"
-		convertErrorsToExceptions="true"
-		convertNoticesToExceptions="true"
-		convertWarningsToExceptions="true"
 		processIsolation="false"
 		syntaxCheck="false">
 	<testsuites>
