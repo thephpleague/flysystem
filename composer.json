@@ -18,8 +18,7 @@
         "aws/aws-sdk-php": "~2.4.7",
         "predis/predis": "~0.8.4",
         "mockery/mockery": "~0.8.0",
-        "dropbox/dropbox-sdk": "~1.1.1",
-        "phpseclib/phpseclib": "~0.3.5"
+        "dropbox/dropbox-sdk": "~1.1.1"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
