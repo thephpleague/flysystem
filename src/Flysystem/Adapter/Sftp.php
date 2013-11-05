@@ -10,6 +10,7 @@ use LogicException;
 
 class Sftp extends Ftp
 {
+    protected $port = 22;
     protected $privatekey;
     protected $configurable = array('host', 'port', 'username', 'password', 'timeout', 'root', 'privateKey', 'permPrivate', 'permPublic');
     protected $statMap = array('mtime' => 'timestamp', 'size' => 'size');

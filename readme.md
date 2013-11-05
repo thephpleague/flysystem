@@ -16,6 +16,7 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 * Amazon Web Services - S3
 * Dropbox
 * Ftp
+* Sftp (through phpseclib)
 
 ### Planned Adapters
 
@@ -73,10 +74,28 @@ $filesystem = new Filesystem(new Adapter(array(
 	'port' => 21,
 	'username' => 'username',
 	'password' => 'password',
-	'root' => 'path/to/root',
+	'root' => '/path/to/root',
 	'passive' => true,
 	'ssl' => true,
 	'timeout' => 30,
+)));
+```
+
+## Sftp Setup
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Sftp as Adapter;
+
+$client = new Client($token, $appName);
+$filesystem = new Filesystem(new Adapter(array(
+	'host' => 'example.com',
+	'port' => 21,
+	'username' => 'username',
+	'password' => 'password',
+	'privateKey' => 'path/to/or/contents/of/privatekey'
+	'root' => '/path/to/root',
+	'timeout' => 10,
 )));
 ```
 

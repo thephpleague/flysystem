@@ -9,7 +9,7 @@ class Ftp extends AbstractAdapter
 {
     protected $connection;
     protected $host;
-    protected $port;
+    protected $port = 21;
     protected $username;
     protected $password;
     protected $ssl = false;
@@ -70,11 +70,7 @@ class Ftp extends AbstractAdapter
 
     public function getPort()
     {
-        if ($this->port !== null) {
-            return $this->port;
-        }
-
-        return 21;
+        return $this->port;
     }
 
     public function setUsername($username)
