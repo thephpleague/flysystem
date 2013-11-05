@@ -17,6 +17,9 @@ class Ftp extends AbstractAdapter
     protected $passive = true;
     protected $separator = '/';
     protected $root;
+    protected $permPublic = 0744;
+    protected $permPrivate = 0000;
+    protected $configurable = array('host', 'port', 'username', 'password', 'ssl', 'timeout', 'root', 'permPrivate', 'permPublic');
 
     public function __construct(array $config)
     {
@@ -29,11 +32,8 @@ class Ftp extends AbstractAdapter
 
     public function setConfig(array $config)
     {
-        $settings = array('host', 'port', 'username', 'password', 'ssl', 'timeout', 'root');
-
-        foreach ($settings as $setting) {
+        foreach ($this->configurable as $setting) {
             if ( ! isset($config[$setting])) continue;
-
             $this->{'set'.ucfirst($setting)}($config[$setting]);
         }
 
@@ -50,6 +50,20 @@ class Ftp extends AbstractAdapter
     public function setPort($port)
     {
         $this->port = $port;
+
+        return $this;
+    }
+
+    public function setPermPublic($permPublic)
+    {
+        $this->permPublic = $permPublic;
+
+        return $this;
+    }
+
+    public function setPermPrivate($permPrivate)
+    {
+        $this->permPrivate = $permPrivate;
 
         return $this;
     }
@@ -98,7 +112,9 @@ class Ftp extends AbstractAdapter
 
     public function setRoot($root)
     {
-        $this->root = $root;
+        $this->root = rtrim($root, '\\/').$this->separator;
+
+        return $this;
     }
 
     public function getConnection()
@@ -213,7 +229,7 @@ class Ftp extends AbstractAdapter
 
     public function ensureDirectory($dirname)
     {
-        if ( ! $this->has($dirname)) {
+        if ( ! empty($dirname) and ! $this->has($dirname)) {
             $this->createDir($dirname);
         }
     }
@@ -291,7 +307,7 @@ class Ftp extends AbstractAdapter
 
     public function listContents()
     {
-        return $this->listDirectoryContents('./');
+        return $this->listDirectoryContents('');
     }
 
     protected function listDirectoryContents($directory)
@@ -310,7 +326,7 @@ class Ftp extends AbstractAdapter
 
         while ($item = array_shift($listing))
         {
-            if (preg_match('#\./.*:#', $item)) {
+            if (preg_match('#^.*:$#', $item)) {
                 $base = substr($item, 2, -1);
                 continue;
             }
@@ -379,7 +395,7 @@ class Ftp extends AbstractAdapter
     protected function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            return ! empty($line) and ! preg_match('#.* \.(\.)?$#', $line);
+            return ! empty($line) and ! preg_match('#.* \.(\.)?$|^total#', $line);
         };
 
         return array_filter($list, $filter);
