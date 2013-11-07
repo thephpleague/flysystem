@@ -68,7 +68,6 @@ $filesystem = new Filesystem(new Adapter($client), 'optional/path/prefix');
 use Flysystem\Filesystem;
 use Flysystem\Adapter\Ftp as Adapter;
 
-$client = new Client($token, $appName);
 $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'ftp.example.com',
 	'port' => 21,
@@ -87,7 +86,6 @@ $filesystem = new Filesystem(new Adapter(array(
 use Flysystem\Filesystem;
 use Flysystem\Adapter\Sftp as Adapter;
 
-$client = new Client($token, $appName);
 $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'example.com',
 	'port' => 21,
