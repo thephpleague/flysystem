@@ -121,7 +121,7 @@ class Filesystem implements AdapterInterface
     }
 
     /**
-     * Write a file
+     * Read a file
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
@@ -145,7 +145,7 @@ class Filesystem implements AdapterInterface
     }
 
     /**
-     * Write a file
+     * Rename a file
      *
      * @param  string                $path    path to file
      * @param  string                $newpath new path
