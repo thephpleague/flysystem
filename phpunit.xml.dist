@@ -21,5 +21,6 @@
 	</listeners>
 	<logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
+        <log type="coverage-html" target="./coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="49" highLowerBound="75"/>
     </logging>
 </phpunit>
