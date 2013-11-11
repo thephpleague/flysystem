@@ -16,7 +16,7 @@ class PredisTests extends PHPUnit_Framework_TestCase
 
     public function testLoadSuccess()
     {
-        $response = json_encode(array(false, array()));
+        $response = json_encode(array(true, array()));
         $client = Mockery::mock('Predis\Client');
         $client->shouldReceive('get')->once()->andReturn($response);
         $cache = new Predis($client);
