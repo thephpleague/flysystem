@@ -1,4 +1,4 @@
-# Flysystem [![Build Status](https://travis-ci.org/FrenkyNet/Flysystem.png)](https://travis-ci.org/FrenkyNet/Flysystem) [![Latest Stable Version](https://poser.pugx.org/frenkynet/flysystem/v/stable.png)](https://packagist.org/packages/frenkynet/flysystem) [![Total Downloads](https://poser.pugx.org/frenkynet/flysystem/downloads.png)](https://packagist.org/packages/frenkynet/flysystem)
+# Flysystem [![Build Status](https://travis-ci.org/FrenkyNet/Flysystem.png)](https://travis-ci.org/FrenkyNet/Flysystem) [![Latest Stable Version](https://poser.pugx.org/frenkynet/flysystem/v/stable.png)](https://packagist.org/packages/frenkynet/flysystem) [![Total Downloads](https://poser.pugx.org/frenkynet/flysystem/downloads.png)](https://packagist.org/packages/frenkynet/flysystem) by [@frankdejonge](http://twitter.com/frankdejonge)
 
 Flysystem is a filesystem abstraction which allows you to easiliy swap out a local filesystem for a remote one.
 
