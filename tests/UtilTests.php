@@ -34,4 +34,23 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 		$result = Util::map($from, $map);
 		$this->assertEquals($expected, $result);
 	}
+
+
+	public function dirnameProvider()
+	{
+		return array(
+			array('filename.txt', ''),
+			array('dirname/filename.txt', 'dirname'),
+			array('dirname/subdir', 'dirname'),
+		);
+	}
+
+	/**
+	 * @dataProvider  dirnameProvider
+	 */
+	public function testDirname($input, $expected)
+	{
+		$result = Util::dirname($input);
+		$this->assertEquals($expected, $result);
+	}
 }
