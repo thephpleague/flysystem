@@ -10,6 +10,18 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 * Be cacheable.
 * Emulate directories in systems that support non, like AwsS3.
 
+# Installation
+
+Trough Composer, obviously:
+
+```json
+{
+    "require": {
+        "frenkynet/flysystem": "0.1.*"
+    }
+}
+```
+
 ## Adapters
 
 * Local
