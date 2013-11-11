@@ -26,7 +26,7 @@ class PredisTests extends PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $response = json_encode([false, []]);
+        $response = json_encode(array(false, array()));
         $client = Mockery::mock('Predis\Client');
         $client->shouldReceive('set')->once()->andReturn($response);
         $cache = new Predis($client);
@@ -35,7 +35,7 @@ class PredisTests extends PHPUnit_Framework_TestCase
 
     public function testSaveWithExpire()
     {
-        $response = json_encode([false, []]);
+        $response = json_encode(array(false, array()));
         $client = Mockery::mock('Predis\Client');
         $client->shouldReceive('set')->once()->andReturn($response);
         $client->shouldReceive('expire')->once();
