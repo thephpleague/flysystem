@@ -43,4 +43,9 @@ abstract class Handler
 
         return $this;
     }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
 }

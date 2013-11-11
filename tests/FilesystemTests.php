@@ -376,4 +376,32 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 			$filesystem->write('test.txt', 'something');
 		$listing = $filesystem->listWith('unknowntype');
 	}
+
+	/**
+	 * @dataProvider  filesystemProvider
+	 */
+	public function testGet($filesystem)
+	{
+		if ( ! $filesystem->has('nested/file.txt')) {
+			$filesystem->write('nested/file.txt', 'contents');
+		}
+
+		$handler = $filesystem->get('nested/file.txt');
+		$this->assertInstanceOf('Flysystem\Handler', $handler);
+		$this->assertInstanceOf('Flysystem\File', $handler);
+		$this->assertEquals(8, $handler->getSize());
+		$this->assertEquals('nested/file.txt', $handler->getPath());
+		$this->assertEquals('text/plain', $handler->getMimetype());
+		$this->assertEquals('file', $handler->getType());
+		$this->assertTrue($handler->isFile());
+		$this->assertFalse($handler->isDir());
+		$this->assertInternalType('integer', $handler->getTimestamp());
+		$this->assertEquals('contents', $handler->read());
+		$handler->delete();
+		$this->assertFalse($filesystem->has('nested/file.txt'));
+		$handler = $filesystem->get('nested');
+		$this->assertTrue($handler->isDir());
+		$handler->delete();
+		$this->assertFalse($filesystem->has('nested'));
+	}
 }
