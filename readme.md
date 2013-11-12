@@ -29,6 +29,7 @@ Trough Composer, obviously:
 * Dropbox
 * Ftp
 * Sftp (through phpseclib)
+* Zip (through ZipArchive)
 
 ### Planned Adapters
 
@@ -48,6 +49,16 @@ use Flysystem\Adapter\Local as Adapter;
 
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'));
 ```
+
+## Zip Archive Setup
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Zip as Adapter;
+
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/archive.zip'));
+```
+
 ## AwsS3 Setup
 
 ```php
