@@ -12,7 +12,7 @@ class Dropbox extends AbstractAdapter
 {
     protected static $resultMap = array(
         'bytes'          => 'size',
-        'mime_type' => 'mimetype',
+        'mime_type'      => 'mimetype',
     );
 
     protected $client;
