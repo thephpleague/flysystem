@@ -1,26 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit backupGlobals="false"
-		backupStaticAttributes="false"
-		bootstrap="./phpunit.php"
-		colors="true"
-		processIsolation="false"
-		syntaxCheck="false">
-	<testsuites>
-		<testsuite name="flysystem/tests">
-			<directory suffix=".php">./tests/</directory>
-		</testsuite>
-	</testsuites>
-	<filter>
-		<blacklist>
-			<directory suffix=".php">./vendor/</directory>
-			<directory suffix=".php">./tests/</directory>
-		</blacklist>
-	</filter>
-	<listeners>
-		<listener class="\Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>
-	</listeners>
-	<logging>
+        backupStaticAttributes="false"
+        bootstrap="./phpunit.php"
+        colors="true"
+        processIsolation="false"
+        syntaxCheck="false">
+    <testsuites>
+        <testsuite name="flysystem/tests">
+            <directory suffix=".php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./vendor/</directory>
+            <directory suffix=".php">./tests/</directory>
+        </blacklist>
+    </filter>
+    <listeners>
+        <listener class="Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>
+        <listener class="League\PHPUnitCoverageListener\Listener">
+            <arguments>
+                <array>
+                    <element key="printer">
+                      <object class="League\PHPUnitCoverageListener\Printer\StdOut"/>
+                    </element>
+                    <element key="hook">
+                      <object class="League\PHPUnitCoverageListener\Hook\Travis"/>
+                    </element>
+                    <element key="namespace">
+                        <string>Flysystem</string>
+                    </element>
+                    <element key="repo_token">
+                        <string>TRMtqZN8tQzC3NhyF6O0Pa3LyufxqrEuc</string>
+                    </element>
+                    <element key="target_url">
+                        <string>https://coveralls.io/api/v1/jobs</string>
+                    </element>
+                    <element key="coverage_dir">
+                        <string>/tmp/flysystem</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+    <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
         <log type="coverage-html" target="./coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="49" highLowerBound="75"/>
+        <log type="coverage-clover" target="/tmp/flysystem/coverage.xml"/>
     </logging>
 </phpunit>

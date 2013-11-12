@@ -10,4 +10,4 @@ before_script:
   - composer install --dev -o
   - mkdir tests/files
 
-script: phpunit --coverage-text
+script: phpunit --coverage-text --coverage-clover /tmp/flysystem/coverage.xml
