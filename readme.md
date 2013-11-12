@@ -4,6 +4,7 @@
 [![Latest Stable Version](https://poser.pugx.org/frenkynet/flysystem/v/stable.png)](https://packagist.org/packages/frenkynet/flysystem)
 [![Total Downloads](https://poser.pugx.org/frenkynet/flysystem/downloads.png)](https://packagist.org/packages/frenkynet/flysystem)
 [![Coverage Status](https://coveralls.io/repos/FrenkyNet/Flysystem/badge.png)](https://coveralls.io/r/FrenkyNet/Flysystem)
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/FrenkyNet/flysystem/trend.png)](https://bitdeli.com/free)
 
 Flysystem is a filesystem abstraction which allows you to easiliy swap out a local filesystem for a remote one.
 
