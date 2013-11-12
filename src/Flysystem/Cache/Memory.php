@@ -16,8 +16,8 @@ class Memory extends AbstractCache
 
     public function flush()
     {
-    	clearstatcache();
+        clearstatcache();
 
-    	return parent::flush();
+        return parent::flush();
     }
 }

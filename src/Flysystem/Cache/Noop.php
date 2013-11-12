@@ -4,16 +4,16 @@ namespace Flysystem\Cache;
 
 class Noop extends AbstractCache
 {
-	protected $autosave = false;
+    protected $autosave = false;
 
-	public function updateObject($path, array $object, $autosave = false)
-	{
-		return $object;
-	}
+    public function updateObject($path, array $object, $autosave = false)
+    {
+        return $object;
+    }
 
     public function isComplete()
     {
-    	return false;
+        return false;
     }
 
     public function setComplete($complete = true)
@@ -23,7 +23,7 @@ class Noop extends AbstractCache
 
     public function storeContents(array $contents)
     {
-    	return $contents;
+        return $contents;
     }
 
     public function flush()
@@ -48,46 +48,46 @@ class Noop extends AbstractCache
 
     public function has($path)
     {
-    	return false;
+        return false;
     }
 
     public function read($path)
     {
-    	return false;
+        return false;
     }
 
     public function listContents()
     {
-    	return false;
+        return false;
     }
 
     public function getMetadata($path)
     {
-    	return false;
+        return false;
     }
 
     public function getSize($path)
     {
-    	return false;
+        return false;
     }
 
     public function getMimetype($path)
     {
-    	return false;
+        return false;
     }
 
     public function getTimestamp($path)
     {
-    	return false;
+        return false;
     }
 
     public function getVisibility($path)
     {
-    	return false;
+        return false;
     }
 
     public function ensureParentDirectories($path)
     {
-    	return false;
+        return false;
     }
 }
