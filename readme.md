@@ -18,7 +18,7 @@ Flysystem is a filesystem abstraction which allows you to easiliy swap out a loc
 
 # Installation
 
-Trough Composer, obviously:
+Through Composer, obviously:
 
 ```json
 {
