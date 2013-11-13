@@ -88,7 +88,7 @@ use Flysystem\Filesystem;
 use Flysystem\Adapter\Dropbox as Adapter;
 
 $client = new Client($token, $appName);
-$filesystem = new Filesystem(new Adapter($client), 'optional/path/prefix');
+$filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
 ```
 
 ## Ftp Setup
@@ -120,7 +120,7 @@ $filesystem = new Filesystem(new Adapter(array(
 	'port' => 21,
 	'username' => 'username',
 	'password' => 'password',
-	'privateKey' => 'path/to/or/contents/of/privatekey'
+	'privateKey' => 'path/to/or/contents/of/privatekey',
 	'root' => '/path/to/root',
 	'timeout' => 10,
 )));
