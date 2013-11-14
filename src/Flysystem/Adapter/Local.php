@@ -5,6 +5,7 @@ namespace Flysystem\Adapter;
 use Finfo;
 use SplFileInfo;
 use FilesystemIterator;
+use DirectoryIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Flysystem\Util;
@@ -111,9 +112,9 @@ class Local extends AbstractAdapter
         return unlink($this->prefix($path));
     }
 
-    public function listContents()
+    public function listContents($directory = '', $recursive = false)
     {
-        return $this->directoryContents('', true);
+        return $this->directoryContents($directory, $recursive);
     }
 
     public function getMetadata($path)
@@ -193,16 +194,17 @@ class Local extends AbstractAdapter
         return rmdir($location);
     }
 
-    protected function directoryContents($path = '', $info = true)
+    protected function directoryContents($path = '', $recursive = false)
     {
         $result = array();
         $path = $this->prefix($path).DIRECTORY_SEPARATOR;
         $length = strlen($path);
-        $iterator = $this->getDirectoryIterator($path);
+        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($path) : $this->getDirectoryIterator($path);
 
         foreach ($iterator as $file) {
             $path = substr($file->getPathname(), $length);
-            $result[] = $info ? $this->normalizeFileInfo($path, $file) : $path;
+            if ($path === '.' || $path === '..') continue;
+            $result[] = $this->normalizeFileInfo($path, $file);
         }
 
         return $result;
@@ -220,10 +222,17 @@ class Local extends AbstractAdapter
         return $normalized;
     }
 
-    protected function getDirectoryIterator($path)
+    protected function getRecursiveDirectoryIterator($path)
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+
+        return $iterator;
+    }
+
+    protected function getDirectoryIterator($path)
+    {
+        $iterator = new DirectoryIterator($path);
 
         return $iterator;
     }

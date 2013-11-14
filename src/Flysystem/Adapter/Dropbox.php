@@ -131,12 +131,12 @@ class Dropbox extends AbstractAdapter
         throw new LogicException('The Dropbox adapter does not support visibility settings.');
     }
 
-    public function listContents()
+    public function listContents($directory = '', $recursive = false)
     {
-        return $this->retrieveListing($this->prefix(''));
+        return $this->retrieveListing($this->prefix($directory), $recursive);
     }
 
-    public function retrieveListing($dir)
+    public function retrieveListing($dir, $recursive = true)
     {
         $listing = array();
         $directory = rtrim($dir, '/');
@@ -147,7 +147,7 @@ class Dropbox extends AbstractAdapter
         {
             $listing[] = $this->normalizeObject($object, substr($object['path'], $length));
 
-            if ($object['is_dir']) {
+            if ($recursive and $object['is_dir']) {
                 $listing = array_merge($listing, $this->retrieveListing($object['path']));
             }
         }

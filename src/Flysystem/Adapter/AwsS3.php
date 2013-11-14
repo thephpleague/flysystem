@@ -146,7 +146,7 @@ class AwsS3 extends AbstractAdapter
         return compact('visibility');
     }
 
-    public function listContents()
+    public function listContents($dirname = '', $recursive = false)
     {
         $result = $this->client->listObjects(array(
             'Bucket' => $this->bucket,

@@ -13,14 +13,14 @@ abstract class AbstractCache implements CacheInterface
     protected $autosave = true;
 
     /**
-     * @var  boolean  @complete
-     */
-    protected $complete = false;
-
-    /**
      * @var  array  $cache
      */
     protected $cache = array();
+
+    /**
+     * @var  array  $complete
+     */
+    protected $complete = array();
 
     /**
      * Destructor
@@ -61,15 +61,25 @@ abstract class AbstractCache implements CacheInterface
      * @param   array  $contents
      * @return  array  contents listing
      */
-    public function storeContents(array $contents)
+    public function storeContents($directory, array $contents, $recursive = false)
     {
-        foreach ($contents as $object) {
-            $this->updateObject($object['path'], $object);
+        $directories = array($directory);
+
+        foreach ($contents as $index => $object) {
+            $object = $this->updateObject($object['path'], $object);
+            $contents[$index] = $object;
+
+            if ($recursive and ! in_array($object['dirname'], $directories)) {
+                $directories[] = $object['dirname'];
+            }
         }
 
-        $this->setComplete();
+        foreach ($directories as $directory)
+            $this->setComplete($directory, $recursive);
 
-        return $this->listContents();
+        $this->autosave();
+
+        return $contents;
     }
 
     /**
@@ -81,7 +91,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function updateObject($path, array $object, $autosave = false)
     {
-        if ( ! isset($this->cache[$path])) {
+        if ( ! $this->has($path)) {
             $this->cache[$path] = Util::pathinfo($path);
         }
 
@@ -99,9 +109,23 @@ abstract class AbstractCache implements CacheInterface
      *
      * @return  array  contents listing
      */
-    public function listContents()
+    public function listContents($dirname = '', $recursive = false)
     {
-        return array_values($this->cache);
+        $result = array();
+
+        foreach ($this->cache as $object) {
+            if ($object['dirname'] !== $dirname) {
+                continue;
+            }
+
+            $result[] = $object;
+
+            if ($recursive and $object['type'] === 'dir') {
+                $result = array_merge($result, $this->listContents($object['path'], true));
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -111,7 +135,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function has($path)
     {
-        return isset($this->cache[$path]);
+        return isset($this->cache[$path]) and ! empty($this->cache[$path]);
     }
 
     /**
@@ -172,6 +196,10 @@ abstract class AbstractCache implements CacheInterface
             if (strpos($path, $dirname) === 0) {
                 unset($this->cache[$path]);
             }
+        }
+
+        if (isset($this->complete[$dirname])) {
+            unset($this->complete[$dirname]);
         }
 
         $this->autosave();
@@ -251,21 +279,28 @@ abstract class AbstractCache implements CacheInterface
      *
      * @return boolean
      */
-    public function isComplete()
+    public function isComplete($dirname, $recursive)
     {
-        return $this->complete;
+        if ( ! array_key_exists($dirname, $this->complete)) {
+            return false;
+        }
+
+        if ($recursive and $this->complete[$dirname] !== 'recursive') {
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Set the cache to (in)complete
+     * Set the cache to complete
      *
      * @param   boolean  wether the listing is complete
      * @return  $this
      */
-    public function setComplete($complete = true)
+    public function setComplete($dirname, $recursive)
     {
-        $this->complete = $complete;
-        $this->autosave();
+        $this->complete[$dirname] = $recursive ? 'recursive' : true;
 
         return $this;
     }
@@ -293,7 +328,7 @@ abstract class AbstractCache implements CacheInterface
     public function flush()
     {
         $this->cache = array();
-        $this->setComplete(false);
+        $this->complete = array();
         $this->autosave();
     }
 
@@ -316,7 +351,7 @@ abstract class AbstractCache implements CacheInterface
     {
         $cleaned = $this->cleanContents($this->cache);
 
-        return json_encode(array($this->complete, $cleaned));
+        return json_encode(array($cleaned, $this->complete));
     }
 
     /**
@@ -326,9 +361,9 @@ abstract class AbstractCache implements CacheInterface
      */
     public function setFromStorage($json)
     {
-        list($complete, $cache) = json_decode($json, true);
-        $this->complete = $complete;
+        list ($cache, $complete) = json_decode($json, true);
         $this->cache = $cache;
+        $this->complete = $complete;
     }
 
     /**
@@ -342,6 +377,7 @@ abstract class AbstractCache implements CacheInterface
 
         while ($object['dirname'] !== '' and ! isset($this->cache[$object['dirname']])) {
             $object = Util::pathinfo($object['dirname']);
+            $object['type'] = 'dir';
             $this->cache[$object['path']] = $object;
         }
     }

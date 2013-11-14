@@ -68,7 +68,7 @@ class Filesystem implements AdapterInterface
             return true;
         }
 
-        if ($this->cache->isComplete() or ($data = $this->adapter->has($path)) === false) {
+        if ($this->cache->isComplete(Util::dirname($path), false) or ($data = $this->adapter->has($path)) === false) {
             return false;
         }
 
@@ -251,17 +251,19 @@ class Filesystem implements AdapterInterface
     /**
      * List the filesystem contents
      *
-     * @return array contents
+     * @param  string   $directory
+     * @param  boolean  $recursive
+     * @return array    contents
      */
-    public function listContents()
+    public function listContents($directory = '', $recursive = false)
     {
-        if ($this->cache->isComplete()) {
-            return $this->cache->listContents();
+        if ($this->cache->isComplete($directory, $recursive)) {
+            return $this->cache->listContents($directory, $recursive);
         }
 
-        $contents = $this->adapter->listContents();
+        $contents = $this->adapter->listContents($directory, $recursive);
 
-        return $this->cache->storeContents($contents);
+        return $this->cache->storeContents($directory, $contents, $recursive);
     }
 
     /**

@@ -11,17 +11,17 @@ class Noop extends AbstractCache
         return $object;
     }
 
-    public function isComplete()
+    public function isComplete($dirname, $recursive)
     {
         return false;
     }
 
-    public function setComplete($complete = true)
+    public function setComplete($dirname, $recursive)
     {
 
     }
 
-    public function storeContents(array $contents)
+    public function storeContents($directory, array $contents, $recursive)
     {
         return $contents;
     }
@@ -56,7 +56,7 @@ class Noop extends AbstractCache
         return false;
     }
 
-    public function listContents()
+    public function listContents($directory = '', $recursive = false)
     {
         return false;
     }

@@ -118,7 +118,7 @@ class Zip extends AbstractAdapter
         return compact('contents');
     }
 
-    public function listContents()
+    public function listContents($dirname = '', $recursive = false)
     {
         $result = array();
 
@@ -129,8 +129,6 @@ class Zip extends AbstractAdapter
         for ($i = 0; $i < $this->archive->numFiles; $i++) {
             if ($info = $this->archive->statIndex($i)) {
                 $result[] = $this->normalizeObject($info);
-            } else {
-
             }
         }
 

@@ -301,14 +301,14 @@ class Ftp extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
-    public function listContents()
+    public function listContents($directory = '', $recursive = false)
     {
-        return $this->listDirectoryContents('');
+        return $this->listDirectoryContents($directory, $recursive);
     }
 
-    protected function listDirectoryContents($directory)
+    protected function listDirectoryContents($directory, $recursive = true)
     {
-        $listing = ftp_rawlist($this->getConnection(), $directory, true);
+        $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
 
         return $this->normalizeListing($listing);
     }

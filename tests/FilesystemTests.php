@@ -8,7 +8,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	{
 		clearstatcache();
 		$fs = new Adapter\Local(__DIR__.'/files');
-		foreach (array_reverse($fs->listContents()) as $info) {
+		foreach (array_reverse($fs->listContents('', true)) as $info) {
 			if (is_file(__DIR__.'/files/'.$info['path'])) {
 				unlink(__DIR__.'/files/'.$info['path']);
 			} else {
@@ -68,11 +68,11 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	 */
 	public function testIsComplete($filesystem, $adapter, $cache)
 	{
-		$this->assertFalse($cache->isComplete());
+		$this->assertFalse($cache->isComplete('', false));
 		$filesystem->listContents();
-		$this->assertTrue($cache->isComplete());
+		$this->assertTrue($cache->isComplete('', false));
 		$cache->flush();
-		$this->assertFalse($cache->isComplete());
+		$this->assertFalse($cache->isComplete('', false));
 	}
 
 	/**
@@ -98,7 +98,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($cache->has('some_file.txt'));
 		$this->assertTrue($adapter->has('some_file.txt'));
 		$this->assertCount(1, $filesystem->listContents());
-		$this->assertCount(1, $cache->listContents());
+		$this->assertCount(1, $cache->listContents('', false));
 		$this->assertCount(1, $adapter->listContents());
 
 		$filesystem->rename('some_file.txt', 'other_name.txt');
@@ -109,7 +109,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($cache->has('other_name.txt'));
 		$this->assertTrue($adapter->has('other_name.txt'));
 		$this->assertCount(1, $filesystem->listContents());
-		$this->assertCount(1, $cache->listContents());
+		$this->assertCount(1, $cache->listContents('', false));
 		$this->assertCount(1, $adapter->listContents());
 
 		$filesystem->delete('other_name.txt');
@@ -117,7 +117,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($cache->has('other_name.txt'));
 		$this->assertFalse($adapter->has('other_name.txt'));
 		$this->assertCount(0, $filesystem->listContents());
-		$this->assertCount(0, $cache->listContents());
+		$this->assertCount(0, $cache->listContents('', false));
 		$this->assertCount(0, $adapter->listContents());
 	}
 
@@ -168,17 +168,18 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider filesystemProvider
 	 */
-	public function testImplicidDirs($filesystem)
+	public function testImplicidDirs($filesystem, $adapter, $cache)
 	{
 		$this->assertCount(0, $filesystem->listContents());
 		$filesystem->write('dummy.txt', 'content');
 		$this->assertCount(1, $filesystem->listContents());
 		$filesystem->write('nested/dir/dummy.txt', 'text');
-		$this->assertCount(4, $filesystem->listContents());
+		$this->assertCount(4, $filesystem->listContents('', true));
+		$this->assertTrue($cache->isComplete('nested/dir', true));
 		$filesystem->deleteDir('nested');
-		$this->assertCount(1, $filesystem->listContents());
+		$this->assertCount(1, $filesystem->listContents('', true));
 		$filesystem->delete('dummy.txt');
-		$this->assertCount(0, $filesystem->listContents());
+		$this->assertCount(0, $filesystem->listContents('', true));
 		$filesystem->flushCache();
 	}
 
@@ -269,11 +270,11 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$cache = new Cache\Memory(__DIR__);
 		$input = array(array('contents' => 'hehe', 'filename' => 'with contents'), array('filename' => 'no contents'));
 		$expected = array(array('filename' => 'with contents'), array('filename' => 'no contents'));
-		$json = json_encode(array(false, array()));
+		$json = json_encode(array(array(),array()));
 		$output = $cache->cleanContents($input);
 		$this->assertEquals($expected, $output);
 		$this->assertEquals($json, $cache->getForStorage());
-		$input = json_encode(array(true, array()));
+		$input = json_encode(array(array(),array()));
 		$cache->setFromStorage($input);
 		$this->assertEquals($input, $cache->getForStorage());
 	}
@@ -364,17 +365,17 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($filesystem->has('test.txt'));
 		$this->assertInternalType('array', $filesystem->listContents());
 		$cache = $filesystem->getCache();
-		$cache->setComplete(true);
+		$cache->setComplete('', false);
 		$cache->flush();
 		$cache->autosave();
-		$this->assertFalse($cache->isComplete());
+		$this->assertFalse($cache->isComplete('', false));
 		$this->assertFalse($cache->read('something'));
 		$this->assertFalse($cache->getMetadata('something'));
 		$this->assertFalse($cache->getMimetype('something'));
 		$this->assertFalse($cache->getSize('something'));
 		$this->assertFalse($cache->getTimestamp('something'));
 		$this->assertFalse($cache->getVisibility('something'));
-		$this->assertFalse($cache->listContents());
+		$this->assertFalse($cache->listContents('', false));
 		$filesystem->delete('test.txt');
 	}
 
@@ -419,7 +420,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider  filesystemProvider
 	 */
-	public function testGet($filesystem)
+	public function testGet($filesystem, $adapter, $cache)
 	{
 		if ( ! $filesystem->has('nested/file.txt')) {
 			$filesystem->write('nested/file.txt', 'contents');
@@ -442,5 +443,14 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($handler->isDir());
 		$handler->delete();
 		$this->assertFalse($filesystem->has('nested'));
+
+		$cache->flush();
+		$filesystem->write('deeply/nested/thing.txt', 'contents');
+		$filesystem->write('other/nested/thing.txt', 'contents');
+		$this->assertCount(1, $filesystem->listContents('deeply'));
+		$this->assertCount(2, $filesystem->listContents('deeply', true));
+		$this->assertCount(2, $filesystem->listContents('deeply', true));
+		$this->assertCount(1, $cache->listContents('deeply'));
+		$this->assertCount(2, $cache->listContents('deeply', true));
 	}
 }

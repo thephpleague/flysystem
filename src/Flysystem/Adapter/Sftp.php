@@ -79,10 +79,10 @@ class Sftp extends Ftp
         return $key;
     }
 
-    protected function listDirectoryContents($directory)
+    protected function listDirectoryContents($directory, $recursive = true)
     {
         $connection = $this->getConnection();
-        $listing = $connection->exec('cd '.$this->root.$directory.' && ls -laR');
+        $listing = $connection->exec('cd '.$this->root.$directory.' && ls -la'.($recursive ? 'R' : ''));
         $listing = explode(PHP_EOL, trim($listing));
         $listing = array_slice($listing, 2);
 
