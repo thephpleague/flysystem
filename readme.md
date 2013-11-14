@@ -148,16 +148,22 @@ __Write Files__
 $filemanager->write('filename.txt', 'contents');
 ```
 
-__Read Files__
-
-```php
-$contents = $filemanager->read('filename.txt');
-```
-
 __Update Files__
 
 ```php
 $filemanager->update('filename.txt', 'new contents');
+```
+
+__Write or Update Files__
+
+```php
+$filemanager->put('filename.txt', 'contents');
+```
+
+__Read Files__
+
+```php
+$contents = $filemanager->read('filename.txt');
 ```
 
 __Delete Files__
