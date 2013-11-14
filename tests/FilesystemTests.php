@@ -91,9 +91,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider filesystemProvider
 	 */
-	public function testWrite($filesystem, $adapter, $cache)
+	public function testWrite(Filesystem $filesystem, $adapter, $cache)
 	{
-		$this->assertEquals(12, $filesystem->write('some_file.txt', 'some content'));
+		$this->assertTrue($filesystem->write('some_file.txt', 'some content'));
 		$this->assertTrue($filesystem->has('some_file.txt'));
 		$this->assertTrue($cache->has('some_file.txt'));
 		$this->assertTrue($adapter->has('some_file.txt'));
@@ -121,9 +121,26 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertCount(0, $adapter->listContents());
 	}
 
+    /**
+     * @dataProvider filesystemProvider
+     */
+    public function testPut(Filesystem $filesystem, $adapter, $cache)
+    {
+        $this->assertFalse($filesystem->has('new_file.txt'));
+        $this->assertTrue($filesystem->put('new_file.txt', 'new content'));
+        $this->assertTrue($filesystem->has('new_file.txt'));
+        $this->assertEquals('new content', $filesystem->read('new_file.txt'));
+
+        $this->assertTrue($filesystem->put('new_file.txt', 'modified content'));
+        $this->assertEquals('modified content', $filesystem->read('new_file.txt'));
+
+        $this->assertTrue($filesystem->put('new_file.txt', ''));
+        $this->assertEquals('', $filesystem->read('new_file.txt'));
+    }
+
 	/**
 	 * @dataProvider filesystemProvider
-	 * @expectedException  Flysystem\FileExistsException
+	 * @expectedException  \Flysystem\FileExistsException
 	 */
 	public function testFileExists($filesystem)
 	{
@@ -132,7 +149,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider filesystemProvider
-	 * @expectedException  Flysystem\FileNotFoundException
+	 * @expectedException  \Flysystem\FileNotFoundException
 	 */
 	public function testFileNotFoundUpdate($filesystem)
 	{
@@ -141,7 +158,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
 	/**
 	 * @dataProvider filesystemProvider
-	 * @expectedException  Flysystem\FileNotFoundException
+	 * @expectedException  \Flysystem\FileNotFoundException
 	 */
 	public function testFileNotFoundDelete($filesystem)
 	{
@@ -307,6 +324,28 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$mock->shouldReceive($method)->andReturn(false);
 		$this->assertFalse($filesystem->{$method}('dummy.txt', 'other.txt'));
 	}
+
+    public function testFailingPut()
+    {
+        $mock = \Mockery::mock('Flysystem\Adapter\AbstractAdapter');
+        $cachemock = \Mockery::mock('Flysystem\Cache\AbstractCache');
+        $cachemock->shouldReceive('load')->andReturn(array());
+        $cachemock->shouldReceive('has')->andReturn(false);
+        $cachemock->shouldReceive('isComplete')->andReturn(false);
+        $cachemock->shouldReceive('updateObject')->andReturn(false);
+        $mock->shouldReceive('__toString')->andReturn('Flysystem\Adapter\AbstractAdapter');
+        $cachemock->shouldReceive('__toString')->andReturn('Flysystem\Cache\AbstractCache');
+
+        $filesystem = new Filesystem($mock, $cachemock);
+        $mock->shouldReceive('write')->andReturn(false);
+        $mock->shouldReceive('update')->andReturn(false);
+
+        $mock->shouldReceive('has')->with('dummy.txt')->andReturn(true);
+        $this->assertFalse($filesystem->put('dummy.txt', 'content'));
+
+        $mock->shouldReceive('has')->with('dummy2.txt')->andReturn(false);
+        $this->assertFalse($filesystem->put('dummy2.txt', 'content'));
+    }
 
 	/**
 	 * @dataProvider filesystemProvider

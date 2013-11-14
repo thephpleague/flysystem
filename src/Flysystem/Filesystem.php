@@ -101,6 +101,35 @@ class Filesystem implements AdapterInterface
     }
 
     /**
+     * Create a file or update if exists
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @param  string              $visibility
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
+    public function put($path, $contents, $visibility = null)
+    {
+        if ($this->has($path)) {
+            if (($data = $this->adapter->update($path, $contents)) === false) {
+                return false;
+            }
+
+            $this->cache->updateObject($path, $data, true);
+        } else {
+            if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+                return false;
+            }
+
+            $this->cache->updateObject($path, $data, true);
+            $this->cache->ensureParentDirectories($path);
+        }
+
+        return true;
+    }
+
+    /**
      * Update a file
      *
      * @param  string                $path     path to file
