@@ -51,7 +51,7 @@ class Local extends AbstractAdapter
         return file_exists($this->prefix($path));
     }
 
-    public function write($path, $contents, $visibility)
+    public function write($path, $contents, $visibility = null)
     {
         $location = $this->prefix($path);
 

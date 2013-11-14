@@ -35,7 +35,7 @@ class AwsS3 extends AbstractAdapter
         return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
     }
 
-    public function write($path, $contents, $visibility)
+    public function write($path, $contents, $visibility = null)
     {
         $options = $this->getOptions($path, array(
             'Body' => $contents,
