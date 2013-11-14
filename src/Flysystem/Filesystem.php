@@ -4,7 +4,7 @@ namespace Flysystem;
 
 use InvalidArgumentException;
 
-class Filesystem implements AdapterInterface
+class Filesystem implements FilesystemInterface
 {
     /**
      * @var  AdapterInterface  $adapter
