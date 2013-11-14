@@ -38,7 +38,7 @@ class Dropbox extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
-    public function write($path, $contents, $visibility)
+    public function write($path, $contents, $visibility = null)
     {
         return $this->upload($path, $contents, WriteMode::add());
     }

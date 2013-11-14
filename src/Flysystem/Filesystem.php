@@ -26,6 +26,7 @@ class Filesystem implements AdapterInterface
      *
      * @param AdapterInterface $adapter
      * @param CacheInterface   $cache
+     * @param string           $visibility
      */
     public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = AdapterInterface::VISIBILITY_PUBLIC)
     {
@@ -56,7 +57,7 @@ class Filesystem implements AdapterInterface
     }
 
     /**
-     * Check wether a path exists
+     * Check whether a path exists
      *
      * @param  string  $path path to check
      * @return boolean wether the path exists
@@ -81,6 +82,7 @@ class Filesystem implements AdapterInterface
      *
      * @param  string              $path     path to file
      * @param  string              $contents file contents
+     * @param  string              $visibility
      * @throws FileExistsException
      * @return boolean             success boolean
      */
@@ -190,7 +192,7 @@ class Filesystem implements AdapterInterface
     /**
      * Delete a directory
      *
-     * @param  string  $path path to directory
+     * @param  string  $dirname path to directory
      * @return boolean success boolean
      */
     public function deleteDir($dirname)
@@ -275,6 +277,7 @@ class Filesystem implements AdapterInterface
      *
      * @param   string  $path      path to file
      * @param   array   $metadata  metadata keys
+     * @throws InvalidArgumentException
      * @return  array   metadata
      */
     public function getWithMetadata($path, array $metadata)
@@ -428,6 +431,7 @@ class Filesystem implements AdapterInterface
      * Get a file/directory handler
      *
      * @param   string   $path
+     * @param   Handler  $handler
      * @return  Handler  file or directory handler
      */
     public function get($path, Handler $handler = null)
