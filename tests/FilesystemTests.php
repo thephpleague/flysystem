@@ -441,6 +441,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($filesystem->has('nested/file.txt'));
 		$handler = $filesystem->get('nested');
 		$this->assertTrue($handler->isDir());
+		$this->assertCount(0, $handler->getContents(true));
+		$filesystem->write('nested/other.txt', 'contents');
+		$this->assertCount(1, $handler->getContents(true));
 		$handler->delete();
 		$this->assertFalse($filesystem->has('nested'));
 

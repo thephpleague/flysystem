@@ -2,6 +2,7 @@
 
 namespace Flysystem;
 
+use LogicException;
 use InvalidArgumentException;
 
 class Filesystem implements FilesystemInterface
@@ -20,6 +21,11 @@ class Filesystem implements FilesystemInterface
      * @var  string  $visibility
      */
     protected $visibility;
+
+    /**
+     * @var  array  $plugins
+     */
+    protected $plugins = array();
 
     /**
      * Constructor
@@ -515,5 +521,52 @@ class Filesystem implements FilesystemInterface
         if ($this->has($path)) {
             throw new FileExistsException($path);
         }
+    }
+
+    /**
+     * Register a plugin
+     *
+     * @param   PluginInterface  $plugin
+     * @return  $this
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $plugin->setFilesystem($this);
+        $method = $plugin->getMethod();
+
+        $this->plugins[$method] = $plugin;
+
+        return $this;
+    }
+
+    /**
+     * Register a plugin
+     *
+     * @param   string           $method
+     * @return  PluginInterface  $plugin
+     * @throws  LogicException
+     */
+    public function findPlugin($method)
+    {
+        if ( ! isset($this->plugins[$method])) {
+            throw new LogicException('Plugin not found for method: '.$method);
+        }
+
+        return $this->plugins[$method];
+    }
+
+    /**
+     * Plugins passthrough
+     *
+     * @param   string  $method
+     * @param   array   $arguments
+     * @return  mixed
+     */
+    public function __call($method, array $arguments)
+    {
+        $plugin = $this->findPlugin($method);
+        $callback = array($plugin, 'handle');
+
+        return call_user_func_array($callback, $arguments);
     }
 }
