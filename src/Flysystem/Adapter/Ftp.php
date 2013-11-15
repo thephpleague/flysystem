@@ -30,26 +30,42 @@ class Ftp extends AbstractAdapter
         }
     }
 
+    /**
+     * Set the config
+     *
+     * @param array $config
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setConfig(array $config)
     {
         foreach ($this->configurable as $setting) {
-            if ( ! isset($config[$setting])) continue;
-            $this->{'set'.ucfirst($setting)}($config[$setting]);
+            if ( ! isset($config[$setting]))
+                continue;
+            $this->{'set' . ucfirst($setting)}($config[$setting]);
         }
 
         return $this;
     }
 
+    /**
+     * Returns the host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the host
+     *
+     * @param string $host
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setHost($host)
     {
         $this->host = $host;
-
-        return $this;
-    }
-
-    public function setPort($port)
-    {
-        $this->port = $port;
 
         return $this;
     }
@@ -68,11 +84,45 @@ class Ftp extends AbstractAdapter
         return $this;
     }
 
+    /**
+     * Returns the ftp port
+     *
+     * @return int
+     */
     public function getPort()
     {
         return $this->port;
     }
 
+    /**
+     * Set the ftp port
+     *
+     * @param int|string $port
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setPort($port)
+    {
+        $this->port = (int) $port;
+
+        return $this;
+    }
+
+    /**
+     * Returns the ftp username
+     *
+     * @return string username
+     */
+    public function getUsername()
+    {
+        return empty($this->username) ? 'anonymous' : $this->username;
+    }
+
+    /**
+     * Set ftp username
+     *
+     * @param string $username
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setUsername($username)
     {
         $this->username = $username;
@@ -80,6 +130,22 @@ class Ftp extends AbstractAdapter
         return $this;
     }
 
+    /**
+     * Returns the password
+     *
+     * @return string password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the ftp password
+     *
+     * @param string $password
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setPassword($password)
     {
         $this->password = $password;
@@ -87,28 +153,91 @@ class Ftp extends AbstractAdapter
         return $this;
     }
 
+    /**
+     * Returns if SSL is enabled
+     *
+     * @return bool
+     */
+    public function getSsl()
+    {
+        return $this->ssl;
+    }
+
+    /**
+     * Set if Ssl is enabled
+     *
+     * @param bool $ssl
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setSsl($ssl)
     {
-        $this->ssl = $ssl;
+        $this->ssl = (bool) $ssl;
 
         return $this;
     }
 
+    /**
+     * Returns the amount of seconds before the connection will timeout
+     *
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set the amount of seconds before the connection should timeout
+     *
+     * @param int $timeout
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setTimeout($timeout)
     {
-        $this->timeout = $timeout;
+        $this->timeout = (int) $timeout;
 
         return $this;
     }
 
+    /**
+     * Returns if passive mode will be used
+     *
+     * @return bool
+     */
+    public function getPassive()
+    {
+        return $this->passive;
+    }
+
+    /**
+     * Set if passive mode should be used
+     *
+     * @param bool $passive
+     */
     public function setPassive($passive = true)
     {
         $this->passive = $passive;
     }
 
+    /**
+     * Returns the root folder to work from
+     *
+     * @return string
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
+     * Set the root folder to work from
+     *
+     * @param string $root
+     * @return \Flysystem\Adapter\Ftp
+     */
     public function setRoot($root)
     {
-        $this->root = rtrim($root, '\\/').$this->separator;
+        $this->root = rtrim($root, '\\/') . $this->separator;
 
         return $this;
     }
@@ -126,8 +255,8 @@ class Ftp extends AbstractAdapter
     {
         $connector = $this->ssl ? 'ftp_ssl_connect' : 'ftp_connect';
 
-        if ( ! $this->connection = @$connector($this->host, $this->getPort(), $this->timeout)) {
-            throw new \RuntimeException('Could not connect to host: '.$this->host.'::'.$this->getPort());
+        if ( ! $this->connection = @$connector($this->getHost(), $this->getPort(), $this->getTimeout())) {
+            throw new \RuntimeException('Could not connect to host: ' . $this->getHost() . '::' . $this->getPort());
         }
 
         $this->login();
@@ -137,22 +266,22 @@ class Ftp extends AbstractAdapter
 
     protected function setConnectionPassiveMode()
     {
-        if ( ! $result = ftp_pasv($this->connection, $this->passive)) {
-            throw new \RuntimeException('Could not set passive mode for connection: '.$this->host.'::'.$this->getPort());
+        if ( ! $result = ftp_pasv($this->getConnection(), $this->getPassive())) {
+            throw new \RuntimeException('Could not set passive mode for connection: ' . $this->getHost() . '::' . $this->getPort());
         }
     }
 
     protected function setConnectionRoot()
     {
-        if ($this->root and ! ftp_chdir($this->connection, $this->root)) {
-            throw new \RuntimeException('Root is invalid or does not exist: '.$this->root);
+        if ($this->root and ! ftp_chdir($this->getConnection(), $this->getRoot())) {
+            throw new \RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
     }
 
     protected function login()
     {
-        if ( ! @ftp_login($this->connection, $this->username, $this->password)) {
-            throw new \RuntimeException('Could not login with connection: '.$this->host.'::'.$this->getPort().', username: '.$this->username);
+        if ( ! @ftp_login($this->getConnection(), $this->getUsername(), $this->getPassword())) {
+            throw new \RuntimeException('Could not login with connection: ' . $this->getHost() . '::' . $this->getPort() . ', username: ' . $this->getUsername());
         }
     }
 
@@ -169,7 +298,7 @@ class Ftp extends AbstractAdapter
     {
         $this->ensureDirectory(Util::dirname($path));
         $mimetype = Util::contentMimetype($contents);
-        $stream = fopen('data://'.$mimetype.','.$contents, 'r');
+        $stream = fopen('data://' . $mimetype . ',' . $contents, 'r');
         $result = ftp_fput($this->getConnection(), $path, $stream, FTP_BINARY);
         fclose($stream);
 
@@ -205,9 +334,9 @@ class Ftp extends AbstractAdapter
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                ftp_delete($this->getConnection(), $dirname.$this->separator.$object['path']);
+                ftp_delete($this->getConnection(), $dirname . $this->separator . $object['path']);
             } else {
-                ftp_rmdir($this->getConnection(), $dirname.$this->separator.$object['path']);
+                ftp_rmdir($this->getConnection(), $dirname . $this->separator . $object['path']);
             }
         }
 
@@ -237,12 +366,13 @@ class Ftp extends AbstractAdapter
 
     public function getMetadata($path)
     {
-        if ( ! $object = ftp_raw($this->getConnection(), 'STAT '.$path) or count($object) < 3) {
+        if ( ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
             return false;
         }
 
         $dirname = dirname($path);
-        if ($dirname === '.') $dirname = '';
+        if ($dirname === '.')
+            $dirname = '';
 
         return $this->normalizeObject($object[1], $dirname);
     }
@@ -320,8 +450,7 @@ class Ftp extends AbstractAdapter
         $base = '';
         $result = array();
 
-        while ($item = array_shift($listing))
-        {
+        while ($item = array_shift($listing)) {
             if (preg_match('#^.*:$#', $item)) {
                 $base = substr($item, 2, -1);
                 continue;
@@ -350,7 +479,7 @@ class Ftp extends AbstractAdapter
         list ($permissions, $number, $owner, $group, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
 
         $type = $this->detectType($permissions);
-        $path = empty($base) ? $name : $base.$this->separator.$name;
+        $path = empty($base) ? $name : $base . $this->separator . $name;
 
         if ($type === 'dir') {
             return compact('type', 'path');
@@ -359,7 +488,7 @@ class Ftp extends AbstractAdapter
         $permissions = $this->normalizePermissions($permissions);
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
         $size = (int) $size;
-        $timestamp = strtotime($month.' '.$day.' '.$time);
+        $timestamp = strtotime($month . ' ' . $day . ' ' . $time);
 
         return compact('type', 'path', 'visibility', 'size', 'timestamp');
     }
@@ -382,7 +511,9 @@ class Ftp extends AbstractAdapter
         $parts = str_split($permissions, 3);
 
         // convert the groups
-        $mapper = function ($part) { return array_sum(str_split($part)); };
+        $mapper = function ($part) {
+            return array_sum(str_split($part));
+        };
 
         // get the sum of the groups
         return array_sum(array_map($mapper, $parts));
@@ -401,4 +532,5 @@ class Ftp extends AbstractAdapter
     {
         $this->disconnect();
     }
+
 }
