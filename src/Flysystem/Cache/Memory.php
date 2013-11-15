@@ -18,6 +18,6 @@ class Memory extends AbstractCache
     {
         clearstatcache();
 
-        return parent::flush();
+        parent::flush();
     }
 }

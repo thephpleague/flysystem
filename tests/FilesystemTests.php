@@ -168,7 +168,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider filesystemProvider
 	 */
-	public function testImplicidDirs($filesystem, $adapter, $cache)
+	public function testImplicitDirs($filesystem, $adapter, $cache)
 	{
 		$this->assertCount(0, $filesystem->listContents());
 		$filesystem->write('dummy.txt', 'content');

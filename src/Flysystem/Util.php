@@ -104,7 +104,7 @@ abstract class Util
     }
 
     /**
-     * Emulate directies
+     * Emulate directories
      *
      * @param   array  $listing
      * @return  array  listing with emulated directories

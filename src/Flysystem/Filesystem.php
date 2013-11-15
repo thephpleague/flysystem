@@ -66,7 +66,7 @@ class Filesystem implements FilesystemInterface
      * Check whether a path exists
      *
      * @param  string  $path path to check
-     * @return boolean wether the path exists
+     * @return boolean whether the path exists
      */
     public function has($path)
     {
