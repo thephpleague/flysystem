@@ -92,7 +92,7 @@ class Dropbox extends AbstractAdapter
 
     public function createDir($path)
     {
-        return array('path' => $path, 'type' => $dir);
+        return array('path' => $path, 'type' => 'dir');
     }
 
     public function getMetadata($path)

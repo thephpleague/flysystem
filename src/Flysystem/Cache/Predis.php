@@ -17,7 +17,7 @@ class Predis extends Memory
     protected $key;
 
     /**
-     * @var  int|null  $expire  seconds until cache expitation
+     * @var  int|null  $expire  seconds until cache expiration
      */
     protected $expire;
 
@@ -26,7 +26,7 @@ class Predis extends Memory
      *
      * @param \Predis\Client $client predis client
      * @param string         $key    storage key
-     * @param int|null       $expire seconds until cache expitation
+     * @param int|null       $expire seconds until cache expiration
      */
     public function __construct(Client $client = null, $key = 'flysystem', $expire = null)
     {

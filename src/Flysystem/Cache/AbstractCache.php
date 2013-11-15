@@ -58,7 +58,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Store the contents listing
      *
-     * @param   array  $contents
+     * @param   string   $directory
+     * @param   array    $contents
+     * @param   boolean  $recursive
      * @return  array  contents listing
      */
     public function storeContents($directory, array $contents, $recursive = false)
@@ -83,11 +85,11 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Opdate the metadata for an object
+     * Update the metadata for an object
      *
      * @param   string   $path      object path
      * @param   array    $object    object metadata
-     * @param   boolean  $autosave  wether to trigger the autosave routine
+     * @param   boolean  $autosave  whether to trigger the autosave routine
      */
     public function updateObject($path, array $object, $autosave = false)
     {
@@ -107,7 +109,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Get the contents listing
      *
-     * @return  array  contents listing
+     * @param   string   $dirname
+     * @param   boolean  $recursive
+     * @return  array    contents listing
      */
     public function listContents($dirname = '', $recursive = false)
     {
@@ -129,8 +133,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Check wether an object has been cached
+     * Check whether an object has been cached
      *
+     * @param   string   $path
      * @return  boolean  cached boolean
      */
     public function has($path)
@@ -139,8 +144,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the contents of an object
+     * Retrieve the contents of an object
      *
+     * @param   string       $path
      * @return  null|string  contents or null on failure
      */
     public function read($path)
@@ -206,8 +212,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the mimetype of an object
+     * Retrieve the mimetype of an object
      *
+     * @param   string       $path
      * @return  null|string  mimetype or null on failure
      */
     public function getMimetype($path)
@@ -227,8 +234,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the size of an object
+     * Retrieve the size of an object
      *
+     * @param   string       $path
      * @return  null|string  size or null on failure
      */
     public function getSize($path)
@@ -239,8 +247,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the timestamp of an object
+     * Retrieve the timestamp of an object
      *
+     * @param   string        $path
      * @return  null|integer  timestamp or null on failure
      */
     public function getTimestamp($path)
@@ -251,9 +260,10 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the visiility of an object
+     * Retrieve the visibility of an object
      *
-     * @return  null|string  visiility or null on failure
+     * @param   string       $path
+     * @return  null|string  visibility or null on failure
      */
     public function getVisibility($path)
     {
@@ -263,8 +273,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive the metadata of an object
+     * Retrieve the metadata of an object
      *
+     * @param   string      $path
      * @return  null|array  metadata or null on failure
      */
     public function getMetadata($path)
@@ -275,8 +286,10 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Check wether the listing is complete
+     * Check whether the listing is complete
      *
+     * @param  string  $dirname
+     * @param  boolean $recursive
      * @return boolean
      */
     public function isComplete($dirname, $recursive)
@@ -295,7 +308,8 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Set the cache to complete
      *
-     * @param   boolean  wether the listing is complete
+     * @param   string   $dirname
+     * @param   boolean  $recursive
      * @return  $this
      */
     public function setComplete($dirname, $recursive)
@@ -343,7 +357,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retreive serialied cache data
+     * Retrieve serialized cache data
      *
      * @return  string  serialized data
      */

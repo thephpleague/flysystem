@@ -6,7 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/FrenkyNet/Flysystem/badge.png)](https://coveralls.io/r/FrenkyNet/Flysystem)
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/FrenkyNet/flysystem/trend.png)](https://bitdeli.com/free)
 
-Flysystem is a filesystem abstraction which allows you to easiliy swap out a local filesystem for a remote one.
+Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
 # Goals
 
@@ -258,7 +258,7 @@ foreach ($paths as $path) {
 }
 ```
 
-___List with ensured presence of precific metadata___
+___List with ensured presence of specific metadata___
 
 ```php
 $listing = $filesystem->listWith('mimetype', 'size', 'timestamp');

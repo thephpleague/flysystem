@@ -42,7 +42,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Check wether a file is present
+     * Check whether a file is present
      *
      * @param   string   $path
      * @return  boolean
