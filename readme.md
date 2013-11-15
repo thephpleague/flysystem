@@ -232,7 +232,7 @@ if ($filesystem->getVisibility('secret.txt') === 'private') {
 }
 ```
 
-### List Contents
+___List Contents___
 
 ```php
 $contents = $filemanager->listContents();
@@ -248,7 +248,7 @@ foreach ($contents as $object) {
 }
 ```
 
-### List paths
+___List paths___
 
 ```php
 $paths = $filemanager->listPaths();
@@ -258,7 +258,7 @@ foreach ($paths as $path) {
 }
 ```
 
-### List with ensured presence of precific metadata
+___List with ensured presence of precific metadata___
 
 ```php
 $listing = $filesystem->listWith('mimetype', 'size', 'timestamp');
@@ -266,6 +266,48 @@ $listing = $filesystem->listWith('mimetype', 'size', 'timestamp');
 foreach ($listing as $object) {
 	echo $object['path'].' has mimetype: '.$object['mimetype'];
 }
+```
+
+## Plugins
+
+Need a feature which is not included in Flysystem's bag of trick? Write a plugin!
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\PluginInterface;
+
+class MaximusAwesomeness implements PluginInterface
+{
+    protected $filesystem;
+
+    public function setFilesystem(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
+    public function getMethod()
+    {
+        return 'getDown';
+    }
+
+    public function handle($path = null)
+    {
+        $contents = $this->filesystem->read($path);
+
+        return sha1($contents);
+    }
+}
+```
+
+Now we're ready to use the plugin
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\Adapter;
+
+$filesystem = new Filesystem(new Adapter\Local(__DIR__.'/path/to/files/'));
+$filesystem->addPlugin(new MaximusAwesomeness);
+$sha1 = $filesystem->getDown('path/to/file');
 ```
 
 # Enjoy.
