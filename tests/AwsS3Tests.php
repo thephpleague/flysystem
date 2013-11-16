@@ -37,7 +37,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $result = $adapter->rename('old', 'new');
         $this->assertArrayHasKey('path', $result);
         $this->assertContains('new', $result);
-        $this->assertContains(1293836400, $result);
+        $this->assertInternalType('int', $result['timestamp']);
     }
 
     public function testDeleteDir()
