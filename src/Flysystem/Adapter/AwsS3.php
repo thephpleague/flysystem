@@ -86,7 +86,7 @@ class AwsS3 extends AbstractAdapter
 
     public function deleteDir($path)
     {
-        $this->client->deleteMatchingObjects($this->bucket, $this->prefix($path));
+        return $this->client->deleteMatchingObjects($this->bucket, $this->prefix($path));
     }
 
     public function createDir($path)
@@ -123,11 +123,7 @@ class AwsS3 extends AbstractAdapter
         $result = $this->client->getObjectAcl($options)->getAll();
 
         foreach ($result['Grants'] as $grant) {
-            if (isset($grant['Grantee']['URI']) and $grant['Grantee']['URI'] === Group::ALL_USERS) {
-                if ($grant['Permission'] !== Permission::READ) {
-                    break;
-                }
-
+            if (isset($grant['Grantee']['URI']) and $grant['Grantee']['URI'] === Group::ALL_USERS and $grant['Permission'] === Permission::READ) {
                 return ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
             }
         }
@@ -150,11 +146,7 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->client->listObjects(array(
             'Bucket' => $this->bucket,
-        ))->getAll(['Contents']);
-
-        if ( ! isset($result['Contents'])) {
-            return array();
-        }
+        ))->getAll(array('Contents'));
 
         $result = array_map(array($this, 'normalizeObject'), $result['Contents']);
 
@@ -169,7 +161,7 @@ class AwsS3 extends AbstractAdapter
             $result['timestamp'] = strtotime($object['LastModified']);
         }
 
-        $result = array_merge($result, Util::map($object, static::$resultMap), ['type' => 'file']);
+        $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
 
         return $result;
     }
