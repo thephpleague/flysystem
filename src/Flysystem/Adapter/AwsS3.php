@@ -124,11 +124,11 @@ class AwsS3 extends AbstractAdapter
 
         foreach ($result['Grants'] as $grant) {
             if (isset($grant['Grantee']['URI']) and $grant['Grantee']['URI'] === Group::ALL_USERS and $grant['Permission'] === Permission::READ) {
-                return ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
+                return array('visibility' => AdapterInterface::VISIBILITY_PUBLIC);
             }
         }
 
-        return ['visibility' => AdapterInterface::VISIBILITY_PRIVATE];
+        return array('visibility' => AdapterInterface::VISIBILITY_PRIVATE);
     }
 
     public function setVisibility($path, $visibility)
