@@ -19,12 +19,14 @@
         "predis/predis": "~0.8.4",
         "mockery/mockery": "~0.8.0",
         "dropbox/dropbox-sdk": "~1.1.1",
+        "sabre/dav": "~1.8.7",
         "league/phpunit-coverage-listener" : "~1.0"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
         "predis/predis": "Allows you to use Predis for caching",
         "dropbox/dropbox-sdk": "Allows you to use Dropbox storage",
-        "phpseclib/phpseclib": "Allows SFTP server storage"
+        "phpseclib/phpseclib": "Allows SFTP server storage",
+        "sabre/dav": "Enables WebDav support"
     }
 }
