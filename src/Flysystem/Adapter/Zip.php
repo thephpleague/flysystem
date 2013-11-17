@@ -11,6 +11,7 @@ class Zip extends AbstractAdapter
     protected static $resultMap = array(
         'size'  => 'size',
         'mtime' => 'timestamp',
+        'name'  => 'path',
     );
 
     protected $archive;
