@@ -25,9 +25,24 @@ class Local extends AbstractAdapter
      */
     public function __construct($root)
     {
-        $root = realpath($root);
+        $root = $this->ensureRootDirectory($root);
 
         $this->root = Util::normalizePrefix($root, DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Ensure the root directory exists.
+     *
+     * @param   string  $root  root directory path
+     * @return  string  real path to root
+     */
+    protected function ensureRootDirectory($root)
+    {
+        if ( ! is_dir($root)) {
+            mkdir($root, 0777, true);
+        }
+
+        return realpath($root);
     }
 
     /**

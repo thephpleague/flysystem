@@ -38,7 +38,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
 	public function testInstantiable()
 	{
-		$instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'files'), $cache = new Cache\Memory);
+		$instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory);
 	}
 
 	public function filesystemProvider()
