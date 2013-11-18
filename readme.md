@@ -146,13 +146,12 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($cl
 ```php
 use Flysystem\Filesystem;
 use Flysystem\Adapter\Local as Adapter;
-use Flysystem\Cache\Predis as Cache;
+use Flysystem\Cache\Memcached as Cache;
 
-$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache);
-
-// Or supply a client
-$client = new Predis\Client;
-$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($client));
+$memcached = new Memcached;
+$memcached->addServer('localhost', 11211);
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($memcached, 'storageKey', time() + 300));
+// Storage Key and expire time are optional
 ```
 
 ## General Usage
