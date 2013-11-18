@@ -46,6 +46,7 @@ Through Composer, obviously:
 
 * Memory (array caching)
 * Redis (through Predis)
+* Memcached
 
 ## Local Setup
 
@@ -127,6 +128,20 @@ $filesystem = new Filesystem(new Adapter(array(
 ```
 
 ## Predis Caching Setup
+
+```php
+use Flysystem\Filesystem;
+use Flysystem\Adapter\Local as Adapter;
+use Flysystem\Cache\Predis as Cache;
+
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache);
+
+// Or supply a client
+$client = new Predis\Client;
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($client));
+```
+
+## Memcached Caching Setup
 
 ```php
 use Flysystem\Filesystem;
