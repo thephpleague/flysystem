@@ -125,16 +125,12 @@ class WebDav extends AbstractAdapter
 
     public function listContents($directory = '', $recursive = false)
     {
-        try {
-            $response = $this->client->propFind($directory, array(
-                '{DAV:}displayname',
-                '{DAV:}getcontentlength',
-                '{DAV:}getcontenttype',
-                '{DAV:}getlastmodified',
-            ), 1);
-        } catch (Exception $e) {
-            return false;
-        }
+        $response = $this->client->propFind($directory, array(
+            '{DAV:}displayname',
+            '{DAV:}getcontentlength',
+            '{DAV:}getcontenttype',
+            '{DAV:}getlastmodified',
+        ), 1);
 
         array_shift($response);
 
