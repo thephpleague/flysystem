@@ -19,12 +19,9 @@ class WebDav extends AbstractAdapter
 
     protected $client;
 
-    protected $prefix;
-
-    public function __construct(Client $client, $prefix = null)
+    public function __construct(Client $client)
     {
         $this->client = $client;
-        $this->prefix = $prefix;
     }
 
     public function getMetadata($path)
