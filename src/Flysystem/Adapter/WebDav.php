@@ -35,7 +35,7 @@ class WebDav extends AbstractAdapter
             ));
 
             return $this->normalizeObject($result, $path);
-        } catch (Exception $e) {
+        } catch (Exception\FileNotFound $e) {
             return false;
         }
     }
@@ -58,20 +58,16 @@ class WebDav extends AbstractAdapter
                 'contents' => $response['body'],
                 'timestamp' => strtotime($response['headers']['last-modified']),
             ), Util::map($response['headers'], static::$resultMap));
-        } catch (Exception $e) {
+        } catch (Exception\FileNotFound $e) {
             return false;
         }
     }
 
     public function write($path, $contents, $visibility = null)
     {
-        try {
-            $this->client->request('PUT', $path, $contents);
+        $this->client->request('PUT', $path, $contents);
 
-            return compact('path', 'contents', 'visibility');
-        } catch (Exception $e) {
-            return false;
-        }
+        return compact('path', 'contents', 'visibility');
     }
 
     public function update($path, $contents)
@@ -89,7 +85,7 @@ class WebDav extends AbstractAdapter
             if ($response['statusCode'] > 200 or $response['statusCode'] < 299) {
                 return true;
             }
-        } catch (Exception $e) { }
+        } catch (Exception\FileNotFound $e) { }
 
         return false;
     }
@@ -100,20 +96,16 @@ class WebDav extends AbstractAdapter
             $this->client->request('DELETE', $path);
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception\FileNotFound $e) {
             return false;
         }
     }
 
     public function createDir($path)
     {
-        try {
-            $response = $this->client->request('MKCOL', $path);
+        $response = $this->client->request('MKCOL', $path);
 
-            return $response['statusCode'] === 201;
-        } catch (Exception $e) {
-            return false;
-        }
+        return $response['statusCode'] === 201;
     }
 
     public function deleteDir($dirname)
@@ -123,12 +115,12 @@ class WebDav extends AbstractAdapter
 
     public function getVisibility($path)
     {
-
+        throw new LogicException('The WebDav adapter does not support visibility settings.');
     }
 
     public function setVisibility($path, $visibility)
     {
-
+        throw new LogicException('The WebDav adapter does not support visibility settings.');
     }
 
     public function listContents($directory = '', $recursive = false)
