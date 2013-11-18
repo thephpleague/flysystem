@@ -2,6 +2,7 @@
 
 namespace Flysystem;
 
+use Exception;
 use LogicException;
 use InvalidArgumentException;
 
@@ -74,13 +75,17 @@ class Filesystem implements FilesystemInterface
             return true;
         }
 
-        if ($this->cache->isComplete(Util::dirname($path), false) or ($data = $this->adapter->has($path)) === false) {
-            return false;
+        try {
+            if ($this->cache->isComplete(Util::dirname($path), false) or ($data = $this->adapter->has($path)) === false) {
+                return false;
+            }
+
+            $this->cache->updateObject($path, $data === true ? array() : $data, true);
+
+            return true;
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
-
-        $this->cache->updateObject($path, $data === true ? array() : $data, true);
-
-        return true;
     }
 
     /**
@@ -96,8 +101,12 @@ class Filesystem implements FilesystemInterface
     {
         $this->assertAbsent($path);
 
-        if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
-            return false;
+        try {
+            if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->updateObject($path, $data, true);
@@ -118,14 +127,22 @@ class Filesystem implements FilesystemInterface
     public function put($path, $contents, $visibility = null)
     {
         if ($this->has($path)) {
-            if (($data = $this->adapter->update($path, $contents)) === false) {
-                return false;
+            try {
+                if (($data = $this->adapter->update($path, $contents)) === false) {
+                    return false;
+                }
+            } catch (Exception $e) {
+                throw new AdapterException($e->getMessage(), $e->getCode(), $e);
             }
 
             $this->cache->updateObject($path, $data, true);
         } else {
-            if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
-                return false;
+            try {
+                if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+                    return false;
+                }
+            } catch (Exception $e) {
+                throw new AdapterException($e->getMessage(), $e->getCode(), $e);
             }
 
             $this->cache->updateObject($path, $data, true);
@@ -146,7 +163,12 @@ class Filesystem implements FilesystemInterface
     public function update($path, $contents)
     {
         $this->assertPresent($path);
-        $data = $this->adapter->update($path, $contents);
+
+        try {
+            $data = $this->adapter->update($path, $contents);
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
+        }
 
         if ($data === false) {
             return false;
@@ -172,8 +194,12 @@ class Filesystem implements FilesystemInterface
             return $contents;
         }
 
-        if ( ! $data = $this->adapter->read($path)) {
-            return false;
+        try {
+            if ( ! $data = $this->adapter->read($path)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->updateObject($path, $data, true);
@@ -195,8 +221,12 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
-        if ($this->adapter->rename($path, $newpath) === false) {
-            return false;
+        try {
+            if ($this->adapter->rename($path, $newpath) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->rename($path, $newpath);
@@ -215,8 +245,12 @@ class Filesystem implements FilesystemInterface
     {
         $this->assertPresent($path);
 
-        if ($this->adapter->delete($path) === false) {
-            return false;
+        try {
+            if ($this->adapter->delete($path) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->delete($path);
@@ -232,8 +266,12 @@ class Filesystem implements FilesystemInterface
      */
     public function deleteDir($dirname)
     {
-        if ($this->adapter->deleteDir($dirname) === false) {
-            return false;
+        try {
+            if ($this->adapter->deleteDir($dirname) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->deleteDir($dirname);
@@ -249,7 +287,11 @@ class Filesystem implements FilesystemInterface
      */
     public function createDir($dirname)
     {
-        $data = $this->adapter->createDir($dirname);
+        try {
+            $data = $this->adapter->createDir($dirname);
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
+        }
 
         $this->cache->updateObject($dirname, $data, true);
     }
@@ -267,7 +309,11 @@ class Filesystem implements FilesystemInterface
             return $this->cache->listContents($directory, $recursive);
         }
 
-        $contents = $this->adapter->listContents($directory, $recursive);
+        try {
+            $contents = $this->adapter->listContents($directory, $recursive);
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
+        }
 
         return $this->cache->storeContents($directory, $contents, $recursive);
     }
@@ -347,8 +393,12 @@ class Filesystem implements FilesystemInterface
             return $mimetype;
         }
 
-        if ( ! $data = $this->adapter->getMimetype($path)) {
-            return false;
+        try {
+            if ( ! $data = $this->adapter->getMimetype($path)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $data = $this->cache->updateObject($path, $data, true);
@@ -371,8 +421,12 @@ class Filesystem implements FilesystemInterface
             return $mimetype;
         }
 
-        if ( ! $data = $this->adapter->getTimestamp($path)) {
-            return false;
+        try {
+            if ( ! $data = $this->adapter->getTimestamp($path)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $data = $this->cache->updateObject($path, $data, true);
@@ -394,8 +448,12 @@ class Filesystem implements FilesystemInterface
             return $visibility;
         }
 
-        if (($data = $this->adapter->getVisibility($path)) === false) {
-            return false;
+        try {
+            if (($data = $this->adapter->getVisibility($path)) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->updateObject($path, $data, true);
@@ -415,8 +473,12 @@ class Filesystem implements FilesystemInterface
             return $visibility;
         }
 
-        if (($data = $this->adapter->getSize($path)) === false) {
-            return false;
+        try {
+            if (($data = $this->adapter->getSize($path)) === false) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->updateObject($path, $data, true);
@@ -433,8 +495,12 @@ class Filesystem implements FilesystemInterface
      */
     public function setVisibility($path, $visibility)
     {
-        if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
-            return false;
+        try {
+            if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         $this->cache->updateObject($path, $data, true);
@@ -457,8 +523,12 @@ class Filesystem implements FilesystemInterface
             return $metadata;
         }
 
-        if ( ! $metadata = $this->adapter->getMetadata($path)) {
-            return false;
+        try {
+            if ( ! $metadata = $this->adapter->getMetadata($path)) {
+                return false;
+            }
+        } catch (Exception $e) {
+            throw new AdapterException($e->getMessage(), $e->getCode(), $e);
         }
 
         return $this->cache->updateObject($path, $metadata, true);
