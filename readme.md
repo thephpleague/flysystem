@@ -38,6 +38,7 @@ Through Composer, obviously:
 * Ftp
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
+* WebDAV (through SabreDAV)
 
 ### Planned Adapters
 
@@ -127,6 +128,14 @@ $filesystem = new Filesystem(new Adapter(array(
 	'root' => '/path/to/root',
 	'timeout' => 10,
 )));
+```
+
+## WebDAV Setup
+
+```php
+$client = new Sabre\DAV\Client($settings);
+$adapter = new Flysystem\Adapter\WebDav($client);
+$flysystem = new Flisystem\Filesystem($adapter);
 ```
 
 ## Predis Caching Setup
