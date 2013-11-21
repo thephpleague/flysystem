@@ -113,16 +113,6 @@ class WebDav extends AbstractAdapter
         return $this->delete($dirname);
     }
 
-    public function getVisibility($path)
-    {
-        throw new LogicException('The WebDav adapter does not support visibility settings.');
-    }
-
-    public function setVisibility($path, $visibility)
-    {
-        throw new LogicException('The WebDav adapter does not support visibility settings.');
-    }
-
     public function listContents($directory = '', $recursive = false)
     {
         $response = $this->client->propFind($directory, array(

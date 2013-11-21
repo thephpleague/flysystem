@@ -121,16 +121,6 @@ class Dropbox extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
-    public function getVisibility($path)
-    {
-        throw new LogicException('The Dropbox adapter does not support visibility settings.');
-    }
-
-    public function setVisibility($path, $visibility)
-    {
-        throw new LogicException('The Dropbox adapter does not support visibility settings.');
-    }
-
     public function listContents($directory = '', $recursive = false)
     {
         return $this->retrieveListing($this->prefix($directory), $recursive);

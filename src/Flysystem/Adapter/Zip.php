@@ -179,15 +179,4 @@ class Zip extends AbstractAdapter
     {
         return $this->getMetadata($path);
     }
-
-    public function getVisibility($path)
-    {
-        throw new LogicException('The Zip adapter does not support visibility settings.');
-    }
-
-    public function setVisibility($path, $visibility)
-    {
-        throw new LogicException('The Zip adapter does not support visibility settings.');
-    }
-
 }
