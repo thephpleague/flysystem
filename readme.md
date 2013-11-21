@@ -273,6 +273,12 @@ foreach ($contents as $object) {
 }
 ```
 
+By default Flysystem lists the top directory non-recursively. You can supply a directory name and recursive boolean to get more precise results
+
+```php
+$contents = $flysystem->listContents('some/dir', true);
+```
+
 ___List paths___
 
 ```php
