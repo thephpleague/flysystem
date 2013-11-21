@@ -10,7 +10,7 @@ class Memcached extends AbstractCache
     protected $expire;
     protected $memcached;
 
-    public function __construct(NativeMemcached $memcached, $key = 'flysystem', $expire = 0)
+    public function __construct(NativeMemcached $memcached, $key = 'flysystem', $expire = null)
     {
         $this->key = $key;
         $this->expire = $expire;
@@ -29,6 +29,7 @@ class Memcached extends AbstractCache
     public function save()
     {
         $contents = $this->getForStorage();
-        $this->memcached->set($this->key, $contents, $this->expire);
+        $expiration = $this->expire === null ? 0 : time() + $this->expire;
+        $this->memcached->set($this->key, $contents, $expiration);
     }
 }

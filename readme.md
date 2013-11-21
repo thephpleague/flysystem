@@ -161,7 +161,7 @@ use Flysystem\Cache\Memcached as Cache;
 
 $memcached = new Memcached;
 $memcached->addServer('localhost', 11211);
-$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($memcached, 'storageKey', time() + 300));
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($memcached, 'storageKey', 300));
 // Storage Key and expire time are optional
 ```
 
