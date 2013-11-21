@@ -399,7 +399,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem->flushCache();
 		if ( ! $filesystem->has('test.txt'))
 			$filesystem->write('test.txt', 'something');
-		$listing = $filesystem->listWith(['mimetype']);
+		$listing = $filesystem->listWith(array('mimetype'));
 		$this->assertContainsOnly('array', $listing, true);
 		$first = reset($listing);
 		$this->assertArrayHasKey('mimetype', $first);
@@ -414,7 +414,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$filesystem->flushCache();
 		if ( ! $filesystem->has('test.txt'))
 			$filesystem->write('test.txt', 'something');
-		$listing = $filesystem->listWith(['unknowntype']);
+		$listing = $filesystem->listWith(array('unknowntype'));
 	}
 
 	/**
