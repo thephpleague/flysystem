@@ -545,7 +545,7 @@ class Filesystem implements FilesystemInterface
      * @return  PluginInterface  $plugin
      * @throws  LogicException
      */
-    public function findPlugin($method)
+    protected function findPlugin($method)
     {
         if ( ! isset($this->plugins[$method])) {
             throw new LogicException('Plugin not found for method: '.$method);
