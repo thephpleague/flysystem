@@ -292,11 +292,19 @@ foreach ($paths as $path) {
 ___List with ensured presence of specific metadata___
 
 ```php
-$listing = $filesystem->listWith('mimetype', 'size', 'timestamp');
+$listing = $flysystem->listWith(['mimetype', 'size', 'timestamp'], 'optional/path/to/dir', true);
 
 foreach ($listing as $object) {
 	echo $object['path'].' has mimetype: '.$object['mimetype'];
 }
+```
+
+___Get file into with explicid metadata___
+
+```php
+$info = $flysystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
+echo $info['mimetype'];
+echo $info['timestamp'];
 ```
 
 ## Plugins

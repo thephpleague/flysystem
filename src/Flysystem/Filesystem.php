@@ -277,10 +277,10 @@ class Filesystem implements FilesystemInterface
      *
      * @return  array  paths
      */
-    public function listPaths()
+    public function listPaths($directory = '', $recursive = false)
     {
         $result = array();
-        $contents = $this->listContents();
+        $contents = $this->listContents($directory, $recursive);
 
         foreach ($contents as $object) {
             $result[] = $object['path'];
@@ -292,13 +292,12 @@ class Filesystem implements FilesystemInterface
     /**
      * List contents with metadata
      *
-     * @param   ...string|array  $key  metadata key
+     * @param   array  $key  metadata key
      * @return  array            listing with metadata
      */
-    public function listWith($key)
+    public function listWith(array $keys = array(), $directory = '', $recursive = false)
     {
-        $keys = is_array($key) ? $key : func_get_args();
-        $contents = $this->listContents();
+        $contents = $this->listContents($directory, $recursive);
 
         foreach ($contents as $index => $object) {
             if ($object['type'] === 'file') {
