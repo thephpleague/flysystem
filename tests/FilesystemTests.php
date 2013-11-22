@@ -7,14 +7,9 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	public function setup()
 	{
 		clearstatcache();
-		$fs = new Adapter\Local(__DIR__.'/files');
-		foreach (array_reverse($fs->listContents('', true)) as $info) {
-			if (is_file(__DIR__.'/files/'.$info['path'])) {
-				unlink(__DIR__.'/files/'.$info['path']);
-			} else {
-				rmdir(__DIR__.'/files/'.$info['path']);
-			}
-		}
+		$fs = new Adapter\Local(__DIR__.'/');
+		$fs->deleteDir('files');
+		$fs->createDir('files');
 	}
 
 	public function teardown()
@@ -99,7 +94,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($adapter->has('some_file.txt'));
 		$this->assertCount(1, $filesystem->listContents());
 		$this->assertCount(1, $cache->listContents('', false));
-		$this->assertCount(1, $adapter->listContents());
+		$this->assertCount(1, $adapter->listContents('', false));
 
 		$filesystem->rename('some_file.txt', 'other_name.txt');
 		$this->assertFalse($filesystem->has('some_file.txt'));
@@ -110,7 +105,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertTrue($adapter->has('other_name.txt'));
 		$this->assertCount(1, $filesystem->listContents());
 		$this->assertCount(1, $cache->listContents('', false));
-		$this->assertCount(1, $adapter->listContents());
+		$this->assertCount(1, $adapter->listContents('', false));
 
 		$filesystem->delete('other_name.txt');
 		$this->assertFalse($filesystem->has('other_name.txt'));
@@ -118,7 +113,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertFalse($adapter->has('other_name.txt'));
 		$this->assertCount(0, $filesystem->listContents());
 		$this->assertCount(0, $cache->listContents('', false));
-		$this->assertCount(0, $adapter->listContents());
+		$this->assertCount(0, $adapter->listContents('', false));
 	}
 
     /**
@@ -397,9 +392,11 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	public function testListWith($filesystem)
 	{
 		$filesystem->flushCache();
+
 		if ( ! $filesystem->has('test.txt'))
 			$filesystem->write('test.txt', 'something');
-		$listing = $filesystem->listWith(array('mimetype'));
+
+		$listing = $filesystem->listWith(array('mimetype'), '', true);
 		$this->assertContainsOnly('array', $listing, true);
 		$first = reset($listing);
 		$this->assertArrayHasKey('mimetype', $first);
@@ -450,6 +447,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$cache->flush();
 		$filesystem->write('deeply/nested/thing.txt', 'contents');
 		$filesystem->write('other/nested/thing.txt', 'contents');
+		// var_dump($filesystem->listContents('deeply'));
 		$this->assertCount(1, $filesystem->listContents('deeply'));
 		$this->assertCount(2, $filesystem->listContents('deeply', true));
 		$this->assertCount(2, $filesystem->listContents('deeply', true));

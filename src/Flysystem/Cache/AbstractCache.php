@@ -74,6 +74,10 @@ abstract class AbstractCache implements CacheInterface
             if ($recursive and ! in_array($object['dirname'], $directories)) {
                 $directories[] = $object['dirname'];
             }
+
+            if ($recursive === false and $object['dirname'] !== $directory) {
+                unset($contents[$index]);
+            }
         }
 
         foreach ($directories as $directory)

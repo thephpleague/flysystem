@@ -53,6 +53,10 @@ class Local extends AbstractAdapter
      */
     protected function prefix($path)
     {
+        if (empty($path)) {
+            return $this->root;
+        }
+
         return $this->root.Util::normalizePath($path, DIRECTORY_SEPARATOR);
     }
 
@@ -200,9 +204,9 @@ class Local extends AbstractAdapter
 
         foreach ($contents as $file) {
             if ($file['type'] === 'file') {
-                unlink($location.DIRECTORY_SEPARATOR.$file['path']);
+                unlink($this->prefix($file['path']));
             } else {
-                rmdir($location.DIRECTORY_SEPARATOR.$file['path']);
+                rmdir($this->prefix($file['path']));
             }
         }
 
@@ -212,13 +216,14 @@ class Local extends AbstractAdapter
     protected function directoryContents($path = '', $recursive = false)
     {
         $result = array();
-        $path = $this->prefix($path).DIRECTORY_SEPARATOR;
-        $length = strlen($path);
-        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($path) : $this->getDirectoryIterator($path);
+        $location = $this->prefix($path).DIRECTORY_SEPARATOR;
+        $length = strlen($this->root);
+        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
 
         foreach ($iterator as $file) {
             $path = substr($file->getPathname(), $length);
-            if ($path === '.' || $path === '..') continue;
+            $path = trim($path, '\\/');
+            if (preg_match('#(^|/)\.{1,2}$#', $path)) continue;
             $result[] = $this->normalizeFileInfo($path, $file);
         }
 
