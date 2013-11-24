@@ -563,7 +563,7 @@ class Filesystem implements FilesystemInterface
      * @param  string                $path path to file
      * @throws FileNotFoundException
      */
-    protected function assertPresent($path)
+    public function assertPresent($path)
     {
         if ( ! $this->has($path)) {
             throw new FileNotFoundException($path);
@@ -576,7 +576,7 @@ class Filesystem implements FilesystemInterface
      * @param  string              $path path to file
      * @throws FileExistsException
      */
-    protected function assertAbsent($path)
+    public function assertAbsent($path)
     {
         if ($this->has($path)) {
             throw new FileExistsException($path);
