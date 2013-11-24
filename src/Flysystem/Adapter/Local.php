@@ -83,7 +83,8 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        $this->setVisibility($path, $visibility);
+        if ($visibility)
+            $this->setVisibility($path, $visibility);
 
         return array(
             'contents' => $contents,
@@ -92,6 +93,39 @@ class Local extends AbstractAdapter
             'visibility' => $visibility,
             'mimetype' => Util::contentMimetype($contents),
         );
+    }
+
+    public function writeStream($path, $resource, $visibility = null)
+    {
+        rewind($resource);
+
+        if ( ! $stream = fopen($this->prefix($path), 'w+')) {
+            return false;
+        }
+
+        while ( ! feof($resource)) {
+            fwrite($stream, fread($resource, 1024), 1024);
+        }
+
+        if ( ! fclose($stream)) {
+            return false;
+        }
+
+        $visibility and $this->setVisibility($path, $visibility);
+
+        return compact('path', 'visibility');
+    }
+
+    public function readStream($path)
+    {
+        $stream = fopen($this->prefix($path), 'r');
+
+        return compact('stream', 'path');
+    }
+
+    public function updateStream($path, $resource)
+    {
+        return $this->writeStream($path, $resource);
     }
 
     public function update($path, $contents)

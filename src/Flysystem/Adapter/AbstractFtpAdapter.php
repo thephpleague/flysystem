@@ -1,0 +1,340 @@
+<?php
+
+namespace Flysystem\Adapter;
+
+use Flysystem\AdapterInterface;
+
+abstract class AbstractFtpAdapter extends AbstractAdapter
+{
+    protected $connection;
+    protected $host;
+    protected $port = 21;
+    protected $username;
+    protected $password;
+    protected $ssl = false;
+    protected $timeout = 90;
+    protected $passive = true;
+    protected $separator = '/';
+    protected $root;
+    protected $permPublic = 0744;
+    protected $permPrivate = 0000;
+
+    public function __construct(array $config)
+    {
+        $this->setConfig($config);
+    }
+
+    /**
+     * Set the config
+     *
+     * @param array $config
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setConfig(array $config)
+    {
+        foreach ($this->configurable as $setting) {
+            if ( ! isset($config[$setting]))
+                continue;
+            $this->{'set' . ucfirst($setting)}($config[$setting]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns the host
+     *
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set the host
+     *
+     * @param string $host
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * Set the public permission value
+     *
+     * @param   int  $permPublic
+     * @return  $this
+     */
+    public function setPermPublic($permPublic)
+    {
+        $this->permPublic = $permPublic;
+
+        return $this;
+    }
+
+    /**
+     * Set the private permission value
+     *
+     * @param   int  $permPrivate
+     * @return  $this
+     */
+    public function setPermPrivate($permPrivate)
+    {
+        $this->permPrivate = $permPrivate;
+
+        return $this;
+    }
+
+    /**
+     * Returns the ftp port
+     *
+     * @return int
+     */
+    public function getPort()
+    {
+        return $this->port;
+    }
+
+    /**
+     * Set the ftp port
+     *
+     * @param int|string $port
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setPort($port)
+    {
+        $this->port = (int) $port;
+
+        return $this;
+    }
+
+    /**
+     * Set the root folder to work from
+     *
+     * @param string $root
+     * @return $this
+     */
+    public function setRoot($root)
+    {
+        $this->root = rtrim($root, '\\/') . $this->separator;
+
+        return $this;
+    }
+
+    /**
+     * Returns the ftp username
+     *
+     * @return string username
+     */
+    public function getUsername()
+    {
+        return empty($this->username) ? 'anonymous' : $this->username;
+    }
+
+    /**
+     * Set ftp username
+     *
+     * @param string $username
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Returns the password
+     *
+     * @return string password
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the ftp password
+     *
+     * @param string $password
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Returns the amount of seconds before the connection will timeout
+     *
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
+    }
+
+    /**
+     * Set the amount of seconds before the connection should timeout
+     *
+     * @param int $timeout
+     * @return \Flysystem\Adapter\Ftp
+     */
+    public function setTimeout($timeout)
+    {
+        $this->timeout = (int) $timeout;
+
+        return $this;
+    }
+
+    /**
+     * {inheritdoc}
+     */
+    public function listContents($directory = '', $recursive = false)
+    {
+        return $this->listDirectoryContents($directory, $recursive);
+    }
+
+    protected function normalizeListing(array $listing, $prefix = '')
+    {
+        $base = $prefix;
+        $result = array();
+        $listing = $this->removeDotDirectories($listing);
+
+        while ($item = array_shift($listing)) {
+            if (preg_match('#^.*:$#', $item)) {
+                $base = $prefix.substr($item, 2, -1);
+                continue;
+            }
+
+            $result[] = $this->normalizeObject($item, $base);
+        }
+
+        return $this->sortListing($result);
+    }
+
+    protected function sortListing(array $result)
+    {
+        $compare = function ($one, $two) {
+            return strnatcmp($one['path'], $two['path']);
+        };
+
+        usort($result, $compare);
+
+        return $result;
+    }
+
+    protected function normalizeObject($item, $base)
+    {
+        $item = preg_replace('#\s+#', ' ', trim($item));
+        list ($permissions, $number, $owner, $group, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
+
+        $type = $this->detectType($permissions);
+        $path = empty($base) ? $name : $base . $this->separator . $name;
+
+        if ($type === 'dir') {
+            return compact('type', 'path');
+        }
+
+        $permissions = $this->normalizePermissions($permissions);
+        $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
+        $size = (int) $size;
+        $timestamp = strtotime($month . ' ' . $day . ' ' . $time);
+
+        return compact('type', 'path', 'visibility', 'size', 'timestamp');
+    }
+
+    protected function detectType($permissions)
+    {
+        return substr($permissions, 0, 1) === 'd' ? 'dir' : 'file';
+    }
+
+    protected function normalizePermissions($permissions)
+    {
+        // remove the type identifier
+        $permissions = substr($permissions, 1);
+
+        // map the string rights to the numeric counterparts
+        $map = array('-' => '0', 'r' => '4', 'w' => '2', 'x' => '1');
+        $permissions = strtr($permissions, $map);
+
+        // split up the permission groups
+        $parts = str_split($permissions, 3);
+
+        // convert the groups
+        $mapper = function ($part) {
+            return array_sum(str_split($part));
+        };
+
+        // get the sum of the groups
+        return array_sum(array_map($mapper, $parts));
+    }
+
+    protected function removeDotDirectories(array $list)
+    {
+        $filter = function ($line) {
+            return ! empty($line) and ! preg_match('#.* \.(\.)?$|^total#', $line);
+        };
+
+        return array_filter($list, $filter);
+    }
+
+    public function has($path)
+    {
+        return $this->getMetadata($path);
+    }
+
+    public function getSize($path)
+    {
+        return $this->getMetadata($path);
+    }
+
+    public function getTimestamp($path)
+    {
+        return $this->getMetadata($path);
+    }
+
+    public function getVisibility($path)
+    {
+        return $this->getMetadata($path);
+    }
+
+    public function ensureDirectory($dirname)
+    {
+        if ( ! empty($dirname) and ! $this->has($dirname)) {
+            $this->createDir($dirname);
+        }
+    }
+
+    public function getConnection()
+    {
+        if ( ! $this->connection) {
+            $this->connect();
+        }
+
+        return $this->connection;
+    }
+
+    public function getPermPublic()
+    {
+        return $this->permPublic;
+    }
+
+    public function getPermPrivate()
+    {
+        return $this->permPrivate;
+    }
+
+    public function __destruct()
+    {
+        $this->disconnect();
+    }
+}

@@ -43,9 +43,19 @@ class Dropbox extends AbstractAdapter
         return $this->upload($path, $contents, WriteMode::add());
     }
 
+    public function writeStream($path, $resource, $visibility = null)
+    {
+        $this->uploadStream($path, $resource, $visibility, WriteMode::add());
+    }
+
     public function update($path, $contents)
     {
         return $this->upload($path, $contents, WriteMode::force());
+    }
+
+    public function updateStream($path, $resource, $visibility = null)
+    {
+        $this->uploadStream($path, $resource, $visibility, WriteMode::force());
     }
 
     public function upload($path, $contents, $mode)
@@ -55,15 +65,38 @@ class Dropbox extends AbstractAdapter
         return $this->normalizeObject($result, $path);
     }
 
+    protected function uploadStream($path, $resource, $mode)
+    {
+        $result = $this->client->uploadFile($path, $mode, $resource);
+
+        return $this->normalizeObject($result, $path);
+    }
+
     public function read($path)
     {
-        $stream = fopen('php://temp', 'w+');
-        $this->client->getFile($this->prefix($path), $stream);
-        rewind($stream);
-        $contents = stream_get_contents($stream);
-        fclose($stream);
+        if ( ! $object = $this->readStream($path)) {
+            return false;
+        }
 
-        return compact('contents');
+        $object['contents'] = stream_get_contents($object['stream']);
+        fclose($object['stream']);
+        unset($object['stream']);
+
+        return $object;
+    }
+
+    public function readStream($path)
+    {
+        $stream = fopen('php://temp', 'w+');
+
+        if ( ! $this->client->getFile($this->prefix($path), $stream)) {
+            fclose($stream);
+            return false;
+        }
+
+        rewind($stream);
+
+        return compact('stream');
     }
 
     public function rename($path, $newpath)

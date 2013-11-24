@@ -5,14 +5,14 @@ namespace Flysystem\Adapter {
 		if (strpos($name, 'pleasefail') !== false)
 			return false;
 
-		return call_user_func_array('\file_put_contents', func_get_args());
+		return call_user_func_array('file_put_contents', func_get_args());
 	}
 
 	function file_get_contents($name) {
 		if (strpos($name, 'pleasefail') !== false)
 			return false;
 
-		return call_user_func_array('\file_get_contents', func_get_args());
+		return call_user_func_array('file_get_contents', func_get_args());
 	}
 }
 

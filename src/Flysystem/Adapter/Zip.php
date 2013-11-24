@@ -58,6 +58,8 @@ class Zip extends AbstractAdapter
             return false;
         }
 
+        $visibility and $this->setVisibility($path, $visibility);
+
         return compact('path', 'contents', 'visibility');
     }
 
@@ -117,6 +119,17 @@ class Zip extends AbstractAdapter
         }
 
         return compact('contents');
+    }
+
+    public function readStream($path)
+    {
+        $this->reopenArchive();
+
+        if ( ! $stream = $this->archive->getStream($path)) {
+            return false;
+        }
+
+        return compact('stream');
     }
 
     public function listContents($dirname = '', $recursive = false)

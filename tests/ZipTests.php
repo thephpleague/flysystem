@@ -41,6 +41,8 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $zip->update('nested/file.txt', 'new contents');
         $result = $zip->read('nested/file.txt');
         $this->assertEquals('new contents', $result['contents']);
+        $result = $zip->readStream('nested/file.txt');
+        $this->assertArrayHasKey('stream', $result);
         $result = $zip->getSize('nested/file.txt');
         $this->assertEquals(12, $result['size']);
         $result = $zip->getTimestamp('nested/file.txt');
@@ -51,6 +53,28 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $zip->listContents());
         $zip->rename('file.txt', 'renamed.txt');
         $this->assertFalse($zip->has('file.txt'));
+        $stream = tmpfile();
+        fwrite($stream, 'something');
+        rewind($stream);
+        $zip->writeStream('streamed.txt', $stream);
+        fclose($stream);
+        $this->assertInternalType('array', $zip->has('streamed.txt'));
+
+        $stream = tmpfile();
+        fwrite($stream, 'something');
+        rewind($stream);
+        $zip->updateStream('streamed-other.txt', $stream);
+        fclose($stream);
+        $this->assertInternalType('array', $zip->has('streamed-other.txt'));
+    }
+
+    /**
+     * @dataProvider zipProvider
+     * @expectedException  LogicException
+     */
+    public function testWriteStreamFail($zip)
+    {
+        $zip->writeStream('file.txt', tmpfile(), 'private');
     }
 
     /**
@@ -72,6 +96,15 @@ class ZipTests extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException LogicException
+     * @dataProvider zipProvider
+     */
+    public function testSetVisibilityWrite($zip)
+    {
+        $zip->write('path', 'contents', 'public');
+    }
+
+    /**
      * @expectedException  LogicException
      */
     public function testZipOpenFails()
@@ -88,10 +121,12 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('close')->andReturn(true);
         $mock->shouldReceive('addFromString')->andReturn(false);
         $mock->shouldReceive('getFromName')->andReturn(false);
+        $mock->shouldReceive('getStream')->andReturn(false);
         $zip = new Zip('location', $mock);
 
         $this->assertFalse($zip->write('file', 'contents'));
         $this->assertFalse($zip->read('file'));
         $this->assertFalse($zip->getMimetype('file'));
+        $this->assertFalse($zip->readStream('file'));
     }
 }

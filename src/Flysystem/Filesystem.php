@@ -74,11 +74,11 @@ class Filesystem implements FilesystemInterface
             return true;
         }
 
-        if ($this->cache->isComplete(Util::dirname($path), false) or ($data = $this->adapter->has($path)) === false) {
+        if ($this->cache->isComplete(Util::dirname($path), false) or ($object = $this->adapter->has($path)) === false) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data === true ? array() : $data, true);
+        $this->cache->updateObject($path, $object === true ? array() : $object, true);
 
         return true;
     }
@@ -96,14 +96,75 @@ class Filesystem implements FilesystemInterface
     {
         $this->assertAbsent($path);
 
-        if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+        if ( ! $object = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
         $this->cache->ensureParentDirectories($path);
 
         return true;
+    }
+
+    public function writeStream($path, $resource, $visibility = null)
+    {
+        $this->assertAbsent($path);
+
+        if ( ! is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
+        }
+
+        if ( ! $object = $this->adapter->writeStream($path, $resource, $visibility ?: $this->visibility)) {
+            return false;
+        }
+
+        $this->cache->updateObject($path, $object, true);
+        $this->cache->ensureParentDirectories($path);
+
+        return true;
+    }
+
+    /**
+     * Update a file with the contents of a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @return  bool      success boolean
+     * @throws  InvalidArgumentException
+     */
+    public function updateStream($path, $resource)
+    {
+        $this->assertPresent($path);
+
+        if ( ! is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
+        }
+
+        if ( ! $object = $this->adapter->updateStream($path, $resource)) {
+            return false;
+        }
+
+        $this->cache->updateObject($path, $object, true);
+        $this->cache->ensureParentDirectories($path);
+
+        return true;
+    }
+
+    /**
+     * Retrieves a read-stream for a path
+     *
+     * @param   string  $path
+     * @return  resource|false  path resource or false when on failure
+     */
+    public function readStream($path)
+    {
+        $this->assertPresent($path);
+
+        if ( ! $object = $this->adapter->readStream($path)) {
+            return false;
+        }
+
+        return $object['stream'];
     }
 
     /**
@@ -118,17 +179,17 @@ class Filesystem implements FilesystemInterface
     public function put($path, $contents, $visibility = null)
     {
         if ($this->has($path)) {
-            if (($data = $this->adapter->update($path, $contents)) === false) {
+            if (($object = $this->adapter->update($path, $contents)) === false) {
                 return false;
             }
 
-            $this->cache->updateObject($path, $data, true);
+            $this->cache->updateObject($path, $object, true);
         } else {
-            if ( ! $data = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+            if ( ! $object = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
                 return false;
             }
 
-            $this->cache->updateObject($path, $data, true);
+            $this->cache->updateObject($path, $object, true);
             $this->cache->ensureParentDirectories($path);
         }
 
@@ -146,13 +207,13 @@ class Filesystem implements FilesystemInterface
     public function update($path, $contents)
     {
         $this->assertPresent($path);
-        $data = $this->adapter->update($path, $contents);
+        $object = $this->adapter->update($path, $contents);
 
-        if ($data === false) {
+        if ($object === false) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
 
         return true;
     }
@@ -172,13 +233,13 @@ class Filesystem implements FilesystemInterface
             return $contents;
         }
 
-        if ( ! $data = $this->adapter->read($path)) {
+        if ( ! $object = $this->adapter->read($path)) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
 
-        return $data['contents'];
+        return $object['contents'];
     }
 
     /**
@@ -249,9 +310,9 @@ class Filesystem implements FilesystemInterface
      */
     public function createDir($dirname)
     {
-        $data = $this->adapter->createDir($dirname);
+        $object = $this->adapter->createDir($dirname);
 
-        $this->cache->updateObject($dirname, $data, true);
+        $this->cache->updateObject($dirname, $object, true);
     }
 
     /**
@@ -346,13 +407,13 @@ class Filesystem implements FilesystemInterface
             return $mimetype;
         }
 
-        if ( ! $data = $this->adapter->getMimetype($path)) {
+        if ( ! $object = $this->adapter->getMimetype($path)) {
             return false;
         }
 
-        $data = $this->cache->updateObject($path, $data, true);
+        $object = $this->cache->updateObject($path, $object, true);
 
-        return $data['mimetype'];
+        return $object['mimetype'];
     }
 
      /**
@@ -370,13 +431,13 @@ class Filesystem implements FilesystemInterface
             return $mimetype;
         }
 
-        if ( ! $data = $this->adapter->getTimestamp($path)) {
+        if ( ! $object = $this->adapter->getTimestamp($path)) {
             return false;
         }
 
-        $data = $this->cache->updateObject($path, $data, true);
+        $object = $this->cache->updateObject($path, $object, true);
 
-        return $data['timestamp'];
+        return $object['timestamp'];
     }
 
     /**
@@ -393,13 +454,13 @@ class Filesystem implements FilesystemInterface
             return $visibility;
         }
 
-        if (($data = $this->adapter->getVisibility($path)) === false) {
+        if (($object = $this->adapter->getVisibility($path)) === false) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
 
-        return $data['visibility'];
+        return $object['visibility'];
     }
 
     /**
@@ -414,13 +475,13 @@ class Filesystem implements FilesystemInterface
             return $visibility;
         }
 
-        if (($data = $this->adapter->getSize($path)) === false) {
+        if (($object = $this->adapter->getSize($path)) === false) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
 
-        return $data['size'];
+        return $object['size'];
     }
 
     /**
@@ -432,13 +493,13 @@ class Filesystem implements FilesystemInterface
      */
     public function setVisibility($path, $visibility)
     {
-        if ( ! $data = $this->adapter->setVisibility($path, $visibility)) {
+        if ( ! $object = $this->adapter->setVisibility($path, $visibility)) {
             return false;
         }
 
-        $this->cache->updateObject($path, $data, true);
+        $this->cache->updateObject($path, $object, true);
 
-        return $data['visibility'];
+        return $object['visibility'];
     }
 
     /**

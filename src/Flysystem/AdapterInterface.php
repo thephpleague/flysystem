@@ -13,4 +13,7 @@ interface AdapterInterface extends ReadInterface
     public function deleteDir($dirname);
     public function createDir($dirname);
     public function setVisibility($path, $visibility);
+    public function readStream($path);
+    public function writeStream($path, $resource, $visibility = null);
+    public function updateStream($path, $resource);
 }

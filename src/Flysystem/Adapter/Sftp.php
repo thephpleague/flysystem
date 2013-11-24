@@ -8,7 +8,7 @@ use Flysystem\AdapterInterface;
 use Flysystem\Util;
 use LogicException;
 
-class Sftp extends Ftp
+class Sftp extends AbstractFtpAdapter
 {
     protected $port = 22;
     protected $privatekey;
@@ -84,9 +84,9 @@ class Sftp extends Ftp
         $connection = $this->getConnection();
         $listing = $connection->exec('cd '.$this->root.$directory.' && ls -la'.($recursive ? 'R' : ''));
         $listing = explode(PHP_EOL, trim($listing));
-        $listing = array_slice($listing, 2);
+        array_shift($listing);
 
-        return $this->normalizeListing($listing);
+        return $this->normalizeListing($listing, $directory);
     }
 
     public function disconnect()

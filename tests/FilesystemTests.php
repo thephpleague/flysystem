@@ -454,4 +454,13 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 		$this->assertCount(1, $cache->listContents('deeply'));
 		$this->assertCount(2, $cache->listContents('deeply', true));
 	}
+
+	public function testAbstractReadStream()
+	{
+		$mock = \Mockery::mock('Flysystem\Adapter\AbstractAdapter[read,write,update,getTimestamp,getMetadata,getMimetype,getSize,delete,deleteDir,listContents,has,createDir,rename]');
+		$mock->shouldReceive('read')->twice()->andReturn(false, array('contents' => 'something'));
+		$this->assertFalse($mock->readStream('path'));
+		$data = $mock->readStream('path');
+		$this->assertInternalType('resource', $data['stream']);
+	}
 }

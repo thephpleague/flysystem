@@ -41,8 +41,27 @@ class AwsS3 extends AbstractAdapter
             'Body' => $contents,
             'ContentType' => Util::contentMimetype($contents),
             'ContentLength' => Util::contentSize($contents),
-            'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
         ));
+
+        if ($visibility) {
+            $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
+        }
+
+        $this->client->putObject($options);
+        $options['visibility'] = $visibility;
+
+        return $this->normalizeObject($options);
+    }
+
+    public function writeStream($path, $resource, $visibility = null)
+    {
+        $options = $this->getOptions($path, array(
+            'Body' => $resource,
+        ));
+
+        if ($visibility) {
+            $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
+        }
 
         $this->client->putObject($options);
         $options['visibility'] = $visibility;
@@ -55,12 +74,32 @@ class AwsS3 extends AbstractAdapter
         return $this->write($path, $contents);
     }
 
+    public function updateStream($path, $resource)
+    {
+        return $this->write($path, $resource);
+    }
+
     public function read($path)
     {
         $options = $this->getOptions($path);
         $result = $this->client->getObject($options);
 
         return $this->normalizeObject($result->getAll());
+    }
+
+    public function readStream($path)
+    {
+        if ( ! in_array('s3', stream_get_wrappers())) {
+            $this->client->registerStreamWrapper();
+        }
+
+        $context = stream_context_create(array(
+            's3' => array('seekable' => true),
+        ));
+
+        $stream = fopen('s3://'.$this->bucket.'/'.$this->prefix($path), 'r', false, $context);
+
+        return compact('stream');
     }
 
     public function rename($path, $newpath)

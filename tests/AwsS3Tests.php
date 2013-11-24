@@ -4,6 +4,14 @@ use Flysystem\Adapter\AwsS3 as Adapter;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
 
+class StreamMock
+{
+    public function stream_open()
+    {
+        return true;
+    }
+}
+
 class AwsS3Tests extends PHPUnit_Framework_TestCase
 {
     protected function getS3Client()
@@ -22,9 +30,23 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $mock = $this->getS3Client();
-        $mock->shouldReceive('putObject')->once();
+        $mock->shouldReceive('putObject')->times(4);
         $adapter = new Adapter($mock, 'bucketname', 'prefix');
         $adapter->update('something', 'something');
+        $adapter->write('something', 'something', 'private');
+        $adapter->writeStream('something', 'something', 'private');
+        $adapter->updateStream('something', 'something');
+    }
+
+    public function testReadStream()
+    {
+        $mock = $this->getS3Client();
+        $mock->shouldReceive('registerStreamWrapper')->once()->andReturnUsing(function () {
+            stream_wrapper_register('s3', 'StreamMock');
+        });
+        $adapter = new Adapter($mock, 'bucketname', 'prefix');
+        $result = $adapter->readStream('file.txt');
+        $this->assertInternalType('resource', $result['stream']);
     }
 
     public function testRename()
