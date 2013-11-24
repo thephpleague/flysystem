@@ -312,14 +312,14 @@ echo $info['timestamp'];
 Need a feature which is not included in Flysystem's bag of trick? Write a plugin!
 
 ```php
-use Flysystem\Filesystem;
+use Flysystem\FilesystemInterface;
 use Flysystem\PluginInterface;
 
 class MaximusAwesomeness implements PluginInterface
 {
     protected $filesystem;
 
-    public function setFilesystem(Filesystem $filesystem)
+    public function setFilesystem(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
     }
