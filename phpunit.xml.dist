@@ -18,7 +18,7 @@
     </filter>
     <listeners>
         <listener class="Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>
-        <!-- <listener class="League\PHPUnitCoverageListener\Listener">
+        <listener class="League\PHPUnitCoverageListener\Listener">
             <arguments>
                 <array>
                     <element key="printer">
@@ -41,11 +41,11 @@
                     </element>
                 </array>
             </arguments>
-        </listener> -->
+        </listener>
     </listeners>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
         <log type="coverage-html" target="./coverage" charset="UTF-8" yui="true" highlight="false" lowUpperBound="49" highLowerBound="75"/>
-        <!-- <log type="coverage-clover" target="/tmp/flysystem/coverage.xml"/> -->
+        <log type="coverage-clover" target="/tmp/flysystem/coverage.xml"/>
     </logging>
 </phpunit>

@@ -17,6 +17,7 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 * Emulate directories in systems that support none, like AwsS3.
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
+* Support streams for bigger file handling
 
 # Installation
 
@@ -305,6 +306,19 @@ ___Get file into with explicid metadata___
 $info = $flysystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
 echo $info['mimetype'];
 echo $info['timestamp'];
+```
+
+## Using streams for reads and writes
+
+```php
+$stream = fopen('/path/to/database.backup', 'r+');
+$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
+
+// Using write you can also directly set the visibility
+$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, 'private');
+
+// Or update a file with stream contents
+$flysystem->updateStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
 ```
 
 ## Plugins
