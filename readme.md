@@ -192,6 +192,12 @@ __Read Files__
 $contents = $filemanager->read('filename.txt');
 ```
 
+__Check if a file exists__
+
+```php
+$exists = $filemanager->has('filename.txt');
+```
+
 __Delete Files__
 
 ```php
