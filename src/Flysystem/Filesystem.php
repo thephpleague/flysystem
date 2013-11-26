@@ -183,19 +183,10 @@ class Filesystem implements FilesystemInterface
     public function put($path, $contents, $visibility = null)
     {
         if ($this->has($path)) {
-            if (($object = $this->adapter->update($path, $contents)) === false) {
-                return false;
-            }
-
-            $this->cache->updateObject($path, $object, true);
-        } else {
-            if ( ! $object = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
-                return false;
-            }
-
-            $this->cache->updateObject($path, $object, true);
-            $this->cache->ensureParentDirectories($path);
+            return $this->update($path, $contents);
         }
+
+        return $this->write($path, $contents, $visibility);
 
         return true;
     }
