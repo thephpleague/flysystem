@@ -132,7 +132,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->prefix($path);
 
-        if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
+        if (($size = file_put_contents($location, $contents, LOCK_EX | FILE_APPEND)) === false) {
             return false;
         }
 
