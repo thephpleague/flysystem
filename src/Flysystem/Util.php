@@ -62,7 +62,7 @@ abstract class Util
      * @param   string  $separator
      * @return  string  normalized path
      */
-    public static function normalizePath($path, $separator)
+    public static function normalizePath($path, $separator = '\\/')
     {
         return ltrim($path, $separator);
     }

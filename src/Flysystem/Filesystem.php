@@ -70,6 +70,8 @@ class Filesystem implements FilesystemInterface
      */
     public function has($path)
     {
+        $path = Util::normalizePath($path);
+
         if (($exists = $this->cache->has($path)) !== null) {
             return $exists;
         }
@@ -98,6 +100,7 @@ class Filesystem implements FilesystemInterface
      */
     public function write($path, $contents, $visibility = null)
     {
+        $path = Util::normalizePath($path);
         $this->assertAbsent($path);
 
         if ( ! $object = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
@@ -112,6 +115,7 @@ class Filesystem implements FilesystemInterface
 
     public function writeStream($path, $resource, $visibility = null)
     {
+        $path = Util::normalizePath($path);
         $this->assertAbsent($path);
 
         if ( ! is_resource($resource)) {
@@ -138,6 +142,7 @@ class Filesystem implements FilesystemInterface
      */
     public function updateStream($path, $resource)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ( ! is_resource($resource)) {
@@ -164,6 +169,8 @@ class Filesystem implements FilesystemInterface
      */
     public function putStream($path, $resource, $visibility = null)
     {
+        $path = Util::normalizePath($path);
+
         if ($this->has($path)) {
             return $this->updateStream($path, $resource);
         }
@@ -179,6 +186,7 @@ class Filesystem implements FilesystemInterface
      */
     public function readStream($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ( ! $object = $this->adapter->readStream($path)) {
@@ -199,6 +207,7 @@ class Filesystem implements FilesystemInterface
      */
     public function put($path, $contents, $visibility = null)
     {
+        $path = Util::normalizePath($path);
         if ($this->has($path)) {
             return $this->update($path, $contents);
         }
@@ -218,6 +227,7 @@ class Filesystem implements FilesystemInterface
      */
     public function update($path, $contents)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
         $object = $this->adapter->update($path, $contents);
 
@@ -239,6 +249,7 @@ class Filesystem implements FilesystemInterface
      */
     public function read($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($contents = $this->cache->read($path)) {
@@ -265,6 +276,8 @@ class Filesystem implements FilesystemInterface
      */
     public function rename($path, $newpath)
     {
+        $path = Util::normalizePath($path);
+        $newpath = Util::normalizePath($newpath);
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
@@ -286,6 +299,7 @@ class Filesystem implements FilesystemInterface
      */
     public function delete($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($this->adapter->delete($path) === false) {
@@ -305,6 +319,7 @@ class Filesystem implements FilesystemInterface
      */
     public function deleteDir($dirname)
     {
+        $dirname = Util::normalizePath($dirname);
         if ($this->adapter->deleteDir($dirname) === false) {
             return false;
         }
@@ -322,6 +337,7 @@ class Filesystem implements FilesystemInterface
      */
     public function createDir($dirname)
     {
+        $dirname = Util::normalizePath($dirname);
         $object = $this->adapter->createDir($dirname);
 
         $this->cache->updateObject($dirname, $object, true);
@@ -336,6 +352,7 @@ class Filesystem implements FilesystemInterface
      */
     public function listContents($directory = '', $recursive = false)
     {
+        $directory = Util::normalizePath($directory);
         if ($this->cache->isComplete($directory, $recursive)) {
             return $this->cache->listContents($directory, $recursive);
         }
@@ -413,6 +430,7 @@ class Filesystem implements FilesystemInterface
      */
     public function getMimetype($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($mimetype = $this->cache->getMimetype($path)) {
@@ -437,6 +455,7 @@ class Filesystem implements FilesystemInterface
      */
     public function getTimestamp($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($mimetype = $this->cache->getTimestamp($path)) {
@@ -460,6 +479,7 @@ class Filesystem implements FilesystemInterface
      */
     public function getVisibility($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($visibility = $this->cache->getVisibility($path)) {
@@ -483,6 +503,7 @@ class Filesystem implements FilesystemInterface
      */
     public function getSize($path)
     {
+        $path = Util::normalizePath($path);
         if ($visibility = $this->cache->getSize($path)) {
             return $visibility;
         }
@@ -505,6 +526,7 @@ class Filesystem implements FilesystemInterface
      */
     public function setVisibility($path, $visibility)
     {
+        $path = Util::normalizePath($path);
         if ( ! $object = $this->adapter->setVisibility($path, $visibility)) {
             return false;
         }
@@ -523,6 +545,7 @@ class Filesystem implements FilesystemInterface
      */
     public function getMetadata($path)
     {
+        $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
         if ($metadata = $this->cache->getMetadata($path)) {
@@ -545,6 +568,8 @@ class Filesystem implements FilesystemInterface
      */
     public function get($path, Handler $handler = null)
     {
+        $path = Util::normalizePath($path);
+
         if ( ! $handler) {
             $metadata = $this->getMetadata($path);
 
