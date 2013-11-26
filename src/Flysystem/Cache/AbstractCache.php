@@ -111,6 +111,20 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
+     * Store object hit miss
+     *
+     * @param   string   $path
+     * @return  $this
+     */
+    public function storeMiss($path)
+    {
+        $this->cache[$path] = false;
+        $this->autosave();
+
+        return $this;
+    }
+
+    /**
      * Get the contents listing
      *
      * @param   string   $dirname
@@ -144,7 +158,11 @@ abstract class AbstractCache implements CacheInterface
      */
     public function has($path)
     {
-        return isset($this->cache[$path]) and ! empty($this->cache[$path]);
+        if ( ! isset($this->cache[$path])) {
+            return $this->isComplete(Util::dirname($path), false) ? false : null;
+        }
+
+        return $this->cache[$path] !== false;
     }
 
     /**
@@ -168,9 +186,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function rename($path, $newpath)
     {
-        if ( ! isset($this->cache[$path])) {
-            return false;
-        }
+        if ( ! $this->has($path)) return false;
 
         $object = $this->cache[$path];
         unset($this->cache[$path]);
@@ -184,7 +200,8 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Delete an object from cache
      *
-     * @param  string  $path  object path
+     * @param   string  $path  object path
+     * @return  $this
      */
     public function delete($path)
     {
@@ -192,7 +209,7 @@ abstract class AbstractCache implements CacheInterface
             unset($this->cache[$path]);
         }
 
-        $this->autosave();
+        return $this;
     }
 
     /**
@@ -228,7 +245,7 @@ abstract class AbstractCache implements CacheInterface
         }
 
         if ( ! $contents = $this->read($path)) {
-            return null;
+            return false;
         }
 
         $mimetype = Util::contentMimetype($contents);

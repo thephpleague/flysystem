@@ -121,6 +121,7 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
      */
     public function testPut(Filesystem $filesystem, $adapter, $cache)
     {
+    	$filesystem->flushCache();
         $this->assertFalse($filesystem->has('new_file.txt'));
         $this->assertTrue($filesystem->put('new_file.txt', 'new content'));
         $this->assertTrue($filesystem->has('new_file.txt'));
@@ -131,6 +132,15 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($filesystem->put('new_file.txt', ''));
         $this->assertEquals('', $filesystem->read('new_file.txt'));
+    }
+
+    public function testPutFail()
+    {
+    	$mock = \Mockery::mock('Flysystem\AdapterInterface');
+    	$mock->shouldReceive('has')->andReturn(true);
+    	$mock->shouldReceive('update')->andReturn(false);
+    	$filesystem = new Filesystem($mock);
+    	$this->assertFalse($filesystem->put('something', 'something'));
     }
 
 	/**
@@ -303,21 +313,22 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider failProvider
 	 */
-	public function testAdapterFail($method, $mockfile, $mockcache = null)
+	public function testAdapterFail($method, $hasfile)
 	{
 		$mock = \Mockery::mock('Flysystem\Adapter\AbstractAdapter');
 		$cachemock = \Mockery::mock('Flysystem\Cache\AbstractCache');
 		$cachemock->shouldReceive('load')->andReturn(array());
-		$cachemock->shouldReceive('has')->andReturn(false);
+		$cachemock->shouldReceive('has')->andReturn(null);
 		$cachemock->shouldReceive('isComplete')->andReturn(false);
 		$cachemock->shouldReceive('updateObject')->andReturn(false);
+		$cachemock->shouldReceive('storeMiss')->andReturn(false);
 		$mock->shouldReceive('__toString')->andReturn('Flysystem\Adapter\AbstractAdapter');
 		$cachemock->shouldReceive('__toString')->andReturn('Flysystem\Cache\AbstractCache');
-		$filesystem = new Filesystem($mock, $cachemock);
 		$mock->shouldReceive('has')->with('other.txt')->andReturn(false);
 		$cachemock->shouldReceive($method)->andReturn(false);
-		$mock->shouldReceive('has')->with('dummy.txt')->andReturn($mockfile);
+		$mock->shouldReceive('has')->with('dummy.txt')->andReturn($hasfile);
 		$mock->shouldReceive($method)->andReturn(false);
+		$filesystem = new Filesystem($mock, $cachemock);
 		$this->assertFalse($filesystem->{$method}('dummy.txt', 'other.txt'));
 	}
 

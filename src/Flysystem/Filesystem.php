@@ -70,15 +70,19 @@ class Filesystem implements FilesystemInterface
      */
     public function has($path)
     {
-        if ($this->cache->has($path)) {
-            return true;
+        if (($exists = $this->cache->has($path)) !== null) {
+            return $exists;
         }
 
-        if ($this->cache->isComplete(Util::dirname($path), false) or ($object = $this->adapter->has($path)) === false) {
+        $result = $this->adapter->has($path);
+
+        if ( ! $result) {
+            $this->cache->storeMiss($path);
+
             return false;
         }
 
-        $this->cache->updateObject($path, $object === true ? array() : $object, true);
+        $this->cache->updateObject($path, $result === true ? array() : $result, true);
 
         return true;
     }
