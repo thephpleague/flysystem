@@ -118,7 +118,7 @@ class Local extends AbstractAdapter
 
     public function readStream($path)
     {
-        $stream = fopen($this->prefix($path), 'r');
+        $stream = fopen($this->prefix($path), 'r+');
 
         return compact('stream', 'path');
     }

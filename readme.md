@@ -326,9 +326,17 @@ $flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, 
 // Or update a file with stream contents
 $flysystem->updateStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
 
+// Retrieve a read-stream
 $stream = $flysystem->readStream('something/is/here.ext');
 $contents = stream_get_contents($stream);
 fclose($stream);
+
+// Create or overwrite using a stream.
+$putStream = tmpfile();
+fwrite($putStream, $contents);
+rewind($putStream);
+$filesystem->putStream('somewhere/here.txt', $putStream);
+fclose($putStream);
 ```
 
 ## Plugins

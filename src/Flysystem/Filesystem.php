@@ -155,6 +155,23 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * Create a file or update if exists using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @param   string    $visibility
+     * @return  boolean   success boolean
+     */
+    public function putStream($path, $resource, $visibility = null)
+    {
+        if ($this->has($path)) {
+            return $this->updateStream($path, $resource);
+        }
+
+        return $this->writeStream($path, $resource, $visibility);
+    }
+
+    /**
      * Retrieves a read-stream for a path
      *
      * @param   string  $path

@@ -129,9 +129,29 @@ class FlysystemTests extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($filesystem->put('new_file.txt', 'modified content'));
         $this->assertEquals('modified content', $filesystem->read('new_file.txt'));
+    }
 
-        $this->assertTrue($filesystem->put('new_file.txt', ''));
-        $this->assertEquals('', $filesystem->read('new_file.txt'));
+    /**
+     * @dataProvider filesystemProvider
+     */
+    public function testPutStream(Filesystem $filesystem, $adapter, $cache)
+    {
+    	$filesystem->flushCache();
+    	$stream = tmpfile();
+    	fwrite($stream, 'new content');
+        $this->assertFalse($filesystem->has('new_file.txt'));
+        $this->assertTrue($filesystem->putStream('new_file.txt', $stream));
+        fclose($stream);
+        unset($stream);
+        $this->assertTrue($filesystem->has('new_file.txt'));
+        $this->assertEquals('new content', $filesystem->read('new_file.txt'));
+
+        $update = tmpfile();
+    	fwrite($update, 'modified content');
+        $this->assertTrue($filesystem->putStream('new_file.txt', $update));
+        $filesystem->flushCache();
+        fclose($update);
+        $this->assertEquals('modified content', $filesystem->read('new_file.txt'));
     }
 
     public function testPutFail()
