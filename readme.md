@@ -106,12 +106,13 @@ $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'ftp.example.com',
 	'username' => 'username',
 	'password' => 'password',
+
     /** optional config settings */
     'port' => 21,
     'root' => '/path/to/root',
-	'passive' => true, // optional
-	'ssl' => true, // optional
-	'timeout' => 30, // optional
+	'passive' => true,
+	'ssl' => true,
+	'timeout' => 30,
 )));
 ```
 
