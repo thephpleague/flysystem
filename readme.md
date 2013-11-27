@@ -104,13 +104,14 @@ use Flysystem\Adapter\Ftp as Adapter;
 
 $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'ftp.example.com',
-	'port' => 21,
 	'username' => 'username',
 	'password' => 'password',
-	'root' => '/path/to/root',
-	'passive' => true,
-	'ssl' => true,
-	'timeout' => 30,
+    /** optional config settings */
+    'port' => 21,
+    'root' => '/path/to/root',
+	'passive' => true, // optional
+	'ssl' => true, // optional
+	'timeout' => 30, // optional
 )));
 ```
 
