@@ -1,7 +1,7 @@
 {
     "name": "frenkynet/flysystem",
     "description": "Filesystem abstraction, but easy.",
-    "keywords": ["filesystem", "dropbox", "aws", "s3"],
+    "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote"],
     "license": "MIT",
     "authors": [
         {

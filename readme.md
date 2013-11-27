@@ -383,4 +383,61 @@ $filesystem->addPlugin(new MaximusAwesomeness);
 $sha1 = $filesystem->getDown('path/to/file');
 ```
 
+# Mount Manager
+
+Flysystem comes with an wrapper class to easilly work with multiple filesystem instances
+from a single object. The `Flysystem\MountManager` is an easy to use container allowing
+you do simplify complex cross-filesystem interactions.
+
+Setting up a Mount Manager is easy:
+
+```php
+$ftp = new Flysystem\Filesystem($ftpAdapter);
+$s3 = new Flysystem\Filesystem($s3Adapter);
+$local = new Flysystem\Filesystem($localAdapter);
+
+// Add them in the constructor
+$manager = new Flysystem\MountManager(array(
+    'ftp' => $ftp,
+    's3' => $s3,
+));
+
+// Or mount them later
+$manager->mountFilesystem('local', $local);
+```
+
+Now we do all the file operations we'd normally do on a `Flysystem\Filesystem` instance.
+
+```php
+// Read from FTP
+$contents = $manager->read('ftp://some/file.txt');
+
+// And write to local
+$manager->write('local://put/it/here.txt', $contents);
+```
+
+This makes is easy to code up simple sync strategies.
+
+```php
+$contents = $manager->listContents('local://uploads', true);
+
+foreach ($contents as $entry) {
+    $update = false;
+
+    if ( ! $manager->has('storage://'.$entry['path'])) {
+        $update = true;
+    }
+
+    elseif ($manager->getTimestamp('local://'.$entry['path']) > $manager->getTimestamp('storage://'.$entry['path'])) {
+        $update = true;
+    }
+
+    if ($update) {
+        $manager->put('storage://'.$entry['path'], $manager->read('local://'.$entry['path']));
+    }
+}
+```
+
 # Enjoy.
+
+Oh and if you've come down this far, you might as well follow me on [twitter](http://twitter.com/frankdejonge).
