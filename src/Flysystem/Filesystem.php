@@ -34,7 +34,7 @@ class Filesystem implements FilesystemInterface
      * @param CacheInterface   $cache
      * @param string           $visibility
      */
-    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = AdapterInterface::VISIBILITY_PUBLIC)
+    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = null)
     {
         $this->adapter = $adapter;
         $this->cache = $cache ?: new Cache\Memory;
