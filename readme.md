@@ -31,6 +31,22 @@ Through Composer, obviously:
 }
 ```
 
+You can also use Flysystem without using Composer. You can register an Autoloader function and the rest will be taken care by it.
+
+```php
+spl_autoload_register(function($class) {
+    if (!substr($class, 0, 9) === 'Flysystem') {
+        return;
+    }
+
+    $location = 'path\to\flysystem\ .  str_replace('\\', '/', $class) . '.php';
+
+    if (is_file($location)) {
+        require_once($location);
+    }
+});
+```
+
 ## Adapters
 
 * Local
