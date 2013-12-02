@@ -4,25 +4,54 @@ namespace Flysystem;
 
 abstract class Handler
 {
+    /**
+     * @var  string  $path
+     */
     protected $path;
+
+    /**
+     * @var  FilesystemInterface  $filesystem
+     */
+
     protected $filesystem;
 
-    public function __construct(Filesystem $filesystem = null, $path = null)
+    /**
+     * Constructor
+     *
+     * @param  FilesystemInterface  $filesystem
+     * @path   string               $path
+     */
+    public function __construct(FilesystemInterface $filesystem = null, $path = null)
     {
         $this->path = $path;
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * Check whether the entree is a directory
+     *
+     * @return  boolean
+     */
     public function isDir()
     {
         return $this->getType() === 'dir';
     }
 
+    /**
+     * Check whether the entree is a file
+     *
+     * @return  boolean
+     */
     public function isFile()
     {
         return $this->getType() === 'file';
     }
 
+    /**
+     * Retrieve the entree type (file|dir)
+     *
+     * @return  string  file or dir
+     */
     public function getType()
     {
         $metadata = $this->filesystem->getMetadata($this->path);
@@ -30,13 +59,25 @@ abstract class Handler
         return $metadata['type'];
     }
 
-    public function setFilesystem(Filesystem $filesystem)
+    /**
+     * Set the Filesystem object
+     *
+     * @param   FilesystemInterface  $filesystem
+     * @return  $this
+     */
+    public function setFilesystem(FilesystemInterface $filesystem)
     {
         $this->filesystem = $filesystem;
 
         return $this;
     }
 
+    /**
+     * Set the entree path
+     *
+     * @param   string  $path
+     * @return  $this
+     */
     public function setPath($path)
     {
         $this->path = $path;
@@ -44,6 +85,11 @@ abstract class Handler
         return $this;
     }
 
+    /**
+     * Retrieve the entree path
+     *
+     * @return  string  path
+     */
     public function getPath()
     {
         return $this->path;
