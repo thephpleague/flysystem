@@ -29,6 +29,12 @@ abstract class Util
         return $dirname;
     }
 
+    /**
+     * Get a normalized dirname from a path
+     *
+     * @param   string  $path
+     * @return  string  dirname
+     */
     public static function dirname($path)
     {
         return static::normalizeDirname(dirname($path));
