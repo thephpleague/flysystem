@@ -31,7 +31,7 @@ Through Composer, obviously:
 }
 ```
 
-You can also use Flysystem without using Composer. You can register an autoloader function:
+You can also use Flysystem without using Composer by registing an autoloader function:
 
 ```php
 spl_autoload_register(function($class) {
