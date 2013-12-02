@@ -6,10 +6,28 @@ use Memcached as NativeMemcached;
 
 class Memcached extends AbstractCache
 {
+    /**
+     * @var  string  $key  storage key
+     */
     protected $key;
+
+    /**
+     * @var  int|null  $expire  expiration time
+     */
     protected $expire;
+
+    /**
+     * @var  \Memcached  $memcached  Memcached instance
+     */
     protected $memcached;
 
+    /**
+     * Constructor
+     *
+     * @param   \Memcached  $memcached
+     * @param   string      $key        storage key
+     * @param   int|null    $expire     expire time
+     */
     public function __construct(NativeMemcached $memcached, $key = 'flysystem', $expire = null)
     {
         $this->key = $key;
@@ -17,6 +35,9 @@ class Memcached extends AbstractCache
         $this->memcached = $memcached;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load()
     {
         $contents = $this->memcached->get($this->key);
@@ -26,6 +47,9 @@ class Memcached extends AbstractCache
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save()
     {
         $contents = $this->getForStorage();
