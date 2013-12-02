@@ -24,9 +24,9 @@ class Predis extends Memory
     /**
      * Constructor
      *
-     * @param \Predis\Client $client predis client
-     * @param string         $key    storage key
-     * @param int|null       $expire seconds until cache expiration
+     * @param \Predis\Client  $client  predis client
+     * @param string          $key     storage key
+     * @param int|null        $expire  seconds until cache expiration
      */
     public function __construct(Client $client = null, $key = 'flysystem', $expire = null)
     {
@@ -35,6 +35,9 @@ class Predis extends Memory
         $this->expire = $expire;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load()
     {
         $contents = $this->client->get($this->key);
@@ -44,6 +47,9 @@ class Predis extends Memory
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function save()
     {
         $contents = $this->getForStorage();

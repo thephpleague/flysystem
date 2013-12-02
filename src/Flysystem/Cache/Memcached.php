@@ -12,7 +12,7 @@ class Memcached extends AbstractCache
     protected $key;
 
     /**
-     * @var  int|null  $expire  expiration time
+     * @var  int|null  $expire  seconds until cache expiration
      */
     protected $expire;
 
@@ -26,7 +26,7 @@ class Memcached extends AbstractCache
      *
      * @param   \Memcached  $memcached
      * @param   string      $key        storage key
-     * @param   int|null    $expire     expire time
+     * @param   int|null    $expire     seconds until cache expiration
      */
     public function __construct(NativeMemcached $memcached, $key = 'flysystem', $expire = null)
     {
