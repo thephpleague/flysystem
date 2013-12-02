@@ -31,7 +31,7 @@ Through Composer, obviously:
 }
 ```
 
-You can also use Flysystem without using Composer. You can register an Autoloader function and the rest will be taken care by it.
+You can also use Flysystem without using Composer. You can register an autoloader function:
 
 ```php
 spl_autoload_register(function($class) {
@@ -39,7 +39,7 @@ spl_autoload_register(function($class) {
         return;
     }
 
-    $location = 'path\to\flysystem\ .  str_replace('\\', '/', $class) . '.php';
+    $location = __DIR__ . 'path/to/flysystem/src/' . str_replace('\\', '/', $class) . '.php';
 
     if (is_file($location)) {
         require_once($location);
