@@ -41,8 +41,8 @@ class MountManager
     /**
      * Mount filesystems
      *
-     * @param   string      $prefix
-     * @param   Filesystem  $filesystem
+     * @param   string               $prefix
+     * @param   FilesystemInterface  $filesystem
      * @return  $this
      */
     public function mountFilesystem($prefix, FilesystemInterface $filesystem)
@@ -59,8 +59,8 @@ class MountManager
     /**
      * Get the filesystem with the corresponding prefix
      *
-     * @param    string      $prefix
-     * @return   Filesystem
+     * @param    string               $prefix
+     * @return   FilesystemInterface
      * @throws   LogicException
      */
     public function getFilesystem($prefix)
