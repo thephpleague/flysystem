@@ -2,7 +2,7 @@
 
 namespace Flysystem;
 
-class FlilesystemTests extends \PHPUnit_Framework_TestCase
+class FilesystemTests extends \PHPUnit_Framework_TestCase
 {
     public function setup()
     {

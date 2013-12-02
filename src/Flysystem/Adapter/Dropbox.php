@@ -45,7 +45,7 @@ class Dropbox extends AbstractAdapter
 
     public function writeStream($path, $resource, $visibility = null)
     {
-        $this->uploadStream($path, $resource, $visibility, WriteMode::add());
+        return $this->uploadStream($path, $resource, $visibility, WriteMode::add());
     }
 
     public function update($path, $contents)
@@ -55,19 +55,23 @@ class Dropbox extends AbstractAdapter
 
     public function updateStream($path, $resource, $visibility = null)
     {
-        $this->uploadStream($path, $resource, $visibility, WriteMode::force());
+        return $this->uploadStream($path, $resource, $visibility, WriteMode::force());
     }
 
     public function upload($path, $contents, $mode)
     {
-        $result = $this->client->uploadFileFromString($this->prefix($path), $mode, $contents);
+        if ( ! $result = $this->client->uploadFileFromString($this->prefix($path), $mode, $contents)) {
+            return false;
+        }
 
         return $this->normalizeObject($result, $path);
     }
 
     protected function uploadStream($path, $resource, $mode)
     {
-        $result = $this->client->uploadFile($path, $mode, $resource);
+        if ( ! $result = $this->client->uploadFile($path, $mode, $resource)) {
+            return false;
+        }
 
         return $this->normalizeObject($result, $path);
     }
@@ -101,16 +105,14 @@ class Dropbox extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-        $options = $this->getOptions($newpath, array(
-            'Bucket' => $this->bucket,
-            'CopySource' => $this->bucket.'/'.$this->prefix($path),
-        ));
+        $path = $this->prefix($path);
+        $newpath = $this->prefix($newpath);
 
-        $result = $this->client->copyObject($options)->getAll();
-        $result = $this->normalizeObject($result, $newpath);
-        $this->delete($path);
+        if ( ! $result = $this->client->move($path, $newpath)) {
+            return false;
+        }
 
-        return $result;
+        return $this->normalizeObject($result);
     }
 
     public function delete($path)
@@ -164,7 +166,10 @@ class Dropbox extends AbstractAdapter
         $listing = array();
         $directory = rtrim($dir, '/');
         $length = strlen($directory) + 1;
-        $result = $this->client->getMetadataWithChildren($directory);
+
+        if ( ! $result = $this->client->getMetadataWithChildren($directory)) {
+            return false;
+        }
 
         foreach ($result['contents'] as $object)
         {
