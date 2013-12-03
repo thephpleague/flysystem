@@ -213,8 +213,6 @@ class Filesystem implements FilesystemInterface
         }
 
         return $this->write($path, $contents, $visibility);
-
-        return true;
     }
 
     /**
