@@ -4,9 +4,7 @@ namespace Flysystem\Adapter;
 
 use Dropbox\Client;
 use Dropbox\WriteMode;
-use Flysystem\AdapterInterface;
 use Flysystem\Util;
-use LogicException;
 
 class Dropbox extends AbstractAdapter
 {

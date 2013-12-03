@@ -2,7 +2,6 @@
 
 namespace Flysystem\Adapter;
 
-use Flysystem\AdapterInterface;
 use Flysystem\Adapter\AbstractAdapter;
 use Flysystem\Util;
 use Sabre\DAV\Client;

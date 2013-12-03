@@ -4,7 +4,6 @@ namespace Flysystem\Adapter;
 
 use Net_SFTP;
 use Crypt_RSA;
-use Flysystem\AdapterInterface;
 use Flysystem\Util;
 use LogicException;
 
