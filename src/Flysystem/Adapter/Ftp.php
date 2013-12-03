@@ -82,7 +82,7 @@ class Ftp extends AbstractFtpAdapter
 
     protected function setConnectionPassiveMode()
     {
-        if ( ! $result = ftp_pasv($this->getConnection(), $this->getPassive())) {
+        if ( ! ftp_pasv($this->getConnection(), $this->getPassive())) {
             throw new RuntimeException('Could not set passive mode for connection: ' . $this->getHost() . '::' . $this->getPort());
         }
     }
@@ -178,8 +178,6 @@ class Ftp extends AbstractFtpAdapter
         if ( ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
             return false;
         }
-
-        $dirname = Util::dirname($path);
 
         return $this->normalizeObject($object[1], '');
     }
