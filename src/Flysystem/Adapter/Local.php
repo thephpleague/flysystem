@@ -264,7 +264,7 @@ class Local extends AbstractAdapter
         return $result;
     }
 
-    protected function normalizeFileInfo($path, $file)
+    protected function normalizeFileInfo($path, SplFileInfo $file)
     {
         $normalized = array('type' => $file->getType(), 'path' => $path);
 
