@@ -4,3 +4,4 @@ composer.lock
 index.php
 coverage
 tests/files/*
+.idea
