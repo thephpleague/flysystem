@@ -11,7 +11,7 @@ class Directory extends Handler
      */
     public function delete()
     {
-        $this->filesystem->deleteDir($this->path);
+        return $this->filesystem->deleteDir($this->path);
     }
 
     /**

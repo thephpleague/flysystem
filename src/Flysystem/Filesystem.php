@@ -318,6 +318,7 @@ class Filesystem implements FilesystemInterface
     public function deleteDir($dirname)
     {
         $dirname = Util::normalizePath($dirname);
+
         if ($this->adapter->deleteDir($dirname) === false) {
             return false;
         }
