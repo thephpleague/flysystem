@@ -41,7 +41,13 @@ class Zip extends AbstractAdapter
 
     public function openArchive($location)
     {
-        if (($response = $this->archive->open($location, ZipArchive::CREATE)) !== true) {
+        $flags = 0;
+
+        if ( ! file_exists($location)) {
+            $flags = ZipArchive::CREATE;
+        }
+
+        if (($response = $this->archive->open($location, $flags)) !== true) {
             throw new LogicException('Could not open zip archive at:'.$location.', error: '.$response);
         }
     }
