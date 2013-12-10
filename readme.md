@@ -8,6 +8,8 @@
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
+[Flysystem on Packagist](https://packagist.org/packages/frenkynet/flysystem)
+
 # Goals
 
 * Have a generic API for handling common tasks across multiple file storage engines.
