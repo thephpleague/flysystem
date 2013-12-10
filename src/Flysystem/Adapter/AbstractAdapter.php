@@ -7,9 +7,9 @@ use Flysystem\AdapterInterface;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
-    public function writeStream($path, $resource, $visibility = null)
+    public function writeStream($path, $resource, $config = null)
     {
-        return $this->stream($path, $resource, $visibility, 'write');
+        return $this->stream($path, $resource, $config, 'write');
     }
 
     public function updateStream($path, $resource)
@@ -32,12 +32,12 @@ abstract class AbstractAdapter implements AdapterInterface
         return $data;
     }
 
-    protected function stream($path, $resource, $visibility, $fallback)
+    protected function stream($path, $resource, $config, $fallback)
     {
         rewind($resource);
         $contents = stream_get_contents($resource);
 
-        return $this->{$fallback}($path, $contents, $visibility);
+        return $this->{$fallback}($path, $contents, $config);
     }
 
     public function getVisibility($path)

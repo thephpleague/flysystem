@@ -18,9 +18,9 @@ class Filesystem implements FilesystemInterface
     protected $cache;
 
     /**
-     * @var  string  $visibility
+     * @var  Config  $config
      */
-    protected $visibility;
+    protected $config;
 
     /**
      * @var  array  $plugins
@@ -32,14 +32,14 @@ class Filesystem implements FilesystemInterface
      *
      * @param AdapterInterface $adapter
      * @param CacheInterface   $cache
-     * @param string           $visibility
+     * @param mixed            $config
      */
-    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $visibility = null)
+    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
         $this->adapter = $adapter;
         $this->cache = $cache ?: new Cache\Memory;
         $this->cache->load();
-        $this->visibility = $visibility;
+        $this->config = Util::ensureConfig($config);
     }
 
     /**
@@ -50,6 +50,16 @@ class Filesystem implements FilesystemInterface
     public function getAdapter()
     {
         return $this->adapter;
+    }
+
+    /**
+     * Get the Config
+     *
+     * @return  AdapterInterface  adapter
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 
     /**
@@ -94,16 +104,18 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string              $path     path to file
      * @param  string              $contents file contents
-     * @param  string              $visibility
+     * @param  mixed               $config
      * @throws FileExistsException
      * @return boolean             success boolean
      */
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
+        $config = Util::ensureConfig($config);
+        $config->setFallback($this->getConfig());
 
-        if ( ! $object = $this->adapter->write($path, $contents, $visibility ?: $this->visibility)) {
+        if ( ! $object = $this->adapter->write($path, $contents, $config)) {
             return false;
         }
 
@@ -113,16 +125,18 @@ class Filesystem implements FilesystemInterface
         return true;
     }
 
-    public function writeStream($path, $resource, $visibility = null)
+    public function writeStream($path, $resource, $config = null)
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
+        $config = Util::ensureConfig($config);
+        $config->setFallback($this->getConfig());
 
         if ( ! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
-        if ( ! $object = $this->adapter->writeStream($path, $resource, $visibility ?: $this->visibility)) {
+        if ( ! $object = $this->adapter->writeStream($path, $resource, $config)) {
             return false;
         }
 
@@ -164,10 +178,9 @@ class Filesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   string    $visibility
      * @return  boolean   success boolean
      */
-    public function putStream($path, $resource, $visibility = null)
+    public function putStream($path, $resource, $config = null)
     {
         $path = Util::normalizePath($path);
 
@@ -175,7 +188,7 @@ class Filesystem implements FilesystemInterface
             return $this->updateStream($path, $resource);
         }
 
-        return $this->writeStream($path, $resource, $visibility);
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**
@@ -201,18 +214,19 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string              $path     path to file
      * @param  string              $contents file contents
-     * @param  string              $visibility
+     * @param  mixed               $config
      * @throws FileExistsException
      * @return boolean             success boolean
      */
-    public function put($path, $contents, $visibility = null)
+    public function put($path, $contents, $config = null)
     {
         $path = Util::normalizePath($path);
+
         if ($this->has($path)) {
             return $this->update($path, $contents);
         }
 
-        return $this->write($path, $contents, $visibility);
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -352,6 +366,7 @@ class Filesystem implements FilesystemInterface
     public function listContents($directory = '', $recursive = false)
     {
         $directory = Util::normalizePath($directory);
+
         if ($this->cache->isComplete($directory, $recursive)) {
             return $this->cache->listContents($directory, $recursive);
         }
@@ -503,8 +518,9 @@ class Filesystem implements FilesystemInterface
     public function getSize($path)
     {
         $path = Util::normalizePath($path);
-        if ($visibility = $this->cache->getSize($path)) {
-            return $visibility;
+
+        if ($size = $this->cache->getSize($path)) {
+            return $size;
         }
 
         if (($object = $this->adapter->getSize($path)) === false) {
@@ -571,7 +587,6 @@ class Filesystem implements FilesystemInterface
 
         if ( ! $handler) {
             $metadata = $this->getMetadata($path);
-
             $handler = $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
         }
 

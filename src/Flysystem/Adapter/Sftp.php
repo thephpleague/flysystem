@@ -93,16 +93,17 @@ class Sftp extends AbstractFtpAdapter
         $this->connection = null;
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         $connection = $this->getConnection();
         $this->ensureDirectory(Util::dirname($path));
+        $config = Util::ensureConfig($config);
 
         if ( ! $connection->put($path, $contents, NET_SFTP_STRING)) {
             return false;
         }
 
-        if ($visibility) {
+        if ($config and $visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
         }
 

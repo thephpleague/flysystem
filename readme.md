@@ -269,9 +269,11 @@ Visibility is the abstraction of file permissions across multiple platforms. Vis
 
 ```php
 use Flysystem\AdapterInterface;
-$filesystem->write('db.backup', $backup, AdapterInterface::VISIBILITY_PRIVATE);
+$filesystem->write('db.backup', $backup, [
+    'visibility' => AdapterInterface::VISIBILITY_PRIVATE),
+]);
 // or simply
-$filesystem->write('db.backup', $backup, 'private');
+$filesystem->write('db.backup', $backup, ['visibility' => 'private']);
 ```
 
 You can also change and check visibility of existing files
@@ -280,6 +282,16 @@ You can also change and check visibility of existing files
 if ($filesystem->getVisibility('secret.txt') === 'private') {
 	$filesystem->setVisibility('secret.txt', 'public');
 }
+```
+
+## Global visibility setting
+
+You can set the visibility as a default, which prevents you from setting it all over the place.
+
+```php
+$filesystem = new Flysystem\Filesystem($adapter, $cache, [
+    'visibility' => AdapterInterface::VISIBILITY_PRIVATE
+]);
 ```
 
 ___List Contents___
@@ -355,6 +367,17 @@ fwrite($putStream, $contents);
 rewind($putStream);
 $filesystem->putStream('somewhere/here.txt', $putStream);
 fclose($putStream);
+```
+
+## S3 and writeStream
+
+In order to get the correct mime type for the object, supply it like so:
+
+```php
+$s3->writeStream('path/to/object.png', $stream, [
+    'visibility' => 'public',
+    'mimetype' => 'image/png',
+]);
 ```
 
 ## Plugins

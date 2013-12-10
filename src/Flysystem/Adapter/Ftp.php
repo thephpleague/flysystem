@@ -110,10 +110,11 @@ class Ftp extends AbstractFtpAdapter
         $this->connection = null;
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         $this->ensureDirectory(Util::dirname($path));
         $mimetype = Util::contentMimetype($contents);
+        $config = Util::ensureConfig($config);
         $stream = $contents;
 
         if ( ! is_resource($stream)) {
@@ -127,7 +128,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        if ($visibility) {
+        if ($visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
         }
 

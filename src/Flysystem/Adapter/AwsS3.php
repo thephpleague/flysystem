@@ -35,36 +35,44 @@ class AwsS3 extends AbstractAdapter
         return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
+        $config = Util::ensureConfig($config);
+
         $options = $this->getOptions($path, array(
             'Body' => $contents,
             'ContentType' => Util::contentMimetype($contents),
             'ContentLength' => Util::contentSize($contents),
         ));
 
-        if ($visibility) {
+        if ($visibility = $config->get('visibility')) {
             $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
         }
 
         $this->client->putObject($options);
-        $options['visibility'] = $visibility;
+        $visibility and $options['visibility'] = $visibility;
 
         return $this->normalizeObject($options);
     }
 
-    public function writeStream($path, $resource, $visibility = null)
+    public function writeStream($path, $resource, $config = null)
     {
+        $config = Util::ensureConfig($config);
+
         $options = $this->getOptions($path, array(
             'Body' => $resource,
         ));
 
-        if ($visibility) {
+        if ($visibility = $config->get('visibility')) {
             $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
         }
 
+        if ($mimetype = $config->get('mimetype')) {
+            $options['ContentType'] = $mimetype;
+        }
+
         $this->client->putObject($options);
-        $options['visibility'] = $visibility;
+        $visibility and $options['visibility'] = $visibility;
 
         return $this->normalizeObject($options);
     }

@@ -3,6 +3,7 @@
 namespace Flysystem;
 
 use Finfo;
+use LogicException;
 
 abstract class Util
 {
@@ -20,6 +21,12 @@ abstract class Util
         return $pathinfo;
     }
 
+    /**
+     * Normalize a dirname return value
+     *
+     * @param   string  $dirname
+     * @return  string  normalized dirname
+     */
     public static function normalizeDirname($dirname)
     {
         if ($dirname === '.') {
@@ -131,5 +138,34 @@ abstract class Util
         }
 
         return $listing;
+    }
+
+    /**
+     * Ensure a Config instance
+     *
+     * @param  string|array|Config  $config
+     * @return Config  config instance
+     * @throw  LogicException
+     */
+    public static function ensureConfig($config)
+    {
+        if ($config === null) {
+            return new Config;
+        }
+
+        if ($config instanceof Config) {
+            return $config;
+        }
+
+        // Backwards compatibility
+        if (is_string($config)) {
+            $config = array('visibility' => $config);
+        }
+
+        if (is_array($config)) {
+            return new Config($config);
+        }
+
+        throw new LogicException('A config should either be an array or a Flysystem\Config object.');
     }
 }

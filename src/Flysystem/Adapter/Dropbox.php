@@ -36,14 +36,14 @@ class Dropbox extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         return $this->upload($path, $contents, WriteMode::add());
     }
 
-    public function writeStream($path, $resource, $visibility = null)
+    public function writeStream($path, $resource, $config = null)
     {
-        return $this->uploadStream($path, $resource, $visibility, WriteMode::add());
+        return $this->uploadStream($path, $resource, $config, WriteMode::add());
     }
 
     public function update($path, $contents)
@@ -51,9 +51,9 @@ class Dropbox extends AbstractAdapter
         return $this->upload($path, $contents, WriteMode::force());
     }
 
-    public function updateStream($path, $resource, $visibility = null)
+    public function updateStream($path, $resource, $config = null)
     {
-        return $this->uploadStream($path, $resource, $visibility, WriteMode::force());
+        return $this->uploadStream($path, $resource, WriteMode::force());
     }
 
     public function upload($path, $contents, $mode)

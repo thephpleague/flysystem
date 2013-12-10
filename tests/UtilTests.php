@@ -53,4 +53,20 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 		$result = Util::dirname($input);
 		$this->assertEquals($expected, $result);
 	}
+
+	public function testEnsureConfig()
+	{
+		$this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(array()));
+		$this->assertInstanceOf('Flysystem\Config', Util::ensureConfig('string'));
+		$this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(null));
+		$this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(new Config));
+	}
+
+	/**
+	 * @expectedException  LogicException
+	 */
+	public function testInvalidValueEnsureConfig()
+	{
+		Util::ensureConfig(false);
+	}
 }

@@ -71,9 +71,10 @@ class Local extends AbstractAdapter
         return file_exists($this->prefix($path));
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         $location = $this->prefix($path);
+        $config = Util::ensureConfig($config);
 
         if ( ! is_dir($dirname = dirname($location))) {
             mkdir($dirname, 0777, true);
@@ -83,21 +84,24 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        if ($visibility)
-            $this->setVisibility($path, $visibility);
-
-        return array(
+        $result = array(
             'contents' => $contents,
             'type' => 'file',
             'size' => $size,
-            'visibility' => $visibility,
-            'mimetype' => Util::contentMimetype($contents),
         );
+
+        if ($visibility = $config->get('visibility')) {
+            $result['visibility'] = $visibility;
+            $this->setVisibility($path, $visibility);
+        }
+
+        return $result;
     }
 
-    public function writeStream($path, $resource, $visibility = null)
+    public function writeStream($path, $resource, $config = null)
     {
         rewind($resource);
+        $config = Util::ensureConfig($config);
 
         if ( ! $stream = fopen($this->prefix($path), 'w+')) {
             return false;
@@ -111,7 +115,8 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        $visibility and $this->setVisibility($path, $visibility);
+        if ($visibility = $config->get('visibility'))
+            $this->setVisibility($path, $visibility);
 
         return compact('path', 'visibility');
     }

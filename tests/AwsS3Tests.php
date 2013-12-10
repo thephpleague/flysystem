@@ -34,7 +34,10 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter = new Adapter($mock, 'bucketname', 'prefix');
         $adapter->update('something', 'something');
         $adapter->write('something', 'something', 'private');
-        $adapter->writeStream('something', 'something', 'private');
+        $adapter->writeStream('something', 'something', array(
+            'visibility' => 'private',
+            'mimetype' => 'text/plain',
+        ));
         $adapter->updateStream('something', 'something');
     }
 

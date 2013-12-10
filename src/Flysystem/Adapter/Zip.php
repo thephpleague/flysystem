@@ -46,9 +46,10 @@ class Zip extends AbstractAdapter
         }
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
         $dirname = Util::dirname($path);
+        $config = Util::ensureConfig($config);
 
         if ( ! empty($dirname) and  ! $this->has($dirname)) {
             $this->createDir($dirname);
@@ -58,9 +59,13 @@ class Zip extends AbstractAdapter
             return false;
         }
 
-        $visibility and $this->setVisibility($path, $visibility);
+        $result = compact('path', 'contents');
 
-        return compact('path', 'contents', 'visibility');
+        if ($config and $visibility = $config->get('visibility')) {
+            throw new LogicException(get_class($this).' does not support visibility settings.');
+        }
+
+        return $result;
     }
 
     public function update($path, $contents)

@@ -62,11 +62,18 @@ class WebDav extends AbstractAdapter
         }
     }
 
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, $config = null)
     {
+        $config = Util::ensureConfig($config);
         $this->client->request('PUT', $path, $contents);
 
-        return compact('path', 'contents', 'visibility');
+        $result = compact('path', 'contents');
+
+        if ($config and $visibility = $config->get('visibility')) {
+            $this->setVisibility($visibility);
+        }
+
+        return $result;
     }
 
     public function update($path, $contents)
