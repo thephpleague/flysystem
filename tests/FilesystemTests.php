@@ -164,12 +164,12 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider filesystemProvider
      * @expectedException  \Flysystem\FileExistsException
      */
-    public function testFileExists($filesystem)
+    public function testFileExists()
     {
-        $filesystem->write('../FilesystemTests.php', 'something');
+        $filesystem = new Filesystem(new Adapter\Local(__DIR__));
+        $filesystem->write('FilesystemTests.php', 'something');
     }
 
     /**

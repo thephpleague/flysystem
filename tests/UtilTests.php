@@ -69,4 +69,29 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 	{
 		Util::ensureConfig(false);
 	}
+
+	/**
+	 * @expectedException  LogicException
+	 */
+	public function testOutsideRootPath()
+	{
+		Util::normalizePath('something/../../../hehe');
+	}
+
+	public function pathProvider()
+	{
+		return array(
+			array('/dirname/', 'dirname'),
+			array('dirname/..', ''),
+		);
+	}
+
+	/**
+	 * @dataProvider  pathProvider
+	 */
+	public function testNormalizePath($input, $expected)
+	{
+		$result = Util::normalizePath($input);
+		$this->assertEquals($expected, $result);
+	}
 }
