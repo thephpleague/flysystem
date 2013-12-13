@@ -178,7 +178,7 @@ class Ftp extends AbstractFtpAdapter
 
     public function getMetadata($path)
     {
-        if ( ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
+        if ( ! empty($path) and ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
             return false;
         }
 
