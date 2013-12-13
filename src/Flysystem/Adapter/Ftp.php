@@ -118,7 +118,9 @@ class Ftp extends AbstractFtpAdapter
         $stream = $contents;
 
         if ( ! is_resource($stream)) {
-            $stream = fopen('data://' . $mimetype . ',' . $contents, 'r+');
+            $stream = tmpfile();
+            fwrite($stream, $contents);
+            rewind($stream);
         }
 
         $result = ftp_fput($this->getConnection(), $path, $stream, FTP_BINARY);
