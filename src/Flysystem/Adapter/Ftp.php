@@ -211,6 +211,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $stream = fopen('php://temp', 'w+');
         $result = ftp_fget($this->getConnection(), $stream, $path, FTP_BINARY);
+        rewind($stream);
 
         if ( ! $result) {
             fclose($stream);
