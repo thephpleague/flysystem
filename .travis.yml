@@ -4,11 +4,11 @@ php:
   - 5.3
   - 5.4
   - 5.5
-  - hhmv
+  - hhvm
 
 matrix:
   allow_failures:
-    - php: hhmv
+    - php: hhvm
 
 before_script:
   - composer self-update
