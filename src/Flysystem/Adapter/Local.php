@@ -57,6 +57,8 @@ class Local extends AbstractAdapter
             return $this->root;
         }
 
+        $path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+
         return $this->root.Util::normalizePath($path, DIRECTORY_SEPARATOR);
     }
 
@@ -88,6 +90,7 @@ class Local extends AbstractAdapter
             'contents' => $contents,
             'type' => 'file',
             'size' => $size,
+            'path' => $path,
         );
 
         if ($visibility = $config->get('visibility')) {
@@ -142,6 +145,7 @@ class Local extends AbstractAdapter
         }
 
         return array(
+            'path' => $path,
             'size' => $size,
             'contents' => $contents,
             'mimetype' => Util::contentMimetype($contents),
@@ -154,7 +158,10 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return array('contents' => $contents);
+        return array(
+            'contents' => $contents,
+            'path' => $path
+        );
     }
 
     public function rename($path, $newpath)
