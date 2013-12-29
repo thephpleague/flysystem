@@ -171,6 +171,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->getMimetype('not.found'));
         $this->assertFalse($adapter->getTimestamp('not.found'));
         $this->assertFalse($adapter->write('write.fail', 'contents'));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile()));
         $this->assertFalse($adapter->update('write.fail', 'contents'));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
         $this->assertTrue($adapter->rename('a','b'));
@@ -181,6 +182,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('text/plain', $result['mimetype']);
         $this->assertFalse($adapter->createDir('mkdir.fail'));
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', 'public'));
+        $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), 'public'));
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }

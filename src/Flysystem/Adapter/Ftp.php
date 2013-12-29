@@ -137,6 +137,22 @@ class Ftp extends AbstractFtpAdapter
         return compact('path', 'contents', 'mimetype', 'visibility');
     }
 
+    public function writeStream($path, $resource, $config = null)
+    {
+        $this->ensureDirectory(Util::dirname($path));
+        $config = Util::ensureConfig($config);
+
+        if ( ! ftp_fput($this->getConnection(), $path, $resource, FTP_BINARY)) {
+            return false;
+        }
+
+        if ($visibility = $config->get('visibility')) {
+            $this->setVisibility($path, $visibility);
+        }
+
+        return compact('path', 'visibility');
+    }
+
     public function update($path, $contents)
     {
         return $this->write($path, $contents);
