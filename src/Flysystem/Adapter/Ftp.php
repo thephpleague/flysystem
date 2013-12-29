@@ -89,9 +89,17 @@ class Ftp extends AbstractFtpAdapter
 
     protected function setConnectionRoot()
     {
-        if ($this->root and ! ftp_chdir($this->getConnection(), $this->getRoot())) {
+        $connection = $this->getConnection();
+
+        if ($this->root and ! ftp_chdir($connection, $this->getRoot())) {
             throw new RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
+
+        // Store absolute path for further reference.
+        // This is needed when creating directories and
+        // initial root was a relative path, else the root
+        // would be relative to the chdir'd path.
+        $this->root = ftp_pwd($connection);
     }
 
     protected function login()
@@ -185,9 +193,23 @@ class Ftp extends AbstractFtpAdapter
 
     public function createDir($dirname)
     {
-        if ( ! ftp_mkdir($this->getConnection(), $dirname)) {
-            return false;
+        $connection = $this->getConnection();
+        $directories = explode('/', $dirname);
+
+        while($directory = array_shift($directories))
+        {
+            $result = ftp_mkdir($connection, $directory);
+
+            if ( ! $result) {
+                $this->setConnectionRoot();
+
+                return false;
+            }
+
+            ftp_chdir($connection, $directory);
         }
+
+        $this->setConnectionRoot();
 
         return array('path' => $dirname);
     }

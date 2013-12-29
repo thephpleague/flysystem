@@ -62,6 +62,11 @@ function ftp_chdir($connection)
     return true;
 }
 
+function ftp_pwd($connection)
+{
+    return 'dirname';
+}
+
 function ftp_raw($connection, $command)
 {
     if ($command === 'STAT not.found') {
