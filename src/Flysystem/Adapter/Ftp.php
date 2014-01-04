@@ -178,17 +178,18 @@ class Ftp extends AbstractFtpAdapter
 
     public function deleteDir($dirname)
     {
+        $connection = $this->getConnection();
         $contents = array_reverse($this->listDirectoryContents($dirname));
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                ftp_delete($this->getConnection(), $dirname . $this->separator . $object['path']);
+                ftp_delete($connection, $dirname . $this->separator . $object['path']);
             } else {
-                ftp_rmdir($this->getConnection(), $dirname . $this->separator . $object['path']);
+                ftp_rmdir($connection, $dirname . $this->separator . $object['path']);
             }
         }
 
-        ftp_rmdir($this->getConnection(), $dirname);
+        ftp_rmdir($connection, $dirname);
     }
 
     public function createDir($dirname)
@@ -196,14 +197,11 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->getConnection();
         $directories = explode('/', $dirname);
 
-        while($directory = array_shift($directories))
-        {
-            $result = ftp_mkdir($connection, $directory);
+        while($directory = array_shift($directories)) {
+            $result = $this->createActualDirectory($directory, $connection);
 
             if ( ! $result) {
-                $this->setConnectionRoot();
-
-                return false;
+                break;
             }
 
             ftp_chdir($connection, $directory);
@@ -211,7 +209,23 @@ class Ftp extends AbstractFtpAdapter
 
         $this->setConnectionRoot();
 
+        if ( ! $result) {
+            return false;
+        }
+
         return array('path' => $dirname);
+    }
+
+    protected function createActualDirectory($directory, $connection)
+    {
+        // List the current directory
+        $listing = ftp_nlist($connection, '.');
+
+        if (in_array($directory, $listing)) {
+            return true;
+        }
+
+        return ftp_mkdir($connection, $directory);
     }
 
     public function getMetadata($path)

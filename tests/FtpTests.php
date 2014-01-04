@@ -130,6 +130,11 @@ function ftp_fget($connection, $resource, $path)
     return true;
 }
 
+function ftp_nlist($connection, $directory)
+{
+    return array('some.nested');
+}
+
 function ftp_chmod($connection, $mode, $path)
 {
     if (strpos($path, 'chmod.fail') !== false) {
@@ -185,7 +190,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
-        $this->assertFalse($adapter->createDir('mkdir.fail'));
+        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail'));
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', 'public'));
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), 'public'));
         $adapter->deleteDir('');
