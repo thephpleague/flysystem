@@ -10,6 +10,9 @@ use Flysystem\Util;
 
 class AwsS3 extends AbstractAdapter
 {
+    /**
+     * @var  array  $resultMap
+     */
     protected static $resultMap = array(
         'Body'          => 'contents',
         'ContentLength' => 'size',
@@ -17,11 +20,34 @@ class AwsS3 extends AbstractAdapter
         'Size'          => 'size',
     );
 
+    /**
+     * @var  string  $bucket  bucket name
+     */
     protected $bucket;
-    protected $client;
-    protected $prefix;
-    protected $options;
 
+    /**
+     * @var  Aws\S3\S3Client  $client  S3 Client
+     */
+    protected $client;
+
+    /**
+     * @var  string  $prefix  path prefix
+     */
+    protected $prefix;
+
+    /**
+     * @var  array  $options  default options
+     */
+    protected $options = array();
+
+    /**
+     * Constructor
+     *
+     * @param  S3Client  $client
+     * @param  string    $bucket
+     * @param  string    $prefix
+     * @param  array     $options
+     */
     public function __construct(S3Client $client, $bucket, $prefix = null, array $options = array())
     {
         $this->bucket = $bucket;
@@ -30,11 +56,25 @@ class AwsS3 extends AbstractAdapter
         $this->client = $client;
     }
 
+    /**
+     * Check wether a file exists
+     *
+     * @param   string  $path
+     * @return  bool    weather an object result
+     */
     public function has($path)
     {
         return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
     }
 
+    /**
+     * Write a file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @param   mixed   $config
+     * @return  array   file metadata
+     */
     public function write($path, $contents, $config = null)
     {
         $config = Util::ensureConfig($config);
@@ -55,6 +95,15 @@ class AwsS3 extends AbstractAdapter
         return $this->normalizeObject($options);
     }
 
+    /**
+     * Write using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @param   mixed     $config
+     *
+     * @return  array     file metadata
+     */
     public function writeStream($path, $resource, $config = null)
     {
         $config = Util::ensureConfig($config);
@@ -77,16 +126,36 @@ class AwsS3 extends AbstractAdapter
         return $this->normalizeObject($options);
     }
 
+    /**
+     * Update a file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @return  array   file metadata
+     */
     public function update($path, $contents)
     {
         return $this->write($path, $contents);
     }
 
+    /**
+     * Update a file using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @return  array     file metadata
+     */
     public function updateStream($path, $resource)
     {
         return $this->write($path, $resource);
     }
 
+    /**
+     * Read a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function read($path)
     {
         $options = $this->getOptions($path);
@@ -95,6 +164,12 @@ class AwsS3 extends AbstractAdapter
         return $this->normalizeObject($result->getAll());
     }
 
+    /**
+     * Get a read-stream for a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function readStream($path)
     {
         if ( ! in_array('s3', stream_get_wrappers())) {
@@ -110,6 +185,13 @@ class AwsS3 extends AbstractAdapter
         return compact('stream');
     }
 
+    /**
+     * Rename a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  array   file metadata
+     */
     public function rename($path, $newpath)
     {
         $options = $this->getOptions($newpath, array(
@@ -124,6 +206,12 @@ class AwsS3 extends AbstractAdapter
         return $result;
     }
 
+    /**
+     * Delete a file
+     *
+     * @param   string   $path
+     * @return  boolean  delete result
+     */
     public function delete($path)
     {
         $options = $this->getOptions($path);
@@ -131,16 +219,34 @@ class AwsS3 extends AbstractAdapter
         return $this->client->deleteObject($options);
     }
 
+    /**
+     * Delete a directory (recursive)
+     *
+     * @param   string   $path
+     * @return  boolean  delete result
+     */
     public function deleteDir($path)
     {
         return $this->client->deleteMatchingObjects($this->bucket, $this->prefix($path));
     }
 
+    /**
+     * Create a directory
+     *
+     * @param   string  $path
+     * @return  array   directory metadata
+     */
     public function createDir($path)
     {
         return array('path' => $path, 'type' => 'dir');
     }
 
+    /**
+     * Get metadata for a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function getMetadata($path)
     {
         $options = $this->getOptions($path);
@@ -149,21 +255,45 @@ class AwsS3 extends AbstractAdapter
         return $this->normalizeObject($result->getAll(), $path);
     }
 
+    /**
+     * Get the mimetype of a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function getMimetype($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * Get the file of a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function getSize($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * Get the timestamp of a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function getTimestamp($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * Get the visibility of a file
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     public function getVisibility($path)
     {
         $options = $this->getOptions($path);
@@ -178,6 +308,13 @@ class AwsS3 extends AbstractAdapter
         return array('visibility' => AdapterInterface::VISIBILITY_PRIVATE);
     }
 
+    /**
+     * Get mimetype of a file
+     *
+     * @param   string  $path
+     * @param   string  $visibility
+     * @return  array   file metadata
+     */
     public function setVisibility($path, $visibility)
     {
         $options = $this->getOptions($path, array(
@@ -189,6 +326,13 @@ class AwsS3 extends AbstractAdapter
         return compact('visibility');
     }
 
+    /**
+     * List contents of a directory
+     *
+     * @param   string  $dirname
+     * @param   bool    $recursive
+     * @return  array   directory contents
+     */
     public function listContents($dirname = '', $recursive = false)
     {
         $result = $this->client->listObjects(array(
@@ -200,6 +344,13 @@ class AwsS3 extends AbstractAdapter
         return Util::emulateDirectories($result);
     }
 
+    /**
+     * Normalize a result from AWS
+     *
+     * @param   string  $object
+     * @param   string  $path
+     * @return  array   file metadata
+     */
     protected function normalizeObject($object, $path = null)
     {
         $result = array('path' => $path ?: $object['Key']);
@@ -213,6 +364,14 @@ class AwsS3 extends AbstractAdapter
         return $result;
     }
 
+    /**
+     * Get options for a AWS call
+     *
+     * @param   string  $path
+     * @param   array   $options
+     *
+     * @return  array   AWS options
+     */
     protected function getOptions($path, array $options = array())
     {
         $options['Key'] = $this->prefix($path);
@@ -221,6 +380,12 @@ class AwsS3 extends AbstractAdapter
         return array_merge($this->options, $options);
     }
 
+    /**
+     * Prefix a path
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
     protected function prefix($path)
     {
         if (! $this->prefix) {
