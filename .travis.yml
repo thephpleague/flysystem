@@ -9,10 +9,11 @@ php:
 matrix:
   allow_failures:
     - php: hhvm
+  fast_finish: true
 
 before_script:
   - composer self-update
-  - composer install --dev -o
+  - composer install --prefer-source --no-interaction --dev
   - mkdir tests/files
 
 script: phpunit --coverage-text --coverage-clover /tmp/flysystem/coverage.xml
