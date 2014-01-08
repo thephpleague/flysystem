@@ -30,8 +30,7 @@ class MountManager
      */
     public function mountFilesystems(array $filesystems)
     {
-        foreach ($filesystems as $prefix => $filesystem)
-        {
+        foreach ($filesystems as $prefix => $filesystem) {
             $this->mountFilesystem($prefix, $filesystem);
         }
 
