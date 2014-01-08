@@ -26,7 +26,8 @@ function ftp_connect($host)
     return ftp_ssl_connect($host);
 }
 
-function ftp_pasv($connection) {
+function ftp_pasv($connection)
+{
     if ($connection === 'pasv.fail') {
         return false;
     }
@@ -196,7 +197,6 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
-
 
     /**
      * @expectedException RuntimeException
