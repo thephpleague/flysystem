@@ -8,12 +8,22 @@ use Flysystem\Util;
 
 class Dropbox extends AbstractAdapter
 {
+    /**
+     * @var  array  $resultMap
+     */
     protected static $resultMap = array(
         'bytes'          => 'size',
         'mime_type'      => 'mimetype',
     );
 
+    /**
+     * @var  Doprbox\Client  $client
+     */
     protected $client;
+
+    /**
+     * @var  string  $prefix
+     */
     protected $prefix;
 
     /**
@@ -31,32 +41,76 @@ class Dropbox extends AbstractAdapter
         }
     }
 
+    /**
+     * Check weather a file exists
+     *
+     * @param   string       $path
+     * @return  false|array  false or file metadata
+     */
     public function has($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * Write a file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @param   mixed   $config
+     * @return  array   file metadata
+     */
     public function write($path, $contents, $config = null)
     {
         return $this->upload($path, $contents, WriteMode::add());
     }
 
+    /**
+     * Write a file using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @param   mixed     $config
+     * @return  array     file metadata
+     */
     public function writeStream($path, $resource, $config = null)
     {
         return $this->uploadStream($path, $resource, $config, WriteMode::add());
     }
 
+    /**
+     * Update a file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @return  array   file metadata
+     */
     public function update($path, $contents)
     {
         return $this->upload($path, $contents, WriteMode::force());
     }
 
+    /**
+     * Update a file using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @return  array     file metadata
+     */
     public function updateStream($path, $resource, $config = null)
     {
         return $this->uploadStream($path, $resource, WriteMode::force());
     }
 
-    public function upload($path, $contents, $mode)
+    /**
+     * Do the actual upload of a string file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @param   string  $mode
+     * @return  array   file metadata
+     */
+    protected function upload($path, $contents, $mode)
     {
         if ( ! $result = $this->client->uploadFileFromString($this->prefix($path), $mode, $contents)) {
             return false;

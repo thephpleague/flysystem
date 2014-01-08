@@ -161,7 +161,7 @@ class AwsS3 extends AbstractAdapter
         $options = $this->getOptions($path);
         $result = $this->client->getObject($options);
 
-        return $this->normalizeObject($result->getAll());
+        return $this->normalizeObject($result->getAll(), $path);
     }
 
     /**
@@ -360,6 +360,10 @@ class AwsS3 extends AbstractAdapter
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
+
+        if (isset($result['contents'])) {
+            $result['contents'] = (string) $result['contents'];
+        }
 
         return $result;
     }
