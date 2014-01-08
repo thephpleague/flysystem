@@ -114,7 +114,7 @@ $client = new Client($token, $appName);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
 ```
 
-## FTP Setup
+## Ftp Setup
 
 ```php
 use Flysystem\Filesystem;
@@ -134,7 +134,7 @@ $filesystem = new Filesystem(new Adapter(array(
 )));
 ```
 
-## SFTP Setup
+## Sftp Setup
 
 ```php
 use Flysystem\Filesystem;
