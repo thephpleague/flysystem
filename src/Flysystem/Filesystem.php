@@ -465,15 +465,15 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return string                file mimetype
+     * @return string                timestamp
      */
     public function getTimestamp($path)
     {
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($mimetype = $this->cache->getTimestamp($path)) {
-            return $mimetype;
+        if ($timestamp = $this->cache->getTimestamp($path)) {
+            return $timestamp;
         }
 
         if ( ! $object = $this->adapter->getTimestamp($path)) {
