@@ -88,7 +88,7 @@ use Flysystem\Adapter\Zip as Adapter;
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/archive.zip'));
 ```
 
-## AwsS3 Setup
+## AWS S3 Setup
 
 ```php
 use Aws\S3\S3Client;
