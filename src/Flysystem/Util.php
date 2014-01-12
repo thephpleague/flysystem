@@ -5,8 +5,13 @@ namespace Flysystem;
 use Finfo;
 use LogicException;
 
-abstract class Util
+class Util
 {
+    private function __construct()
+    {
+        throw new LogicException('Instantiation forbidden');
+    }
+
     /**
      * Get normalized pathinfo
      *
