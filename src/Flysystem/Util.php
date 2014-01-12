@@ -7,7 +7,7 @@ use LogicException;
 
 class Util
 {
-    private function __construct()
+    public function __construct()
     {
         throw new LogicException('Instantiation forbidden');
     }

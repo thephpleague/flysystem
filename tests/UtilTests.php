@@ -4,6 +4,14 @@ namespace Flysystem;
 
 class UtilTests extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @expectedException Exception
+     */
+    public function testCannotInstanciate()
+    {
+        new Util();
+    }
+
     public function testEmulateDirectories()
     {
         $input = array(array('dirname' => '', 'filename' => 'dummy'), array('dirname' => 'something', 'filename' => 'dummy'));
