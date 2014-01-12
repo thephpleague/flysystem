@@ -4,12 +4,10 @@ namespace Flysystem;
 
 class UtilTests extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @expectedException Exception
-     */
     public function testCannotInstanciate()
     {
-        new Util();
+        $utilReflection = new \ReflectionClass('Flysystem\Util');
+        $this->assertFalse($utilReflection->isInstantiable());
     }
 
     public function testEmulateDirectories()
