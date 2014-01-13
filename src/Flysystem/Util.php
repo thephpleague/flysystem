@@ -7,6 +7,9 @@ use LogicException;
 
 class Util
 {
+    /**
+     * @codeCoverageIgnore
+     */
     private function __construct()
     {
         throw new LogicException('Instantiation forbidden');
