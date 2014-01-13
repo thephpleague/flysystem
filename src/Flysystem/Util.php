@@ -8,14 +8,6 @@ use LogicException;
 class Util
 {
     /**
-     * @codeCoverageIgnore
-     */
-    private function __construct()
-    {
-        throw new LogicException('Instantiation forbidden');
-    }
-
-    /**
      * Get normalized pathinfo
      *
      * @param   string  $path

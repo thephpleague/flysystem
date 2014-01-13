@@ -4,12 +4,6 @@ namespace Flysystem;
 
 class UtilTests extends \PHPUnit_Framework_TestCase
 {
-    public function testCannotInstanciate()
-    {
-        $utilReflection = new \ReflectionClass('Flysystem\Util');
-        $this->assertFalse($utilReflection->isInstantiable());
-    }
-
     public function testEmulateDirectories()
     {
         $input = array(array('dirname' => '', 'filename' => 'dummy'), array('dirname' => 'something', 'filename' => 'dummy'));
