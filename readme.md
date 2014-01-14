@@ -156,7 +156,7 @@ $filesystem = new Filesystem(new Adapter(array(
 ```php
 $client = new Sabre\DAV\Client($settings);
 $adapter = new League\Flysystem\Adapter\WebDav($client);
-$flysystem = new Flisystem\Filesystem($adapter);
+$flysystem = new League\Flysystem\Filesystem($adapter);
 ```
 
 ## Predis Caching Setup
