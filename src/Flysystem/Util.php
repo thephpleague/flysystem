@@ -5,7 +5,7 @@ namespace Flysystem;
 use Finfo;
 use LogicException;
 
-abstract class Util
+class Util
 {
     /**
      * Get normalized pathinfo
