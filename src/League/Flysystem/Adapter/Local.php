@@ -1,6 +1,6 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
 use Finfo;
 use SplFileInfo;
@@ -8,8 +8,8 @@ use FilesystemIterator;
 use DirectoryIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Flysystem\Util;
-use Flysystem\AdapterInterface;
+use League\Flysystem\Util;
+use League\Flysystem\AdapterInterface;
 
 class Local extends AbstractAdapter
 {

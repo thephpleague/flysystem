@@ -1,10 +1,10 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
 use Net_SFTP;
 use Crypt_RSA;
-use Flysystem\Util;
+use League\Flysystem\Util;
 use LogicException;
 
 class Sftp extends AbstractFtpAdapter

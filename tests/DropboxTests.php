@@ -1,6 +1,6 @@
 <?php
 
-use Flysystem\Adapter\Dropbox;
+use League\Flysystem\Adapter\Dropbox;
 
 class DropboxTests extends PHPUnit_Framework_TestCase
 {

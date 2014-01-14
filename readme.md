@@ -73,8 +73,8 @@ spl_autoload_register(function($class) {
 ## Local Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as Adapter;
 
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'));
 ```
@@ -82,8 +82,8 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'));
 ## Zip Archive Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Zip as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Zip as Adapter;
 
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/archive.zip'));
 ```
@@ -92,8 +92,8 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/archive.zip'));
 
 ```php
 use Aws\S3\S3Client;
-use Flysystem\Filesystem;
-use Flysystem\Adapter\AwsS3 as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\AwsS3 as Adapter;
 
 $client = S3Client::factory(array(
     'key'    => '[your key]',
@@ -107,8 +107,8 @@ $filesystem = new Filesystem(new Adapter($client, 'bucket-name', 'optional-prefi
 
 ```php
 use Dropbox\Client;
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Dropbox as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Dropbox as Adapter;
 
 $client = new Client($token, $appName);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
@@ -117,8 +117,8 @@ $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
 ## FTP Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Ftp as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Ftp as Adapter;
 
 $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'ftp.example.com',
@@ -137,8 +137,8 @@ $filesystem = new Filesystem(new Adapter(array(
 ## SFTP Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Sftp as Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Sftp as Adapter;
 
 $filesystem = new Filesystem(new Adapter(array(
 	'host' => 'example.com',
@@ -155,16 +155,16 @@ $filesystem = new Filesystem(new Adapter(array(
 
 ```php
 $client = new Sabre\DAV\Client($settings);
-$adapter = new Flysystem\Adapter\WebDav($client);
+$adapter = new League\Flysystem\Adapter\WebDav($client);
 $flysystem = new Flisystem\Filesystem($adapter);
 ```
 
 ## Predis Caching Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Local as Adapter;
-use Flysystem\Cache\Predis as Cache;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Cache\Predis as Cache;
 
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache);
 
@@ -176,9 +176,9 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($cl
 ## Memcached Caching Setup
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter\Local as Adapter;
-use Flysystem\Cache\Memcached as Cache;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Cache\Memcached as Cache;
 
 $memcached = new Memcached;
 $memcached->addServer('localhost', 11211);
@@ -270,7 +270,7 @@ __Manage Visibility__
 Visibility is the abstraction of file permissions across multiple platforms. Visibility can be either public or private.
 
 ```php
-use Flysystem\AdapterInterface;
+use League\Flysystem\AdapterInterface;
 $filesystem->write('db.backup', $backup, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE),
 ]);
@@ -291,7 +291,7 @@ if ($filesystem->getVisibility('secret.txt') === 'private') {
 You can set the visibility as a default, which prevents you from setting it all over the place.
 
 ```php
-$filesystem = new Flysystem\Filesystem($adapter, $cache, [
+$filesystem = new League\Flysystem\Filesystem($adapter, $cache, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
 ```
@@ -387,8 +387,8 @@ $s3->writeStream('path/to/object.png', $stream, [
 Need a feature which is not included in Flysystem's bag of trick? Write a plugin!
 
 ```php
-use Flysystem\FilesystemInterface;
-use Flysystem\PluginInterface;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\PluginInterface;
 
 class MaximusAwesomeness implements PluginInterface
 {
@@ -416,8 +416,8 @@ class MaximusAwesomeness implements PluginInterface
 Now we're ready to use the plugin
 
 ```php
-use Flysystem\Filesystem;
-use Flysystem\Adapter;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter;
 
 $filesystem = new Filesystem(new Adapter\Local(__DIR__.'/path/to/files/'));
 $filesystem->addPlugin(new MaximusAwesomeness);
@@ -433,12 +433,12 @@ you do simplify complex cross-filesystem interactions.
 Setting up a Mount Manager is easy:
 
 ```php
-$ftp = new Flysystem\Filesystem($ftpAdapter);
-$s3 = new Flysystem\Filesystem($s3Adapter);
-$local = new Flysystem\Filesystem($localAdapter);
+$ftp = new League\Flysystem\Filesystem($ftpAdapter);
+$s3 = new League\Flysystem\Filesystem($s3Adapter);
+$local = new League\Flysystem\Filesystem($localAdapter);
 
 // Add them in the constructor
-$manager = new Flysystem\MountManager(array(
+$manager = new League\Flysystem\MountManager(array(
     'ftp' => $ftp,
     's3' => $s3,
 ));

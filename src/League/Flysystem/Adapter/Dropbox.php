@@ -1,10 +1,10 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
 use Dropbox\Client;
 use Dropbox\WriteMode;
-use Flysystem\Util;
+use League\Flysystem\Util;
 
 class Dropbox extends AbstractAdapter
 {

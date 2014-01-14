@@ -1,7 +1,7 @@
 {
     "name": "frenkynet/flysystem",
     "description": "Filesystem abstraction, but easy.",
-    "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote"],
+    "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote", "webdav"],
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +11,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "Flysystem": "src/"
+            "League\\Flysystem": "src/"
         }
     },
     "require-dev": {

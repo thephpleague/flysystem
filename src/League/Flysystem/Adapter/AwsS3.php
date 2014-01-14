@@ -1,12 +1,12 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
 use Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
-use Flysystem\AdapterInterface;
-use Flysystem\Util;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Util;
 
 class AwsS3 extends AbstractAdapter
 {

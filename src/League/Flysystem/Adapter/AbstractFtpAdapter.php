@@ -1,8 +1,8 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
-use Flysystem\AdapterInterface;
+use League\Flysystem\AdapterInterface;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
 {

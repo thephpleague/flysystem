@@ -1,6 +1,6 @@
 <?php
 
-namespace Flysystem;
+namespace League\Flysystem;
 
 class UtilTests extends \PHPUnit_Framework_TestCase
 {
@@ -54,10 +54,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function testEnsureConfig()
     {
-        $this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(array()));
-        $this->assertInstanceOf('Flysystem\Config', Util::ensureConfig('string'));
-        $this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(null));
-        $this->assertInstanceOf('Flysystem\Config', Util::ensureConfig(new Config));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(array()));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig('string'));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(null));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config));
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flysystem\Adapter {
+namespace League\Flysystem\Adapter {
 	function file_put_contents($name) {
 		if (strpos($name, 'pleasefail') !== false)
 			return false;
@@ -16,7 +16,7 @@ namespace Flysystem\Adapter {
 	}
 }
 
-namespace Flysystem {
+namespace League\Flysystem {
 
 	/**
 	 * @runTestsInSeparateProcesses

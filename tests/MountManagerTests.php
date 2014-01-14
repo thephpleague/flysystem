@@ -1,6 +1,6 @@
 <?php
 
-use Flysystem\MountManager;
+use League\Flysystem\MountManager;
 
 class MountManagerTests extends PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
 
     public function testConstructorInjection()
     {
-        $mock = Mockery::mock('Flysystem\FilesystemInterface');
+        $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
         $manager = new MountManager(array(
             'prefix' => $mock,
         ));
@@ -24,7 +24,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
     public function testInvalidPrefix()
     {
         $manager = new MountManager;
-        $manager->mountFilesystem(false, Mockery::mock('Flysystem\FilesystemInterface'));
+        $manager->mountFilesystem(false, Mockery::mock('League\Flysystem\FilesystemInterface'));
     }
 
     /**
@@ -58,7 +58,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
     public function testCallForwarder()
     {
         $manager = new MountManager;
-        $mock = Mockery::mock('Flysystem\FilesystemInterface');
+        $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
         $mock->shouldReceive('aMethodCall')->once()->andReturn('a result');
         $manager->mountFilesystem('prot', $mock);
         $this->assertEquals($manager->aMethodCall('prot://file.ext'), 'a result');

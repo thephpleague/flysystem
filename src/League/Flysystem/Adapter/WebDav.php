@@ -1,9 +1,9 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
-use Flysystem\Adapter\AbstractAdapter;
-use Flysystem\Util;
+use League\Flysystem\Adapter\AbstractAdapter;
+use League\Flysystem\Util;
 use Sabre\DAV\Client;
 use Sabre\DAV\Exception;
 

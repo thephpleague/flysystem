@@ -1,8 +1,8 @@
 <?php
 
-use Flysystem\PluginInterface;
-use Flysystem\Filesystem;
-use Flysystem\FilesystemInterface;
+use League\Flysystem\PluginInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 
 class MyPlugin implements PluginInterface
 {
@@ -28,7 +28,7 @@ class PluginTests extends PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->filesystem = new Filesystem(Mockery::mock('Flysystem\AdapterInterface'));
+        $this->filesystem = new Filesystem(Mockery::mock('League\Flysystem\AdapterInterface'));
     }
 
     /**

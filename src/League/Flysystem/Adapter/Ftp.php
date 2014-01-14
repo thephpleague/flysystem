@@ -1,9 +1,9 @@
 <?php
 
-namespace Flysystem\Adapter;
+namespace League\Flysystem\Adapter;
 
-use Flysystem\AdapterInterface;
-use Flysystem\Util;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Util;
 use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
