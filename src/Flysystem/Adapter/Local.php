@@ -187,6 +187,28 @@ class Local extends AbstractAdapter
             'mimetype' => Util::contentMimetype($contents),
         );
     }
+    
+    /**
+     * Wrie or Append to the target file
+     * 
+     * @param string $path
+     * @param string $contents
+     * @return array 
+     */
+    public function append($path, $contents)
+    {
+        $location = $this->prefix($path);
+
+        if (($size = file_put_contents($location, $contents, LOCK_EX | FILE_APPEND)) === false) {
+            return false;
+        }
+
+        return array(
+            'size'     => $size,
+            'contents' => $contents,
+            'mimetype' => Util::contentMimetype($contents),
+        );
+    }    
 
 	/**
 	 * Read a file
