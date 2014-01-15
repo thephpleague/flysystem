@@ -27,7 +27,7 @@ Through Composer, obviously:
 ```json
 {
     "require": {
-        "frenkynet/flysystem": "0.1.*"
+        "league/flysystem": "0.2.*"
     }
 }
 ```
