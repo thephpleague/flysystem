@@ -36,7 +36,7 @@ You can also use Flysystem without using Composer by registing an autoloader fun
 
 ```php
 spl_autoload_register(function($class) {
-    if (!substr($class, 0, 9) === 'Flysystem') {
+    if (!substr($class, 0, 17) === 'League\\Flysystem') {
         return;
     }
 
