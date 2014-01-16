@@ -1,9 +1,9 @@
 # Flysystem by [@frankdejonge](http://twitter.com/frankdejonge)
 
-[![Build Status](https://travis-ci.org/php-loep/Flysystem.png)](https://travis-ci.org/php-loep/Flysystem)
+[![Build Status](https://travis-ci.org/php-loep/flysystem.png)](https://travis-ci.org/php-loep/flysystem)
 [![Latest Stable Version](https://poser.pugx.org/league/flysystem/v/stable.png)](https://packagist.org/league//flysystem)
 [![Total Downloads](https://poser.pugx.org/league/flysystem/downloads.png)](https://packagist.org/packages/league/flysystem)
-[![Coverage Status](https://coveralls.io/repos/php-loep/Flysystem/badge.png)](https://coveralls.io/r/php-loep/Flysystem)
+[![Coverage Status](https://coveralls.io/repos/php-loep/flysystem/badge.png)](https://coveralls.io/r/php-loep/flysystem)
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
