@@ -190,78 +190,78 @@ $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($me
 __Write Files__
 
 ```php
-$filemanager->write('filename.txt', 'contents');
+$filesystem->write('filename.txt', 'contents');
 ```
 
 __Update Files__
 
 ```php
-$filemanager->update('filename.txt', 'new contents');
+$filesystem->update('filename.txt', 'new contents');
 ```
 
 __Write or Update Files__
 
 ```php
-$filemanager->put('filename.txt', 'contents');
+$filesystem->put('filename.txt', 'contents');
 ```
 
 __Read Files__
 
 ```php
-$contents = $filemanager->read('filename.txt');
+$contents = $filesystem->read('filename.txt');
 ```
 
 __Check if a file exists__
 
 ```php
-$exists = $filemanager->has('filename.txt');
+$exists = $filesystem->has('filename.txt');
 ```
 
 __Delete Files__
 
 ```php
-$filemanager->delete('filename.txt');
+$filesystem->delete('filename.txt');
 ```
 
 __Rename Files__
 
 ```php
-$filemanager->rename('filename.txt', 'newname.txt');
+$filesystem->rename('filename.txt', 'newname.txt');
 ```
 
 __Get Mimetypes__
 
 ```php
-$mimetype = $filemanager->getMimetype('filename.txt');
+$mimetype = $filesystem->getMimetype('filename.txt');
 ```
 
 __Get Timestamps__
 
 ```php
-$timestamp = $filemanager->getTimestamp('filename.txt');
+$timestamp = $filesystem->getTimestamp('filename.txt');
 ```
 
 __Get File Sizes__
 
 ```php
-$size = $filemanager->getSize('filename.txt');
+$size = $filesystem->getSize('filename.txt');
 ```
 
 __Create Directories__
 
 ```php
-$filemanager->createDir('nested/directory');
+$filesystem->createDir('nested/directory');
 ```
 Directories are also made implicitly when writing to a deeper path
 
 ```php
-$filemanager->write('path/to/filename.txt', 'contents');
+$filesystem->write('path/to/filename.txt', 'contents');
 ```
 
 __Delete Directories__
 
 ```php
-$filemanager->deleteDir('path/to/directory');
+$filesystem->deleteDir('path/to/directory');
 ```
 
 __Manage Visibility__
