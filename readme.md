@@ -120,16 +120,16 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Ftp as Adapter;
 
 $filesystem = new Filesystem(new Adapter(array(
-	'host' => 'ftp.example.com',
-	'username' => 'username',
-	'password' => 'password',
+    'host' => 'ftp.example.com',
+    'username' => 'username',
+    'password' => 'password',
 
     /** optional config settings */
     'port' => 21,
     'root' => '/path/to/root',
-	'passive' => true,
-	'ssl' => true,
-	'timeout' => 30,
+    'passive' => true,
+    'ssl' => true,
+    'timeout' => 30,
 )));
 ```
 
@@ -140,13 +140,13 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Sftp as Adapter;
 
 $filesystem = new Filesystem(new Adapter(array(
-	'host' => 'example.com',
-	'port' => 21,
-	'username' => 'username',
-	'password' => 'password',
-	'privateKey' => 'path/to/or/contents/of/privatekey',
-	'root' => '/path/to/root',
-	'timeout' => 10,
+    'host' => 'example.com',
+    'port' => 21,
+    'username' => 'username',
+    'password' => 'password',
+    'privateKey' => 'path/to/or/contents/of/privatekey',
+    'root' => '/path/to/root',
+    'timeout' => 10,
 )));
 ```
 
@@ -281,7 +281,7 @@ You can also change and check visibility of existing files
 
 ```php
 if ($filesystem->getVisibility('secret.txt') === 'private') {
-	$filesystem->setVisibility('secret.txt', 'public');
+    $filesystem->setVisibility('secret.txt', 'public');
 }
 ```
 
@@ -307,7 +307,7 @@ Example:
 
 ```php
 foreach ($contents as $object) {
-	echo $object['basename'].' is located at'.$object['path'].' and is a '.$object['type'];
+    echo $object['basename'].' is located at'.$object['path'].' and is a '.$object['type'];
 }
 ```
 
@@ -323,7 +323,7 @@ ___List paths___
 $paths = $filemanager->listPaths();
 
 foreach ($paths as $path) {
-	echo $path;
+    echo $path;
 }
 ```
 
@@ -333,7 +333,7 @@ ___List with ensured presence of specific metadata___
 $listing = $flysystem->listWith(['mimetype', 'size', 'timestamp'], 'optional/path/to/dir', true);
 
 foreach ($listing as $object) {
-	echo $object['path'].' has mimetype: '.$object['mimetype'];
+    echo $object['path'].' has mimetype: '.$object['mimetype'];
 }
 ```
 

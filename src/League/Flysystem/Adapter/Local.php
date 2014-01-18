@@ -73,15 +73,15 @@ class Local extends AbstractAdapter
         return file_exists($this->prefix($path));
     }
 
-	/**
-	 * Write a file
-	 *
-	 * @param $path
-	 * @param $contents
-	 * @param null $config
-	 * @return array|bool
-	 */
-	public function write($path, $contents, $config = null)
+    /**
+     * Write a file
+     *
+     * @param $path
+     * @param $contents
+     * @param null $config
+     * @return array|bool
+     */
+    public function write($path, $contents, $config = null)
     {
         $location = $this->prefix($path);
         $config = Util::ensureConfig($config);
@@ -109,15 +109,15 @@ class Local extends AbstractAdapter
         return $result;
     }
 
-	/**
-	 * Write using a stream
-	 *
-	 * @param $path
-	 * @param $resource
-	 * @param null $config
-	 * @return array|bool
-	 */
-	public function writeStream($path, $resource, $config = null)
+    /**
+     * Write using a stream
+     *
+     * @param $path
+     * @param $resource
+     * @param null $config
+     * @return array|bool
+     */
+    public function writeStream($path, $resource, $config = null)
     {
         rewind($resource);
         $config = Util::ensureConfig($config);
@@ -140,39 +140,39 @@ class Local extends AbstractAdapter
         return compact('path', 'visibility');
     }
 
-	/**
-	 * Get a read-stream for a file
-	 *
-	 * @param $path
-	 * @return array|bool
-	 */
-	public function readStream($path)
+    /**
+     * Get a read-stream for a file
+     *
+     * @param $path
+     * @return array|bool
+     */
+    public function readStream($path)
     {
         $stream = fopen($this->prefix($path), 'r+');
 
         return compact('stream', 'path');
     }
 
-	/**
-	 * Update a file using a stream
-	 *
-	 * @param $path
-	 * @param $resource
-	 * @return array|bool
-	 */
-	public function updateStream($path, $resource)
+    /**
+     * Update a file using a stream
+     *
+     * @param $path
+     * @param $resource
+     * @return array|bool
+     */
+    public function updateStream($path, $resource)
     {
         return $this->writeStream($path, $resource);
     }
 
-	/**
-	 * Update a file
-	 *
-	 * @param $path
-	 * @param $contents
-	 * @return array|bool
-	 */
-	public function update($path, $contents)
+    /**
+     * Update a file
+     *
+     * @param $path
+     * @param $contents
+     * @return array|bool
+     */
+    public function update($path, $contents)
     {
         $location = $this->prefix($path);
 
@@ -188,13 +188,13 @@ class Local extends AbstractAdapter
         );
     }
 
-	/**
-	 * Read a file
-	 *
-	 * @param $path
-	 * @return array|bool
-	 */
-	public function read($path)
+    /**
+     * Read a file
+     *
+     * @param $path
+     * @return array|bool
+     */
+    public function read($path)
     {
         if (($contents = file_get_contents($this->prefix($path))) === false) {
             return false;
@@ -206,14 +206,14 @@ class Local extends AbstractAdapter
         );
     }
 
-	/**
-	 * Rename a file
-	 *
-	 * @param $path
-	 * @param $newpath
-	 * @return bool
-	 */
-	public function rename($path, $newpath)
+    /**
+     * Rename a file
+     *
+     * @param $path
+     * @param $newpath
+     * @return bool
+     */
+    public function rename($path, $newpath)
     {
         $location = $this->prefix($path);
         $destination = $this->prefix($newpath);
@@ -222,36 +222,36 @@ class Local extends AbstractAdapter
     }
 
 
-	/**
-	 * Delete a file
-	 *
-	 * @param $path
-	 * @return bool
-	 */
-	public function delete($path)
+    /**
+     * Delete a file
+     *
+     * @param $path
+     * @return bool
+     */
+    public function delete($path)
     {
         return unlink($this->prefix($path));
     }
 
-	/**
-	 * List contents of a directory
-	 *
-	 * @param string $directory
-	 * @param bool $recursive
-	 * @return array
-	 */
-	public function listContents($directory = '', $recursive = false)
+    /**
+     * List contents of a directory
+     *
+     * @param string $directory
+     * @param bool $recursive
+     * @return array
+     */
+    public function listContents($directory = '', $recursive = false)
     {
         return $this->directoryContents($directory, $recursive);
     }
 
-	/**
-	 * Get the metadata of a file
-	 *
-	 * @param $path
-	 * @return array
-	 */
-	public function getMetadata($path)
+    /**
+     * Get the metadata of a file
+     *
+     * @param $path
+     * @return array
+     */
+    public function getMetadata($path)
     {
         $location = $this->prefix($path);
         $info = new SplFileInfo($location);
@@ -259,24 +259,24 @@ class Local extends AbstractAdapter
         return $this->normalizeFileInfo($path, $info);
     }
 
-	/**
-	 * Get the size of a file
-	 *
-	 * @param $path
-	 * @return array
-	 */
-	public function getSize($path)
+    /**
+     * Get the size of a file
+     *
+     * @param $path
+     * @return array
+     */
+    public function getSize($path)
     {
         return $this->getMetadata($path);
     }
 
-	/**
-	 * Get the mimetype of a file
-	 *
-	 * @param $path
-	 * @return array
-	 */
-	public function getMimetype($path)
+    /**
+     * Get the mimetype of a file
+     *
+     * @param $path
+     * @return array
+     */
+    public function getMimetype($path)
     {
         $location = $this->prefix($path);
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
@@ -284,24 +284,24 @@ class Local extends AbstractAdapter
         return array('mimetype' => $finfo->file($location));
     }
 
-	/**
-	 * Get the timestamp of a file
-	 *
-	 * @param $path
-	 * @return array
-	 */
-	public function getTimestamp($path)
+    /**
+     * Get the timestamp of a file
+     *
+     * @param $path
+     * @return array
+     */
+    public function getTimestamp($path)
     {
         return $this->getMetadata($path);
     }
 
-	/**
-	 * Get the visibility of a file
-	 *
-	 * @param $path
-	 * @return array|void
-	 */
-	public function getVisibility($path)
+    /**
+     * Get the visibility of a file
+     *
+     * @param $path
+     * @return array|void
+     */
+    public function getVisibility($path)
     {
         $location = $this->prefix($path);
         clearstatcache(false, $location);
@@ -311,14 +311,14 @@ class Local extends AbstractAdapter
         return compact('visibility');
     }
 
-	/**
-	 * Set the visibility of a file
-	 *
-	 * @param $path
-	 * @param $visibility
-	 * @return array|void
-	 */
-	public function setVisibility($path, $visibility)
+    /**
+     * Set the visibility of a file
+     *
+     * @param $path
+     * @param $visibility
+     * @return array|void
+     */
+    public function setVisibility($path, $visibility)
     {
         $location = $this->prefix($path);
         chmod($location, static::$permissions[$visibility]);
@@ -326,13 +326,13 @@ class Local extends AbstractAdapter
         return compact('visibility');
     }
 
-	/**
-	 * Create a directory
-	 *
-	 * @param $dirname
-	 * @return array
-	 */
-	public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param $dirname
+     * @return array
+     */
+    public function createDir($dirname)
     {
         $location = $this->prefix($dirname);
 
@@ -343,13 +343,13 @@ class Local extends AbstractAdapter
         return array('path' => $dirname, 'type' => 'dir');
     }
 
-	/**
-	 * Delete a directory
-	 *
-	 * @param $dirname
-	 * @return bool
-	 */
-	public function deleteDir($dirname)
+    /**
+     * Delete a directory
+     *
+     * @param $dirname
+     * @return bool
+     */
+    public function deleteDir($dirname)
     {
         $location = $this->prefix($dirname);
 
@@ -371,14 +371,14 @@ class Local extends AbstractAdapter
         return rmdir($location);
     }
 
-	/**
-	 * Get contents of a directory
-	 *
-	 * @param string $path
-	 * @param bool $recursive
-	 * @return array
-	 */
-	protected function directoryContents($path = '', $recursive = false)
+    /**
+     * Get contents of a directory
+     *
+     * @param string $path
+     * @param bool $recursive
+     * @return array
+     */
+    protected function directoryContents($path = '', $recursive = false)
     {
         $result = array();
         $location = $this->prefix($path).DIRECTORY_SEPARATOR;
@@ -395,14 +395,14 @@ class Local extends AbstractAdapter
         return $result;
     }
 
-	/**
-	 * Normalize the file info
-	 *
-	 * @param $path
-	 * @param SplFileInfo $file
-	 * @return array
-	 */
-	protected function normalizeFileInfo($path, SplFileInfo $file)
+    /**
+     * Normalize the file info
+     *
+     * @param $path
+     * @param SplFileInfo $file
+     * @return array
+     */
+    protected function normalizeFileInfo($path, SplFileInfo $file)
     {
         $normalized = array('type' => $file->getType(), 'path' => $path);
 
@@ -414,11 +414,11 @@ class Local extends AbstractAdapter
         return $normalized;
     }
 
-	/**
-	 * @param $path
-	 * @return RecursiveIteratorIterator
-	 */
-	protected function getRecursiveDirectoryIterator($path)
+    /**
+     * @param $path
+     * @return RecursiveIteratorIterator
+     */
+    protected function getRecursiveDirectoryIterator($path)
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
@@ -426,11 +426,11 @@ class Local extends AbstractAdapter
         return $iterator;
     }
 
-	/**
-	 * @param $path
-	 * @return DirectoryIterator
-	 */
-	protected function getDirectoryIterator($path)
+    /**
+     * @param $path
+     * @return DirectoryIterator
+     */
+    protected function getDirectoryIterator($path)
     {
         $iterator = new DirectoryIterator($path);
 
