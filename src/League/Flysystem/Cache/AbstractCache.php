@@ -71,11 +71,11 @@ abstract class AbstractCache implements CacheInterface
             $object = $this->updateObject($object['path'], $object);
             $contents[$index] = $object;
 
-            if ($recursive and ! in_array($object['dirname'], $directories)) {
+            if ($recursive && ! in_array($object['dirname'], $directories)) {
                 $directories[] = $object['dirname'];
             }
 
-            if ($recursive === false and $object['dirname'] !== $directory) {
+            if ($recursive === false && $object['dirname'] !== $directory) {
                 unset($contents[$index]);
             }
         }
@@ -142,7 +142,7 @@ abstract class AbstractCache implements CacheInterface
 
             $result[] = $object;
 
-            if ($recursive and $object['type'] === 'dir') {
+            if ($recursive && $object['type'] === 'dir') {
                 $result = array_merge($result, $this->listContents($object['path'], true));
             }
         }
@@ -319,7 +319,7 @@ abstract class AbstractCache implements CacheInterface
             return false;
         }
 
-        if ($recursive and $this->complete[$dirname] !== 'recursive') {
+        if ($recursive && $this->complete[$dirname] !== 'recursive') {
             return false;
         }
 
@@ -410,7 +410,7 @@ abstract class AbstractCache implements CacheInterface
     {
         $object = $this->cache[$path];
 
-        while ($object['dirname'] !== '' and ! isset($this->cache[$object['dirname']])) {
+        while ($object['dirname'] !== '' && ! isset($this->cache[$object['dirname']])) {
             $object = Util::pathinfo($object['dirname']);
             $object['type'] = 'dir';
             $this->cache[$object['path']] = $object;

@@ -91,7 +91,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $connection = $this->getConnection();
 
-        if ($this->root and ! ftp_chdir($connection, $this->getRoot())) {
+        if ($this->root && ! ftp_chdir($connection, $this->getRoot())) {
             throw new RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
 
@@ -230,7 +230,7 @@ class Ftp extends AbstractFtpAdapter
 
     public function getMetadata($path)
     {
-        if ( ! empty($path) and ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
+        if ( ! empty($path) && ! $object = ftp_raw($this->getConnection(), 'STAT ' . $path) or count($object) < 3) {
             return false;
         }
 

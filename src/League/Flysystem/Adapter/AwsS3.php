@@ -90,7 +90,10 @@ class AwsS3 extends AbstractAdapter
         }
 
         $this->client->putObject($options);
-        $visibility and $options['visibility'] = $visibility;
+
+        if ($visibility) {
+            $options['visibility'] = $visibility;
+        }
 
         return $this->normalizeObject($options);
     }
@@ -121,7 +124,10 @@ class AwsS3 extends AbstractAdapter
         }
 
         $this->client->putObject($options);
-        $visibility and $options['visibility'] = $visibility;
+
+        if ($visibility) {
+            $options['visibility'] = $visibility;
+        }
 
         return $this->normalizeObject($options);
     }
@@ -300,7 +306,7 @@ class AwsS3 extends AbstractAdapter
         $result = $this->client->getObjectAcl($options)->getAll();
 
         foreach ($result['Grants'] as $grant) {
-            if (isset($grant['Grantee']['URI']) and $grant['Grantee']['URI'] === Group::ALL_USERS and $grant['Permission'] === Permission::READ) {
+            if (isset($grant['Grantee']['URI']) && $grant['Grantee']['URI'] === Group::ALL_USERS && $grant['Permission'] === Permission::READ) {
                 return array('visibility' => AdapterInterface::VISIBILITY_PUBLIC);
             }
         }
@@ -360,6 +366,7 @@ class AwsS3 extends AbstractAdapter
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
+        $result['dirname'] = Util::dirname($result['path']);
 
         if (isset($result['contents'])) {
             $result['contents'] = (string) $result['contents'];

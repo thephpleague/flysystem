@@ -103,7 +103,7 @@ class Sftp extends AbstractFtpAdapter
             return false;
         }
 
-        if ($config and $visibility = $config->get('visibility')) {
+        if ($config && $visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
         }
 

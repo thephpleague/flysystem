@@ -69,7 +69,7 @@ class WebDav extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config and $visibility = $config->get('visibility')) {
+        if ($config && $visibility = $config->get('visibility')) {
             $this->setVisibility($visibility);
         }
 
@@ -136,7 +136,7 @@ class WebDav extends AbstractAdapter
             $object = $this->normalizeObject($object, $path);
             $result[] = $object;
 
-            if ($recursive and $object['type'] === 'dir') {
+            if ($recursive && $object['type'] === 'dir') {
                 $result = array_merge($result, $this->listContents($object['path'], true));
             }
         }

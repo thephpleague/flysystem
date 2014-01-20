@@ -281,7 +281,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            if ( ! empty($line) and ! preg_match('#.* \.(\.)?$|^total#', $line)) {
+            if ( ! empty($line) && ! preg_match('#.* \.(\.)?$|^total#', $line)) {
                 return true;
             }
 
@@ -313,7 +313,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
     public function ensureDirectory($dirname)
     {
-        if ( ! empty($dirname) and ! $this->has($dirname)) {
+        if ( ! empty($dirname) && ! $this->has($dirname)) {
             $this->createDir($dirname);
         }
     }

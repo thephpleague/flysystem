@@ -226,7 +226,7 @@ class Dropbox extends AbstractAdapter
         foreach ($result['contents'] as $object) {
             $listing[] = $this->normalizeObject($object, substr($object['path'], $length));
 
-            if ($recursive and $object['is_dir']) {
+            if ($recursive && $object['is_dir']) {
                 $listing = array_merge($listing, $this->retrieveListing($object['path']));
             }
         }

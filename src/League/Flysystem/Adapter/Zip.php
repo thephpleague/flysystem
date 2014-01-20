@@ -53,7 +53,7 @@ class Zip extends AbstractAdapter
         $dirname = Util::dirname($path);
         $config = Util::ensureConfig($config);
 
-        if ( ! empty($dirname) and  ! $this->has($dirname)) {
+        if ( ! empty($dirname) && ! $this->has($dirname)) {
             $this->createDir($dirname);
         }
 
@@ -63,7 +63,7 @@ class Zip extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config and $config->get('visibility')) {
+        if ($config && $config->get('visibility')) {
             throw new LogicException(get_class($this).' does not support visibility settings.');
         }
 
