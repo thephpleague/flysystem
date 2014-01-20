@@ -281,7 +281,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            return ! empty($line) and ! preg_match('#.* \.(\.)?$|^total#', $line);
+            if ( ! empty($line) and ! preg_match('#.* \.(\.)?$|^total#', $line)) {
+                return true;
+            }
+
+            return false;
         };
 
         return array_filter($list, $filter);
