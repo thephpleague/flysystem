@@ -88,7 +88,7 @@ class WebDav extends AbstractAdapter
                 'Destination' => '/'.ltrim($newpath, '/'),
             ));
 
-            if ($response['statusCode'] > 200 or $response['statusCode'] < 299) {
+            if ($response['statusCode'] > 200 || $response['statusCode'] < 299) {
                 return true;
             }
         } catch (Exception\FileNotFound $e) { }
