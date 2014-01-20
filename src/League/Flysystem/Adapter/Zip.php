@@ -63,7 +63,7 @@ class Zip extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config and $visibility = $config->get('visibility')) {
+        if ($config and $config->get('visibility')) {
             throw new LogicException(get_class($this).' does not support visibility settings.');
         }
 
