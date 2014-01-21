@@ -17,7 +17,7 @@ class Dropbox extends AbstractAdapter
     );
 
     /**
-     * @var  Doprbox\Client  $client
+     * @var  Dropbox\Client  $client
      */
     protected $client;
 
