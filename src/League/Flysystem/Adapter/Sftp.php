@@ -12,7 +12,7 @@ class Sftp extends AbstractFtpAdapter
     protected $port = 22;
     protected $privatekey;
     protected $configurable = array('host', 'port', 'username', 'password', 'timeout', 'root', 'privateKey', 'permPrivate', 'permPublic');
-    protected $statMap = array('mtime' => 'timestamp', 'size' => 'size');
+    protected $statMap = array('mtime' => 'timestamp', 'size' => 'size','dirname'=>'dirname');
 
     protected function prefix($path)
     {
@@ -78,7 +78,7 @@ class Sftp extends AbstractFtpAdapter
         return $key;
     }
 
-    protected function listDirectoryContents($directory, $recursive = true)
+    protected function listDirectoryContentsCmd($directory, $recursive = true)
     {
         $connection = $this->getConnection();
         $listing = $connection->exec('cd '.$this->root.$directory.' && ls -la'.($recursive ? 'R' : ''));
@@ -86,6 +86,72 @@ class Sftp extends AbstractFtpAdapter
         array_shift($listing);
 
         return $this->normalizeListing($listing, $directory);
+    }
+
+    protected function listDirectoryContents($directory, $recursive = true)
+    {
+        return $this->retrieveListing($directory,$recursive);
+    }
+
+    public function retrieveListing($path, $recursive = true)
+    {
+        $connection = $this->getConnection();
+
+        $listing    = array();
+        $location   = $this->prefix($path).DIRECTORY_SEPARATOR;
+        $length     = strlen($this->root);
+
+        if ( ! $result = $connection->rawlist($location)) {
+            return array();
+        }
+
+        $path = trim($path, '\\/');
+        foreach ($result as $key => $object) {
+
+            if($object['type'] == 2 && ($key == '.' || $key == '..'))
+                continue;
+
+            $object['dirname'] = $key;
+
+            $listing[] = $this->normalizeFileObject($object,(($path) ? $path.'/' : '').$key);
+
+            if ($recursive) {
+                $listing = array_merge($listing, $this->retrieveListing($path.'/'.$key));
+            }
+        }
+
+        return $listing;
+    }
+
+    /**
+     * Normalize a result
+     *
+     * @param   string  $object
+     * @param   string  $path
+     * @return  array   file metadata
+     */
+    protected function normalizeFileObject($object, $path = null)
+    {
+        $result = array('path' => $path ?: $object['dirname']);
+
+        if (isset($object['mtime'])) {
+            $result['timestamp'] = $object['mtime'];
+        }
+
+        $result = array_merge($result, Util::map($object, $this->statMap));
+        $result['type'] = $object['type'] == 2 ? 'dir' : 'file';
+
+        if($result['type'] == 'file')
+            $result = array_merge($result,Util::pathinfo($path));
+
+        $permissions = $this->normalizePermissions($object['permissions']);
+        $result['visibility'] = $permissions & 0044 ? AbstractFtpAdapter::VISIBILITY_PUBLIC : AbstractFtpAdapter::VISIBILITY_PRIVATE;
+
+        if (isset($result['contents'])) {
+            $result['contents'] = (string) $result['contents'];
+        }
+
+        return $result;
     }
 
     public function disconnect()
