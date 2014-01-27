@@ -53,6 +53,7 @@ spl_autoload_register(function($class) {
 
 * Local
 * Amazon Web Services - S3
+* Rackspace Cloud Files
 * Dropbox
 * Ftp
 * Sftp (through phpseclib)
@@ -101,6 +102,22 @@ $client = S3Client::factory(array(
 ));
 
 $filesystem = new Filesystem(new Adapter($client, 'bucket-name', 'optional-prefix'));
+```
+
+## Rackspace Setup
+
+```php
+use OpenCloud\OpenStack;
+use OpenCloud\Rackspace;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Rackspace as Adapter;
+
+$client = new OpenStack(Rackspace::UK_IDENTITY_ENDPOINT, array(
+    'username' => ':username',
+    'password' => ':password',
+));
+
+$filesystem = new Filesystem(new Adapter($client));
 ```
 
 ## Dropbox Setup
