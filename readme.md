@@ -117,7 +117,10 @@ $client = new OpenStack(Rackspace::UK_IDENTITY_ENDPOINT, array(
     'password' => ':password',
 ));
 
-$filesystem = new Filesystem(new Adapter($client));
+$store = $client->objectStoreService('cloudFiles', 'LON');
+$container = $store->getContainer('flysystem');
+
+$filesystem = new Filesystem(new Adapter($container));
 ```
 
 ## Dropbox Setup
