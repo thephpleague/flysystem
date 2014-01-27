@@ -151,7 +151,7 @@ class Util
         $directories = array_unique($directories);
 
         foreach ($directories as $directory) {
-            $listing[] = Util::pathinfo($directory);
+            $listing[] = static::pathinfo($directory) + array('type' => 'dir');
         }
 
         return $listing;
