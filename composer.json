@@ -29,6 +29,7 @@
         "predis/predis": "Allows you to use Predis for caching",
         "dropbox/dropbox-sdk": "Allows you to use Dropbox storage",
         "phpseclib/phpseclib": "Allows SFTP server storage",
-        "sabre/dav": "Enables WebDav support"
+        "sabre/dav": "Enables WebDav support",
+        "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files"
     }
 }
