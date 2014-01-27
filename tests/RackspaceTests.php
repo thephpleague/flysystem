@@ -136,8 +136,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
     public function deleteProvider()
     {
         return array(
-            [204, true],
-            [500, false],
+            array(204, true),
+            array(500, false),
         );
     }
 
@@ -158,8 +158,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
     public function renameProvider()
     {
         return array(
-            [201, true],
-            [500, false],
+            array(201, true),
+            array(500, false),
         );
     }
 
@@ -200,7 +200,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getName')->andReturn('container_name');
         $dataObject = Mockery::mock('OpenCloud\ObjectStore\Resource\DataObject');
         $dataObject->shouldReceive('getName')->andReturn('filename.ext');
-        $container->shouldReceive('objectList')->andReturn([$dataObject]);
+        $container->shouldReceive('objectList')->andReturn(array($dataObject));
         $container->shouldReceive('getService')->andReturn($container);
         $container->shouldReceive('bulkDelete')->andReturn($container);
         $container->shouldReceive('getStatusCode')->andReturn($status);
@@ -213,7 +213,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container = $this->getContainerMock();
         $container->shouldReceive('getName')->andReturn('container_name');
         $dataObject = $this->getDataObjectMock('filename.ext');
-        $container->shouldReceive('objectList')->andReturn(new ArrayIterator([$dataObject]));
+        $container->shouldReceive('objectList')->andReturn(new ArrayIterator(array($dataObject)));
         $adapter = new Rackspace($container);
         $this->assertInternalType('array', $adapter->listContents('', true));
     }
