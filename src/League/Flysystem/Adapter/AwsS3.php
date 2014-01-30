@@ -345,7 +345,8 @@ class AwsS3 extends AbstractAdapter
             'Bucket' => $this->bucket,
         ))->getAll(array('Contents'));
 
-        $result = array_map(array($this, 'normalizeObject'), $result['Contents']);
+        $contents = isset($result['Contents']) ? $result['Contents'] : array();
+        $result = array_map(array($this, 'normalizeObject'), $contents);
 
         return Util::emulateDirectories($result);
     }
