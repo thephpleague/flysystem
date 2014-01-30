@@ -1,0 +1,1023 @@
+/*! normalize.css v1.1.2 | MIT License | git.io/normalize */
+/* ==========================================================================
+   HTML5 display definitions
+   ========================================================================== */
+/**
+ * Correct `block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+nav,
+section,
+summary {
+  display: block; }
+
+/**
+ * Correct `inline-block` display not defined in IE 6/7/8/9 and Firefox 3.
+ */
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1; }
+
+/**
+ * Prevent modern browsers from displaying `audio` without controls.
+ * Remove excess height in iOS 5 devices.
+ */
+audio:not([controls]) {
+  display: none;
+  height: 0; }
+
+/**
+ * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
+ * Known issue: no IE 6 support.
+ */
+[hidden] {
+  display: none; }
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+/**
+ * 1. Correct text resizing oddly in IE 6/7 when body `font-size` is set using
+ *    `em` units.
+ * 2. Prevent iOS text size adjust after orientation change, without disabling
+ *    user zoom.
+ */
+html {
+  font-size: 100%;
+  /* 1 */
+  -ms-text-size-adjust: 100%;
+  /* 2 */
+  -webkit-text-size-adjust: 100%;
+  /* 2 */ }
+
+/**
+ * Address `font-family` inconsistency between `textarea` and other form
+ * elements.
+ */
+html,
+button,
+input,
+select,
+textarea {
+  font-family: sans-serif; }
+
+/**
+ * Address margins handled incorrectly in IE 6/7.
+ */
+body {
+  margin: 0; }
+
+/* ==========================================================================
+   Links
+   ========================================================================== */
+/**
+ * Address `outline` inconsistency between Chrome and other browsers.
+ */
+a:focus {
+  outline: thin dotted; }
+
+/**
+ * Improve readability when focused and also mouse hovered in all browsers.
+ */
+a:active,
+a:hover {
+  outline: 0; }
+
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+/**
+ * Address font sizes and margins set differently in IE 6/7.
+ * Address font sizes within `section` and `article` in Firefox 4+, Safari 5,
+ * and Chrome.
+ */
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0; }
+
+h2 {
+  font-size: 1.5em;
+  margin: 0.83em 0; }
+
+h3 {
+  font-size: 1.17em;
+  margin: 1em 0; }
+
+h4 {
+  font-size: 1em;
+  margin: 1.33em 0; }
+
+h5 {
+  font-size: 0.83em;
+  margin: 1.67em 0; }
+
+h6 {
+  font-size: 0.67em;
+  margin: 2.33em 0; }
+
+/**
+ * Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+ */
+abbr[title] {
+  border-bottom: 1px dotted; }
+
+/**
+ * Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
+ */
+b,
+strong {
+  font-weight: bold; }
+
+blockquote {
+  margin: 1em 40px; }
+
+/**
+ * Address styling not present in Safari 5 and Chrome.
+ */
+dfn {
+  font-style: italic; }
+
+/**
+ * Address differences between Firefox and other browsers.
+ * Known issue: no IE 6/7 normalization.
+ */
+hr {
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  height: 0; }
+
+/**
+ * Address styling not present in IE 6/7/8/9.
+ */
+mark {
+  background: #ff0;
+  color: #000; }
+
+/**
+ * Address margins set differently in IE 6/7.
+ */
+p,
+pre {
+  margin: 1em 0; }
+
+/**
+ * Correct font family set oddly in IE 6, Safari 4/5, and Chrome.
+ */
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, serif;
+  _font-family: 'courier new', monospace;
+  font-size: 1em; }
+
+/**
+ * Improve readability of pre-formatted text in all browsers.
+ */
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word; }
+
+/**
+ * Address CSS quotes not supported in IE 6/7.
+ */
+q {
+  quotes: none; }
+
+/**
+ * Address `quotes` property not supported in Safari 4.
+ */
+q:before,
+q:after {
+  content: '';
+  content: none; }
+
+/**
+ * Address inconsistent and variable font size in all browsers.
+ */
+small {
+  font-size: 80%; }
+
+/**
+ * Prevent `sub` and `sup` affecting `line-height` in all browsers.
+ */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline; }
+
+sup {
+  top: -0.5em; }
+
+sub {
+  bottom: -0.25em; }
+
+/* ==========================================================================
+   Lists
+   ========================================================================== */
+/**
+ * Address margins set differently in IE 6/7.
+ */
+dl,
+menu,
+ol,
+ul {
+  margin: 1em 0; }
+
+dd {
+  margin: 0 0 0 40px; }
+
+/**
+ * Address paddings set differently in IE 6/7.
+ */
+menu,
+ol,
+ul {
+  padding: 0 0 0 40px; }
+
+/**
+ * Correct list images handled incorrectly in IE 7.
+ */
+nav ul,
+nav ol {
+  list-style: none;
+  list-style-image: none; }
+
+/* ==========================================================================
+   Embedded content
+   ========================================================================== */
+/**
+ * 1. Remove border when inside `a` element in IE 6/7/8/9 and Firefox 3.
+ * 2. Improve image quality when scaled in IE 7.
+ */
+img {
+  border: 0;
+  /* 1 */
+  -ms-interpolation-mode: bicubic;
+  /* 2 */ }
+
+/**
+ * Correct overflow displayed oddly in IE 9.
+ */
+svg:not(:root) {
+  overflow: hidden; }
+
+/* ==========================================================================
+   Figures
+   ========================================================================== */
+/**
+ * Address margin not present in IE 6/7/8/9, Safari 5, and Opera 11.
+ */
+figure {
+  margin: 0; }
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+/**
+ * Correct margin displayed oddly in IE 6/7.
+ */
+form {
+  margin: 0; }
+
+/**
+ * Define consistent border, margin, and padding.
+ */
+fieldset {
+  border: 1px solid #c0c0c0;
+  margin: 0 2px;
+  padding: 0.35em 0.625em 0.75em; }
+
+/**
+ * 1. Correct color not being inherited in IE 6/7/8/9.
+ * 2. Correct text not wrapping in Firefox 3.
+ * 3. Correct alignment displayed oddly in IE 6/7.
+ */
+legend {
+  border: 0;
+  /* 1 */
+  padding: 0;
+  white-space: normal;
+  /* 2 */
+  *margin-left: -7px;
+  /* 3 */ }
+
+/**
+ * 1. Correct font size not being inherited in all browsers.
+ * 2. Address margins set differently in IE 6/7, Firefox 3+, Safari 5,
+ *    and Chrome.
+ * 3. Improve appearance and consistency in all browsers.
+ */
+button,
+input,
+select,
+textarea {
+  font-size: 100%;
+  /* 1 */
+  margin: 0;
+  /* 2 */
+  vertical-align: baseline;
+  /* 3 */
+  *vertical-align: middle;
+  /* 3 */ }
+
+/**
+ * Address Firefox 3+ setting `line-height` on `input` using `!important` in
+ * the UA stylesheet.
+ */
+button,
+input {
+  line-height: normal; }
+
+/**
+ * Address inconsistent `text-transform` inheritance for `button` and `select`.
+ * All other form control elements do not inherit `text-transform` values.
+ * Correct `button` style inheritance in Chrome, Safari 5+, and IE 6+.
+ * Correct `select` style inheritance in Firefox 4+ and Opera.
+ */
+button,
+select {
+  text-transform: none; }
+
+/**
+ * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+ *    and `video` controls.
+ * 2. Correct inability to style clickable `input` types in iOS.
+ * 3. Improve usability and consistency of cursor style between image-type
+ *    `input` and others.
+ * 4. Remove inner spacing in IE 7 without affecting normal text inputs.
+ *    Known issue: inner spacing remains in IE 6.
+ */
+button,
+html input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  -webkit-appearance: button;
+  /* 2 */
+  cursor: pointer;
+  /* 3 */
+  *overflow: visible;
+  /* 4 */ }
+
+/**
+ * Re-set default cursor for disabled elements.
+ */
+button[disabled],
+html input[disabled] {
+  cursor: default; }
+
+/**
+ * 1. Address box sizing set to content-box in IE 8/9.
+ * 2. Remove excess padding in IE 8/9.
+ * 3. Remove excess padding in IE 7.
+ *    Known issue: excess padding remains in IE 6.
+ */
+input[type="checkbox"],
+input[type="radio"] {
+  box-sizing: border-box;
+  /* 1 */
+  padding: 0;
+  /* 2 */
+  *height: 13px;
+  /* 3 */
+  *width: 13px;
+  /* 3 */ }
+
+/**
+ * 1. Address `appearance` set to `searchfield` in Safari 5 and Chrome.
+ * 2. Address `box-sizing` set to `border-box` in Safari 5 and Chrome
+ *    (include `-moz` to future-proof).
+ */
+input[type="search"] {
+  -webkit-appearance: textfield;
+  /* 1 */
+  -moz-box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+  /* 2 */
+  box-sizing: content-box; }
+
+/**
+ * Remove inner padding and search cancel button in Safari 5 and Chrome
+ * on OS X.
+ */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none; }
+
+/**
+ * Remove inner padding and border in Firefox 3+.
+ */
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0; }
+
+/**
+ * 1. Remove default vertical scrollbar in IE 6/7/8/9.
+ * 2. Improve readability and alignment in all browsers.
+ */
+textarea {
+  overflow: auto;
+  /* 1 */
+  vertical-align: top;
+  /* 2 */ }
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+/**
+ * Remove most spacing between table cells.
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+@font-face {
+  font-family: "Museo 100";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/museo_100.eot");
+  src: url("../fonts/museo_100.eot?#iefix") format("embedded-opentype"), url("../fonts/museo_100.woff") format("woff"), url("../fonts/museo_100.ttf") format("truetype"), url("../fonts/museo_100.svg#Museo 100") format("svg"); }
+
+@font-face {
+  font-family: "Museo 300";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/museo_300.eot");
+  src: url("../fonts/museo_300.eot?#iefix") format("embedded-opentype"), url("../fonts/museo_300.woff") format("woff"), url("../fonts/museo_300.ttf") format("truetype"), url("../fonts/museo_300.svg#Museo 300") format("svg"); }
+
+@font-face {
+  font-family: "Museo Sans 300";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/museo_sans_300.eot");
+  src: url("../fonts/museo_sans_300.eot?#iefix") format("embedded-opentype"), url("../fonts/museo_sans_300.woff") format("woff"), url("../fonts/museo_sans_300.ttf") format("truetype"), url("../fonts/museo_sans_300.svg#Museo Sans 300") format("svg"); }
+
+@font-face {
+  font-family: "Museo Sans 500";
+  font-weight: normal;
+  font-style: normal;
+  src: url("../fonts/museo_sans_300.eot");
+  src: url("../fonts/museo_sans_300.eot?#iefix") format("embedded-opentype"), url("../fonts/museo_sans_300.woff") format("woff"), url("../fonts/museo_sans_300.ttf") format("truetype"), url("../fonts/museo_sans_300.svg#Museo Sans 500") format("svg"); }
+
+* {
+  box-sizing: border-box; }
+
+html {
+  background-color: #19242f; }
+  @media screen and (max-width: 549px) {
+    html {
+      overflow-x: hidden; } }
+
+@media screen and (max-width: 549px) {
+  body {
+    overflow-x: hidden; } }
+
+::-moz-selection {
+  background: #69bbdc;
+  color: #2b3d50;
+  text-shadow: none; }
+
+::selection {
+  background: #69bbdc;
+  color: #2b3d50;
+  text-shadow: none; }
+
+.all_packages {
+  display: none;
+  position: relative;
+  background: #ffffff; }
+  .all_packages h2 {
+    margin: 0 0 15px 0;
+    -webkit-font-smoothing: antialiased;
+    font-family: "Museo Sans 300";
+    color: #929292;
+    font-size: 26px;
+    line-height: 100%;
+    font-weight: normal;
+    text-transform: uppercase; }
+  .all_packages ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+    .all_packages ul li {
+      border-top: #929292 dotted 1px; }
+      .all_packages ul li:nth-child(odd) {
+        clear: both; }
+      .all_packages ul li a {
+        font-family: "Museo Sans 500";
+        color: #5f5f5f;
+        font-size: 16px;
+        line-height: 100%;
+        text-decoration: none; }
+        .all_packages ul li a:hover {
+          text-decoration: underline; }
+      .all_packages ul li span {
+        font-family: "Museo Sans 300";
+        color: #929292;
+        font-size: 14px;
+        line-height: 100%;
+        text-decoration: none; }
+  @media screen and (max-width: 549px) {
+    .all_packages {
+      padding: 0 15px;
+      text-align: center;
+      font-size: 0;
+      line-height: 0; }
+      .all_packages img {
+        margin: 25px 0;
+        display: inline-block; }
+      .all_packages ul {
+        padding: 0 0 25px 0;
+        overflow: hidden; }
+        .all_packages ul li {
+          padding: 8px 0; }
+          .all_packages ul li span {
+            margin: 5px 0 0 0;
+            display: block; } }
+  @media (min-width: 550px) and (max-width: 849px) {
+    .all_packages {
+      padding: 35px 0 35px 300px; }
+      .all_packages img {
+        position: absolute;
+        left: 50px; }
+      .all_packages ul {
+        overflow: hidden; }
+        .all_packages ul li {
+          float: left;
+          width: 47%;
+          margin: 0 3% 0 0;
+          padding: 8px 15px 8px 0; } }
+  @media screen and (min-width: 850px) {
+    .all_packages {
+      padding: 35px 0 35px 300px; }
+      .all_packages img {
+        position: absolute;
+        left: 50px; }
+      .all_packages ul {
+        max-width: 850px;
+        overflow: hidden; }
+        .all_packages ul li {
+          float: left;
+          width: 47%;
+          margin: 0 3% 0 0;
+          padding: 8px 15px 8px 0; } }
+
+header {
+  position: relative; }
+  header .logo {
+    display: block;
+    text-decoration: none; }
+    header .logo .name {
+      -webkit-font-smoothing: antialiased;
+      font-family: "Museo 100";
+      color: #ff4143;
+      font-size: 44px;
+      line-height: 90%; }
+    header .logo .tagline {
+      font-family: "Museo Sans 500";
+      color: #69bbdc;
+      font-size: 12px;
+      line-height: 100%;
+      text-transform: uppercase; }
+  header .league {
+    position: relative;
+    display: block;
+    width: 210px;
+    height: 46px;
+    padding: 10px 20px 0 40px;
+    font-family: "Museo Sans 500";
+    color: #2b3d50;
+    font-size: 12px;
+    line-height: 120%;
+    text-decoration: none;
+    background: #d6dadb;
+    border-radius: 4px; }
+    header .league:hover:before {
+      -webkit-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -ms-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+      -webkit-transition-duration: 1s;
+      -moz-transition-duration: 1s;
+      transition-duration: 1s;
+      -webkit-transition-property: -webkit-transform;
+      -moz-transition-property: -moz-transform;
+      transition-property: transform; }
+    header .league:before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 13px;
+      display: block;
+      width: 21px;
+      height: 20px;
+      background: url(../img/star_icon.png) no-repeat; }
+    header .league:after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      margin: 0 0 0 -4px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 8px solid #d6dadb; }
+    header .league:hover {
+      background-color: white; }
+      header .league:hover:after {
+        border-bottom-color: white; }
+  @media screen and (max-width: 549px) {
+    header {
+      padding: 85px 10px 25px 10px; }
+      header .logo {
+        text-align: center;
+        font-size: 0;
+        line-height: 0; }
+        header .logo .icon {
+          display: block;
+          margin: 0 0 10px 0; }
+        header .logo .name {
+          display: block;
+          margin: 0 0 10px 0; }
+        header .logo .tagline {
+          display: block; }
+      header .league {
+        position: absolute;
+        left: 50%;
+        top: 15px;
+        margin: 0 0 0 -105px; } }
+  @media screen and (min-width: 550px) {
+    header {
+      max-width: 1000px;
+      padding: 20px 250px 10px 30px; }
+      header .logo {
+        font-size: 0;
+        line-height: 0; }
+        header .logo .icon {
+          position: relative;
+          top: 5px;
+          display: inline-block;
+          margin: 0 7px 0 0; }
+        header .logo .name {
+          margin: 0 7px 0 0; }
+        header .logo .tagline {
+          display: inline-block;
+          margin: 7px 0; }
+      header .league {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        margin: 0 0 0 -105px; } }
+  @media screen and (min-width: 850px) {
+    header {
+      padding-left: 45px; } }
+
+#menu {
+  display: none;
+  position: absolute;
+  top: -9999px;
+  left: -9999px; }
+  @media screen and (max-width: 549px) {
+    #menu {
+      display: block; }
+      #menu:checked ~ label[for="menu"] .closed {
+        display: none; }
+      #menu:checked ~ label[for="menu"] .open {
+        display: block; }
+      #menu:checked ~ main {
+        right: 0; } }
+
+label[for="menu"] {
+  display: none;
+  padding: 15px;
+  font-family: "Museo Sans 500";
+  color: #454a4f;
+  font-size: 18px;
+  line-height: 100%;
+  text-transform: uppercase;
+  text-align: center;
+  background: #b9bdc1;
+  cursor: pointer; }
+  label[for="menu"]:hover {
+    background: #abb0b5; }
+  label[for="menu"] .closed {
+    display: block; }
+  label[for="menu"] .open {
+    display: none; }
+  @media screen and (max-width: 549px) {
+    label[for="menu"] {
+      display: block; } }
+
+main {
+  overflow: hidden;
+  position: relative;
+  background: #eff0f1;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-property: right;
+  -moz-transition-property: right;
+  transition-property: right; }
+  @media screen and (max-width: 549px) {
+    main {
+      width: 200%;
+      right: 100%;
+      background-size: 50% 1px;
+      background-repeat: repeat-y;
+      background-image: -webkit-linear-gradient( #2b3d50 100%, #2b3d50 100%);
+      background-image: linear-gradient( #2b3d50 100%, #2b3d50 100%); } }
+  @media (min-width: 550px) and (max-width: 849px) {
+    main {
+      background-size: 200px 1px;
+      background-repeat: repeat-y;
+      background-image: -webkit-linear-gradient( #2b3d50 100%, #2b3d50 100%);
+      background-image: linear-gradient( #2b3d50 100%, #2b3d50 100%); } }
+  @media screen and (min-width: 850px) {
+    main {
+      background-size: 250px 1px;
+      background-repeat: repeat-y;
+      background-image: -webkit-linear-gradient( #2b3d50 100%, #2b3d50 100%);
+      background-image: linear-gradient( #2b3d50 100%, #2b3d50 100%); } }
+  main menu {
+    margin: 0;
+    padding: 0; }
+    main menu h2 {
+      font-family: "Museo 300";
+      color: #d6dadb;
+      line-height: 100%;
+      font-weight: normal;
+      text-transform: uppercase; }
+    main menu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0; }
+      main menu ul li a {
+        padding: 8px 3px 6px 0;
+        display: block;
+        font-family: "Museo 300";
+        color: #6abcdd;
+        line-height: 100%;
+        font-weight: normal;
+        text-decoration: none;
+        -webkit-transition-duration: 0.2s;
+        -moz-transition-duration: 0.2s;
+        transition-duration: 0.2s;
+        -webkit-transition-property: all;
+        -moz-transition-property: all;
+        transition-property: all; }
+        main menu ul li a:hover {
+          color: #a8d8eb;
+          padding: 8px 0 6px 3px; }
+      main menu ul li.selected {
+        background: #22303f; }
+    @media screen and (max-width: 549px) {
+      main menu {
+        float: left;
+        width: 50%;
+        padding: 10px 0; }
+        main menu h2 {
+          margin: 35px 15px 5px 15px;
+          font-size: 12px;
+          text-align: center; }
+        main menu ul li {
+          padding: 0 15px; }
+          main menu ul li a {
+            font-size: 17px;
+            text-align: center; }
+            main menu ul li a:hover {
+              padding: 8px 3px 6px 0; } }
+    @media (min-width: 550px) and (max-width: 849px) {
+      main menu {
+        float: left;
+        width: 200px;
+        padding: 10px 0 30px 0; }
+        main menu h2 {
+          margin: 35px 20px 5px 30px;
+          font-size: 12px; }
+        main menu ul li {
+          padding: 0 20px 0 30px; }
+          main menu ul li a {
+            font-size: 16px; } }
+    @media screen and (min-width: 850px) {
+      main menu {
+        float: left;
+        width: 250px;
+        padding: 15px 0 50px 0; }
+        main menu h2 {
+          margin: 35px 25px 5px 45px;
+          font-size: 13px; }
+        main menu ul li {
+          padding: 0 25px 0 45px; }
+          main menu ul li a {
+            font-size: 18px; } }
+  main article {
+    overflow: hidden;
+    font-family: "Museo 300";
+    color: #2b3d50;
+    line-height: 160%;
+    font-weight: normal; }
+    main article h1 {
+      -webkit-font-smoothing: antialiased;
+      font-family: "Museo 100";
+      color: #ff4143;
+      line-height: 100%;
+      font-weight: normal; }
+      main article h1 + .quick_links {
+        margin-top: -10px; }
+    main article h2 {
+      -webkit-font-smoothing: antialiased;
+      font-family: "Museo 300";
+      color: #ff4143;
+      line-height: 100%;
+      font-weight: normal; }
+    main article a {
+      color: #6abcdd;
+      text-decoration: underline; }
+      main article a:hover {
+        color: #2f9fcc; }
+    main article li {
+      margin: 5px 0; }
+    main article p > code,
+    main article li > code {
+      display: inline-block;
+      padding: 3px 5px;
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 17px;
+      line-height: 100%;
+      border-radius: 2px;
+      background: #f5f6f7;
+      border: solid #dcdddd 1px; }
+    main article .quick_links {
+      list-style: none;
+      margin: 25px 0;
+      padding: 0;
+      font-size: 0; }
+      main article .quick_links li {
+        display: inline-block;
+        margin: 0 10px 0 0; }
+        main article .quick_links li a {
+          display: block;
+          height: 38px;
+          text-indent: -9999px;
+          border-radius: 4px;
+          background: #c2c2c2 url(../img/quick_links.png) no-repeat; }
+          main article .quick_links li a:hover {
+            background-color: #6abcdd; }
+          main article .quick_links li a.github {
+            width: 142px;
+            background-position: 0 0; }
+          main article .quick_links li a.twitter {
+            width: 158px;
+            background-position: -142px 0; }
+    @media screen and (max-width: 549px) {
+      main article {
+        float: left;
+        width: 50%;
+        margin: 0 0 30px 0;
+        padding: 0 15px; }
+        main article h1 {
+          margin: 30px 0 15px 0;
+          font-size: 40px; }
+        main article h2 {
+          margin: 30px 0 10px 0;
+          font-size: 22px; } }
+    @media (min-width: 550px) and (max-width: 849px) {
+      main article {
+        margin: 0 0 30px 0;
+        padding: 0 30px; }
+        main article h1 {
+          margin: 30px 0 15px 0;
+          font-size: 50px; }
+        main article h2 {
+          margin: 30px 0 10px 0;
+          font-size: 22px; } }
+    @media screen and (min-width: 850px) {
+      main article {
+        margin: 0 0 50px 0;
+        padding: 0 50px;
+        max-width: 950px;
+        font-size: 18px; }
+        main article h1 {
+          margin: 50px 0 30px 0;
+          font-size: 70px; }
+        main article h2 {
+          margin: 30px 0 15px 0;
+          font-size: 30px; } }
+
+footer {
+  font-family: "Museo Sans 500";
+  color: #69bbdc;
+  font-size: 12px;
+  line-height: 175%; }
+  footer span {
+    display: inline-block;
+    margin: 0 5px 0 0; }
+    footer span a {
+      color: #92cee6;
+      text-decoration: underline; }
+      footer span a:hover {
+        color: #bce0ef; }
+  @media screen and (max-width: 549px) {
+    footer {
+      padding: 25px 15px;
+      text-align: center; } }
+  @media (min-width: 550px) and (max-width: 849px) {
+    footer {
+      padding: 25px 0 25px 30px; } }
+  @media screen and (min-width: 850px) {
+    footer {
+      padding: 25px 0 25px 45px; } }
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #2b3d50;
+  font-family: Consolas, Monaco, 'Andale Mono', monospace;
+  line-height: 140%;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-wrap: normal;
+  word-spacing: normal;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none; }
+  @media (min-width: 550px) and (max-width: 849px) {
+    code[class*="language-"],
+    pre[class*="language-"] {
+      font-size: 14px; } }
+  @media screen and (min-width: 800px) {
+    code[class*="language-"],
+    pre[class*="language-"] {
+      font-size: 16px; } }
+
+pre[class*="language-"] {
+  padding: 1em;
+  overflow: auto; }
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #f5f6f7;
+  border: solid #dcdddd 1px; }
+
+.language-php .string {
+  color: #ff4143; }
+.language-php .this,
+.language-php .keyword {
+  color: #2b3d50; }
+.language-php .comment {
+  color: #b6b6b6; }
+.language-php .property,
+.language-php .function,
+.language-php .class-name,
+.language-php .variable {
+  color: #07a; }
+.language-php .punctuation {
+  color: #2b3d50; }
+.language-php .php .keyword,
+.language-php .php .string {
+  color: #ff4143; }
+.language-php .php .function,
+.language-php .php .property,
+.language-php .php .this,
+.language-php .php .variable,
+.language-php .php .operator,
+.language-php .php .punctuation {
+  color: #07a; }
+.language-php .markup .token {
+  color: #2b3d50 !important; }
+  .language-php .markup .token .php .keyword,
+  .language-php .markup .token .php .string,
+  .language-php .markup .token .php .punctuation {
+    color: #690 !important; }
+  .language-php .markup .token .php .function,
+  .language-php .markup .token .php .property,
+  .language-php .markup .token .php .this,
+  .language-php .markup .token .php .variable,
+  .language-php .markup .token .php .operator {
+    color: #07a !important; }
+
+.language-javascript .punctuation {
+  color: #007e74; }
+.language-javascript .string {
+  color: #ff4143; }

@@ -1,0 +1,5 @@
+{
+    "name": "thephpleague/thephpleague.github.com",
+    "description": "A Sculpin based theme for the proejct websites of The League of Extraordinary Packages.",
+    "type": "sculpin-theme"
+}

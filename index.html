@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="icon" type="image/x-icon" href="/themes/thephpleague/thephpleague.github.com/img/favicon.ico" />
+                <link rel="apple-touch-icon-precomposed" href="/themes/thephpleague/thephpleague.github.com/img/apple-touch-icon-precomposed.png">
+                <title>Flysystem - Many filesystems, one API.</title>
+                <meta name="description" content="Flysystem is an abstraction for filesystems such as Amazon S3, FTP, SFTP, Dropbox and Rackspace">
+                <link rel="stylesheet" href="/themes/thephpleague/thephpleague.github.com/css/all.css">
+    </head>
+<body>
+
+<section class="all_packages">
+    <a href="http://thephpleague.com/">
+        <img src="/themes/thephpleague/thephpleague.github.com/img/loep_logo.png" width="195" height="200" alt="The League of Extraordinary Packages">
+    </a>
+    <h2>Our Packages:</h2>
+    <ul>
+    </ul>
+</section>
+
+<header>
+    <a class="logo" href="/">
+                <span class="name">Flysystem</span>
+        <span class="tagline">Many filesystems, one API.</span>
+    </a>
+    <a href="http://thephpleague.com/" class="league">
+        Presented by The League of Extraordinary Packages
+    </a>
+</header>
+
+<input type="checkbox" id="menu">
+<label for="menu" onclick>
+    <div class="closed">&#9776; Menu</div>
+    <div class="open">&#9776; Hide Menu</div>
+</label>
+
+<main>
+    <menu>
+                    <h2>Flysystem</h2>
+            <ul>
+                                    <li class="selected">
+                        <a href="/">Introduction</a>
+                    </li>
+                                    <li >
+                        <a href="/installation/">Installation</a>
+                    </li>
+                                    <li >
+                        <a href="/api/">The API</a>
+                    </li>
+                                    <li >
+                        <a href="/caching/">Caching</a>
+                    </li>
+                            </ul>
+                    <h2>Adapters</h2>
+            <ul>
+                                    <li >
+                        <a href="/adapter/local">Local</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/s3">AWS S3</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/rackspace">Rackspace</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/dropbox">Dropbox</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/ftp">Ftp</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/sftp">Sftp</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/zip">Zip</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/webdav">WebDAV</a>
+                    </li>
+                            </ul>
+            </menu>
+    <article>
+        <h1>Flysystem</h1>
+
+<p><a href="https://travis-ci.org/thephpleague/flysystem"><img src="https://travis-ci.org/thephpleague/flysystem.png" alt="Build Status" /></a>
+<a href="https://packagist.org/league//flysystem"><img src="https://poser.pugx.org/league/flysystem/v/stable.png" alt="Latest Stable Version" /></a>
+<a href="https://packagist.org/packages/league/flysystem"><img src="https://poser.pugx.org/league/flysystem/downloads.png" alt="Total Downloads" /></a>
+<a href="https://coveralls.io/r/thephpleague/flysystem"><img src="https://coveralls.io/repos/thephpleague/flysystem/badge.png" alt="Coverage Status" /></a>
+<a href="https://packagist.org/packages/league/flysystem"><img src="https://poser.pugx.org/league/flysystem/license.png" alt="License" /></a></p>
+
+<ul class="quick_links">
+    <li><a class="github" href="https://github.com/thephpleague/flysystem">View Source</a></li>
+    <li><a class="twitter" href="https://twitter.com/frankdejonge">Follow Author</a></li>
+</ul>
+
+<h2>What is Flysystem?</h2>
+
+<p>Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.</p>
+
+<p><a href="https://packagist.org/packages/league/flysystem">Flysystem on Packagist</a></p>
+
+<h2>Goals</h2>
+
+<ul>
+<li>Have a generic API for handling common tasks across multiple file storage engines.</li>
+<li>Have consistent output which you can rely on.</li>
+<li>Integrate well with other packages/frameworks.</li>
+<li>Be cacheable.</li>
+<li>Emulate directories in systems that support none, like AwsS3.</li>
+<li>Support third party plugins.</li>
+<li>Make it easy to test your filesystem interactions.</li>
+<li>Support streams for bigger file handling</li>
+</ul>
+
+<h2>Bootstrap</h2>
+
+<pre><code class="language-php">use League\Flysystem\Filesystem;
+
+$filesystem = new Filesystem($adapter);
+</code></pre>
+
+<p>To enable caching, pass a <a href="/caching/">cache adapter</a> as the second constructor argument.</p>
+
+<pre><code class="language-php">use League\Flysystem\Filesystem;
+
+$filesystem = new Filesystem($adapter, $cache);
+</code></pre>
+
+<p>By default memory caching is used, which will cache result per request.</p>
+
+<h2>Quick Example</h2>
+
+<pre><code class="language-php">// Create a file
+$filesystem-&gt;write('path/to/file.txt', 'contents');
+
+// Update a file
+$filesystem-&gt;update('file/to/update.ext', 'new contents');
+
+// Or delete a file
+$filesyste-&gt;delete('delete/this/file.md');
+</code></pre>
+
+<p>These are just a couple of every day commands you'll run on any given filesystems.
+Unfortunately the API for different kinds filesystems looks nothing alike. Flysystem
+eliminates these differences by providing a normalized API layer. So when you're
+switching from local storage to a cloud service, it's just a matter of configuration.</p>
+
+<p>Flysystem eliminates for investing in hardware or cload resources upfront and minimizes
+the chances of vendor lock in. Develop locally and move to the cloud when your project
+asks for it.</p>
+    </article>
+</main>
+
+<footer>
+    <span>&copy; Copyright The League of Extraordinary Packages.</span>
+    <span>Site design by <a href="http://reinink.ca">Jonathan Reinink</a>.</span>
+    <span>Powered by <a href="https://sculpin.io">Sculpin</a>.</span>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/themes/thephpleague/thephpleague.github.com/js/scripts.js"></script>
+<script src="/themes/thephpleague/thephpleague.github.com/js/prism.js"></script>
+
+
+</body>
+</html>

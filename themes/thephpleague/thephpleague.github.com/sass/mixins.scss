@@ -1,0 +1,23 @@
+@mixin respond_min($width)
+{
+    @media screen and (min-width: $width)
+    {
+        @content;
+    }
+}
+
+@mixin respond_max($width)
+{
+    @media screen and (max-width: $width)
+    {
+        @content;
+    }
+}
+
+@mixin respond_min_max($min, $max)
+{
+    @media (min-width: $min) and (max-width: $max)
+    {
+        @content;
+    }
+}

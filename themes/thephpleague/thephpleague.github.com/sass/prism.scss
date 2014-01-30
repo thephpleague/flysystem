@@ -1,0 +1,134 @@
+code[class*="language-"],
+pre[class*="language-"] {
+
+    color: #2b3d50;
+    font-family: Consolas, Monaco, 'Andale Mono', monospace;
+    line-height: 140%;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    word-wrap: normal;
+    word-spacing: normal;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+
+    @include respond_min_max(550px, 849px)
+    {
+        font-size: 14px;
+    }
+
+    @include respond_min(800px)
+    {
+        font-size: 16px;
+    }
+}
+
+pre[class*="language-"] {
+    padding: 1em;
+    overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+    background: #f5f6f7;
+    border: solid #dcdddd 1px;
+}
+
+.language-php
+{
+    .string
+    {
+        color: #ff4143;
+    }
+
+    .this,
+    .keyword
+    {
+        color: #2b3d50;
+    }
+
+    .comment
+    {
+        color: #b6b6b6;
+    }
+
+    .property,
+    .function,
+    .class-name,
+    .variable
+    {
+        color: #07a;
+    }
+
+    .punctuation
+    {
+        color: #2b3d50;
+    }
+
+    .php
+    {
+        .keyword,
+        .string,
+        {
+            color: #ff4143;
+        }
+
+        .function,
+        .property,
+        .this,
+        .variable,
+        .operator,
+        .punctuation
+        {
+            color: #07a;
+        }
+    }
+
+    .markup
+    {
+        .token
+        {
+            color: #2b3d50 !important;
+
+            .php
+            {
+                .keyword,
+                .string,
+                .punctuation
+                {
+                    color: #690 !important;
+                }
+
+                .function,
+                .property,
+                .this,
+                .variable,
+                .operator
+                {
+                    color: #07a !important;
+                }
+            }
+
+        }
+    }
+}
+
+.language-javascript
+{
+    .punctuation
+    {
+        color: #007e74;
+    }
+
+    .string
+    {
+        color: #ff4143;
+    }
+}

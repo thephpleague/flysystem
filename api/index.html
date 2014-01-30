@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="icon" type="image/x-icon" href="/themes/thephpleague/thephpleague.github.com/img/favicon.ico" />
+                <link rel="apple-touch-icon-precomposed" href="/themes/thephpleague/thephpleague.github.com/img/apple-touch-icon-precomposed.png">
+                <title>Simple example - Flysystem</title>
+                <meta name="description" content="Flysystem is an abstraction for filesystems such as Amazon S3, FTP, SFTP, Dropbox and Rackspace">
+                <link rel="stylesheet" href="/themes/thephpleague/thephpleague.github.com/css/all.css">
+    </head>
+<body>
+
+<section class="all_packages">
+    <a href="http://thephpleague.com/">
+        <img src="/themes/thephpleague/thephpleague.github.com/img/loep_logo.png" width="195" height="200" alt="The League of Extraordinary Packages">
+    </a>
+    <h2>Our Packages:</h2>
+    <ul>
+    </ul>
+</section>
+
+<header>
+    <a class="logo" href="/">
+                <span class="name">Flysystem</span>
+        <span class="tagline">Many filesystems, one API.</span>
+    </a>
+    <a href="http://thephpleague.com/" class="league">
+        Presented by The League of Extraordinary Packages
+    </a>
+</header>
+
+<input type="checkbox" id="menu">
+<label for="menu" onclick>
+    <div class="closed">&#9776; Menu</div>
+    <div class="open">&#9776; Hide Menu</div>
+</label>
+
+<main>
+    <menu>
+                    <h2>Flysystem</h2>
+            <ul>
+                                    <li >
+                        <a href="/">Introduction</a>
+                    </li>
+                                    <li >
+                        <a href="/installation/">Installation</a>
+                    </li>
+                                    <li class="selected">
+                        <a href="/api/">The API</a>
+                    </li>
+                                    <li >
+                        <a href="/caching/">Caching</a>
+                    </li>
+                            </ul>
+                    <h2>Adapters</h2>
+            <ul>
+                                    <li >
+                        <a href="/adapter/local">Local</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/s3">AWS S3</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/rackspace">Rackspace</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/dropbox">Dropbox</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/ftp">Ftp</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/sftp">Sftp</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/zip">Zip</a>
+                    </li>
+                                    <li >
+                        <a href="/adapter/webdav">WebDAV</a>
+                    </li>
+                            </ul>
+            </menu>
+    <article>
+        <h1>The API</h1>
+
+<h2>General Usage</h2>
+
+<p><strong>Write Files</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;write('filename.txt', 'contents');
+</code></pre>
+
+<p><strong>Update Files</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;update('filename.txt', 'new contents');
+</code></pre>
+
+<p><strong>Write or Update Files</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;put('filename.txt', 'contents');
+</code></pre>
+
+<p><strong>Read Files</strong></p>
+
+<pre><code class="language-php">$contents = $filesystem-&gt;read('filename.txt');
+</code></pre>
+
+<p><strong>Check if a file exists</strong></p>
+
+<pre><code class="language-php">$exists = $filesystem-&gt;has('filename.txt');
+</code></pre>
+
+<p><strong>Delete Files</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;delete('filename.txt');
+</code></pre>
+
+<p><strong>Rename Files</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;rename('filename.txt', 'newname.txt');
+</code></pre>
+
+<p><strong>Get Mimetypes</strong></p>
+
+<pre><code class="language-php">$mimetype = $filesystem-&gt;getMimetype('filename.txt');
+</code></pre>
+
+<p><strong>Get Timestamps</strong></p>
+
+<pre><code class="language-php">$timestamp = $filesystem-&gt;getTimestamp('filename.txt');
+</code></pre>
+
+<p><strong>Get File Sizes</strong></p>
+
+<pre><code class="language-php">$size = $filesystem-&gt;getSize('filename.txt');
+</code></pre>
+
+<p><strong>Create Directories</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;createDir('nested/directory');
+</code></pre>
+
+<p>Directories are also made implicitly when writing to a deeper path</p>
+
+<pre><code class="language-php">$filesystem-&gt;write('path/to/filename.txt', 'contents');
+</code></pre>
+
+<p><strong>Delete Directories</strong></p>
+
+<pre><code class="language-php">$filesystem-&gt;deleteDir('path/to/directory');
+</code></pre>
+
+<p><strong>Manage Visibility</strong></p>
+
+<p>Visibility is the abstraction of file permissions across multiple platforms. Visibility can be either public or private.</p>
+
+<pre><code class="language-php">use League\Flysystem\AdapterInterface;
+$filesystem-&gt;write('db.backup', $backup, [
+    'visibility' =&gt; AdapterInterface::VISIBILITY_PRIVATE),
+]);
+// or simply
+$filesystem-&gt;write('db.backup', $backup, ['visibility' =&gt; 'private']);
+</code></pre>
+
+<p>You can also change and check visibility of existing files</p>
+
+<pre><code class="language-php">if ($filesystem-&gt;getVisibility('secret.txt') === 'private') {
+    $filesystem-&gt;setVisibility('secret.txt', 'public');
+}
+</code></pre>
+
+<h2>Global visibility setting</h2>
+
+<p>You can set the visibility as a default, which prevents you from setting it all over the place.</p>
+
+<pre><code class="language-php">$filesystem = new League\Flysystem\Filesystem($adapter, $cache, [
+    'visibility' =&gt; AdapterInterface::VISIBILITY_PRIVATE
+]);
+</code></pre>
+
+<p><strong><em>List Contents</em></strong></p>
+
+<pre><code class="language-php">$contents = $filemanager-&gt;listContents();
+</code></pre>
+
+<p>The result of a contents listing is a collection of arrays containing all the metadata the file manager knows at that time. By default a you'll receive path info and file type. Additional info could be supplied by default depending on the adapter used.</p>
+
+<p>Example:</p>
+
+<pre><code class="language-php">foreach ($contents as $object) {
+    echo $object['basename'].' is located at'.$object['path'].' and is a '.$object['type'];
+}
+</code></pre>
+
+<p>By default Flysystem lists the top directory non-recursively. You can supply a directory name and recursive boolean to get more precise results</p>
+
+<pre><code class="language-php">$contents = $flysystem-&gt;listContents('some/dir', true);
+</code></pre>
+
+<p><strong><em>List paths</em></strong></p>
+
+<pre><code class="language-php">$paths = $filemanager-&gt;listPaths();
+
+foreach ($paths as $path) {
+    echo $path;
+}
+</code></pre>
+
+<p><strong><em>List with ensured presence of specific metadata</em></strong></p>
+
+<pre><code class="language-php">$listing = $flysystem-&gt;listWith(['mimetype', 'size', 'timestamp'], 'optional/path/to/dir', true);
+
+foreach ($listing as $object) {
+    echo $object['path'].' has mimetype: '.$object['mimetype'];
+}
+</code></pre>
+
+<p><strong><em>Get file into with explicid metadata</em></strong></p>
+
+<pre><code class="language-php">$info = $flysystem-&gt;getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
+echo $info['mimetype'];
+echo $info['timestamp'];
+</code></pre>
+
+<h2>Using streams for reads and writes</h2>
+
+<pre><code class="language-php">$stream = fopen('/path/to/database.backup', 'r+');
+$flysystem-&gt;writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
+
+// Using write you can also directly set the visibility
+$flysystem-&gt;writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, 'private');
+
+// Or update a file with stream contents
+$flysystem-&gt;updateStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
+
+// Retrieve a read-stream
+$stream = $flysystem-&gt;readStream('something/is/here.ext');
+$contents = stream_get_contents($stream);
+fclose($stream);
+
+// Create or overwrite using a stream.
+$putStream = tmpfile();
+fwrite($putStream, $contents);
+rewind($putStream);
+$filesystem-&gt;putStream('somewhere/here.txt', $putStream);
+fclose($putStream);
+</code></pre>
+
+<h2>S3 and writeStream</h2>
+
+<p>In order to get the correct mime type for the object, supply it like so:</p>
+
+<pre><code class="language-php">$s3-&gt;writeStream('path/to/object.png', $stream, [
+    'visibility' =&gt; 'public',
+    'mimetype' =&gt; 'image/png',
+]);
+</code></pre>
+    </article>
+</main>
+
+<footer>
+    <span>&copy; Copyright The League of Extraordinary Packages.</span>
+    <span>Site design by <a href="http://reinink.ca">Jonathan Reinink</a>.</span>
+    <span>Powered by <a href="https://sculpin.io">Sculpin</a>.</span>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="/themes/thephpleague/thephpleague.github.com/js/scripts.js"></script>
+<script src="/themes/thephpleague/thephpleague.github.com/js/prism.js"></script>
+
+
+</body>
+</html>
