@@ -97,8 +97,6 @@ executions.</p>
 <pre><code class="language-php">use League\Flysystem\Filesystem;
 use League\Flysystem\Cache\Memory as Cache;
 
-$memcached = new Memcached;
-$memcached-&gt;addServer('localhost', 11211);
 $filesystem = new Filesystem($adapter, new Cache);
 </code></pre>
 
