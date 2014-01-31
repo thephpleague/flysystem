@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if theme_path_exists("img/favicon.ico") %}
+        <link rel="icon" type="image/x-icon" href="{{ site.url }}/{{ theme_path("img/favicon.ico") }}" />
+    {% endif %}
+    {% if theme_path_exists("img/apple-touch-icon-precomposed.png") %}
+        <link rel="apple-touch-icon-precomposed" href="{{ site.url }}/{{ theme_path("img/apple-touch-icon-precomposed.png") }}">
+    {% endif %}
+    {% if page.url == '/' %}
+        <title>{{ site.title }} - {{ site.tagline }}</title>
+    {% else %}
+        <title>{{ page.title }} - {{ site.title }}</title>
+    {% endif %}
+    {% if site.description %}
+        <meta name="description" content="{{ site.description }}">
+    {% endif %}
+    {% for stylesheet in theme_paths("css/all.css") %}
+        <link rel="stylesheet" href="{{ site.url }}/{{ stylesheet }}">
+    {% endfor %}
+</head>
+<body>
+
+<section class="all_packages">
+    <a href="http://thephpleague.com/">
+        <img src="{{ site.url }}/{{ theme_path("img/loep_logo.png") }}" width="195" height="200" alt="The League of Extraordinary Packages">
+    </a>
+    <h2>Our Packages:</h2>
+    <ul>
+    </ul>
+</section>
+
+<header>
+    <a class="logo" href="/">
+        {% if theme_path_exists("img/logo.png") %}
+            <span class="icon">
+                <img src="{{ site.url }}/{{ theme_path("img/logo.png") }}" width="50" height="40" alt="{{ site.title }} - {{ site.tagline }}">
+            </span>
+        {% endif %}
+        <span class="name">{{ site.title }}</span>
+        <span class="tagline">{{ site.tagline }}</span>
+    </a>
+    <a href="http://thephpleague.com/" class="league">
+        Presented by The League of Extraordinary Packages
+    </a>
+</header>
+
+<input type="checkbox" id="menu">
+<label for="menu" onclick>
+    <div class="closed">&#9776; Menu</div>
+    <div class="open">&#9776; Hide Menu</div>
+</label>
+
+<main>
+    <menu>
+        {% for name, links in site.menu %}
+            <h2>{{ name }}</h2>
+            <ul>
+                {% for name, url in links %}
+                    <li {% if page.url == url or page.url ~ '/' == url %}class="selected"{% endif %}>
+                        <a href="{{ url }}">{{ name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </menu>
+    <article>
+        {% block content_wrapper %}{% block content %}{% endblock %}{% endblock %}
+    </article>
+</main>
+
+<footer>
+    <span>&copy; Copyright The League of Extraordinary Packages.</span>
+    <span>Site design by <a href="http://reinink.ca">Jonathan Reinink</a>.</span>
+    <span>Powered by <a href="https://sculpin.io">Sculpin</a>.</span>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="{{ site.url }}/{{ theme_path("js/scripts.js") }}"></script>
+<script src="{{ site.url }}/{{ theme_path("js/prism.js") }}"></script>
+
+{% if site.google_analytics_tracking_id %}
+    <script>
+        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+        e.src='//www.google-analytics.com/analytics.js';
+        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+        ga('create','{{  site.google_analytics_tracking_id }}');ga('send','pageview');
+    </script>
+{% endif %}
+
+</body>
+</html>

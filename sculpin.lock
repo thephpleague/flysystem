@@ -1,0 +1,47 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "a7234a2e610dc45b938498869bceceb6",
+    "packages": [
+        {
+            "name": "thephpleague/thephpleague.github.com",
+            "version": "dev-project-website-theme",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/thephpleague.github.com.git",
+                "reference": "83769a733aec1cdbf8fb5f0ac4afb0ff49c5addc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/thephpleague.github.com/zipball/83769a733aec1cdbf8fb5f0ac4afb0ff49c5addc",
+                "reference": "83769a733aec1cdbf8fb5f0ac4afb0ff49c5addc",
+                "shasum": ""
+            },
+            "type": "sculpin-theme",
+            "description": "A Sculpin based theme for the proejct websites of The League of Extraordinary Packages.",
+            "support": {
+                "source": "https://github.com/thephpleague/thephpleague.github.com/tree/project-website-theme",
+                "issues": "https://github.com/thephpleague/thephpleague.github.com/issues"
+            },
+            "time": "2014-01-29 21:49:46"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "thephpleague/thephpleague.github.com": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

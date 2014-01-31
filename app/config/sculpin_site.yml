@@ -1,0 +1,19 @@
+title: Flysystem
+tagline: Many filesystems, one API.
+description: "Flysystem is an abstraction for filesystems such as Amazon S3, FTP, SFTP, Dropbox and Rackspace"
+google_analytics_tracking_id: UA-46050814-3
+menu:
+    Flysystem:
+        Introduction: '/'
+        Installation: '/installation/'
+        The API: '/api/'
+        Caching: '/caching/'
+    Adapters:
+        Local: '/adapter/local'
+        AWS S3: '/adapter/s3'
+        Rackspace: '/adapter/rackspace'
+        Dropbox: '/adapter/dropbox'
+        Ftp: '/adapter/ftp'
+        Sftp: '/adapter/sftp'
+        Zip: '/adapter/zip'
+        WebDAV: '/adapter/webdav'

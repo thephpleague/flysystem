@@ -1,0 +1,11 @@
+{
+    "require": {
+        "thephpleague/thephpleague.github.com": "dev-project-website-theme"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:thephpleague/thephpleague.github.com.git"
+        }
+    ]
+}
