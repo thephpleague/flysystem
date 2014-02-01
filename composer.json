@@ -10,8 +10,8 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "League\\Flysystem": "src/"
+        "psr-4": {
+            "League\\Flysystem\\": "src/"
         }
     },
     "require-dev": {
