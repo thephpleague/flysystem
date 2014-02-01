@@ -121,8 +121,13 @@ class Local extends AbstractAdapter
     {
         rewind($resource);
         $config = Util::ensureConfig($config);
+        $location = $this->prefix($path);
 
-        if ( ! $stream = fopen($this->prefix($path), 'w+')) {
+        if ( ! is_dir($dirname = dirname($location))) {
+            mkdir($dirname, 0777, true);
+        }
+
+        if ( ! $stream = fopen($location, 'w+')) {
             return false;
         }
 
@@ -134,8 +139,9 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        if ($visibility = $config->get('visibility'))
+        if ($visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
+        }
 
         return compact('path', 'visibility');
     }

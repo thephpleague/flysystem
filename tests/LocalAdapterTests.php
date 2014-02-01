@@ -57,12 +57,12 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $temp = tmpfile();
         fwrite($temp, 'dummy');
         rewind($temp);
-        $adapter->writeStream('file.txt', $temp);
+        $adapter->writeStream('dir/file.txt', $temp);
         fclose($temp);
-        $this->assertTrue($adapter->has('file.txt'));
-        $result = $adapter->read('file.txt');
+        $this->assertTrue($adapter->has('dir/file.txt'));
+        $result = $adapter->read('dir/file.txt');
         $this->assertEquals('dummy', $result['contents']);
-        $adapter->delete('file.txt');
+        $adapter->delete('dir/file.txt');
     }
 
     public function testUpdateStream()
