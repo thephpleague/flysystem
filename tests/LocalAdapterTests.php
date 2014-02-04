@@ -57,7 +57,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $temp = tmpfile();
         fwrite($temp, 'dummy');
         rewind($temp);
-        $adapter->writeStream('dir/file.txt', $temp);
+        $adapter->writeStream('dir/file.txt', $temp, 'public');
         fclose($temp);
         $this->assertTrue($adapter->has('dir/file.txt'));
         $result = $adapter->read('dir/file.txt');

@@ -179,6 +179,19 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
+     * Retrieve the contents of an object
+     *
+     * @param   string       $path
+     * @return  null|string  contents or null on failure
+     */
+    public function readStream($path)
+    {
+        if (isset($this->cache[$path]['stream'])) {
+            return $this->cache[$path]['stream'];
+        }
+    }
+
+    /**
      * Rename an object
      *
      * @param  string  $path

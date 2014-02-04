@@ -52,10 +52,12 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
     {
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->andReturn(true);
-        $adapter->shouldReceive('readStream')->andReturn(array('stream' => 'this result'), false);
+        $adapter->shouldReceive('readStream')->twice()->andReturn(array('stream' => 'this result'), false);
         $filesystem = new Filesystem($adapter);
-        $result = $filesystem->readStream('file.txt');
-        $this->assertEquals('this result', $result);
-        $this->assertFalse($filesystem->readStream('file.txt'));
+        $this->assertEquals('this result', $filesystem->readStream('file.txt'));
+        $this->assertFalse($filesystem->readStream('other.txt'));
+
+        // Another time to hit the cache
+        $this->assertEquals('this result', $filesystem->readStream('file.txt'));
     }
 }

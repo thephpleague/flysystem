@@ -202,9 +202,15 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
+        if ($stream = $this->cache->readStream($path)) {
+            return $stream;
+        }
+
         if ( ! $object = $this->adapter->readStream($path)) {
             return false;
         }
+
+        $this->cache->updateObject($path, $object, true);
 
         return $object['stream'];
     }
