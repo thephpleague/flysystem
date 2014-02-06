@@ -22,6 +22,19 @@ class MyPlugin implements PluginInterface
     }
 }
 
+class InvalidPlugin implements PluginInterface
+{
+    public function getMethod()
+    {
+        return 'beInvalid';
+    }
+
+    public function setFilesystem(FilesystemInterface $filesystem)
+    {
+        // yay
+    }
+}
+
 class PluginTests extends PHPUnit_Framework_TestCase
 {
     protected $filesystem;
@@ -39,5 +52,14 @@ class PluginTests extends PHPUnit_Framework_TestCase
         $this->filesystem->addPlugin(new MyPlugin);
         $this->assertEquals('result', $this->filesystem->beAwesome('result'));
         $this->filesystem->unknownPlugin();
+    }
+
+    /**
+     * @expectedException  \LogicException
+     */
+    public function testInvalidPlugin()
+    {
+        $this->filesystem->addPlugin(new InvalidPlugin);
+        $this->filesystem->beInvalid();
     }
 }

@@ -12,11 +12,6 @@ interface PluginInterface
     public function getMethod();
 
     /**
-     * Handle the plugin call
-     */
-    public function handle();
-
-    /**
      * Set the Filesystem object
      *
      * @param  FilesystemInterface  $filesystem

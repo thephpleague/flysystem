@@ -682,6 +682,11 @@ class Filesystem implements FilesystemInterface
     public function __call($method, array $arguments)
     {
         $plugin = $this->findPlugin($method);
+
+        if ( ! method_exists($plugin, 'handle')) {
+            throw new LogicException(get_class($plugin).' should define a handle method.');
+        }
+
         $callback = array($plugin, 'handle');
 
         return call_user_func_array($callback, $arguments);
