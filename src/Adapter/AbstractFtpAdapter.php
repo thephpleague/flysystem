@@ -211,7 +211,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         while ($item = array_shift($listing)) {
             if (preg_match('#^.*:$#', $item)) {
-                $base = $prefix.substr($item, 2, -1);
+                $base = trim($item, './:');
                 continue;
             }
 
@@ -236,7 +236,6 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     {
         $item = preg_replace('#\s+#', ' ', trim($item));
         list ($permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
-
         $type = $this->detectType($permissions);
         $path = empty($base) ? $name : $base . $this->separator . $name;
 

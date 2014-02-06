@@ -183,9 +183,9 @@ class Ftp extends AbstractFtpAdapter
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                ftp_delete($connection, $dirname . $this->separator . $object['path']);
+                ftp_delete($connection, $object['path']);
             } else {
-                ftp_rmdir($connection, $dirname . $this->separator . $object['path']);
+                ftp_rmdir($connection, $object['path']);
             }
         }
 
@@ -230,7 +230,7 @@ class Ftp extends AbstractFtpAdapter
 
     public function getMetadata($path)
     {
-        if (empty($path) || ( ! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path)) && count($object) < 3)) {
+        if (empty($path) ||  ! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path)) || count($object) < 3) {
             return false;
         }
 
