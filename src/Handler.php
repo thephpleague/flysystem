@@ -19,7 +19,7 @@ abstract class Handler
      * Constructor
      *
      * @param  FilesystemInterface  $filesystem
-     * @path   string               $path
+     * @param   string               $path
      */
     public function __construct(FilesystemInterface $filesystem = null, $path = null)
     {

@@ -103,7 +103,7 @@ class MountManager
      * Call forwarder
      *
      * @param   string  $method
-     * @array   array   $arguments
+     * @param   array   $arguments
      * @return  mixed
      */
     public function __call($method, $arguments)
