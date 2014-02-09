@@ -525,7 +525,8 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        if ($size = $this->cache->getSize($path)) {
+        $size = $this->cache->getSize($path);
+        if (isset($size) && $size !== false) {
             return $size;
         }
 
