@@ -526,7 +526,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $cached = $this->cache->getSize($path);
 
-        if (is_int($cached)) {
+        if ($cached !== false) {
             return $cached;
         }
 
