@@ -129,7 +129,7 @@ abstract class AbstractCache implements CacheInterface
      *
      * @param   string   $dirname
      * @param   boolean  $recursive
-     * @return  array    contents listing
+     * @return  false|array    contents listing
      */
     public function listContents($dirname = '', $recursive = false)
     {
@@ -169,7 +169,7 @@ abstract class AbstractCache implements CacheInterface
      * Retrieve the contents of an object
      *
      * @param   string       $path
-     * @return  false|string  contents or null on failure
+     * @return  false|array  contents or false on failure
      */
     public function read($path)
     {
@@ -184,7 +184,7 @@ abstract class AbstractCache implements CacheInterface
      * Retrieve the contents of an object
      *
      * @param   string       $path
-     * @return  false|string  contents or null on failure
+     * @return  false|array  contents or false on failure
      */
     public function readStream($path)
     {
@@ -275,7 +275,7 @@ abstract class AbstractCache implements CacheInterface
      * Retrieve the size of an object
      *
      * @param   string       $path
-     * @return  false|string  size or null on failure
+     * @return  false|array  size or false on failure
      */
     public function getSize($path)
     {
