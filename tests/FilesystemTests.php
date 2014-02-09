@@ -17,20 +17,6 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $this->setup();
     }
 
-    public function metaProvider()
-    {
-        $adapter = new Adapter\Local(__DIR__.'/files');
-        $cache = new Cache\Memory;
-        $filesystem = new Filesystem($adapter, $cache);
-
-        return array(
-            array($filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int'),
-            array($filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string'),
-            array($filesystem, $adapter, $cache, 'getSize', 'size', 'int'),
-            array($filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string'),
-        );
-    }
-
     public function testInstantiable()
     {
         $instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory);
@@ -208,18 +194,32 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $filesystem->flushCache();
     }
 
+    public function metaProvider()
+    {
+        $adapter = new Adapter\Local(__DIR__.'/files');
+        $cache = new Cache\Memory;
+        $filesystem = new Filesystem($adapter, $cache);
+
+        return array(
+            array($filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int', 100),
+            array($filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string', 'plain/text'),
+            array($filesystem, $adapter, $cache, 'getSize', 'size', 'int', 10),
+            array($filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string', 'public'),
+        );
+    }
+
     /**
      * @dataProvider metaProvider
      */
-    public function testGetters($filesystem, $adapter, $cache, $method, $key, $type)
+    public function testGetters($filesystem, $adapter, $cache, $method, $key, $type, $mockValue)
     {
         $filesystem->write('test.txt', 'something');
         $cache->flush();
         $this->assertEquals('something', $filesystem->read('test.txt'));
         $value = $filesystem->{$method}('test.txt');
         $this->assertInternalType($type, $value);
-        $cache->updateObject('test.txt', array($key => 'injected'));
-        $this->assertEquals('injected', $filesystem->{$method}('test.txt'));
+        $cache->updateObject('test.txt', array($key => $mockValue));
+        $this->assertEquals($mockValue, $filesystem->{$method}('test.txt'));
         $cache->flush();
         $this->assertEquals($value, $filesystem->{$method}('test.txt'));
         $filesystem->delete('test.txt');
