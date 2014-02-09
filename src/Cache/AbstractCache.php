@@ -271,13 +271,15 @@ abstract class AbstractCache implements CacheInterface
      * Retrieve the size of an object
      *
      * @param   string       $path
-     * @return  null|string  size or null on failure
+     * @return  false|string  size or null on failure
      */
     public function getSize($path)
     {
         if (isset($this->cache[$path]['size'])) {
             return $this->cache[$path]['size'];
         }
+
+        return false;
     }
 
     /**
