@@ -278,6 +278,7 @@ abstract class AbstractCache implements CacheInterface
         if (isset($this->cache[$path]['size'])) {
             return $this->cache[$path]['size'];
         }
+
         return false;
     }
 
