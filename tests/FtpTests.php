@@ -81,8 +81,12 @@ function ftp_raw($connection, $command)
     return array( 0 => '211-Status of somewhere/folder/dummy.txt:', 1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt', 2 => '211 End of status' );
 }
 
-function ftp_rawlist($connection)
+function ftp_rawlist($connection, $directory)
 {
+    if (strpos($directory, 'fail.rawlist') !== false) {
+        return false;
+    }
+
     return array(
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
@@ -147,23 +151,22 @@ function ftp_chmod($connection, $mode, $path)
 
 class FtpTests extends \PHPUnit_Framework_TestCase
 {
+    protected $options = array(
+        'host' => 'example.org',
+        'port' => 40,
+        'ssl' => true,
+        'timeout' => 35,
+        'root' => '/somewhere',
+        'permPublic' => 0777,
+        'permPrivate' => 0000,
+        'passive' => false,
+        'username' => 'user',
+        'password' => 'password',
+    );
+
     public function testInstantiable()
     {
-        // 'host', 'port', 'username', 'password', 'ssl', 'timeout', 'root', 'permPrivate', 'permPublic'
-        $options = array(
-            'host' => 'example.org',
-            'port' => 40,
-            'ssl' => true,
-            'timeout' => 35,
-            'root' => '/somewhere',
-            'permPublic' => 0777,
-            'permPrivate' => 0000,
-            'passive' => false,
-            'username' => 'user',
-            'password' => 'password',
-        );
-
-        $adapter = new Ftp($options);
+        $adapter = new Ftp($this->options);
         $this->assertEquals('example.org', $adapter->getHost());
         $this->assertEquals(40, $adapter->getPort());
         $this->assertEquals(true, $adapter->getSsl());
@@ -205,6 +208,15 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp(array('host' => 'fail.me', 'ssl' => false));
         $adapter->connect();
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testRawlistFail()
+    {
+        $adapter = new Ftp($this->options);
+        $adapter->listContents('fail.rawlist');
     }
 
     /**
