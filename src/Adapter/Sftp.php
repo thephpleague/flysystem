@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use Net_SFTP;
 use Crypt_RSA;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Util;
 use LogicException;
 
@@ -80,12 +81,42 @@ class Sftp extends AbstractFtpAdapter
 
     protected function listDirectoryContents($directory, $recursive = true)
     {
+        $result = array();
         $connection = $this->getConnection();
-        $listing = $connection->exec('cd '.$this->root.$directory.' && ls -la'.($recursive ? 'R' : ''));
-        $listing = explode(PHP_EOL, trim($listing));
-        array_shift($listing);
+        $location = $this->prefix($directory);
+        $listing = $connection->rawlist($location);
 
-        return $this->normalizeListing($listing, $directory);
+        if ($listing === false) {
+            throw new LogicException('Could not get a listing of directory: '.$directory);
+        }
+
+        foreach ($listing as $filename => $object) {
+            if (in_array($filename, array('.', '..'))) {
+                continue;
+            }
+
+            $path = empty($directory) ? $filename : ($directory . DIRECTORY_SEPARATOR . $filename);
+            $result[] = $this->normalizeListingObject($path, $object);
+
+            if ($recursive and $object['type'] === 2) {
+                $result = array_merge($result, $this->listDirectoryContents($path));
+            }
+        }
+
+        return $result;
+    }
+
+    protected function normalizeListingObject($path, $object)
+    {
+        $permissions = $this->normalizePermissions($object['permissions']);
+
+        return array(
+            'path' => $path,
+            'size' => $object['size'],
+            'timestamp' => $object['mtime'],
+            'type' => ($object['type'] === 1 ? 'file' : 'dir'),
+            'visibility' => $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE,
+        );
     }
 
     public function disconnect()
