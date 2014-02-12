@@ -65,6 +65,12 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $adapter->delete('dir/file.txt');
     }
 
+    public function testListingNonexistingDirectory()
+    {
+        $result = $this->adapter->listContents('nonexisting/directory');
+        $this->assertEquals(array(), $result);
+    }
+
     public function testUpdateStream()
     {
         $adapter = $this->adapter;

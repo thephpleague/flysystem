@@ -87,7 +87,7 @@ class Sftp extends AbstractFtpAdapter
         $listing = $connection->rawlist($location);
 
         if ($listing === false) {
-            throw new LogicException('Could not get a listing of directory: '.$directory);
+            return array();
         }
 
         foreach ($listing as $filename => $object) {

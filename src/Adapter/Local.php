@@ -388,6 +388,11 @@ class Local extends AbstractAdapter
     {
         $result = array();
         $location = $this->prefix($path).DIRECTORY_SEPARATOR;
+
+        if ( ! is_dir($location)) {
+            return array();
+        }
+
         $length = strlen($this->root);
         $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
 

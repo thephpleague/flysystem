@@ -210,13 +210,11 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter->connect();
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testRawlistFail()
     {
         $adapter = new Ftp($this->options);
-        $adapter->listContents('fail.rawlist');
+        $result = $adapter->listContents('fail.rawlist');
+        $this->assertEquals(array(), $result);
     }
 
     /**

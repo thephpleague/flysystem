@@ -291,7 +291,7 @@ class Ftp extends AbstractFtpAdapter
         $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
 
         if ($listing === false) {
-            throw new RuntimeException('Could not perform a rawlist on directory: '.$directory);
+            return array();
         }
 
         return $this->normalizeListing($listing, $directory);
