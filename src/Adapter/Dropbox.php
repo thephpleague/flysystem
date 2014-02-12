@@ -35,10 +35,7 @@ class Dropbox extends AbstractAdapter
     public function __construct(Client $client, $prefix = null)
     {
         $this->client = $client;
-
-        if ($prefix) {
-            $this->prefix = '/'.ltrim($prefix, '/');
-        }
+        $this->prefix = '/'.ltrim($prefix, '/');
     }
 
     /**
@@ -218,8 +215,9 @@ class Dropbox extends AbstractAdapter
         $listing = array();
         $directory = rtrim($dir, '/');
         $length = strlen($directory) + 1;
+        $location = $this->prefix($directory);
 
-        if ( ! $result = $this->client->getMetadataWithChildren($directory)) {
+        if ( ! $result = $this->client->getMetadataWithChildren($location)) {
             return false;
         }
 
@@ -250,10 +248,6 @@ class Dropbox extends AbstractAdapter
 
     protected function prefix($path)
     {
-        if ( ! $this->prefix) {
-            return '/'.ltrim($path, '/');
-        }
-
         return $this->prefix.'/'.$path;
     }
 }
