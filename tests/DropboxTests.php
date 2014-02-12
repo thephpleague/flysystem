@@ -182,7 +182,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
 
         $result = $adapter->listContents('', true);
         $this->assertCount(2, $result);
-        $this->assertFalse($adapter->listContents('', false));
+        $this->assertEquals(array(), $adapter->listContents('', false));
     }
 
     /**
