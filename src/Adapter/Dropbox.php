@@ -218,7 +218,7 @@ class Dropbox extends AbstractAdapter
         $location = $this->prefix($directory);
 
         if ( ! $result = $this->client->getMetadataWithChildren($location)) {
-            return false;
+            return array();
         }
 
         foreach ($result['contents'] as $object) {
