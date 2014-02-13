@@ -17,7 +17,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $separator = '/';
     protected $root;
     protected $permPublic = 0744;
-    protected $permPrivate = 0000;
+    protected $permPrivate = 0700;
 
     public function __construct(array $config)
     {

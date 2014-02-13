@@ -14,8 +14,8 @@ use League\Flysystem\AdapterInterface;
 class Local extends AbstractAdapter
 {
     protected static $permissions = array(
-        'public' => 0644,
-        'private' => 0000,
+        'public' => 0744,
+        'private' => 0700,
     );
 
     /**
