@@ -36,7 +36,7 @@ class Dropbox extends AbstractAdapter
     {
         $prefix = trim($prefix, '/');
         $this->client = $client;
-        $this->prefix = '/'. empty($prefix) ? '' : $prefix . '/';
+        $this->prefix = '/' . (empty($prefix) ? '' : $prefix . '/');
     }
 
     /**
