@@ -34,8 +34,9 @@ class Dropbox extends AbstractAdapter
      */
     public function __construct(Client $client, $prefix = null)
     {
+        $prefix = trim($prefix, '/');
         $this->client = $client;
-        $this->prefix = '/'. $prefix ? (trim($prefix, '/') . '/') : '';;
+        $this->prefix = '/'. empty($prefix) ? '' : $prefix . '/';
     }
 
     /**
@@ -248,6 +249,6 @@ class Dropbox extends AbstractAdapter
 
     protected function prefix($path)
     {
-        return $this->prefix.'/'.$path;
+        return $this->prefix.$path;
     }
 }
