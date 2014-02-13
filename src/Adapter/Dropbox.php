@@ -213,7 +213,7 @@ class Dropbox extends AbstractAdapter
     public function retrieveListing($dir, $recursive = true)
     {
         $listing = array();
-        $directory = rtrim($dir, '/');
+        $directory = rtrim($dir, '/.');
         $length = strlen($directory) + 1;
         $location = $this->prefix($directory);
 
