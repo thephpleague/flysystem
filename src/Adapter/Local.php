@@ -39,7 +39,7 @@ class Local extends AbstractAdapter
     protected function ensureRootDirectory($root)
     {
         if ( ! is_dir($root)) {
-            mkdir($root, 0777, true);
+            mkdir($root, 0755, true);
         }
 
         return realpath($root);
