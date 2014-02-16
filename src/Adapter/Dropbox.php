@@ -211,7 +211,7 @@ class Dropbox extends AbstractAdapter
         $listing = array();
         $directory = trim($directory, '/.');
         $prefixLength = strlen($this->prefix);
-        $location = rtrim($this->prefix($directory), '/');
+        $location = '/' . trim($this->prefix($directory), '/');
 
         if ( ! $result = $this->client->getMetadataWithChildren($location)) {
             return array();
