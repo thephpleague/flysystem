@@ -36,7 +36,7 @@ class Dropbox extends AbstractAdapter
     {
         $prefix = trim($prefix, '/');
         $this->client = $client;
-        $this->prefix = '/' . (empty($prefix) ? '' : $prefix . '/');
+        $this->prefix = '/' . $prefix;
     }
 
     /**
@@ -208,25 +208,21 @@ class Dropbox extends AbstractAdapter
 
     public function listContents($directory = '', $recursive = false)
     {
-        return $this->retrieveListing($this->prefix($directory), $recursive);
-    }
-
-    public function retrieveListing($dir, $recursive = true)
-    {
         $listing = array();
-        $directory = rtrim($dir, '/.');
-        $length = strlen($directory) + 1;
-        $location = $this->prefix($directory);
+        $directory = trim($directory, '/.');
+        $prefixLength = strlen($this->prefix);
+        $location = rtrim($this->prefix($directory), '/');
 
         if ( ! $result = $this->client->getMetadataWithChildren($location)) {
             return array();
         }
 
         foreach ($result['contents'] as $object) {
-            $listing[] = $this->normalizeObject($object, substr($object['path'], $length));
+            $path = substr($object['path'], $prefixLength);
+            $listing[] = $this->normalizeObject($object, trim($path, '/'));
 
             if ($recursive && $object['is_dir']) {
-                $listing = array_merge($listing, $this->retrieveListing($object['path']));
+                $listing = array_merge($listing, $this->listContents($path));
             }
         }
 
@@ -249,6 +245,8 @@ class Dropbox extends AbstractAdapter
 
     protected function prefix($path)
     {
-        return $this->prefix.$path;
+        $prefix = rtrim($this->prefix, '/');
+
+        return $prefix . '/' . ltrim($path, '/');
     }
 }
