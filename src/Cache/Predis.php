@@ -4,7 +4,7 @@ namespace League\Flysystem\Cache;
 
 use Predis\Client;
 
-class Predis extends Memory
+class Predis extends AbstractCache
 {
     /**
      * @var  \Predis\Client  $client  Predis Client
