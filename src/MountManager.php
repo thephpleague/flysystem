@@ -8,7 +8,7 @@ use InvalidArgumentException;
 class MountManager
 {
     /**
-     * @var  array  $filesystens
+     * @var  array  $filesystems
      */
     protected $filesystems = array();
 

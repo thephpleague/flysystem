@@ -143,7 +143,7 @@ class Zip extends AbstractAdapter
     {
         $result = array();
 
-        // This is needed to ensure the right numer of
+        // This is needed to ensure the right number of
         // files are set to the $numFiles property.
         $this->reopenArchive();
 

@@ -5,7 +5,7 @@ namespace League\Flysystem;
 interface ReadInterface
 {
     /**
-     * Check wether a file exists
+     * Check whether a file exists
      *
      * @param   string  $path
      * @return  bool
