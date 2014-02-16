@@ -1,7 +1,7 @@
 # Flysystem by [@frankdejonge](http://twitter.com/frankdejonge)
 
 [![Build Status](https://travis-ci.org/thephpleague/flysystem.png)](https://travis-ci.org/thephpleague/flysystem)
-[![Latest Stable Version](https://poser.pugx.org/league/flysystem/v/stable.png)](https://packagist.org/league//flysystem)
+[![Latest Stable Version](https://poser.pugx.org/league/flysystem/v/stable.png)](https://packagist.org/packages/league/flysystem)
 [![Total Downloads](https://poser.pugx.org/league/flysystem/downloads.png)](https://packagist.org/packages/league/flysystem)
 [![Coverage Status](https://coveralls.io/repos/thephpleague/flysystem/badge.png)](https://coveralls.io/r/thephpleague/flysystem)
 [![License](https://poser.pugx.org/league/flysystem/license.png)](https://packagist.org/packages/league/flysystem)
