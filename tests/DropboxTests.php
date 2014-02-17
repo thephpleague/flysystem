@@ -19,6 +19,10 @@ class DropboxTests extends PHPUnit_Framework_TestCase
 
     public function dropboxProvider()
     {
+        if (defined('HHVM_VERSION')) {
+            return $this->markTestSkipped('This dropbox test is broken on HHVM.');
+        }
+
         $mock = $this->getClientMock();
 
         return array(

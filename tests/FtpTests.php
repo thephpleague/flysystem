@@ -166,6 +166,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
+        if (defined('HHVM_VERSION')) {
+            return $this->markTestSkipped('This ftp test is broken on HHVM.');
+        }
+
         $adapter = new Ftp($this->options);
         $this->assertEquals('example.org', $adapter->getHost());
         $this->assertEquals(40, $adapter->getPort());
