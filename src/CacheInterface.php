@@ -5,7 +5,7 @@ namespace League\Flysystem;
 interface CacheInterface extends ReadInterface
 {
     /**
-     * Check wether the directory listing of a given directory is complete
+     * Check whether the directory listing of a given directory is complete
      *
      * @param   path  $dirname
      * @param   bool  $recursive

@@ -70,7 +70,7 @@ interface AdapterInterface extends ReadInterface
     public function delete($path);
 
     /**
-     * Delete a firectory
+     * Delete a directory
      *
      * @param   string  $dirname
      * @return  boolean

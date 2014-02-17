@@ -18,7 +18,7 @@ class Directory extends Handler
      * List the directory contents
      *
      * @param   boolean        $recursive
-     * @return  array|boolean  directort contents or false
+     * @return  array|boolean  directory contents or false
      */
     public function getContents($recursive = false)
     {

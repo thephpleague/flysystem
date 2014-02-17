@@ -57,7 +57,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Check wether a file exists
+     * Check whether a file exists
      *
      * @param   string  $path
      * @return  bool    weather an object result

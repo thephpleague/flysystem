@@ -34,7 +34,7 @@ Through Composer, obviously:
 }
 ```
 
-You can also use Flysystem without using Composer by registing an autoloader function:
+You can also use Flysystem without using Composer by registering an autoloader function:
 
 ```php
 spl_autoload_register(function($class) {
@@ -359,7 +359,7 @@ foreach ($listing as $object) {
 }
 ```
 
-___Get file into with explicid metadata___
+___Get file into with explicit metadata___
 
 ```php
 $info = $flysystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
@@ -447,7 +447,7 @@ $sha1 = $filesystem->getDown('path/to/file');
 
 # Mount Manager
 
-Flysystem comes with an wrapper class to easilly work with multiple filesystem instances
+Flysystem comes with an wrapper class to easily work with multiple filesystem instances
 from a single object. The `Flysystem\MountManager` is an easy to use container allowing
 you do simplify complex cross-filesystem interactions.
 

@@ -204,7 +204,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Normalize a direcoty listing
+     * Normalize a directory listing
      *
      * @param   array   $listing
      * @param   string  $prefix
