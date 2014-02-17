@@ -7,7 +7,7 @@ use League\Flysystem\AdapterInterface;
 class Adapter extends AbstractCache
 {
     /**
-     * @var  \League\Flysystem\AdapterInterface  $adapter  An adapter
+     * @var  AdapterInterface  $adapter  An adapter
      */
     protected $adapter;
 
@@ -24,16 +24,26 @@ class Adapter extends AbstractCache
     /**
      * Constructor
      *
-     * @param \League\Flysystem\AdapterInterface  $adapter  adapter
-     * @param string                              $key      storage key
-     * @param int|null                            $expire   seconds until cache expiration
+     * @param AdapterInterface  $adapter  adapter
+     * @param string            $key      storage key
+     * @param int|null          $expire   seconds until cache expiration
      */
     public function __construct(AdapterInterface $adapter, $key = 'flysystem', $expire = null)
     {
         $this->adapter = $adapter;
         $this->key = $key;
+        $this->setExpire($expire);
+    }
+
+    /**
+     * Set the expiration time in seconds
+     *
+     * @param  int  $expire  relative expiration time
+     */
+    protected function setExpire($expire)
+    {
         if ($expire) {
-            $this->expire = getTime($expire);
+            $this->expire = $this->getTime($expire);
         }
     }
 
@@ -58,6 +68,8 @@ class Adapter extends AbstractCache
         if ( ! $expire || $expire > $this->getTime()) {
             $this->cache = $cache;
             $this->complete = $complete;
+        } else {
+            $this->adapter->delete($this->key);
         }
     }
 
@@ -90,6 +102,6 @@ class Adapter extends AbstractCache
     {
         $contents = $this->getForStorage();
 
-        $this->adapter->write($this->key, $contents);
+        $this->adapter->put($this->key, $contents);
     }
 }
