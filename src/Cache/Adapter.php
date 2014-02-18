@@ -78,7 +78,7 @@ class Adapter extends AbstractCache
      */
     public function load()
     {
-        $contents = $this->adapter->get($this->key);
+        $contents = $this->adapter->read($this->key);
 
         if ($contents) {
             $this->setFromStorage($contents);
