@@ -222,8 +222,8 @@ $client = new Client('token', 'app');
 $dropbox = new Dropbox($client, 'prefix');
 
 $local = new Local('path');
-$cache = new Adapter($local, 'key', 300);
-// Storage Key and expire time are optional
+$cache = new Adapter($local, 'file', 300);
+// Expire time is optional
 
 $filesystem = new Filesystem($dropbox, $cache);
 ```

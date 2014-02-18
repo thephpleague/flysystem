@@ -12,9 +12,9 @@ class Adapter extends AbstractCache
     protected $adapter;
 
     /**
-     * @var  string  $key  storage key
+     * @var  string  $file  the file to cache to
      */
-    protected $key;
+    protected $file;
 
     /**
      * @var  int|null  $expire  seconds until cache expiration
@@ -25,13 +25,13 @@ class Adapter extends AbstractCache
      * Constructor
      *
      * @param AdapterInterface  $adapter  adapter
-     * @param string            $key      storage key
+     * @param string            $file     the file to cache to
      * @param int|null          $expire   seconds until cache expiration
      */
-    public function __construct(AdapterInterface $adapter, $key = 'flysystem', $expire = null)
+    public function __construct(AdapterInterface $adapter, $file, $expire = null)
     {
         $this->adapter = $adapter;
-        $this->key = $key;
+        $this->file = $file;
         $this->setExpire($expire);
     }
 
@@ -69,7 +69,7 @@ class Adapter extends AbstractCache
             $this->cache = $cache;
             $this->complete = $complete;
         } else {
-            $this->adapter->delete($this->key);
+            $this->adapter->delete($this->file);
         }
     }
 
@@ -78,7 +78,7 @@ class Adapter extends AbstractCache
      */
     public function load()
     {
-        $contents = $this->adapter->read($this->key);
+        $contents = $this->adapter->read($this->file);
 
         if ($contents) {
             $this->setFromStorage($contents);
@@ -102,6 +102,6 @@ class Adapter extends AbstractCache
     {
         $contents = $this->getForStorage();
 
-        $this->adapter->put($this->key, $contents);
+        $this->adapter->put($this->file, $contents);
     }
 }
