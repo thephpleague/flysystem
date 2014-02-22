@@ -55,7 +55,7 @@ class Filesystem implements FilesystemInterface
     /**
      * Get the Config
      *
-     * @return  AdapterInterface  adapter
+     * @return  Config  config object
      */
     public function getConfig()
     {
