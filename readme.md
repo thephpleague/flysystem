@@ -405,7 +405,7 @@ $s3->writeStream('path/to/object.png', $stream, [
 
 ## Plugins
 
-Need a feature which is not included in Flysystem's bag of trick? Write a plugin!
+Need a feature which is not included in Flysystem's bag of tricks? Write a plugin!
 
 ```php
 use League\Flysystem\FilesystemInterface;
