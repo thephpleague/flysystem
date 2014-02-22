@@ -478,7 +478,7 @@ $contents = $manager->read('ftp://some/file.txt');
 $manager->write('local://put/it/here.txt', $contents);
 ```
 
-This makes is easy to code up simple sync strategies.
+This makes it easy to code up simple sync strategies.
 
 ```php
 $contents = $manager->listContents('local://uploads', true);
