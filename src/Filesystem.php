@@ -263,7 +263,8 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return string                file contents
+     * @return string|false          file contents or FALSE when fails
+     *                               to read existing file
      */
     public function read($path)
     {
