@@ -447,7 +447,8 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return string                file mimetype
+     * @return string|false file mimetype or FALSE when fails
+     *                      to fetch mimetype from existing file
      */
     public function getMimetype($path)
     {
@@ -472,7 +473,8 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return string                timestamp
+     * @return string|false timestamp or FALSE when fails
+     *                      to fetch timestamp from existing file
      */
     public function getTimestamp($path)
     {
@@ -496,7 +498,8 @@ class Filesystem implements FilesystemInterface
      * Get a file's visibility
      *
      * @param   string  $path  path to file
-     * @return  string  visibility (public|private)
+     * @return  string|false  visibility (public|private) or FALSE
+     *                        when fails to check it in existing file
      */
     public function getVisibility($path)
     {
@@ -520,7 +523,8 @@ class Filesystem implements FilesystemInterface
      * Get a file's size
      *
      * @param   string  $path  path to file
-     * @return  int     file size
+     * @return  int|false     file size or FALSE when fails
+     *                        to check size of existing file
      */
     public function getSize($path)
     {
@@ -564,7 +568,8 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return array                 file metadata
+     * @return array|false           file metadata or FALSE when fails
+     *                               to fetch it from existing file
      */
     public function getMetadata($path)
     {
