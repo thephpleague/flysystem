@@ -68,6 +68,6 @@ Unfortunately the API for different kinds filesystems looks nothing alike. Flysy
 eliminates these differences by providing a normalized API layer. So when you're
 switching from local storage to a cloud service, it's just a matter of configuration.
 
-Flysystem eliminates for investing in hardware or cload resources upfront and minimizes
+Flysystem eliminates for investing in hardware or cloud resources upfront and minimizes
 the chances of vendor lock in. Develop locally and move to the cloud when your project
 asks for it.
