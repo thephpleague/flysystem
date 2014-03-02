@@ -343,6 +343,7 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->client->listObjects(array(
             'Bucket' => $this->bucket,
+            'Prefix' => $this->prefix($dirname),
         ))->getAll(array('Contents'));
 
         $contents = isset($result['Contents']) ? $result['Contents'] : array();
