@@ -5,6 +5,7 @@ namespace League\Flysystem\Adapter;
 use League\Flysystem\Util;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\ObjectStore\Resource\DataObject;
+use OpenCloud\ObjectStore\Exception\ObjectNotFoundException;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 class Rackspace extends AbstractAdapter
@@ -162,6 +163,8 @@ class Rackspace extends AbstractAdapter
         try {
             $object = $this->getObject($path);
         } catch(ClientErrorResponseException $e) {
+            return false;
+        } catch(ObjectNotFoundException $e) {
             return false;
         }
 
