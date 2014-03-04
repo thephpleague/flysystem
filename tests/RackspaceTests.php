@@ -49,6 +49,14 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->has('filename.ext'));
     }
 
+    public function testHasNotFound()
+    {
+        $container = $this->getContainerMock();
+        $container->shouldReceive('getObject')->andThrow('OpenCloud\ObjectStore\Exception\ObjectNotFoundException');
+        $adapter = new Rackspace($container);
+        $this->assertFalse($adapter->has('filename.ext'));
+    }
+
     public function testWrite()
     {
         $container = $this->getContainerMock();
