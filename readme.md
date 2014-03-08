@@ -71,6 +71,7 @@ spl_autoload_register(function($class) {
 * Memory (array caching)
 * Redis (through Predis)
 * Memcached
+* Adapter
 
 ## Local Setup
 
@@ -203,9 +204,30 @@ use League\Flysystem\Cache\Memcached as Cache;
 
 $memcached = new Memcached;
 $memcached->addServer('localhost', 11211);
+
 $filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'), new Cache($memcached, 'storageKey', 300));
 // Storage Key and expire time are optional
 ```
+
+## Adapter Caching Setup
+
+```php
+use Dropbox\Client;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Dropbox;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Cache\Adapter;
+
+$client = new Client('token', 'app');
+$dropbox = new Dropbox($client, 'prefix');
+
+$local = new Local('path');
+$cache = new Adapter($local, 'file', 300);
+// Expire time is optional
+
+$filesystem = new Filesystem($dropbox, $cache);
+```
+
 
 ## General Usage
 
