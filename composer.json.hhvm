@@ -21,9 +21,7 @@
         "mockery/mockery": "~0.9.0",
         "dropbox/dropbox-sdk": "~1.1.1",
         "rackspace/php-opencloud": "~1.9.1",
-        "sabre/dav": "~1.8.7",
-        "phpseclib/phpseclib": "~0.3.5",
-        "league/phpunit-coverage-listener" : "~1.0"
+        "phpseclib/phpseclib": "~0.3.5"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
