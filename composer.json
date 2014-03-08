@@ -15,6 +15,7 @@
         }
     },
     "require-dev": {
+        "phpunit/phpunit": "4.0.*",
         "aws/aws-sdk-php": "~2.5",
         "predis/predis": "~0.8.4",
         "mockery/mockery": "~0.9.0",
