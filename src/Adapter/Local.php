@@ -10,7 +10,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use League\Flysystem\Util;
 use League\Flysystem\AdapterInterface;
-use League\Flysystem\AppendableInterface;
 
 class Local extends AbstractAdapter
 {
