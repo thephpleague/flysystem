@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Cache;
 
+use League\Flysystem\Util;
+
 class Noop extends AbstractCache
 {
     /**
@@ -38,7 +40,31 @@ class Noop extends AbstractCache
      */
     public function storeContents($directory, array $contents, $recursive)
     {
+        if ($recursive) {
+            return $contents;
+        }
+
+        foreach ($contents as $index => $object) {
+            $pathinfo = Util::pathinfo($object['path']);
+            $object = array_merge($pathinfo, $object);
+
+            if ( ! $recursive && $object['dirname'] !== $directory) {
+                unset($contents[$index]);
+                continue;
+            }
+
+            $contents[$index] = $object;
+        }
+
         return $contents;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function storeMiss($path)
+    {
+        return $this;
     }
 
     /**

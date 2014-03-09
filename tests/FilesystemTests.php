@@ -390,6 +390,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $filesystem->write('test.txt', 'contents');
         $this->assertTrue($filesystem->has('test.txt'));
         $this->assertInternalType('array', $filesystem->listContents());
+        $this->assertInternalType('array', $filesystem->listContents('', true));
         $cache = $filesystem->getCache();
         $cache->setComplete('', false);
         $cache->flush();
@@ -403,6 +404,10 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->getVisibility('something'));
         $this->assertFalse($cache->listContents('', false));
         $filesystem->delete('test.txt');
+
+        $this->assertEquals(array(), $cache->storeContents('unknwon', array(
+            array('path' => 'some/file.txt'),
+        ), false));
     }
 
     /**
