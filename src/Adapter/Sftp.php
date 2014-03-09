@@ -98,7 +98,7 @@ class Sftp extends AbstractFtpAdapter
             $path = empty($directory) ? $filename : ($directory . DIRECTORY_SEPARATOR . $filename);
             $result[] = $this->normalizeListingObject($path, $object);
 
-            if ($recursive and $object['type'] === 2) {
+            if ($recursive && $object['type'] === 2) {
                 $result = array_merge($result, $this->listDirectoryContents($path));
             }
         }
