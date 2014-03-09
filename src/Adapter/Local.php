@@ -103,11 +103,6 @@ class Local extends AbstractAdapter implements AppendableInterface
         return $result;
     }
 
-    public function append($path, $contents)
-    {
-
-    }
-
     /**
      * Write using a stream
      *
