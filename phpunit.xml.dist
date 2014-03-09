@@ -28,7 +28,7 @@
                       <object class="League\PHPUnitCoverageListener\Hook\Travis"/>
                     </element>
                     <element key="namespace">
-                        <string>Flysystem</string>
+                        <string>League\Flysystem</string>
                     </element>
                     <element key="repo_token">
                         <string>O6jilIz6cIrJ6t7sHUfKgmA5wUUOoXdQ6</string>
