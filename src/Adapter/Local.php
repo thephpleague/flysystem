@@ -10,12 +10,14 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use League\Flysystem\Util;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\AppendableInterface;
 
-class Local extends AbstractAdapter
+class Local extends AbstractAdapter implements AppendableInterface
 {
     protected static $permissions = array(
         'public' => 0744,
         'private' => 0700,
+
     );
 
     /**
@@ -25,8 +27,7 @@ class Local extends AbstractAdapter
      */
     public function __construct($root)
     {
-        $root = $this->ensureRootDirectory($root);
-
+        $root = $this->ensureDirectory($root);
         $this->root = Util::normalizePrefix($root, DIRECTORY_SEPARATOR);
     }
 
@@ -36,7 +37,7 @@ class Local extends AbstractAdapter
      * @param   string  $root  root directory path
      * @return  string  real path to root
      */
-    protected function ensureRootDirectory($root)
+    protected function ensureDirectory($root)
     {
         if ( ! is_dir($root)) {
             mkdir($root, 0755, true);
@@ -85,21 +86,14 @@ class Local extends AbstractAdapter
     {
         $location = $this->prefix($path);
         $config = Util::ensureConfig($config);
-
-        if ( ! is_dir($dirname = dirname($location))) {
-            mkdir($dirname, 0777, true);
-        }
+        $this->ensureDirectory(dirname($location));
 
         if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
             return false;
         }
 
-        $result = array(
-            'contents' => $contents,
-            'type' => 'file',
-            'size' => $size,
-            'path' => $path,
-        );
+        $type = 'file';
+        $result = compact('contents', 'type', 'size',  'path');
 
         if ($visibility = $config->get('visibility')) {
             $result['visibility'] = $visibility;
@@ -107,6 +101,11 @@ class Local extends AbstractAdapter
         }
 
         return $result;
+    }
+
+    public function append($path, $contents)
+    {
+
     }
 
     /**
