@@ -31,7 +31,7 @@
                         <string>Flysystem</string>
                     </element>
                     <element key="repo_token">
-                        <string>TRMtqZN8tQzC3NhyF6O0Pa3LyufxqrEuc</string>
+                        <string>O6jilIz6cIrJ6t7sHUfKgmA5wUUOoXdQ6</string>
                     </element>
                     <element key="target_url">
                         <string>https://coveralls.io/api/v1/jobs</string>
@@ -45,6 +45,6 @@
     </listeners>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-        <log type="coverage-clover" target="/tmp/flysystem/coverage.xml"/>
+        <log type="coverage-clover" target="./clover.xml" />
     </logging>
 </phpunit>
