@@ -12,7 +12,7 @@ use League\Flysystem\Util;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\AppendableInterface;
 
-class Local extends AbstractAdapter implements AppendableInterface
+class Local extends AbstractAdapter
 {
     protected static $permissions = array(
         'public' => 0744,
@@ -116,10 +116,7 @@ class Local extends AbstractAdapter implements AppendableInterface
         rewind($resource);
         $config = Util::ensureConfig($config);
         $location = $this->prefix($path);
-
-        if ( ! is_dir($dirname = dirname($location))) {
-            mkdir($dirname, 0777, true);
-        }
+        $this->ensureDirectory(dirname($location));
 
         if ( ! $stream = fopen($location, 'w+')) {
             return false;
@@ -175,17 +172,13 @@ class Local extends AbstractAdapter implements AppendableInterface
     public function update($path, $contents)
     {
         $location = $this->prefix($path);
+        $mimetype = Util::contentMimetype($contents);
 
         if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
             return false;
         }
 
-        return array(
-            'path' => $path,
-            'size' => $size,
-            'contents' => $contents,
-            'mimetype' => Util::contentMimetype($contents),
-        );
+        return compact('path', 'size', 'contents', 'mimetype');
     }
 
     /**
