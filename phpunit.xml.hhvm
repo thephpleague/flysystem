@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false" preserveGlobalState="false"
+        backupStaticAttributes="false"
+        bootstrap="./phpunit.php"
+        colors="true"
+        processIsolation="true"
+        syntaxCheck="false">
+    <testsuites>
+        <testsuite name="flysystem/tests">
+            <directory suffix=".php">./tests/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <blacklist>
+            <directory suffix=".php">./vendor/</directory>
+            <directory suffix=".php">./tests/</directory>
+        </blacklist>
+    </filter>
+</phpunit>
