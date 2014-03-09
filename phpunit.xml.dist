@@ -37,7 +37,7 @@
                         <string>https://coveralls.io/api/v1/jobs</string>
                     </element>
                     <element key="coverage_dir">
-                        <string>/tmp/flysystem</string>
+                        <string>/tmp/flysystem/</string>
                     </element>
                 </array>
             </arguments>
@@ -45,6 +45,6 @@
     </listeners>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-        <log type="coverage-clover" target="./clover.xml" />
+        <log type="coverage-clover" target="/tmp/flysystem/coverage.xml" />
     </logging>
 </phpunit>
