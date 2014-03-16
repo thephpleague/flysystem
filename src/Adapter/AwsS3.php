@@ -137,11 +137,12 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
+     * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
-        return $this->write($path, $contents);
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -149,11 +150,12 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed        $config   Config object or visibility setting
      * @return  array     file metadata
      */
-    public function updateStream($path, $resource)
+    public function updateStream($path, $resource, $config = null)
     {
-        return $this->write($path, $resource);
+        return $this->write($path, $resource, $config);
     }
 
     /**

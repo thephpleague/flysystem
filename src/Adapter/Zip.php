@@ -70,11 +70,11 @@ class Zip extends AbstractAdapter
         return $result;
     }
 
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
         $this->delete($path);
 
-        return $this->write($path, $contents);
+        return $this->write($path, $contents, $config);
     }
 
     public function rename($path, $newpath)

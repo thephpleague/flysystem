@@ -56,9 +56,10 @@ class Rackspace extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
+     * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
         $object = $this->getObject($path);
         $object->setContent($contents);
@@ -153,9 +154,9 @@ class Rackspace extends AbstractAdapter
         return $this->write($path, $resource, $config);
     }
 
-    public function updateStream($path, $resource)
+    public function updateStream($path, $resource, $config = null)
     {
-        return $this->update($path, $resource);
+        return $this->update($path, $resource, $config);
     }
 
     public function has($path)

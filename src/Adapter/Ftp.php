@@ -161,9 +161,9 @@ class Ftp extends AbstractFtpAdapter
         return compact('path', 'visibility');
     }
 
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
-        return $this->write($path, $contents);
+        return $this->write($path, $contents, $config);
     }
 
     public function rename($path, $newpath)

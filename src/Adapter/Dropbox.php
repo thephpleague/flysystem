@@ -81,9 +81,10 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
+     * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
         return $this->upload($path, $contents, WriteMode::force());
     }
@@ -93,6 +94,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed     $config   Config object or visibility setting
      * @return  array     file metadata
      */
     public function updateStream($path, $resource, $config = null)

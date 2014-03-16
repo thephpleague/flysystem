@@ -29,9 +29,10 @@ interface AdapterInterface extends ReadInterface
      *
      * @param   string       $path
      * @param   string       $contents
+     * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function update($path, $contents);
+    public function update($path, $contents, $config = null);
 
     /**
      * Write a new file using a stream
@@ -41,16 +42,17 @@ interface AdapterInterface extends ReadInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function writeStream($path, $resource, $visibility = null);
+    public function writeStream($path, $resource, $config = null);
 
     /**
      * Update a file using a stream
      *
      * @param   string       $path
      * @param   resource     $resource
+     * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function updateStream($path, $resource);
+    public function updateStream($path, $resource, $config = null);
 
     /**
      * Rename a file

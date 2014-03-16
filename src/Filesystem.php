@@ -151,10 +151,11 @@ class Filesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed     $config   Config object or visibility setting
      * @return  bool      success boolean
      * @throws  InvalidArgumentException
      */
-    public function updateStream($path, $resource)
+    public function updateStream($path, $resource, $config = null)
     {
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
@@ -229,7 +230,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
 
         if ($this->has($path)) {
-            return $this->update($path, $contents);
+            return $this->update($path, $contents, $config);
         }
 
         return $this->write($path, $contents, $config);
@@ -240,10 +241,11 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path     path to file
      * @param  string                $contents file contents
+     * @param   mixed                $config   Config object or visibility setting
      * @throws FileNotFoundException
      * @return boolean               success boolean
      */
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
         $path = Util::normalizePath($path);
         $this->assertPresent($path);

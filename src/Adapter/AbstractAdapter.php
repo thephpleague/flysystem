@@ -25,11 +25,12 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed     $config   Config object or visibility setting
      * @return  mixed     false of file metadata
      */
-    public function updateStream($path, $resource)
+    public function updateStream($path, $resource, $config = null)
     {
-        return $this->stream($path, $resource, null, 'update');
+        return $this->stream($path, $resource, $config, 'update');
     }
 
     /**

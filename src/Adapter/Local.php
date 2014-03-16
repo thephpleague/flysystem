@@ -152,23 +152,25 @@ class Local extends AbstractAdapter
     /**
      * Update a file using a stream
      *
-     * @param $path
-     * @param $resource
-     * @return array|bool
+     * @param   string    $path
+     * @param   resource  $resource
+     * @param   mixed     $config   Config object or visibility setting
+     * @return  array|bool
      */
-    public function updateStream($path, $resource)
+    public function updateStream($path, $resource, $config = null)
     {
-        return $this->writeStream($path, $resource);
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**
      * Update a file
      *
-     * @param $path
-     * @param $contents
-     * @return array|bool
+     * @param   string       $path
+     * @param   string       $contents
+     * @param   mixed        $config   Config object or visibility setting
+     * @return  array|bool
      */
-    public function update($path, $contents)
+    public function update($path, $contents, $config = null)
     {
         $location = $this->prefix($path);
         $mimetype = Util::contentMimetype($contents);
@@ -183,8 +185,8 @@ class Local extends AbstractAdapter
     /**
      * Read a file
      *
-     * @param $path
-     * @return array|bool
+     * @param   string  $path
+     * @return  array|bool
      */
     public function read($path)
     {
@@ -192,10 +194,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return array(
-            'contents' => $contents,
-            'path' => $path
-        );
+        return compact('contents', 'path');
     }
 
     /**
