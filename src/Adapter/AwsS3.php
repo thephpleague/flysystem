@@ -247,6 +247,7 @@ class AwsS3 extends AbstractAdapter
     public function createDir($path)
     {
         $result = $this->write(rtrim($path, '/') . '/', '');
+
         return array('path' => $path, 'type' => 'dir');
     }
 
