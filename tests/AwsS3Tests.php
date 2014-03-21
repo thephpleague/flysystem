@@ -148,7 +148,9 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
 
     public function testCreateDir()
     {
-        $adapter = new Adapter($this->getS3Client(), 'bucketname');
+        $mock = $this->getS3Client();
+        $mock->shouldReceive('putObject')->once();
+        $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->createDir('something');
         $this->assertArrayHasKey('path', $result);
         $this->assertArrayHasKey('type', $result);
