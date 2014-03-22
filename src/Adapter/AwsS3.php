@@ -248,6 +248,10 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->write(rtrim($path, '/') . '/', '');
 
+        if ( ! $result) {
+            return false;
+        }
+
         return array('path' => $path, 'type' => 'dir');
     }
 
@@ -369,6 +373,13 @@ class AwsS3 extends AbstractAdapter
 
         if (isset($object['LastModified'])) {
             $result['timestamp'] = strtotime($object['LastModified']);
+        }
+
+        if (substr($result['path'], -1) === '/') {
+            $result['type'] = 'dir';
+            $result['path'] = rtrim($result['path'], '/');
+
+            return $result;
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
