@@ -78,15 +78,23 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     {
         $mock = $this->getS3Client();
         $mock->shouldReceive('listObjects')->once()->andReturn(Mockery::self());
-        $result = array('Contents' => array(array('Key' => 'path', 'ContentLength' => 20, 'ContentType' => 'text/plain')));
+        $result = array('Contents' => array(
+            array('Key' => 'path', 'ContentLength' => 20, 'ContentType' => 'text/plain'),
+            array('Key' => 'path/to/dir/'),
+        ));
         $mock->shouldReceive('getAll')->with(array('Contents'))->andReturn($result);
         $adapter = new Adapter($mock, 'bucketname');
         $listing = $adapter->listContents();
-        $this->assertCount(1, $listing);
-        $item = reset($listing);
-        $this->assertArrayHasKey('path', $item);
-        $this->assertArrayHasKey('type', $item);
-        $this->assertArrayHasKey('mimetype', $item);
+        $this->assertCount(2, $listing);
+        $first = reset($listing);
+        $this->assertArrayHasKey('path', $first);
+        $this->assertArrayHasKey('type', $first);
+        $this->assertArrayHasKey('mimetype', $first);
+        $last = end($listing);
+        $this->assertArrayHasKey('path', $first);
+        $this->assertArrayHasKey('type', $first);
+        $this->assertEquals($last['type'], 'dir');
+
     }
 
     public function testSetVisibility()
@@ -156,6 +164,15 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('something', $result['path']);
         $this->assertEquals('dir', $result['type']);
+    }
+
+    public function testCreateDirFail()
+    {
+        $mock = $this->getS3Client();
+        $mock->shouldReceive('putObject')->andReturn(false);
+        $adapter = new Adapter($mock, 'bucketname');
+        $result = $adapter->createDir('something');
+        $this->assertFalse($result);
     }
 
     public function testRead()

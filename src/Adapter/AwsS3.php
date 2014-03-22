@@ -89,7 +89,11 @@ class AwsS3 extends AbstractAdapter
             $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
         }
 
-        $this->client->putObject($options);
+        $result = $this->client->putObject($options);
+
+        if ($result === false) {
+            return false;
+        }
 
         if ($visibility) {
             $options['visibility'] = $visibility;
