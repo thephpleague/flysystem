@@ -68,7 +68,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testDeleteDir()
     {
         $mock = $this->getS3Client();
-        $mock->shouldReceive('deleteMatchingObjects')->with('bucketname', 'some/dirname')->once()->andReturn(true);
+        $mock->shouldReceive('deleteMatchingObjects')->with('bucketname', 'some/dirname/')->once()->andReturn(true);
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->deleteDir('some/dirname');
         $this->assertTrue($result);

@@ -239,7 +239,9 @@ class AwsS3 extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        return $this->client->deleteMatchingObjects($this->bucket, $this->prefix($path));
+        $prefix = rtrim($this->prefix($path), '/') . '/';
+
+        return $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
 
     /**
