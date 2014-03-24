@@ -16,7 +16,15 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
 {
     protected function getS3Client()
     {
-        return Mockery::mock('Aws\S3\S3Client');
+        $credentials = $this->getMock('Aws\Common\Credentials\CredentialsInterface');
+        $signature = $this->getMock('Aws\Common\Signature\SignatureInterface');
+        $client = $this->getMock('Guzzle\Common\Collection');
+
+        return Mockery::mock('Aws\S3\S3Client[putObject,copyObject,getAll,deleteObject,deleteMatchingObjects,listObjects,putObjectAcl,getAll,getObjectAcl,doesObjectExist,GetObject,registerStreamWrapper]', array(
+            $credentials,
+            $signature,
+            $client,
+        ));
     }
 
     public function testHas()
