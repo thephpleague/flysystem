@@ -29,7 +29,7 @@ Through Composer, obviously:
 ```json
 {
     "require": {
-        "league/flysystem": "0.2.*"
+        "league/flysystem": "0.3.*"
     }
 }
 ```
