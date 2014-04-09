@@ -81,6 +81,6 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
     public function testArrayResult($method)
     {
         $adapter = new NullAdapter;
-        $this->assertInternalType('array', $adapter->{$method}('one', tmpfile(), ['visibility' => 'public']));
+        $this->assertInternalType('array', $adapter->{$method}('one', tmpfile(), array('visibility' => 'public')));
     }
 }
