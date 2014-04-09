@@ -46,6 +46,7 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
             array('update'),
             array('read'),
             array('rename'),
+            array('delete'),
             array('listContents'),
             array('getMetadata'),
             array('getSize'),
