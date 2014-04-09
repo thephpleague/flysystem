@@ -60,6 +60,7 @@ spl_autoload_register(function($class) {
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
 * WebDAV (through SabreDAV)
+* NullAdapter
 
 ### Planned Adapters
 
@@ -178,6 +179,15 @@ $filesystem = new Filesystem(new Adapter(array(
 ```php
 $client = new Sabre\DAV\Client($settings);
 $adapter = new League\Flysystem\Adapter\WebDav($client);
+$flysystem = new League\Flysystem\Filesystem($adapter);
+```
+
+## NullAdapter Setup
+
+This adapter acts like /dev/null, you can only write to it. Reading from it is never possible.
+
+```php
+$adapter = new League\Flysystem\Adapter\NullAdapter;
 $flysystem = new League\Flysystem\Filesystem($adapter);
 ```
 
