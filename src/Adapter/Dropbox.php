@@ -125,7 +125,7 @@ class Dropbox extends AbstractAdapter
     {
         $location = $this->prefix($path);
 
-        if ( ! $result = $this->client->uploadFile($path, $mode, $resource)) {
+        if ( ! $result = $this->client->uploadFile($location, $mode, $resource)) {
             return false;
         }
 
