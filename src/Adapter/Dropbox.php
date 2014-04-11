@@ -123,6 +123,8 @@ class Dropbox extends AbstractAdapter
 
     protected function uploadStream($path, $resource, $mode)
     {
+        $location = $this->prefix($path);
+
         if ( ! $result = $this->client->uploadFile($path, $mode, $resource)) {
             return false;
         }
@@ -146,8 +148,9 @@ class Dropbox extends AbstractAdapter
     public function readStream($path)
     {
         $stream = fopen('php://temp', 'w+');
+        $location = $this->prefix($path);
 
-        if ( ! $this->client->getFile($this->prefix($path), $stream)) {
+        if ( ! $this->client->getFile($location, $stream)) {
             fclose($stream);
             return false;
         }
