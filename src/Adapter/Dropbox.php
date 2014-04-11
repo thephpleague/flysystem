@@ -112,7 +112,9 @@ class Dropbox extends AbstractAdapter
      */
     protected function upload($path, $contents, $mode)
     {
-        if ( ! $result = $this->client->uploadFileFromString($this->prefix($path), $mode, $contents)) {
+        $location = $this->prefix($path);
+
+        if ( ! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
             return false;
         }
 
