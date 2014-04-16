@@ -2,10 +2,10 @@
 
 [![Build Status](https://travis-ci.org/thephpleague/flysystem.png)](https://travis-ci.org/thephpleague/flysystem)
 [![Latest Stable Version](https://poser.pugx.org/league/flysystem/v/stable.png)](https://packagist.org/packages/league/flysystem)
-[![Total Downloads](https://poser.pugx.org/league/flysystem/downloads.png)](https://packagist.org/packages/league/flysystem)
-[![Coverage Status](https://coveralls.io/repos/thephpleague/flysystem/badge.png)](https://coveralls.io/r/thephpleague/flysystem)
-[![License](https://poser.pugx.org/league/flysystem/license.png)](https://packagist.org/packages/league/flysystem)
+[![Total Downloads](https://poser.pugx.org/league/flysystem/downloads.png)](https://packagist.org/packages/league/flysystem) [![License](https://poser.pugx.org/league/flysystem/license.png)](https://packagist.org/packages/league/flysystem)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/mini.png)](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
+
+<!-- [![Coverage Status](https://coveralls.io/repos/thephpleague/flysystem/badge.png)](https://coveralls.io/r/thephpleague/flysystem) -->
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
