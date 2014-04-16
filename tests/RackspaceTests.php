@@ -39,6 +39,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container, 'prefix');
         $this->assertInternalType('array', $adapter->read('filename.ext'));
+        $adapter->setPrefix('/');
+        $this->assertEquals('path.ext', $adapter->prefix('path.ext'));
     }
 
     public function testRead()
