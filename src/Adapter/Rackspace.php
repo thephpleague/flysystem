@@ -16,13 +16,57 @@ class Rackspace extends AbstractAdapter
     protected $container;
 
     /**
+     * @var  string  $prefix
+     */
+    protected $prefix;
+
+    /**
      * Constructor
      *
      * @param  Container  $container
+     * @param  string     $prefix
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, $prefix = null)
     {
+        if ($prefix) $this->setPrefix($prefix);
+
         $this->container = $container;
+    }
+
+    /**
+     * Prefix a path
+     *
+     * @param   string  $path
+     * @return  string
+     */
+    public function prefix($path)
+    {
+        if ( ! $this->prefix) {
+            return $path;
+        }
+
+        return $this->prefix . $path;
+    }
+
+    /**
+     * Set the prefix
+     *
+     * @param   string  $prefix
+     * @return  $this
+     */
+    public function setPrefix($prefix)
+    {
+        $prefix = trim($prefix, '/');
+
+        if (empty($prefix)) {
+            $this->prefix = null;
+
+            return $this;
+        }
+
+        $this->prefix = $prefix . '/';
+
+        return $this;
     }
 
     /**
@@ -33,7 +77,9 @@ class Rackspace extends AbstractAdapter
      */
     protected function getObject($path)
     {
-        return $this->container->getObject($path);
+        $location = $this->prefix($path);
+
+        return $this->container->getObject($location);
     }
 
     /**
@@ -46,7 +92,8 @@ class Rackspace extends AbstractAdapter
      */
     public function write($path, $contents, $config = null)
     {
-        $response = $this->container->uploadObject($path, $contents);
+        $location = $this->prefix($path);
+        $response = $this->container->uploadObject($location, $contents);
 
         return $this->normalizeObject($response);
     }
@@ -61,6 +108,7 @@ class Rackspace extends AbstractAdapter
      */
     public function update($path, $contents, $config = null)
     {
+        $location = $this->prefix($path);
         $object = $this->getObject($path);
         $object->setContent($contents);
         $object->setEtag(null);
@@ -82,8 +130,10 @@ class Rackspace extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
-        $object = $this->getObject($path);
-        $destination = '/'.$this->container->getName().'/'.ltrim($newpath, '/');
+        $location = $this->prefix($path);
+        $object = $this->getObject($location);
+        $newlocation = $this->prefix($newpath);
+        $destination = '/'.$this->container->getName().'/'.ltrim($newlocation, '/');
         $response = $object->copy($destination);
 
         if ($response->getStatusCode() !== 201) {
@@ -103,7 +153,8 @@ class Rackspace extends AbstractAdapter
      */
     public function delete($path)
     {
-        $object = $this->getObject($path);
+        $location = $this->prefix($path);
+        $object = $this->getObject($location);
         $response = $object->delete();
 
         if ($response->getStatusCode() !== 204) {
@@ -123,7 +174,8 @@ class Rackspace extends AbstractAdapter
     {
         $paths = array();
         $prefix = '/'.$this->container->getName().'/';
-        $objects = $this->container->objectList(array('prefix' => $dirname));
+        $location = $this->prefix($dirname);
+        $objects = $this->container->objectList(array('prefix' => $location));
 
         foreach ($objects as $object)
             $paths[] = $prefix.ltrim($object->getName(), '/');
@@ -151,18 +203,24 @@ class Rackspace extends AbstractAdapter
 
     public function writeStream($path, $resource, $config = null)
     {
-        return $this->write($path, $resource, $config);
+        $location = $this->prefix($path);
+
+        return $this->write($location, $resource, $config);
     }
 
     public function updateStream($path, $resource, $config = null)
     {
-        return $this->update($path, $resource, $config);
+        $location = $this->prefix($path);
+
+        return $this->update($location, $resource, $config);
     }
 
     public function has($path)
     {
+        $location = $this->prefix($path);
+
         try {
-            $object = $this->getObject($path);
+            $object = $this->getObject($location);
         } catch(ClientErrorResponseException $e) {
             return false;
         } catch(ObjectNotFoundException $e) {
@@ -180,7 +238,8 @@ class Rackspace extends AbstractAdapter
      */
     public function read($path)
     {
-        $object = $this->getObject($path);
+        $location = $this->prefix($path);
+        $object = $this->getObject($location);
         $data = $this->normalizeObject($object);
         $data['contents'] = (string) $object->getContent();
 
@@ -195,7 +254,8 @@ class Rackspace extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $response = $this->container->objectList(array('prefix' => $directory));
+        $location = $this->prefix($directory);
+        $response = $this->container->objectList(array('prefix' => $location));
         $response = iterator_to_array($response);
         $contents = array_map(array($this, 'normalizeObject'), $response);
 
@@ -211,6 +271,11 @@ class Rackspace extends AbstractAdapter
     protected function normalizeObject(DataObject $object)
     {
         $name = $object->getName();
+
+        if ($this->prefix) {
+            $name = substr($name, strlen($this->prefix));
+        }
+
         $mimetype = explode('; ', $object->getContentType());
 
         return array(
@@ -231,7 +296,8 @@ class Rackspace extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        $object = $this->getObject($path);
+        $location = $this->prefix($path);
+        $object = $this->getObject($location);
 
         return $this->normalizeObject($object);
     }
@@ -244,7 +310,9 @@ class Rackspace extends AbstractAdapter
      */
     public function getSize($path)
     {
-        return $this->getMetadata($path);
+        $location = $this->prefix($path);
+
+        return $this->getMetadata($location);
     }
 
     /**
@@ -255,7 +323,9 @@ class Rackspace extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-        return $this->getMetadata($path);
+        $location = $this->prefix($path);
+
+        return $this->getMetadata($location);
     }
 
     /**
@@ -266,6 +336,8 @@ class Rackspace extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
-        return $this->getMetadata($path);
+        $location = $this->prefix($path);
+
+        return $this->getMetadata($location);
     }
 }
