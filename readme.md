@@ -126,6 +126,12 @@ $container = $store->getContainer('flysystem');
 $filesystem = new Filesystem(new Adapter($container));
 ```
 
+You can also use a prefix to "namespace" your filesystem.
+
+```php
+$filesystem = new Filesystem(new Adapter\Rackspace($container, 'prefix'));
+```
+
 ## Dropbox Setup
 
 ```php
