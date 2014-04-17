@@ -109,7 +109,7 @@ class Rackspace extends AbstractAdapter
     public function update($path, $contents, $config = null)
     {
         $location = $this->prefix($path);
-        $object = $this->getObject($path);
+        $object = $this->getObject($location);
         $object->setContent($contents);
         $object->setEtag(null);
         $response = $object->update();
