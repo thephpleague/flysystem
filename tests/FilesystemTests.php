@@ -178,6 +178,15 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider filesystemProvider
+     * @expectedException  \League\Flysystem\RootViolationException
+     */
+    public function testRootViolationProtection($filesystem)
+    {
+        $filesystem->deleteDir('./');
+    }
+
+    /**
+     * @dataProvider filesystemProvider
      */
     public function testImplicitDirs($filesystem, $adapter, $cache)
     {

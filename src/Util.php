@@ -84,7 +84,7 @@ class Util
         $normalized = preg_replace('#/\.(?=/)|^\./|\./$#', '', $normalized);
 
         // Regex for resolving relative paths
-        $regex = '#\/*[^/\.]+/\.\.#Uu';
+        $regex = '#/*[^/\.]+/\.\.#Uu';
 
         while (preg_match($regex, $normalized)) {
             $normalized = preg_replace($regex, '', $normalized);
