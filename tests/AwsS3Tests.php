@@ -20,7 +20,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $signature = $this->getMock('Aws\Common\Signature\SignatureInterface');
         $client = $this->getMock('Guzzle\Common\Collection');
 
-        return Mockery::mock('Aws\S3\S3Client[putObject,copyObject,getAll,deleteObject,deleteMatchingObjects,listObjects,putObjectAcl,getAll,getObjectAcl,doesObjectExist,GetObject,registerStreamWrapper]', array(
+        return Mockery::mock('Aws\S3\S3Client[putObject,copyObject,getAll,deleteObject,deleteMatchingObjects,getIterator,putObjectAcl,getAll,getObjectAcl,doesObjectExist,GetObject,registerStreamWrapper]', array(
             $credentials,
             $signature,
             $client,
@@ -85,12 +85,11 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testListContents()
     {
         $mock = $this->getS3Client();
-        $mock->shouldReceive('listObjects')->once()->andReturn(Mockery::self());
-        $result = array('Contents' => array(
+        $result = new \ArrayIterator(array(
             array('Key' => 'path', 'ContentLength' => 20, 'ContentType' => 'text/plain'),
             array('Key' => 'path/to/dir/'),
         ));
-        $mock->shouldReceive('getAll')->with(array('Contents'))->andReturn($result);
+        $mock->shouldReceive('getIterator')->once()->andReturn($result);
         $adapter = new Adapter($mock, 'bucketname');
         $listing = $adapter->listContents();
         $this->assertCount(2, $listing);
