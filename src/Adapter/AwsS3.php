@@ -355,12 +355,12 @@ class AwsS3 extends AbstractAdapter
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        $result = $this->client->listObjects(array(
+        $objectsIterator = $this->client->getIterator('listObjects', array(
             'Bucket' => $this->bucket,
             'Prefix' => $this->prefix($dirname),
-        ))->getAll(array('Contents'));
+        ));
 
-        $contents = isset($result['Contents']) ? $result['Contents'] : array();
+        $contents = iterator_to_array($objectsIterator);
         $result = array_map(array($this, 'normalizeObject'), $contents);
 
         return Util::emulateDirectories($result);
