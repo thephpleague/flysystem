@@ -70,7 +70,7 @@ class WebDav extends AbstractAdapter
         $result = compact('path', 'contents');
 
         if ($config && $visibility = $config->get('visibility')) {
-            $this->setVisibility($visibility);
+            $this->setVisibility($path, $visibility);
         }
 
         return $result;
@@ -88,7 +88,7 @@ class WebDav extends AbstractAdapter
                 'Destination' => '/'.ltrim($newpath, '/'),
             ));
 
-            if ($response['statusCode'] > 200 || $response['statusCode'] < 299) {
+            if ($response['statusCode'] >= 200 && $response['statusCode'] < 300) {
                 return true;
             }
         } catch (Exception\FileNotFound $e) { }
