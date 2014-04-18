@@ -128,9 +128,9 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     public function testCopyFail()
     {
         $mock = Mockery::mock('League\Flysystem\AdapterInterface');
-        $mock->shouldReceive('write')->andReturn([
+        $mock->shouldReceive('write')->andReturn(array(
             'path' => 'path.txt',
-        ]);
+        ));
         $mock->shouldReceive('copy')->andReturn(false);
         $mock->shouldReceive('has')->with('path.txt')->andReturn(false, true);
         $mock->shouldReceive('has')->with('new.txt')->andReturn(false);
