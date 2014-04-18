@@ -312,6 +312,29 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * Copy a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  boolean
+     */
+    public function copy($path, $newpath)
+    {
+        $path = Util::normalizePath($path);
+        $newpath = Util::normalizePath($newpath);
+        $this->assertPresent($path);
+        $this->assertAbsent($newpath);
+
+        if ($this->adapter->copy($path, $newpath) === false) {
+            return false;
+        }
+
+        $this->cache->copy($path, $newpath);
+
+        return true;
+    }
+
+    /**
      * Delete a file
      *
      * @param  string                $path path to file

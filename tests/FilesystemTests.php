@@ -2,6 +2,8 @@
 
 namespace League\Flysystem;
 
+use Mockery;
+
 class FilesystemTests extends \PHPUnit_Framework_TestCase
 {
     public function setup()
@@ -20,6 +22,16 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     public function testInstantiable()
     {
         $instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory);
+    }
+
+    public function testAbstractAdapterCopy()
+    {
+        $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[readStream,writeStream]');
+        $mock->shouldReceive('readStream')->andReturn(false, tmpfile(), tmpfile());
+        $mock->shouldReceive('writeStream')->andReturn(false, true);
+        $this->assertFalse($mock->copy('something', 'other'));
+        $this->assertFalse($mock->copy('something', 'other'));
+        $this->assertTrue($mock->copy('something', 'other'));
     }
 
     public function filesystemProvider()
@@ -100,6 +112,32 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $filesystem->listContents());
         $this->assertCount(0, $cache->listContents('', false));
         $this->assertCount(0, $adapter->listContents('', false));
+    }
+
+    /**
+     * @dataProvider filesystemProvider
+     */
+    public function testCopy(Filesystem $filesystem, $adapter, $cache)
+    {
+        $filesystem->write('test.txt', 'dummy');
+        $this->assertFalse($filesystem->has('copied.txt'));
+        $filesystem->copy('test.txt', 'copied.txt');
+        $this->assertTrue($filesystem->has('copied.txt'));
+    }
+
+    public function testCopyFail()
+    {
+        $mock = Mockery::mock('League\Flysystem\AdapterInterface');
+        $mock->shouldReceive('write')->andReturn([
+            'path' => 'path.txt',
+        ]);
+        $mock->shouldReceive('copy')->andReturn(false);
+        $mock->shouldReceive('has')->with('path.txt')->andReturn(false, true);
+        $mock->shouldReceive('has')->with('new.txt')->andReturn(false);
+
+        $filesystem = new Filesystem($mock);
+        $filesystem->write('path.txt', 'content');
+        $this->assertFalse($filesystem->copy('path.txt', 'new.txt'));
     }
 
     /**
@@ -412,6 +450,8 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($cache->getTimestamp('something'));
         $this->assertFalse($cache->getVisibility('something'));
         $this->assertFalse($cache->listContents('', false));
+        $this->assertFalse($cache->rename('', ''));
+        $this->assertFalse($cache->copy('', ''));
         $filesystem->delete('test.txt');
 
         $this->assertEquals(array(), $cache->storeContents('unknwon', array(

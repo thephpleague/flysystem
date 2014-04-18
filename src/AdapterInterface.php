@@ -64,6 +64,15 @@ interface AdapterInterface extends ReadInterface
     public function rename($path, $newpath);
 
     /**
+     * Rename a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  boolean
+     */
+    public function copy($path, $newpath);
+
+    /**
      * Delete a file
      *
      * @param   string  $path

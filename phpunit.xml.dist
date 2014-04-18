@@ -11,10 +11,9 @@
         </testsuite>
     </testsuites>
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor/</directory>
-            <directory suffix=".php">./tests/</directory>
-        </blacklist>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
     </filter>
     <listeners>
         <listener class="Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>

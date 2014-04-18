@@ -11,9 +11,8 @@
         </testsuite>
     </testsuites>
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor/</directory>
-            <directory suffix=".php">./tests/</directory>
-        </blacklist>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+        </whitelist>
     </filter>
 </phpunit>

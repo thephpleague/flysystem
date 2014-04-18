@@ -93,4 +93,29 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         throw new LogicException(get_class($this).' does not support visibility settings.');
     }
+
+    /**
+     * Copy a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  boolean
+     */
+    public function copy($path, $newpath)
+    {
+        $stream = $this->readStream($path);
+
+        if ( ! is_resource($stream)) {
+            return false;
+        }
+
+        $result = $this->writeStream($newpath, $stream);
+        fclose($stream);
+
+        if ( ! $result) {
+            return false;
+        }
+
+        return true;
+    }
 }

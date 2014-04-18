@@ -83,6 +83,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $adapter->delete('file.txt');
     }
 
+    public function testCopy()
+    {
+        $adapter = $this->adapter;
+        $adapter->write('file.ext', 'content');
+        $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
+        $this->assertTrue($adapter->has('new.ext'));
+        $adapter->delete('file.ext');
+    }
+
     public function testFailingStreamCalls()
     {
         $this->assertFalse($this->adapter->writeStream('false', tmpfile()));

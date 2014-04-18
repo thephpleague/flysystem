@@ -212,6 +212,20 @@ class Local extends AbstractAdapter
         return rename($location, $destination);
     }
 
+    /**
+     * Copy a file
+     *
+     * @param $path
+     * @param $newpath
+     * @return bool
+     */
+    public function copy($path, $newpath)
+    {
+        $location = $this->prefix($path);
+        $destination = $this->prefix($newpath);
+
+        return copy($location, $destination);
+    }
 
     /**
      * Delete a file

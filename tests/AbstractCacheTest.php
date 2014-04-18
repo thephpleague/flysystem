@@ -2,11 +2,13 @@
 
 use League\Flysystem;
 
+use League\Flysystem\Cache\Memory;
+
 class AbstractCacheTest extends PHPUnit_Framework_TestCase
 {
     public function testRecursiveResultWithNonRecursiveRequest()
     {
-        $cache = new League\Flysystem\Cache\Memory;
+        $cache = new Memory;
         $input = array(
             array('path' => 'wanted/path.txt'),
             array('path' => 'unwanted/path.txt'),
@@ -16,5 +18,11 @@ class AbstractCacheTest extends PHPUnit_Framework_TestCase
         );
         $output = $cache->storeContents('wanted', $input, false);
         $this->assertEquals($expected, $output);
+    }
+
+    public function testCopyFail()
+    {
+        $cache = new Memory;
+        $this->assertFalse($cache->copy('one', 'two'));
     }
 }

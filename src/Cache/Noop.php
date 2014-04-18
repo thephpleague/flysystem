@@ -38,6 +38,22 @@ class Noop extends AbstractCache
     /**
      * {@inheritdoc}
      */
+    public function copy($path, $newpath)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rename($path, $newpath)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function storeContents($directory, array $contents, $recursive)
     {
         if ($recursive) {

@@ -215,6 +215,24 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
+     * Copy an object
+     *
+     * @param  string  $path
+     * @param  string  $newpath
+     */
+    public function copy($path, $newpath)
+    {
+        if ( ! $this->has($path)) {
+            return false;
+        }
+
+        $object = $this->cache[$path];
+        $object = array_merge($object, Util::pathinfo($newpath));
+
+        return $this->updateObject($newpath, $object, true);
+    }
+
+    /**
      * Delete an object from cache
      *
      * @param   string  $path  object path
