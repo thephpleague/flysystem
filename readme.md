@@ -15,7 +15,7 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 Do you use Flysystem often? Supporting it through Gittip will help freeing up extra time for me to work on
 bugs, new features and documentation.
 
-[![Support with Gittip](http://img.shields.io/gittip/FrenkyNet.svg)](http://img.shields.io/gittip/FrenkyNet.svg)
+[![Support with Gittip](http://img.shields.io/gittip/FrenkyNet.svg)](https://www.gittip.com/FrenkyNet/)
 
 # Goals
 
