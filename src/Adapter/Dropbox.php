@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use Dropbox\Client;
 use Dropbox\WriteMode;
+use Dropbox\Exception;
 use League\Flysystem\Util;
 
 class Dropbox extends AbstractAdapter
@@ -165,7 +166,23 @@ class Dropbox extends AbstractAdapter
         $path = $this->prefix($path);
         $newpath = $this->prefix($newpath);
 
-        if ( ! $result = $this->client->move($path, $newpath)) {
+        try {
+            $result = $this->client->move($path, $newpath);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return $this->normalizeObject($result);
+    }
+
+    public function copy($path, $newpath)
+    {
+        $path = $this->prefix($path);
+        $newpath = $this->prefix($newpath);
+
+        try {
+            $result = $this->client->copy($path, $newpath);
+        } catch (Exception $e) {
             return false;
         }
 

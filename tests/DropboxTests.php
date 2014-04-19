@@ -190,8 +190,40 @@ class DropboxTests extends PHPUnit_Framework_TestCase
      */
     public function testRename($adapter, $mock)
     {
-        $mock->shouldReceive('move')->andReturn(array('is_dir' => false, 'path' => 'something'), false);
+        $mock->shouldReceive('move')->andReturn(array('is_dir' => false, 'path' => 'something'));
         $this->assertInternalType('array', $adapter->rename('something', 'something'));
+    }
+
+    /**
+     * @dataProvider  dropboxProvider
+     */
+    public function testRenameFail($adapter, $mock)
+    {
+        $mock->shouldReceive('move')->andReturnUsing(function () {
+            throw new \Dropbox\Exception('Message');
+        });
+
         $this->assertFalse($adapter->rename('something', 'something'));
+    }
+
+    /**
+     * @dataProvider  dropboxProvider
+     */
+    public function testCopy($adapter, $mock)
+    {
+        $mock->shouldReceive('copy')->andReturn(array('is_dir' => false, 'path' => 'something'));
+        $this->assertInternalType('array', $adapter->copy('something', 'something'));
+    }
+
+    /**
+     * @dataProvider  dropboxProvider
+     */
+    public function testCopyFail($adapter, $mock)
+    {
+        $mock->shouldReceive('copy')->andReturnUsing(function () {
+            throw new \Dropbox\Exception('Message');
+        });
+
+        $this->assertFalse($adapter->copy('something', 'something'));
     }
 }
