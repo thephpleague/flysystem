@@ -73,6 +73,18 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $this->assertInternalType('int', $result['timestamp']);
     }
 
+    public function testCopy()
+    {
+        $mock = $this->getS3Client();
+        $mock->shouldReceive('copyObject')->once()->andReturn(Mockery::self());
+        $mock->shouldReceive('getAll')->once()->andReturn(array('Key' => 'something', 'LastModified' => '2011-01-01'));
+        $adapter = new Adapter($mock, 'bucketname');
+        $result = $adapter->copy('old', 'new');
+        $this->assertArrayHasKey('path', $result);
+        $this->assertContains('new', $result);
+        $this->assertInternalType('int', $result['timestamp']);
+    }
+
     public function testDeleteDir()
     {
         $mock = $this->getS3Client();

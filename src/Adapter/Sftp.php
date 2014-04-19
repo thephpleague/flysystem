@@ -7,6 +7,7 @@ use Crypt_RSA;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Util;
 use LogicException;
+use InvalidArgumentException;
 
 class Sftp extends AbstractFtpAdapter
 {
@@ -27,11 +28,18 @@ class Sftp extends AbstractFtpAdapter
         return $this;
     }
 
+    public function setNetSftpConnection(Net_SFTP $connection)
+    {
+        $this->connection = $connection;
+
+        return $this;
+    }
+
     public function connect()
     {
-        $this->connection = new Net_SFTP($this->host, $this->port, $this->timeout);
+        $this->connection = $this->connection ?: new Net_SFTP($this->host, $this->port, $this->timeout);
 
-        if ( ! $this->connection) {
+        if ( ! $this->connection->isConnected()) {
             throw new LogicException('Could not connect to host: '.$this->host);
         }
 
@@ -134,9 +142,8 @@ class Sftp extends AbstractFtpAdapter
             return false;
         }
 
-        if ($config && $visibility = $config->get('visibility')) {
+        if ($config && $visibility = $config->get('visibility'))
             $this->setVisibility($path, $visibility);
-        }
 
         return compact('contents', 'visibility');
     }
@@ -236,7 +243,7 @@ class Sftp extends AbstractFtpAdapter
         $visibility = ucfirst($visibility);
 
         if ( ! isset($this->{'perm'.$visibility})) {
-            throw new \InvalidArgumentException('Unknown visibility: '.$visibility);
+            throw new InvalidArgumentException('Unknown visibility: '.$visibility);
         }
 
         $connection = $this->getConnection();

@@ -219,6 +219,25 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
+     * Copy a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  array   file metadata
+     */
+    public function copy($path, $newpath)
+    {
+        $options = $this->getOptions($newpath, array(
+            'Bucket' => $this->bucket,
+            'CopySource' => $this->bucket.'/'.$this->prefix($path),
+        ));
+
+        $result = $this->client->copyObject($options)->getAll();
+
+        return $this->normalizeObject($result, $newpath);
+    }
+
+    /**
      * Delete a file
      *
      * @param   string   $path
