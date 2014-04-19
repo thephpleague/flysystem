@@ -69,9 +69,8 @@ class WebDav extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config && $visibility = $config->get('visibility')) {
+        if ($config && $visibility = $config->get('visibility'))
             $this->setVisibility($path, $visibility);
-        }
 
         return $result;
     }
