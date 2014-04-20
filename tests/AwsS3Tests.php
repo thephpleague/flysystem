@@ -38,15 +38,24 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $mock = $this->getS3Client();
-        $mock->shouldReceive('putObject')->times(4);
+        $mock->shouldReceive('putObject')->times(2);
         $adapter = new Adapter($mock, 'bucketname', 'prefix');
         $adapter->update('something', 'something');
         $adapter->write('something', 'something', 'private');
-        $adapter->writeStream('something', 'something', array(
+    }
+    
+    public function testWriteStream()
+    {
+        $mock = $this->getS3Client();
+        $mock->shouldReceive('putObject')->times(2);
+        $adapter = new Adapter($mock, 'bucketname', 'prefix');
+        $temp = tmpfile();
+        $adapter->writeStream('something', $temp, array(
             'visibility' => 'private',
             'mimetype' => 'text/plain',
         ));
-        $adapter->updateStream('something', 'something');
+        $adapter->updateStream('something', $temp);
+        fclose($temp);
     }
 
     public function testReadStream()

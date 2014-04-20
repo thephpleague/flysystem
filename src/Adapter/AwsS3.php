@@ -159,7 +159,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function updateStream($path, $resource, $config = null)
     {
-        return $this->write($path, $resource, $config);
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**
