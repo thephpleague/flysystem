@@ -590,11 +590,14 @@ class Filesystem implements FilesystemInterface
     public function setVisibility($path, $visibility)
     {
         $path = Util::normalizePath($path);
+
         if ( ! $object = $this->adapter->setVisibility($path, $visibility)) {
             return false;
         }
 
-        $this->cache->updateObject($path, compact('visibility'), true);
+        if ($object === true) $object = compact('visibility');
+
+        $this->cache->updateObject($path, $object, true);
 
         return true;
     }
