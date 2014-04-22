@@ -16,7 +16,7 @@ class SftpTests extends PHPUnit_Framework_TestCase
 
     public function adapterProvider()
     {
-        $adapter = new Sftp([]);
+        $adapter = new Sftp(array());
         $mock = Mockery::mock('Net_SFTP');
         $mock->shouldReceive('__toString')->andReturn('Net_SFTP');
         $mock->shouldReceive('disconnect');
