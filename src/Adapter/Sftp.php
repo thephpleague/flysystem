@@ -106,7 +106,7 @@ class Sftp extends AbstractFtpAdapter
             $path = empty($directory) ? $filename : ($directory . DIRECTORY_SEPARATOR . $filename);
             $result[] = $this->normalizeListingObject($path, $object);
 
-            if ($recursive && $object['type'] === 2) {
+            if ($recursive && $object['type'] === NET_SFTP_TYPE_DIRECTORY) {
                 $result = array_merge($result, $this->listDirectoryContents($path));
             }
         }
@@ -145,7 +145,7 @@ class Sftp extends AbstractFtpAdapter
         if ($config && $visibility = $config->get('visibility'))
             $this->setVisibility($path, $visibility);
 
-        return compact('contents', 'visibility');
+        return compact('contents', 'visibility', 'path');
     }
 
     public function read($path)

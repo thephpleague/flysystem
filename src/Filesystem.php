@@ -387,9 +387,16 @@ class Filesystem implements FilesystemInterface
     public function createDir($dirname)
     {
         $dirname = Util::normalizePath($dirname);
-        $object = $this->adapter->createDir($dirname);
+        $result = $this->adapter->createDir($dirname);
 
-        $this->cache->updateObject($dirname, $object, true);
+        if ( $result === false) {
+            return false;
+        }
+
+        $result['type'] = 'dir';
+        $this->cache->updateObject($dirname, $result, true);
+
+        return true;
     }
 
     /**
@@ -587,9 +594,9 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $object, true);
+        $this->cache->updateObject($path, compact('visibility'), true);
 
-        return $object['visibility'];
+        return true;
     }
 
     /**

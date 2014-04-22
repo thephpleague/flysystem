@@ -18,9 +18,6 @@ namespace League\Flysystem\Adapter {
 
 namespace League\Flysystem {
 
-    /**
-     * @runTestsInSeparateProcesses
-     */
     class FailTests extends \PHPUnit_Framework_TestCase
     {
         public function testFails()
