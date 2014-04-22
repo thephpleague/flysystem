@@ -20,8 +20,7 @@
         "aws/aws-sdk-php": "~2.5",
         "predis/predis": "~0.8.4",
         "dropbox/dropbox-sdk": "~1.1.1",
-        "rackspace/php-opencloud": "~1.9.1",
-        "phpseclib/phpseclib": "~0.3.5"
+        "rackspace/php-opencloud": "~1.9.1"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
