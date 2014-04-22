@@ -249,7 +249,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
-        $object = $this->adapter->update($path, $contents);
+        $object = $this->adapter->update($path, $contents, $config);
 
         if ($object === false) {
             return false;
