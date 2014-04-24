@@ -74,7 +74,7 @@ class Dropbox extends AbstractAdapter
      */
     public function writeStream($path, $resource, $config = null)
     {
-        return $this->uploadStream($path, $resource, $config, WriteMode::add());
+        return $this->uploadStream($path, $resource, WriteMode::add());
     }
 
     /**
