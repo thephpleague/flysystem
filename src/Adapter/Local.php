@@ -16,7 +16,6 @@ class Local extends AbstractAdapter
     protected static $permissions = array(
         'public' => 0744,
         'private' => 0700,
-
     );
 
     /**
@@ -51,7 +50,7 @@ class Local extends AbstractAdapter
      * @param   string  $path
      * @return  string  prefixed path
      */
-    protected function prefix($path)
+    public function prefix($path)
     {
         if (empty($path)) {
             return $this->root;
@@ -70,7 +69,9 @@ class Local extends AbstractAdapter
      */
     public function has($path)
     {
-        return file_exists($this->prefix($path));
+        $location = $this->prefix($path);
+
+        return file_exists($location);
     }
 
     /**
