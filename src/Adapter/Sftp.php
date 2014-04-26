@@ -39,7 +39,7 @@ class Sftp extends AbstractFtpAdapter
     {
         $this->connection = $this->connection ?: new Net_SFTP($this->host, $this->port, $this->timeout);
 
-        if ( ! $this->connection->isConnected()) {
+        if ( ! $this->connection ) {
             throw new LogicException('Could not connect to host: '.$this->host);
         }
 
