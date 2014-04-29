@@ -94,7 +94,8 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $result === true ? array() : $result, true);
+        if ( ! is_array($result)) $result = array();
+        $this->cache->updateObject($path, $result, true);
 
         return true;
     }
@@ -147,6 +148,90 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * Create a file or update if exists
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @param  mixed               $config
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
+    public function put($path, $contents, $config = null)
+    {
+        $path = Util::normalizePath($path);
+
+        if ($this->has($path)) {
+            return $this->update($path, $contents, $config);
+        }
+
+        return $this->write($path, $contents, $config);
+    }
+
+    /**
+     * Create a file or update if exists using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @return  boolean   success boolean
+     */
+    public function putStream($path, $resource, $config = null)
+    {
+        $path = Util::normalizePath($path);
+
+        if ($this->has($path)) {
+            return $this->updateStream($path, $resource);
+        }
+
+        return $this->writeStream($path, $resource, $config);
+    }
+
+    /**
+     * Read and delete a file.
+     *
+     * @param   string  $path
+     * @return  string  file contents
+     * @throws  FileNotFoundException
+     */
+    public function readAndDelete($path)
+    {
+        $path = Util::normalizePath($path);
+        $this->assertPresent($path);
+        $contents = $this->read($path);
+
+        if ( ! $contents) {
+            return false;
+        }
+
+        $this->delete($path);
+
+        return $contents;
+    }
+
+    /**
+     * Update a file
+     *
+     * @param  string                $path     path to file
+     * @param  string                $contents file contents
+     * @param   mixed                $config   Config object or visibility setting
+     * @throws FileNotFoundException
+     * @return boolean               success boolean
+     */
+    public function update($path, $contents, $config = null)
+    {
+        $path = Util::normalizePath($path);
+        $this->assertPresent($path);
+        $object = $this->adapter->update($path, $contents, $config);
+
+        if ($object === false) {
+            return false;
+        }
+
+        $this->cache->updateObject($path, $object, true);
+
+        return true;
+    }
+
+    /**
      * Update a file with the contents of a stream
      *
      * @param   string    $path
@@ -175,21 +260,29 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a file or update if exists using a stream
+     * Read a file
      *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @return  boolean   success boolean
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return string|false          file contents or FALSE when fails
+     *                               to read existing file
      */
-    public function putStream($path, $resource, $config = null)
+    public function read($path)
     {
         $path = Util::normalizePath($path);
+        $this->assertPresent($path);
 
-        if ($this->has($path)) {
-            return $this->updateStream($path, $resource);
+        if ($contents = $this->cache->read($path)) {
+            return $contents;
         }
 
-        return $this->writeStream($path, $resource, $config);
+        if ( ! ($object = $this->adapter->read($path))) {
+            return false;
+        }
+
+        $this->cache->updateObject($path, $object, true);
+
+        return $object['contents'];
     }
 
     /**
@@ -214,76 +307,6 @@ class Filesystem implements FilesystemInterface
         $this->cache->updateObject($path, $object, true);
 
         return $object['stream'];
-    }
-
-    /**
-     * Create a file or update if exists
-     *
-     * @param  string              $path     path to file
-     * @param  string              $contents file contents
-     * @param  mixed               $config
-     * @throws FileExistsException
-     * @return boolean             success boolean
-     */
-    public function put($path, $contents, $config = null)
-    {
-        $path = Util::normalizePath($path);
-
-        if ($this->has($path)) {
-            return $this->update($path, $contents, $config);
-        }
-
-        return $this->write($path, $contents, $config);
-    }
-
-    /**
-     * Update a file
-     *
-     * @param  string                $path     path to file
-     * @param  string                $contents file contents
-     * @param   mixed                $config   Config object or visibility setting
-     * @throws FileNotFoundException
-     * @return boolean               success boolean
-     */
-    public function update($path, $contents, $config = null)
-    {
-        $path = Util::normalizePath($path);
-        $this->assertPresent($path);
-        $object = $this->adapter->update($path, $contents, $config);
-
-        if ($object === false) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object, true);
-
-        return true;
-    }
-
-    /**
-     * Read a file
-     *
-     * @param  string                $path path to file
-     * @throws FileNotFoundException
-     * @return string|false          file contents or FALSE when fails
-     *                               to read existing file
-     */
-    public function read($path)
-    {
-        $path = Util::normalizePath($path);
-        $this->assertPresent($path);
-
-        if ($contents = $this->cache->read($path)) {
-            return $contents;
-        }
-
-        if ( ! $object = $this->adapter->read($path)) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object, true);
-
-        return $object['contents'];
     }
 
     /**

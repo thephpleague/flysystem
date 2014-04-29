@@ -548,4 +548,29 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $data = $mock->readStream('path');
         $this->assertInternalType('resource', $data['stream']);
     }
+
+    public function testReadAndDelete()
+    {
+        $path = 'path.ext';
+        $expected = 'contents';
+        $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[has,read,delete]');
+        $adapter = new Filesystem($mock);
+        $mock->shouldReceive('has')->andReturn(true);
+        $mock->shouldReceive('read')->once()->with($path)->andReturn(array('contents' => $expected));
+        $mock->shouldReceive('delete')->once()->andReturn(true);
+        $result = $adapter->readAndDelete($path);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testReadAndDeleteFail()
+    {
+        $path = 'path.ext';
+        $expected = false;
+        $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[has,read,delete]');
+        $adapter = new Filesystem($mock);
+        $mock->shouldReceive('has')->andReturn(true);
+        $mock->shouldReceive('read')->once()->with($path)->andReturn($expected);
+        $result = $adapter->readAndDelete($path);
+        $this->assertEquals($expected, $result);
+    }
 }

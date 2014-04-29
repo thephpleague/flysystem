@@ -289,6 +289,12 @@ __Delete Files__
 $filesystem->delete('filename.txt');
 ```
 
+__Read and Delete__
+
+```php
+$contents = $filesystem->readAndDelete('filename.txt');
+```
+
 __Rename Files__
 
 ```php
