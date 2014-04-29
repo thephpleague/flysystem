@@ -2,16 +2,16 @@
 
 namespace League\Flysystem;
 
-use Exception;
-use LogicException;
+use Exception as BaseException;
 
-class FileExistsException extends LogicException
+class FileExistsException extends Exception
 {
     protected $path;
 
-    public function __construct($path, $code = 0, Exception $previous = null)
+    public function __construct($path, $code = 0, BaseException $previous = null)
     {
         $this->path = $path;
+
         parent::__construct('File already exists at path: '.$this->getPath(), $code, $previous);
     }
 

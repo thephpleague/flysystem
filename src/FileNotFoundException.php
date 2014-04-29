@@ -2,10 +2,9 @@
 
 namespace League\Flysystem;
 
-use Exception;
-use LogicException;
+use Exception as BaseException;
 
-class FileNotFoundException extends LogicException
+class FileNotFoundException extends Exception
 {
     /**
      * @var  string  $path
@@ -17,9 +16,9 @@ class FileNotFoundException extends LogicException
      *
      * @param  string     $path
      * @param  int        $code
-     * @param  Exception  $previous
+     * @param  \Exception  $previous
      */
-    public function __construct($path, $code = 0, Exception $previous = null)
+    public function __construct($path, $code = 0, BaseException $previous = null)
     {
         $this->path = $path;
 
