@@ -137,7 +137,7 @@ function ftp_fget($connection, $resource, $path)
 
 function ftp_nlist($connection, $directory)
 {
-    return array('some.nested');
+    return array('./some.nested');
 }
 
 function ftp_chmod($connection, $mode, $path)
