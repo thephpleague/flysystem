@@ -221,7 +221,7 @@ class Ftp extends AbstractFtpAdapter
         // List the current directory
         $listing = ftp_nlist($connection, '.');
 
-        array_map(function ($item) {
+        $listing = array_map(function ($item) {
             return ltrim($item, './');
         }, $listing);
 
