@@ -29,5 +29,10 @@
         "phpseclib/phpseclib": "Allows SFTP server storage",
         "sabre/dav": "Enables WebDav support",
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4-dev"
+        }
     }
 }
