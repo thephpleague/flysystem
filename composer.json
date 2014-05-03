@@ -23,7 +23,7 @@
         "rackspace/php-opencloud": "~1.9.1",
         "sabre/dav": "~1.8.7",
         "phpseclib/phpseclib": "~0.3.5",
-        "league/phpunit-coverage-listener" : "~1.0"
+        "league/phpunit-coverage-listener" : "~1.1"
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
@@ -32,5 +32,10 @@
         "phpseclib/phpseclib": "Allows SFTP server storage",
         "sabre/dav": "Enables WebDav support",
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.4-dev"
+        }
     }
 }
