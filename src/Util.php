@@ -144,8 +144,17 @@ class Util
         $directories = array();
 
         foreach ($listing as $object) {
-            if ( ! empty($object['dirname']))
-                $directories[] = $object['dirname'];
+            if (empty($object['dirname'])) {
+                continue;
+            }
+
+            $parent = $object['dirname'];
+
+            while( ! empty($parent) && ! in_array($parent, $directories)) {
+                $directories[] = $parent;
+
+                $parent = static::dirname($parent);
+            }
         }
 
         $directories = array_unique($directories);

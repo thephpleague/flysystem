@@ -403,6 +403,7 @@ class AwsS3 extends AbstractAdapter
         if (substr($result['path'], -1) === '/') {
             $result['type'] = 'dir';
             $result['path'] = rtrim($result['path'], '/');
+            $result['dirname'] = Util::dirname($result['path']);
 
             return $result;
         }

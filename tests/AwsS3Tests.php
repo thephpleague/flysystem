@@ -43,7 +43,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->update('something', 'something');
         $adapter->write('something', 'something', 'private');
     }
-    
+
     public function testWriteStream()
     {
         $mock = $this->getS3Client();
@@ -107,13 +107,13 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     {
         $mock = $this->getS3Client();
         $result = new \ArrayIterator(array(
-            array('Key' => 'path', 'ContentLength' => 20, 'ContentType' => 'text/plain'),
-            array('Key' => 'path/to/dir/'),
+            array('Key' => 'file.ext', 'ContentLength' => 20, 'ContentType' => 'text/plain'),
+            array('Key' => 'path/to_another/dir/'),
         ));
         $mock->shouldReceive('getIterator')->once()->andReturn($result);
         $adapter = new Adapter($mock, 'bucketname');
         $listing = $adapter->listContents();
-        $this->assertCount(2, $listing);
+        $this->assertCount(4, $listing);
         $first = reset($listing);
         $this->assertArrayHasKey('path', $first);
         $this->assertArrayHasKey('type', $first);
