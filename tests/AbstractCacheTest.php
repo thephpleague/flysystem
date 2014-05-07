@@ -10,13 +10,18 @@ class AbstractCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = new Memory;
         $input = array(
-            array('path' => 'wanted/path.txt'),
-            array('path' => 'unwanted/path.txt'),
+            array('path' => 'this_is/unwanted/path.txt'),
+            array('path' => 'this_is/wanted/not/path.txt'),
+            array('path' => 'this_is/wanted/path.txt'),
         );
         $expected = array(
-            array('dirname' => 'wanted', 'path' => 'wanted/path.txt', 'basename' => 'path.txt', 'filename' => 'path', 'extension' => 'txt'),
+            array('dirname' => 'this_is/wanted', 'path' => 'this_is/wanted/path.txt', 'basename' => 'path.txt', 'filename' => 'path', 'extension' => 'txt'),
         );
-        $output = $cache->storeContents('wanted', $input, false);
+        $output = $cache->storeContents('this_is/wanted', $input, false);
+
+        ksort($output);
+        ksort($expected);
+
         $this->assertEquals($expected, $output);
     }
 

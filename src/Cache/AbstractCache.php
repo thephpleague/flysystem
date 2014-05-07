@@ -71,6 +71,11 @@ abstract class AbstractCache implements CacheInterface
             $object = $this->updateObject($object['path'], $object);
             $contents[$index] = $object;
 
+            if ( ! empty($directory) && strpos($object['path'], $directory) === false) {
+                unset($contents[$index]);
+                continue;
+            }
+
             if ($recursive && ! in_array($object['dirname'], $directories)) {
                 $directories[] = $object['dirname'];
             }
@@ -85,7 +90,7 @@ abstract class AbstractCache implements CacheInterface
 
         $this->autosave();
 
-        return $contents;
+        return array_values($contents);
     }
 
     /**
