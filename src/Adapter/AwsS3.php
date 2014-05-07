@@ -399,7 +399,7 @@ class AwsS3 extends AbstractAdapter
         $directories = array();
 
         // Creating list of directories
-        foreach ($contents as &$object) {
+        foreach ($contents as $object) {
             if (!empty($object['dirname']) && !isset($directories[$object['dirname']])) {
                 $directories[$object['dirname']] = true;
             }
