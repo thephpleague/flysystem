@@ -382,7 +382,46 @@ class AwsS3 extends AbstractAdapter
         $contents = iterator_to_array($objectsIterator);
         $result = array_map(array($this, 'normalizeObject'), $contents);
 
-        return Util::emulateDirectories($result);
+        return $this->emulateDirectories($result);
+    }
+    
+    /**
+     * Emulating directories using S3 specific convention
+     *
+     * Extracting from keys it's parent's directories by slash,
+     * eg. from "dir1/dir2/file" extracting "dir1" and "dir1/dir2"
+     *
+     * @param array $contents
+     * @return array
+     */
+    protected function emulateDirectories(array $contents)
+    {
+        $directories = array();
+
+        // Creating list of directories
+        foreach ($contents as &$object) {
+            if (!empty($object['dirname']) && !isset($directories[$object['dirname']])) {
+                $directories[$object['dirname']] = true;
+            }
+        }
+
+        // Extracting from directory paths it's parent's directories by slash
+        foreach ($directories as $path => $dummyValue) {
+            $slashPosition = -1;
+            while (false !== ($slashPosition = strpos($path, '/', $slashPosition+1))) {
+                $subDirectoryPath = substr($path, 0, $slashPosition);
+                if (!isset($directories[$subDirectoryPath])) {
+                    $directories[$subDirectoryPath] = true;
+                }
+            }
+        }
+
+        // For every directory creating library compatible pathinfo structure
+        foreach ($directories as $path => $dummyValue) {
+            $contents[] = \League\Flysystem\Util::pathinfo($path) + array('type' => 'dir');
+        }
+
+        return $contents;
     }
 
     /**
