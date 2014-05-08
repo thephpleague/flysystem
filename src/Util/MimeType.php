@@ -26,14 +26,13 @@ class MimeType
      */
     public static function detectByFileExtension($extension)
     {
-        $mimeType = null;
-        $extensionToMimeTypeMap = self::getExtenionToMimeTypeMap();
-        
-        if (isset($extensionToMimeTypeMap[$extension])) {
-            $mimeType = $extensionToMimeTypeMap[$extension];
-        }
+        static $extensionToMimeTypeMap;
 
-        return $mimeType;
+        if ( ! $extensionToMimeTypeMap) $extensionToMimeTypeMap = static::getExtenionToMimeTypeMap();
+
+        if (isset($extensionToMimeTypeMap[$extension])) {
+            return $extensionToMimeTypeMap[$extension];
+        }
     }
 
     /**
