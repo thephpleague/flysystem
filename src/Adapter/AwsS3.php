@@ -81,7 +81,7 @@ class AwsS3 extends AbstractAdapter
 
         $options = $this->getOptions($path, array(
             'Body' => $contents,
-            'ContentType' => Util::contentMimetype($contents),
+            'ContentType' => Util::guessMimeType($path, $contents),
             'ContentLength' => Util::contentSize($contents),
         ));
 

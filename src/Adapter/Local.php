@@ -174,7 +174,7 @@ class Local extends AbstractAdapter
     public function update($path, $contents, $config = null)
     {
         $location = $this->prefix($path);
-        $mimetype = Util::contentMimetype($contents);
+        $mimetype = Util::guessMimeType($path, $contents);
 
         if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
             return false;

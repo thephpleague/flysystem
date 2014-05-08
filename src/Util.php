@@ -121,16 +121,25 @@ class Util
     }
 
     /**
-     * Get content mimetype from buffer
+     * Guess MIME Type based on the path of the file and it's content
      *
-     * @param   string  $content
-     * @return  string  mimetype
+     * @param  string $path
+     * @param  string $content
+     * @return string|null     MIME Type or NULL if no extension detected
      */
-    public static function contentMimetype($content)
+    public static function guessMimeType($path, $content)
     {
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
+        $mimeType = Util\MimeType::detectByContent($content);
 
-        return $finfo->buffer($content);
+        if (empty($mimeType) || $mimeType === 'text/plain') {
+            $extension = pathinfo($path, PATHINFO_EXTENSION);
+            
+            if ($extension) {
+                $mimeType = Util\MimeType::detectByFileExtension($extension) ?: $mimeType;
+            }
+        }
+
+        return $mimeType;
     }
 
     /**

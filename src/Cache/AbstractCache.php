@@ -288,7 +288,7 @@ abstract class AbstractCache implements CacheInterface
             return false;
         }
 
-        $mimetype = Util::contentMimetype($contents);
+        $mimetype = Util::guessMimeType($path, $contents);
         $this->cache[$path]['mimetype'] = $mimetype;
 
         return $mimetype;
