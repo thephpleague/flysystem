@@ -248,6 +248,7 @@ abstract class AbstractCache implements CacheInterface
         if (isset($this->cache[$path])) {
             unset($this->cache[$path]);
         }
+
         $this->autosave();
 
         return $this;
