@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Util;
 
+use Finfo;
+
 class MimeType
 {
     /**
@@ -12,7 +14,7 @@ class MimeType
      */
     public static function detectByContent($content)
     {
-        $finfo = new \Finfo(FILEINFO_MIME_TYPE);
+        $finfo = new Finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($content);
 
         return $mimeType ?: null;
