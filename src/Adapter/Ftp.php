@@ -121,7 +121,7 @@ class Ftp extends AbstractFtpAdapter
     public function write($path, $contents, $config = null)
     {
         $this->ensureDirectory(Util::dirname($path));
-        $mimetype = Util::contentMimetype($contents);
+        $mimetype = Util::guessMimeType($path, $contents);
         $config = Util::ensureConfig($config);
         $stream = $contents;
 
@@ -247,7 +247,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        $metadata['mimetype'] = Util::contentMimetype($metadata['contents']);
+        $metadata['mimetype'] = Util::guessMimeType($path, $metadata['contents']);
 
         return $metadata;
     }

@@ -190,7 +190,7 @@ class Zip extends AbstractAdapter
             return false;
         }
 
-        $data['mimetype'] = Util::contentMimetype($data['contents']);
+        $data['mimetype'] = Util::guessMimeType($path, $data['contents']);
 
         return $data;
     }

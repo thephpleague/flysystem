@@ -217,7 +217,7 @@ class Sftp extends AbstractFtpAdapter
             return false;
         }
 
-        $data['mimetype'] = Util::contentMimetype($data['contents']);
+        $data['mimetype'] = Util::guessMimeType($path, $data['contents']);
 
         return $data;
     }
