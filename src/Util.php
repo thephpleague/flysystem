@@ -2,7 +2,6 @@
 
 namespace League\Flysystem;
 
-use Finfo;
 use LogicException;
 
 class Util
@@ -133,7 +132,7 @@ class Util
 
         if (empty($mimeType) || $mimeType === 'text/plain') {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
-            
+
             if ($extension) {
                 $mimeType = Util\MimeType::detectByFileExtension($extension) ?: $mimeType;
             }
