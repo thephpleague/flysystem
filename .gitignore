@@ -3,3 +3,7 @@ composer.lock
 index.php
 coverage
 tests/files/*
+
+# PHPStorm #
+############
+.idea/*
