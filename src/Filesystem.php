@@ -600,7 +600,7 @@ class Filesystem implements FilesystemInterface
 
         $this->cache->updateObject($path, $object, true);
 
-        return intval($object['size']);
+        return (integer) $object['size'];
     }
 
     /**
