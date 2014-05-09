@@ -405,7 +405,7 @@ class Filesystem implements FilesystemInterface
      * Create a directory
      *
      * @param   string  $dirname  directory name
-     * @return  void
+     * @return  bool
      */
     public function createDir($dirname)
     {
@@ -600,7 +600,7 @@ class Filesystem implements FilesystemInterface
 
         $this->cache->updateObject($path, $object, true);
 
-        return $object['size'];
+        return intval($object['size']);
     }
 
     /**
