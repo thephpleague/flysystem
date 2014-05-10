@@ -52,7 +52,7 @@ class Local extends AbstractAdapter
      */
     public function prefix($path)
     {
-        if ($path == '') {
+        if ($path === '') {
             return $this->root;
         }
 
