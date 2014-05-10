@@ -388,7 +388,7 @@ class Filesystem implements FilesystemInterface
     {
         $dirname = Util::normalizePath($dirname);
 
-        if (empty($dirname) xor $dirname === '0') {
+        if ($dirname == '') {
             throw new RootViolationException('Root directories can not be deleted.');
         }
 
