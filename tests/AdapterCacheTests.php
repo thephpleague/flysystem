@@ -15,7 +15,7 @@ class AdapterCacheTests extends PHPUnit_Framework_TestCase
 
     public function testLoadExpired()
     {
-        $response = json_encode(array(array(), array('' => true), 1234567890));
+        $response = array('content' => json_encode(array(array(), array('' => true), 1234567890)), 'path' => 'file.json');
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('read')->once()->with('file.json')->andReturn($response);
         $adapter->shouldReceive('delete')->once()->with('file.json');
@@ -26,7 +26,7 @@ class AdapterCacheTests extends PHPUnit_Framework_TestCase
 
     public function testLoadSuccess()
     {
-        $response = json_encode(array(array(), array('' => true), 9876543210));
+        $response = array('content' => json_encode(array(array(), array('' => true), 9876543210)), 'path' => 'file.json');
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('read')->once()->with('file.json')->andReturn($response);
         $cache = new Adapter($adapter, 'file.json', 10);
@@ -34,11 +34,22 @@ class AdapterCacheTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($cache->isComplete('', false));
     }
 
-    public function testSave()
+    public function testSaveExists()
     {
         $response = json_encode(array(array(), array(), null));
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('put')->once()->with('file.json', $response)->andReturn($response);
+        $adapter->shouldReceive('has')->once()->with('file.json')->andReturn(true);
+        $adapter->shouldReceive('update')->once()->with('file.json', $response);
+        $cache = new Adapter($adapter, 'file.json', null);
+        $cache->save();
+    }
+
+    public function testSaveNew()
+    {
+        $response = json_encode(array(array(), array(), null));
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->once()->with('file.json')->andReturn(false);
+        $adapter->shouldReceive('write')->once()->with('file.json', $response);
         $cache = new Adapter($adapter, 'file.json', null);
         $cache->save();
     }
