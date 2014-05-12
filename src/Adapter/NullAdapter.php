@@ -29,7 +29,7 @@ class NullAdapter extends AbstractAdapter
     {
         $type = 'file';
         $config = Util::ensureConfig($config);
-        $result = compact('contents', 'type', 'size',  'path');
+        $result = compact('contents', 'type', 'size', 'path');
 
         if ($visibility = $config->get('visibility')) {
             $result['visibility'] = $visibility;
