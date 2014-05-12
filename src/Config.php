@@ -41,6 +41,17 @@ class Config
     }
 
     /**
+     * Check if an item exists by key
+     *
+     * @param   string  $key
+     * @return  bool
+     */
+    public function has($key)
+    {
+        return array_key_exists($key, $this->settings);
+    }
+
+    /**
      * Try to retrieve a default setting from a config fallback
      *
      * @param   string  $key

@@ -6,6 +6,7 @@ use Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class AwsS3 extends AbstractAdapter
@@ -18,6 +19,14 @@ class AwsS3 extends AbstractAdapter
         'ContentLength' => 'size',
         'ContentType'   => 'mimetype',
         'Size'          => 'size',
+    );
+
+    /**
+     * @var  array  $metaOptions
+     */
+    protected static $metaOptions = array(
+        'Cache-Control',
+        'Expires',
     );
 
     /**
@@ -50,10 +59,10 @@ class AwsS3 extends AbstractAdapter
      */
     public function __construct(S3Client $client, $bucket, $prefix = null, array $options = array())
     {
+        $this->client = $client;
         $this->bucket = $bucket;
         $this->prefix = $prefix;
         $this->options = $options;
-        $this->client = $client;
     }
 
     /**
@@ -78,25 +87,16 @@ class AwsS3 extends AbstractAdapter
     public function write($path, $contents, $config = null)
     {
         $config = Util::ensureConfig($config);
-
         $options = $this->getOptions($path, array(
             'Body' => $contents,
             'ContentType' => Util::guessMimeType($path, $contents),
             'ContentLength' => Util::contentSize($contents),
-        ));
-
-        if ($visibility = $config->get('visibility')) {
-            $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
-        }
+        ), $config);
 
         $result = $this->client->putObject($options);
 
         if ($result === false) {
             return false;
-        }
-
-        if ($visibility) {
-            $options['visibility'] = $visibility;
         }
 
         return $this->normalizeObject($options);
@@ -114,24 +114,11 @@ class AwsS3 extends AbstractAdapter
     public function writeStream($path, $resource, $config = null)
     {
         $config = Util::ensureConfig($config);
-
         $options = $this->getOptions($path, array(
             'Body' => $resource,
-        ));
-
-        if ($visibility = $config->get('visibility')) {
-            $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
-        }
-
-        if ($mimetype = $config->get('mimetype')) {
-            $options['ContentType'] = $mimetype;
-        }
+        ), $config);
 
         $this->client->putObject($options);
-
-        if ($visibility) {
-            $options['visibility'] = $visibility;
-        }
 
         return $this->normalizeObject($options);
     }
@@ -337,14 +324,16 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions($path);
         $result = $this->client->getObjectAcl($options)->getAll();
+        $visibility = AdapterInterface::VISIBILITY_PRIVATE;
 
         foreach ($result['Grants'] as $grant) {
             if (isset($grant['Grantee']['URI']) && $grant['Grantee']['URI'] === Group::ALL_USERS && $grant['Permission'] === Permission::READ) {
-                return array('visibility' => AdapterInterface::VISIBILITY_PUBLIC);
+                $visibility = AdapterInterface::VISIBILITY_PUBLIC;
+                break;
             }
         }
 
-        return array('visibility' => AdapterInterface::VISIBILITY_PRIVATE);
+        return compact('visibility');
     }
 
     /**
@@ -426,12 +415,48 @@ class AwsS3 extends AbstractAdapter
      *
      * @return  array   AWS options
      */
-    protected function getOptions($path, array $options = array())
+    protected function getOptions($path, array $options = array(), Config $config = null)
     {
         $options['Key'] = $this->prefix($path);
         $options['Bucket'] = $this->bucket;
 
+        if ($config) {
+            $options = array_merge($options, $this->getOptionsFromConfig($config));
+        }
+
         return array_merge($this->options, $options);
+    }
+
+    /**
+     * Retrieve options from a Config instance
+     *
+     * @param   Config  $config
+     * @return  array
+     */
+    protected function getOptionsFromConfig(Config $config)
+    {
+        $options = array();
+
+        foreach (static::$metaOptions as $option) {
+            if ( ! $config->has($option)) continue;
+            $options[$option] = $config->get($option);
+        }
+
+        if ($visibility = $config->get('visibility')) {
+            // For local reference
+            $options['visibility'] = $visibility;
+            // For external reference
+            $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
+        }
+
+        if ($mimetype = $config->get('mimetype')) {
+            // For local reference
+            $options['mimetype'] = $mimetype;
+            // For external reference
+            $options['ContentType'] = $mimetype;
+        }
+
+        return $options;
     }
 
     /**

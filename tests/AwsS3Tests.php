@@ -53,6 +53,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->writeStream('something', $temp, array(
             'visibility' => 'private',
             'mimetype' => 'text/plain',
+            'Expires' => 'it does',
         ));
         $adapter->updateStream('something', $temp);
         fclose($temp);
