@@ -18,6 +18,8 @@ class Local extends AbstractAdapter
         'private' => 0700,
     );
 
+    protected $root;
+
     /**
      * Constructor
      *
