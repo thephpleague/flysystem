@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use Aws\Common\Exception\MultipartUploadException;
+use Aws\S3\Model\MultipartUpload\AbstractTransfer;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use \Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
@@ -39,12 +40,12 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * @var  array  $options  default options[
-     *                            Multipart=1024 Mb - After how many Gb should multipart be used
+     *                            Multipart=1024 Mb - After what size should multipart be used
      *                            MinPartSize=25 Mb - Minimum size of parts for each part
      *                            Concurrency=3 - If multipart is used, how many concurrent connections should be used
      *                            ]
      */
-    protected $options = array('Multipart' => 1024, 'MinPartSize' => 25, 'Concurrency' => 3);
+    protected $options = array('Multipart' => 1024, 'MinPartSize' => 32, 'Concurrency' => 3);
 
     /**
      * Constructor
@@ -141,8 +142,9 @@ class AwsS3 extends AbstractAdapter
 
         // if we don't know the streamsize, we have to assume we need to upload using multipart,
         //      otherwise it might fail
+        $defaultMultipartLimit = $this->mbToBytes($options['Multipart']);
         if ((isset($options['Multipart'])) &&
-            ($config->get('streamsize', $options['Multipart'] + 1) > $options['Multipart'])
+            ($config->get('streamsize', ($defaultMultipartLimit + 1)) > $defaultMultipartLimit)
         ) {
             $this->putObjectMultipart($options);
         } else {
@@ -201,7 +203,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string $path
      *
-     * @return  resource A read stream to the path given
+     * @return    array   file metadata
      */
     public function readStream($path)
     {
@@ -215,7 +217,6 @@ class AwsS3 extends AbstractAdapter
 
         $stream = fopen('s3://'.$this->bucket.'/'.$this->prefix($path), 'r', false, $context);
 
-        // NOTE HG: this compact() here it's useless because it just returns the actual variable and not an array
         return compact('stream');
     }
 
@@ -319,8 +320,6 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the mimetype of a file
      *
-     * NOTE HG: I feel this name is misleading as it actually returns the file metadata and not its size
-     *
      * @param   string $path
      *
      * @return  array   file metadata
@@ -332,8 +331,6 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * Get the metadata of a file, the filesize will be in $object['size']
-     *
-     * NOTE HG: I feel this name is misleading as it actually returns the file metadata and not its size
      *
      * @param   string $path
      *
@@ -347,8 +344,6 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the timestamp of a file
      *
-     * NOTE HG: I feel this name is misleading as it actually returns the file metadata and not its size
-     *
      * @param   string $path
      *
      * @return  array   file metadata
@@ -360,8 +355,6 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * Get the visibility of a file
-     *
-     * NOTE HG: I feel this name is misleading as it actually returns the file metadata and not its size
      *
      * @param   string $path
      *
@@ -397,8 +390,6 @@ class AwsS3 extends AbstractAdapter
 
         $this->client->putObjectAcl($options);
 
-        // NOTE HG: this compact() here it's useless because it just returns the actual variable and not an array
-        //          Also, this is a setter, so I would return $this so it behaves as a fluent interface
         return compact('visibility');
     }
 
@@ -516,12 +507,12 @@ class AwsS3 extends AbstractAdapter
     protected function putObjectMultipart($options)
     {
         // Prepare the upload parameters.
-        /** @var UploadBuilder $uploader */
-        $uploader = UploadBuilder::newInstance()
+        /** @var UploadBuilder $uploadBuilder */
+        $uploadBuilder = UploadBuilder::newInstance()
             ->setClient($this->client)
             // This options are always set in the $options array, so we don't need to check for them
             ->setSource($options['Body'])
-            ->setBucket($options['Bucket'])
+            ->setBucket($options['Bucket']) // IDE complains here, but the method exists in UploadBuilder
             ->setKey($options['Key'])
             ->setMinPartSize($options['MinPartSize'])
             ->setOption('ACL', $options['ACL'])
@@ -529,9 +520,10 @@ class AwsS3 extends AbstractAdapter
 
         // content type might not be set, so we have to check for it
         if (isset($options['ContentType'])) {
-            $uploader->setOption('ContentType', $options['ContentType']);
+            $uploadBuilder->setOption('ContentType', $options['ContentType']);
         }
-        $uploader->build();
+        /** @var AbstractTransfer $uploader */
+        $uploader = $uploadBuilder->build();
 
         // Perform the upload. Abort the upload if something goes wrong.
         try {
@@ -541,5 +533,10 @@ class AwsS3 extends AbstractAdapter
             $uploader->abort();
             throw $e;
         }
+    }
+
+    private function mbToBytes($megabytes)
+    {
+        return $megabytes * 1024 * 1024;
     }
 }
