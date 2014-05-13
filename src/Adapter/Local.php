@@ -93,7 +93,7 @@ class Local extends AbstractAdapter
         }
 
         $type = 'file';
-        $result = compact('contents', 'type', 'size',  'path');
+        $result = compact('contents', 'type', 'size', 'path');
 
         if ($visibility = $config->get('visibility')) {
             $result['visibility'] = $visibility;
