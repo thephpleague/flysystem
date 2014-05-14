@@ -40,7 +40,7 @@ class Predis extends AbstractCache
      */
     public function load()
     {
-        if (($contents = $this->client->get($this->key)) !=== null) {
+        if (($contents = $this->client->get($this->key)) !== null) {
             $this->setFromStorage($contents);
         }
     }
