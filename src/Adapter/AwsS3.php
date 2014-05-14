@@ -533,9 +533,10 @@ class AwsS3 extends AbstractAdapter
             // we just catch this exception here so we can abort the upload
             $uploader->abort();
             throw $e;
-        } catch (RuntimeException $e) {
+        } catch (\Exception $e) {
             // This happens when trying to make a ParallelTransfer with a remote source stream, so we just
             //      fallback to a SerialTransfer and try again
+            // Tried catching the RuntimeException directly but it didn't work.
             $this->fallBackToSerialTransfer($uploadBuilder);
         }
     }
