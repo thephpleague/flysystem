@@ -126,7 +126,6 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * Write using a stream
-     * For streams (files) above 3Gb its necessary to use this function
      *
      * @param   string    $path
      * @param   resource  $resource
