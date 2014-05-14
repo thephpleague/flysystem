@@ -194,6 +194,7 @@ class Ftp extends AbstractFtpAdapter
 
     public function createDir($dirname)
     {
+        $result = false;
         $connection = $this->getConnection();
         $directories = explode('/', $dirname);
 

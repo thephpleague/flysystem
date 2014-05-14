@@ -108,10 +108,10 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   string  $mode
-     * @return  array   file metadata
+     * @param   WriteMode  $mode
+     * @return  array|false   file metadata
      */
-    protected function upload($path, $contents, $mode)
+    protected function upload($path, $contents, WriteMode $mode)
     {
         $location = $this->prefix($path);
 
@@ -122,7 +122,15 @@ class Dropbox extends AbstractAdapter
         return $this->normalizeObject($result, $path);
     }
 
-    protected function uploadStream($path, $resource, $mode)
+    /**
+     * Do the actual upload of a file resource
+     *
+     * @param   string  $path
+     * @param   resource  $resource
+     * @param   WriteMode  $mode
+     * @return  array|false   file metadata
+     */
+    protected function uploadStream($path, $resource, WriteMode $mode)
     {
         $location = $this->prefix($path);
 
