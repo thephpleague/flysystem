@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use Aws\Common\Exception\MultipartUploadException;
+use Aws\Common\Exception\RuntimeException;
 use Aws\S3\Model\MultipartUpload\AbstractTransfer;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use \Aws\S3\S3Client;
@@ -532,9 +533,39 @@ class AwsS3 extends AbstractAdapter
             // we just catch this exception here so we can abort the upload
             $uploader->abort();
             throw $e;
+        } catch (RuntimeException $e) {
+            // This happens when trying to make a ParallelTransfer with a remote source stream, so we just
+            //      fallback to a SerialTransfer and try again
+            $this->fallBackToSerialTransfer($uploadBuilder);
         }
     }
 
+    /**
+     * @param UploadBuilder $uploadBuilder
+     *
+     * @throws \Aws\Common\Exception\MultipartUploadException
+     * @throws \Exception
+     */
+    private function fallBackToSerialTransfer(UploadBuilder $uploadBuilder)
+    {
+        $uploadBuilder->setConcurrency(1);
+        $uploader = $uploadBuilder->build();
+        try {
+            $uploader->upload();
+        } catch (MultipartUploadException $e) {
+            // we just catch this exception here so we can abort the upload
+            $uploader->abort();
+            throw $e;
+        }
+    }
+
+    /**
+     * Converts megabytes to bytes
+     *
+     * @param $megabytes
+     *
+     * @return mixed
+     */
     private function mbToBytes($megabytes)
     {
         return $megabytes * 1024 * 1024;
