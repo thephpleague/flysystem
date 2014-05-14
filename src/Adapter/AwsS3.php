@@ -523,34 +523,19 @@ class AwsS3 extends AbstractAdapter
         if (isset($options['ContentType'])) {
             $uploadBuilder->setOption('ContentType', $options['ContentType']);
         }
-        /** @var AbstractTransfer $uploader */
-        $uploader = $uploadBuilder->build();
+
+        // create the uploader
+        try {
+            /** @var AbstractTransfer $uploader */
+            $uploader = $uploadBuilder->build();
+        } catch (RuntimeException $e) {
+            // This happens when trying to make a ParallelTransfer with a remote source stream,
+            //      or with no concurrency set. We fallback to a SerialTransfer and try again.
+            $uploadBuilder->setConcurrency(1);
+            $uploader = $uploadBuilder->build();
+        }
 
         // Perform the upload. Abort the upload if something goes wrong.
-        try {
-            $uploader->upload();
-        } catch (MultipartUploadException $e) {
-            // we just catch this exception here so we can abort the upload
-            $uploader->abort();
-            throw $e;
-        } catch (\Exception $e) {
-            // This happens when trying to make a ParallelTransfer with a remote source stream, so we just
-            //      fallback to a SerialTransfer and try again
-            // Tried catching the RuntimeException directly but it didn't work.
-            $this->fallBackToSerialTransfer($uploadBuilder);
-        }
-    }
-
-    /**
-     * @param UploadBuilder $uploadBuilder
-     *
-     * @throws \Aws\Common\Exception\MultipartUploadException
-     * @throws \Exception
-     */
-    private function fallBackToSerialTransfer(UploadBuilder $uploadBuilder)
-    {
-        $uploadBuilder->setConcurrency(1);
-        $uploader = $uploadBuilder->build();
         try {
             $uploader->upload();
         } catch (MultipartUploadException $e) {
