@@ -102,7 +102,16 @@ class AwsS3 extends AbstractAdapter
             $options['ACL'] = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
         }
 
-        $result = $this->client->putObject($options);
+        $multipartLimit = $this->mbToBytes($options['Multipart']);
+        if ($options['ContentLength'] > $multipartLimit) {
+            try {
+                $result = $this->putObjectMultipart($options);
+            } catch (\Exception $e) {
+                $result = false;
+            }
+        } else {
+            $result = $this->client->putObject($options);
+        }
 
         if ($result === false) {
             return false;
@@ -117,7 +126,7 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * Write using a stream
-     * For streams (files) above 3Gb its necessary to use this function AND set the stream size (filesize)
+     * For streams (files) above 3Gb its necessary to use this function
      *
      * @param   string    $path
      * @param   resource  $resource
@@ -141,12 +150,9 @@ class AwsS3 extends AbstractAdapter
             $options['ContentType'] = $mimetype;
         }
 
-        // if we don't know the streamsize, we have to assume we need to upload using multipart,
-        //      otherwise it might fail
-        $defaultMultipartLimit = $this->mbToBytes($options['Multipart']);
-        if ((isset($options['Multipart'])) &&
-            ($config->get('streamsize', ($defaultMultipartLimit + 1)) > $defaultMultipartLimit)
-        ) {
+        //if we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail
+        $multipartLimit = $this->mbToBytes($options['Multipart']);
+        if ($config->get('streamsize', ($multipartLimit + 1)) > $multipartLimit) {
             $this->putObjectMultipart($options);
         } else {
             $this->client->putObject($options);
@@ -543,6 +549,8 @@ class AwsS3 extends AbstractAdapter
             $uploader->abort();
             throw $e;
         }
+
+        return true;
     }
 
     /**
