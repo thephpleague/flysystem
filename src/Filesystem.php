@@ -38,7 +38,7 @@ class Filesystem implements FilesystemInterface
     {
         $this->adapter = $adapter;
         $this->cache = $cache ?: new Cache\Memory;
-        $this->cache->save();
+        $this->cache->load();
         $this->config = Util::ensureConfig($config);
     }
 
