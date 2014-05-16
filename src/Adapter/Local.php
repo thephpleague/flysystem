@@ -417,10 +417,13 @@ class Local extends AbstractAdapter
      */
     protected function normalizeFileInfo($path, SplFileInfo $file)
     {
-        $normalized = array('type' => $file->getType(), 'path' => $path);
+        $normalized = array(
+            'type' => $file->getType(),
+            'path' => $path,
+            'timestamp' => $file->getMTime()
+        );
 
         if ($normalized['type'] === 'file') {
-            $normalized['timestamp'] = $file->getMTime();
             $normalized['size'] = $file->getSize();
         }
 
