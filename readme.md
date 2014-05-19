@@ -56,6 +56,14 @@ spl_autoload_register(function($class) {
 });
 ```
 
+## Integrations
+
+Want to get started quickly? Check out some of these integrations:
+
+* Laravel integration: https://github.com/GrahamCampbell/Laravel-Flysystem
+* Symfony integration: https://github.com/1up-lab/OneupFlysystemBundle
+* Backup manager: https://github.com/heybigname/backup-manager
+
 ## Adapters
 
 * Local
