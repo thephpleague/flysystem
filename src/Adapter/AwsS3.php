@@ -2,7 +2,12 @@
 
 namespace League\Flysystem\Adapter;
 
-use Aws\S3\S3Client;
+use Aws\Common\Exception\MultipartUploadException;
+use Aws\Common\Exception\RuntimeException;
+use Aws\S3\Model\MultipartUpload\ParallelTransfer;
+use Aws\S3\Model\MultipartUpload\SerialTransfer;
+use Aws\S3\Model\MultipartUpload\UploadBuilder;
+use \Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
 use League\Flysystem\AdapterInterface;
@@ -35,7 +40,7 @@ class AwsS3 extends AbstractAdapter
     protected $bucket;
 
     /**
-     * @var  Aws\S3\S3Client  $client  S3 Client
+     * @var  \Aws\S3\S3Client  $client  S3 Client
      */
     protected $client;
 
@@ -45,24 +50,37 @@ class AwsS3 extends AbstractAdapter
     protected $prefix;
 
     /**
-     * @var  array  $options  default options
+     * @var  array  $options  default options[
+     *                            Multipart=1024 Mb - After what size should multipart be used
+     *                            MinPartSize=32 Mb - Minimum size of parts for each part
+     *                            Concurrency=3 - If multipart is used, how many concurrent connections should be used
+     *                            ]
      */
-    protected $options = array();
+    protected $options = array('Multipart' => 1024, 'MinPartSize' => 32, 'Concurrency' => 3);
+
+    protected $uploadBuilder;
 
     /**
      * Constructor
      *
-     * @param  S3Client  $client
-     * @param  string    $bucket
-     * @param  string    $prefix
-     * @param  array     $options
+     * @param  S3Client      $client
+     * @param  string        $bucket
+     * @param  string        $prefix
+     * @param  array         $options
+     * @param  UploadBuilder $uploadBuilder
      */
-    public function __construct(S3Client $client, $bucket, $prefix = null, array $options = array())
-    {
+    public function __construct(
+        S3Client $client,
+        $bucket,
+        $prefix = null,
+        array $options = array(),
+        $uploadBuilder = null
+    ) {
         $this->client = $client;
         $this->bucket = $bucket;
         $this->prefix = $prefix;
-        $this->options = $options;
+        $this->options = array_merge($this->options, $options);
+        $this->setUploadBuilder($uploadBuilder);
     }
 
     /**
@@ -82,6 +100,7 @@ class AwsS3 extends AbstractAdapter
      * @param   string  $path
      * @param   string  $contents
      * @param   mixed   $config
+     *
      * @return  array   file metadata
      */
     public function write($path, $contents, $config = null)
@@ -93,7 +112,16 @@ class AwsS3 extends AbstractAdapter
             'ContentLength' => Util::contentSize($contents),
         ), $config);
 
-        $result = $this->client->putObject($options);
+        $multipartLimit = $this->mbToBytes($options['Multipart']);
+        if ($options['ContentLength'] > $multipartLimit) {
+            try {
+                $result = $this->putObjectMultipart($options);
+            } catch (\Exception $e) {
+                $result = false;
+            }
+        } else {
+            $result = $this->client->putObject($options);
+        }
 
         if ($result === false) {
             return false;
@@ -107,18 +135,26 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config
+     * @param   mixed     $config ['visibility'='private', 'mimetype'='', 'streamsize'=0]
      *
      * @return  array     file metadata
      */
     public function writeStream($path, $resource, $config = null)
     {
         $config = Util::ensureConfig($config);
-        $options = $this->getOptions($path, array(
-            'Body' => $resource,
-        ), $config);
+        $options = array('Body' => $resource,);
 
-        $this->client->putObject($options);
+        $options = $this->getOptions($path, $options, $config);
+
+        // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail
+        // However, if we don't have an uploadBuilder set, we have to try using putObject()
+        $multipartLimit = $this->mbToBytes($options['Multipart']);
+        $uploadBuilder = $this->getUploadBuilder();
+        if (($config->get('streamsize', ($multipartLimit + 1)) > $multipartLimit) && (!empty($uploadBuilder))) {
+            $this->putObjectMultipart($options);
+        } else {
+            $this->client->putObject($options);
+        }
 
         return $this->normalizeObject($options);
     }
@@ -166,8 +202,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get a read-stream for a file
      *
-     * @param   string  $path
-     * @return  array   file metadata
+     * @param   string $path
+     *
+     * @return    array   file metadata
      */
     public function readStream($path)
     {
@@ -284,7 +321,8 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the mimetype of a file
      *
-     * @param   string  $path
+     * @param   string $path
+     *
      * @return  array   file metadata
      */
     public function getMimetype($path)
@@ -293,9 +331,10 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the file of a file
+     * Get the metadata of a file, the filesize will be in $object['size']
      *
-     * @param   string  $path
+     * @param   string $path
+     *
      * @return  array   file metadata
      */
     public function getSize($path)
@@ -306,7 +345,8 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the timestamp of a file
      *
-     * @param   string  $path
+     * @param   string $path
+     *
      * @return  array   file metadata
      */
     public function getTimestamp($path)
@@ -317,7 +357,8 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the visibility of a file
      *
-     * @param   string  $path
+     * @param   string $path
+     *
      * @return  array   file metadata
      */
     public function getVisibility($path)
@@ -339,8 +380,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get mimetype of a file
      *
-     * @param   string  $path
-     * @param   string  $visibility
+     * @param   string $path
+     * @param   string $visibility
+     *
      * @return  array   file metadata
      */
     public function setVisibility($path, $visibility)
@@ -410,14 +452,15 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get options for a AWS call
      *
-     * @param   string  $path
-     * @param   array   $options
+     * @param string $path
+     * @param array  $options
+     * @param Config $config
      *
      * @return  array   AWS options
      */
     protected function getOptions($path, array $options = array(), Config $config = null)
     {
-        $options['Key'] = $this->prefix($path);
+        $options['Key']    = $this->prefix($path);
         $options['Bucket'] = $this->bucket;
 
         if ($config) {
@@ -472,5 +515,111 @@ class AwsS3 extends AbstractAdapter
         }
 
         return $this->prefix.'/'.$path;
+    }
+
+    /**
+     * Get option for a AWS call
+     *
+     * @param $key
+     *
+     * @return  mixed   AWS option
+     */
+    protected function getOption($key)
+    {
+        return $this->options[$key];
+    }
+
+    /**
+     * Set option for a AWS call
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return  self
+     */
+    protected function setOption($key, $value)
+    {
+        $this->options[$key] = $value;
+
+        return $this;
+    }
+
+    protected function putObjectMultipart($options)
+    {
+        // Prepare the upload parameters.
+        /** @var UploadBuilder $uploadBuilder */
+        $uploadBuilder = $this->getUploadBuilder();
+
+        $uploadBuilder->setClient($this->client)
+            // This options are always set in the $options array, so we don't need to check for them
+            ->setSource($options['Body'])
+            ->setBucket($options['Bucket']) // IDE complains here, but the method exists in UploadBuilder
+            ->setKey($options['Key'])
+            ->setMinPartSize($options['MinPartSize'])
+            ->setConcurrency($options['Concurrency']);
+
+
+        if (isset($options['ContentType'])) {
+            $uploadBuilder->setOption('ACL', $options['ACL']);
+        }
+
+        if (isset($options['ContentType'])) {
+            $uploadBuilder->setOption('ContentType', $options['ContentType']);
+        }
+
+        // create the uploader
+        try {
+            /** @var ParallelTransfer $uploader */
+            $uploader = $uploadBuilder->build();
+        } catch (RuntimeException $e) {
+            // This happens when trying to make a ParallelTransfer with a remote source stream,
+            //      or with no concurrency set. We fallback to a SerialTransfer and try again.
+            /** @var SerialTransfer $uploader */
+            $uploadBuilder->setConcurrency(1);
+            $uploader = $uploadBuilder->build();
+        }
+
+        // Perform the upload. Abort the upload if something goes wrong.
+        try {
+            $uploader->upload();
+        } catch (MultipartUploadException $e) {
+            // we just catch this exception here so we can abort the upload
+            $uploader->abort();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Converts megabytes to bytes
+     *
+     * @param $megabytes
+     *
+     * @return mixed
+     */
+    private function mbToBytes($megabytes)
+    {
+        return $megabytes * 1024 * 1024;
+    }
+
+    /**
+     * @param null $uploadBuilder
+     *
+     * @return self
+     */
+    public function setUploadBuilder($uploadBuilder)
+    {
+        $this->uploadBuilder = $uploadBuilder;
+
+        return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getUploadBuilder()
+    {
+        return $this->uploadBuilder;
     }
 }
