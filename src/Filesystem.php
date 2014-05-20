@@ -172,6 +172,7 @@ class Filesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   null      $config
      * @return  boolean   success boolean
      */
     public function putStream($path, $resource, $config = null)
@@ -405,12 +406,13 @@ class Filesystem implements FilesystemInterface
      * Create a directory
      *
      * @param   string  $dirname  directory name
+     * @param   array   $options
      * @return  bool
      */
-    public function createDir($dirname)
+    public function createDir($dirname, array $options = array())
     {
         $dirname = Util::normalizePath($dirname);
-        $result = $this->adapter->createDir($dirname);
+        $result = $this->adapter->createDir($dirname, $options);
 
         if ( $result === false) {
             return false;

@@ -106,9 +106,17 @@ class WebDav extends AbstractAdapter
         }
     }
 
-    public function createDir($path)
+    /**
+     * Create a directory
+     *
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
+     */
+    public function createDir($dirname, array $options = array())
     {
-        $response = $this->client->request('MKCOL', $path);
+        $response = $this->client->request('MKCOL', $dirname);
 
         return $response['statusCode'] === 201;
     }

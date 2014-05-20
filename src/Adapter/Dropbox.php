@@ -18,7 +18,7 @@ class Dropbox extends AbstractAdapter
     );
 
     /**
-     * @var  Dropbox\Client  $client
+     * @var  \Dropbox\Client  $client
      */
     protected $client;
 
@@ -207,9 +207,17 @@ class Dropbox extends AbstractAdapter
         return $this->delete($path);
     }
 
-    public function createDir($path)
+    /**
+     * Create a directory
+     *
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
+     */
+    public function createDir($dirname, array $options = array())
     {
-        return array('path' => $path, 'type' => 'dir');
+        return array('path' => $dirname, 'type' => 'dir');
     }
 
     public function getMetadata($path)
