@@ -34,7 +34,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
 
     protected function getAbstractTransfer()
     {
-        return Mockery::mock('Aws\S3\Model\MultipartUpload\UploadBuilder[upload]');
+        return Mockery::mock('Aws\S3\Model\MultipartUpload\AbstractTransfer');
     }
 
     public function testHas()
@@ -58,7 +58,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     {
         $mockS3Client = $this->getS3Client();
 
-        $mockTransfer = Mockery::mock('Aws\S3\Model\MultipartUpload\AbstractTransfer');
+        $mockTransfer = $this->getAbstractTransfer();
         $mockTransfer->shouldReceive('upload')->times(2);
 
         $mockUploadBuilder = $this->getUploadBuilder();
