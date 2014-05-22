@@ -266,7 +266,7 @@ class Ftp extends AbstractFtpAdapter
     private function getMetadataByList($path)
     {
         // GetMetadata with remote FTP command LIST
-        if (! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path))) {
+        if (! ($object = ftp_rawlist($this->getConnection(), $path))) {
             return false;
         }
 
