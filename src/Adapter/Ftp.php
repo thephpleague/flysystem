@@ -254,7 +254,7 @@ class Ftp extends AbstractFtpAdapter
 
             if (($size > 0) && ((int)substr($object[0],0,3) === 500)) {
                 // Retry with ftp_rawlist method (fix for compatibility with Filezilla FTP Server
-                return $this->getMetadataByList($path));
+                return $this->getMetadataByList($path);
             }
 
             return false;
