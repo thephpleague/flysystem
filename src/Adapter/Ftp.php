@@ -233,50 +233,50 @@ class Ftp extends AbstractFtpAdapter
         return ftp_mkdir($connection, $directory);
     }
 
-    public function getMetadata($path) 
+    public function getMetadata($path)
     {
-		if (empty($path) || ! ($object = $this->getMetadataByStat($path))) {
-			return false;
-		}
+        if (empty($path) || ! ($object = $this->getMetadataByStat($path))) {
+            return false;
+        }
 		
-		return $this->normalizeObject($object, '');
-	}
+        return $this->normalizeObject($object, '');
+    }
 
-	private function getMetadataByStat($path)
-	{
-		// GetMetadata with remote FTP command STAT
-		if (! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path))) {
-			return false;
-		}
+    private function getMetadataByStat($path)
+    {
+        // GetMetadata with remote FTP command STAT
+        if (! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path))) {
+            return false;
+        }
 	
-		// Check if result = "500 Syntax error, command unrecognized" ?
-		if ($size = count($object) < 3) {
+        // Check if result = "500 Syntax error, command unrecognized" ?
+        if ($size = count($object) < 3) {
 
-			if (($size > 0) && ((int)substr($object[0],0,3) === 500)) {
-				// Retry with ftp_rawlist method (fix for compatibility with Filezilla FTP Server
-				return $this->getMetadataByList($path));
-			}
+            if (($size > 0) && ((int)substr($object[0],0,3) === 500)) {
+                // Retry with ftp_rawlist method (fix for compatibility with Filezilla FTP Server
+                return $this->getMetadataByList($path));
+            }
 
-			return false;
-		}
+            return false;
+        }
 
-		return $object[1];
-	}
+        return $object[1];
+    }
 
-	private function getMetadataByList($path)
-	{
-		// GetMetadata with remote FTP command LIST
-		if (! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path))) {
-			return false;
-		}
+    private function getMetadataByList($path)
+    {
+        // GetMetadata with remote FTP command LIST
+        if (! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path))) {
+            return false;
+        }
 
-		// Check if result is a error code ?
-		if (is_numeric(substr($object[0], 0, 3))) {
-			return false;
-		}
+        // Check if result is a error code ?
+        if (is_numeric(substr($object[0], 0, 3))) {
+            return false;
+        }
 
-		return $object[1];
-	}
+        return $object[1];
+    }
 
     public function getMimetype($path)
     {
