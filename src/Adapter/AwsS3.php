@@ -8,7 +8,7 @@ use Aws\S3\Model\MultipartUpload\AbstractTransfer;
 use Aws\S3\Model\MultipartUpload\ParallelTransfer;
 use Aws\S3\Model\MultipartUpload\SerialTransfer;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
-use \Aws\S3\S3Client;
+use Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
 use League\Flysystem\AdapterInterface;
@@ -515,31 +515,6 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get option for a AWS call
-     *
-     * @param   $key
-     * @return  mixed  AWS option
-     */
-    protected function getOption($key)
-    {
-        return $this->options[$key];
-    }
-
-    /**
-     * Set option for a AWS call
-     *
-     * @param   $key
-     * @param   $value
-     * @return  self
-     */
-    protected function setOption($key, $value)
-    {
-        $this->options[$key] = $value;
-
-        return $this;
-    }
-
-    /**
      * Sends an object to a bucket using a multipart transfer, possibly also using concurrency
      *
      * @param   array  $options  Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL]
@@ -576,7 +551,7 @@ class AwsS3 extends AbstractAdapter
      * @param   UploadBuilder     $uploadBuilder
      * @return  AbstractTransfer
      */
-    private function createUploader(UploadBuilder $uploadBuilder)
+    protected function createUploader(UploadBuilder $uploadBuilder)
     {
         try {
             /** @var ParallelTransfer $uploader */
@@ -599,7 +574,7 @@ class AwsS3 extends AbstractAdapter
      * @param   AbstractTransfer  $uploader
      * @return  bool
      */
-    private function upload(AbstractTransfer $uploader)
+    protected function upload(AbstractTransfer $uploader)
     {
         try {
             $uploader->upload();
@@ -618,7 +593,7 @@ class AwsS3 extends AbstractAdapter
      * @param   int  $megabytes
      * @return  int
      */
-    private function mbToBytes($megabytes)
+    protected function mbToBytes($megabytes)
     {
         return $megabytes * 1024 * 1024;
     }
@@ -627,7 +602,7 @@ class AwsS3 extends AbstractAdapter
      * @param   UploadBuilder  $uploadBuilder
      * @return  self
      */
-    public function setUploadBuilder($uploadBuilder)
+    public function setUploadBuilder(UploadBuilder $uploadBuilder)
     {
         $this->uploadBuilder = $uploadBuilder;
 
