@@ -267,7 +267,7 @@ class Ftp extends AbstractFtpAdapter
             return $this->normalizeObject($object[1], '');
         }
     }
-    
+
     public function getMimetype($path)
     {
         if ( ! $metadata = $this->read($path)) {
