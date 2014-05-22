@@ -241,7 +241,7 @@ class Ftp extends AbstractFtpAdapter
 
         // Get Metadata with STAT raw FTP command
         $object = ftp_raw($this->getConnection(), 'STAT ' . $path);
-        if (count($object) < 3) {
+        if (($object !== FALSE) && (count($object) < 3)) {
             // FIX for Filezilla Server (STAT unrecognized)
             // code = "500 Syntax error, command unrecognized" ?
             $code = substr($object[0], 0, 3);
@@ -250,7 +250,7 @@ class Ftp extends AbstractFtpAdapter
 
                 // Get Metadata with rawlist FTP command
                 $object = ftp_rawlist($this->getConnection(), $path);
-                if (count($object) > 0) {
+                if (($object !== FALSE) && (count($object) > 0)) {
                     $code = substr($object[0], 0, 3);
                     if (! is_numeric($code)) {
                         return $this->normalizeObject($object[0], '');
