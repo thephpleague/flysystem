@@ -233,8 +233,8 @@ class Ftp extends AbstractFtpAdapter
         return ftp_mkdir($connection, $directory);
     }
 
-	public function getMetadata($path) 
-	{
+    public function getMetadata($path) 
+    {
 		if (empty($path) || ! ($object = $this->getMetadataByStat($path))) {
 			return false;
 		}
