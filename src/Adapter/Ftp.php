@@ -236,33 +236,38 @@ class Ftp extends AbstractFtpAdapter
     public function getMetadata($path)
     {
         if (empty($path)) {
-			return false;
+            return false;
         }
-	
-		// Get Metadata with STAT raw FTP command
-		$object = ftp_raw($this->getConnection(), 'STAT ' . $path);
-		if (count($object) < 3) {
-			// FIX for Filezilla Server (STAT unrecognized)
-			// code = "500 Syntax error, command unrecognized" ? 
-			$code = (int)substr($object[0], 0, 3);
-			if ($code === 500) {
-				unset($object);
-				
-				// Get Metadata with rawlist FTP command
-				$object = ftp_rawlist($this->getConnection(), $path);
-				if (count($object) > 0) {
-					return $this->normalizeObject($object[0], '');
-				} else {
-					return false;
-				}
-			} else {
-				return false;
-			}
-        } else {
-			return $this->normalizeObject($object[1], '');
-		}
-    }
 
+        // Get Metadata with STAT raw FTP command
+        $object = ftp_raw($this->getConnection(), 'STAT ' . $path);
+        if (count($object) < 3) {
+            // FIX for Filezilla Server (STAT unrecognized)
+            // code = "500 Syntax error, command unrecognized" ?
+            $code = substr($object[0], 0, 3);
+            if ((is_int($code) === TRUE) && ((int)$code === 500)) {
+                unset($object);
+
+                // Get Metadata with rawlist FTP command
+                $object = ftp_rawlist($this->getConnection(), $path);
+                if (count($object) > 0) {
+                    $code = substr($object[0], 0, 3);
+                    if (! is_int($code)) {
+                        return $this->normalizeObject($object[0], '');
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return $this->normalizeObject($object[1], '');
+        }
+    }
+    
     public function getMimetype($path)
     {
         if ( ! $metadata = $this->read($path)) {
