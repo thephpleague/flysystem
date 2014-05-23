@@ -275,7 +275,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        return $object[1];
+        return $object[0];
     }
 
     public function getMimetype($path)
