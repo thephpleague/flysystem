@@ -84,7 +84,9 @@ class AwsS3 extends AbstractAdapter
         $this->bucket = $bucket;
         $this->prefix = $prefix;
         $this->options = array_merge($this->options, $options);
-        $this->setUploadBuilder($uploadBuilder);
+        if (!empty($uploadBuilder)) {
+            $this->setUploadBuilder($uploadBuilder);
+        }
     }
 
     /**
@@ -417,7 +419,7 @@ class AwsS3 extends AbstractAdapter
     /**
      * Normalize a result from AWS
      *
-     * @param   string  $object
+     * @param   array   $object
      * @param   string  $path
      * @return  array   file metadata
      */
@@ -526,13 +528,13 @@ class AwsS3 extends AbstractAdapter
         /** @var UploadBuilder $uploadBuilder */
         $uploadBuilder = $this->getUploadBuilder();
 
-        $uploadBuilder->setClient($this->client)
+        $uploadBuilder->setBucket($options['Bucket'])
             // This options are always set in the $options array, so we don't need to check for them
-            ->setSource($options['Body'])
-            ->setBucket($options['Bucket']) // IDE complains here, but the method exists in UploadBuilder
             ->setKey($options['Key'])
             ->setMinPartSize($options['MinPartSize'])
-            ->setConcurrency($options['Concurrency']);
+            ->setConcurrency($options['Concurrency'])
+            ->setSource($options['Body']) // these 2 methods must be the last to be called because they return
+            ->setClient($this->client);   // AbstractUploadBuilder, which makes IDE and CI complain.
 
         if (isset($options['ACL'])) {
             $uploadBuilder->setOption('ACL', $options['ACL']);
