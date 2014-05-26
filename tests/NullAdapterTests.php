@@ -70,7 +70,6 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('write'),
-            array('createDir'),
             array('setVisibility'),
         );
     }
@@ -82,5 +81,11 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
     {
         $adapter = new NullAdapter;
         $this->assertInternalType('array', $adapter->{$method}('one', tmpfile(), array('visibility' => 'public')));
+    }
+
+    public function testArrayResultForCreateDir()
+    {
+        $adapter = new NullAdapter;
+        $this->assertInternalType('array', $adapter->createDir('one', array('visibility' => 'public')));
     }
 }

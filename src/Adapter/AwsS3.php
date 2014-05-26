@@ -33,6 +33,7 @@ class AwsS3 extends AbstractAdapter
     protected static $metaOptions = array(
         'Cache-Control',
         'Expires',
+        'Metadata',
     );
 
     /**
@@ -140,7 +141,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config ['visibility'='private', 'mimetype'='', 'streamsize'=0]
+     * @param   mixed     $config ['visibility'='private', 'mimetype'='', 'streamsize'=0, 'Metadata'=[]]
      * @return  array     file metadata
      */
     public function writeStream($path, $resource, $config = null)
@@ -295,18 +296,19 @@ class AwsS3 extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string  $path
+     * @param   string  $dirname
+     * @param   array   $options
      * @return  array   directory metadata
      */
-    public function createDir($path)
+    public function createDir($dirname, array $options = array())
     {
-        $result = $this->write(rtrim($path, '/') . '/', '');
+        $result = $this->write(rtrim($dirname, '/') . '/', '', $options);
 
         if ( ! $result) {
             return false;
         }
 
-        return array('path' => $path, 'type' => 'dir');
+        return array('path' => $dirname, 'type' => 'dir');
     }
 
     /**
@@ -519,7 +521,8 @@ class AwsS3 extends AbstractAdapter
     /**
      * Sends an object to a bucket using a multipart transfer, possibly also using concurrency
      *
-     * @param   array  $options  Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL]
+     * @param   array $options Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL, Metadata]
+     *
      * @return  bool
      */
     protected function putObjectMultipart(array $options)
@@ -542,6 +545,10 @@ class AwsS3 extends AbstractAdapter
 
         if (isset($options['ContentType'])) {
             $uploadBuilder->setOption('ContentType', $options['ContentType']);
+        }
+
+        if (isset($options['Metadata'])) {
+            $uploadBuilder->setOption('Metadata', $options['Metadata']);
         }
 
         $uploader = $this->createUploader($uploadBuilder);

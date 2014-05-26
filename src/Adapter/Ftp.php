@@ -24,7 +24,7 @@ class Ftp extends AbstractFtpAdapter
      * Set if Ssl is enabled
      *
      * @param bool $ssl
-     * @return \Flysystem\Adapter\Ftp
+     * @return self
      */
     public function setSsl($ssl)
     {
@@ -192,7 +192,15 @@ class Ftp extends AbstractFtpAdapter
         ftp_rmdir($connection, $dirname);
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
+     */
+    public function createDir($dirname, array $options = array())
     {
         $result = false;
         $connection = $this->getConnection();

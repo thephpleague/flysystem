@@ -222,7 +222,15 @@ class Sftp extends AbstractFtpAdapter
         return $data;
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
+     */
+    public function createDir($dirname, array $options = array())
     {
         $connection = $this->getConnection();
 
