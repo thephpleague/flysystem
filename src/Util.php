@@ -202,4 +202,16 @@ class Util
 
         throw new LogicException('A config should either be an array or a Flysystem\Config object.');
     }
+
+    /**
+     * Rewind a stream
+     *
+     * @param  resource  $resource
+     */
+    public static function rewindStream($resource)
+    {
+        if (ftell($resource) !== 0) {
+            rewind($resource);
+        }
+    }
 }

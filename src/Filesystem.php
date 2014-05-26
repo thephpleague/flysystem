@@ -126,6 +126,15 @@ class Filesystem implements FilesystemInterface
         return true;
     }
 
+    /**
+     * Write a file using a stream
+     *
+     * @param  string              $path     path to file
+     * @param  resource            $resource file contents
+     * @param  mixed               $config
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
     public function writeStream($path, $resource, $config = null)
     {
         $path = Util::normalizePath($path);
@@ -136,6 +145,8 @@ class Filesystem implements FilesystemInterface
         if ( ! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
+
+        Util::rewindStream($resource);
 
         if ( ! $object = $this->adapter->writeStream($path, $resource, $config)) {
             return false;
@@ -248,6 +259,8 @@ class Filesystem implements FilesystemInterface
         if ( ! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
+
+        Util::rewindStream($resource);
 
         if ( ! $object = $this->adapter->updateStream($path, $resource)) {
             return false;
