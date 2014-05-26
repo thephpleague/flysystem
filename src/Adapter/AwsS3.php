@@ -28,6 +28,7 @@ class AwsS3 extends AbstractAdapter
         'Cache-Control',
         'Expires',
         'StorageClass',
+        'ServerSideEncryption',
     );
 
     /**
