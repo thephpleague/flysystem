@@ -115,7 +115,6 @@ class Local extends AbstractAdapter
      */
     public function writeStream($path, $resource, $config = null)
     {
-        rewind($resource);
         $config = Util::ensureConfig($config);
         $location = $this->prefix($path);
         $this->ensureDirectory(dirname($location));

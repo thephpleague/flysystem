@@ -65,7 +65,6 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function stream($path, $resource, $config, $fallback)
     {
-        rewind($resource);
         $contents = stream_get_contents($resource);
 
         return $this->{$fallback}($path, $contents, $config);
