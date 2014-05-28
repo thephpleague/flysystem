@@ -23,11 +23,6 @@ class Dropbox extends AbstractAdapter
     protected $client;
 
     /**
-     * @var  string  $prefix
-     */
-    protected $prefix;
-
-    /**
      * Constructor
      *
      * @param  \Dropbox\Client  $client
@@ -35,9 +30,8 @@ class Dropbox extends AbstractAdapter
      */
     public function __construct(Client $client, $prefix = null)
     {
-        $prefix = trim($prefix, '/');
         $this->client = $client;
-        $this->prefix = '/' . $prefix;
+        $this->setPathPrefix($prefix);
     }
 
     /**
@@ -113,7 +107,7 @@ class Dropbox extends AbstractAdapter
      */
     protected function upload($path, $contents, WriteMode $mode)
     {
-        $location = $this->prefix($path);
+        $location = $this->applyPathPrefix($path);
 
         if ( ! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
             return false;
@@ -132,7 +126,7 @@ class Dropbox extends AbstractAdapter
      */
     protected function uploadStream($path, $resource, WriteMode $mode)
     {
-        $location = $this->prefix($path);
+        $location = $this->applyPathPrefix($path);
 
         if ( ! $result = $this->client->uploadFile($location, $mode, $resource)) {
             return false;
@@ -157,7 +151,7 @@ class Dropbox extends AbstractAdapter
     public function readStream($path)
     {
         $stream = fopen('php://temp', 'w+');
-        $location = $this->prefix($path);
+        $location = $this->applyPathPrefix($path);
 
         if ( ! $this->client->getFile($location, $stream)) {
             fclose($stream);
@@ -171,8 +165,8 @@ class Dropbox extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-        $path = $this->prefix($path);
-        $newpath = $this->prefix($newpath);
+        $path = $this->applyPathPrefix($path);
+        $newpath = $this->applyPathPrefix($newpath);
 
         try {
             $result = $this->client->move($path, $newpath);
@@ -185,8 +179,8 @@ class Dropbox extends AbstractAdapter
 
     public function copy($path, $newpath)
     {
-        $path = $this->prefix($path);
-        $newpath = $this->prefix($newpath);
+        $path = $this->applyPathPrefix($path);
+        $newpath = $this->applyPathPrefix($newpath);
 
         try {
             $result = $this->client->copy($path, $newpath);
@@ -199,7 +193,9 @@ class Dropbox extends AbstractAdapter
 
     public function delete($path)
     {
-        return $this->client->delete($this->prefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->delete($location);
     }
 
     public function deleteDir($path)
@@ -214,7 +210,8 @@ class Dropbox extends AbstractAdapter
 
     public function getMetadata($path)
     {
-        $object = $this->client->getMetadata($this->prefix($path));
+        $location = $this->applyPathPrefix($path);
+        $object = $this->client->getMetadata($location);
 
         if ( ! $object) {
             return false;
@@ -242,16 +239,15 @@ class Dropbox extends AbstractAdapter
     {
         $listing = array();
         $directory = trim($directory, '/.');
-        $prefixLength = strlen($this->prefix);
-        $location = '/' . trim($this->prefix($directory), '/');
+        $location = $this->applyPathPrefix($directory);
 
         if ( ! $result = $this->client->getMetadataWithChildren($location)) {
             return array();
         }
 
         foreach ($result['contents'] as $object) {
-            $path = substr($object['path'], $prefixLength);
-            $listing[] = $this->normalizeObject($object, trim($path, '/'));
+            $path = $this->removePathPrefix($object['path']);
+            $listing[] = $this->normalizeObject($object, $path);
 
             if ($recursive && $object['is_dir']) {
                 $listing = array_merge($listing, $this->listContents($path));
@@ -263,7 +259,7 @@ class Dropbox extends AbstractAdapter
 
     protected function normalizeObject($object, $path = null)
     {
-        $result = array('path' => $path ?: ltrim($object['path'], '/'));
+        $result = array('path' => $path ?: trim($object['path'], '/'));
 
         if (isset($object['modified'])) {
             $result['timestamp'] = strtotime($object['modified']);
@@ -275,10 +271,16 @@ class Dropbox extends AbstractAdapter
         return $result;
     }
 
-    protected function prefix($path)
+    /**
+     * Apply the path prefix
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
+    public function applyPathPrefix($path)
     {
-        $prefix = rtrim($this->prefix, '/');
+        $path = parent::applyPathPrefix($path);
 
-        return $prefix . '/' . ltrim($path, '/');
+        return '/' . rtrim($path, '/');
     }
 }

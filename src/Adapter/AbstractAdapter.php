@@ -42,6 +42,8 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function applyPathPrefix($path)
     {
+        $path = ltrim($path, '\\/');
+
         if (empty($path)) {
             return $this->pathPrefix ?: '';
         }
