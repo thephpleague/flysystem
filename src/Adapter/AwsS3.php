@@ -68,6 +68,16 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
+     * Get the S3Client instance
+     *
+     * @return  S3Client
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    /**
      * Check whether a file exists
      *
      * @param   string  $path
