@@ -8,9 +8,14 @@ use League\Flysystem\AdapterInterface;
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
-     * @var  string  $prefix  path prefix
+     * @var  string  $prefixPrefix  path prefix
      */
     protected $pathPrefix;
+
+    /**
+     * @var  string  $pathSeparator
+     */
+    protected $pathSeparator = '/';
 
     /**
      * Set the path prefix
@@ -23,7 +28,7 @@ abstract class AbstractAdapter implements AdapterInterface
         $is_empty = empty($prefix);
 
         if ( ! $is_empty) {
-            $prefix = rtrim($prefix, '/') . '/';
+            $prefix = rtrim($prefix, $this->pathSeparator) . $this->pathSeparator;
         }
 
         $this->pathPrefix = $is_empty ? null : $prefix;
@@ -38,7 +43,7 @@ abstract class AbstractAdapter implements AdapterInterface
     public function applyPathPrefix($path)
     {
         if (empty($path)) {
-            return $pathPrefix ?: '';
+            return $this->pathPrefix ?: '';
         }
 
         if ($this->pathPrefix) {
