@@ -40,7 +40,7 @@ class MimeType
     /**
      * @return array Map of file extension to MIME Type
      */
-    public static function getExtenionToMimeTypeMap()
+    public static function getExtensionToMimeTypeMap()
     {
         return array(
             'hqx'   => 'application/mac-binhex40',
