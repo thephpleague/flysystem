@@ -16,10 +16,11 @@ class Zip extends AbstractAdapter
 
     protected $archive;
 
-    public function __construct($location, ZipArchive $archive = null)
+    public function __construct($location, ZipArchive $archive = null, $prefix = null)
     {
         $this->setArchive($archive ?: new ZipArchive);
         $this->openArchive($location);
+        $this->setPathPrefix($prefix);
     }
 
     protected function reopenArchive()
@@ -50,6 +51,7 @@ class Zip extends AbstractAdapter
 
     public function write($path, $contents, $config = null)
     {
+        $location = $this->applyPathPrefix($path);
         $dirname = Util::dirname($path);
         $config = Util::ensureConfig($config);
 
@@ -57,7 +59,7 @@ class Zip extends AbstractAdapter
             $this->createDir($dirname);
         }
 
-        if ( ! $this->archive->addFromString($path, $contents)) {
+        if ( ! $this->archive->addFromString($location, $contents)) {
             return false;
         }
 
@@ -79,17 +81,27 @@ class Zip extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
-        return $this->archive->renameName($path, $newpath);
+        $source = $this->applyPathPrefix($path);
+        $destination = $this->applyPathPrefix($newpath);
+
+        return $this->archive->renameName($source, $destination);
     }
 
     public function delete($path)
     {
-        return $this->archive->deleteName($path);
+        $location = $this->applyPathPrefix($path);
+
+        return $this->archive->deleteName($location);
     }
 
     public function deleteDir($dirname)
     {
-        $path = Util::normalizePrefix($dirname, '/');
+        // This is needed to ensure the right number of
+        // files are set to the $numFiles property.
+        $this->reopenArchive();
+
+        $location = $this->applyPathPrefix($dirname);
+        $path = Util::normalizePrefix($location, '/');
         $length = strlen($path);
 
         for ($i = 0; $i < $this->archive->numFiles; $i++) {
@@ -106,7 +118,9 @@ class Zip extends AbstractAdapter
     public function createDir($dirname)
     {
         if ( ! $this->has($dirname)) {
-            $this->archive->addEmptyDir($dirname);
+            $location = $this->applyPathPrefix($dirname);
+
+            $this->archive->addEmptyDir($location);
         }
 
         return array('path' => $dirname);
@@ -120,8 +134,9 @@ class Zip extends AbstractAdapter
     public function read($path)
     {
         $this->reopenArchive();
+        $location = $this->applyPathPrefix($path);
 
-        if ( ! $contents = $this->archive->getFromName($path)) {
+        if ( ! $contents = $this->archive->getFromName($location)) {
             return false;
         }
 
@@ -131,8 +146,9 @@ class Zip extends AbstractAdapter
     public function readStream($path)
     {
         $this->reopenArchive();
+        $location = $this->applyPathPrefix($path);
 
-        if ( ! $stream = $this->archive->getStream($path)) {
+        if ( ! $stream = $this->archive->getStream($location)) {
             return false;
         }
 
@@ -158,7 +174,9 @@ class Zip extends AbstractAdapter
 
     public function getMetadata($path)
     {
-        if ( ! $info = $this->archive->statName($path)) {
+        $location = $this->applyPathPrefix($path);
+
+        if ( ! $info = $this->archive->statName($location)) {
             return false;
         }
 
@@ -169,14 +187,16 @@ class Zip extends AbstractAdapter
     {
         if (substr($object['name'], -1) === '/') {
             return array(
-                'path' => trim($object['name'], '/'),
+                'path' => $this->removePathPrefix(trim($object['name'], '/')),
                 'type' => 'dir'
             );
         }
 
         $result = array('type' => 'file');
+        $normalised = Util::map($object, static::$resultMap);
+        $normalised['path'] = $this->removePathPrefix($normalised['path']);
 
-        return array_merge($result, Util::map($object, static::$resultMap));
+        return array_merge($result, $normalised);
     }
 
     public function getSize($path)
