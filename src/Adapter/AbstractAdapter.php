@@ -35,6 +35,16 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Get the path prefix
+     *
+     * @return  string  path prefix
+     */
+    public function getPathPrefix()
+    {
+        return $this->pathPrefix;
+    }
+
+    /**
      * Prefix a path
      *
      * @param   string  $path

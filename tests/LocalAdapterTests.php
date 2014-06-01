@@ -105,4 +105,9 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($path, $this->adapter->applyPathPrefix($path));
         $this->assertEquals($path, $this->adapter->removePathPrefix($path));
     }
+
+    public function testGetPathPrefix()
+    {
+        $this->assertEquals(realpath(__DIR__.'/files') . '/', $this->adapter->getPathPrefix());
+    }
 }
