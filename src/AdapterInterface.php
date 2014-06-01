@@ -92,9 +92,11 @@ interface AdapterInterface extends ReadInterface
      * Create a directory
      *
      * @param   string  $dirname
+     * @param   array   $options
+     *
      * @return  array   directory meta data
      */
-    public function createDir($dirname);
+    public function createDir($dirname, array $options = array());
 
     /**
      * Set the visibility for a file

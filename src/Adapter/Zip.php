@@ -103,7 +103,15 @@ class Zip extends AbstractAdapter
         return $this->archive->deleteName($dirname);
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
+     */
+    public function createDir($dirname, array $options = array())
     {
         if ( ! $this->has($dirname)) {
             $this->archive->addEmptyDir($dirname);

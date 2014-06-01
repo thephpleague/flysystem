@@ -177,9 +177,11 @@ class Util
     /**
      * Ensure a Config instance
      *
-     * @param  string|array|Config  $config
+     * @param  string|array|Config $config
+     *
+     * @throws \LogicException
+     *
      * @return Config  config instance
-     * @throw  LogicException
      */
     public static function ensureConfig($config)
     {

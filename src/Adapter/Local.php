@@ -336,10 +336,12 @@ class Local extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param $dirname
-     * @return array
+     * @param   string $dirname
+     * @param   array  $options
+     *
+     * @return  array   directory metadata
      */
-    public function createDir($dirname)
+    public function createDir($dirname, array $options = array())
     {
         $location = $this->prefix($dirname);
 
