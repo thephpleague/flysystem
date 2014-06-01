@@ -32,6 +32,14 @@ class Local extends AbstractAdapter
     }
 
     /**
+     * Get the local adapter root
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
      * Ensure the root directory exists.
      *
      * @param   string  $root  root directory path
