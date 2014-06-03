@@ -435,11 +435,11 @@ class AwsS3 extends AbstractAdapter
     /**
      * Normalize a result from AWS
      *
-     * @param   string  $object
+     * @param   array  $object
      * @param   string  $path
      * @return  array   file metadata
      */
-    protected function normalizeObject($object, $path = null)
+    protected function normalizeObject(array $object, $path = null)
     {
         $result = array('path' => $path ?: $object['Key']);
 
