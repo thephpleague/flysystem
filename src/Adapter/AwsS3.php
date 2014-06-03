@@ -4,8 +4,6 @@ namespace League\Flysystem\Adapter;
 
 use Aws\Common\Exception\MultipartUploadException;
 use Aws\S3\Model\MultipartUpload\AbstractTransfer;
-use Aws\S3\Model\MultipartUpload\ParallelTransfer;
-use Aws\S3\Model\MultipartUpload\SerialTransfer;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
