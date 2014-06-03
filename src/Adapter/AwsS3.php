@@ -81,12 +81,13 @@ class AwsS3 extends AbstractAdapter
         $bucket,
         $prefix = null,
         array $options = array(),
-        $uploadBuilder = null
+        UploadBuilder $uploadBuilder = null
     ) {
         $this->client  = $client;
         $this->bucket  = $bucket;
         $this->prefix  = $prefix;
         $this->options = array_merge($this->options, $options);
+
         if (!empty($uploadBuilder)) {
             $this->setUploadBuilder($uploadBuilder);
         }
