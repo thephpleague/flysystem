@@ -3,7 +3,6 @@
 namespace League\Flysystem\Adapter;
 
 use Aws\Common\Exception\MultipartUploadException;
-use Aws\Common\Exception\RuntimeException;
 use Aws\S3\Model\MultipartUpload\AbstractTransfer;
 use Aws\S3\Model\MultipartUpload\ParallelTransfer;
 use Aws\S3\Model\MultipartUpload\SerialTransfer;
@@ -44,7 +43,7 @@ class AwsS3 extends AbstractAdapter
     protected $bucket;
 
     /**
-     * @var  \Aws\S3\S3Client  $client  S3 Client
+     * @var  S3Client  $client  S3 Client
      */
     protected $client;
 
@@ -54,13 +53,17 @@ class AwsS3 extends AbstractAdapter
     protected $prefix;
 
     /**
-     * @var  array $options default options[
+     * @var  array  $options  default options[
      *                            Multipart=1024 Mb - After what size should multipart be used
      *                            MinPartSize=32 Mb - Minimum size of parts for each part
      *                            Concurrency=3 - If multipart is used, how many concurrent connections should be used
      *                            ]
      */
-    protected $options = array('Multipart' => 1024, 'MinPartSize' => 32, 'Concurrency' => 3);
+    protected $options = array(
+        'Multipart' => 1024,
+        'MinPartSize' => 32,
+        'Concurrency' => 3
+    );
 
     /**
      * @var  UploadBuilder $uploadBuilder Used to upload object using a multipart transfer
@@ -88,9 +91,8 @@ class AwsS3 extends AbstractAdapter
         $this->prefix  = $prefix;
         $this->options = array_merge($this->options, $options);
 
-        if (!empty($uploadBuilder)) {
+        if ($uploadBuilder !== null)
             $this->setUploadBuilder($uploadBuilder);
-        }
     }
 
     /**
@@ -137,12 +139,9 @@ class AwsS3 extends AbstractAdapter
         );
 
         $multipartLimit = $this->mbToBytes($options['Multipart']);
+
         if ($options['ContentLength'] > $multipartLimit) {
-            try {
-                $result = $this->putObjectMultipart($options);
-            } catch (\Exception $e) {
-                $result = false;
-            }
+            return $this->putObjectMultipart($options);
         } else {
             $result = $this->client->putObject($options);
         }
@@ -173,10 +172,12 @@ class AwsS3 extends AbstractAdapter
         $multipartLimit = $this->mbToBytes($options['Multipart']);
         $uploadBuilder  = $this->getUploadBuilder();
 
-        // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail
-        // However, if we don't have an uploadBuilder set, we have to try using putObject()
-
-        if (($config->get('streamsize', ($multipartLimit + 1)) > $multipartLimit) && (!empty($uploadBuilder))) {
+        // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail.
+        if ($config->has('streamsize') === false || $config->get('streamsize') > $multipartLimit) {
+            // var_dump($multipartLimit);
+            // var_dump($config);
+            // var_dump('multipart');
+            // die();
             $this->putObjectMultipart($options);
         } else {
             $this->client->putObject($options);
@@ -203,7 +204,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed        $config   Config object or visibility setting
+     * @param   mixed     $config   Config object or visibility setting
      * @return  array     file metadata
      */
     public function updateStream($path, $resource, $config = null)
@@ -530,7 +531,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function prefix($path)
     {
-        if (! $this->prefix) {
+        if ( ! $this->prefix) {
             return $path;
         }
 
@@ -570,31 +571,9 @@ class AwsS3 extends AbstractAdapter
             $uploadBuilder->setOption('Metadata', $options['Metadata']);
         }
 
-        $uploader = $this->createUploader($uploadBuilder);
+        $uploader = $uploadBuilder->build();
 
         return $this->upload($uploader);
-    }
-
-    /**
-     * @param   UploadBuilder $uploadBuilder
-     *
-     * @return  AbstractTransfer
-     */
-    protected function createUploader(UploadBuilder $uploadBuilder)
-    {
-        try {
-            /** @var ParallelTransfer $uploader */
-            $uploader = $uploadBuilder->build();
-
-        } catch (RuntimeException $e) {
-            // This happens when trying to make a ParallelTransfer with a remote source stream,
-            //      or with no concurrency set. We fallback to a SerialTransfer and try again.
-            /** @var SerialTransfer $uploader */
-            $uploadBuilder->setConcurrency(1);
-            $uploader = $uploadBuilder->build();
-        }
-
-        return $uploader;
     }
 
     /**
@@ -618,7 +597,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Converts megabytes to bytes
+     * Convert megabytes to bytes
      *
      * @param   int $megabytes
      *
@@ -630,6 +609,8 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
+     * Set the S3 UploadBuilder
+     *
      * @param   UploadBuilder $uploadBuilder
      *
      * @return  self
@@ -642,10 +623,16 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
+     * Get the S3 UploadBuilder
+     *
      * @return UploadBuilder
      */
     public function getUploadBuilder()
     {
+        if ( ! $this->uploadBuilder) {
+            $this->uploadBuilder = UploadBuilder::newInstance();
+        }
+
         return $this->uploadBuilder;
     }
 }

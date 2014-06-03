@@ -63,13 +63,41 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->write('something', 'something', 'private');
     }
 
+    public function testWriteAboveLimit()
+    {
+        $mockS3Client = $this->getS3Client();
+        $mockTransfer = $this->getAbstractTransfer();
+        $mockTransfer->shouldReceive('upload')->once();
+        $mockUploadBuilder = $this->getUploadBuilder();
+        $mockUploadBuilder->shouldReceive('setBucket')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setKey')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setMinPartSize')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setOption')->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setConcurrency')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setSource')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('build')->once()->andReturn($mockTransfer);
+
+        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(
+            'Multipart' => -10
+        ), $mockUploadBuilder);
+
+        $adapter->write(
+            'something',
+            'some content',
+            array(
+                'visibility' => 'private',
+                'mimetype'   => 'text/plain',
+                'Expires'    => 'it does',
+                'Metadata' => [],
+            )
+        );
+    }
+
     public function testWriteStreamAboveLimit()
     {
         $mockS3Client = $this->getS3Client();
-
         $mockTransfer = $this->getAbstractTransfer();
         $mockTransfer->shouldReceive('upload')->times(2);
-
         $mockUploadBuilder = $this->getUploadBuilder();
         $mockUploadBuilder->shouldReceive('setBucket')->times(2)->andReturn($mockUploadBuilder);
         $mockUploadBuilder->shouldReceive('setKey')->times(2)->andReturn($mockUploadBuilder);
@@ -89,9 +117,41 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
+                'Metadata' => [],
             )
         );
         $adapter->updateStream('something', $temp);
+        fclose($temp);
+    }
+
+    public function testWriteStreamAboveLimitFail()
+    {
+        $mockS3Client = $this->getS3Client();
+        $mockTransfer = $this->getAbstractTransfer();
+        $mockTransfer->shouldReceive('upload')->andThrow(Mockery::mock('Aws\Common\Exception\MultipartUploadException'));
+        $mockTransfer->shouldReceive('abort')->once();
+        $mockUploadBuilder = $this->getUploadBuilder();
+        $mockUploadBuilder->shouldReceive('setBucket')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setKey')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setMinPartSize')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setOption')->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setConcurrency')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('setSource')->once()->andReturn($mockUploadBuilder);
+        $mockUploadBuilder->shouldReceive('build')->once()->andReturn($mockTransfer);
+
+        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(), $mockUploadBuilder);
+        $temp    = tmpfile();
+        fwrite($temp, "some content");
+        $adapter->writeStream(
+            'something',
+            $temp,
+            array(
+                'visibility' => 'private',
+                'mimetype'   => 'text/plain',
+                'Expires'    => 'it does',
+                'Metadata' => [],
+            )
+        );
         fclose($temp);
     }
 
@@ -100,20 +160,23 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mockS3Client = $this->getS3Client();
         $mockS3Client->shouldReceive('putObject')->times(2);
 
-        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix');
+        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(
+            'Multipart' => 10 * 1024 * 1024,
+        ));
+
         $temp    = tmpfile();
         fwrite($temp, $content = "some content");
         $adapter->writeStream(
             'something',
             $temp,
-            array(
+            $options = array(
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
-                'streamsize' => strlen($content),
+                'streamsize' => 5,
             )
         );
-        $adapter->updateStream('something', $temp);
+        $adapter->updateStream('something', $temp, $options);
         fclose($temp);
     }
 
