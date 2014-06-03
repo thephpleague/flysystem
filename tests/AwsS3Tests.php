@@ -117,7 +117,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
-                'Metadata' => [],
+                'Metadata' => array(),
             )
         );
         $adapter->updateStream('something', $temp);
