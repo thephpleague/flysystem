@@ -42,6 +42,11 @@ class AwsS3 extends AbstractAdapter
     protected $client;
 
     /**
+     * @var  string  $prefix  path prefix
+     */
+    protected $prefix;
+
+    /**
      * @var  array  $options  default options
      */
     protected $options = array();
@@ -58,7 +63,7 @@ class AwsS3 extends AbstractAdapter
     {
         $this->client = $client;
         $this->bucket = $bucket;
-        $this->setPathPrefix($prefix);
+        $this->prefix = $prefix;
         $this->options = $options;
     }
 
@@ -80,9 +85,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function has($path)
     {
-        $location = $this->applyPathPrefix($path);
-
-        return $this->client->doesObjectExist($this->bucket, $location);
+        return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
     }
 
     /**
@@ -188,8 +191,7 @@ class AwsS3 extends AbstractAdapter
             's3' => array('seekable' => true),
         ));
 
-        $location = $this->applyPathPrefix($path);
-        $stream = fopen('s3://'.$this->bucket . '/' . $location, 'r', false, $context);
+        $stream = fopen('s3://'.$this->bucket.'/'.$this->prefix($path), 'r', false, $context);
 
         return compact('stream');
     }
@@ -205,7 +207,7 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
-            'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'CopySource' => $this->bucket.'/'.$this->prefix($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -226,7 +228,7 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
-            'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'CopySource' => $this->bucket.'/'.$this->prefix($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -255,7 +257,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        $prefix = rtrim($this->applyPathPrefix($path), '/') . '/';
+        $prefix = rtrim($this->prefix($path), '/') . '/';
 
         return $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
@@ -375,7 +377,7 @@ class AwsS3 extends AbstractAdapter
     {
         $objectsIterator = $this->client->getIterator('listObjects', array(
             'Bucket' => $this->bucket,
-            'Prefix' => $this->applyPathPrefix($dirname),
+            'Prefix' => $this->prefix($dirname),
         ));
 
         $contents = iterator_to_array($objectsIterator);
@@ -393,9 +395,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function normalizeObject($object, $path = null)
     {
-        $result = array(
-            'path' => $path ?: $this->removePathPrefix($object['Key'])
-        );
+        $result = array('path' => $path ?: $object['Key']);
 
         if (isset($object['LastModified'])) {
             $result['timestamp'] = strtotime($object['LastModified']);
@@ -429,7 +429,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function getOptions($path, array $options = array(), Config $config = null)
     {
-        $options['Key'] = $this->applyPathPrefix($path);
+        $options['Key'] = $this->prefix($path);
         $options['Bucket'] = $this->bucket;
 
         if ($config) {
@@ -469,5 +469,20 @@ class AwsS3 extends AbstractAdapter
         }
 
         return $options;
+    }
+
+    /**
+     * Prefix a path
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
+    protected function prefix($path)
+    {
+        if (! $this->prefix) {
+            return $path;
+        }
+
+        return $this->prefix.'/'.$path;
     }
 }
