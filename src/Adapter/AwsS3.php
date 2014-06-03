@@ -174,13 +174,13 @@ class AwsS3 extends AbstractAdapter
 
         // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail.
         if ($config->has('streamsize') === false || $config->get('streamsize') > $multipartLimit) {
-            // var_dump($multipartLimit);
-            // var_dump($config);
-            // var_dump('multipart');
-            // die();
-            $this->putObjectMultipart($options);
+            $result = $this->putObjectMultipart($options);
         } else {
-            $this->client->putObject($options);
+            $result = $this->client->putObject($options);
+        }
+
+        if ($result === false) {
+            return false;
         }
 
         return $this->normalizeObject($options);
