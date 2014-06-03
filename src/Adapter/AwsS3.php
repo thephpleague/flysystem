@@ -166,11 +166,8 @@ class AwsS3 extends AbstractAdapter
     {
         $config  = Util::ensureConfig($config);
         $options = array('Body' => $resource,);
-
         $options = $this->getOptions($path, $options, $config);
-
         $multipartLimit = $this->mbToBytes($options['Multipart']);
-        $uploadBuilder  = $this->getUploadBuilder();
 
         // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail.
         if ($config->has('streamsize') === false || $config->get('streamsize') > $multipartLimit) {
