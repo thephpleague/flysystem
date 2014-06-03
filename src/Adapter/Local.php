@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use Finfo;
+use League\Flysystem\Config;
 use SplFileInfo;
 use FilesystemIterator;
 use DirectoryIterator;
@@ -325,10 +326,12 @@ class Local extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param $dirname
-     * @return array
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
      */
-    public function createDir($dirname)
+    public function createDir($dirname, $options = null)
     {
         $location = $this->applyPathPrefix($dirname);
 

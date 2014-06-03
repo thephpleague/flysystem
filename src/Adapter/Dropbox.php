@@ -5,6 +5,7 @@ namespace League\Flysystem\Adapter;
 use Dropbox\Client;
 use Dropbox\WriteMode;
 use Dropbox\Exception;
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class Dropbox extends AbstractAdapter
@@ -203,7 +204,15 @@ class Dropbox extends AbstractAdapter
         return $this->delete($path);
     }
 
-    public function createDir($path)
+    /**
+     * Create a directory
+     *
+     * @param   string       $path directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
+     */
+    public function createDir($path, $options = null)
     {
         return array('path' => $path, 'type' => 'dir');
     }
