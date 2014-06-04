@@ -334,4 +334,11 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $result = $adapter->read('file.ext');
         $this->assertEquals('1234567890', $result['contents']);
     }
+
+    public function testGetUploadBuilder()
+    {
+        $mock = $this->getS3Client();
+        $adapter = new Adapter($mock, 'bucket');
+        $this->assertInstanceOf('Aws\S3\Model\MultipartUpload\UploadBuilder', $adapter->getUploadBuilder());
+    }
 }

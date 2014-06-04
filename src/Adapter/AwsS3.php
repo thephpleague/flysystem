@@ -140,7 +140,7 @@ class AwsS3 extends AbstractAdapter
         $multipartLimit = $this->mbToBytes($options['Multipart']);
 
         if ($options['ContentLength'] > $multipartLimit) {
-            return $this->putObjectMultipart($options);
+            $result = $this->putObjectMultipart($options);
         } else {
             $result = $this->client->putObject($options);
         }
