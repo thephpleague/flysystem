@@ -1,14 +1,4 @@
 {
-    "name": "league/flysystem",
-    "description": "Filesystem abstraction, but easy.",
-    "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote", "webdav"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Frank de Jonge",
-            "email": "info@frenky.net"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "League\\Flysystem\\": "src/"
@@ -16,23 +6,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "dev-master as 0.9.0-dev",
+        "mockery/mockery": "~0.9",
         "aws/aws-sdk-php": "~2.5",
         "predis/predis": "~0.8.4",
         "dropbox/dropbox-sdk": "~1.1.1",
         "rackspace/php-opencloud": "~1.9.1"
-    },
-    "suggest": {
-        "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
-        "predis/predis": "Allows you to use Predis for caching",
-        "dropbox/dropbox-sdk": "Allows you to use Dropbox storage",
-        "phpseclib/phpseclib": "Allows SFTP server storage",
-        "sabre/dav": "Enables WebDav support",
-        "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.4-dev"
-        }
     }
 }
