@@ -18,15 +18,18 @@ class WebDav extends AbstractAdapter
 
     protected $client;
 
-    public function __construct(Client $client)
+    public function __construct(Client $client, $prefix = null)
     {
         $this->client = $client;
+        $this->setPathPrefix($prefix);
     }
 
     public function getMetadata($path)
     {
+        $location = $this->applyPathPrefix($path);
+
         try {
-            $result = $this->client->propFind($path, array(
+            $result = $this->client->propFind($location, array(
                 '{DAV:}displayname',
                 '{DAV:}getcontentlength',
                 '{DAV:}getcontenttype',
@@ -46,8 +49,10 @@ class WebDav extends AbstractAdapter
 
     public function read($path)
     {
+        $location = $this->applyPathPrefix($path);
+
         try {
-            $response = $this->client->request('GET', $path);
+            $response = $this->client->request('GET', $location);
 
             if ($response['statusCode'] !== 200) {
                 return false;
@@ -56,6 +61,7 @@ class WebDav extends AbstractAdapter
             return array_merge(array(
                 'contents' => $response['body'],
                 'timestamp' => strtotime($response['headers']['last-modified']),
+                'path' => $path,
             ), Util::map($response['headers'], static::$resultMap));
         } catch (Exception\FileNotFound $e) {
             return false;
@@ -64,8 +70,9 @@ class WebDav extends AbstractAdapter
 
     public function write($path, $contents, $config = null)
     {
+        $location = $this->applyPathPrefix($path);
         $config = Util::ensureConfig($config);
-        $this->client->request('PUT', $path, $contents);
+        $this->client->request('PUT', $location, $contents);
 
         $result = compact('path', 'contents');
 
@@ -82,8 +89,10 @@ class WebDav extends AbstractAdapter
 
     public function rename($path, $newpath)
     {
+        $location = $this->applyPathPrefix($path);
+
         try {
-            $response = $this->client->request('MOVE', '/'.ltrim($path, '/'), null, array(
+            $response = $this->client->request('MOVE', '/'.ltrim($location, '/'), null, array(
                 'Destination' => '/'.ltrim($newpath, '/'),
             ));
 
@@ -97,8 +106,10 @@ class WebDav extends AbstractAdapter
 
     public function delete($path)
     {
+        $location = $this->applyPathPrefix($path);
+
         try {
-            $this->client->request('DELETE', $path);
+            $this->client->request('DELETE', $location);
 
             return true;
         } catch (Exception\FileNotFound $e) {
@@ -108,7 +119,8 @@ class WebDav extends AbstractAdapter
 
     public function createDir($path)
     {
-        $response = $this->client->request('MKCOL', $path);
+        $location = $this->applyPathPrefix($path);
+        $response = $this->client->request('MKCOL', $location);
 
         return $response['statusCode'] === 201;
     }
@@ -120,7 +132,9 @@ class WebDav extends AbstractAdapter
 
     public function listContents($directory = '', $recursive = false)
     {
-        $response = $this->client->propFind($directory, array(
+        $location = $this->applyPathPrefix($directory);
+
+        $response = $this->client->propFind($location, array(
             '{DAV:}displayname',
             '{DAV:}getcontentlength',
             '{DAV:}getcontenttype',
@@ -132,6 +146,7 @@ class WebDav extends AbstractAdapter
         $result = array();
 
         foreach ($response as $path => $object) {
+            $path = $this->removePathPrefix($path);
             $object = $this->normalizeObject($object, $path);
             $result[] = $object;
 

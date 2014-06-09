@@ -8,6 +8,81 @@ use League\Flysystem\AdapterInterface;
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
+     * @var  string  $prefixPrefix  path prefix
+     */
+    protected $pathPrefix;
+
+    /**
+     * @var  string  $pathSeparator
+     */
+    protected $pathSeparator = '/';
+
+    /**
+     * Set the path prefix
+     *
+     * @param   string  $prefix
+     * @return  self
+     */
+    public function setPathPrefix($prefix)
+    {
+        $is_empty = empty($prefix);
+
+        if ( ! $is_empty) {
+            $prefix = rtrim($prefix, $this->pathSeparator) . $this->pathSeparator;
+        }
+
+        $this->pathPrefix = $is_empty ? null : $prefix;
+    }
+
+    /**
+     * Get the path prefix
+     *
+     * @return  string  path prefix
+     */
+    public function getPathPrefix()
+    {
+        return $this->pathPrefix;
+    }
+
+    /**
+     * Prefix a path
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
+    public function applyPathPrefix($path)
+    {
+        $path = ltrim($path, '\\/');
+
+        if (empty($path)) {
+            return $this->pathPrefix ?: '';
+        }
+
+        if ($this->pathPrefix) {
+            $path = $this->pathPrefix . $path;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Remove a path prefix
+     *
+     * @param   string  $path
+     * @return  string  path without the prefix
+     */
+    public function removePathPrefix($path)
+    {
+        if ($this->pathPrefix === null) {
+            return $path;
+        }
+
+        $length = strlen($this->pathPrefix);
+
+        return substr($path, $length);
+    }
+
+    /**
      * Write using a stream
      *
      * @param   string  $path
