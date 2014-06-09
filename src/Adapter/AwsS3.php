@@ -33,6 +33,8 @@ class AwsS3 extends AbstractAdapter
         'StorageClass',
         'ServerSideEncryption',
         'Metadata',
+        'ACL',
+        'ContentType'
     );
 
     /**
@@ -44,11 +46,6 @@ class AwsS3 extends AbstractAdapter
      * @var  S3Client  $client  S3 Client
      */
     protected $client;
-
-    /**
-     * @var  string  $prefix  path prefix
-     */
-    protected $prefix;
 
     /**
      * @var  array  $options  default options[
@@ -86,7 +83,7 @@ class AwsS3 extends AbstractAdapter
     ) {
         $this->client  = $client;
         $this->bucket  = $bucket;
-        $this->prefix  = $prefix;
+        $this->setPathPrefix($prefix);
         $this->options = array_merge($this->options, $options);
 
         if ($uploadBuilder !== null) {
@@ -112,7 +109,9 @@ class AwsS3 extends AbstractAdapter
      */
     public function has($path)
     {
-        return $this->client->doesObjectExist($this->bucket, $this->prefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->doesObjectExist($this->bucket, $location);
     }
 
     /**
@@ -238,7 +237,7 @@ class AwsS3 extends AbstractAdapter
             's3' => array('seekable' => true),
         ));
 
-        $stream = fopen('s3://'.$this->bucket.'/'.$this->prefix($path), 'r', false, $context);
+        $stream = fopen('s3://'.$this->bucket.'/'.$this->applyPathPrefix($path), 'r', false, $context);
 
         return compact('stream');
     }
@@ -254,7 +253,7 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
-            'CopySource' => $this->bucket.'/'.$this->prefix($path),
+            'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -275,7 +274,7 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
-            'CopySource' => $this->bucket.'/'.$this->prefix($path),
+            'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -304,7 +303,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        $prefix = rtrim($this->prefix($path), '/') . '/';
+        $prefix = rtrim($this->applyPathPrefix($path), '/') . '/';
 
         return $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
@@ -424,7 +423,7 @@ class AwsS3 extends AbstractAdapter
     {
         $objectsIterator = $this->client->getIterator('listObjects', array(
             'Bucket' => $this->bucket,
-            'Prefix' => $this->prefix($dirname),
+            'Prefix' => $this->applyPathPrefix($dirname),
         ));
 
         $contents = iterator_to_array($objectsIterator);
@@ -442,7 +441,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function normalizeObject(array $object, $path = null)
     {
-        $result = array('path' => $path ?: $object['Key']);
+        $result = array('path' => $path ?: $this->removePathPrefix($object['Key']));
 
         if (isset($object['LastModified'])) {
             $result['timestamp'] = strtotime($object['LastModified']);
@@ -477,7 +476,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function getOptions($path, array $options = array(), Config $config = null)
     {
-        $options['Key']    = $this->prefix($path);
+        $options['Key']    = $this->applyPathPrefix($path);
         $options['Bucket'] = $this->bucket;
 
         if ($config) {
@@ -520,21 +519,6 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Prefix a path
-     *
-     * @param   string  $path
-     * @return  string  prefixed path
-     */
-    protected function prefix($path)
-    {
-        if ( ! $this->prefix) {
-            return $path;
-        }
-
-        return $this->prefix.'/'.$path;
-    }
-
-    /**
      * Sends an object to a bucket using a multipart transfer, possibly also using concurrency
      *
      * @param   array $options Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL, Metadata]
@@ -555,16 +539,10 @@ class AwsS3 extends AbstractAdapter
             ->setSource($options['Body']) // these 2 methods must be the last to be called because they return
             ->setClient($this->client); // AbstractUploadBuilder, which makes IDE and CI complain.
 
-        if (isset($options['ACL'])) {
-            $uploadBuilder->setOption('ACL', $options['ACL']);
-        }
+        foreach (static::$metaOptions as $option) {
+            if ( ! array_key_exists($option, $options)) continue;
 
-        if (isset($options['ContentType'])) {
-            $uploadBuilder->setOption('ContentType', $options['ContentType']);
-        }
-
-        if (isset($options['Metadata'])) {
-            $uploadBuilder->setOption('Metadata', $options['Metadata']);
+            $uploadBuilder->setOption($option, $options[$option]);
         }
 
         $uploader = $uploadBuilder->build();
