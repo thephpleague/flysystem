@@ -10,6 +10,11 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
         return new Filesystem(new NullAdapter);
     }
 
+    protected function getAdapter()
+    {
+        return new NullAdapter;
+    }
+
     public function testWrite()
     {
         $fs = $this->getFilesystem();
@@ -35,8 +40,8 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $fs = $this->getFilesystem();
-        $this->assertFalse($fs->has('something'));
+        $adapter = $this->getAdapter();
+        $this->assertFalse($adapter->delete('something'));
     }
 
     public function expectedFailsProvider()
