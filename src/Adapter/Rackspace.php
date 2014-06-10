@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\ObjectStore\Resource\DataObject;
@@ -157,10 +158,12 @@ class Rackspace extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string  $dirname
-     * @return  array
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
      */
-    public function createDir($dirname)
+    public function createDir($dirname, $options = null)
     {
         return array('path' => $dirname);
     }

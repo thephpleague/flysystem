@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class NullAdapter extends AbstractAdapter
@@ -168,10 +169,12 @@ class NullAdapter extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param $dirname
-     * @return array
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
      */
-    public function createDir($dirname)
+    public function createDir($dirname, $options = null)
     {
         return array('path' => $dirname, 'type' => 'dir');
     }

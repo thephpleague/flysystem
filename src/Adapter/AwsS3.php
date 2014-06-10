@@ -311,12 +311,14 @@ class AwsS3 extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string  $path
-     * @return  array   directory metadata
+     * @param   string        $path directory name
+     * @param   array|Config  $options
+     *
+     * @return  bool
      */
-    public function createDir($path)
+    public function createDir($path, $options = null)
     {
-        $result = $this->write(rtrim($path, '/') . '/', '');
+        $result = $this->write(rtrim($path, '/') . '/', '', $options);
 
         if ( ! $result) {
             return false;

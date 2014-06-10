@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
 use LogicException;
 use ZipArchive;
 use League\Flysystem\Util;
@@ -115,7 +116,15 @@ class Zip extends AbstractAdapter
         return $this->archive->deleteName($dirname);
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
+     */
+    public function createDir($dirname, $options = null)
     {
         if ( ! $this->has($dirname)) {
             $location = $this->applyPathPrefix($dirname);
