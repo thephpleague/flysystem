@@ -417,15 +417,17 @@ class Filesystem implements FilesystemInterface
     /**
      * Create a directory
      *
-     * @param   string  $dirname  directory name
+     * @param   string        $dirname directory name
+     * @param   array|Config  $options
+     *
      * @return  bool
      */
-    public function createDir($dirname)
+    public function createDir($dirname, $options = null)
     {
         $dirname = Util::normalizePath($dirname);
-        $result = $this->adapter->createDir($dirname);
+        $result  = $this->adapter->createDir($dirname, $options);
 
-        if ( $result === false) {
+        if ($result === false) {
             return false;
         }
 

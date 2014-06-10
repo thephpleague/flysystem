@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
 use Net_SFTP;
 use Crypt_RSA;
 use League\Flysystem\AdapterInterface;
@@ -222,7 +223,15 @@ class Sftp extends AbstractFtpAdapter
         return $data;
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
+     */
+    public function createDir($dirname, $options = null)
     {
         $connection = $this->getConnection();
 

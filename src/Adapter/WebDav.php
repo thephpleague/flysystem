@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Adapter\AbstractAdapter;
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 use Sabre\DAV\Client;
 use Sabre\DAV\Exception;
@@ -117,7 +118,15 @@ class WebDav extends AbstractAdapter
         }
     }
 
-    public function createDir($path)
+    /**
+     * Create a directory
+     *
+     * @param   string       $path directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
+     */
+    public function createDir($path, $options = null)
     {
         $location = $this->applyPathPrefix($path);
         $response = $this->client->request('MKCOL', $location);

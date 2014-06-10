@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
 use League\Flysystem\Util;
 use RuntimeException;
 
@@ -192,7 +193,15 @@ class Ftp extends AbstractFtpAdapter
         ftp_rmdir($connection, $dirname);
     }
 
-    public function createDir($dirname)
+    /**
+     * Create a directory
+     *
+     * @param   string       $dirname directory name
+     * @param   array|Config $options
+     *
+     * @return  bool
+     */
+    public function createDir($dirname, $options = null)
     {
         $result = false;
         $connection = $this->getConnection();
