@@ -8,7 +8,7 @@ class MemcachedTests extends PHPUnit_Framework_TestCase
     public function testLoadFail()
     {
         $client = Mockery::mock('Memcached');
-        $client->shouldReceive('get')->once()->andReturn(null);
+        $client->shouldReceive('get')->once()->andReturn(false);
         $cache = new Memcached($client);
         $cache->load();
         $this->assertFalse($cache->isComplete('', false));

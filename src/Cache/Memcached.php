@@ -40,7 +40,9 @@ class Memcached extends AbstractCache
      */
     public function load()
     {
-        if (($contents = $this->memcached->get($this->key)) !== null) {
+        $contents = $this->memcached->get($this->key);
+
+        if ($contents !== false) {
             $this->setFromStorage($contents);
         }
     }
