@@ -259,7 +259,7 @@ class Dropbox extends AbstractAdapter
             $listing[] = $this->normalizeObject($object, $path);
 
             if ($recursive && $object['is_dir']) {
-                $listing = array_merge($listing, $this->listContents($path));
+                $listing = array_merge($listing, $this->listContents($path, true));
             }
         }
 
