@@ -532,7 +532,6 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $cache->flush();
         $filesystem->write('deeply/nested/thing.txt', 'contents');
         $filesystem->write('other/nested/thing.txt', 'contents');
-        // var_dump($filesystem->listContents('deeply'));
         $this->assertCount(1, $filesystem->listContents('deeply'));
         $this->assertCount(2, $filesystem->listContents('deeply', true));
         $this->assertCount(2, $filesystem->listContents('deeply', true));

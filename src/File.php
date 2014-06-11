@@ -15,6 +15,38 @@ class File extends Handler
     }
 
     /**
+     * Read the file as a stream
+     *
+     * @return  resource  file stream
+     */
+    public function readStream()
+    {
+        return $this->filesystem->readStream($this->path);
+    }
+
+    /**
+     * Update the file contents
+     *
+     * @param   string   $contents
+     * @return  boolean  success boolean
+     */
+    public function update($content)
+    {
+        return $this->filesystem->update($this->path, $content);
+    }
+
+    /**
+     * Update the file contents with a stream
+     *
+     * @param   resource   $resource
+     * @return  boolean    success boolean
+     */
+    public function updateStream($resource)
+    {
+        return $this->filesystem->updateStream($this->path, $resource);
+    }
+
+    /**
      * Get the file's timestamp
      *
      * @return  int  unix timestamp

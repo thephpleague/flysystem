@@ -3,6 +3,7 @@
 namespace League\Flysystem;
 
 use LogicException;
+use League\Flysystem\Util\MimeType;
 
 class Util
 {
@@ -128,13 +129,13 @@ class Util
      */
     public static function guessMimeType($path, $content)
     {
-        $mimeType = Util\MimeType::detectByContent($content);
+        $mimeType = MimeType::detectByContent($content);
 
         if (empty($mimeType) || $mimeType === 'text/plain') {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {
-                $mimeType = Util\MimeType::detectByFileExtension($extension) ?: $mimeType;
+                $mimeType = MimeType::detectByFileExtension($extension) ?: $mimeType;
             }
         }
 
