@@ -9,10 +9,8 @@
             "email": "info@frenky.net"
         }
     ],
-    "autoload": {
-        "psr-4": {
-            "League\\Flysystem\\": "src/"
-        }
+    "require": {
+        "php": ">=5.4.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
@@ -24,6 +22,11 @@
         "sabre/dav": "~1.8.7",
         "phpseclib/phpseclib": "~0.3.5",
         "league/phpunit-coverage-listener" : "~1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\": "src/"
+        }
     },
     "suggest": {
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
