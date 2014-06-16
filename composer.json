@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "pae23/flysystem",
     "description": "Filesystem abstraction, but easy.",
     "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote", "webdav"],
     "license": "MIT",
