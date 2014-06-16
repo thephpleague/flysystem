@@ -513,7 +513,8 @@ class Filesystem implements FilesystemInterface
         foreach ($contents as $index => $object) {
             if ($object['type'] === 'file') {
                 $object = array_merge($object, $this->getWithMetadata($object['path'], $keys));
-                $contentsRet[sprintf("%1$032s-%2$09d", $object[$metaSort], $index)] = $object;
+                $format = in_array($metaSort, array("size", "timestamp")) ? "%1$032s-%2$09d" : "%1$-0256s-%2$09d";
+                $contentsRet[sprintf($format, $object[$metaSort], $index)] = $object;
             }
         }
         if ($desc)
