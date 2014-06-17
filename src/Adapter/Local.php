@@ -178,6 +178,10 @@ class Local extends AbstractAdapter
     public function read($path)
     {
         $location = $this->applyPathPrefix($path);
+        if (!is_file($location))
+        {
+            return false;
+        }
         $contents = file_get_contents($location);
 
         if ($contents === false) {
