@@ -492,37 +492,6 @@ class Filesystem implements FilesystemInterface
 
         return $contents;
     }
-    
-    /**
-     * List contents with metadata sorted
-     *
-     * @param   array  $key  metadata key
-     * @param   string  $metaSort  metadata key used for sorting
-     * @desc    boolean $desc   if true, sort is reversed
-     * @return  array            listing with metadata
-     */
-    public function listSorted(array $keys = array(), $directory = '', $recursive = false, $metaSort, $desc = false)
-    {
-        $contents = $this->listContents($directory, $recursive);
-        
-        if (!in_array($metaSort, array_merge($keys, array("dirname", "basename", "extension", "filename", "path", "type"))))
-        {
-            throw new InvalidArgumentException('The metaSort parameter : "'.$metaSort.'" must be in your keys arguments');
-        }
-
-        foreach ($contents as $index => $object) {
-            if ($object['type'] === 'file') {
-                $object = array_merge($object, $this->getWithMetadata($object['path'], $keys));
-                $format = in_array($metaSort, array("size", "timestamp")) ? "%1$032s-%2$09d" : "%1$-0256s-%2$09d";
-                $contentsRet[sprintf($format, $object[$metaSort], $index)] = $object;
-            }
-        }
-        if ($desc)
-            krsort($contentsRet);
-        else
-            ksort($contentsRet);
-        return $contentsRet;
-    }
 
     /**
      * Get metadata for an object with required metadata
