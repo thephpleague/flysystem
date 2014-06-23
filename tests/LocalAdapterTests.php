@@ -83,6 +83,12 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $adapter->delete('file.txt');
     }
 
+    public function testCreateZeroDir()
+    {
+        $this->adapter->createDir('0');
+        $this->assertTrue(is_dir($this->adapter->applyPathPrefix('0')));
+    }
+
     public function testCopy()
     {
         $adapter = $this->adapter;
