@@ -54,7 +54,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $path = ltrim($path, '\\/');
 
-        if (empty($path)) {
+        if (strlen($path) === 0) {
             return $this->pathPrefix ?: '';
         }
 
