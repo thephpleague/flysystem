@@ -14,9 +14,24 @@ use League\Flysystem\FilesystemInterface;
 
 class Before extends EventAbstract
 {
+    /**
+     * @var  FilesystemInterface  $filesystem
+     */
     protected $filesystem;
+
+    /**
+     * @var  string  $method
+     */
     protected $method;
+
+    /**
+     * @var  array  $arguments
+     */
     protected $arguments;
+
+    /**
+     * @var  mixed  $result
+     */
     protected $result = false;
 
     /**
@@ -39,6 +54,11 @@ class Before extends EventAbstract
         return $this->filesystem;
     }
 
+    /**
+     * Get the event name
+     *
+     * @return  string  event name
+     */
     public function getName()
     {
         $method = $this->getMethod();
@@ -46,16 +66,33 @@ class Before extends EventAbstract
         return 'before.' . strtolower($method);
     }
 
+    /**
+     * Get the called method name
+     *
+     * @return  string  method
+     */
     public function getMethod()
     {
         return $this->method;
     }
 
+    /**
+     * Get the passed arguments
+     *
+     * @return  array  method arguments
+     */
     public function getArguments()
     {
         return $this->arguments;
     }
 
+    /**
+     * Get an argument by key
+     *
+     * @param   string  $key      argument key
+     * @param   mixed   $default  default return value
+     * @return  mixed
+     */
     public function getArgument($key, $default = null)
     {
         if ( ! array_key_exists($key, $this->arguments)) {
@@ -79,6 +116,12 @@ class Before extends EventAbstract
         return $this;
     }
 
+    /**
+     * Set the arguments
+     *
+     * @param   array  $arguments
+     * @return  self
+     */
     public function setArguments(array $arguments)
     {
         $this->arguments = array_merge($this->arguments, $arguments);
@@ -86,6 +129,12 @@ class Before extends EventAbstract
         return $this;
     }
 
+    /**
+     * Set the result, used when the operation is canceled
+     *
+     * @param   mixed  $result
+     * @return  self
+     */
     public function setResult($result)
     {
         $this->result = $result;
@@ -93,13 +142,21 @@ class Before extends EventAbstract
         return $this;
     }
 
+    /**
+     * Get the result, used when the operation is canceled
+     *
+     * @return  mixed
+     */
     public function getResult()
     {
         return $this->result;
     }
 
     /**
-     * @param mixed $result
+     * Cancel the operation
+     *
+     * @param   mixed $result
+     * @return  void
      */
     public function cancelOperation($result = false)
     {
