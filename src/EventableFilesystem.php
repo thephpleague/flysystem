@@ -25,9 +25,14 @@ class EventableFilesystem implements FilesystemInterface
         $this->setEmitter($emitter);
     }
 
+    public function getFilesystem()
+    {
+        return $this->filesystem;
+    }
+
     protected function prepareAdapter(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
-        if ($adapter instanceof Filesystem) {
+        if ($adapter instanceof FilesystemInterface) {
             return $adapter;
         }
 
@@ -46,12 +51,12 @@ class EventableFilesystem implements FilesystemInterface
 
     public function readAndDelete($path, $config = null)
     {
-        return $this->delegateMethodCall('put', compact('path', 'config'));
+        return $this->delegateMethodCall('readAndDelete', compact('path', 'config'));
     }
 
     public function listPaths($directory = '', $recursive = false, $config = null)
     {
-        return $this->delegateMethodCall('listPaths', compact('path', 'recursive', 'config'));
+        return $this->delegateMethodCall('listPaths', compact('directory', 'recursive', 'config'));
     }
 
     public function listWith(array $keys = array(), $directory = '', $recursive = false, $config = null)
@@ -69,9 +74,9 @@ class EventableFilesystem implements FilesystemInterface
         return $this->delegateMethodCall('get', compact('path', 'handler', 'config'));
     }
 
-    public function flushCache()
+    public function flushCache($config = null)
     {
-        return $this->delegateMethodCall('flushCache');
+        return $this->delegateMethodCall('flushCache', compact('config'));
     }
 
     public function addPlugin(PluginInterface $plugin, $config = null)
@@ -274,7 +279,7 @@ class EventableFilesystem implements FilesystemInterface
      */
     public function deleteDir($dirname, $config = null)
     {
-        return $this->delegateMethodCall('deleteDir', compact('path', 'config'));
+        return $this->delegateMethodCall('deleteDir', compact('dirname', 'config'));
     }
 
     /**
@@ -307,7 +312,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param array $arguments
      * @return mixed
      */
-    public function delegateMethodCall($method, array $arguments)
+    public function delegateMethodCall($method, array $arguments = [])
     {
         $arguments = $this->prepareArguments($arguments);
         $config = $arguments['config'];
@@ -374,7 +379,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param array $arguments
      * @return array
      */
-    protected function prepareArguments(array $arguments)
+    public function prepareArguments(array $arguments)
     {
         if ( ! isset($arguments['config'])) {
             $arguments['config'] = new Config;
