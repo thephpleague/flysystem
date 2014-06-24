@@ -333,9 +333,11 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
-     * @param $method
-     * @param $arguments
-     * @return array
+     * Emit the before event
+     *
+     * @param   string  $method
+     * @param   array   $arguments
+     * @return  array   [continue, call result]
      */
     protected function emitBefore($method, $arguments)
     {

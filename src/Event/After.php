@@ -14,10 +14,19 @@ use League\Flysystem\FilesystemInterface;
 
 class After extends EventAbstract
 {
+    /**
+     * @var  FilesystemInterface  $filesystem
+     */
     protected $filesystem;
 
+    /**
+     * @var  string  $method
+     */
     protected $method;
 
+    /**
+     * @var  mixed  $result
+     */
     protected $result;
 
     /**
