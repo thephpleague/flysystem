@@ -177,6 +177,13 @@ class Ftp extends AbstractFtpAdapter
         return ftp_delete($this->getConnection(), $path);
     }
 
+    /**
+     * Removes a directory
+     *
+     * @param   string       $dirname directory name
+     *
+     * @return  bool
+     */
     public function deleteDir($dirname)
     {
         $connection = $this->getConnection();
@@ -184,13 +191,17 @@ class Ftp extends AbstractFtpAdapter
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                ftp_delete($connection, $object['path']);
+                if (!ftp_delete($connection, $object['path'])) {
+                    return false;
+                }
             } else {
-                ftp_rmdir($connection, $object['path']);
+                if (!ftp_rmdir($connection, $object['path'])) {
+                    return false;
+                }
             }
         }
 
-        ftp_rmdir($connection, $dirname);
+        return ftp_rmdir($connection, $dirname);
     }
 
     /**

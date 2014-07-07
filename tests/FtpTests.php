@@ -16,8 +16,12 @@ function ftp_delete()
     return true;
 }
 
-function ftp_rmdir()
+function ftp_rmdir($connection, $dirname)
 {
+    if (strpos($dirname, 'rmdir.fail') !== false) {
+        return false;
+    }
+
     return true;
 }
 
@@ -190,6 +194,8 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
         $this->assertTrue($adapter->rename('a','b'));
         $this->assertTrue($adapter->delete('a'));
+        $this->assertFalse($adapter->deleteDir('some.nested/rmdir.fail'));
+        $this->assertTrue($adapter->deleteDir('a/directory'));
         $result = $adapter->read('something.txt');
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
