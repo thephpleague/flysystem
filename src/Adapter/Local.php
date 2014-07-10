@@ -214,6 +214,8 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $destination = $this->applyPathPrefix($newpath);
 
+        $this->ensureDirectory(dirname($destination));
+
         return copy($location, $destination);
     }
 
