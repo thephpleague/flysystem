@@ -8,11 +8,11 @@
 
 namespace League\Flysystem\Event;
 
-use League\Event\EventAbstract;
+use League\Event\AbstractEvent;
 use League\Flysystem\FilesystemInterface;
 
 
-class Before extends EventAbstract
+class Before extends AbstractEvent
 {
     /**
      * @var  FilesystemInterface  $filesystem
