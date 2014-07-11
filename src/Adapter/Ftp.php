@@ -121,21 +121,15 @@ class Ftp extends AbstractFtpAdapter
 
     public function write($path, $contents, $config = null)
     {
-        $this->ensureDirectory(Util::dirname($path));
         $mimetype = Util::guessMimeType($path, $contents);
         $config = Util::ensureConfig($config);
-        $stream = $contents;
+        $stream = tmpfile();
+        fwrite($stream, $contents);
+        rewind($stream);
+        $result = $this->writeStream($path, $stream, $config);
+        $result = fclose($stream) && $result;
 
-        if ( ! is_resource($stream)) {
-            $stream = tmpfile();
-            fwrite($stream, $contents);
-            rewind($stream);
-        }
-
-        $result = ftp_fput($this->getConnection(), $path, $stream, FTP_BINARY);
-        fclose($stream);
-
-        if ( ! $result) {
+        if ($result === false) {
             return false;
         }
 
@@ -191,13 +185,11 @@ class Ftp extends AbstractFtpAdapter
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
-                if (!ftp_delete($connection, $object['path'])) {
+                if ( ! ftp_delete($connection, $object['path'])) {
                     return false;
                 }
-            } else {
-                if (!ftp_rmdir($connection, $object['path'])) {
-                    return false;
-                }
+            } elseif ( ! ftp_rmdir($connection, $object['path'])) {
+                return false;
             }
         }
 
@@ -294,6 +286,7 @@ class Ftp extends AbstractFtpAdapter
 
         if ( ! $result) {
             fclose($stream);
+
             return false;
         }
 
