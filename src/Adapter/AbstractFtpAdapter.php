@@ -258,16 +258,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $item = preg_replace('#\s+#', ' ', trim($item));
         list ($permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
+        $timestamp = strtotime($month . ' ' . $day . ' ' . $time);
         $path = empty($base) ? $name : $base . $this->separator . $name;
 
         if ($type === 'dir') {
-            return compact('type', 'path');
+            return compact('type', 'path', 'timestamp');
         }
 
         $permissions = $this->normalizePermissions($permissions);
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
         $size = (int) $size;
-        $timestamp = strtotime($month . ' ' . $day . ' ' . $time);
 
         return compact('type', 'path', 'visibility', 'size', 'timestamp');
     }
