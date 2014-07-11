@@ -11,8 +11,12 @@ function ftp_ssl_connect($host)
     return $host;
 }
 
-function ftp_delete()
+function ftp_delete($conn, $path)
 {
+    if (strpos($path, 'rm.fail.txt')) {
+        return false;
+    }
+
     return true;
 }
 
@@ -89,6 +93,14 @@ function ftp_rawlist($connection, $directory)
 {
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
+    }
+
+    if (strpos($directory, 'rmdir.nested.fail') !== false) {
+        return array(
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp           409 Oct 13  2012 rm.fail.txt',
+        );
     }
 
     return array(
@@ -195,7 +207,8 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($adapter->rename('a','b'));
         $this->assertTrue($adapter->delete('a'));
         $this->assertFalse($adapter->deleteDir('some.nested/rmdir.fail'));
-        $this->assertTrue($adapter->deleteDir('a/directory'));
+        $this->assertFalse($adapter->deleteDir('rmdir.nested.fail'));
+        $this->assertTrue($adapter->deleteDir('somewhere'));
         $result = $adapter->read('something.txt');
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
