@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: FrenkyNet
- * Date: 23/06/14
- * Time: 14:52
- */
 
 namespace League\Flysystem\Event;
 
