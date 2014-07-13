@@ -3,7 +3,7 @@
         backupStaticAttributes="false"
         bootstrap="./phpunit.php"
         colors="true"
-        processIsolation="true"
+        processIsolation="false"
         syntaxCheck="false">
     <testsuites>
         <testsuite name="flysystem/tests">
