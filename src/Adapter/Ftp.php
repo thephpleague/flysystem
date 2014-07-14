@@ -106,6 +106,7 @@ class Ftp extends AbstractFtpAdapter
     protected function login()
     {
         if ( ! @ftp_login($this->getConnection(), $this->getUsername(), $this->getPassword())) {
+            $this->disconnect();
             throw new RuntimeException('Could not login with connection: ' . $this->getHost() . '::' . $this->getPort() . ', username: ' . $this->getUsername());
         }
     }
