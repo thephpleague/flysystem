@@ -219,7 +219,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         while ($item = array_shift($listing)) {
             if (preg_match('#^.*:$#', $item)) {
-                $base = trim($item, './:');
+                $base = trim($item, ':');
                 continue;
             }
 
@@ -316,7 +316,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @param   array   $list
      * @return  array
      */
-    protected function removeDotDirectories(array $list)
+    public function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
             if ( ! empty($line) && ! preg_match('#.* \.(\.)?$|^total#', $line)) {
