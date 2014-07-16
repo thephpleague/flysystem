@@ -253,16 +253,16 @@ class Filesystem implements FilesystemInterface
      */
     public function updateStream($path, $resource, $config = null)
     {
-        $path = Util::normalizePath($path);
-        $this->assertPresent($path);
-
         if ( ! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
+        $path = Util::normalizePath($path);
+        $config = Util::ensureConfig($config);
+        $this->assertPresent($path);
         Util::rewindStream($resource);
 
-        if ( ! $object = $this->adapter->updateStream($path, $resource)) {
+        if ( ! $object = $this->adapter->updateStream($path, $resource, $config)) {
             return false;
         }
 
