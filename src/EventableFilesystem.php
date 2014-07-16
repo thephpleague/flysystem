@@ -12,6 +12,11 @@ class EventableFilesystem implements FilesystemInterface
     use EmitterTrait;
 
     /**
+     * @var  FilesystemInterface  $filesystem
+     */
+    protected $filesystem;
+
+    /**
      * Constructor
      *
      * @param  AdapterInterface  $adapter
