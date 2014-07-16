@@ -57,7 +57,7 @@ class AwsS3 extends AbstractAdapter
     protected $options = array(
         'Multipart' => 1024,
         'MinPartSize' => 32,
-        'Concurrency' => 3
+        'Concurrency' => 3,
     );
 
     /**
@@ -85,10 +85,7 @@ class AwsS3 extends AbstractAdapter
         $this->bucket  = $bucket;
         $this->setPathPrefix($prefix);
         $this->options = array_merge($this->options, $options);
-
-        if ($uploadBuilder !== null) {
-            $this->setUploadBuilder($uploadBuilder);
-        }
+        $this->setUploadBuilder($uploadBuilder);
     }
 
     /**
@@ -125,7 +122,6 @@ class AwsS3 extends AbstractAdapter
      */
     public function write($path, $contents, $config = null)
     {
-        $config  = Util::ensureConfig($config);
         $options = $this->getOptions(
             $path,
             array(
@@ -133,7 +129,7 @@ class AwsS3 extends AbstractAdapter
                 'ContentType'   => Util::guessMimeType($path, $contents),
                 'ContentLength' => Util::contentSize($contents),
             ),
-            $config
+            Util::ensureConfig($config)
         );
 
         $multipartLimit = $this->mbToBytes($options['Multipart']);
@@ -163,7 +159,7 @@ class AwsS3 extends AbstractAdapter
     public function writeStream($path, $resource, $config = null)
     {
         $config  = Util::ensureConfig($config);
-        $options = array('Body' => $resource,);
+        $options = array('Body' => $resource);
         $options = $this->getOptions($path, $options, $config);
         $multipartLimit = $this->mbToBytes($options['Multipart']);
 
@@ -444,6 +440,7 @@ class AwsS3 extends AbstractAdapter
     protected function normalizeObject(array $object, $path = null)
     {
         $result = array('path' => $path ?: $this->removePathPrefix($object['Key']));
+        $result['dirname'] = Util::dirname($result['path']);
 
         if (isset($object['LastModified'])) {
             $result['timestamp'] = strtotime($object['LastModified']);
@@ -452,13 +449,11 @@ class AwsS3 extends AbstractAdapter
         if (substr($result['path'], -1) === '/') {
             $result['type'] = 'dir';
             $result['path'] = rtrim($result['path'], '/');
-            $result['dirname'] = Util::dirname($result['path']);
 
             return $result;
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
-        $result['dirname'] = Util::dirname($result['path']);
 
         if (isset($result['contents'])) {
             $result['contents'] = (string) $result['contents'];
@@ -478,6 +473,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function getOptions($path, array $options = array(), Config $config = null)
     {
+        $options = array_merge($this->options, $options);
         $options['Key']    = $this->applyPathPrefix($path);
         $options['Bucket'] = $this->bucket;
 
@@ -485,7 +481,7 @@ class AwsS3 extends AbstractAdapter
             $options = array_merge($options, $this->getOptionsFromConfig($config));
         }
 
-        return array_merge($this->options, $options);
+        return $options;
     }
 
     /**
@@ -543,7 +539,6 @@ class AwsS3 extends AbstractAdapter
 
         foreach (static::$metaOptions as $option) {
             if ( ! array_key_exists($option, $options)) continue;
-
             $uploadBuilder->setOption($option, $options[$option]);
         }
 
@@ -588,10 +583,9 @@ class AwsS3 extends AbstractAdapter
      * Set the S3 UploadBuilder
      *
      * @param   UploadBuilder $uploadBuilder
-     *
      * @return  self
      */
-    public function setUploadBuilder(UploadBuilder $uploadBuilder)
+    public function setUploadBuilder(UploadBuilder $uploadBuilder = null)
     {
         $this->uploadBuilder = $uploadBuilder;
 
