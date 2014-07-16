@@ -307,7 +307,7 @@ class Ftp extends AbstractFtpAdapter
 
     protected function listDirectoryContents($directory, $recursive = true)
     {
-        $listing = ftp_rawlist($this->getConnection(), '-lna '. $directory, $recursive);
+        $listing = ftp_rawlist($this->getConnection(), '-lna ' . $directory, $recursive);
 
         if ($listing === false) {
             return array();
