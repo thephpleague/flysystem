@@ -461,6 +461,39 @@ $s3->writeStream('path/to/object.png', $stream, [
 ]);
 ```
 
+## Events
+
+Flysystem comes with an intergrations of the Event package (also provided by the PHP League).
+In this case you can use the `League\Flysystem\EventableFilesystem`. This will expose the same API
+as the `League\Flysystem\Filesystem` class but exposes events for every method call. Events allow
+you to hook into Flysystem by exposing a before and after event for every method.
+
+```php
+use League\Flysystem\EventableFilesystem;
+use League\Flysystem\Event\Before;
+use League\Flysystem\Event\After;
+
+$filesystem = new League\Flysystem\EventableFilesystem($adapter, $cache, $options);
+$filesystem->addListener('before.read', function (Before $event) {
+    // Get a parameter
+    $path = $event->getParameter('path');
+
+    // Overwrite a parameter
+    $event->setParameter('path', '/another/path.ext');
+
+    // Cancel the operation
+    $event->cancelOperation('optional alternative return value');
+});
+
+$filesystem->addListener('after.read', function (After $event)) {
+    // Get the response
+    $response = $event->getResponse();
+
+    // Overwrite the response
+    $event->setResponse('altered response');
+});
+```
+
 ## Plugins
 
 Need a feature which is not included in Flysystem's bag of tricks? Write a plugin!
