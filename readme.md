@@ -476,10 +476,10 @@ use League\Flysystem\Event\After;
 $filesystem = new League\Flysystem\EventableFilesystem($adapter, $cache, $options);
 $filesystem->addListener('before.read', function (Before $event) {
     // Get a parameter
-    $path = $event->getParameter('path');
+    $path = $event->getArgument('path');
 
     // Overwrite a parameter
-    $event->setParameter('path', '/another/path.ext');
+    $event->setArgument('path', '/another/path.ext');
 
     // Cancel the operation
     $event->cancelOperation('optional alternative return value');
