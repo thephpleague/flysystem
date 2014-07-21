@@ -332,7 +332,7 @@ class EventableFilesystem implements FilesystemInterface
             return $result;
         }
 
-        $result = $this->callFilesystemMethod($method, $arguments);
+        $result = $this->callFilesystemMethod($method, $result);
 
         return $this->emitAfter($method, $result);
     }
@@ -353,7 +353,7 @@ class EventableFilesystem implements FilesystemInterface
             return [false, $event->getResult()];
         }
 
-        return [true, null];
+        return [true, $event->getArguments()];
     }
 
     /**

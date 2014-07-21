@@ -115,11 +115,10 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $filesystem->addListener('before.read', function ($event) {
             $event->setArgument('path', 'altered');
         });
-        $arguments = ['original', new Config];
-        $call = $mock->shouldReceive('read');
-        call_user_func_array([$call, 'with'], $arguments);
+        $config = new Config;
+        $call = $mock->shouldReceive('read')->with('altered', $config);
         $call->andReturn(true);
-        $result = call_user_func_array([$filesystem, 'read'], $arguments);
+        $result = $filesystem->read('original', $config);
         $this->assertTrue($result);
     }
 
@@ -129,11 +128,10 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $filesystem->addListener('before.read', function ($event) {
             $event->setArguments(['path' => 'altered']);
         });
-        $arguments = ['original', new Config];
-        $call = $mock->shouldReceive('read');
-        call_user_func_array([$call, 'with'], $arguments);
+        $config = new Config;
+        $call = $mock->shouldReceive('read')->with('altered', $config);
         $call->andReturn(true);
-        $result = call_user_func_array([$filesystem, 'read'], $arguments);
+        $result = $filesystem->read('original', $config);
         $this->assertTrue($result);
     }
 
