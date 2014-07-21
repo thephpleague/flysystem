@@ -162,7 +162,14 @@ class DropboxTests extends PHPUnit_Framework_TestCase
      */
     public function testCreateDir($adapter, $mock)
     {
-        $this->assertInternalType('array', $adapter->createDir('something'));
+        $mock->shouldReceive('createFolder')->with('/prefix/fail/please')->andReturn(null);
+        $mock->shouldReceive('createFolder')->with('/prefix/pass/please')->andReturn(array(
+            'is_dir' => true,
+            'path' => 'pass/please',
+        ));
+        $this->assertFalse($adapter->createDir('fail/please'));
+        $expected = ['path' => 'pass/please', 'type' => 'dir'];
+        $this->assertEquals($expected, $adapter->createDir('pass/please'));
     }
 
     /**

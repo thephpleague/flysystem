@@ -214,7 +214,14 @@ class Dropbox extends AbstractAdapter
      */
     public function createDir($path, $options = null)
     {
-        return array('path' => $path, 'type' => 'dir');
+        $location = $this->applyPathPrefix($path);
+        $result = $this->client->createFolder($location);
+
+        if ($result === null) {
+            return false;
+        }
+
+        return $this->normalizeObject($result, $path);
     }
 
     public function getMetadata($path)
