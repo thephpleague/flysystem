@@ -244,16 +244,15 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($directory).$this->pathSeparator;
 
         if ( ! is_dir($location)) {
-            return $result;
+            return array();
         }
 
         $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
 
         foreach ($iterator as $file) {
-            $path = $this->removePathPrefix($file->getPathname());
-            $path = trim($path, '\\/');
+            $path = $this->getFilePath($file);
             if (preg_match('#(^|/)\.{1,2}$#', $path)) continue;
-            $result[] = $this->normalizeFileInfo($path, $file);
+            $result[] = $this->normalizeFileInfo($file);
         }
 
         return $result;
@@ -270,7 +269,7 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $info = new SplFileInfo($location);
 
-        return $this->normalizeFileInfo($path, $info);
+        return $this->normalizeFileInfo($info);
     }
 
     /**
@@ -390,15 +389,14 @@ class Local extends AbstractAdapter
     /**
      * Normalize the file info
      *
-     * @param $path
      * @param SplFileInfo $file
      * @return array
      */
-    protected function normalizeFileInfo($path, SplFileInfo $file)
+    protected function normalizeFileInfo(SplFileInfo $file)
     {
         $normalized = array(
             'type' => $file->getType(),
-            'path' => $path,
+            'path' => $this->getFilePath($file),
             'timestamp' => $file->getMTime()
         );
 
@@ -407,6 +405,14 @@ class Local extends AbstractAdapter
         }
 
         return $normalized;
+    }
+
+    protected function getFilePath(SplFileInfo $file)
+    {
+        $path = $file->getPathname();
+        $path = $this->removePathPrefix($path);
+
+        return trim($path, '\\/');
     }
 
     /**
