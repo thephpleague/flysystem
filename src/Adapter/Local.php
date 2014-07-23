@@ -244,7 +244,7 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($directory).$this->pathSeparator;
 
         if ( ! is_dir($location)) {
-            return array();
+            return $result;
         }
 
         $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
