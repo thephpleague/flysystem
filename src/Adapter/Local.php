@@ -407,6 +407,12 @@ class Local extends AbstractAdapter
         return $normalized;
     }
 
+    /**
+     * Get the normalized path from a SplFileInfo object
+     *
+     * @param   SplFileInfo  $file
+     * @return  string
+     */
     protected function getFilePath(SplFileInfo $file)
     {
         $path = $file->getPathname();
