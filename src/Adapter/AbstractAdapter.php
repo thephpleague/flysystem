@@ -55,11 +55,11 @@ abstract class AbstractAdapter implements AdapterInterface
         $path = ltrim($path, '\\/');
 
         if (strlen($path) === 0) {
-            return $this->pathPrefix ?: '';
+            return $this->getPathPrefix() ?: '';
         }
 
-        if ($this->pathPrefix) {
-            $path = $this->pathPrefix . $path;
+        if ($prefix = $this->getPathPrefix()) {
+            $path = $prefix . $path;
         }
 
         return $path;

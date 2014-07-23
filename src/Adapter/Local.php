@@ -240,7 +240,23 @@ class Local extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return $this->directoryContents($directory, $recursive);
+        $result = array();
+        $location = $this->applyPathPrefix($directory).$this->pathSeparator;
+
+        if ( ! is_dir($location)) {
+            return array();
+        }
+
+        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
+
+        foreach ($iterator as $file) {
+            $path = $this->removePathPrefix($file->getPathname());
+            $path = trim($path, '\\/');
+            if (preg_match('#(^|/)\.{1,2}$#', $path)) continue;
+            $result[] = $this->normalizeFileInfo($path, $file);
+        }
+
+        return $result;
     }
 
     /**
@@ -357,7 +373,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        $contents = $this->directoryContents($dirname, true);
+        $contents = $this->listContents($dirname, true);
         $contents = array_reverse($contents);
 
         foreach ($contents as $file) {
@@ -369,34 +385,6 @@ class Local extends AbstractAdapter
         }
 
         return rmdir($location);
-    }
-
-    /**
-     * Get contents of a directory
-     *
-     * @param string $path
-     * @param bool $recursive
-     * @return array
-     */
-    protected function directoryContents($path = '', $recursive = false)
-    {
-        $result = array();
-        $location = $this->applyPathPrefix($path).DIRECTORY_SEPARATOR;
-
-        if ( ! is_dir($location)) {
-            return array();
-        }
-
-        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
-
-        foreach ($iterator as $file) {
-            $path = $this->removePathPrefix($file->getPathname());
-            $path = trim($path, '\\/');
-            if (preg_match('#(^|/)\.{1,2}$#', $path)) continue;
-            $result[] = $this->normalizeFileInfo($path, $file);
-        }
-
-        return $result;
     }
 
     /**
