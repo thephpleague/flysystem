@@ -216,6 +216,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->createDir('some.nested/mkdir.fail'));
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', 'public'));
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), 'public'));
+        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), 'public'));
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
