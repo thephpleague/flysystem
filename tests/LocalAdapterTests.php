@@ -63,7 +63,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($adapter->has('dir/file.txt'));
         $result = $adapter->read('dir/file.txt');
         $this->assertEquals('dummy', $result['contents']);
-        $adapter->delete('dir/file.txt');
+        $adapter->deleteDir('dir');
     }
 
     public function testListingNonexistingDirectory()
@@ -88,6 +88,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     {
         $this->adapter->createDir('0');
         $this->assertTrue(is_dir($this->adapter->applyPathPrefix('0')));
+        $this->adapter->deleteDir('0');
     }
 
     public function testCopy()
@@ -97,6 +98,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
         $this->assertTrue($adapter->has('new.ext'));
         $adapter->delete('file.ext');
+        $adapter->delete('new.ext');
     }
 
     public function testFailingStreamCalls()
