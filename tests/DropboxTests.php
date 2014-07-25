@@ -233,4 +233,12 @@ class DropboxTests extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($adapter->copy('something', 'something'));
     }
+
+    /**
+     * @dataProvider  dropboxProvider
+     */
+    public function testGetClient($adapter, $mock)
+    {
+        $this->assertEquals($mock, $adapter->getClient());
+    }
 }
