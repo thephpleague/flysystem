@@ -250,6 +250,11 @@ class Dropbox extends AbstractAdapter
     {
         return $this->getMetadata($path);
     }
+    
+    public function getClient()
+    {
+        return $this->client;
+    }
 
     public function listContents($directory = '', $recursive = false)
     {
