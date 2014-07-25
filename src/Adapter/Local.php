@@ -19,6 +19,9 @@ class Local extends AbstractAdapter
         'private' => 0700,
     );
 
+    /**
+     * @var  string  $pathSeparator
+     */
     protected $pathSeparator = DIRECTORY_SEPARATOR;
 
     /**
