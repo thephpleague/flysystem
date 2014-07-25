@@ -297,6 +297,10 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
      */
     public function testVisibility($filesystem, $adapter, $cache)
     {
+        if (strtolower(substr(php_uname('a'), 0, 3)) === 'win') {
+            return $this->markTestSkipped('Windows does not support file permissions.');
+        }
+
         $filesystem->write('test.txt', 'something', 'private');
         $this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $filesystem->getVisibility('test.txt'));
         $this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $cache->getVisibility('test.txt'));
