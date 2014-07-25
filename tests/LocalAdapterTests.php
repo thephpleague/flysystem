@@ -48,6 +48,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('stream', $result);
         $this->assertInternalType('resource', $result['stream']);
+        fclose($result['stream']);
         $adapter->delete('file.txt');
     }
 
