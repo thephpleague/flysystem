@@ -15,7 +15,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @var  string  $pathSeparator
      */
-    protected $pathSeparator = DIRECTORY_SEPARATOR;
+    protected $pathSeparator = '/';
 
     /**
      * Set the path prefix
