@@ -1,9 +1,4 @@
-vendor
+/.idea
+/vendor
+/tests/files
 composer.lock
-index.php
-coverage
-tests/files/*
-
-# PHPStorm #
-############
-.idea/*
