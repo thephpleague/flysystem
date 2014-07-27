@@ -7,4 +7,4 @@
 /phpunit.php export-ignore
 /phpunit.xml.dist export-ignore
 /phpunit.xml.hhvm export-ignore
-/README.md export-ignore
+/readme.md export-ignore
