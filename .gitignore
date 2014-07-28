@@ -1,4 +1,5 @@
 /.idea
+/coverage
 /vendor
 /tests/files
 composer.lock
