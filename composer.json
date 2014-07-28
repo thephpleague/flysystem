@@ -1,7 +1,10 @@
 {
     "name": "league/flysystem",
     "description": "Filesystem abstraction, but easy.",
-    "keywords": ["filesystem", "dropbox", "aws", "s3", "ftp", "sftp", "remote", "webdav"],
+    "keywords": [
+        "filesystem", "files", "storage", "dropbox", "aws",
+        "s3", "ftp", "sftp", "remote", "webdav", "file systems"
+    ],
     "license": "MIT",
     "authors": [
         {
