@@ -33,16 +33,6 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Returns if SSL is enabled
-     *
-     * @return bool
-     */
-    public function getSsl()
-    {
-        return $this->ssl;
-    }
-
-    /**
      * Set if Ssl is enabled
      *
      * @param bool $ssl
@@ -53,16 +43,6 @@ class Ftp extends AbstractFtpAdapter
         $this->ssl = (bool) $ssl;
 
         return $this;
-    }
-
-    /**
-     * Returns if passive mode will be used
-     *
-     * @return bool
-     */
-    public function getPassive()
-    {
-        return $this->passive;
     }
 
     /**
@@ -104,7 +84,7 @@ class Ftp extends AbstractFtpAdapter
 
     protected function setConnectionPassiveMode()
     {
-        if ( ! ftp_pasv($this->getConnection(), $this->getPassive())) {
+        if ( ! ftp_pasv($this->getConnection(), $this->passive)) {
             throw new RuntimeException('Could not set passive mode for connection: ' . $this->getHost() . '::' . $this->getPort());
         }
     }

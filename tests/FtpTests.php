@@ -185,12 +185,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter = new Ftp($this->options);
         $this->assertEquals('example.org', $adapter->getHost());
         $this->assertEquals(40, $adapter->getPort());
-        $this->assertEquals(true, $adapter->getSsl());
         $this->assertEquals(35, $adapter->getTimeout());
         $this->assertEquals('/somewhere/', $adapter->getRoot());
         $this->assertEquals(0777, $adapter->getPermPublic());
         $this->assertEquals(0000, $adapter->getPermPrivate());
-        $this->assertEquals(false, $adapter->getPassive());
         $this->assertEquals('user', $adapter->getUsername());
         $this->assertEquals('password', $adapter->getPassword());
         $listing = $adapter->listContents('', true);
