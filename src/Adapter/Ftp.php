@@ -9,7 +9,28 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
-    protected $configurable = array('host', 'port', 'username', 'password', 'ssl', 'timeout', 'root', 'permPrivate', 'permPublic', 'passive');
+    protected $transferMode = FTP_BINARY;
+
+    protected $configurable = array(
+        'host', 'port', 'username',
+        'password', 'ssl', 'timeout',
+        'root', 'permPrivate',
+        'permPublic', 'passive',
+        'transferMode',
+    );
+
+    /**
+     * Set the transfer mode
+     *
+     * @param   int  $mode
+     * @return  self
+     */
+    public function setTransferMode($mode)
+    {
+        $this->transferMode = FTP_BINARY;
+
+        return $this;
+    }
 
     /**
      * Returns if SSL is enabled
@@ -25,7 +46,7 @@ class Ftp extends AbstractFtpAdapter
      * Set if Ssl is enabled
      *
      * @param bool $ssl
-     * @return \Flysystem\Adapter\Ftp
+     * @return self
      */
     public function setSsl($ssl)
     {
@@ -146,7 +167,7 @@ class Ftp extends AbstractFtpAdapter
         $this->ensureDirectory(Util::dirname($path));
         $config = Util::ensureConfig($config);
 
-        if ( ! ftp_fput($this->getConnection(), $path, $resource, FTP_BINARY)) {
+        if ( ! ftp_fput($this->getConnection(), $path, $resource, $this->transferMode)) {
             return false;
         }
 

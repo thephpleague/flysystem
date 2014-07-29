@@ -226,7 +226,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testConnectFail()
     {
-        $adapter = new Ftp(array('host' => 'fail.me', 'ssl' => false));
+        $adapter = new Ftp(array('host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY));
         $adapter->connect();
     }
 
