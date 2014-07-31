@@ -26,7 +26,7 @@ bugs, new features and documentation.
 * Emulate directories in systems that support none, like AwsS3.
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
-* Support streams for bigger file handling
+* Support streams for big file handling
 
 # Installation
 
@@ -44,10 +44,13 @@ You can also use Flysystem without using Composer by registering an autoloader f
 
 ```php
 spl_autoload_register(function($class) {
-    if (!substr($class, 0, 17) === 'League\\Flysystem') {
+    $prefix = 'League\\Flysystem\\';
+
+    if ( ! substr($class, 0, 17) === $prefix) {
         return;
     }
 
+    $class = substr($class, strlen($prefix));
     $location = __DIR__ . 'path/to/flysystem/src/' . str_replace('\\', '/', $class) . '.php';
 
     if (is_file($location)) {
@@ -78,7 +81,7 @@ Want to get started quickly? Check out some of these integrations:
 
 ### Planned Adapters
 
-* Azure
+* Azure (PR welcome)
 * PR's welcome?
 
 ## Caching
