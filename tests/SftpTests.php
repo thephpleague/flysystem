@@ -21,7 +21,7 @@ class SftpTests extends PHPUnit_Framework_TestCase
 
     public function adapterProvider()
     {
-        $adapter = new Sftp(array());
+        $adapter = new Sftp(array('username' => 'test', 'password' => 'test'));
         $mock = Mockery::mock('Net_SFTP');
         $mock->shouldReceive('__toString')->andReturn('Net_SFTP');
         $mock->shouldReceive('disconnect');
@@ -288,5 +288,70 @@ class SftpTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('text/plain', $result);
         $filesystem->flushCache();
         $this->assertFalse($filesystem->getMimetype('some.file'));
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     */
+    public function testPrivateKeySetGet($filesystem, $adapter, $mock)
+    {
+        $key = 'private.key';
+        $this->assertEquals($adapter, $adapter->setPrivateKey($key));
+        $this->assertInstanceOf('Crypt_RSA', $adapter->getPrivateKey());
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     */
+    public function testPrivateKeyFileSetGet($filesystem, $adapter, $mock)
+    {
+        file_put_contents($key =__DIR__.'/files/some.key', 'key contents');
+        $this->assertEquals($adapter, $adapter->setPrivateKey($key));
+        $this->assertInstanceOf('Crypt_RSA', $adapter->getPrivateKey());
+        @unlink($key);
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     */
+    public function testConnect($filesystem, $adapter, $mock)
+    {
+        $adapter->setNetSftpConnection($mock);
+        $mock->shouldReceive('login')->with('test', 'test')->andReturn(true);
+        $adapter->connect();
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     */
+    public function testGetPasswordWithKey($filesystem, $adapter, $mock)
+    {
+        $key = 'private.key';
+        $this->assertEquals($adapter, $adapter->setPrivateKey($key));
+        $this->assertInstanceOf('Crypt_RSA', $adapter->getPassword());
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     * @expectedException LogicException
+     */
+    public function testLoginFail($filesystem, $adapter, $mock)
+    {
+        $adapter->setNetSftpConnection($mock);
+        $mock->shouldReceive('login')->with('test', 'test')->andReturn(false);
+        $adapter->connect();
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     */
+    public function testConnectWithRoot($filesystem, $adapter, $mock)
+    {
+        $adapter->setRoot('/root');
+        $adapter->setNetSftpConnection($mock);
+        $mock->shouldReceive('login')->with('test', 'test')->andReturn(true);
+        $mock->shouldReceive('chdir')->with('/root/');
+        $adapter->connect();
+        $adapter->disconnect();
     }
 }
