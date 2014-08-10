@@ -223,7 +223,7 @@ class Filesystem implements FilesystemInterface
      *
      * @param  string                $path     path to file
      * @param  string                $contents file contents
-     * @param   mixed                $config   Config object or visibility setting
+     * @param  mixed                 $config   Config object or visibility setting
      * @throws FileNotFoundException
      * @return boolean               success boolean
      */
@@ -498,7 +498,7 @@ class Filesystem implements FilesystemInterface
      *
      * @param   string  $path      path to file
      * @param   array   $metadata  metadata keys
-     * @throws InvalidArgumentException
+     * @throws  InvalidArgumentException
      * @return  array   metadata
      */
     public function getWithMetadata($path, array $metadata)
