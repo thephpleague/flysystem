@@ -73,6 +73,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed    $config
      * @return  boolean   success boolean
      */
     public function putStream($path, $resource, $config = null)
@@ -84,6 +85,7 @@ class EventableFilesystem implements FilesystemInterface
      * Read and delete a file.
      *
      * @param   string  $path
+     * @param   mixed    $config
      * @return  string  file contents
      * @throws  FileNotFoundException
      */
@@ -95,6 +97,9 @@ class EventableFilesystem implements FilesystemInterface
     /**
      * List all paths
      *
+     * @param   string   $directory
+     * @param   boolean  $recursive
+     * @param   mixed    $config
      * @return  array  paths
      */
     public function listPaths($directory = '', $recursive = false, $config = null)
@@ -105,7 +110,10 @@ class EventableFilesystem implements FilesystemInterface
     /**
      * List contents with metadata
      *
-     * @param   array  $key  metadata key
+     * @param   array    $key  metadata key
+     * @param   string   $directory
+     * @param   boolean  $recursive
+     * @param   mixed    $config
      * @return  array            listing with metadata
      */
     public function listWith(array $keys = array(), $directory = '', $recursive = false, $config = null)
@@ -118,6 +126,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $path      path to file
      * @param   array   $metadata  metadata keys
+     * @param   mixed   $config
      * @throws  InvalidArgumentException
      * @return  array   metadata
      */
@@ -131,6 +140,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string   $path
      * @param   Handler  $handler
+     * @param   mixed    $config
      * @return  Handler  file or directory handler
      */
     public function get($path, Handler $handler = null, $config = null)
@@ -141,28 +151,35 @@ class EventableFilesystem implements FilesystemInterface
     /**
      * Flush the cache
      *
+     * @param   mixed  $config
      * @return  $this
      */
     public function flushCache($config = null)
     {
-        return $this->delegateMethodCall('flushCache', compact('config'));
+        $this->delegateMethodCall('flushCache', compact('config'));
+
+        return $this;
     }
 
     /**
      * Register a plugin
      *
      * @param   PluginInterface  $plugin
+     * @param   mixed            $config
      * @return  $this
      */
     public function addPlugin(PluginInterface $plugin, $config = null)
     {
-        return $this->delegateMethodCall('addPlugin', compact('plugin', 'config'));
+        $this->delegateMethodCall('addPlugin', compact('plugin', 'config'));
+
+        return $this;
     }
 
     /**
      * Check whether a file exists
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  bool
      */
     public function has($path, $config = null)
@@ -174,6 +191,7 @@ class EventableFilesystem implements FilesystemInterface
      * Read a file
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function read($path, $config = null)
@@ -185,6 +203,7 @@ class EventableFilesystem implements FilesystemInterface
      * Read a file as a stream
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function readStream($path, $config = null)
@@ -197,6 +216,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $directory
      * @param   bool    $recursive
+     * @param   mixed   $config
      * @return  false|array
      */
     public function listContents($directory = '', $recursive = false, $config = null)
@@ -208,6 +228,7 @@ class EventableFilesystem implements FilesystemInterface
      * Get all the meta data of a file or directory
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function getMetadata($path, $config = null)
@@ -219,6 +240,7 @@ class EventableFilesystem implements FilesystemInterface
      * Get all the meta data of a file or directory
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function getSize($path, $config = null)
@@ -230,6 +252,7 @@ class EventableFilesystem implements FilesystemInterface
      * Get the mimetype of a file
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function getMimetype($path, $config = null)
@@ -241,6 +264,7 @@ class EventableFilesystem implements FilesystemInterface
      * Get the timestamp of a file
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function getTimestamp($path, $config = null)
@@ -252,6 +276,7 @@ class EventableFilesystem implements FilesystemInterface
      * Get the visibility of a file
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  false|array
      */
     public function getVisibility($path, $config = null)
@@ -316,6 +341,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $path
      * @param   string  $newpath
+     * @param   mixed    $config
      * @return  boolean
      */
     public function rename($path, $newpath, $config = null)
@@ -328,6 +354,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $path
      * @param   string  $newpath
+     * @param   mixed    $config
      * @return  boolean
      */
     public function copy($path, $newpath, $config = null)
@@ -339,6 +366,7 @@ class EventableFilesystem implements FilesystemInterface
      * Delete a file
      *
      * @param   string  $path
+     * @param   mixed   $config
      * @return  boolean
      */
     public function delete($path, $config = null)
@@ -350,6 +378,7 @@ class EventableFilesystem implements FilesystemInterface
      * Delete a directory
      *
      * @param   string  $dirname
+     * @param   mixed    $config
      * @return  boolean
      */
     public function deleteDir($dirname, $config = null)
@@ -360,8 +389,8 @@ class EventableFilesystem implements FilesystemInterface
     /**
      * Create a directory
      *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
+     * @param   string  $dirname  directory name
+     * @param   mixed   $config
      *
      * @return  bool
      */
@@ -375,6 +404,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $path
      * @param   string  $visibility
+     * @param   mixed   $config
      * @return  file meta data
      */
     public function setVisibility($path, $visibility, $config = null)

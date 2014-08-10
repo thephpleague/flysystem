@@ -49,8 +49,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
             ['listWith', [['key'], 'path', true]],
             ['getWithMetadata', ['path', []]],
             ['get', ['path', Mockery::mock('League\Flysystem\Handler')]],
-            ['flushCache', []],
-            ['addPlugin', [Mockery::mock('League\Flysystem\PluginInterface')]],
             ['has', ['path']],
             ['getMetadata', ['path']],
             ['getSize', ['path']],
@@ -76,6 +74,25 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $filesystem = new EventableFilesystem($mock);
         $result = call_user_func_array([$filesystem, $method], $arguments);
         $this->assertEquals($expected, $result);
+    }
+
+    public function testAddPlugin()
+    {
+        $mock = $this->getMockeryMock('filesystem');
+        $config = new Config;
+        $plugin = Mockery::mock('League\Flysystem\PluginInterface');
+        $mock->shouldReceive('addPlugin')->with($plugin, $config)->once()->andReturn($mock);
+        $filesystem = new EventableFilesystem($mock);
+        $filesystem->addPlugin($plugin, $config);
+    }
+
+    public function testFlushCache()
+    {
+        $mock = $this->getMockeryMock('filesystem');
+        $config = new Config;
+        $mock->shouldReceive('flushCache')->with($config)->once()->andReturn($mock);
+        $filesystem = new EventableFilesystem($mock);
+        $filesystem->flushCache($config);
     }
 
     public function testBeforeEventAbort()
