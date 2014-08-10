@@ -30,11 +30,21 @@ class EventableFilesystem implements FilesystemInterface
         $this->setEmitter($emitter);
     }
 
+    /**
+     * @return FilesystemInterface
+     */
     public function getFilesystem()
     {
         return $this->filesystem;
     }
 
+    /**
+     * Prepare the adapter
+     *
+     * @param  AdapterInterface  $adapter
+     * @param  CacheInterface    $cache
+     * @param  null              $config
+     */
     protected function prepareAdapter(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
         if ($adapter instanceof FilesystemInterface) {
@@ -44,46 +54,106 @@ class EventableFilesystem implements FilesystemInterface
         return new Filesystem($adapter, $cache, $config);
     }
 
+    /**
+     * Create a file or update if exists
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @param  mixed               $config
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
     public function put($path, $contents, $config = null)
     {
         return $this->delegateMethodCall('put', compact('path', 'contents', 'config'));
     }
 
+    /**
+     * Create a file or update if exists using a stream
+     *
+     * @param   string    $path
+     * @param   resource  $resource
+     * @return  boolean   success boolean
+     */
     public function putStream($path, $resource, $config = null)
     {
         return $this->delegateMethodCall('putStream', compact('path', 'resource', 'config'));
     }
 
+    /**
+     * Read and delete a file.
+     *
+     * @param   string  $path
+     * @return  string  file contents
+     * @throws  FileNotFoundException
+     */
     public function readAndDelete($path, $config = null)
     {
         return $this->delegateMethodCall('readAndDelete', compact('path', 'config'));
     }
 
+    /**
+     * List all paths
+     *
+     * @return  array  paths
+     */
     public function listPaths($directory = '', $recursive = false, $config = null)
     {
         return $this->delegateMethodCall('listPaths', compact('directory', 'recursive', 'config'));
     }
 
+    /**
+     * List contents with metadata
+     *
+     * @param   array  $key  metadata key
+     * @return  array            listing with metadata
+     */
     public function listWith(array $keys = array(), $directory = '', $recursive = false, $config = null)
     {
         return $this->delegateMethodCall('listWith', compact('keys', 'directory', 'recursive', 'config'));
     }
 
+    /**
+     * Get metadata for an object with required metadata
+     *
+     * @param   string  $path      path to file
+     * @param   array   $metadata  metadata keys
+     * @throws  InvalidArgumentException
+     * @return  array   metadata
+     */
     public function getWithMetadata($path, array $metadata, $config = null)
     {
         return $this->delegateMethodCall('getWithMetadata', compact('path', 'metadata', 'config'));
     }
 
+    /**
+     * Get a file/directory handler
+     *
+     * @param   string   $path
+     * @param   Handler  $handler
+     * @return  Handler  file or directory handler
+     */
     public function get($path, Handler $handler = null, $config = null)
     {
         return $this->delegateMethodCall('get', compact('path', 'handler', 'config'));
     }
 
+    /**
+     * Flush the cache
+     *
+     * @return  $this
+     */
     public function flushCache($config = null)
     {
         return $this->delegateMethodCall('flushCache', compact('config'));
     }
 
+    /**
+     * Register a plugin
+     *
+     * @param   PluginInterface  $plugin
+     * @return  $this
+     */
     public function addPlugin(PluginInterface $plugin, $config = null)
     {
         return $this->delegateMethodCall('addPlugin', compact('plugin', 'config'));
@@ -313,8 +383,10 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
-     * @param       $method
-     * @param array $arguments
+     * Do all the work to call the method and emit the events
+     *
+     * @param  string  $method
+     * @param  array   $arguments
      * @return mixed
      */
     public function delegateMethodCall($method, array $arguments = [])
@@ -357,8 +429,10 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
-     * @param $method
-     * @param array $arguments
+     * Call the underlying filesystem method
+     *
+     * @param  string  $method
+     * @param  array   $arguments
      * @return mixed
      */
     protected function callFilesystemMethod($method, array $arguments)
@@ -370,8 +444,10 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
-     * @param $method
-     * @param $result
+     * Emit the after event
+     *
+     * @param  string  $method
+     * @param  mixed   $result
      * @return mixed
      */
     protected function emitAfter($method, $result)
@@ -383,7 +459,9 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
-     * @param array $arguments
+     * Prepare the arguments
+     *
+     * @param  array  $arguments
      * @return array
      */
     public function prepareArguments(array $arguments)
