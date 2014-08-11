@@ -178,12 +178,4 @@ class Noop extends AbstractCache
     {
         return false;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function ensureParentDirectories($path)
-    {
-        return false;
-    }
 }
