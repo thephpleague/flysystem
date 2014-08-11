@@ -3,3 +3,6 @@ filter:
     excluded_paths: [bin/*, spec/*, tests/*, stub/*, coverage/*]
 tools:
     php_analyzer: true
+checks:
+    php:
+        code_rating: true
