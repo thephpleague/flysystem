@@ -78,7 +78,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mockUploadBuilder->shouldReceive('build')->once()->andReturn($mockTransfer);
 
         $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(
-            'Multipart' => -10
+            'Multipart' => 0
         ), $mockUploadBuilder);
 
         $adapter->write(
@@ -107,7 +107,9 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mockUploadBuilder->shouldReceive('setSource')->times(2)->andReturn($mockUploadBuilder);
         $mockUploadBuilder->shouldReceive('build')->times(2)->andReturn($mockTransfer);
 
-        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(), $mockUploadBuilder);
+        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(
+            'Multipart' => 0
+        ), $mockUploadBuilder);
         $temp    = tmpfile();
         fwrite($temp, "some content");
         $adapter->writeStream(
@@ -139,7 +141,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mockUploadBuilder->shouldReceive('setSource')->once()->andReturn($mockUploadBuilder);
         $mockUploadBuilder->shouldReceive('build')->once()->andReturn($mockTransfer);
 
-        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array(), $mockUploadBuilder);
+        $adapter = new Adapter($mockS3Client, 'bucketname', 'prefix', array('Multipart' => 0), $mockUploadBuilder);
         $temp    = tmpfile();
         fwrite($temp, "some content");
         $adapter->writeStream(

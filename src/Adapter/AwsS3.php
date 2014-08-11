@@ -129,7 +129,7 @@ class AwsS3 extends AbstractAdapter
                 'ContentType'   => Util::guessMimeType($path, $contents),
                 'ContentLength' => Util::contentSize($contents),
             ),
-            Util::ensureConfig($config)
+            $config = Util::ensureConfig($config)
         );
 
         $multipartLimit = $this->mbToBytes($options['Multipart']);
@@ -152,7 +152,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string   $path
      * @param   resource $resource
-     * @param   mixed    $config ['visibility'='private', 'mimetype'='', 'streamsize'=0, 'Metadata'=[]]
+     * @param   mixed    $config ['visibility'='private', 'mimetype'='', 'Metadata'=[]]
      *
      * @return  array     file metadata
      */
@@ -160,21 +160,28 @@ class AwsS3 extends AbstractAdapter
     {
         $config  = Util::ensureConfig($config);
         $options = array('Body' => $resource);
+        $options['ContentLength'] = Util::getStreamSize($resource);
         $options = $this->getOptions($path, $options, $config);
+
+        return $this->writeObject($options);
+    }
+
+    protected function writeObject(array $options)
+    {
         $multipartLimit = $this->mbToBytes($options['Multipart']);
 
         // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail.
-        if ($config->has('streamsize') === false || $config->get('streamsize') > $multipartLimit) {
+        if ($options['ContentLength'] > $multipartLimit) {
             $result = $this->putObjectMultipart($options);
         } else {
             $result = $this->client->putObject($options);
         }
 
-        unset($options['Body']);
-
         if ($result === false) {
             return false;
         }
+
+        if (is_resource($options['Body'])) unset($options['Body']);
 
         return $this->normalizeObject($options);
     }

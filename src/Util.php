@@ -215,4 +215,17 @@ class Util
             rewind($resource);
         }
     }
+
+    /**
+     * Get the size of a stream
+     *
+     * @param   resource  $resource
+     * @return  int       stream size
+     */
+    public static function getStreamSize($resource)
+    {
+        $stat = fstat($resource);
+
+        return $stat['size'];
+    }
 }
