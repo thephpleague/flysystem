@@ -132,19 +132,7 @@ class AwsS3 extends AbstractAdapter
             $config = Util::ensureConfig($config)
         );
 
-        $multipartLimit = $this->mbToBytes($options['Multipart']);
-
-        if ($options['ContentLength'] > $multipartLimit) {
-            $result = $this->putObjectMultipart($options);
-        } else {
-            $result = $this->client->putObject($options);
-        }
-
-        if ($result === false) {
-            return false;
-        }
-
-        return $this->normalizeObject($options);
+        return $this->writeObject($options);
     }
 
     /**
