@@ -1,3 +1,5 @@
 filter:
     paths: [src/*]
     excluded_paths: [bin/*, spec/*, tests/*, stub/*, coverage/*]
+tools:
+    php_analyzer: true
