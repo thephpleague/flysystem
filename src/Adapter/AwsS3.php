@@ -154,6 +154,12 @@ class AwsS3 extends AbstractAdapter
         return $this->writeObject($options);
     }
 
+    /**
+     * Write an object to S3
+     *
+     * @param   array  $options
+     * @return  array   file metadata
+     */
     protected function writeObject(array $options)
     {
         $multipartLimit = $this->mbToBytes($options['Multipart']);
