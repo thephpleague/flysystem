@@ -1,6 +1,8 @@
 * text=auto
 
 /bin export-ingore
+/spec export-ingore
+/stub export-ingore
 /tests export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore

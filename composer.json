@@ -33,6 +33,11 @@
             "League\\Flysystem\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "League\\Flysystem\\Stub\\": "stub/"
+        }
+    },
     "suggest": {
         "league/event": "Required for EventableFilesystem",
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
