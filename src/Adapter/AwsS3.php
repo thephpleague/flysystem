@@ -211,10 +211,10 @@ class AwsS3 extends AbstractAdapter
      */
     public function read($path)
     {
-        $options = $this->getOptions($path);
-        $result = $this->client->getObject($options);
+        $result = $this->readObject($path);
+        $result['contents'] = (string) $result['contents'];
 
-        return $this->normalizeObject($result->getAll(), $path);
+        return $result;
     }
 
     /**
@@ -225,17 +225,25 @@ class AwsS3 extends AbstractAdapter
      */
     public function readStream($path)
     {
-        if ( ! in_array('s3', stream_get_wrappers())) {
-            $this->client->registerStreamWrapper();
-        }
+        $result = $this->readObject($path);
+        $result['stream'] = $result['contents']->getStream();
+        unset($result['contents']);
 
-        $context = stream_context_create(array(
-            's3' => array('seekable' => true),
-        ));
+        return $result;
+    }
 
-        $stream = fopen('s3://'.$this->bucket.'/'.$this->applyPathPrefix($path), 'r', false, $context);
+    /**
+     * Get an object from S3
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
+    protected function readObject($path)
+    {
+        $options = $this->getOptions($path);
+        $result = $this->client->getObject($options);
 
-        return compact('stream');
+        return $this->normalizeObject($result->getAll(), $path);
     }
 
     /**
@@ -454,10 +462,6 @@ class AwsS3 extends AbstractAdapter
         }
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
-
-        if (isset($result['contents'])) {
-            $result['contents'] = (string) $result['contents'];
-        }
 
         return $result;
     }

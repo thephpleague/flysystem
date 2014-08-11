@@ -257,6 +257,7 @@ class Filesystem implements FilesystemInterface
 
         $path = Util::normalizePath($path);
         $config = Util::ensureConfig($config);
+        $config->setFallback($this->getConfig());
         $this->assertPresent($path);
         Util::rewindStream($resource);
 

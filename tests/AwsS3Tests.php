@@ -182,13 +182,15 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
 
     public function testReadStream()
     {
+        $stream = tmpfile();
         $mock = $this->getS3Client();
-        $mock->shouldReceive('registerStreamWrapper')->once()->andReturnUsing(function () {
-            stream_wrapper_register('s3', 'StreamMock');
-        });
-        $adapter = new Adapter($mock, 'bucketname', 'prefix');
-        $result = $adapter->readStream('file.txt');
+        $mock->shouldReceive('getObject')->once()->andReturn(Mockery::self());
+        $mock->shouldReceive('getAll')->once()->andReturn(array('ContentLength' => 10, 'ContentType' => 'text/plain', 'Body' => $mock, 'Key' => 'file.ext'));
+        $mock->shouldReceive('getStream')->andReturn($stream);
+        $adapter = new Adapter($mock, 'bucketname');
+        $result = $adapter->readStream('file.ext');
         $this->assertInternalType('resource', $result['stream']);
+        fclose($stream);
     }
 
     public function testRename()
