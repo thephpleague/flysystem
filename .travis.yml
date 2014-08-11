@@ -18,5 +18,5 @@ before_script:
   - mkdir tests/files
 
 script:
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then vendor/bin/phpunit --verbose; fi;'
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then vendor/bin/phpunit --verbose --coverage-text --coverage-clover /tmp/flysystem/coverage.xml; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then bin/phpunit --verbose; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then bin/phpunit --verbose --coverage-text --coverage-clover /tmp/flysystem/coverage.xml; fi;'

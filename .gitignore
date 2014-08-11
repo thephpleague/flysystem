@@ -1,4 +1,5 @@
 /.idea
+/bin
 /coverage
 /vendor
 /tests/files

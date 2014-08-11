@@ -25,7 +25,8 @@
         "rackspace/php-opencloud": "~1.9.1",
         "sabre/dav": "~2.0.2",
         "phpseclib/phpseclib": "~0.3.5",
-        "league/phpunit-coverage-listener" : "~1.1"
+        "league/phpunit-coverage-listener" : "~1.1",
+        "phpspec/phpspec": "~2.0"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +41,9 @@
         "phpseclib/phpseclib": "Allows SFTP server storage",
         "sabre/dav": "Enables WebDav support",
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files"
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "extra": {
         "branch-alias": {
