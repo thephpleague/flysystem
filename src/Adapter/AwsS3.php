@@ -170,6 +170,8 @@ class AwsS3 extends AbstractAdapter
             $result = $this->client->putObject($options);
         }
 
+        unset($options['Body']);
+
         if ($result === false) {
             return false;
         }
