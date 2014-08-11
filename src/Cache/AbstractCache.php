@@ -112,6 +112,8 @@ abstract class AbstractCache implements CacheInterface
             $this->autosave();
         }
 
+        $this->ensureParentDirectories($path);
+
         return $this->cache[$path];
     }
 

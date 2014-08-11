@@ -58,4 +58,29 @@ interface CacheInterface extends ReadInterface
      * @return  void
      */
     public function load();
+
+    /**
+     * Delete an object from cache
+     *
+     * @param   string  $path  object path
+     * @return  $this
+     */
+    public function delete($path);
+
+    /**
+     * Update the metadata for an object
+     *
+     * @param   string   $path      object path
+     * @param   array    $object    object metadata
+     * @param   boolean  $autosave  whether to trigger the autosave routine
+     */
+    public function updateObject($path, array $object, $autosave = false);
+
+    /**
+     * Store object hit miss
+     *
+     * @param   string   $path
+     * @return  $this
+     */
+    public function storeMiss($path);
 }

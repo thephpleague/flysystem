@@ -121,7 +121,6 @@ class Filesystem implements FilesystemInterface
         }
 
         $this->cache->updateObject($path, $object, true);
-        $this->cache->ensureParentDirectories($path);
 
         return true;
     }
@@ -153,7 +152,6 @@ class Filesystem implements FilesystemInterface
         }
 
         $this->cache->updateObject($path, $object, true);
-        $this->cache->ensureParentDirectories($path);
 
         return true;
     }
@@ -190,7 +188,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
 
         if ($this->has($path)) {
-            return $this->updateStream($path, $resource);
+            return $this->updateStream($path, $resource, $config);
         }
 
         return $this->writeStream($path, $resource, $config);
@@ -267,7 +265,6 @@ class Filesystem implements FilesystemInterface
         }
 
         $this->cache->updateObject($path, $object, true);
-        $this->cache->ensureParentDirectories($path);
 
         return true;
     }
