@@ -429,6 +429,9 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
+        // ensure the result in an array so the it's cacheable
+        if ( ! is_array($result)) $result = array();
+
         $result['type'] = 'dir';
         $this->cache->updateObject($dirname, $result, true);
 
