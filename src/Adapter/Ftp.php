@@ -27,7 +27,7 @@ class Ftp extends AbstractFtpAdapter
      */
     public function setTransferMode($mode)
     {
-        $this->transferMode = FTP_BINARY;
+        $this->transferMode = $mode;
 
         return $this;
     }
@@ -288,7 +288,7 @@ class Ftp extends AbstractFtpAdapter
     public function readStream($path)
     {
         $stream = fopen('php://temp', 'w+');
-        $result = ftp_fget($this->getConnection(), $stream, $path, FTP_BINARY);
+        $result = ftp_fget($this->getConnection(), $stream, $path, $this->transferMode);
         rewind($stream);
 
         if ( ! $result) {

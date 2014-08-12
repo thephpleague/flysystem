@@ -25,6 +25,9 @@ class FilesystemSpec extends ObjectBehavior
     function it_is_initializable()
     {
         $this->shouldHaveType('League\Flysystem\Filesystem');
+        $this->shouldHaveType('League\Flysystem\FilesystemInterface');
+        $this->shouldHaveType('League\Flysystem\ReadInterface');
+        $this->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 
     function it_should_expose_an_adapter()
