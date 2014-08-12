@@ -7,8 +7,8 @@ interface CacheInterface extends ReadInterface
     /**
      * Check whether the directory listing of a given directory is complete
      *
-     * @param   path  $dirname
-     * @param   bool  $recursive
+     * @param   string  $dirname
+     * @param   bool    $recursive
      * @return  bool
      */
     public function isComplete($dirname, $recursive);
