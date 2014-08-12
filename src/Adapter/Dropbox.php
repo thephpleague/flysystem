@@ -19,7 +19,7 @@ class Dropbox extends AbstractAdapter
     );
 
     /**
-     * @var  Dropbox\Client  $client
+     * @var  \Dropbox\Client  $client
      */
     protected $client;
 
@@ -250,7 +250,7 @@ class Dropbox extends AbstractAdapter
     {
         return $this->getMetadata($path);
     }
-    
+
     public function getClient()
     {
         return $this->client;
