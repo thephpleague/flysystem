@@ -40,7 +40,7 @@ class Predis extends AbstractCache
      */
     public function load()
     {
-        if (($contents = $this->client->get($this->key)) !== null) {
+        if (($contents = $this->executeCommand('get', array($this->key))) !== null) {
             $this->setFromStorage($contents);
         }
     }
@@ -51,10 +51,24 @@ class Predis extends AbstractCache
     public function save()
     {
         $contents = $this->getForStorage();
-        $this->client->set($this->key, $contents);
+        $this->executeCommand('set', array($this->key, $contents));
 
         if ($this->expire !== null) {
-            $this->client->expire($this->key, $this->expire);
+            $this->executeCommand('expire', array($this->key, $this->expire));
         }
+    }
+
+    /**
+     * Execute a Predis command
+     *
+     * @param   string  $name
+     * @param   array   $arguments
+     * @return  mixed
+     */
+    protected function executeCommand($name, array $arguments)
+    {
+        $command = $this->client->createCommand($name, $arguments);
+
+        return $this->client->executeCommand($command);
     }
 }

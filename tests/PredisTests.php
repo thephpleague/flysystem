@@ -8,7 +8,9 @@ class PredisTests extends PHPUnit_Framework_TestCase
     public function testLoadFail()
     {
         $client = Mockery::mock('Predis\Client');
-        $client->shouldReceive('get')->once()->andReturn(null);
+        $command = Mockery::mock('Predis\Command\CommandInterface');
+        $client->shouldReceive('createCommand')->with('get', array('flysystem'))->once()->andReturn($command);
+        $client->shouldReceive('executeCommand')->with($command)->andReturn(null);
         $cache = new Predis($client);
         $cache->load();
         $this->assertFalse($cache->isComplete('', false));
@@ -18,7 +20,9 @@ class PredisTests extends PHPUnit_Framework_TestCase
     {
         $response = json_encode(array(array(), array('' => true)));
         $client = Mockery::mock('Predis\Client');
-        $client->shouldReceive('get')->once()->andReturn($response);
+        $command = Mockery::mock('Predis\Command\CommandInterface');
+        $client->shouldReceive('createCommand')->with('get', array('flysystem'))->once()->andReturn($command);
+        $client->shouldReceive('executeCommand')->with($command)->andReturn($response);
         $cache = new Predis($client);
         $cache->load();
         $this->assertTrue($cache->isComplete('', false));
@@ -26,19 +30,25 @@ class PredisTests extends PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $response = json_encode(array(array(), array()));
+        $data = json_encode(array(array(), array()));
         $client = Mockery::mock('Predis\Client');
-        $client->shouldReceive('set')->once()->andReturn($response);
+        $command = Mockery::mock('Predis\Command\CommandInterface');
+        $client->shouldReceive('createCommand')->with('set', array('flysystem', $data))->once()->andReturn($command);
+        $client->shouldReceive('executeCommand')->with($command)->once();
         $cache = new Predis($client);
         $cache->save();
     }
 
     public function testSaveWithExpire()
     {
-        $response = json_encode(array(array(), array()));
+        $data = json_encode(array(array(), array()));
         $client = Mockery::mock('Predis\Client');
-        $client->shouldReceive('set')->once()->andReturn($response);
-        $client->shouldReceive('expire')->once();
+        $command = Mockery::mock('Predis\Command\CommandInterface');
+        $client->shouldReceive('createCommand')->with('set', array('flysystem', $data))->once()->andReturn($command);
+        $client->shouldReceive('executeCommand')->with($command)->once();
+        $expireCommand = Mockery::mock('Predis\Command\CommandInterface');
+        $client->shouldReceive('createCommand')->with('expire', array('flysystem', 20))->once()->andReturn($expireCommand);
+        $client->shouldReceive('executeCommand')->with($expireCommand)->once();
         $cache = new Predis($client, 'flysystem', 20);
         $cache->save();
     }
