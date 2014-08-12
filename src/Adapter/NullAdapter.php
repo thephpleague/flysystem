@@ -96,7 +96,7 @@ class NullAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return false;
+        return array();
     }
 
     /**

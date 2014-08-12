@@ -52,7 +52,7 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
             array('read'),
             array('rename'),
             array('delete'),
-            array('listContents'),
+            array('listContents', array()),
             array('getMetadata'),
             array('getSize'),
             array('getMimetype'),
@@ -65,10 +65,10 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider expectedFailsProvider
      */
-    public function testExpectedFails($method)
+    public function testExpectedFails($method, $result = false)
     {
         $adapter = new NullAdapter;
-        $this->assertFalse($adapter->{$method}('one', 'two', 'three'));
+        $this->assertEquals($result, $adapter->{$method}('one', 'two', 'three'));
     }
 
     public function expectedArrayResultProvider()

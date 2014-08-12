@@ -33,7 +33,7 @@ interface ReadInterface
      *
      * @param   string  $directory
      * @param   bool    $recursive
-     * @return  false|array
+     * @return  array
      */
     public function listContents($directory = '', $recursive = false);
 
