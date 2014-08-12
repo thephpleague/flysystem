@@ -16,18 +16,18 @@ interface CacheInterface extends ReadInterface
     /**
      * Set a directory to completely listed
      *
-     * @param  path  $dirname
-     * @param  bool  $recursive
+     * @param  string  $dirname
+     * @param  bool    $recursive
      */
     public function setComplete($dirname, $recursive);
 
     /**
      * Store the contents of a directory
      *
-     * @param   path   $directory
-     * @param   array  $contents
-     * @param   bool   $recursive
-     * @return  array  contents
+     * @param   string  $directory
+     * @param   array   $contents
+     * @param   bool    $recursive
+     * @return  array   contents
      */
     public function storeContents($directory, array $contents, $recursive);
 
