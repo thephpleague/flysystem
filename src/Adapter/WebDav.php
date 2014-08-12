@@ -100,7 +100,9 @@ class WebDav extends AbstractAdapter
             if ($response['statusCode'] >= 200 && $response['statusCode'] < 300) {
                 return true;
             }
-        } catch (Exception\FileNotFound $e) { }
+        } catch (Exception\FileNotFound $e) {
+            // Would have returned false here, but would be redundant
+        }
 
         return false;
     }
