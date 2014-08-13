@@ -467,7 +467,7 @@ $s3->writeStream('path/to/object.png', $stream, [
 
 ## Events
 
-Flysystem comes with an intergrations of the Event package (also provided by the PHP League).
+Flysystem comes with an integration of the Event package (also provided by the PHP League).
 In this case you can use the `League\Flysystem\EventableFilesystem`. This will expose the same API
 as the `League\Flysystem\Filesystem` class but exposes events for every method call. Events allow
 you to hook into Flysystem by exposing a before and after event for every method.
