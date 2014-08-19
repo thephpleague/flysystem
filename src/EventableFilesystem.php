@@ -44,6 +44,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param  AdapterInterface  $adapter
      * @param  CacheInterface    $cache
      * @param  null              $config
+     * @return FilesystemInterface
      */
     protected function prepareAdapter(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
