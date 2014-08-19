@@ -34,6 +34,17 @@ interface FilesystemInterface extends AdapterInterface
     public function readAndDelete($path);
 
     /**
+     * List all files in the directory
+     *
+     * @param string      $directory
+     * @param bool        $recursive
+     * @param string|null $filePathPattern
+     *
+     * @return array
+     */
+    public function listFiles($directory = '', $recursive = false, $filePathPattern = null);
+
+    /**
      * List all paths
      *
      * @return  array  paths
