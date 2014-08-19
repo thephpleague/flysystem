@@ -466,6 +466,46 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider filesystemProvider
      */
+    public function testListFiles($filesystem)
+    {
+        $filesystem->flushCache();
+
+        if ( ! $filesystem->has('test.txt'))
+            $filesystem->write('test.txt', 'something');
+
+        if ( ! $filesystem->has('othertest.txt'))
+            $filesystem->write('othertest.txt', 'something');
+
+        if ( ! $filesystem->has('subdir/test.txt'))
+            $filesystem->write('subdir/test.txt', 'something');
+
+        if ( ! $filesystem->has('subdir/other-test.txt'))
+            $filesystem->write('subdir/other-test.txt', 'something');
+
+        if ( ! $filesystem->has('subdir/subsubdir/test.txt'))
+            $filesystem->write('subdir/subsubdir/test.txt', 'something');
+
+        if ( ! $filesystem->has('subdir2/test.txt'))
+            $filesystem->write('subdir2/test.txt', 'something');
+
+        $rootFiles = $filesystem->listFiles();
+        $this->assertContainsOnly('array', $rootFiles, true);
+
+        foreach ($rootFiles as $file) {
+            $this->assertEquals('file', $file['type']);
+        }
+
+        $subDirFiles = $filesystem->listFiles('subdir');
+        $this->assertContainsOnly('array', $subDirFiles, true);
+
+        foreach ($subDirFiles as $subDirFile) {
+            $this->assertEquals('file', $subDirFile['type']);
+        }
+    }
+
+    /**
+     * @dataProvider filesystemProvider
+     */
     public function testListPaths($filesystem)
     {
         if ( ! $filesystem->has('test.txt'))
