@@ -461,13 +461,12 @@ class Filesystem implements FilesystemInterface
     /**
      * List all files in the directory
      *
-     * @param string      $directory
-     * @param bool        $recursive
-     * @param string|null $filePathPattern
+     * @param string $directory
+     * @param bool   $recursive
      *
      * @return array
      */
-    public function listFiles($directory = '', $recursive = false, $filePathPattern = null)
+    public function listFiles($directory = '', $recursive = false)
     {
         $files = array();
 
@@ -478,9 +477,7 @@ class Filesystem implements FilesystemInterface
                 continue;
             }
 
-            if ($filePathPattern === null || preg_match($filePathPattern, $object['path'])) {
-                $files[] = $object;
-            }
+            $files[] = $object;
         }
 
         return $files;

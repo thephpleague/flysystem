@@ -38,11 +38,10 @@ interface FilesystemInterface extends AdapterInterface
      *
      * @param string      $directory
      * @param bool        $recursive
-     * @param string|null $filePathPattern
      *
      * @return array
      */
-    public function listFiles($directory = '', $recursive = false, $filePathPattern = null);
+    public function listFiles($directory = '', $recursive = false);
 
     /**
      * List all paths

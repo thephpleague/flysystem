@@ -95,6 +95,20 @@ class EventableFilesystem implements FilesystemInterface
     }
 
     /**
+     * List all files in the directory
+     *
+     * @param string $directory
+     * @param bool   $recursive
+     * @param mixed  $config
+     *
+     * @return array
+     */
+    public function listFiles($directory = '', $recursive = false, $config = null)
+    {
+        return $this->delegateMethodCall('listFiles', compact('directory', 'recursive', 'config'));
+    }
+
+    /**
      * List all paths
      *
      * @param   string   $directory
