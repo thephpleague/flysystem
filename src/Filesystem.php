@@ -468,19 +468,13 @@ class Filesystem implements FilesystemInterface
      */
     public function listFiles($directory = '', $recursive = false)
     {
-        $files = array();
-
         $contents = $this->listContents($directory, $recursive);
 
-        foreach ($contents as $object) {
-            if ($object['type'] === 'dir') {
-                continue;
-            }
+        $filter = function ($object) {
+            return $object['type'] === 'file';
+        };
 
-            $files[] = $object;
-        }
-
-        return $files;
+        return array_filter($contents, $filter);
     }
 
     /**
