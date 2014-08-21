@@ -71,11 +71,13 @@ class Util
     /**
      * Normalize path
      *
-     * @param   string  $path
-     * @param   string  $separator
-     * @return  string  normalized path
+     * @param string $path
+     * @param string $separator
+     *
+     * @return string
+     * @throws LogicException
      */
-    public static function normalizePath($path, $separator = '\\/')
+    public static function normalizePath($path, $separator = DIRECTORY_SEPARATOR)
     {
         // Remove any kind of funky unicode whitespace
         $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
@@ -93,6 +95,11 @@ class Util
         if (preg_match('#/\.{2}|\.{2}/#', $normalized)) {
             throw new LogicException('Path is outside of the defined root, path: [' . $path . '], resolved: [' . $normalized . ']');
         }
+
+        /**
+         * Replace multiple separators with a single separator
+         */
+        $normalized = preg_replace('#' . $separator . '{2,}#', $separator, $normalized);
 
         return trim($normalized, $separator);
     }
