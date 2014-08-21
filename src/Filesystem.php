@@ -459,6 +459,25 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * List all files in the directory
+     *
+     * @param string $directory
+     * @param bool   $recursive
+     *
+     * @return array
+     */
+    public function listFiles($directory = '', $recursive = false)
+    {
+        $contents = $this->listContents($directory, $recursive);
+
+        $filter = function ($object) {
+            return $object['type'] === 'file';
+        };
+
+        return array_filter($contents, $filter);
+    }
+
+    /**
      * List all paths
      *
      * @return  array  paths

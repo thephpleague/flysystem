@@ -44,6 +44,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
             ['deleteDir', ['path.txt']],
             ['createDir', ['path.txt']],
             ['readAndDelete', ['path.txt']],
+            ['listFiles', ['path', true]],
             ['listPaths', ['path', true]],
             ['listContents', ['path', true]],
             ['listWith', [['key'], 'path', true]],
