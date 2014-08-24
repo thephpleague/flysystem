@@ -27,7 +27,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     public function testAbstractAdapterCopy()
     {
         $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[readStream,writeStream]');
-        $mock->shouldReceive('readStream')->andReturn(false, tmpfile(), tmpfile());
+        $mock->shouldReceive('readStream')->andReturn(false, ['stream' => tmpfile()], ['stream' => tmpfile()]);
         $mock->shouldReceive('writeStream')->andReturn(false, true);
         $this->assertFalse($mock->copy('something', 'other'));
         $this->assertFalse($mock->copy('something', 'other'));
