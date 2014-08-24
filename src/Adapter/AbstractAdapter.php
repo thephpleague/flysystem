@@ -184,7 +184,10 @@ abstract class AbstractAdapter implements AdapterInterface
         }
 
         $result = $this->writeStream($newpath, $data['stream']);
-        fclose($data['stream']);
+
+        if (is_resource($data['stream'])) {
+            fclose($data['stream']);
+        }
 
         if ( ! $result) {
             return false;
