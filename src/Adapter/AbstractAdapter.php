@@ -177,14 +177,17 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function copy($path, $newpath)
     {
-        $stream = $this->readStream($path);
+        $stream = $this->readStream($path)['stream'];
 
         if ( ! is_resource($stream)) {
             return false;
         }
 
         $result = $this->writeStream($newpath, $stream);
-        fclose($stream);
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
 
         if ( ! $result) {
             return false;
