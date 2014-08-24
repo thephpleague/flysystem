@@ -16,6 +16,12 @@ class FileTests extends \PHPUnit_Framework_TestCase
         $this->filesystem = new Filesystem($fs);
     }
 
+    public function tearDown()
+    {
+        $this->filesystem->delete('file.txt');
+        $this->filesystem->deleteDir('files');
+    }
+
     protected function getFile()
     {
         return $this->filesystem->get('file.txt');
