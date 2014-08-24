@@ -131,7 +131,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  array            listing with metadata
      */
-    public function listWith(array $keys = array(), $directory = '', $recursive = false, $config = null)
+    public function listWith(array $keys = [], $directory = '', $recursive = false, $config = null)
     {
         return $this->delegateMethodCall('listWith', compact('keys', 'directory', 'recursive', 'config'));
     }

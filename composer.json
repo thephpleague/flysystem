@@ -16,7 +16,7 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "league/event": "~0.2.0",
+        "league/event": "~0.3",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9@dev",
         "aws/aws-sdk-php": "~2.4",
