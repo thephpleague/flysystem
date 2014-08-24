@@ -183,7 +183,7 @@ abstract class AbstractAdapter implements AdapterInterface
             return false;
         }
 
-        $result = $this->writeStream($newpath, $data);
+        $result = $this->writeStream($newpath, $data['stream']);
         fclose($data['stream']);
 
         if ( ! $result) {
