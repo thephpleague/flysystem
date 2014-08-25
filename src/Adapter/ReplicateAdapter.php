@@ -7,10 +7,14 @@ use League\Flysystem\Config;
 
 class ReplicateAdapter extends AbstractAdapter
 {
-    /** @var AdapterInterface */
+    /**
+     * @var AdapterInterface $replica
+     */
     protected $replica;
 
-    /** @var AdapterInterface */
+    /**
+     * @var AdapterInterface $source
+     */
     protected $source;
 
     /**
@@ -64,6 +68,24 @@ class ReplicateAdapter extends AbstractAdapter
     }
 
     /**
+     * Write a new file to the source and replica from a stream
+     *
+     * @param   string $path
+     * @param   resource $resource
+     * @param   mixed  $config Config object or visibility setting
+     *
+     * @return  false|array  false on failure file meta data on success
+     */
+    public function writeStream($path, $resource, $config = null)
+    {
+        if ( ! $this->source->writeStream($path, $resource, $config)) {
+            return false;
+        }
+
+        return $this->replica->writeStream($path, $resource, $config);
+    }
+
+    /**
      * Update a file on the source and replica
      *
      * @param   string $path
@@ -79,6 +101,24 @@ class ReplicateAdapter extends AbstractAdapter
         }
 
         return $this->replica->update($path, $contents, $config);
+    }
+
+    /**
+     * Update a file on the source and replica
+     *
+     * @param   string $path
+     * @param   resource $resource
+     * @param   mixed  $config Config object or visibility setting
+     *
+     * @return  false|array  false on failure file meta data on success
+     */
+    public function updateStream($path, $resource, $config = null)
+    {
+        if ( ! $this->source->updateStream($path, $resource, $config)) {
+            return false;
+        }
+
+        return $this->replica->updateStream($path, $resource, $config);
     }
 
     /**
@@ -172,6 +212,18 @@ class ReplicateAdapter extends AbstractAdapter
     }
 
     /**
+     * Get a read stream from the source
+     *
+     * @param   string $path
+     *
+     * @return  false|array
+     */
+    public function readStream($path)
+    {
+        return $this->source->readStream($path);
+    }
+
+    /**
      * List contents of a directory from the source
      *
      * @param   string $directory
@@ -230,5 +282,33 @@ class ReplicateAdapter extends AbstractAdapter
     public function getTimestamp($path)
     {
         return $this->source->getTimestamp($path);
+    }
+
+    /**
+     * Get the visibility of a file
+     *
+     * @param string $path
+     *
+     * @return array|false
+     */
+    public function getVisibility($path)
+    {
+        return $this->source->getVisibility($path);
+    }
+
+    /**
+     * Set the file visibility
+     *
+     * @param   string  $path
+     * @param   string  $visibility
+     * @return  false|array
+     */
+    public function setVisibility($path, $visibility)
+    {
+        if ( ! $this->source->setVisibility($path, $visibility)) {
+            return false;
+        }
+
+        return $this->replica->setVisibility($path, $visibility);
     }
 }
