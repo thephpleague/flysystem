@@ -33,6 +33,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
             'getMetadata' => ['getMetadata', false, 1],
             'getTimestamp' => ['getTimestamp', false, 1],
             'rename' => ['rename', true, 2],
+            'copy' => ['copy', true, 2],
             'delete' => ['delete', true, 1],
             'deleteDir' => ['deleteDir', true, 1],
             'createDir' => ['createDir', true, 2],

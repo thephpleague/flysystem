@@ -5,7 +5,7 @@ namespace League\Flysystem\Adapter;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 
-class ReplicateAdapter extends AbstractAdapter
+class ReplicateAdapter implements AdapterInterface
 {
     /**
      * @var AdapterInterface $replica
@@ -136,6 +136,22 @@ class ReplicateAdapter extends AbstractAdapter
         }
 
         return $this->replica->rename($path, $newpath);
+    }
+
+    /**
+     * Copy a file
+     *
+     * @param   string  $path
+     * @param   string  $newpath
+     * @return  boolean
+     */
+    public function copy($path, $newpath)
+    {
+        if ( ! $this->source->copy($path, $newpath)) {
+            return false;
+        }
+
+        return $this->replica->copy($path, $newpath);
     }
 
     /**
