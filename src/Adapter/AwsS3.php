@@ -230,7 +230,6 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->readObject($path);
         $result['stream'] = $result['contents']->getStream();
-        unset($result['contents']);
 
         return $result;
     }
