@@ -83,6 +83,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
             array('dirname/..', ''),
             array('./dir/../././', ''),
             array('/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'),
+            array('\dirname\\\\subdir\\\\\\subsubdir', 'dirname\subdir\subsubdir'),
+            array('\\\\some\shared\\\\drive', 'some\shared\drive'),
+            array('C:\dirname\\\\subdir\\\\\\subsubdir', 'C:\dirname\subdir\subsubdir'),
+            array('C:\\\\dirname\subdir\\\\subsubdir', 'C:\dirname\subdir\subsubdir'),
         );
     }
 

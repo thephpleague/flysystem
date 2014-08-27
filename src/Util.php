@@ -72,12 +72,11 @@ class Util
      * Normalize path
      *
      * @param string $path
-     * @param string $separator
      *
      * @return string
      * @throws LogicException
      */
-    public static function normalizePath($path, $separator = DIRECTORY_SEPARATOR)
+    public static function normalizePath($path)
     {
         // Remove any kind of funky unicode whitespace
         $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
@@ -99,9 +98,10 @@ class Util
         /**
          * Replace multiple separators with a single separator
          */
-        $normalized = preg_replace('#' . $separator . '{2,}#', $separator, $normalized);
+        $normalized = preg_replace('#\\\{2,}#', '\\', trim($normalized, '\\'));
+        $normalized = preg_replace('#/{2,}#', '/', trim($normalized, '/'));
 
-        return trim($normalized, $separator);
+        return $normalized;
     }
 
     /**
