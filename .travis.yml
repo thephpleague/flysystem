@@ -6,11 +6,6 @@ php:
   - 5.6
   - hhvm
 
-matrix:
-  allow_failures:
-    - php: hhvm
-  fast_finish: true
-
 before_script:
   - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml.dist; fi;'
   - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then mv phpunit.xml.hhvm phpunit.xml.dist; fi;'

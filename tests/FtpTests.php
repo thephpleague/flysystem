@@ -182,6 +182,11 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
+        if ( ! defined('FTP_BINARY')) {
+            $this->markTestSkipped('The FTP_BINARY constant is not defined');
+            return;
+        }
+
         $adapter = new Ftp($this->options);
         $this->assertEquals('example.org', $adapter->getHost());
         $this->assertEquals(40, $adapter->getPort());
@@ -220,6 +225,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
      * @expectedException RuntimeException
      */
     public function testConnectFail()
@@ -228,6 +234,9 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter->connect();
     }
 
+    /**
+     * @depends testInstantiable
+     */
     public function testRawlistFail()
     {
         $adapter = new Ftp($this->options);
@@ -236,6 +245,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
      * @expectedException RuntimeException
      */
     public function testConnectFailSsl()
@@ -245,6 +255,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
      * @expectedException RuntimeException
      */
     public function testLoginFailSsl()
@@ -254,6 +265,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
      * @expectedException RuntimeException
      */
     public function testRootFailSsl()
@@ -263,6 +275,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
      * @expectedException RuntimeException
      */
     public function testPassiveFailSsl()

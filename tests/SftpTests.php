@@ -7,12 +7,15 @@ class SftpTests extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
+        if ( ! class_exists('Net_SFTP')) {
+            $this->markTestSkipped('The Net_SFTP class is not defined');
+            return;
+        }
+
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('SFTP is not supported on HHVM');
             return;
         }
-
-        class_exists('Net_SFTP', true);
 
         if ( ! defined('NET_SFTP_TYPE_DIRECTORY')) {
             define('NET_SFTP_TYPE_DIRECTORY', 2);
