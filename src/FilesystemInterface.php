@@ -13,16 +13,17 @@ interface FilesystemInterface extends AdapterInterface
      * @throws FileExistsException
      * @return boolean             success boolean
      */
-    public function put($path, $contents, $visibility = null);
+    public function put($path, $contents, $config = null);
 
     /**
      * Create a file or update if exists using a stream
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed     $config
      * @return  boolean   success boolean
      */
-    public function putStream($path, $resource, $visibility = null);
+    public function putStream($path, $resource, $config = null);
 
     /**
      * Read and delete a file.
@@ -46,14 +47,18 @@ interface FilesystemInterface extends AdapterInterface
     /**
      * List all paths
      *
-     * @return  array  paths
+     * @param   string  $directory
+     * @param   bool    $recursive
+     * @return  array   paths
      */
     public function listPaths($directory = '', $recursive = false);
 
     /**
      * List contents with metadata
      *
-     * @param   array  $key  metadata key
+     * @param   array   $keys metadata key
+     * @param   string  $directory
+     * @param   bool    $recursive
      * @return  array            listing with metadata
      */
     public function listWith(array $keys = array(), $directory = '', $recursive = false);
