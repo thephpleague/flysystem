@@ -1,11 +1,11 @@
 # Flysystem by [@frankdejonge](http://twitter.com/frankdejonge)
 
-[![Build Status](https://travis-ci.org/thephpleague/flysystem.png)](https://travis-ci.org/thephpleague/flysystem)
-[![Latest Stable Version](https://poser.pugx.org/league/flysystem/v/stable.png)](https://packagist.org/packages/league/flysystem)
-[![Total Downloads](https://poser.pugx.org/league/flysystem/downloads.png)](https://packagist.org/packages/league/flysystem) [![License](https://poser.pugx.org/league/flysystem/license.png)](https://packagist.org/packages/league/flysystem)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/mini.png)](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
-[![Coverage Status](https://coveralls.io/repos/thephpleague/flysystem/badge.png)](https://coveralls.io/r/thephpleague/flysystem)
-[![Code Quality](https://scrutinizer-ci.com/g/thephpleague/flysystem/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
+[![Build Status](https://img.shields.io/travis/thephpleague/flysystem/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/flysystem)
+[![Coverage Status](https://img.shields.io/coveralls/thephpleague/flysystem.svg?style=flat-square)](https://coveralls.io/r/thephpleague/flysystem)
+[![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg?style=flat-square)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Latest Version](https://img.shields.io/github/release/thephpleague/flysystem.svg?style=flat-square)](https://github.com/thephpleague/flysystem/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
