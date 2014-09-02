@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false" preserveGlobalState="false"
-        backupStaticAttributes="false"
-        bootstrap="./phpunit.php"
-        colors="true"
-        processIsolation="false"
-        syntaxCheck="false">
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="./phpunit.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true"
+>
     <testsuites>
         <testsuite name="flysystem/tests">
             <directory suffix=".php">./tests/</directory>

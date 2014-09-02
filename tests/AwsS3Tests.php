@@ -128,6 +128,11 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
 
     public function testWriteStreamAboveLimitFail()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('HHVM has a bug breaking mockery');
+            return;
+        }
+
         $mockS3Client = $this->getS3Client();
         $mockTransfer = $this->getAbstractTransfer();
         $mockTransfer->shouldReceive('upload')->andThrow(Mockery::mock('Aws\Common\Exception\MultipartUploadException'));

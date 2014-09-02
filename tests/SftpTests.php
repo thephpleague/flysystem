@@ -12,8 +12,6 @@ class SftpTests extends PHPUnit_Framework_TestCase
             return;
         }
 
-        class_exists('Net_SFTP', true);
-
         if ( ! defined('NET_SFTP_TYPE_DIRECTORY')) {
             define('NET_SFTP_TYPE_DIRECTORY', 2);
         }
