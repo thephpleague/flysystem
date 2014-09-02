@@ -74,6 +74,7 @@ Want to get started quickly? Check out some of these integrations:
 * Amazon Web Services - S3
 * Rackspace Cloud Files
 * Dropbox
+* Copy
 * Ftp
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
@@ -158,6 +159,17 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Dropbox as Adapter;
 
 $client = new Client($token, $appName);
+$filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
+```
+
+## Copy Setup
+
+```php
+use Barracuda\Copy\API;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Copy as Adapter;
+
+$client = new API($consumerKey, $consumerSecret, $accessToken, $tokenSecret);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
 ```
 
