@@ -311,7 +311,7 @@ class Copy extends AbstractAdapter
             $timestamp = strtotime($object->modified_time);
         }
 
-        $result = Util::map((array)$object, static::$resultMap);
+        $result = Util::map((array) $object, static::$resultMap);
 
         return compact('timestamp', 'path') + $result;
     }
