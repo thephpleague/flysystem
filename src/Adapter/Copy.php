@@ -8,14 +8,23 @@ use League\Flysystem\Util;
 
 class Copy extends AbstractAdapter
 {
+    /**
+     * Result key map
+     *
+     * @var array
+     */
     protected static $resultMap = array(
         'size'           => 'size',
         'mime_type'      => 'mimetype',
         'type'           => 'type',
     );
 
+    /**
+     * Copy API
+     *
+     * @var API
+     */
     protected $client;
-    protected $prefix;
 
     /**
      * Constructor
@@ -26,7 +35,7 @@ class Copy extends AbstractAdapter
     public function __construct(\Barracuda\Copy\API $client, $prefix = null)
     {
         $this->client = $client;
-        $this->prefix = $prefix;
+        $this->setPathPrefix($prefix);
     }
 
     /**
@@ -37,7 +46,9 @@ class Copy extends AbstractAdapter
      */
     public function has($path)
     {
-        return $this->getMetadata($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->getMetadata($location);
     }
 
     /**
@@ -50,7 +61,9 @@ class Copy extends AbstractAdapter
      */
     public function write($path, $contents, $config = null)
     {
-        $result = $this->client->uploadFromString($this->applyPathPrefix($path), $contents);
+        $location = $this->applyPathPrefix($path);
+        $result = $this->client->uploadFromString($location, $contents);
+
         return $this->normalizeObject($result, $path);
     }
 
@@ -64,7 +77,9 @@ class Copy extends AbstractAdapter
      */
     public function writeStream($path, $resource, $config = null)
     {
-        $result = $this->client->uploadFromStream($this->applyPathPrefix($path), $resource);
+        $location = $this->applyPathPrefix($path);
+        $result = $this->client->uploadFromStream($location, $resource);
+
         return $this->normalizeObject($result, $path);
     }
 
@@ -78,7 +93,9 @@ class Copy extends AbstractAdapter
      */
     public function update($path, $contents, $config = null)
     {
-        $result = $this->client->uploadFromString($this->applyPathPrefix($path), $contents);
+        $location = $this->applyPathPrefix($path);
+        $result = $this->client->uploadFromString($location, $contents);
+
         return $this->normalizeObject($result, $path);
     }
 
@@ -92,7 +109,9 @@ class Copy extends AbstractAdapter
      */
     public function updateStream($path, $resource, $config = null)
     {
-        $result = $this->client->uploadFromStream($this->applyPathPrefix($path), $resource);
+        $location = $this->applyPathPrefix($path);
+        $result = $this->client->uploadFromStream($location, $resource);
+
         return $this->normalizeObject($result, $path);
     }
 
@@ -104,7 +123,9 @@ class Copy extends AbstractAdapter
      */
     public function read($path)
     {
-        return $this->client->readToString($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->readToString($location);
     }
 
     /**
@@ -115,7 +136,9 @@ class Copy extends AbstractAdapter
      */
     public function readStream($path)
     {
-        return $this->client->readToStream($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->readToStream($location);
     }
 
     /**
@@ -127,14 +150,14 @@ class Copy extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
-        $path = $this->applyPathPrefix($path);
-        $newpath = $this->applyPathPrefix($newpath);
+        $location = $this->applyPathPrefix($path);
+        $destination = $this->applyPathPrefix($newpath);
 
-        if ( ! $result = $this->client->rename($path, $newpath)) {
+        if ( ! $result = $this->client->rename($location, $destination)) {
             return false;
         }
 
-        return $this->normalizeObject($result);
+        return $this->normalizeObject($result, $newpath);
     }
 
     /**
@@ -159,7 +182,9 @@ class Copy extends AbstractAdapter
      */
     public function delete($path)
     {
-        return $this->client->removeFile($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->removeFile($location);
     }
 
     /**
@@ -170,7 +195,9 @@ class Copy extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        return $this->client->removeDir($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->removeDir($location);
     }
 
     /**
@@ -183,7 +210,9 @@ class Copy extends AbstractAdapter
      */
     public function createDir($path, $config = null)
     {
-        return $this->client->createDir($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+
+        return $this->client->createDir($location);
     }
 
 
@@ -195,7 +224,8 @@ class Copy extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        $objects = $this->client->listPath($this->applyPathPrefix($path));
+        $location = $this->applyPathPrefix($path);
+        $objects = $this->client->listPath($location);
 
         if ($objects === false || isset($objects[0]) === false || empty($objects[0])) {
             return false;
@@ -244,16 +274,16 @@ class Copy extends AbstractAdapter
      * @param   bool    $recursive
      * @return  array   directory contents
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($dirname = '', $recursive = false)
     {
         $listing = array();
+        $location = $this->applyPathPrefix($dirname);
 
-        if ( ! $result = $this->client->listPath($this->applyPathPrefix($directory))) {
+        if ( ! $result = $this->client->listPath($location)) {
             return false;
         }
 
-        foreach ($result as $object)
-        {
+        foreach ($result as $object) {
             $listing[] = $this->normalizeObject($object, $object->path);
 
             if ($recursive && $object->type == 'dir') {
@@ -271,23 +301,19 @@ class Copy extends AbstractAdapter
      * @param   string     $path
      * @return  array      file metadata
      */
-    protected function normalizeObject($object, $path = null)
+    protected function normalizeObject($object, $path)
     {
-        // validation
         if (is_a($object, 'stdClass') == false) {
             return false;
         }
 
-        // build the dirname from the path
-        $dirname = Util::dirname(Util::normalizePath($path));
-
-        $result = compact('path', 'dirname');
-
         if (isset($object->modified_time)) {
-            $result['timestamp'] = strtotime($object->modified_time);
+            $timestamp = strtotime($object->modified_time);
         }
 
-        return array_merge($result, Util::map((array)$object, static::$resultMap));
+        $result = Util::map((array)$object, static::$resultMap);
+
+        return compact('timestamp', 'path') + $result;
     }
 
     /**
