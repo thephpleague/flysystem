@@ -166,7 +166,9 @@ abstract class AbstractCache implements CacheInterface
     public function has($path)
     {
         if ( ! isset($this->cache[$path])) {
-            return $this->isComplete(Util::dirname($path), false) ? false : null;
+            $dirname = Util::dirname($path);
+
+            return $this->isComplete($dirname, false) ? false : null;
         }
 
         return $this->cache[$path] !== false;
@@ -195,11 +197,15 @@ abstract class AbstractCache implements CacheInterface
      */
     public function readStream($path)
     {
-        if (isset($this->cache[$path]['stream'])) {
-            return $this->cache[$path]['stream'];
+        if ( ! isset($this->cache[$path]['stream'])) {
+            return false;
         }
 
-        return false;
+        if ( ! is_resource($this->cache[$path]['stream'])) {
+            return false;
+        }
+
+        return $this->cache[$path]['stream'];
     }
 
     /**

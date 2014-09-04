@@ -151,7 +151,7 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $object, true);
+        $this->cache->updateObject($path, $object + ['contents' => false], true);
 
         return true;
     }
@@ -181,6 +181,7 @@ class Filesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
+     * @param   mixed     $config
      * @return  boolean   success boolean
      */
     public function putStream($path, $resource, $config = null)
@@ -265,7 +266,7 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $object, true);
+        $this->cache->updateObject($path, $object + ['contents' => false], true);
 
         return true;
     }
