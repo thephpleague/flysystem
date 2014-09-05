@@ -74,7 +74,7 @@ class FilesystemSpec extends ObjectBehavior
             'path' => 'file',
         ]);
 
-        $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
+        $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
         $this->writeStream('file', $stream, $config)->shouldReturn(true);
         fclose($stream);
     }
@@ -125,7 +125,7 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->updateStream('file', $stream, $config)->willReturn($cache = [
             'path' => 'file',
         ]);
-        $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
+        $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
         $this->updateStream('file', $stream, $config);
         fclose($stream);
     }
@@ -148,7 +148,7 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->writeStream('file', $stream, $config)->willReturn($cache = [
             'path' => 'file',
         ]);
-        $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
+        $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
         $this->putStream('file', $stream, $config)->shouldReturn(true);
         fclose($stream);
     }
@@ -171,7 +171,7 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->updateStream('file', $stream, $config)->willReturn($cache = [
             'path' => 'file',
         ]);
-        $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
+        $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
         $this->putStream('file', $stream, $config)->shouldReturn(true);
         fclose($stream);
     }
