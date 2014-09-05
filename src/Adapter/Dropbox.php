@@ -280,7 +280,7 @@ class Dropbox extends AbstractAdapter
 
     protected function normalizeObject($object, $path = null)
     {
-        $result = array('path' => $path ?: trim($object['path'], '/'));
+        $result = array('path' => trim($path ?: $object['path'], '/'));
 
         if (isset($object['modified'])) {
             $result['timestamp'] = strtotime($object['modified']);
