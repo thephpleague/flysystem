@@ -30,4 +30,14 @@ class AbstractCacheTest extends PHPUnit_Framework_TestCase
         $cache = new Memory;
         $this->assertFalse($cache->copy('one', 'two'));
     }
+
+    public function testValidResource()
+    {
+        $stream = tmpfile();
+        $cache = new Memory;
+        $cache->updateObject('path.txt', ['stream' => $stream]);
+        $this->assertInternalType('resource', $cache->readStream('path.txt'));
+        fclose($stream);
+        $this->assertFalse($cache->readStream('path.txt'));
+    }
 }
