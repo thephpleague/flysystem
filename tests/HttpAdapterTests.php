@@ -4,7 +4,8 @@ use League\Flysystem\Adapter\Http as HttpAdapter;
 
 class HttpAdapterTests extends PHPUnit_Framework_TestCase
 {
-    private $fakeUrl = "http://any.url.com/bla/dibla/dibla";
+    protected $fakeUrl = "http://any.url.com/bla/dibla/dibla";
+
     protected function getAdapter($expectation)
     {
         return new HttpAdapter($this->fakeUrl, $expectation);
@@ -12,21 +13,17 @@ class HttpAdapterTests extends PHPUnit_Framework_TestCase
 
     protected function getGuzzleClient()
     {
-        return Mockery::mock(
-            'GuzzleHttp\Client'
-        );
+        return Mockery::mock('GuzzleHttp\ClientInterface');
     }
 
     protected function getGuzzleResponse()
     {
-        return Mockery::mock(
-            '\GuzzleHttp\Message\Response'
-        );
+        return Mockery::mock('GuzzleHttp\Message\ResponseInterface');
     }
 
     protected function getGuzzleRequest()
     {
-        return Mockery::mock('\GuzzleHttp\Message\Request');
+        return Mockery::mock('\GuzzleHttp\Message\RequestInterface');
     }
 
 
@@ -35,12 +32,14 @@ class HttpAdapterTests extends PHPUnit_Framework_TestCase
         return array(
             array(200, true),
             array(404, false),
-            array('\GuzzleHttp\Exception\ClientException', false),
+            array('GuzzleHttp\Exception\ClientException', false),
         );
     }
 
     /**
      * @dataProvider  hasProvider
+     * @param $codeOrException
+     * @param $expectedReturnValue
      */
     public function testHas($codeOrException, $expectedReturnValue)
     {

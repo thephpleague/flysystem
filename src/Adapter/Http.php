@@ -8,12 +8,10 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Stream\GuzzleStreamWrapper;
 use League\Flysystem\Config;
-use League\Flysystem\Util;
 use League\Flysystem\AdapterInterface;
 
 class Http extends AbstractAdapter
 {
-
     /** @var  string  */
     protected $host;
 
@@ -342,27 +340,21 @@ class Http extends AbstractAdapter
         $client = $this->getClient();
         /** @var ResponseInterface $response */
         $response = $client->head($url);
-
-        $status        = $response->getStatusCode();
-        $contentLength = (int)$response->getHeader('Content-Length');
-        $timestamp     = $response->getHeader('Last-Modified');
-        $contentType   = $response->getHeader('Content-Type');
-
-        $size       = "unknown";
+        $status = (int) $response->getStatusCode();
         $visibility = AdapterInterface::VISIBILITY_PRIVATE;
-        $mimeType   = $contentType;
 
         // http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
         if ($status == 200 || ($status > 300 && $status <= 308)) {
-            $size     = $contentLength;
-            $mimeType = $contentType;
+            $size = (int) $response->getHeader('Content-Length');
+            $timestamp = strtotime($response->getHeader('Last-Modified'));
+            $mimetype = $response->getHeader('Content-Type');
         }
 
         if ($status != 401 && $status != 402 && $status != 403) {
             $visibility = AdapterInterface::VISIBILITY_PUBLIC;
         }
 
-        return array('visibility' => $visibility, 'size' => $size, 'timestamp' => $timestamp, 'mimetype' => $mimeType);
+        return compact('visibility', 'size', 'timestamp', 'mimetype');
     }
 
     /**
