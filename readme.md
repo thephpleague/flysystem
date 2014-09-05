@@ -76,6 +76,7 @@ Want to get started quickly? Check out some of these integrations:
 * Dropbox
 * Copy
 * Ftp
+* Http (through guzzle 4)
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
 * WebDAV (through SabreDAV)
@@ -171,6 +172,18 @@ use League\Flysystem\Adapter\Copy as Adapter;
 
 $client = new API($consumerKey, $consumerSecret, $accessToken, $tokenSecret);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
+```
+
+## Http Setup
+
+```php
+use GuzzleHttp\Client;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Http as Adapter;
+
+$client = new Client;
+$url = 'http://example.com'
+$filesystem = new Filesystem(new Adapter($url, $client));
 ```
 
 ## FTP Setup
