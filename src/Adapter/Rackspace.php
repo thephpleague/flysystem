@@ -168,6 +168,9 @@ class Rackspace extends AbstractAdapter
         return array('path' => $dirname);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function writeStream($path, $resource, $config = null)
     {
         $location = $this->applyPathPrefix($path);
@@ -175,6 +178,9 @@ class Rackspace extends AbstractAdapter
         return $this->write($location, $resource, $config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateStream($path, $resource, $config = null)
     {
         $location = $this->applyPathPrefix($path);
@@ -216,7 +222,8 @@ class Rackspace extends AbstractAdapter
     /**
      * Get a file's metadata
      *
-     * @param   string  $path
+     * @param string $directory
+     * @param bool   $recursive
      * @return  array   file metadata
      */
     public function listContents($directory = '', $recursive = false)
