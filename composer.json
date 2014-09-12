@@ -16,13 +16,13 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "league/event": "~0.3",
+        "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9@dev",
         "aws/aws-sdk-php": "~2.4",
         "predis/predis": "~1.0",
         "dropbox/dropbox-sdk": "~1.1.1",
-        "rackspace/php-opencloud": "~1.9.1",
+        "rackspace/php-opencloud": "~1.10.0",
         "sabre/dav": "~2.0.2",
         "barracuda/copy": "~1.1.4",
         "guzzlehttp/guzzle": "~4.0",
