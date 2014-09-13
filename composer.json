@@ -18,7 +18,7 @@
     "require-dev": {
         "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "~0.9@dev",
+        "mockery/mockery": "~0.9",
         "aws/aws-sdk-php": "~2.4",
         "predis/predis": "~1.0",
         "dropbox/dropbox-sdk": "~1.1.1",
