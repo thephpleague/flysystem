@@ -58,7 +58,8 @@ class Rackspace extends AbstractAdapter
     public function write($path, $contents, $config = null)
     {
         $location = $this->applyPathPrefix($path);
-        $response = $this->container->uploadObject($location, $contents);
+        $headers = ($config->has('headers') ? $config->get('headers') : array());
+        $response = $this->container->uploadObject($location, $contents, $headers);
 
         return $this->normalizeObject($response);
     }
