@@ -72,9 +72,19 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
     {
         $container = $this->getContainerMock();
         $dataObject = $this->getDataObjectMock('filename.ext');
-        $container->shouldReceive('uploadObject')->andReturn($dataObject);
+        $container->shouldReceive('uploadObject')->with('filename.ext', 'content', [])->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $config = new Config(array());
+        $this->assertInternalType('array', $adapter->write('filename.ext', 'content'));
+    }
+
+    public function testWriteWithHeaders()
+    {
+        $container = $this->getContainerMock();
+        $dataObject = $this->getDataObjectMock('filename.ext');
+        $headers = ['custom' => 'headers'];
+        $container->shouldReceive('uploadObject')->with('filename.ext', 'content', $headers)->andReturn($dataObject);
+        $adapter = new Rackspace($container);
+        $config = new Config(['headers' => $headers]);
         $this->assertInternalType('array', $adapter->write('filename.ext', 'content', $config));
     }
 

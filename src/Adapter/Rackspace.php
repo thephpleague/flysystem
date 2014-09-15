@@ -58,7 +58,12 @@ class Rackspace extends AbstractAdapter
     public function write($path, $contents, $config = null)
     {
         $location = $this->applyPathPrefix($path);
-        $headers = ($config->has('headers') ? $config->get('headers') : array());
+        $headers = [];
+
+        if ($config and $config->has('headers')) {
+            $headers =  $config->get('headers');
+        }
+
         $response = $this->container->uploadObject($location, $contents, $headers);
 
         return $this->normalizeObject($response);
@@ -123,6 +128,7 @@ class Rackspace extends AbstractAdapter
         $object = $this->getObject($location);
         $response = $object->delete();
 
+
         if ($response->getStatusCode() !== 204) {
             return false;
         }
@@ -174,9 +180,7 @@ class Rackspace extends AbstractAdapter
      */
     public function writeStream($path, $resource, $config = null)
     {
-        $location = $this->applyPathPrefix($path);
-
-        return $this->write($location, $resource, $config);
+        return $this->write($path, $resource, $config);
     }
 
     /**
@@ -184,11 +188,12 @@ class Rackspace extends AbstractAdapter
      */
     public function updateStream($path, $resource, $config = null)
     {
-        $location = $this->applyPathPrefix($path);
-
-        return $this->update($location, $resource, $config);
+        return $this->update($path, $resource, $config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function has($path)
     {
         $location = $this->applyPathPrefix($path);
