@@ -2,6 +2,7 @@
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use League\Flysystem\Adapter\Rackspace;
+use League\Flysystem\Config;
 
 class RackspaceTests extends PHPUnit_Framework_TestCase
 {
@@ -73,7 +74,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject = $this->getDataObjectMock('filename.ext');
         $container->shouldReceive('uploadObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->write('filename.ext', 'content'));
+        $config = new Config(array());
+        $this->assertInternalType('array', $adapter->write('filename.ext', 'content', $config));
     }
 
     public function testWriteStream()
@@ -82,7 +84,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject = $this->getDataObjectMock('filename.ext');
         $container->shouldReceive('uploadObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->writeStream('filename.ext', 'content'));
+        $config = new Config(array());
+        $this->assertInternalType('array', $adapter->writeStream('filename.ext', 'content', $config));
     }
 
     public function testUpdateFail()
