@@ -1,8 +1,12 @@
 # Changelog
 
-### Unreleased
+### 0.5.7 - Unreleased
 
 No changes yet.
+
+### Fixed
+
+* Path prefixing would done twice for rackspace when using streams for writes or updates.
 
 ---
 
