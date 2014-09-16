@@ -1,8 +1,12 @@
 # Changelog
 
-### 0.5.7 - Unreleased
+## Next - unreleased
 
-No changes yet.
+No changed yet.
+
+---
+
+## 0.5.7 - 2014-09-16
 
 ### Fixed
 
@@ -10,7 +14,7 @@ No changes yet.
 
 ---
 
-## 0.5.6 - 2014-10-06
+## 0.5.6 - 2014-09-09
 
 ### Added
 
