@@ -60,7 +60,7 @@ class Rackspace extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $headers = [];
 
-        if ($config and $config->has('headers')) {
+        if ($config && $config->has('headers')) {
             $headers =  $config->get('headers');
         }
 
