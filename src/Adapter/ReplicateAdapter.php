@@ -100,7 +100,11 @@ class ReplicateAdapter implements AdapterInterface
             return false;
         }
 
-        return $this->replica->update($path, $contents, $config);
+        if ($this->replica->has($path)) {
+            return $this->replica->update($path, $contents, $config);
+        } else {
+            return $this->replica->write($path, $contents, $config);
+        }
     }
 
     /**
@@ -118,7 +122,11 @@ class ReplicateAdapter implements AdapterInterface
             return false;
         }
 
-        return $this->replica->updateStream($path, $resource, $config);
+        if ($this->replica->has($path)) {
+            return $this->replica->updateStream($path, $resource, $config);
+        } else {
+            return $this->replica->writeStream($path, $resource, $config);
+        }
     }
 
     /**
@@ -167,7 +175,11 @@ class ReplicateAdapter implements AdapterInterface
             return false;
         }
 
-        return $this->replica->delete($path);
+        if ($this->replica->has($path)) {
+            return $this->replica->delete($path);
+        }
+
+        return true;
     }
 
     /**
