@@ -3,6 +3,7 @@
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use League\Flysystem\Adapter\Rackspace;
 use League\Flysystem\Config;
+use Mockery\Mock;
 
 class RackspaceTests extends PHPUnit_Framework_TestCase
 {
@@ -184,6 +185,14 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
         $this->assertEquals($expected, $adapter->delete('filename.ext'));
+    }
+
+    public function testDeleteNotFound()
+    {
+        $container = $this->getContainerMock();
+        $container->shouldReceive('getObject')->andThrow('OpenCloud\ObjectStore\Exception\ObjectNotFoundException');
+        $adapter = new Rackspace($container);
+        $this->assertFalse($adapter->delete('filename.txt'));
     }
 
     public function renameProvider()

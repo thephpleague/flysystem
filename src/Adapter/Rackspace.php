@@ -125,9 +125,14 @@ class Rackspace extends AbstractAdapter
     public function delete($path)
     {
         $location = $this->applyPathPrefix($path);
-        $object = $this->getObject($location);
-        $response = $object->delete();
 
+        try {
+            $object = $this->getObject($location);
+        } catch (ObjectNotFoundException $exception) {
+            return false;
+        }
+
+        $response = $object->delete();
 
         if ($response->getStatusCode() !== 204) {
             return false;
