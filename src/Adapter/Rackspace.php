@@ -22,6 +22,16 @@ class Rackspace extends AbstractAdapter
     protected $prefix;
 
     /**
+     * Flag indicating whether the remote is capable of bulk operations
+     *
+     * The Bulk Operations middleware enables uploading and deleting many objects with just one request.
+     *
+     * @see https://www.swiftstack.com/docs/admin/middleware/bulk.html
+     * @var bool
+     */
+    protected $bulkOperationCapable = true;
+
+    /**
      * Constructor
      *
      * @param  Container  $container
@@ -45,6 +55,16 @@ class Rackspace extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
 
         return $this->container->getObject($location);
+    }
+
+    /**
+     * Flag indicating whether the remote is capable of bulk operations
+     *
+     * @param boolean $bulkOperationCapable
+     */
+    public function setBulkOperationCapable($bulkOperationCapable)
+    {
+        $this->bulkOperationCapable = $bulkOperationCapable;
     }
 
     /**
@@ -149,19 +169,33 @@ class Rackspace extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        $paths = array();
-        $prefix = '/'.$this->container->getName().'/';
         $location = $this->applyPathPrefix($dirname);
         $objects = $this->container->objectList(array('prefix' => $location));
 
-        foreach ($objects as $object)
-            $paths[] = $prefix.ltrim($object->getName(), '/');
+        if ($this->bulkOperationCapable) {
+            $paths = array();
+            $prefix = '/'.$this->container->getName().'/';
+            foreach ($objects as $object) {
+                $paths[] = $prefix.ltrim($object->getName(), '/');
+            }
+            $service = $this->container->getService();
+            $response =  $service->bulkDelete($paths);
 
-        $service = $this->container->getService();
-        $response =  $service->bulkDelete($paths);
+            if ($response->getStatusCode() === 200) {
+                return true;
+            }
+        }
 
-        if ($response->getStatusCode() === 200) {
-            return true;
+        if (!$this->bulkOperationCapable) {
+            $failures = 0;
+            foreach ($objects as $object) {
+                $response = $object->delete();
+                if ($response->getStatusCode() !== 204) {
+                    $failures++;
+                }
+            }
+
+            return $failures === 0;
         }
 
         return false;
