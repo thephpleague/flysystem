@@ -1,8 +1,12 @@
 # Changelog
 
-## Next - unreleased
+## 0.5.8 - unreleased
 
 No changed yet.
+
+### Fixed
+
+* Path prefixing done twice when retrieving meta-data in the Rackspace adapter.
 
 ---
 
