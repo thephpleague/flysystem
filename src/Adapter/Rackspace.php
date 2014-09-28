@@ -79,8 +79,7 @@ class Rackspace extends AbstractAdapter
      */
     public function update($path, $contents, $config = null)
     {
-        $location = $this->applyPathPrefix($path);
-        $object = $this->getObject($location);
+        $object = $this->getObject($path);
         $object->setContent($contents);
         $object->setEtag(null);
         $response = $object->update();
@@ -101,8 +100,7 @@ class Rackspace extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
-        $location = $this->applyPathPrefix($path);
-        $object = $this->getObject($location);
+        $object = $this->getObject($path);
         $newlocation = $this->applyPathPrefix($newpath);
         $destination = '/'.$this->container->getName().'/'.ltrim($newlocation, '/');
         $response = $object->copy($destination);
@@ -124,10 +122,8 @@ class Rackspace extends AbstractAdapter
      */
     public function delete($path)
     {
-        $location = $this->applyPathPrefix($path);
-
         try {
-            $object = $this->getObject($location);
+            $object = $this->getObject($path);
         } catch (ObjectNotFoundException $exception) {
             return false;
         }
@@ -220,8 +216,7 @@ class Rackspace extends AbstractAdapter
      */
     public function read($path)
     {
-        $location = $this->applyPathPrefix($path);
-        $object = $this->getObject($location);
+        $object = $this->getObject($path);
         $data = $this->normalizeObject($object);
         $data['contents'] = (string) $object->getContent();
 
@@ -276,8 +271,7 @@ class Rackspace extends AbstractAdapter
      */
     public function getMetadata($path)
     {
-        $location = $this->applyPathPrefix($path);
-        $object = $this->getObject($location);
+        $object = $this->getObject($path);
 
         return $this->normalizeObject($object);
     }
