@@ -22,8 +22,6 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
         return [
             'write' => ['write', true, 3],
             'writeStream' => ['writeStream', true, 3],
-            'update' => ['update', true, 3],
-            'updateStream' => ['updateStream', true, 3],
             'read' => ['read', false, 1],
             'readStream' => ['readStream', false, 1],
             'getVisibility' => ['getVisibility', false, 1],
@@ -34,7 +32,6 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
             'getTimestamp' => ['getTimestamp', false, 1],
             'rename' => ['rename', true, 2],
             'copy' => ['copy', true, 2],
-            'delete' => ['delete', true, 1],
             'deleteDir' => ['deleteDir', true, 1],
             'createDir' => ['createDir', true, 2],
             'has' => ['has', false, 1],
@@ -71,5 +68,70 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
     public function testGetReplicaAdapter()
     {
         $this->assertEquals($this->source, $this->adapter->getReplicaAdapter());
+    }
+
+    public function testMethodUpdateSourceWillNotUpdate() {
+        $this->source->shouldReceive('update')->once()->andReturn(false);
+
+        $this->assertFalse(call_user_func_array([$this->adapter, 'update'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodUpdateSourceWillUpdateAndReplicaWillUpdate() {
+        $this->source->shouldReceive('update')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(true);
+        $this->replica->shouldReceive('update')->once()->andReturn(true);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodUpdateSourceWillUpdateAndReplicaWillWrite() {
+        $this->source->shouldReceive('update')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(false);
+        $this->replica->shouldReceive('write')->once()->andReturn(true);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodUpdateStreamSourceWillNotUpdate() {
+        $this->source->shouldReceive('updateStream')->once()->andReturn(false);
+
+        $this->assertFalse(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodUpdateStreamSourceWillUpdateAndReplicaWillUpdate() {
+        $this->source->shouldReceive('updateStream')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(true);
+        $this->replica->shouldReceive('updateStream')->once()->andReturn(true);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodUpdateStreamSourceWillUpdateAndReplicaWillWrite() {
+        $this->source->shouldReceive('updateStream')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(false);
+        $this->replica->shouldReceive('writeStream')->once()->andReturn(true);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', 'value']));
+    }
+
+    public function testMethodDeleteSourceWillNotDelete() {
+        $this->source->shouldReceive('delete')->once()->andReturn(false);
+
+        $this->assertFalse(call_user_func_array([$this->adapter, 'delete'], ['value']));
+    }
+
+    public function testMethodDeleteSourceWillDeleteAndReplicaWillDelete() {
+        $this->source->shouldReceive('delete')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(true);
+        $this->replica->shouldReceive('delete')->once()->andReturn(true);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'delete'], ['value']));
+    }
+
+    public function testMethodDeleteSourceWillDeleteAndReplicaWillNotDelete() {
+        $this->source->shouldReceive('delete')->once()->andReturn(true);
+        $this->replica->shouldReceive('has')->once()->andReturn(false);
+
+        $this->assertTrue(call_user_func_array([$this->adapter, 'delete'], ['value']));
     }
 }
