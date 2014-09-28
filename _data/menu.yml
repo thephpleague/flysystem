@@ -1,0 +1,18 @@
+Getting Started:
+    Introduction: '/'
+    Installation: '/installation/'
+    Integrations: '/integrations/'
+    The API: '/api/'
+    Caching: '/caching/'
+Adapters:
+    Local: '/adapter/local/'
+    AWS S3: '/adapter/aws-s3/'
+    Copy.com: '/adapter/copy/'
+    Dropbox: '/adapter/dropbox/'
+    FTP: '/adapter/ftp/'
+    Null / Test: '/adapter/null-test/'
+    Rackspace: '/adapter/rackspace/'
+    ReplicateAdapter: '/adapter/replicate/'
+    SFTP: '/adapter/sftp/'
+    WebDAV: '/adapter/webdav/'
+    ZipArchive: '/adapter/zip-archive/'
