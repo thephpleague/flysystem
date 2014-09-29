@@ -56,6 +56,12 @@ __Rename Files__
 $filesystem->rename('filename.txt', 'newname.txt');
 ~~~
 
+__Copy Files__
+
+~~~ php
+$filesystem->copy('filename.txt', 'duplicate.txt');
+~~~
+
 __Get Mimetypes__
 
 ~~~ php
