@@ -17,8 +17,7 @@ class MimeType
         if (class_exists('Finfo')) {
             $finfo = new Finfo(FILEINFO_MIME_TYPE);
             $mimeType = $finfo->buffer($content);
-        }
-        else {
+        } else {
             $tempFile = 'php://temp/mime_content_type';
             $fp = fopen($tempFile, 'r+');
             fputs($fp, $content);
@@ -40,7 +39,9 @@ class MimeType
     {
         static $extensionToMimeTypeMap;
 
-        if ( ! $extensionToMimeTypeMap) $extensionToMimeTypeMap = static::getExtensionToMimeTypeMap();
+        if (!$extensionToMimeTypeMap) {
+            $extensionToMimeTypeMap = static::getExtensionToMimeTypeMap();
+        }
 
         if (isset($extensionToMimeTypeMap[$extension])) {
             return $extensionToMimeTypeMap[$extension];
