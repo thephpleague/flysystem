@@ -116,4 +116,14 @@ class UtilTests extends \PHPUnit_Framework_TestCase
         $mimeType = Util::guessMimeType($path, $content);
         $this->assertEquals($expected, $mimeType);
     }
+
+    /**
+     * @dataProvider  pathAndContentProvider
+     */
+    public function testGuessMimeTypeFallback($path, $content, $expected)
+    {
+        \override_function('class_exists', '$class_name', 'return false;');
+        $mimeType = Util::guessMimeType($path, $content);
+        $this->assertEquals($expected, $mimeType);
+    }
 }
