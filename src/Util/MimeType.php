@@ -22,7 +22,7 @@ class MimeType
             $fp = fopen($tempFile, 'r+');
             fputs($fp, $content);
             rewind($fp);
-            $mimeType = \mime_content_type($tempFile);
+            $mimeType = mime_content_type($tempFile);
             fclose($fp);
         }
 
