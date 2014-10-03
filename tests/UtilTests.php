@@ -122,7 +122,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
      */
     public function testGuessMimeTypeFallback($path, $content, $expected)
     {
-        eval("namespace League\\Flysystem\\Util; if (!function_exists('class_exists')) { function class_exists() { return false; } }");
+        eval("namespace League\\Flysystem\\Util; if (!function_exists('League\\Flysystem\\Util\\class_exists')) { function class_exists() { return false; } }");
 
         $mimeType = Util::guessMimeType($path, $content);
         $this->assertEquals($expected, $mimeType);
