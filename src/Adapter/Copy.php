@@ -303,7 +303,7 @@ class Copy extends AbstractAdapter
      */
     protected function normalizeObject($object, $path)
     {
-        if (is_a($object, 'stdClass') == false) {
+        if (is_a($object, 'stdClass') === false) {
             return false;
         }
 
