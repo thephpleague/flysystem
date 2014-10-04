@@ -14,8 +14,17 @@ class MimeType
      */
     public static function detectByContent($content)
     {
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($content);
+        if (class_exists('Finfo')) {
+            $finfo = new Finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($content);
+        } else {
+            $tempFile = 'php://temp/mime_content_type';
+            $fp = fopen($tempFile, 'r+');
+            fputs($fp, $content);
+            rewind($fp);
+            $mimeType = mime_content_type($tempFile);
+            fclose($fp);
+        }
 
         return $mimeType ?: null;
     }
@@ -30,7 +39,9 @@ class MimeType
     {
         static $extensionToMimeTypeMap;
 
-        if ( ! $extensionToMimeTypeMap) $extensionToMimeTypeMap = static::getExtensionToMimeTypeMap();
+        if (!$extensionToMimeTypeMap) {
+            $extensionToMimeTypeMap = static::getExtensionToMimeTypeMap();
+        }
 
         if (isset($extensionToMimeTypeMap[$extension])) {
             return $extensionToMimeTypeMap[$extension];
