@@ -56,6 +56,7 @@ function ftp_close()
 function ftp_login($connection)
 {
     if ($connection === 'login.fail') {
+        trigger_error('FTP login failed!!', E_WARNING);
         return false;
     }
 
