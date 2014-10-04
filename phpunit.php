@@ -1,6 +1,6 @@
 <?php
 
-@include __DIR__.'/vendor/autoload.php';
+include __DIR__.'/vendor/autoload.php';
 
 if ( ! is_dir(__DIR__.'/tests/files')) {
     mkdir(__DIR__.'/tests/files', 0777, true);
