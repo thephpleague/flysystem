@@ -10,10 +10,14 @@ class MimeType
      * Detects MIME Type based on given content
      *
      * @param  string $content
-     * @return string|null     MIME Type or NULL if no extension detected
+     * @return string|null     MIME Type or NULL if no mime type detected
      */
     public static function detectByContent($content)
     {
+        if ( ! class_exists('Finfo')) {
+            return null;
+        }
+
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
         $mimeType = $finfo->buffer($content);
 

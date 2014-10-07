@@ -153,7 +153,7 @@ class Util
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {
-                $mimeType = MimeType::detectByFileExtension($extension) ?: $mimeType;
+                $mimeType = MimeType::detectByFileExtension($extension) ?: 'text/plain';
             }
         }
 
