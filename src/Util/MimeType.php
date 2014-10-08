@@ -15,8 +15,8 @@ class MimeType
     public static function detectByContent($content)
     {
         if ( ! class_exists('Finfo')) {
-            $memoryFile = 'php://memory';
-            $fp = fopen($memoryFile, 'wb+');
+            $tempFile = 'php://temp';
+            $fp = fopen($tempFile, 'wb+');
             fputs($fp, $content);
             rewind($fp);
             $mimeType = mime_content_type($fp);
