@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Util;
 
+use League\Flysystem\Util;
+
 $passthru = true;
 
 function class_exists($class_name, $autoload = true) {
@@ -21,6 +23,35 @@ class MimeTests extends \PHPUnit_Framework_TestCase
         global $passthru;
         $passthru = false;
         $this->assertNull(MimeType::detectByContent('string'));
+        $passthru = true;
+    }
+    public function pathAndContentProvider()
+    {
+        return array(
+            array('/some/file.css', 'body { background: #000; } ', 'text/css'),
+            array('/some/file.txt', 'body { background: #000; } ', 'text/plain'),
+            array('/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif')
+        );
+    }
+
+    /**
+     * @dataProvider  pathAndContentProvider
+     */
+    public function testGuessMimeType($path, $content, $expected)
+    {
+        $mimeType = Util::guessMimeType($path, $content);
+        $this->assertEquals($expected, $mimeType);
+    }
+
+    /**
+     * @dataProvider  pathAndContentProvider
+     */
+    public function testGuessMimeTypeFallback($path, $content, $expected)
+    {
+        global $passthru;
+        $passthru = false;
+        $mimeType = Util::guessMimeType($path, $content);
+        $this->assertEquals($expected, $mimeType);
         $passthru = true;
     }
 }
