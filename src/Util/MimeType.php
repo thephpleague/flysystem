@@ -15,11 +15,16 @@ class MimeType
     public static function detectByContent($content)
     {
         if ( ! class_exists('Finfo')) {
-            return null;
+            $memoryFile = 'php://memory';
+            $fp = fopen($memoryFile, 'wb+');
+            fputs($fp, $content);
+            rewind($fp);
+            $mimeType = mime_content_type($fp);
+            fclose($fp);
+        } else {
+            $finfo = new Finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($content);
         }
-
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($content);
 
         return $mimeType ?: null;
     }
