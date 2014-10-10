@@ -12,8 +12,6 @@
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
-[Flysystem on Packagist](https://packagist.org/packages/league/flysystem)
-
 # Support Flysystem
 
 Do you use Flysystem often? Supporting it through Gittip will help freeing up extra time for me to work on
