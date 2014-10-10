@@ -94,6 +94,7 @@ Want to get started quickly? Check out some of these integrations:
 * Redis (through Predis)
 * Memcached
 * Adapter
+* Stash
 
 ## Local Setup
 
@@ -285,6 +286,25 @@ $cache = new Adapter($local, 'file', 300);
 
 $filesystem = new Filesystem($dropbox, $cache);
 ```
+
+## Stash Caching Setup
+
+```php
+use Stash\Pool;
+use League\Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Cache\Stash as Cache;
+
+$pool = new Pool(); // you can optionally pass a driver (recommended, default: in-memory driver)
+
+$cache = new Cache($pool, 'storageKey', 300);
+// Storage Key and expire time are optional
+
+$adapter = new Adapter(__DIR__.'/path/to/root');
+
+$filesystem = new Filesystem($adapter, $cache);
+```
+
+For list of drivers and their configuration check the [documentation](http://www.stashphp.com/Drivers.html).
 
 
 ## General Usage
