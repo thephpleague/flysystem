@@ -27,6 +27,7 @@
         "barracuda/copy": "~1.1.4",
         "guzzlehttp/guzzle": "~4.0",
         "phpseclib/phpseclib": "~0.3.5",
+        "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
         "phpspec/phpspec": "~2.0"
     },
@@ -49,7 +50,8 @@
         "sabre/dav": "Enables WebDav support",
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files",
         "barracuda/copy": "Allows you to use Copy.com storage",
-        "guzzlehttp/guzzle": "Allows you to use http files (reading only)"
+        "guzzlehttp/guzzle": "Allows you to use http files (reading only)",
+        "tedivm/stash": "Allows you to use Stash as cache implementation"
     },
     "config": {
         "bin-dir": "bin"
