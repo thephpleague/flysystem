@@ -1,7 +1,6 @@
 <?php
 
 use League\Flysystem\Cache\Predis;
-use Predis\Client;
 
 class PredisTests extends PHPUnit_Framework_TestCase
 {
