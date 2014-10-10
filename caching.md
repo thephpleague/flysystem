@@ -61,7 +61,7 @@ $filesystem = new Filesystem($dropbox, $cache);
 
 ## Stash Caching Setup
 
-```php
+~~~ php
 use Stash\Pool;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cache\Stash as Cache;
@@ -75,6 +75,6 @@ $cache = new Cache($pool, 'storageKey', 300);
 $adapter = new Adapter(__DIR__.'/path/to/root');
 
 $filesystem = new Filesystem($adapter, $cache);
-```
+~~~
 
 For list of drivers and configuration options check their [documentation](http://www.stashphp.com/Drivers.html).
