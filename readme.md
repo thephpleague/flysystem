@@ -1,6 +1,6 @@
 # League\Flysystem
 
-[![Author](http://img.shields.io/badge/author-@frankejonge-blue.svg?style=flat-square)](https://twitter.com/frankejonge)
+[![Author](http://img.shields.io/badge/author-@frankdejonge-blue.svg?style=flat-square)](https://twitter.com/frankdejonge)
 [![Build Status](https://img.shields.io/travis/thephpleague/flysystem/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/flysystem)
 [![Coverage Status](https://img.shields.io/coveralls/thephpleague/flysystem.svg?style=flat-square)](https://coveralls.io/r/thephpleague/flysystem)
 [![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg?style=flat-square)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
