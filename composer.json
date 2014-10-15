@@ -16,6 +16,7 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
+        "ext-fileinfo": "*",
         "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
@@ -42,6 +43,7 @@
         }
     },
     "suggest": {
+        "ext-fileinfo": "Required for MimeType",
         "league/event": "Required for EventableFilesystem",
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
         "predis/predis": "Allows you to use Predis for caching",
