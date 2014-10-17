@@ -28,7 +28,7 @@ class AwsS3 extends AbstractAdapter
      * @var  array  $metaOptions
      */
     protected static $metaOptions = array(
-        'Cache-Control',
+        'CacheControl',
         'Expires',
         'StorageClass',
         'ServerSideEncryption',
