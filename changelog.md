@@ -1,8 +1,6 @@
 # Changelog
 
-## 0.5.8 - unreleased
-
-No changed yet.
+## 0.5.8 - 2014-10-17
 
 ### Fixed
 
