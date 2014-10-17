@@ -267,9 +267,12 @@ class AwsS3 extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
+        $visibility = $this->getVisibility($path) === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
+
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'ACL' => $visibility,
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -288,9 +291,12 @@ class AwsS3 extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
+        $visibility = $this->getVisibility($path) === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
+
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'ACL' => $visibility,
         ));
 
         $result = $this->client->copyObject($options)->getAll();

@@ -210,6 +210,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testRename()
     {
         $mock = $this->getS3Client();
+        $this->expectVisibilityCall(Permission::READ, 'old', $mock);
         $mock->shouldReceive('copyObject')->once()->andReturn(Mockery::self());
         $mock->shouldReceive('getAll')->once()->andReturn(array('Key' => 'something', 'LastModified' => '2011-01-01'));
         $mock->shouldReceive('deleteObject')->once()->andReturn(true);
@@ -223,6 +224,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testCopy()
     {
         $mock = $this->getS3Client();
+        $this->expectVisibilityCall(Permission::READ, 'old', $mock);
         $mock->shouldReceive('copyObject')->once()->andReturn(Mockery::self());
         $mock->shouldReceive('getAll')->once()->andReturn(array('Key' => 'something', 'LastModified' => '2011-01-01'));
         $adapter = new Adapter($mock, 'bucketname');
@@ -287,10 +289,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
     public function testGetVisibility($permission, $uri, $expected)
     {
         $mock = $this->getS3Client();
-        $mock->shouldReceive('getObjectAcl')->once()->andReturn(Mockery::self());
-        $grant = array('Permission' => $permission, 'Grantee' => array('URI' => $uri));
-        $grants = array('Grants' => array($grant));
-        $mock->shouldReceive('getAll')->once()->andReturn($grants);
+        $this->expectVisibilityCall($permission, $uri, $mock);
         $expected = array('visibility' => $expected);
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->getVisibility('object.ext');
@@ -356,5 +355,18 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $adapter = new Adapter($mock, 'bucket');
         $this->assertInstanceOf('Aws\S3\Model\MultipartUpload\UploadBuilder', $adapter->getUploadBuilder());
+    }
+
+    /**
+     * @param $permission
+     * @param $uri
+     * @param $mock
+     */
+    protected function expectVisibilityCall($permission, $uri, $mock)
+    {
+        $mock->shouldReceive('getObjectAcl')->once()->andReturn(Mockery::self());
+        $grant = array('Permission' => $permission, 'Grantee' => array('URI' => $uri));
+        $grants = array('Grants' => array($grant));
+        $mock->shouldReceive('getAll')->once()->andReturn($grants);
     }
 }
