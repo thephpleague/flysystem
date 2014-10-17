@@ -6,8 +6,9 @@ No changed yet.
 
 ### Fixed
 
-* Path prefixing done twice when retrieving meta-data in the Rackspace adapter.
-* Finfo is only used to determine mime-type when available.
+* [Rackspace] Path prefixing done twice when retrieving meta-data.
+* [Core] Finfo is only used to determine mime-type when available.
+* [AwsS3] Previously set ACL is now respected in rename and copy.
 
 ### Added
 
