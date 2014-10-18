@@ -185,7 +185,9 @@ class AwsS3 extends AbstractAdapter
             return false;
         }
 
-        if (is_resource($options['Body'])) unset($options['Body']);
+        if ( ! is_string($options['Body'])) {
+            unset($options['Body']);
+        }
 
         return $this->normalizeObject($options);
     }

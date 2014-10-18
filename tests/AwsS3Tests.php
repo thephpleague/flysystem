@@ -190,6 +190,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
                 'streamsize' => 5,
             )
         );
+
         $adapter->updateStream('something', $temp, $options);
         fclose($temp);
     }
