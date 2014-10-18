@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.9 - 2014-10-18
+
+### Fixed
+
+* [AwsS3] CacheControl write option is now correctly mapped.
+* [AwsS3] writeStream now properly detects Body type which resulted in cache corruption: c7246e3341135baad16180760ece3967da7a44f3
+
 ## 0.5.8 - 2014-10-17
 
 ### Fixed
