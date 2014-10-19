@@ -175,6 +175,17 @@ use League\Flysystem\Adapter\Copy as Adapter;
 $client = new API($consumerKey, $consumerSecret, $accessToken, $tokenSecret);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
 ```
+## Http Setup
+
+```php
+se GuzzleHttp\Client;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Http as Adapter;
+
+$client = new Client;
+$url = 'http://example.com'
+$filesystem = new Filesystem(new Adapter($url, $client));
+```
 
 ## FTP Setup
 
