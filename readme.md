@@ -78,7 +78,7 @@ Want to get started quickly? Check out some of these integrations:
 * Dropbox
 * Copy
 * Ftp
-* Http (through guzzle 4)
+* Http (through guzzle 5)
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
 * WebDAV (through SabreDAV)
