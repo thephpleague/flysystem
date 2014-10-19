@@ -16,17 +16,19 @@
         "php": ">=5.4.0"
     },
     "require-dev": {
-        "league/event": "~0.3",
+        "ext-fileinfo": "*",
+        "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "~0.9@dev",
+        "mockery/mockery": "~0.9",
         "aws/aws-sdk-php": "~2.4",
         "predis/predis": "~1.0",
         "dropbox/dropbox-sdk": "~1.1.1",
-        "rackspace/php-opencloud": "~1.9.1",
+        "rackspace/php-opencloud": "~1.10.0",
         "sabre/dav": "~2.0.2",
         "barracuda/copy": "~1.1.4",
         "guzzlehttp/guzzle": "~5.0",
         "phpseclib/phpseclib": "~0.3.5",
+        "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
         "phpspec/phpspec": "~2.0"
     },
@@ -41,6 +43,7 @@
         }
     },
     "suggest": {
+        "ext-fileinfo": "Required for MimeType",
         "league/event": "Required for EventableFilesystem",
         "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
         "predis/predis": "Allows you to use Predis for caching",
@@ -49,7 +52,8 @@
         "sabre/dav": "Enables WebDav support",
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files",
         "barracuda/copy": "Allows you to use Copy.com storage",
-        "guzzlehttp/guzzle": "Allows you to use http files (reading only)"
+        "guzzlehttp/guzzle": "Allows you to use http files (reading only)",
+        "tedivm/stash": "Allows you to use Stash as cache implementation"
     },
     "config": {
         "bin-dir": "bin"

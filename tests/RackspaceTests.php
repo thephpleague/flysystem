@@ -2,6 +2,8 @@
 
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use League\Flysystem\Adapter\Rackspace;
+use League\Flysystem\Config;
+use Mockery\Mock;
 
 class RackspaceTests extends PHPUnit_Framework_TestCase
 {
@@ -71,9 +73,20 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
     {
         $container = $this->getContainerMock();
         $dataObject = $this->getDataObjectMock('filename.ext');
-        $container->shouldReceive('uploadObject')->andReturn($dataObject);
+        $container->shouldReceive('uploadObject')->with('filename.ext', 'content', [])->andReturn($dataObject);
         $adapter = new Rackspace($container);
         $this->assertInternalType('array', $adapter->write('filename.ext', 'content'));
+    }
+
+    public function testWriteWithHeaders()
+    {
+        $container = $this->getContainerMock();
+        $dataObject = $this->getDataObjectMock('filename.ext');
+        $headers = ['custom' => 'headers'];
+        $container->shouldReceive('uploadObject')->with('filename.ext', 'content', $headers)->andReturn($dataObject);
+        $adapter = new Rackspace($container);
+        $config = new Config(['headers' => $headers]);
+        $this->assertInternalType('array', $adapter->write('filename.ext', 'content', $config));
     }
 
     public function testWriteStream()
@@ -82,7 +95,8 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject = $this->getDataObjectMock('filename.ext');
         $container->shouldReceive('uploadObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->writeStream('filename.ext', 'content'));
+        $config = new Config(array());
+        $this->assertInternalType('array', $adapter->writeStream('filename.ext', 'content', $config));
     }
 
     public function testUpdateFail()
@@ -171,6 +185,14 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
         $this->assertEquals($expected, $adapter->delete('filename.ext'));
+    }
+
+    public function testDeleteNotFound()
+    {
+        $container = $this->getContainerMock();
+        $container->shouldReceive('getObject')->andThrow('OpenCloud\ObjectStore\Exception\ObjectNotFoundException');
+        $adapter = new Rackspace($container);
+        $this->assertFalse($adapter->delete('filename.txt'));
     }
 
     public function renameProvider()

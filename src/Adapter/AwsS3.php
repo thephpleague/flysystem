@@ -28,7 +28,7 @@ class AwsS3 extends AbstractAdapter
      * @var  array  $metaOptions
      */
     protected static $metaOptions = array(
-        'Cache-Control',
+        'CacheControl',
         'Expires',
         'StorageClass',
         'ServerSideEncryption',
@@ -86,6 +86,16 @@ class AwsS3 extends AbstractAdapter
         $this->setPathPrefix($prefix);
         $this->options = array_merge($this->options, $options);
         $this->setUploadBuilder($uploadBuilder);
+    }
+
+    /**
+     * Get the S3Client bucket
+     *
+     * @return  string
+     */
+    public function getBucket()
+    {
+        return $this->bucket;
     }
 
     /**
@@ -164,7 +174,7 @@ class AwsS3 extends AbstractAdapter
     {
         $multipartLimit = $this->mbToBytes($options['Multipart']);
 
-        // If we don't know the streamsize, we have to assume we need to upload using multipart, otherwise it might fail.
+        // If we don't know the stream size, we have to assume we need to upload using multipart, otherwise it might fail.
         if ($options['ContentLength'] > $multipartLimit) {
             $result = $this->putObjectMultipart($options);
         } else {
@@ -175,7 +185,9 @@ class AwsS3 extends AbstractAdapter
             return false;
         }
 
-        if (is_resource($options['Body'])) unset($options['Body']);
+        if ( ! is_string($options['Body'])) {
+            unset($options['Body']);
+        }
 
         return $this->normalizeObject($options);
     }
@@ -260,6 +272,7 @@ class AwsS3 extends AbstractAdapter
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'ACL' => $this->getObjectACL($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -281,6 +294,7 @@ class AwsS3 extends AbstractAdapter
         $options = $this->getOptions($newpath, array(
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
+            'ACL' => $this->getObjectACL($path),
         ));
 
         $result = $this->client->copyObject($options)->getAll();
@@ -400,6 +414,19 @@ class AwsS3 extends AbstractAdapter
         }
 
         return compact('visibility');
+    }
+
+    /**
+     * Get the ACL based on the visibility
+     *
+     * @param $path
+     * @return string
+     */
+    protected function getObjectACL($path)
+    {
+        $metadata = $this->getVisibility($path);
+
+        return $metadata['visibility'] === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private';
     }
 
     /**

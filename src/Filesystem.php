@@ -498,8 +498,10 @@ class Filesystem implements FilesystemInterface
     /**
      * List contents with metadata
      *
-     * @param   array  $key  metadata key
-     * @return  array            listing with metadata
+     * @param   array   $key  metadata key
+     * @param   string  $directory
+     * @param   bool    $recursive
+     * @return  array   listing with metadata
      */
     public function listWith(array $keys = array(), $directory = '', $recursive = false)
     {

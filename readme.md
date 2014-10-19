@@ -1,17 +1,16 @@
-# Flysystem by [@frankdejonge](http://twitter.com/frankdejonge)
+# League\Flysystem
 
+[![Author](http://img.shields.io/badge/author-@frankdejonge-blue.svg?style=flat-square)](https://twitter.com/frankdejonge)
 [![Build Status](https://img.shields.io/travis/thephpleague/flysystem/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/flysystem)
 [![Coverage Status](https://img.shields.io/coveralls/thephpleague/flysystem.svg?style=flat-square)](https://coveralls.io/r/thephpleague/flysystem)
 [![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg?style=flat-square)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg?style=flat-square)](https://github.com/thephpleague/flysystem/tags)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Packagist Version](https://img.shields.io/packagist/v/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/big.png)](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
-
-[Flysystem on Packagist](https://packagist.org/packages/league/flysystem)
 
 # Support Flysystem
 
@@ -95,6 +94,7 @@ Want to get started quickly? Check out some of these integrations:
 * Redis (through Predis)
 * Memcached
 * Adapter
+* Stash
 
 ## Local Setup
 
@@ -174,18 +174,6 @@ use League\Flysystem\Adapter\Copy as Adapter;
 
 $client = new API($consumerKey, $consumerSecret, $accessToken, $tokenSecret);
 $filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
-```
-
-## Http Setup
-
-```php
-use GuzzleHttp\Client;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Http as Adapter;
-
-$client = new Client;
-$url = 'http://example.com'
-$filesystem = new Filesystem(new Adapter($url, $client));
 ```
 
 ## FTP Setup
@@ -298,6 +286,25 @@ $cache = new Adapter($local, 'file', 300);
 
 $filesystem = new Filesystem($dropbox, $cache);
 ```
+
+## Stash Caching Setup
+
+```php
+use Stash\Pool;
+use League\Flysystem\Adapter\Local as Adapter;
+use League\Flysystem\Cache\Stash as Cache;
+
+$pool = new Pool(); // you can optionally pass a driver (recommended, default: in-memory driver)
+
+$cache = new Cache($pool, 'storageKey', 300);
+// Storage Key and expire time are optional
+
+$adapter = new Adapter(__DIR__.'/path/to/root');
+
+$filesystem = new Filesystem($adapter, $cache);
+```
+
+For list of drivers and their configuration check the [documentation](http://www.stashphp.com/Drivers.html).
 
 
 ## General Usage

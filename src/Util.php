@@ -83,7 +83,7 @@ class Util
 
         $normalized = static::normalizeRelativePath($normalized);
 
-        if (preg_match('#/\.{2}|\.{2}/#', $normalized)) {
+        if (preg_match('#/\.{2}|\.{2}|^\.{2}/#', $normalized)) {
             throw new LogicException('Path is outside of the defined root, path: [' . $path . '], resolved: [' . $normalized . ']');
         }
 
@@ -153,7 +153,7 @@ class Util
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {
-                $mimeType = MimeType::detectByFileExtension($extension) ?: $mimeType;
+                $mimeType = MimeType::detectByFileExtension($extension) ?: 'text/plain';
             }
         }
 

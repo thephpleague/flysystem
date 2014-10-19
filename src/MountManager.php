@@ -5,6 +5,48 @@ namespace League\Flysystem;
 use LogicException;
 use InvalidArgumentException;
 
+/**
+ * Class MountManager
+ *
+ * Proxies methods to Filesystem (@see __call):
+ *
+ * @method AdapterInterface getAdapter($prefix)
+ * @method Config getConfig($prefix)
+ * @method CacheInterface getCache($prefix)
+ * @method bool has($path)
+ * @method bool write($path, $contents, $config = null)
+ * @method bool writeStream($path, $resource, $config = null)
+ * @method bool put($path, $contents, $config = null)
+ * @method bool putStream($path, $contents, $config = null)
+ * @method string readAndDelete($path)
+ * @method bool update($path, $contents, $config = null)
+ * @method bool updateStream($path, $resource, $config = null)
+ * @method string|false read($path)
+ * @method resource|false readStream($path)
+ * @method bool rename($path, $newpath)
+ * @method bool copy($path, $newpath)
+ * @method bool delete($path)
+ * @method bool deleteDir($dirname)
+ * @method bool createDir($dirname, $options = null)
+ * @method array listContents($directory = '', $recursive = false)
+ * @method array listFiles($directory = '', $recursive = false)
+ * @method array listPaths($directory = '', $recursive = false)
+ * @method array listWith(array $keys = array(), $directory = '', $recursive = false)
+ * @method array getWithMetadata($path, array $metadata)
+ * @method string|false getMimetype($path)
+ * @method string|false getTimestamp($path)
+ * @method string|false getVisibility($path)
+ * @method int|false getSize($path);
+ * @method bool setVisibility($path, $visibility)
+ * @method array|false getMetadata($path)
+ * @method Handler get($path, Handler $handler = null)
+ * @method Filesystem flushCache()
+ * @method assertPresent($path)
+ * @method assertAbsent($path)
+ * @method Filesystem addPlugin(PluginInterface $plugin)
+ *
+ * @package League\Flysystem
+ */
 class MountManager
 {
     /**

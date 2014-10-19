@@ -27,7 +27,7 @@ class File extends Handler
     /**
      * Update the file contents
      *
-     * @param   string   $contents
+     * @param   string   $content
      * @return  boolean  success boolean
      */
     public function update($content)
