@@ -45,6 +45,17 @@ interface FilesystemInterface extends AdapterInterface
     public function read($path);
 
     /**
+     * Write a file
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @param  mixed               $config
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
+    public function write($path, $contents, $config = null);
+
+    /**
      * List all files in the directory
      *
      * @param string      $directory
