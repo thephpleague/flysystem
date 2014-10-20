@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.10 - unreleased
+
+### Fixed
+
+* [AwsS3] Contents supplied during AwsS3::write is now cached like all the other adapters. (Very minor chance of this happening)
+
 ## 0.5.9 - 2014-10-18
 
 ### Fixed
