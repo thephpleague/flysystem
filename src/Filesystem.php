@@ -236,7 +236,7 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        $this->cache->updateObject($path, $object, true);
+        $this->cache->updateObject($path, $object + compact('contents'), true);
 
         return true;
     }
