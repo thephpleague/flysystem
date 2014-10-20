@@ -35,6 +35,27 @@ interface FilesystemInterface extends AdapterInterface
     public function readAndDelete($path);
 
     /**
+     * Read a file
+     *
+     * @param  string                $path path to file
+     * @throws FileNotFoundException
+     * @return string|false          file contents or FALSE when fails
+     *                               to read existing file
+     */
+    public function read($path);
+
+    /**
+     * Write a file
+     *
+     * @param  string              $path     path to file
+     * @param  string              $contents file contents
+     * @param  mixed               $config
+     * @throws FileExistsException
+     * @return boolean             success boolean
+     */
+    public function write($path, $contents, $config = null);
+
+    /**
      * List all files in the directory
      *
      * @param string      $directory
