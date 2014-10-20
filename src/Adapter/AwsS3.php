@@ -18,7 +18,7 @@ class AwsS3 extends AbstractAdapter
      * @var  array  $resultMap
      */
     protected static $resultMap = array(
-        'Body'          => 'contents',
+        'Body'          => 'raw_contents',
         'ContentLength' => 'size',
         'ContentType'   => 'mimetype',
         'Size'          => 'size',
@@ -227,7 +227,7 @@ class AwsS3 extends AbstractAdapter
     public function read($path)
     {
         $result = $this->readObject($path);
-        $result['contents'] = (string) $result['contents'];
+        $result['contents'] = (string) $result['raw_contents'];
 
         return $result;
     }
@@ -241,7 +241,7 @@ class AwsS3 extends AbstractAdapter
     public function readStream($path)
     {
         $result = $this->readObject($path);
-        $result['stream'] = $result['contents']->getStream();
+        $result['stream'] = $result['raw_contents']->getStream();
 
         return $result;
     }
