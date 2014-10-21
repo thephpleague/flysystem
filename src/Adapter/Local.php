@@ -43,7 +43,7 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if ( ! is_dir($root)) {
+        if (is_dir($root) === false) {
             mkdir($root, 0755, true);
         }
 
@@ -201,6 +201,8 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
         $destination = $this->applyPathPrefix($newpath);
+        $parentDirectory = $this->applyPathPrefix(Util::dirname($newpath));
+        $this->ensureDirectory($parentDirectory);
 
         return rename($location, $destination);
     }

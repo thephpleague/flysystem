@@ -35,9 +35,30 @@ function fclose($result)
 
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
+    protected $adapter;
+    protected $root;
+
     public function setup()
     {
-        $this->adapter = new Local(__DIR__.'/files');
+        $this->root = __DIR__.'/files/';
+        $this->adapter = new Local($this->root);
+    }
+
+    public function teardown()
+    {
+        $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $files = new \RecursiveIteratorIterator($it,
+                     \RecursiveIteratorIterator::CHILD_FIRST);
+        foreach($files as $file) {
+            if ($file->getFilename() === '.' || $file->getFilename() === '..') {
+                continue;
+            }
+            if ($file->isDir()){
+                rmdir($file->getRealPath());
+            } else {
+                unlink($file->getRealPath());
+            }
+        }
     }
 
     public function testReadStream()
@@ -117,6 +138,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath(__DIR__.'/files') . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+        $this->assertEquals(realpath($this->root) . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+    }
+
+    public function testRenameToNonExistsingDirectory()
+    {
+        $this->adapter->write('file.txt', 'contents');
+        $dirname = uniqid();
+        $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
+        $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
+
     }
 }
