@@ -1,21 +1,14 @@
 ---
 layout: default
-permalink: /adapter/aws-s3/
-title: Aws S3 Adapter
+permalink: /adapter/local/
+title: Local Adapter
 ---
 
-# Aws S3 Adapter
+# Local Adapter
 
 ~~~ php
-use Aws\S3\S3Client;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\AwsS3 as Adapter;
+use League\Flysystem\Adapter\Local as Adapter;
 
-$client = S3Client::factory(array(
-    'key'    => '[your key]',
-    'secret' => '[your secret]',
-));
-
-$adapter = new Adapter($client, 'bucket-name', 'optional-prefix');
-$filesystem = new Filesystem($adapter);
+$filesystem = new Filesystem(new Adapter(__DIR__.'/path/to/root'));
 ~~~
