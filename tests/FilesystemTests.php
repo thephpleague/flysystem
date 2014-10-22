@@ -546,6 +546,21 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider  filesystemProvider
      */
+    public function testGetDir($filesystem, $adapter, $cache)
+    {
+        if ( ! $filesystem->has('nested/file.txt')) {
+            $filesystem->write('nested/file.txt', 'contents');
+        }
+
+        $filesystem->flushCache();
+
+        $handler = $filesystem->get('nested');
+        $this->assertInstanceOf('League\Flysystem\Directory', $handler);
+    }
+
+    /**
+     * @dataProvider  filesystemProvider
+     */
     public function testGet($filesystem, $adapter, $cache)
     {
         if ( ! $filesystem->has('nested/file.txt')) {
