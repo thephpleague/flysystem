@@ -14,6 +14,7 @@ use League\Flysystem\Adapter\AwsS3 as Adapter;
 $client = S3Client::factory(array(
     'key'    => '[your key]',
     'secret' => '[your secret]',
+    'region' => 'eu-west-1'
 ));
 
 $adapter = new Adapter($client, 'bucket-name', 'optional-prefix');
