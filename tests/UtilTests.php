@@ -68,10 +68,20 @@ class UtilTests extends \PHPUnit_Framework_TestCase
         Util::ensureConfig(false);
     }
 
+    public function invalidPathProvider()
+    {
+        return [
+            ['something/../../../hehe'],
+            ['/something/../../..'],
+            ['..'],
+        ];
+    }
+
     /**
      * @expectedException  LogicException
+     * @dataProvider       invalidPathProvider
      */
-    public function testOutsideRootPath()
+    public function testOutsideRootPath($path)
     {
         Util::normalizePath('something/../../../hehe');
     }
@@ -82,6 +92,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
             array('/dirname/', 'dirname'),
             array('dirname/..', ''),
             array('./dir/../././', ''),
+            array('00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'),
             array('/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'),
             array('\dirname\\\\subdir\\\\\\subsubdir', 'dirname\subdir\subsubdir'),
             array('\\\\some\shared\\\\drive', 'some\shared\drive'),
