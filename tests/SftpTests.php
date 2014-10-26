@@ -1,7 +1,11 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Adapter\Sftp;
 use League\Flysystem\Filesystem;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class SftpTests extends PHPUnit_Framework_TestCase
 {

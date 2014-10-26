@@ -1,7 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Adapter\NullAdapter;
 use League\Flysystem\Filesystem;
+use PHPUnit_Framework_TestCase;
 
 class NullAdapterTest extends PHPUnit_Framework_TestCase
 {

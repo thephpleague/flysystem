@@ -1,6 +1,9 @@
 <?php
 
-namespace League\Flysystem\Adapter;
+namespace League\Flysystem\Tests;
+
+use League\Flysystem\Adapter\Ftp;
+use PHPUnit_Framework_TestCase;
 
 function ftp_ssl_connect($host)
 {
@@ -166,7 +169,7 @@ function ftp_chmod($connection, $mode, $path)
     return true;
 }
 
-class FtpTests extends \PHPUnit_Framework_TestCase
+class FtpTests extends PHPUnit_Framework_TestCase
 {
     protected $options = array(
         'host' => 'example.org',

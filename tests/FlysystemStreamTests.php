@@ -1,6 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Filesystem;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class FlysystemStreamTests extends PHPUnit_Framework_TestCase
 {

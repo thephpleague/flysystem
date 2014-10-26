@@ -39,7 +39,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "League\\Flysystem\\Stub\\": "stub/"
+            "League\\Flysystem\\Stub\\": "stub/",
+            "League\\Flysystem\\Tests\\": "tests/"
         }
     },
     "suggest": {

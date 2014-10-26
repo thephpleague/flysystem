@@ -1,7 +1,13 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
+use League\Flysystem\Event\After;
+use League\Flysystem\Event\Before;
 use League\Flysystem\EventableFilesystem;
 use League\Flysystem\Config;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 {
@@ -155,7 +161,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testBeforeEvent()
     {
-        $before = new League\Flysystem\Event\Before($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
+        $before = new Before($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
         $this->assertSame($filesystem, $before->getFilesystem());
         $this->assertEquals('methodName', $before->getMethod());
         $this->assertEquals($arguments, $before->getArguments());
@@ -165,7 +171,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testAfterEvent()
     {
-        $before = new League\Flysystem\Event\After($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
+        $before = new After($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
         $this->assertSame($filesystem, $before->getFilesystem());
     }
 

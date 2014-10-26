@@ -1,8 +1,10 @@
 <?php
 
-use League\Flysystem;
+namespace League\Flysystem\Tests;
 
+use League\Flysystem;
 use League\Flysystem\Cache\Memory;
+use PHPUnit_Framework_TestCase;
 
 class AbstractCacheTest extends PHPUnit_Framework_TestCase
 {

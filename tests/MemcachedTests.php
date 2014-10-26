@@ -1,6 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Cache\Memcached;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class MemcachedTests extends PHPUnit_Framework_TestCase
 {

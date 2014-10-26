@@ -1,15 +1,19 @@
 <?php
 
-namespace League\Flysystem;
+namespace League\Flysystem\Tests;
 
-class FileTests extends \PHPUnit_Framework_TestCase
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use PHPUnit_Framework_TestCase;
+
+class FileTests extends PHPUnit_Framework_TestCase
 {
     protected $filesystem;
 
     public function setup()
     {
         clearstatcache();
-        $fs = new Adapter\Local(__DIR__.'/');
+        $fs = new Local(__DIR__.'/');
         $fs->deleteDir('files');
         $fs->createDir('files');
         $fs->write('file.txt', 'contents');

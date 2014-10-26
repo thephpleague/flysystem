@@ -1,20 +1,25 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Adapter\Zip;
+use Mockery;
+use PHPUnit_Framework_TestCase;
+use ZipArchive;
 
 class ZipTests extends PHPUnit_Framework_TestCase
 {
     public function zipProvider()
     {
         return array(
-            array(new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive))
+            array(new Zip(__DIR__.'/files/tester.zip', new ZipArchive))
         );
     }
 
     public function testInstance()
     {
-        $adapter = new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive);
+        $adapter = new Zip(__DIR__.'/files/tester.zip', new ZipArchive);
         $this->assertInstanceOf('League\Flysystem\AdapterInterface', $adapter);
     }
 

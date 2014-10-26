@@ -1,6 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Cache\Predis;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class PredisTests extends PHPUnit_Framework_TestCase
 {

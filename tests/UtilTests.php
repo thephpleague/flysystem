@@ -1,8 +1,12 @@
 <?php
 
-namespace League\Flysystem;
+namespace League\Flysystem\Tests;
 
-class UtilTests extends \PHPUnit_Framework_TestCase
+use League\Flysystem\Config;
+use League\Flysystem\Util;
+use PHPUnit_Framework_TestCase;
+
+class UtilTests extends PHPUnit_Framework_TestCase
 {
     public function testEmulateDirectories()
     {
