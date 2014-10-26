@@ -1,9 +1,13 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
+use ArrayIterator;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use League\Flysystem\Adapter\Rackspace;
 use League\Flysystem\Config;
-use Mockery\Mock;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class RackspaceTests extends PHPUnit_Framework_TestCase
 {

@@ -1,8 +1,12 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Adapter\AwsS3 as Adapter;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class StreamMock
 {

@@ -1,10 +1,12 @@
 <?php
 
-namespace League\Flysystem\Adapter;
+namespace League\Flysystem\Tests;
 
+use League\Flysystem\Adapter\ReplicateAdapter;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
-class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
+class ReplicateAdapterTests extends PHPUnit_Framework_TestCase
 {
     protected $adapter;
     protected $source;

@@ -1,8 +1,12 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\PluginInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class MyPlugin implements PluginInterface
 {

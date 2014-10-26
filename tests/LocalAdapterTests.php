@@ -1,6 +1,9 @@
 <?php
 
-namespace League\Flysystem\Adapter;
+namespace League\Flysystem\Tests;
+
+use League\Flysystem\Adapter\Local;
+use PHPUnit_Framework_TestCase;
 
 function fopen($result)
 {
@@ -33,7 +36,7 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
-class LocalAdapterTests extends \PHPUnit_Framework_TestCase
+class LocalAdapterTests extends PHPUnit_Framework_TestCase
 {
     protected $adapter;
     protected $root;

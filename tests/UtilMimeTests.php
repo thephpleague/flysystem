@@ -1,6 +1,9 @@
 <?php
 
-namespace League\Flysystem\Util;
+namespace League\Flysystem\Tests;
+
+use League\Flysystem\Util\MimeType;
+use PHPUnit_Framework_TestCase;
 
 $passthru = true;
 
@@ -14,7 +17,7 @@ function class_exists($class_name, $autoload = true) {
     return false;
 }
 
-class MimeTests extends \PHPUnit_Framework_TestCase
+class MimeTests extends PHPUnit_Framework_TestCase
 {
     public function testNoFinfoFallback()
     {

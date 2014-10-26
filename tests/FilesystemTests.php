@@ -1,15 +1,21 @@
 <?php
 
-namespace League\Flysystem;
+namespace League\Flysystem\Tests;
 
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Cache\Memory;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Cache\Noop;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
-class FilesystemTests extends \PHPUnit_Framework_TestCase
+class FilesystemTests extends PHPUnit_Framework_TestCase
 {
     public function setup()
     {
         clearstatcache();
-        $fs = new Adapter\Local(__DIR__.'/');
+        $fs = new Local(__DIR__.'/');
         $fs->deleteDir('files');
         $fs->createDir('files');
     }
@@ -21,7 +27,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        $instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory);
+        $instance = new Filesystem($adapter = new Local(__DIR__.'/files/deeper'), $cache = new Memory);
     }
 
     public function testAbstractAdapterCopy()
@@ -36,8 +42,8 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function filesystemProvider()
     {
-        $adapter = new Adapter\Local(__DIR__.'/files');
-        $cache = new Cache\Memory;
+        $adapter = new Local(__DIR__.'/files');
+        $cache = new Memory;
         $filesystem = new Filesystem($adapter, $cache);
 
         return array(
@@ -192,7 +198,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
      */
     public function testFileExists()
     {
-        $filesystem = new Filesystem(new Adapter\Local(__DIR__));
+        $filesystem = new Filesystem(new Local(__DIR__));
         $filesystem->write('FilesystemTests.php', 'something');
     }
 
@@ -243,8 +249,8 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function metaProvider()
     {
-        $adapter = new Adapter\Local(__DIR__.'/files');
-        $cache = new Cache\Memory;
+        $adapter = new Local(__DIR__.'/files');
+        $cache = new Memory;
         $filesystem = new Filesystem($adapter, $cache);
 
         return array(
@@ -337,13 +343,13 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function testRenameFailure()
     {
-        $cache = new Cache\Memory(__DIR__);
+        $cache = new Memory(__DIR__);
         $this->assertFalse($cache->rename('something', 'to.this'));
     }
 
     public function testCacheStorage()
     {
-        $cache = new Cache\Memory(__DIR__);
+        $cache = new Memory(__DIR__);
         $input = array(array('contents' => 'hehe', 'filename' => 'with contents'), array('filename' => 'no contents'));
         $expected = array(array('filename' => 'with contents'), array('filename' => 'no contents'));
         $json = json_encode(array(array(),array()));
@@ -357,7 +363,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function testAutosave()
     {
-        $cache = new Cache\Memory(__DIR__);
+        $cache = new Memory(__DIR__);
         $this->assertTrue($cache->getAutosave());
         $cache->setAutosave(false);
         $this->assertFalse($cache->getAutosave());
@@ -386,8 +392,8 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
      */
     public function testAdapterFail($method, $hasfile)
     {
-        $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
-        $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
+        $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
+        $cachemock = Mockery::mock('League\Flysystem\Cache\AbstractCache');
         $cachemock->shouldReceive('load')->andReturn(array());
         $cachemock->shouldReceive('has')->andReturn(null);
         $cachemock->shouldReceive('isComplete')->andReturn(false);
@@ -405,8 +411,8 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function testFailingPut()
     {
-        $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
-        $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
+        $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
+        $cachemock = Mockery::mock('League\Flysystem\Cache\AbstractCache');
         $cachemock->shouldReceive('load')->andReturn(array());
         $cachemock->shouldReceive('has')->andReturn(false);
         $cachemock->shouldReceive('isComplete')->andReturn(false);
@@ -437,7 +443,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
 
     public function testNoop()
     {
-        $filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\Noop);
+        $filesystem = new Filesystem(new Local(__DIR__.'/files'), new Noop);
         $filesystem->write('test.txt', 'contents');
         $this->assertTrue($filesystem->has('test.txt'));
         $this->assertInternalType('array', $filesystem->listContents());

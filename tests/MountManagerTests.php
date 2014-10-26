@@ -1,6 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\MountManager;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class MountManagerTests extends PHPUnit_Framework_TestCase
 {

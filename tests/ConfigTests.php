@@ -1,6 +1,9 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Config;
+use PHPUnit_Framework_TestCase;
 
 class ConfigTests extends PHPUnit_Framework_TestCase
 {

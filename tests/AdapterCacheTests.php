@@ -1,6 +1,10 @@
 <?php
 
+namespace League\Flysystem\Tests;
+
 use League\Flysystem\Cache\Adapter;
+use Mockery;
+use PHPUnit_Framework_TestCase;
 
 class AdapterCacheTests extends PHPUnit_Framework_TestCase
 {
