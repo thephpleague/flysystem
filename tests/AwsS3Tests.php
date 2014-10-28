@@ -202,6 +202,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('getObject')->once()->andReturn(Mockery::self());
         $mock->shouldReceive('getAll')->once()->andReturn(array('ContentLength' => 10, 'ContentType' => 'text/plain', 'Body' => $mock, 'Key' => 'file.ext'));
         $mock->shouldReceive('getStream')->andReturn($stream);
+        $mock->shouldReceive('detachStream');
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->readStream('file.ext');
         $this->assertInternalType('resource', $result['stream']);
