@@ -448,6 +448,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $cache->autosave();
         $this->assertFalse($cache->isComplete('', false));
         $this->assertFalse($cache->read('something'));
+        $this->assertFalse($cache->readStream('something'));
         $this->assertFalse($cache->getMetadata('something'));
         $this->assertFalse($cache->getMimetype('something'));
         $this->assertFalse($cache->getSize('something'));

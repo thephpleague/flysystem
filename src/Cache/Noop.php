@@ -134,6 +134,14 @@ class Noop extends AbstractCache
     /**
      * {@inheritdoc}
      */
+    public function readStream($path)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function listContents($directory = '', $recursive = false)
     {
         return false;
