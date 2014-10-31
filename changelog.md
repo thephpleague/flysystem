@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.5.10 - unreleased
+## 0.5.10 - 2014-10-28
 
 ### Fixed
 
