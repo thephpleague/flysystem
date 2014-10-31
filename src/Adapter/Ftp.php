@@ -23,7 +23,7 @@ class Ftp extends AbstractFtpAdapter
      * Set the transfer mode
      *
      * @param   int  $mode
-     * @return  self
+     * @return  $this
      */
     public function setTransferMode($mode)
     {
@@ -36,7 +36,7 @@ class Ftp extends AbstractFtpAdapter
      * Set if Ssl is enabled
      *
      * @param bool $ssl
-     * @return self
+     * @return $this
      */
     public function setSsl($ssl)
     {
