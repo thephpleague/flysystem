@@ -228,6 +228,7 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->readObject($path);
         $result['contents'] = (string) $result['raw_contents'];
+        unset($result['raw_contents']);
 
         return $result;
     }
@@ -244,6 +245,7 @@ class AwsS3 extends AbstractAdapter
         $result['stream'] = $result['raw_contents']->getStream();
         // Ensure the EntityBody object destruction doesn't close the stream
         $result['raw_contents']->detachStream();
+        unset($result['raw_contents']);
 
         return $result;
     }
