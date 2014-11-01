@@ -34,12 +34,8 @@ bugs, new features and documentation.
 
 Through Composer, obviously:
 
-```json
-{
-    "require": {
-        "league/flysystem": "0.5.*"
-    }
-}
+```
+composer require league/flysystem
 ```
 
 You can also use Flysystem without using Composer by registering an autoloader function:
