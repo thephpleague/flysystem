@@ -15,7 +15,7 @@ function ftp_ssl_connect($host)
 
 function ftp_delete($conn, $path)
 {
-    if (strpos($path, 'rm.fail.txt')) {
+    if (strpos($path, 'rm.fail.txt') !== false) {
         return false;
     }
 
@@ -24,8 +24,12 @@ function ftp_delete($conn, $path)
 
 function ftp_rmdir($connection, $dirname)
 {
-    if (strpos($dirname, 'rmdir.fail') !== false) {
+    if (strpos($dirname, 'rmdir.fail') !== false || strpos($dirname, 'rmdir.dontexist') !== false) {
         return false;
+    }
+
+    if (strpos($dirname, 'rmdir.dontexist') !== false) {
+        throw new \ErrorException("ftp_rmdir(): Can't remove directory: No such file or directory");
     }
 
     return true;
@@ -98,7 +102,7 @@ function ftp_raw($connection, $command)
     return [ 0 => '211-Status of somewhere/folder/dummy.txt:', 1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt', 2 => '211 End of status' ];
 }
 
-function ftp_rawlist($connection, $directory)
+function ftp_rawlist($connection, $directory, $recursive=false)
 {
     if (strpos($directory, 'fail.rawlist') !== false) return false;
     if ($directory === 'not.found') return false;
@@ -111,22 +115,49 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
-    return [
+    if (strpos($directory, 'cgi-bin') !== false) {
+        return array(
+            'somewhere/cgi-bin:',
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+        );
+    }
+
+    if (strpos($directory, 'folder') !== false) {
+        return array(
+            'somewhere/folder:',
+            'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt',
+        );
+    }
+
+    if ($recursive) {
+        return array(
+             'drwxr-xr-x 4 ftp ftp 4096 Nov 24 13:58 .',
+            'drwxr-xr-x 16 ftp ftp 4096 Sep 2 13:01 ..',
+            'drwxr-xr-x 2 ftp ftp 4096 Oct 13 2012 cgi-bin',
+            'drwxr-xr-x 2 ftp ftp 4096 Nov 24 13:59 folder',
+            '-rw-r--r-- 1 ftp ftp 409 Oct 13 2012 index.html',
+            '',
+            'somewhere/cgi-bin:',
+            'drwxr-xr-x 2 ftp ftp 4096 Oct 13 2012 .',
+            'drwxr-xr-x 4 ftp ftp 4096 Nov 24 13:58 ..',
+            '',
+            'somewhere/folder:',
+            'drwxr-xr-x 2 ftp ftp 4096 Nov 24 13:59 .',
+            'drwxr-xr-x 4 ftp ftp 4096 Nov 24 13:58 ..',
+            '-rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 dummy.txt',
+        );
+    }
+
+    return array(
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
         'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 cgi-bin',
         'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 folder',
         '-rw-r--r--   1 ftp      ftp           409 Oct 13  2012 index.html',
-        '',
-        'somewhere/cgi-bin:',
-        'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
-        'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
-        '',
-         'somewhere/folder:',
-         'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 .',
-         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
-         '-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt',
-    ];
+    );
 }
 
 function ftp_mkdir($connection, $dirname)
@@ -204,6 +235,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->deleteDir('some.nested/rmdir.fail'));
         $this->assertFalse($adapter->deleteDir('rmdir.nested.fail'));
         $this->assertTrue($adapter->deleteDir('somewhere'));
+        $this->assertFalse($adapter->deleteDir('rmdir.dontexist'));
         $result = $adapter->read('something.txt');
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
