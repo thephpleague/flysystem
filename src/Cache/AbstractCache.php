@@ -401,10 +401,13 @@ abstract class AbstractCache implements CacheInterface
      */
     public function cleanContents(array $contents)
     {
+        $cachedProperties = array_flip([
+            'path', 'dirname', 'basename', 'extension', 'filename',
+            'size', 'mimetype', 'visibility', 'timestamp',
+        ]);
+
         foreach ($contents as $path => $object) {
-            if (isset($object['contents'])) {
-                unset($contents[$path]['contents']);
-            }
+            $contents[$path] = array_intersect_key($object, $cachedProperties);
         }
 
         return $contents;
