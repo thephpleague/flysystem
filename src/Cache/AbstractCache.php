@@ -407,7 +407,9 @@ abstract class AbstractCache implements CacheInterface
         ]);
 
         foreach ($contents as $path => $object) {
-            $contents[$path] = array_intersect_key($object, $cachedProperties);
+            if (is_array($object)) {
+                $contents[$path] = array_intersect_key($object, $cachedProperties);
+            }
         }
 
         return $contents;
