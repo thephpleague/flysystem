@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.11 - 2014-11-05
+
+### Fixed
+
+* [AwsS3] Removed raw response from response array
+* [Cache] Ensure cache response is JSON formatted and has the correct entries.
+
 ## 0.5.10 - 2014-10-28
 
 ### Fixed
