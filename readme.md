@@ -63,6 +63,7 @@ Want to get started quickly? Check out some of these integrations:
 
 * Laravel integration: https://github.com/GrahamCampbell/Laravel-Flysystem
 * Symfony integration: https://github.com/1up-lab/OneupFlysystemBundle
+* Zend Framework integration : https://github.com/bushbaby/BsbFlysystem
 * Backup manager: https://github.com/heybigname/backup-manager
 
 ## Adapters
