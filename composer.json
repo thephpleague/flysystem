@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "nivancevic/flysystem",
     "description": "Many filesystems, one API.",
     "keywords": [
         "filesystem", "files", "storage", "dropbox", "aws",

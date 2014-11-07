@@ -33,6 +33,15 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
+function mkdir($result)
+{
+    if (substr($result, -5) === 'false') {
+        return false;
+    }
+
+    return call_user_func_array('mkdir', func_get_args());    
+}
+
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
@@ -110,6 +119,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->adapter->createDir('0');
         $this->assertTrue(is_dir($this->adapter->applyPathPrefix('0')));
         $this->adapter->deleteDir('0');
+    }
+
+    public function testFailedCreateDir() {
+        $this->assertFalse($this->adapter->createDir('false'));
     }
 
     public function testCopy()

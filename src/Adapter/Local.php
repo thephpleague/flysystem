@@ -350,14 +350,16 @@ class Local extends AbstractAdapter
      * @param   string       $dirname directory name
      * @param   array|Config $options
      *
-     * @return  bool
+     * @return  array|bool
      */
     public function createDir($dirname, $options = null)
     {
         $location = $this->applyPathPrefix($dirname);
 
         if ( ! is_dir($location)) {
-            mkdir($location, 0777, true);
+            if ( ! mkdir($location, 0777, true)) {
+                return false;
+            }
         }
 
         return array('path' => $dirname, 'type' => 'dir');
