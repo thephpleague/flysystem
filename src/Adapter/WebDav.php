@@ -77,8 +77,9 @@ class WebDav extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config && $visibility = $config->get('visibility'))
+        if ($config && $visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
+        }
 
         return $result;
     }
@@ -186,7 +187,7 @@ class WebDav extends AbstractAdapter
 
     protected function normalizeObject($object, $path)
     {
-        if ( ! isset($object['{DAV:}getcontentlength'])) {
+        if (! isset($object['{DAV:}getcontentlength'])) {
             return array('type' => 'dir', 'path' => trim($path, '/'));
         }
 

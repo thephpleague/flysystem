@@ -49,11 +49,11 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new \RecursiveIteratorIterator($it,
                      \RecursiveIteratorIterator::CHILD_FIRST);
-        foreach($files as $file) {
+        foreach ($files as $file) {
             if ($file->getFilename() === '.' || $file->getFilename() === '..') {
                 continue;
             }
-            if ($file->isDir()){
+            if ($file->isDir()) {
                 rmdir($file->getRealPath());
             } else {
                 unlink($file->getRealPath());
@@ -147,6 +147,5 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $dirname = uniqid();
         $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
-
     }
 }

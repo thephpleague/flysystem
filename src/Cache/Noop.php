@@ -32,7 +32,7 @@ class Noop extends AbstractCache
      */
     public function setComplete($dirname, $recursive)
     {
-
+        //
     }
 
     /**
@@ -64,7 +64,7 @@ class Noop extends AbstractCache
             $pathinfo = Util::pathinfo($object['path']);
             $object = array_merge($pathinfo, $object);
 
-            if ( ! $recursive && $object['dirname'] !== $directory) {
+            if (! $recursive && $object['dirname'] !== $directory) {
                 unset($contents[$index]);
                 continue;
             }
@@ -88,7 +88,7 @@ class Noop extends AbstractCache
      */
     public function flush()
     {
-
+        //
     }
 
     /**
@@ -96,7 +96,7 @@ class Noop extends AbstractCache
      */
     public function autosave()
     {
-
+        //
     }
 
     /**
@@ -104,7 +104,7 @@ class Noop extends AbstractCache
      */
     public function save()
     {
-
+        //
     }
 
     /**
@@ -112,7 +112,7 @@ class Noop extends AbstractCache
      */
     public function load()
     {
-
+        //
     }
 
     /**

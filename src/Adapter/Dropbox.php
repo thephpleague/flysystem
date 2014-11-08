@@ -110,7 +110,7 @@ class Dropbox extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
+        if (! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
             return false;
         }
 
@@ -129,7 +129,7 @@ class Dropbox extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $result = $this->client->uploadFile($location, $mode, $resource)) {
+        if (! $result = $this->client->uploadFile($location, $mode, $resource)) {
             return false;
         }
 
@@ -138,7 +138,7 @@ class Dropbox extends AbstractAdapter
 
     public function read($path)
     {
-        if ( ! $object = $this->readStream($path)) {
+        if (! $object = $this->readStream($path)) {
             return false;
         }
 
@@ -154,7 +154,7 @@ class Dropbox extends AbstractAdapter
         $stream = fopen('php://temp', 'w+');
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $this->client->getFile($location, $stream)) {
+        if (! $this->client->getFile($location, $stream)) {
             fclose($stream);
             return false;
         }
@@ -229,7 +229,7 @@ class Dropbox extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $object = $this->client->getMetadata($location);
 
-        if ( ! $object) {
+        if (! $object) {
             return false;
         }
 
@@ -262,7 +262,7 @@ class Dropbox extends AbstractAdapter
         $directory = trim($directory, '/.');
         $location = $this->applyPathPrefix($directory);
 
-        if ( ! $result = $this->client->getMetadataWithChildren($location)) {
+        if (! $result = $this->client->getMetadataWithChildren($location)) {
             return array();
         }
 

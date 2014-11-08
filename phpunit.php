@@ -3,7 +3,7 @@
 include __DIR__.'/vendor/autoload.php';
 date_default_timezone_set('UTC');
 
-if ( ! is_dir(__DIR__.'/tests/files')) {
+if (! is_dir(__DIR__.'/tests/files')) {
     mkdir(__DIR__.'/tests/files', 0777, true);
 }
 

@@ -88,11 +88,11 @@ class Zip extends AbstractAdapter
         $dirname = Util::dirname($path);
         $config = Util::ensureConfig($config);
 
-        if ( ! empty($dirname) && ! $this->has($dirname)) {
+        if (! empty($dirname) && ! $this->has($dirname)) {
             $this->createDir($dirname);
         }
 
-        if ( ! $this->archive->addFromString($location, $contents)) {
+        if (! $this->archive->addFromString($location, $contents)) {
             return false;
         }
 
@@ -170,7 +170,7 @@ class Zip extends AbstractAdapter
      */
     public function createDir($dirname, $options = null)
     {
-        if ( ! $this->has($dirname)) {
+        if (! $this->has($dirname)) {
             $location = $this->applyPathPrefix($dirname);
 
             $this->archive->addEmptyDir($location);
@@ -195,7 +195,7 @@ class Zip extends AbstractAdapter
         $this->reopenArchive();
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $contents = $this->archive->getFromName($location)) {
+        if (! $contents = $this->archive->getFromName($location)) {
             return false;
         }
 
@@ -210,7 +210,7 @@ class Zip extends AbstractAdapter
         $this->reopenArchive();
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $stream = $this->archive->getStream($location)) {
+        if (! $stream = $this->archive->getStream($location)) {
             return false;
         }
 
@@ -241,7 +241,7 @@ class Zip extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        if ( ! $info = $this->archive->statName($location)) {
+        if (! $info = $this->archive->statName($location)) {
             return false;
         }
 
@@ -283,7 +283,7 @@ class Zip extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-        if ( ! $data = $this->read($path)) {
+        if (! $data = $this->read($path)) {
             return false;
         }
 

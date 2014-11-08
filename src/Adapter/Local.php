@@ -106,15 +106,15 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        if ( ! $stream = fopen($location, 'w+')) {
+        if (! $stream = fopen($location, 'w+')) {
             return false;
         }
 
-        while ( ! feof($resource)) {
+        while (! feof($resource)) {
             fwrite($stream, fread($resource, 1024), 1024);
         }
 
-        if ( ! fclose($stream)) {
+        if (! fclose($stream)) {
             return false;
         }
 
@@ -248,7 +248,7 @@ class Local extends AbstractAdapter
         $result = array();
         $location = $this->applyPathPrefix($directory).$this->pathSeparator;
 
-        if ( ! is_dir($location)) {
+        if (! is_dir($location)) {
             return array();
         }
 
@@ -256,7 +256,9 @@ class Local extends AbstractAdapter
 
         foreach ($iterator as $file) {
             $path = $this->getFilePath($file);
-            if (preg_match('#(^|/)\.{1,2}$#', $path)) continue;
+            if (preg_match('#(^|/)\.{1,2}$#', $path)) {
+                continue;
+            }
             $result[] = $this->normalizeFileInfo($file);
         }
 
@@ -356,7 +358,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($dirname);
 
-        if ( ! is_dir($location)) {
+        if (! is_dir($location)) {
             mkdir($location, 0777, true);
         }
 
@@ -373,7 +375,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($dirname);
 
-        if ( ! is_dir($location)) {
+        if (! is_dir($location)) {
             return false;
         }
 

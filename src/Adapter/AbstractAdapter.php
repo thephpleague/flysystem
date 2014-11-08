@@ -27,7 +27,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $is_empty = empty($prefix);
 
-        if ( ! $is_empty) {
+        if (! $is_empty) {
             $prefix = rtrim($prefix, $this->pathSeparator) . $this->pathSeparator;
         }
 
@@ -116,7 +116,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function readStream($path)
     {
-        if ( ! $data = $this->read($path)) {
+        if (! $data = $this->read($path)) {
             return false;
         }
 
@@ -179,7 +179,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $data = $this->readStream($path);
 
-        if ( ! is_resource($data['stream'])) {
+        if (! is_resource($data['stream'])) {
             return false;
         }
 
@@ -189,7 +189,7 @@ abstract class AbstractAdapter implements AdapterInterface
             fclose($data['stream']);
         }
 
-        if ( ! $result) {
+        if (! $result) {
             return false;
         }
 

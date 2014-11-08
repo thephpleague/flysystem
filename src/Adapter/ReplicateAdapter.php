@@ -60,7 +60,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function write($path, $contents, $config = null)
     {
-        if ( ! $this->source->write($path, $contents, $config)) {
+        if (! $this->source->write($path, $contents, $config)) {
             return false;
         }
 
@@ -78,7 +78,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function writeStream($path, $resource, $config = null)
     {
-        if ( ! $this->source->writeStream($path, $resource, $config)) {
+        if (! $this->source->writeStream($path, $resource, $config)) {
             return false;
         }
 
@@ -96,7 +96,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function update($path, $contents, $config = null)
     {
-        if ( ! $this->source->update($path, $contents, $config)) {
+        if (! $this->source->update($path, $contents, $config)) {
             return false;
         }
 
@@ -118,7 +118,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function updateStream($path, $resource, $config = null)
     {
-        if ( ! $this->source->updateStream($path, $resource, $config)) {
+        if (! $this->source->updateStream($path, $resource, $config)) {
             return false;
         }
 
@@ -139,7 +139,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function rename($path, $newpath)
     {
-        if ( ! $this->source->rename($path, $newpath)) {
+        if (! $this->source->rename($path, $newpath)) {
             return false;
         }
 
@@ -155,7 +155,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function copy($path, $newpath)
     {
-        if ( ! $this->source->copy($path, $newpath)) {
+        if (! $this->source->copy($path, $newpath)) {
             return false;
         }
 
@@ -171,7 +171,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function delete($path)
     {
-        if ( ! $this->source->delete($path)) {
+        if (! $this->source->delete($path)) {
             return false;
         }
 
@@ -191,7 +191,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function deleteDir($dirname)
     {
-        if ( ! $this->source->deleteDir($dirname)) {
+        if (! $this->source->deleteDir($dirname)) {
             return false;
         }
 
@@ -208,7 +208,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function createDir($dirname, $options = null)
     {
-        if ( ! $this->source->createDir($dirname, $options)) {
+        if (! $this->source->createDir($dirname, $options)) {
             return false;
         }
 
@@ -333,7 +333,7 @@ class ReplicateAdapter implements AdapterInterface
      */
     public function setVisibility($path, $visibility)
     {
-        if ( ! $this->source->setVisibility($path, $visibility)) {
+        if (! $this->source->setVisibility($path, $visibility)) {
             return false;
         }
 

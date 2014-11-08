@@ -153,7 +153,7 @@ class Copy extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $destination = $this->applyPathPrefix($newpath);
 
-        if ( ! $result = $this->client->rename($location, $destination)) {
+        if (! $result = $this->client->rename($location, $destination)) {
             return false;
         }
 
@@ -279,7 +279,7 @@ class Copy extends AbstractAdapter
         $listing = array();
         $location = $this->applyPathPrefix($dirname);
 
-        if ( ! $result = $this->client->listPath($location)) {
+        if (! $result = $this->client->listPath($location)) {
             return false;
         }
 

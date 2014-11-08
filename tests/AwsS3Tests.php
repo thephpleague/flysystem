@@ -264,7 +264,6 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('path', $first);
         $this->assertArrayHasKey('type', $first);
         $this->assertEquals($last['type'], 'dir');
-
     }
 
     public function testSetVisibility()

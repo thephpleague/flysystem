@@ -445,7 +445,7 @@ class EventableFilesystem implements FilesystemInterface
 
         list($continue, $result) = $this->emitBefore($method, $arguments);
 
-        if ( ! $continue) {
+        if (! $continue) {
             return $result;
         }
 
@@ -511,7 +511,7 @@ class EventableFilesystem implements FilesystemInterface
      */
     public function prepareArguments(array $arguments)
     {
-        if ( ! isset($arguments['config'])) {
+        if (! isset($arguments['config'])) {
             $arguments['config'] = new Config;
         }
 

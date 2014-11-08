@@ -89,7 +89,7 @@ class Before extends AbstractEvent
      */
     public function getArgument($key, $default = null)
     {
-        if ( ! array_key_exists($key, $this->arguments)) {
+        if (! array_key_exists($key, $this->arguments)) {
             return $default;
         }
 

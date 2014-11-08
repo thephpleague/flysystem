@@ -63,9 +63,9 @@ class Adapter extends AbstractCache
      */
     public function setFromStorage($json)
     {
-        list ($cache, $complete, $expire) = json_decode($json, true);
+        list($cache, $complete, $expire) = json_decode($json, true);
 
-        if ( ! $expire || $expire > $this->getTime()) {
+        if (! $expire || $expire > $this->getTime()) {
             $this->cache = $cache;
             $this->complete = $complete;
         } else {

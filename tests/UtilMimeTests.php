@@ -4,7 +4,8 @@ namespace League\Flysystem\Util;
 
 $passthru = true;
 
-function class_exists($class_name, $autoload = true) {
+function class_exists($class_name, $autoload = true)
+{
     global $passthru;
 
     if ($passthru) {
@@ -14,7 +15,7 @@ function class_exists($class_name, $autoload = true) {
     return false;
 }
 
-class MimeTests extends \PHPUnit_Framework_TestCase
+class UtilMimeTests extends \PHPUnit_Framework_TestCase
 {
     public function testNoFinfoFallback()
     {

@@ -185,7 +185,7 @@ class AwsS3 extends AbstractAdapter
             return false;
         }
 
-        if ( ! is_string($options['Body'])) {
+        if (! is_string($options['Body'])) {
             unset($options['Body']);
         }
 
@@ -344,7 +344,7 @@ class AwsS3 extends AbstractAdapter
     {
         $result = $this->write(rtrim($path, '/') . '/', '', $options);
 
-        if ( ! $result) {
+        if (! $result) {
             return false;
         }
 
@@ -532,7 +532,9 @@ class AwsS3 extends AbstractAdapter
         $options = array();
 
         foreach (static::$metaOptions as $option) {
-            if ( ! $config->has($option)) continue;
+            if (! $config->has($option)) {
+                continue;
+            }
             $options[$option] = $config->get($option);
         }
 
@@ -575,7 +577,9 @@ class AwsS3 extends AbstractAdapter
             ->setClient($this->client); // AbstractUploadBuilder, which makes IDE and CI complain.
 
         foreach (static::$metaOptions as $option) {
-            if ( ! array_key_exists($option, $options)) continue;
+            if (! array_key_exists($option, $options)) {
+                continue;
+            }
             $uploadBuilder->setOption($option, $options[$option]);
         }
 
@@ -636,7 +640,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function getUploadBuilder()
     {
-        if ( ! $this->uploadBuilder) {
+        if (! $this->uploadBuilder) {
             $this->uploadBuilder = UploadBuilder::newInstance();
         }
 

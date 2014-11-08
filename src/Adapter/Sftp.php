@@ -45,7 +45,7 @@ class Sftp extends AbstractFtpAdapter
 
     protected function login()
     {
-        if ( ! $this->connection->login($this->username, $this->getPassword())) {
+        if (! $this->connection->login($this->username, $this->getPassword())) {
             throw new LogicException('Could not login with username: '.$this->username.', host: '.$this->host);
         }
     }
@@ -134,12 +134,13 @@ class Sftp extends AbstractFtpAdapter
         $this->ensureDirectory(Util::dirname($path));
         $config = Util::ensureConfig($config);
 
-        if ( ! $connection->put($path, $contents, NET_SFTP_STRING)) {
+        if (! $connection->put($path, $contents, NET_SFTP_STRING)) {
             return false;
         }
 
-        if ($config && $visibility = $config->get('visibility'))
+        if ($config && $visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
+        }
 
         return compact('contents', 'visibility', 'path');
     }
@@ -209,7 +210,7 @@ class Sftp extends AbstractFtpAdapter
 
     public function getMimetype($path)
     {
-        if ( ! $data = $this->read($path)) {
+        if (! $data = $this->read($path)) {
             return false;
         }
 
@@ -230,7 +231,7 @@ class Sftp extends AbstractFtpAdapter
     {
         $connection = $this->getConnection();
 
-        if ( ! $connection->mkdir($dirname, 0744, true)) {
+        if (! $connection->mkdir($dirname, 0744, true)) {
             return false;
         }
 
@@ -246,7 +247,7 @@ class Sftp extends AbstractFtpAdapter
     {
         $visibility = ucfirst($visibility);
 
-        if ( ! isset($this->{'perm'.$visibility})) {
+        if (! isset($this->{'perm'.$visibility})) {
             throw new InvalidArgumentException('Unknown visibility: '.$visibility);
         }
 

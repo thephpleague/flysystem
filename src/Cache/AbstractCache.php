@@ -27,7 +27,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function __destruct()
     {
-        if ( ! $this->autosave) {
+        if (! $this->autosave) {
             $this->save();
         }
     }
@@ -71,7 +71,7 @@ abstract class AbstractCache implements CacheInterface
             $object = $this->updateObject($object['path'], $object);
             $contents[$index] = $object;
 
-            if ( ! empty($directory) && strpos($object['path'], $directory) === false) {
+            if (! empty($directory) && strpos($object['path'], $directory) === false) {
                 unset($contents[$index]);
                 continue;
             }
@@ -85,8 +85,9 @@ abstract class AbstractCache implements CacheInterface
             }
         }
 
-        foreach ($directories as $directory)
+        foreach ($directories as $directory) {
             $this->setComplete($directory, $recursive);
+        }
 
         $this->autosave();
 
@@ -102,7 +103,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function updateObject($path, array $object, $autosave = false)
     {
-        if ( ! $this->has($path)) {
+        if (! $this->has($path)) {
             $this->cache[$path] = Util::pathinfo($path);
         }
 
@@ -165,7 +166,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function has($path)
     {
-        if ( ! isset($this->cache[$path])) {
+        if (! isset($this->cache[$path])) {
             $dirname = Util::dirname($path);
 
             return $this->isComplete($dirname, false) ? false : null;
@@ -197,11 +198,11 @@ abstract class AbstractCache implements CacheInterface
      */
     public function readStream($path)
     {
-        if ( ! isset($this->cache[$path]['stream'])) {
+        if (! isset($this->cache[$path]['stream'])) {
             return false;
         }
 
-        if ( ! is_resource($this->cache[$path]['stream'])) {
+        if (! is_resource($this->cache[$path]['stream'])) {
             return false;
         }
 
@@ -216,7 +217,9 @@ abstract class AbstractCache implements CacheInterface
      */
     public function rename($path, $newpath)
     {
-        if ( ! $this->has($path)) return false;
+        if (! $this->has($path)) {
+            return false;
+        }
 
         $object = $this->cache[$path];
         unset($this->cache[$path]);
@@ -236,7 +239,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function copy($path, $newpath)
     {
-        if ( ! $this->has($path)) {
+        if (! $this->has($path)) {
             return false;
         }
 
@@ -295,7 +298,7 @@ abstract class AbstractCache implements CacheInterface
             return $this->cache[$path]['mimetype'];
         }
 
-        if ( ! $contents = $this->read($path)) {
+        if (! $contents = $this->read($path)) {
             return false;
         }
 
@@ -368,7 +371,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function isComplete($dirname, $recursive)
     {
-        if ( ! array_key_exists($dirname, $this->complete)) {
+        if (! array_key_exists($dirname, $this->complete)) {
             return false;
         }
 
@@ -454,7 +457,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function setFromStorage($json)
     {
-        list ($cache, $complete) = json_decode($json, true);
+        list($cache, $complete) = json_decode($json, true);
 
         if (json_last_error() === JSON_ERROR_NONE && is_array($cache) && is_array($complete)) {
             $this->cache = $cache;
