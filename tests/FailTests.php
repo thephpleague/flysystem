@@ -1,16 +1,20 @@
 <?php
 
 namespace League\Flysystem\Adapter {
-    function file_put_contents($name) {
-        if (strpos($name, 'pleasefail') !== false)
+    function file_put_contents($name)
+    {
+        if (strpos($name, 'pleasefail') !== false) {
             return false;
+        }
 
         return call_user_func_array('file_put_contents', func_get_args());
     }
 
-    function file_get_contents($name) {
-        if (strpos($name, 'pleasefail') !== false)
+    function file_get_contents($name)
+    {
+        if (strpos($name, 'pleasefail') !== false) {
             return false;
+        }
 
         return call_user_func_array('file_get_contents', func_get_args());
     }

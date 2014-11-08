@@ -84,7 +84,7 @@ class Rackspace extends AbstractAdapter
         $object->setEtag(null);
         $response = $object->update();
 
-        if ( ! $response->getLastModified()) {
+        if (! $response->getLastModified()) {
             return false;
         }
 
@@ -150,8 +150,9 @@ class Rackspace extends AbstractAdapter
         $location = $this->applyPathPrefix($dirname);
         $objects = $this->container->objectList(array('prefix' => $location));
 
-        foreach ($objects as $object)
+        foreach ($objects as $object) {
             $paths[] = $prefix.ltrim($object->getName(), '/');
+        }
 
         $service = $this->container->getService();
         $response =  $service->bulkDelete($paths);
@@ -199,9 +200,9 @@ class Rackspace extends AbstractAdapter
     {
         try {
             $object = $this->getObject($path);
-        } catch(ClientErrorResponseException $e) {
+        } catch (ClientErrorResponseException $e) {
             return false;
-        } catch(ObjectNotFoundException $e) {
+        } catch (ObjectNotFoundException $e) {
             return false;
         }
 

@@ -88,13 +88,15 @@ class Filesystem implements FilesystemInterface
 
         $result = $this->adapter->has($path);
 
-        if ( ! $result) {
+        if (! $result) {
             $this->cache->storeMiss($path);
 
             return false;
         }
 
-        if ( ! is_array($result)) $result = array();
+        if (! is_array($result)) {
+            $result = array();
+        }
         $this->cache->updateObject($path, $result, true);
 
         return true;
@@ -116,7 +118,7 @@ class Filesystem implements FilesystemInterface
         $config = Util::ensureConfig($config);
         $config->setFallback($this->getConfig());
 
-        if ( ! $object = $this->adapter->write($path, $contents, $config)) {
+        if (! $object = $this->adapter->write($path, $contents, $config)) {
             return false;
         }
 
@@ -141,13 +143,13 @@ class Filesystem implements FilesystemInterface
         $config = Util::ensureConfig($config);
         $config->setFallback($this->getConfig());
 
-        if ( ! is_resource($resource)) {
+        if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
         Util::rewindStream($resource);
 
-        if ( ! $object = $this->adapter->writeStream($path, $resource, $config)) {
+        if (! $object = $this->adapter->writeStream($path, $resource, $config)) {
             return false;
         }
 
@@ -208,7 +210,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $contents = $this->read($path);
 
-        if ( ! $contents) {
+        if (! $contents) {
             return false;
         }
 
@@ -252,7 +254,7 @@ class Filesystem implements FilesystemInterface
      */
     public function updateStream($path, $resource, $config = null)
     {
-        if ( ! is_resource($resource)) {
+        if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
@@ -262,7 +264,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         Util::rewindStream($resource);
 
-        if ( ! $object = $this->adapter->updateStream($path, $resource, $config)) {
+        if (! $object = $this->adapter->updateStream($path, $resource, $config)) {
             return false;
         }
 
@@ -288,7 +290,7 @@ class Filesystem implements FilesystemInterface
             return $contents;
         }
 
-        if ( ! ($object = $this->adapter->read($path))) {
+        if (! ($object = $this->adapter->read($path))) {
             return false;
         }
 
@@ -312,7 +314,7 @@ class Filesystem implements FilesystemInterface
             return $stream;
         }
 
-        if ( ! $object = $this->adapter->readStream($path)) {
+        if (! $object = $this->adapter->readStream($path)) {
             return false;
         }
 
@@ -431,7 +433,9 @@ class Filesystem implements FilesystemInterface
         }
 
         // ensure the result in an array so the it's cacheable
-        if ( ! is_array($result)) $result = array();
+        if (! is_array($result)) {
+            $result = array();
+        }
 
         $result['type'] = 'dir';
         $this->cache->updateObject($dirname, $result, true);
@@ -529,7 +533,7 @@ class Filesystem implements FilesystemInterface
         $object = $this->getMetadata($path);
 
         foreach ($metadata as $key) {
-            if ( ! method_exists($this, $method = 'get'.ucfirst($key))) {
+            if (! method_exists($this, $method = 'get'.ucfirst($key))) {
                 throw new InvalidArgumentException('Could not fetch metadata: '.$key);
             }
 
@@ -556,7 +560,7 @@ class Filesystem implements FilesystemInterface
             return $mimetype;
         }
 
-        if ( ! $object = $this->adapter->getMimetype($path)) {
+        if (! $object = $this->adapter->getMimetype($path)) {
             return false;
         }
 
@@ -582,7 +586,7 @@ class Filesystem implements FilesystemInterface
             return $timestamp;
         }
 
-        if ( ! $object = $this->adapter->getTimestamp($path)) {
+        if (! $object = $this->adapter->getTimestamp($path)) {
             return false;
         }
 
@@ -652,11 +656,13 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        if ( ! $object = $this->adapter->setVisibility($path, $visibility)) {
+        if (! $object = $this->adapter->setVisibility($path, $visibility)) {
             return false;
         }
 
-        if ($object === true) $object = compact('visibility');
+        if ($object === true) {
+            $object = compact('visibility');
+        }
 
         $this->cache->updateObject($path, $object, true);
 
@@ -680,7 +686,7 @@ class Filesystem implements FilesystemInterface
             return $metadata;
         }
 
-        if ( ! $metadata = $this->adapter->getMetadata($path)) {
+        if (! $metadata = $this->adapter->getMetadata($path)) {
             return false;
         }
 
@@ -698,7 +704,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        if ( ! $handler) {
+        if (! $handler) {
             $metadata = $this->getMetadata($path);
             $handler = $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
         }
@@ -729,7 +735,7 @@ class Filesystem implements FilesystemInterface
      */
     public function assertPresent($path)
     {
-        if ( ! $this->has($path)) {
+        if (! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
     }
@@ -772,7 +778,7 @@ class Filesystem implements FilesystemInterface
      */
     protected function findPlugin($method)
     {
-        if ( ! isset($this->plugins[$method])) {
+        if (! isset($this->plugins[$method])) {
             throw new LogicException('Plugin not found for method: '.$method);
         }
 
@@ -790,7 +796,7 @@ class Filesystem implements FilesystemInterface
     {
         $plugin = $this->findPlugin($method);
 
-        if ( ! method_exists($plugin, 'handle')) {
+        if (! method_exists($plugin, 'handle')) {
             throw new LogicException(get_class($plugin).' should define a handle method.');
         }
 

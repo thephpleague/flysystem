@@ -2,9 +2,20 @@
 
 use League\Flysystem\Adapter\Copy;
 
-class CopyFile {}
-class CopyRevision {}
-class CopyPart {}
+class CopyFile
+{
+    //
+}
+
+class CopyRevision
+{
+    //
+}
+
+class CopyPart
+{
+    //
+}
 
 class CopyTests extends PHPUnit_Framework_TestCase
 {
@@ -93,7 +104,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
 
-        $fh = fopen($filepath, 'r');        
+        $fh = fopen($filepath, 'r');
         $this->assertFalse($adapter->writeStream('something', $fh));
     }
 

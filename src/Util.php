@@ -59,8 +59,9 @@ class Util
         $result = array();
 
         foreach ($map as $from => $to) {
-            if ( ! isset($object[$from]))
+            if (! isset($object[$from])) {
                 continue;
+            }
 
             $result[$to] = $object[$from];
         }
@@ -177,7 +178,7 @@ class Util
 
             $parent = $object['dirname'];
 
-            while( ! empty($parent) && ! in_array($parent, $directories)) {
+            while (! empty($parent) && ! in_array($parent, $directories)) {
                 $directories[] = $parent;
 
                 $parent = static::dirname($parent);

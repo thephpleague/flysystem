@@ -183,7 +183,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        if ( ! defined('FTP_BINARY')) {
+        if (! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
             return;
         }
@@ -208,7 +208,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->writeStream('write.fail', tmpfile()));
         $this->assertFalse($adapter->update('write.fail', 'contents'));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
-        $this->assertTrue($adapter->rename('a','b'));
+        $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
         $this->assertFalse($adapter->deleteDir('some.nested/rmdir.fail'));
         $this->assertFalse($adapter->deleteDir('rmdir.nested.fail'));

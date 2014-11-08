@@ -12,7 +12,7 @@ class SftpTests extends PHPUnit_Framework_TestCase
             return;
         }
 
-        if ( ! defined('NET_SFTP_TYPE_DIRECTORY')) {
+        if (! defined('NET_SFTP_TYPE_DIRECTORY')) {
             define('NET_SFTP_TYPE_DIRECTORY', 2);
         }
     }
@@ -179,7 +179,7 @@ class SftpTests extends PHPUnit_Framework_TestCase
     public function methodProvider()
     {
         $resources = $this->adapterProvider();
-        list ($filesystem, $adapter, $mock) = reset($resources);
+        list($filesystem, $adapter, $mock) = reset($resources);
 
         return array(
             array($filesystem, $adapter, $mock, 'getMetadata', 'array'),
