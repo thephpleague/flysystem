@@ -82,7 +82,15 @@ function ftp_pwd($connection)
 function ftp_raw($connection, $command)
 {
     if ($command === 'STAT not.found') {
-        return false;
+        return array(0 => '213-Status follows:', 1 => '213 End of status');
+    }
+
+    if ($command === 'STAT syno.not.found') {
+        return array(0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status');
+    }
+
+    if ($command === 'syno.unknowndir') {
+        return array(0 => '211- status of syno.unknowndir:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status');
     }
 
     if (strpos($command, 'unknowndir') !== false) {
