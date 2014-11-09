@@ -1,7 +1,7 @@
 <?php
 
 use League\Flysystem\EventableFilesystem;
-use League\Flysystem\Config;
+use League\Flysystem\Util;
 
 class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 {
@@ -15,12 +15,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
         return Mockery::mock($types[$type]);
     }
-    public function testFilesystemInjection()
-    {
-        $injected = $this->getMockeryMock('filesystem');
-        $filesystem = new EventableFilesystem($injected);
-        $this->assertSame($filesystem->getFilesystem(), $injected);
-    }
 
     public function testFilesystemCreation()
     {
@@ -32,46 +26,167 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
     public function methodCallsProvider()
     {
         return [
-            ['read', ['path.txt']],
-            ['write', ['path.txt', 'contents']],
-            ['update', ['path.txt', 'contents']],
-            ['put', ['path.txt', 'contents']],
-            ['readStream', ['path.txt']],
-            ['putStream', ['path.txt', 'contents']],
-            ['writeStream', ['path.txt', 'contents']],
-            ['updateStream', ['path.txt', 'contents']],
-            ['delete', ['path.txt']],
-            ['deleteDir', ['path.txt']],
-            ['createDir', ['path.txt']],
-            ['readAndDelete', ['path.txt']],
-            ['listFiles', ['path', true]],
-            ['listPaths', ['path', true]],
-            ['listContents', ['path', true]],
-            ['listWith', [['key'], 'path', true]],
-            ['getWithMetadata', ['path', []]],
-            ['get', ['path', Mockery::mock('League\Flysystem\Handler')]],
-            ['has', ['path']],
-            ['getMetadata', ['path']],
-            ['getSize', ['path']],
-            ['getTimestamp', ['path']],
-            ['getMimetype', ['path']],
-            ['getVisibility', ['path']],
-            ['setVisibility', ['path', 'public']],
-            ['copy', ['path', 'path']],
-            ['rename', ['path', 'path']],
+            ['read', ['path.txt'], ['contents' => 'contents'], 'contents'],
+            ['write', ['path.txt', 'contents'], ['contents' => 'contents'], true, false],
+            ['update', ['path.txt', 'contents'], [], true],
+            ['readStream', ['path.txt'], ['stream' => 'stream'], 'stream'],
+            ['writeStream', ['path.txt', tmpfile()], ['stream' => tmpfile()], true, false],
+            ['updateStream', ['path.txt', tmpfile()], ['stream' => tmpfile()], true],
+            ['delete', ['path.txt'], true, true],
+            ['deleteDir', ['path.txt'], true, true],
+            ['createDir', ['path'], ['path' => 'path'], true],
+            ['has', ['path'], true, true],
+            ['getMetadata', ['path'], ['mimetype' => 'plain/text'], [
+                'mimetype' => 'plain/text',
+                'basename' => 'path',
+                'dirname' => '',
+                'path' => 'path',
+                'filename' => 'path',
+            ]],
+            ['getSize', ['path'], ['size' => 1], 1],
+            ['getTimestamp', ['path'], ['timestamp' => 1], 1],
+            ['getMimetype', ['path'], ['mimetype' => 'type'], 'type'],
+            ['getVisibility', ['path'], ['visibility' => 'public'], 'public'],
+            ['setVisibility', ['path', 'public'], true, true],
+            ['listContents', [''], [['path' => 'path', 'type' => 'file']], [[
+                'path' => 'path',
+                'type' => 'file',
+                'basename' => 'path',
+                'dirname' => '',
+                'filename' => 'path',
+            ]]],
         ];
+    }
+
+    public function testPut()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $filesystem = new EventableFilesystem($adapter);
+        $adapter->shouldReceive('has')->andReturn(false);
+        $adapter->shouldReceive('write')->andReturn(['contents' => 'contents']);
+        $this->assertTrue($filesystem->put('file', 'contents'));
+    }
+
+    public function testPutStream()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $filesystem = new EventableFilesystem($adapter);
+        $adapter->shouldReceive('has')->andReturn(false);
+        $adapter->shouldReceive('writeStream')->andReturn(['contents' => 'contents']);
+        $this->assertTrue($filesystem->putStream('file', $stream = tmpfile()));
+        fclose($stream);
+    }
+
+    public function testReadAndDelete()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->andReturn(true);
+        $adapter->shouldReceive('read')->andReturn(['contents' => 'contents']);
+        $adapter->shouldReceive('delete')->andReturn(true);
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertEquals('contents', $filesystem->readAndDelete('filename'));
+    }
+
+    public function testListFiles()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('listContents')->andReturn([
+            ['type' => 'file', 'path' => 'path', 'dirname' => ''],
+            ['type' => 'dir', 'path' => 'path', 'dirname' => ''],
+        ]);
+
+        $expected = [
+            ['type' => 'file', 'path' => 'path'] + Util::pathinfo('path'),
+        ];
+
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertEquals($expected, $filesystem->listFiles(''));
+    }
+
+    public function testListWith()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('listContents')->andReturn([
+            ['type' => 'file', 'path' => 'path', 'dirname' => '', 'mimetype' => 'mimetype'],
+        ]);
+
+        $expected = [
+            ['type' => 'file', 'path' => 'path', 'mimetype' => 'mimetype'] + Util::pathinfo('path'),
+        ];
+
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertEquals($expected, $filesystem->listWith(['mimetype'], ''));
+    }
+
+    public function testListPaths()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('listContents')->andReturn([
+            ['type' => 'file', 'path' => 'path', 'dirname' => ''],
+            ['type' => 'dir', 'path' => 'path2', 'dirname' => ''],
+        ]);
+
+        $expected = ['path', 'path2'];
+
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertEquals($expected, $filesystem->listPaths(''));
+    }
+
+    public function testGetWithMetadata()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->andReturn(true);
+        $adapter->shouldReceive('getMetadata')->andReturn(
+            ['type' => 'file', 'path' => 'path']
+        );
+        $adapter->shouldReceive('getMimetype')->andReturn(['mimetype' => 'text/plain']);
+        $filesystem = new EventableFilesystem($adapter);
+        $result = $filesystem->getWithMetadata('path', ['mimetype']);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('mimetype', $result);
+        $this->assertEquals($result['mimetype'], 'text/plain');
+    }
+
+    public function testGet()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $handler = Mockery::mock('League\Flysystem\Handler');
+        $handler->shouldReceive('setFilesystem');
+        $handler->shouldReceive('setPath');
+        $adapter->shouldReceive('has')->andReturn(true);
+        $filesystem = new EventableFilesystem($adapter);
+        $result = $filesystem->get('path', $handler);
+        $this->assertInstanceOf('League\Flysystem\Handler', $result);
+    }
+
+    public function testCopy()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->with('old')->andReturn(true);
+        $adapter->shouldReceive('has')->with('new')->andReturn(false);
+        $adapter->shouldReceive('copy')->with('old', 'new')->andReturn(true);
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertTrue($filesystem->copy('old', 'new'));
+    }
+
+    public function testRename()
+    {
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->with('old')->andReturn(true);
+        $adapter->shouldReceive('has')->with('new')->andReturn(false);
+        $adapter->shouldReceive('rename')->with('old', 'new')->andReturn(true);
+        $filesystem = new EventableFilesystem($adapter);
+        $this->assertTrue($filesystem->rename('old', 'new'));
     }
 
     /**
      * @dataProvider methodCallsProvider
      */
-    public function testMethodCalls($method, $arguments, $expected = '__mocked_response__')
+    public function testMethodCalls($method, $arguments, $response, $expected, $has = true)
     {
-        $arguments[] = new Config;
-        $mock = $this->getMockeryMock('filesystem');
-        $call = $mock->shouldReceive($method);
-        $call = call_user_func_array([$call, 'with'], $arguments);
-        $call->andReturn($expected);
+        $mock = $this->getMockeryMock('adapter');
+        $mock->shouldReceive('has')->with($arguments[0])->andReturn($has);
+        $mock->shouldReceive($method)->andReturn($response);
         $filesystem = new EventableFilesystem($mock);
         $result = call_user_func_array([$filesystem, $method], $arguments);
         $this->assertEquals($expected, $result);
@@ -79,26 +194,31 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testAddPlugin()
     {
-        $mock = $this->getMockeryMock('filesystem');
-        $config = new Config;
+        $mock = $this->getMockeryMock('adapter');
+        $config = [];
         $plugin = Mockery::mock('League\Flysystem\PluginInterface');
-        $mock->shouldReceive('addPlugin')->with($plugin, $config)->once()->andReturn($mock);
+        $plugin->shouldReceive('setFilesystem')->once();
+        $plugin->shouldReceive('getMethod')->andReturn('methodName');
+        $mock->shouldReceive('addPlugin')->with($plugin, $config)->andReturn($mock);
         $filesystem = new EventableFilesystem($mock);
         $filesystem->addPlugin($plugin, $config);
     }
 
     public function testFlushCache()
     {
-        $mock = $this->getMockeryMock('filesystem');
-        $config = new Config;
-        $mock->shouldReceive('flushCache')->with($config)->once()->andReturn($mock);
-        $filesystem = new EventableFilesystem($mock);
+        $mock = $this->getMockeryMock('cache');
+        $mock->shouldReceive('load');
+        $config = [];
+        $mock->shouldReceive('flush')->once()->andReturn($mock);
+        $adapter = $this->getMockeryMock('adapter');
+
+        $filesystem = new EventableFilesystem($adapter, $mock);
         $filesystem->flushCache($config);
     }
 
     public function testBeforeEventAbort()
     {
-        $mock = $this->getMockeryMock('filesystem');
+        $mock = $this->getMockeryMock('adapter');
         $filesystem = new EventableFilesystem($mock);
         $filesystem->addListener('before.read', function ($event) {
             $event->cancelOperation('altered response');
@@ -108,49 +228,45 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $this->assertEquals($response, 'altered response');
     }
 
-    public function testPrepareArguments()
-    {
-        $filesystem = new EventableFilesystem($this->getMockeryMock('filesystem'));
-        $arguments = ['config' => ['option' => true]];
-        $prepared = $filesystem->prepareArguments($arguments);
-        $this->assertInstanceOf('League\\Flysystem\\Config', $prepared['config']);
-    }
-
     public function testSilentCall()
     {
-        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('filesystem'));
+        $mock = $this->getMockeryMock('adapter');
+        $mock->shouldReceive('has')->andReturn(true);
+        $filesystem = new EventableFilesystem($mock);
         $filesystem->addListener('before.read', function () {
             throw new Exception('The test failed');
         });
-        $mock->shouldReceive('read')->andReturn('contents');
+        $mock->shouldReceive('read')->andReturn(['contents' => 'contents']);
         $result = $filesystem->read('path', ['silent' => true]);
         $this->assertEquals('contents', $result);
     }
 
     public function testBeforeSetArgument()
     {
-        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('filesystem'));
+        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('adapter'));
         $filesystem->addListener('before.read', function ($event) {
             $event->setArgument('path', 'altered');
         });
-        $config = new Config;
-        $call = $mock->shouldReceive('read')->with('altered', $config);
-        $call->andReturn(true);
-        $result = $filesystem->read('original', $config);
-        $this->assertTrue($result);
+        $mock->shouldReceive('has')->andReturn(true);
+        $mock->shouldReceive('read')
+            ->with('altered')
+            ->andReturn(['contents' => 'contents']);
+        $result = $filesystem->read('original');
+        $this->assertEquals('contents', $result);
     }
 
     public function testBeforeSetArgumentArray()
     {
-        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('filesystem'));
+        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('adapter'));
         $filesystem->addListener('before.read', function ($event) {
             $event->setArguments(['path' => 'altered']);
         });
-        $config = new Config;
-        $call = $mock->shouldReceive('read')->with('altered', $config);
-        $call->andReturn(true);
+        $config = [];
+        $mock->shouldReceive('has')->andReturn('true');
+        $call = $mock->shouldReceive('read')->with('altered');
+        $call->andReturn(['contents' => 'contents']);
         $result = $filesystem->read('original', $config);
-        $this->assertTrue($result);
+        $this->assertEquals($result, 'contents');
     }
 
     public function testBeforeEvent()
@@ -171,14 +287,15 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testAfterSetResult()
     {
-        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('filesystem'));
+        $filesystem = new EventableFilesystem($mock = $this->getMockeryMock('adapter'));
         $filesystem->addListener('after.read', function ($event) {
             $event->setResult('injected');
         });
-        $arguments = ['original', new Config];
+        $arguments = ['original'];
+        $mock->shouldReceive('has')->andReturn(true);
         $call = $mock->shouldReceive('read');
         call_user_func_array([$call, 'with'], $arguments);
-        $call->andReturn(true);
+        $call->andReturn(['contents' => 'contents']);
         $result = call_user_func_array([$filesystem, 'read'], $arguments);
         $this->assertEquals('injected', $result);
     }

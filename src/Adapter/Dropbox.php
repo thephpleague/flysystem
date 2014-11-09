@@ -77,7 +77,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config   Config object or visibility setting
+     * @param   Config  $config   Config object or visibility setting
      * @return  array   file metadata
      */
     public function update($path, $contents, Config $config)

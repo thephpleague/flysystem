@@ -19,7 +19,7 @@ interface AdapterInterface extends ReadInterface
      *
      * @param   string       $path
      * @param   string       $contents
-     * @param   mixed        $config   Config object or visibility setting
+     * @param   Config       $config   Config object
      * @return  false|array  false on failure file meta data on success
      */
     public function write($path, $contents, Config $config);
@@ -39,7 +39,7 @@ interface AdapterInterface extends ReadInterface
      *
      * @param   string       $path
      * @param   string       $contents
-     * @param   mixed        $config   Config object or visibility setting
+     * @param   Config       $config   Config object
      * @return  false|array  false on failure file meta data on success
      */
     public function update($path, $contents, Config $config);
@@ -58,7 +58,7 @@ interface AdapterInterface extends ReadInterface
      * Rename a file
      *
      * @param   string  $path
-     * @param   string  $newPath
+     * @param   string  $newpath
      * @return  boolean
      */
     public function rename($path, $newpath);
@@ -91,10 +91,10 @@ interface AdapterInterface extends ReadInterface
     /**
      * Create a directory
      *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
+     * @param   string  $dirname directory name
+     * @param   Config  $config
      *
-     * @return  bool
+     * @return  bool|array
      */
     public function createDir($dirname, Config $config);
 

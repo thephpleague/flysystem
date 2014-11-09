@@ -2,11 +2,11 @@
 
 namespace League\Flysystem\Adapter;
 
-use League\Flysystem\Adapter\AbstractAdapter;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 use Sabre\DAV\Client;
 use Sabre\DAV\Exception;
+use LogicException;
 
 class WebDav extends AbstractAdapter
 {
@@ -76,8 +76,8 @@ class WebDav extends AbstractAdapter
 
         $result = compact('path', 'contents');
 
-        if ($config && $visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
+        if ($config->get('visibility')) {
+            throw new LogicException(__CLASS__ . ' does not support visibility settings.');
         }
 
         return $result;
@@ -133,7 +133,11 @@ class WebDav extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $response = $this->client->request('MKCOL', $location);
 
-        return $response['statusCode'] === 201;
+        if ($response['statusCode'] !== 201) {
+            return false;
+        }
+
+        return compact('path') + ['type' => 'dir'];
     }
 
     public function deleteDir($dirname)

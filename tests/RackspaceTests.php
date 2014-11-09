@@ -75,7 +75,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject = $this->getDataObjectMock('filename.ext');
         $container->shouldReceive('uploadObject')->with('filename.ext', 'content', [])->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->write('filename.ext', 'content'));
+        $this->assertInternalType('array', $adapter->write('filename.ext', 'content', new Config));
     }
 
     public function testWriteWithHeaders()
@@ -109,7 +109,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject->shouldReceive('update')->andReturn(Mockery::self());
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertFalse($adapter->update('filename.ext', 'content'));
+        $this->assertFalse($adapter->update('filename.ext', 'content', new Config));
     }
 
     public function testUpdate()
@@ -121,7 +121,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $dataObject->shouldReceive('update')->andReturn(Mockery::self());
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->update('filename.ext', 'content'));
+        $this->assertInternalType('array', $adapter->update('filename.ext', 'content', new Config));
     }
 
     public function testUpdateStream()
@@ -134,14 +134,14 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
         $resource = tmpfile();
-        $this->assertInternalType('array', $adapter->updateStream('filename.ext', $resource));
+        $this->assertInternalType('array', $adapter->updateStream('filename.ext', $resource, new Config));
     }
 
     public function testCreateDir()
     {
         $container = $this->getContainerMock();
         $adapter = new Rackspace($container);
-        $this->assertInternalType('array', $adapter->createDir('dirname'));
+        $this->assertInternalType('array', $adapter->createDir('dirname', new Config));
     }
 
     public function getterProvider()

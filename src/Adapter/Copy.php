@@ -212,7 +212,13 @@ class Copy extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        return $this->client->createDir($location);
+        try {
+            $this->client->createDir($location);
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return compact('path') + ['type' => 'dir'];
     }
 
 

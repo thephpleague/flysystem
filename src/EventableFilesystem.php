@@ -7,7 +7,7 @@ use League\Event\Emitter;
 use League\Flysystem\Event\Before as BeforeEvent;
 use League\Flysystem\Event\After as AfterEvent;
 
-class EventableFilesystem implements FilesystemInterface
+class EventableFilesystem extends Filesystem
 {
     use EmitterTrait;
 
@@ -26,8 +26,8 @@ class EventableFilesystem implements FilesystemInterface
      */
     public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null, Emitter $emitter = null)
     {
-        $this->filesystem = $this->prepareAdapter($adapter, $cache, $config);
         $this->setEmitter($emitter);
+        parent::__construct($adapter, $cache, $config);
     }
 
     /**
@@ -36,19 +36,6 @@ class EventableFilesystem implements FilesystemInterface
     public function getFilesystem()
     {
         return $this->filesystem;
-    }
-
-    /**
-     * Prepare the adapter
-     *
-     * @param  AdapterInterface  $adapter
-     * @param  CacheInterface    $cache
-     * @param  array             $config
-     * @return FilesystemInterface
-     */
-    protected function prepareAdapter(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
-    {
-        return new Filesystem($adapter, $cache, $config);
     }
 
     /**
@@ -121,7 +108,7 @@ class EventableFilesystem implements FilesystemInterface
     /**
      * List contents with metadata
      *
-     * @param   array    $key  metadata key
+     * @param   array    $keys  metadata key
      * @param   string   $directory
      * @param   boolean  $recursive
      * @param   mixed    $config
@@ -137,7 +124,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $path      path to file
      * @param   array   $metadata  metadata keys
-     * @param   mixed   $config
+     * @param   array   $config
      * @throws  InvalidArgumentException
      * @return  array   metadata
      */
@@ -432,10 +419,9 @@ class EventableFilesystem implements FilesystemInterface
      */
     public function delegateMethodCall($method, array $arguments = [])
     {
-        $arguments = $this->prepareArguments($arguments);
         $config = $arguments['config'];
 
-        if ($config->get('silent')) {
+        if (isset($config['silent']) && $config['silent'] === true) {
             return $this->callFilesystemMethod($method, $arguments);
         }
 
@@ -459,7 +445,7 @@ class EventableFilesystem implements FilesystemInterface
      */
     protected function emitBefore($method, array $arguments)
     {
-        $event = new BeforeEvent($this->filesystem, $method, $arguments);
+        $event = new BeforeEvent($this, $method, $arguments);
         $this->emit($event, $method);
 
         if ($event->isPropagationStopped()) {
@@ -478,7 +464,7 @@ class EventableFilesystem implements FilesystemInterface
      */
     protected function callFilesystemMethod($method, array $arguments)
     {
-        $callable = [$this->filesystem, $method];
+        $callable = 'parent::'.$method;
         $result = call_user_func_array($callable, $arguments);
 
         return $result;
@@ -493,28 +479,9 @@ class EventableFilesystem implements FilesystemInterface
      */
     protected function emitAfter($method, $result)
     {
-        $event = new AfterEvent($this->filesystem, $method, $result);
+        $event = new AfterEvent($this, $method, $result);
         $this->emit($event);
 
         return $event->getResult();
-    }
-
-    /**
-     * Prepare the arguments
-     *
-     * @param  array  $arguments
-     * @return array
-     */
-    public function prepareArguments(array $arguments)
-    {
-        if (! isset($arguments['config'])) {
-            $arguments['config'] = new Config;
-        }
-
-        if (is_array($arguments['config'])) {
-            $arguments['config'] = new Config($arguments['config']);
-        }
-
-        return $arguments;
     }
 }

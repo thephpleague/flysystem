@@ -77,7 +77,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
      */
     public function testWriteStreamFail(Zip $zip)
     {
-        $zip->writeStream('file.txt', tmpfile(), 'private', new Config);
+        $zip->writeStream('file.txt', tmpfile(), new Config(['visibility' => 'private']));
     }
 
     /**
@@ -104,7 +104,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
      */
     public function testSetVisibilityWrite($zip)
     {
-        $zip->write('path', 'contents', new Config);
+        $zip->write('path', 'contents', new Config(['visibility' => 'private']));
     }
 
     /**

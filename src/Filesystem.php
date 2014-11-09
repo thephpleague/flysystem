@@ -94,6 +94,7 @@ class Filesystem implements FilesystemInterface
         if (! is_array($result)) {
             $result = array();
         }
+
         $this->cache->updateObject($path, $result, true);
 
         return true;
@@ -214,7 +215,7 @@ class Filesystem implements FilesystemInterface
     public function update($path, $contents, array $config = [])
     {
         $path = Util::normalizePath($path);
-        $this->prepareConfig($config);
+        $config = $this->prepareConfig($config);
 
         $this->assertPresent($path);
         $object = $this->adapter->update($path, $contents, $config);
@@ -244,8 +245,7 @@ class Filesystem implements FilesystemInterface
         }
 
         $path = Util::normalizePath($path);
-        $config = Util::ensureConfig($config);
-        $config->setFallback($this->getConfig());
+        $config = $this->prepareConfig($config);
         $this->assertPresent($path);
         Util::rewindStream($resource);
 
@@ -406,15 +406,11 @@ class Filesystem implements FilesystemInterface
     public function createDir($dirname, array $config = [])
     {
         $dirname = Util::normalizePath($dirname);
-        $result  = $this->adapter->createDir($dirname, $options);
+        $config = Util::ensureConfig($config);
+        $result  = $this->adapter->createDir($dirname, $config);
 
         if ($result === false) {
             return false;
-        }
-
-        // ensure the result in an array so the it's cacheable
-        if (! is_array($result)) {
-            $result = array();
         }
 
         $result['type'] = 'dir';

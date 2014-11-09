@@ -1,6 +1,7 @@
 <?php
 
 use League\Flysystem\Adapter\WebDav as Adapter;
+use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 
 class WebDavTests extends PHPUnit_Framework_TestCase
@@ -33,7 +34,7 @@ class WebDavTests extends PHPUnit_Framework_TestCase
         $mock = $this->getClient();
         $mock->shouldReceive('request')->once();
         $adapter = new Adapter($mock);
-        $this->assertInternalType('array', $adapter->write('something', 'something'));
+        $this->assertInternalType('array', $adapter->write('something', 'something', new Config));
     }
 
     public function testUpdate()
@@ -41,7 +42,7 @@ class WebDavTests extends PHPUnit_Framework_TestCase
         $mock = $this->getClient();
         $mock->shouldReceive('request')->once();
         $adapter = new Adapter($mock);
-        $this->assertInternalType('array', $adapter->update('something', 'something'));
+        $this->assertInternalType('array', $adapter->update('something', 'something', new Config));
     }
 
     /**
@@ -52,9 +53,9 @@ class WebDavTests extends PHPUnit_Framework_TestCase
         $mock = $this->getClient();
         $mock->shouldReceive('request')->once();
         $adapter = new Adapter($mock);
-        $this->assertInternalType('array', $adapter->write('something', 'something', array(
+        $this->assertInternalType('array', $adapter->write('something', 'something', new Config(array(
             'visibility' => 'private',
-        )));
+        ))));
     }
 
     public function testReadStream()
@@ -181,8 +182,8 @@ class WebDavTests extends PHPUnit_Framework_TestCase
             'statusCode' => 201,
         ));
         $adapter = new Adapter($mock);
-        $result = $adapter->createDir('dirname');
-        $this->assertTrue($result);
+        $result = $adapter->createDir('dirname', new Config);
+        $this->assertInternalType('array', $result);
     }
 
     public function testCreateDirFail()
@@ -192,7 +193,7 @@ class WebDavTests extends PHPUnit_Framework_TestCase
             'statusCode' => 500,
         ));
         $adapter = new Adapter($mock);
-        $result = $adapter->createDir('dirname');
+        $result = $adapter->createDir('dirname', new Config);
         $this->assertFalse($result);
     }
 

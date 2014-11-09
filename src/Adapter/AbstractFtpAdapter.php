@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
 {
@@ -353,7 +354,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function ensureDirectory($dirname)
     {
         if (! empty($dirname) && ! $this->has($dirname)) {
-            $this->createDir($dirname);
+            $this->createDir($dirname, new Config);
         }
     }
 

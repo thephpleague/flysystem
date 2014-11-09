@@ -37,11 +37,11 @@ class DropboxTests extends PHPUnit_Framework_TestCase
             'modified' => '10 September 2000',
         ), false);
 
-        $result = $adapter->write('something', 'contents');
+        $result = $adapter->write('something', 'contents', new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->write('something', 'something'));
+        $this->assertFalse($adapter->write('something', 'something', new Config));
     }
 
     /**
@@ -81,14 +81,14 @@ class DropboxTests extends PHPUnit_Framework_TestCase
      /**
      * @dataProvider  dropboxProvider
      */
-    public function testUpdateStream(Config $adapter, $mock)
+    public function testUpdateStream(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('uploadFile')->andReturn(array(
             'is_dir' => false,
             'modified' => '10 September 2000',
         ), false);
 
-        $result = $adapter->updateStream('something', 'contents');
+        $result = $adapter->updateStream('something', 'contents', new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);

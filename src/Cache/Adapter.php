@@ -3,6 +3,7 @@
 namespace League\Flysystem\Cache;
 
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
 
 class Adapter extends AbstractCache
 {
@@ -98,12 +99,13 @@ class Adapter extends AbstractCache
      */
     public function save()
     {
+        $config = new Config;
         $contents = $this->getForStorage();
 
         if ($this->adapter->has($this->file)) {
-            $this->adapter->update($this->file, $contents);
+            $this->adapter->update($this->file, $contents, $config);
         } else {
-            $this->adapter->write($this->file, $contents);
+            $this->adapter->write($this->file, $contents, $config);
         }
     }
 }

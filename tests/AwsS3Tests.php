@@ -67,8 +67,8 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $mock->shouldReceive('putObject')->times(2);
         $adapter = new Adapter($mock, 'bucketname', 'prefix');
-        $adapter->update('something', 'something');
-        $adapter->write('something', 'something', 'private');
+        $adapter->update('something', 'something', new Config);
+        $adapter->write('something', 'something', new Config(['visibility' => 'private']));
     }
 
     public function testWriteAboveLimit()
@@ -92,12 +92,12 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->write(
             'something',
             'some content',
-            array(
+            new Config(array(
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
                 'Metadata' => array(),
-            )
+            ))
         );
     }
 
@@ -123,12 +123,12 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->writeStream(
             'something',
             $temp,
-            array(
+            new Config(array(
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
                 'Metadata' => array(),
-            )
+            ))
         );
         $adapter->updateStream('something', $temp, new Config);
         fclose($temp);
@@ -215,13 +215,10 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $this->expectVisibilityCall(Permission::READ, 'old', $mock);
         $mock->shouldReceive('copyObject')->once()->andReturn(Mockery::self());
-        $mock->shouldReceive('getAll')->once()->andReturn(array('Key' => 'something', 'LastModified' => '2011-01-01'));
         $mock->shouldReceive('deleteObject')->once()->andReturn(true);
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->rename('old', 'new');
-        $this->assertArrayHasKey('path', $result);
-        $this->assertContains('new', $result);
-        $this->assertInternalType('int', $result['timestamp']);
+        $this->assertTrue($result);
     }
 
     public function testCopy()
@@ -232,9 +229,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('getAll')->once()->andReturn(array('Key' => 'something', 'LastModified' => '2011-01-01'));
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->copy('old', 'new');
-        $this->assertArrayHasKey('path', $result);
-        $this->assertContains('new', $result);
-        $this->assertInternalType('int', $result['timestamp']);
+        $this->assertTrue($result);
     }
 
     public function testDeleteDir()
@@ -251,7 +246,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $result = new \ArrayIterator(array(
             array('Key' => 'file.ext', 'ContentLength' => 20, 'ContentType' => 'text/plain'),
-            array('Key' => 'path/to_another/dir/'),
+            array('Key' => 'path/to_another/dir/', 'LastModified' => '2011-01-01'),
         ));
         $mock->shouldReceive('getIterator')->once()->andReturn($result);
         $adapter = new Adapter($mock, 'bucketname');

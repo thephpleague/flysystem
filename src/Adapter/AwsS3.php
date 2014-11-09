@@ -188,16 +188,11 @@ class AwsS3 extends AbstractAdapter
             unset($options['Body']);
         }
 
-        return $this->normalizeObject($options);
+        return $this->normalizeResponse($options);
     }
 
     /**
-     * Update a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   mixed   $config   Config object or visibility setting
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -205,12 +200,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Update a file using a stream
-     *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config    $config   Config object
-     * @return  array     file metadata
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -218,10 +208,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Read a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -233,10 +220,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get a read-stream for a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -250,25 +234,18 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get an object from S3
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     protected function readObject($path)
     {
         $options = $this->getOptions($path);
         $result = $this->client->getObject($options);
 
-        return $this->normalizeObject($result->getAll(), $path);
+        return $this->normalizeResponse($result->getAll(), $path);
     }
 
     /**
-     * Rename a file
-     *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -278,19 +255,14 @@ class AwsS3 extends AbstractAdapter
             'ACL' => $this->getObjectACL($path),
         ));
 
-        $result = $this->client->copyObject($options)->getAll();
-        $result = $this->normalizeObject($result, $newpath);
+        $this->client->copyObject($options);
         $this->delete($path);
 
-        return $result;
+        return true;
     }
 
     /**
-     * Copy a file
-     *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
@@ -300,16 +272,13 @@ class AwsS3 extends AbstractAdapter
             'ACL' => $this->getObjectACL($path),
         ));
 
-        $result = $this->client->copyObject($options)->getAll();
+        $this->client->copyObject($options)->getAll();
 
-        return $this->normalizeObject($result, $newpath);
+        return true;
     }
 
     /**
-     * Delete a file
-     *
-     * @param   string   $path
-     * @return  boolean  delete result
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -319,10 +288,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Delete a directory (recursive)
-     *
-     * @param   string   $path
-     * @return  boolean  delete result
+     * {@inheritdoc}
      */
     public function deleteDir($path)
     {
@@ -332,12 +298,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string  $path directory name
-     * @param   Config  $config
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($path, Config $config)
     {
@@ -351,24 +312,18 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get metadata for a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
         $options = $this->getOptions($path);
         $result = $this->client->headObject($options);
 
-        return $this->normalizeObject($result->getAll(), $path);
+        return $this->normalizeResponse($result->getAll(), $path);
     }
 
     /**
-     * Get the mimetype of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
@@ -376,10 +331,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the file of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -387,10 +339,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the timestamp of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {
@@ -398,10 +347,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the visibility of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
@@ -420,10 +366,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the ACL based on the visibility
-     *
-     * @param $path
-     * @return string
+     * {@inheritdoc}
      */
     protected function getObjectACL($path)
     {
@@ -433,11 +376,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get mimetype of a file
-     *
-     * @param   string  $path
-     * @param   string  $visibility
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
@@ -451,11 +390,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * List contents of a directory
-     *
-     * @param   string  $dirname
-     * @param   bool    $recursive
-     * @return  array   directory contents
+     * {@inheritdoc}
      */
     public function listContents($dirname = '', $recursive = false)
     {
@@ -465,7 +400,7 @@ class AwsS3 extends AbstractAdapter
         ));
 
         $contents = iterator_to_array($objectsIterator);
-        $result = array_map(array($this, 'normalizeObject'), $contents);
+        $result = array_map(array($this, 'normalizeResponse'), $contents);
 
         return Util::emulateDirectories($result);
     }
@@ -477,7 +412,7 @@ class AwsS3 extends AbstractAdapter
      * @param   string  $path
      * @return  array   file metadata
      */
-    protected function normalizeObject(array $object, $path = null)
+    protected function normalizeResponse(array $object, $path = null)
     {
         $result = array('path' => $path ?: $this->removePathPrefix($object['Key']));
         $result['dirname'] = Util::dirname($result['path']);

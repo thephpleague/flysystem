@@ -171,7 +171,6 @@ class Zip extends AbstractAdapter
     {
         if (! $this->has($dirname)) {
             $location = $this->applyPathPrefix($dirname);
-
             $this->archive->addEmptyDir($location);
         }
 

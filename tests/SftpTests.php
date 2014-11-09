@@ -2,6 +2,7 @@
 
 use League\Flysystem\Adapter\Sftp;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 
 class SftpTests extends PHPUnit_Framework_TestCase
 {
@@ -63,7 +64,8 @@ class SftpTests extends PHPUnit_Framework_TestCase
     {
         $mock->shouldReceive('put')->andReturn(true, false);
         $mock->shouldReceive('stat')->andReturn(false);
-        $this->assertTrue($filesystem->write('something', 'something'));
+        $mock->shouldReceive('chmod')->andReturn(true);
+        $this->assertTrue($filesystem->write('something', 'something', ['visibility' => 'public']));
         $this->assertFalse($filesystem->write('something_else.txt', 'else'));
     }
 
@@ -86,7 +88,7 @@ class SftpTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider adapterProvider
      */
-    public function testUpdate($filesystem, $adapter, $mock)
+    public function testUpdate(FilesystemInterface $filesystem, $adapter, $mock)
     {
         $mock->shouldReceive('put')->andReturn(true, false);
         $mock->shouldReceive('stat')->andReturn(array(

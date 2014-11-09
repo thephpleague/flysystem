@@ -41,6 +41,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
      * @var Local
      */
     protected $adapter;
+
     protected $root;
 
     public function setup()
@@ -84,7 +85,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $temp = tmpfile();
         fwrite($temp, 'dummy');
         rewind($temp);
-        $adapter->writeStream('dir/file.txt', $temp, new Config);
+        $adapter->writeStream('dir/file.txt', $temp, new Config(['visibility' => 'public']));
         fclose($temp);
         $this->assertTrue($adapter->has('dir/file.txt'));
         $result = $adapter->read('dir/file.txt');
@@ -120,7 +121,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testCopy()
     {
         $adapter = $this->adapter;
-        $adapter->write('file.ext', 'content', new Config);
+        $adapter->write('file.ext', 'content', new Config(['visibility' => 'public']));
         $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
         $this->assertTrue($adapter->has('new.ext'));
         $adapter->delete('file.ext');

@@ -39,7 +39,7 @@ class AdapterCacheTests extends PHPUnit_Framework_TestCase
         $response = json_encode(array(array(), array(), null));
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->once()->with('file.json')->andReturn(true);
-        $adapter->shouldReceive('update')->once()->with('file.json', $response);
+        $adapter->shouldReceive('update')->once()->with('file.json', $response, Mockery::any());
         $cache = new Adapter($adapter, 'file.json', null);
         $cache->save();
     }
@@ -49,7 +49,7 @@ class AdapterCacheTests extends PHPUnit_Framework_TestCase
         $response = json_encode(array(array(), array(), null));
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->once()->with('file.json')->andReturn(false);
-        $adapter->shouldReceive('write')->once()->with('file.json', $response);
+        $adapter->shouldReceive('write')->once()->with('file.json', $response, Mockery::any());
         $cache = new Adapter($adapter, 'file.json', null);
         $cache->save();
     }

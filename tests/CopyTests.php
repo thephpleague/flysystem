@@ -4,21 +4,6 @@ use Barracuda\Copy\API;
 use League\Flysystem\Adapter\Copy;
 use League\Flysystem\Config;
 
-class CopyFile
-{
-    //
-}
-
-class CopyRevision
-{
-    //
-}
-
-class CopyPart
-{
-    //
-}
-
 class CopyTests extends PHPUnit_Framework_TestCase
 {
     public function getClientMock()
@@ -61,7 +46,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->write('something', 'something'));
+        $this->assertFalse($adapter->write('something', 'something', new Config));
     }
 
     /**
@@ -77,7 +62,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
         ));
-        $result = $adapter->update('something', $contents);
+        $result = $adapter->update('something', $contents, new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
@@ -100,7 +85,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
         file_put_contents($filepath, 'copy==');
         $fh = fopen($filepath, 'r');
 
-        $result = $adapter->writeStream('something', $fh);
+        $result = $adapter->writeStream('something', $fh, new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
@@ -112,7 +97,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
      /**
      * @dataProvider  copyProvider
      */
-    public function testUpdateStream($adapter, $mock)
+    public function testUpdateStream(Copy $adapter, $mock)
     {
         $contents = 'contents';
 
@@ -214,14 +199,24 @@ class CopyTests extends PHPUnit_Framework_TestCase
     public function testCreateDir($adapter, $mock)
     {
         $mock->shouldReceive('createDir')->andReturn(array(
-            (object)array(
-                'type' => 'dir',
-                'modified_time' => '10 September 2000',
-                'path' => 'something',
+                (object)array(
+                    'type' => 'dir',
+                    'modified_time' => '10 September 2000',
+                    'path' => 'something',
                 ),
             )
         );
         $this->assertInternalType('array', $adapter->createDir('something', new Config));
+    }
+
+    /**
+     * @dataProvider  copyProvider
+     */
+    public function testCreateDirFail($adapter, $mock)
+    {
+        /** @var \Mockery\Mock $mock */
+        $mock->shouldReceive('createDir')->andThrow('Exception');
+        $this->assertFalse($adapter->createDir('something', new Config));
     }
 
     /**
