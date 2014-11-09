@@ -265,4 +265,13 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('copy')->andReturn((object)array('type' => 'file', 'path' => 'something'));
         $this->assertTrue($adapter->copy('something', 'something'));
     }
+
+    /**
+     * @dataProvider  copyProvider
+     */
+    public function testCopyFail(Copy $adapter, $mock)
+    {
+        $mock->shouldReceive('copy')->andThrow('Exception');
+        $this->assertFalse($adapter->copy('something', 'something'));
+    }
 }
