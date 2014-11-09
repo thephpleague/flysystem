@@ -295,7 +295,7 @@ class Dropbox extends AbstractAdapter
      * Normalize a Dropbox response
      *
      * @param      $object
-     * @param null $path
+     * @param string|null $path
      * @return array
      */
     protected function normalizeResponse($object, $path = null)
