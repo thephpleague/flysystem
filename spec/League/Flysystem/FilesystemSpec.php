@@ -53,27 +53,27 @@ class FilesystemSpec extends ObjectBehavior
         $this->pluginMethod();
     }
 
-    public function it_should_allow_writes(Config $config)
+    public function it_should_allow_writes()
     {
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->write('file', 'contents', $config)->willReturn($cache = [
+        $this->adapter->write('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
             'contents' => 'contents',
         ]);
         $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
-        $this->write('file', 'contents', $config)->shouldReturn(true);
+        $this->write('file', 'contents')->shouldReturn(true);
     }
 
-    public function it_should_allow_stream_writes(Config $config)
+    public function it_should_allow_stream_writes()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->writeStream('file', $stream, $config)->willReturn($cache = [
+        $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
 
         $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
-        $this->writeStream('file', $stream, $config)->shouldReturn(true);
+        $this->writeStream('file', $stream)->shouldReturn(true);
         fclose($stream);
     }
 
@@ -89,120 +89,120 @@ class FilesystemSpec extends ObjectBehavior
         $this->shouldThrow('InvalidArgumentException')->duringUpdateStream('file', 'string');
     }
 
-    public function it_should_return_false_when_writing_to_a_existing_file(Config $config)
+    public function it_should_return_false_when_writing_to_a_existing_file()
     {
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->write('file', 'contents', $config)->willReturn(false);
-        $this->write('file', 'contents', $config)->shouldEqual(false);
+        $this->adapter->write('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->write('file', 'contents')->shouldEqual(false);
     }
 
-    public function it_should_return_false_when_writing_a_stream_to_a_existing_file(Config $config)
+    public function it_should_return_false_when_writing_a_stream_to_a_existing_file()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->writeStream('file', $stream, $config)->willReturn(false);
-        $this->writeStream('file', $stream, $config)->shouldEqual(false);
+        $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->writeStream('file', $stream)->shouldEqual(false);
         fclose($stream);
     }
 
-    public function it_should_forward_updates(Config $config)
+    public function it_should_forward_updates()
     {
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->update('file', 'contents', $config)->willReturn($cache = [
+        $this->adapter->update('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
             'contents' => 'contents',
         ]);
         $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
-        $this->update('file', 'contents', $config);
+        $this->update('file', 'contents');
     }
 
-    public function it_should_forward_stream_updates(Config $config)
+    public function it_should_forward_stream_updates()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->updateStream('file', $stream, $config)->willReturn($cache = [
+        $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
-        $this->updateStream('file', $stream, $config);
+        $this->updateStream('file', $stream);
         fclose($stream);
     }
 
-    public function it_should_write_when_putting_a_new_file(Config $config)
+    public function it_should_write_when_putting_a_new_file()
     {
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->write('file', 'contents', $config)->willReturn($cache = [
+        $this->adapter->write('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
             'contents' => 'contents',
         ]);
         $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
-        $this->put('file', 'contents', $config)->shouldReturn(true);
+        $this->put('file', 'contents')->shouldReturn(true);
     }
 
-    public function it_should_write_when_putting_a_new_file_using_stream(Config $config)
+    public function it_should_write_when_putting_a_new_file_using_stream()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->writeStream('file', $stream, $config)->willReturn($cache = [
+        $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
-        $this->putStream('file', $stream, $config)->shouldReturn(true);
+        $this->putStream('file', $stream)->shouldReturn(true);
         fclose($stream);
     }
 
-    public function it_should_update_when_putting_a_new_file(Config $config)
+    public function it_should_update_when_putting_a_new_file()
     {
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->update('file', 'contents', $config)->willReturn($cache = [
+        $this->adapter->update('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
             'contents' => 'contents',
         ]);
         $this->cache->updateObject('file', $cache, true)->shouldBeCalled();
-        $this->put('file', 'contents', $config)->shouldReturn(true);
+        $this->put('file', 'contents')->shouldReturn(true);
     }
 
-    public function it_should_update_when_putting_a_new_file_using_stream(Config $config)
+    public function it_should_update_when_putting_a_new_file_using_stream()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->updateStream('file', $stream, $config)->willReturn($cache = [
+        $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->cache->updateObject('file', $cache + ['contents' => false], true)->shouldBeCalled();
-        $this->putStream('file', $stream, $config)->shouldReturn(true);
+        $this->putStream('file', $stream)->shouldReturn(true);
         fclose($stream);
     }
 
-    public function it_should_return_false_when_write_fails(Config $config)
+    public function it_should_return_false_when_write_fails()
     {
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->write('file', 'contents', $config)->willReturn(false);
-        $this->write('file', 'contents', $config)->shouldReturn(false);
+        $this->adapter->write('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->write('file', 'contents')->shouldReturn(false);
     }
 
-    public function it_should_return_false_when_stream_write_fails(Config $config)
+    public function it_should_return_false_when_stream_write_fails()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(false);
-        $this->adapter->writeStream('file', $stream, $config)->willReturn(false);
-        $this->writeStream('file', $stream, $config)->shouldReturn(false);
+        $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->writeStream('file', $stream)->shouldReturn(false);
         fclose($stream);
     }
 
-    public function it_should_return_false_when_update_fails(Config $config)
+    public function it_should_return_false_when_update_fails()
     {
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->update('file', 'contents', $config)->willReturn(false);
-        $this->update('file', 'contents', $config)->shouldReturn(false);
+        $this->adapter->update('file', 'contents', Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->update('file', 'contents')->shouldReturn(false);
     }
 
-    public function it_should_return_false_when_stream_update_fails(Config $config)
+    public function it_should_return_false_when_stream_update_fails()
     {
         $stream = tmpfile();
         $this->cache->has('file')->willReturn(true);
-        $this->adapter->updateStream('file', $stream, $config)->willReturn(false);
-        $this->updateStream('file', $stream, $config)->shouldReturn(false);
+        $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
+        $this->updateStream('file', $stream)->shouldReturn(false);
         fclose($stream);
     }
 
