@@ -1,6 +1,7 @@
 <?php
 
 use League\Flysystem\Adapter\Dropbox;
+use League\Flysystem\Config;
 
 class DropboxTests extends PHPUnit_Framework_TestCase
 {
@@ -46,41 +47,41 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testUpdate($adapter, $mock)
+    public function testUpdate(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('uploadFileFromString')->andReturn(array(
             'is_dir' => false,
             'modified' => '10 September 2000',
         ), false);
 
-        $result = $adapter->update('something', 'contents');
+        $result = $adapter->update('something', 'contents', new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->update('something', 'something'));
+        $this->assertFalse($adapter->update('something', 'something', new Config));
     }
 
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testWriteStream($adapter, $mock)
+    public function testWriteStream(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('uploadFile')->andReturn(array(
             'is_dir' => false,
             'modified' => '10 September 2000',
         ), false);
 
-        $result = $adapter->writeStream('something', 'contents');
+        $result = $adapter->writeStream('something', 'contents', new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->writeStream('something', 'something'));
+        $this->assertFalse($adapter->writeStream('something', 'something', new Config));
     }
 
      /**
      * @dataProvider  dropboxProvider
      */
-    public function testUpdateStream($adapter, $mock)
+    public function testUpdateStream(Config $adapter, $mock)
     {
         $mock->shouldReceive('uploadFile')->andReturn(array(
             'is_dir' => false,
@@ -91,7 +92,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->updateStream('something', 'something'));
+        $this->assertFalse($adapter->updateStream('something', 'something', new Config));
     }
 
     public function metadataProvider()
@@ -137,7 +138,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testReadStream($adapter, $mock)
+    public function testReadStream(Dropbox $adapter, $mock)
     {
         $stream = tmpfile();
         fwrite($stream, 'something');
@@ -150,7 +151,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testDelete($adapter, $mock)
+    public function testDelete(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('delete')->andReturn(true);
         $this->assertTrue($adapter->delete('something'));
@@ -160,22 +161,22 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testCreateDir($adapter, $mock)
+    public function testCreateDir(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('createFolder')->with('/prefix/fail/please')->andReturn(null);
         $mock->shouldReceive('createFolder')->with('/prefix/pass/please')->andReturn(array(
             'is_dir' => true,
             'path' => 'pass/please',
         ));
-        $this->assertFalse($adapter->createDir('fail/please'));
+        $this->assertFalse($adapter->createDir('fail/please', new Config));
         $expected = ['path' => 'pass/please', 'type' => 'dir'];
-        $this->assertEquals($expected, $adapter->createDir('pass/please'));
+        $this->assertEquals($expected, $adapter->createDir('pass/please', new Config));
     }
 
     /**
      * @dataProvider  dropboxProvider
      */
-    public function testListContents($adapter, $mock)
+    public function testListContents(Dropbox $adapter, $mock)
     {
         $mock->shouldReceive('getMetadataWithChildren')->andReturn(
             array('contents' => array(

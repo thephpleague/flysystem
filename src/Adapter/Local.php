@@ -71,10 +71,9 @@ class Local extends AbstractAdapter
      * @param null $config
      * @return array|bool
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
-        $config = Util::ensureConfig($config);
         $this->ensureDirectory(dirname($location));
 
         if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
@@ -100,9 +99,8 @@ class Local extends AbstractAdapter
      * @param null $config
      * @return array|bool
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
-        $config = Util::ensureConfig($config);
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
@@ -147,7 +145,7 @@ class Local extends AbstractAdapter
      * @param   mixed     $config   Config object or visibility setting
      * @return  array|bool
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         return $this->writeStream($path, $resource, $config);
     }
@@ -160,7 +158,7 @@ class Local extends AbstractAdapter
      * @param   mixed        $config   Config object or visibility setting
      * @return  array|bool
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $mimetype = Util::guessMimeType($path, $contents);
@@ -349,12 +347,12 @@ class Local extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
+     * @param   string  $dirname directory name
+     * @param   Config  $config
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         $location = $this->applyPathPrefix($dirname);
 

@@ -11,8 +11,8 @@ class FileTests extends \PHPUnit_Framework_TestCase
         clearstatcache();
         $fs = new Adapter\Local(__DIR__.'/');
         $fs->deleteDir('files');
-        $fs->createDir('files');
-        $fs->write('file.txt', 'contents');
+        $fs->createDir('files', new Config);
+        $fs->write('file.txt', 'contents', new Config);
         $this->filesystem = new Filesystem($fs);
     }
 

@@ -3,6 +3,7 @@
 use League\Flysystem\Adapter\AwsS3 as Adapter;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
+use League\Flysystem\Config;
 
 class StreamMock
 {
@@ -129,7 +130,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
                 'Metadata' => array(),
             )
         );
-        $adapter->updateStream('something', $temp);
+        $adapter->updateStream('something', $temp, new Config);
         fclose($temp);
     }
 
@@ -159,12 +160,12 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->writeStream(
             'something',
             $temp,
-            array(
+            new Config([
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
-                'Metadata' => array(),
-            )
+                'Metadata' => [],
+            ])
         );
         fclose($temp);
     }
@@ -183,15 +184,15 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $adapter->writeStream(
             'something',
             $temp,
-            $options = array(
+            $config = new Config([
                 'visibility' => 'private',
                 'mimetype'   => 'text/plain',
                 'Expires'    => 'it does',
                 'streamsize' => 5,
-            )
+            ])
         );
 
-        $adapter->updateStream('something', $temp, $options);
+        $adapter->updateStream('something', $temp, $config);
         fclose($temp);
     }
 
@@ -325,7 +326,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $mock->shouldReceive('putObject')->once();
         $adapter = new Adapter($mock, 'bucketname');
-        $result = $adapter->createDir('something');
+        $result = $adapter->createDir('something', new Config);
         $this->assertArrayHasKey('path', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('something', $result['path']);
@@ -337,7 +338,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $mock->shouldReceive('putObject')->andReturn(false);
         $adapter = new Adapter($mock, 'bucketname');
-        $result = $adapter->createDir('something');
+        $result = $adapter->createDir('something', new Config);
         $this->assertFalse($result);
     }
 

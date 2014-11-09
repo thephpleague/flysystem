@@ -21,7 +21,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param  AdapterInterface  $adapter
      * @param  CacheInterface    $cache
-     * @param  null              $config
+     * @param  mixed             $config
      * @param  Emitter           $emitter
      */
     public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null, Emitter $emitter = null)
@@ -43,15 +43,11 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param  AdapterInterface  $adapter
      * @param  CacheInterface    $cache
-     * @param  null              $config
+     * @param  array             $config
      * @return FilesystemInterface
      */
     protected function prepareAdapter(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
-        if ($adapter instanceof FilesystemInterface) {
-            return $adapter;
-        }
-
         return new Filesystem($adapter, $cache, $config);
     }
 
@@ -60,11 +56,11 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param  string              $path     path to file
      * @param  string              $contents file contents
-     * @param  mixed               $config
+     * @param  array               $config
      * @throws FileExistsException
      * @return boolean             success boolean
      */
-    public function put($path, $contents, $config = null)
+    public function put($path, $contents, array $config = [])
     {
         return $this->delegateMethodCall('put', compact('path', 'contents', 'config'));
     }
@@ -74,10 +70,10 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed    $config
+     * @param   array    $config
      * @return  boolean   success boolean
      */
-    public function putStream($path, $resource, $config = null)
+    public function putStream($path, $resource, array $config = [])
     {
         return $this->delegateMethodCall('putStream', compact('path', 'resource', 'config'));
     }
@@ -86,11 +82,11 @@ class EventableFilesystem implements FilesystemInterface
      * Read and delete a file.
      *
      * @param   string  $path
-     * @param   mixed    $config
+     * @param   array    $config
      * @return  string  file contents
      * @throws  FileNotFoundException
      */
-    public function readAndDelete($path, $config = null)
+    public function readAndDelete($path, array $config = [])
     {
         return $this->delegateMethodCall('readAndDelete', compact('path', 'config'));
     }
@@ -104,7 +100,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @return array
      */
-    public function listFiles($directory = '', $recursive = false, $config = null)
+    public function listFiles($directory = '', $recursive = false, array $config = [])
     {
         return $this->delegateMethodCall('listFiles', compact('directory', 'recursive', 'config'));
     }
@@ -117,7 +113,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  array  paths
      */
-    public function listPaths($directory = '', $recursive = false, $config = null)
+    public function listPaths($directory = '', $recursive = false, array $config = [])
     {
         return $this->delegateMethodCall('listPaths', compact('directory', 'recursive', 'config'));
     }
@@ -131,7 +127,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  array            listing with metadata
      */
-    public function listWith(array $keys = [], $directory = '', $recursive = false, $config = null)
+    public function listWith(array $keys = [], $directory = '', $recursive = false, array $config = [])
     {
         return $this->delegateMethodCall('listWith', compact('keys', 'directory', 'recursive', 'config'));
     }
@@ -145,7 +141,7 @@ class EventableFilesystem implements FilesystemInterface
      * @throws  InvalidArgumentException
      * @return  array   metadata
      */
-    public function getWithMetadata($path, array $metadata, $config = null)
+    public function getWithMetadata($path, array $metadata, array $config = [])
     {
         return $this->delegateMethodCall('getWithMetadata', compact('path', 'metadata', 'config'));
     }
@@ -158,7 +154,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  Handler  file or directory handler
      */
-    public function get($path, Handler $handler = null, $config = null)
+    public function get($path, Handler $handler = null, array $config = [])
     {
         return $this->delegateMethodCall('get', compact('path', 'handler', 'config'));
     }
@@ -169,7 +165,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed  $config
      * @return  $this
      */
-    public function flushCache($config = null)
+    public function flushCache(array $config = [])
     {
         $this->delegateMethodCall('flushCache', compact('config'));
 
@@ -183,7 +179,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed            $config
      * @return  $this
      */
-    public function addPlugin(PluginInterface $plugin, $config = null)
+    public function addPlugin(PluginInterface $plugin, array $config = [])
     {
         $this->delegateMethodCall('addPlugin', compact('plugin', 'config'));
 
@@ -194,10 +190,10 @@ class EventableFilesystem implements FilesystemInterface
      * Check whether a file exists
      *
      * @param   string  $path
-     * @param   mixed   $config
+     * @param   array   $config
      * @return  bool
      */
-    public function has($path, $config = null)
+    public function has($path, array $config = [])
     {
         return $this->delegateMethodCall('has', compact('path', 'config'));
     }
@@ -206,10 +202,10 @@ class EventableFilesystem implements FilesystemInterface
      * Read a file
      *
      * @param   string  $path
-     * @param   mixed   $config
+     * @param   array   $config
      * @return  false|array
      */
-    public function read($path, $config = null)
+    public function read($path, array $config = [])
     {
         return $this->delegateMethodCall('read', compact('path', 'config'));
     }
@@ -218,10 +214,10 @@ class EventableFilesystem implements FilesystemInterface
      * Read a file as a stream
      *
      * @param   string  $path
-     * @param   mixed   $config
+     * @param   array   $config
      * @return  false|array
      */
-    public function readStream($path, $config = null)
+    public function readStream($path, $config = [])
     {
         return $this->delegateMethodCall('readStream', compact('path', 'config'));
     }
@@ -231,10 +227,10 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @param   string  $directory
      * @param   bool    $recursive
-     * @param   mixed   $config
+     * @param   array   $config
      * @return  false|array
      */
-    public function listContents($directory = '', $recursive = false, $config = null)
+    public function listContents($directory = '', $recursive = false, array $config = [])
     {
         return $this->delegateMethodCall('listContents', compact('directory', 'recursive', 'config'));
     }
@@ -246,7 +242,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  false|array
      */
-    public function getMetadata($path, $config = null)
+    public function getMetadata($path, array $config = [])
     {
         return $this->delegateMethodCall('getMetadata', compact('path', 'config'));
     }
@@ -258,7 +254,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  false|array
      */
-    public function getSize($path, $config = null)
+    public function getSize($path, array $config = [])
     {
         return $this->delegateMethodCall('getSize', compact('path', 'config'));
     }
@@ -270,7 +266,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  false|array
      */
-    public function getMimetype($path, $config = null)
+    public function getMimetype($path, array $config = [])
     {
         return $this->delegateMethodCall('getMimetype', compact('path', 'config'));
     }
@@ -282,7 +278,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  false|array
      */
-    public function getTimestamp($path, $config = null)
+    public function getTimestamp($path, array $config = [])
     {
         return $this->delegateMethodCall('getTimestamp', compact('path', 'config'));
     }
@@ -294,7 +290,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  false|array
      */
-    public function getVisibility($path, $config = null)
+    public function getVisibility($path, array $config = [])
     {
         return $this->delegateMethodCall('getVisibility', compact('path', 'config'));
     }
@@ -307,7 +303,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, array $config = [])
     {
         return $this->delegateMethodCall('write', compact('path', 'contents', 'config'));
     }
@@ -320,7 +316,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, array $config = [])
     {
         return $this->delegateMethodCall('update', compact('path', 'contents', 'config'));
     }
@@ -333,7 +329,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, array $config = [])
     {
         return $this->delegateMethodCall('writeStream', compact('path', 'resource', 'config'));
     }
@@ -346,7 +342,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, array $config = [])
     {
         return $this->delegateMethodCall('updateStream', compact('path', 'resource', 'config'));
     }
@@ -359,7 +355,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  boolean
      */
-    public function rename($path, $newpath, $config = null)
+    public function rename($path, $newpath, array $config = [])
     {
         return $this->delegateMethodCall('rename', compact('path', 'newpath', 'config'));
     }
@@ -372,7 +368,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  boolean
      */
-    public function copy($path, $newpath, $config = null)
+    public function copy($path, $newpath, array $config = [])
     {
         return $this->delegateMethodCall('copy', compact('path', 'newpath', 'config'));
     }
@@ -384,7 +380,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  boolean
      */
-    public function delete($path, $config = null)
+    public function delete($path, array $config = [])
     {
         return $this->delegateMethodCall('delete', compact('path', 'config'));
     }
@@ -396,7 +392,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed    $config
      * @return  boolean
      */
-    public function deleteDir($dirname, $config = null)
+    public function deleteDir($dirname, array $config = [])
     {
         return $this->delegateMethodCall('deleteDir', compact('dirname', 'config'));
     }
@@ -409,7 +405,7 @@ class EventableFilesystem implements FilesystemInterface
      *
      * @return  bool
      */
-    public function createDir($dirname, $config = null)
+    public function createDir($dirname, array $config = [])
     {
         return $this->delegateMethodCall('createDir', compact('dirname', 'config'));
     }
@@ -422,7 +418,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   mixed   $config
      * @return  file meta data
      */
-    public function setVisibility($path, $visibility, $config = null)
+    public function setVisibility($path, $visibility, array $config = [])
     {
         return $this->delegateMethodCall('setVisibility', compact('path', 'visibility', 'config'));
     }
@@ -461,7 +457,7 @@ class EventableFilesystem implements FilesystemInterface
      * @param   array   $arguments
      * @return  array   [continue, call result]
      */
-    protected function emitBefore($method, $arguments)
+    protected function emitBefore($method, array $arguments)
     {
         $event = new BeforeEvent($this->filesystem, $method, $arguments);
         $this->emit($event, $method);

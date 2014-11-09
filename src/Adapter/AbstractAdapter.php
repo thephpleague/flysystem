@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use LogicException;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -87,10 +88,10 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param   string  $path
      * @param   resource  $resource
-     * @param   mixed     $config
+     * @param   Config     $config
      * @return  mixed     false or file metadata
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         return $this->stream($path, $resource, $config, 'write');
     }
@@ -103,7 +104,7 @@ abstract class AbstractAdapter implements AdapterInterface
      * @param   mixed     $config   Config object or visibility setting
      * @return  mixed     false of file metadata
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         return $this->stream($path, $resource, $config, 'update');
     }
@@ -134,11 +135,11 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config
+     * @param   Config    $config
      * @param   string    $fallback
      * @return  mixed     fallback result
      */
-    protected function stream($path, $resource, $config, $fallback)
+    protected function stream($path, $resource, Config $config, $fallback)
     {
         $contents = stream_get_contents($resource);
 
@@ -146,10 +147,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Get the file visibility
-     *
-     * @param   string  $path
-     * @throws  LogicException
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
@@ -157,11 +155,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Set the file visibility
-     *
-     * @param   string  $path
-     * @param   string  $visibility
-     * @throws  LogicException
+     * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
@@ -169,30 +163,22 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Copy a file
-     *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  boolean
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
-        $data = $this->readStream($path);
+        $response = $this->readStream($path);
 
-        if (! is_resource($data['stream'])) {
+        if ($response === false || ! is_resource($response['stream'])) {
             return false;
         }
 
-        $result = $this->writeStream($newpath, $data['stream']);
+        $result = $this->writeStream($newpath, $response['stream'], new Config);
 
-        if (is_resource($data['stream'])) {
-            fclose($data['stream']);
+        if (is_resource($response['stream'])) {
+            fclose($response['stream']);
         }
 
-        if (! $result) {
-            return false;
-        }
-
-        return true;
+        return (boolean) $result;
     }
 }

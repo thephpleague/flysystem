@@ -59,7 +59,7 @@ class Copy extends AbstractAdapter
      * @param   mixed   $config
      * @return  array   file metadata
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $result = $this->client->uploadFromString($location, $contents);
@@ -70,12 +70,12 @@ class Copy extends AbstractAdapter
     /**
      * Write a file using a stream
      *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   mixed     $config
-     * @return  array     file metadata
+     * @param   string       $path
+     * @param   resource     $resource
+     * @param   mixed        $config
+     * @return  array|false  file metadata
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $result = $this->client->uploadFromStream($location, $resource);
@@ -91,7 +91,7 @@ class Copy extends AbstractAdapter
      * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $result = $this->client->uploadFromString($location, $contents);
@@ -107,7 +107,7 @@ class Copy extends AbstractAdapter
      * @param   mixed     $config   Config object or visibility setting
      * @return  array     file metadata
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $result = $this->client->uploadFromStream($location, $resource);
@@ -204,11 +204,11 @@ class Copy extends AbstractAdapter
      * Create a directory
      *
      * @param   string        $path directory name
-     * @param   array|Config  $options
+     * @param   Config  $config
      *
      * @return  bool
      */
-    public function createDir($path, $config = null)
+    public function createDir($path, Config $config)
     {
         $location = $this->applyPathPrefix($path);
 

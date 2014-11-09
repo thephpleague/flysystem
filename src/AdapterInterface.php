@@ -22,7 +22,17 @@ interface AdapterInterface extends ReadInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function write($path, $contents, $config = null);
+    public function write($path, $contents, Config $config);
+
+    /**
+     * Write a new file using a stream
+     *
+     * @param   string       $path
+     * @param   resource     $resource
+     * @param   Config       $config   Config object
+     * @return  false|array  false on failure file meta data on success
+     */
+    public function writeStream($path, $resource, Config $config);
 
     /**
      * Update a file
@@ -32,33 +42,23 @@ interface AdapterInterface extends ReadInterface
      * @param   mixed        $config   Config object or visibility setting
      * @return  false|array  false on failure file meta data on success
      */
-    public function update($path, $contents, $config = null);
-
-    /**
-     * Write a new file using a stream
-     *
-     * @param   string       $path
-     * @param   resource     $resource
-     * @param   mixed        $config   Config object or visibility setting
-     * @return  false|array  false on failure file meta data on success
-     */
-    public function writeStream($path, $resource, $config = null);
+    public function update($path, $contents, Config $config);
 
     /**
      * Update a file using a stream
      *
      * @param   string       $path
      * @param   resource     $resource
-     * @param   mixed        $config   Config object or visibility setting
+     * @param   Config        $config   Config object
      * @return  false|array  false on failure file meta data on success
      */
-    public function updateStream($path, $resource, $config = null);
+    public function updateStream($path, $resource, Config $config);
 
     /**
      * Rename a file
      *
      * @param   string  $path
-     * @param   string  $newpath
+     * @param   string  $newPath
      * @return  boolean
      */
     public function rename($path, $newpath);
@@ -96,7 +96,7 @@ interface AdapterInterface extends ReadInterface
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null);
+    public function createDir($dirname, Config $config);
 
     /**
      * Set the visibility for a file

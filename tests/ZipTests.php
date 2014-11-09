@@ -1,10 +1,13 @@
 <?php
 
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Adapter\Zip;
+use League\Flysystem\Config;
 
 class ZipTests extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @return Zip[]
+     */
     public function zipProvider()
     {
         return array(
@@ -21,7 +24,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider zipProvider
      */
-    public function testGetArchive($zip)
+    public function testGetArchive(Zip $zip)
     {
         $this->assertInstanceOf('ZipArchive', $zip->getArchive());
     }
@@ -29,16 +32,16 @@ class ZipTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider zipProvider
      */
-    public function testZip($zip)
+    public function testZip(Zip $zip)
     {
         $this->assertCount(0, $zip->listContents());
-        $this->assertInternalType('array', $zip->write('file.txt', 'contents'));
+        $this->assertInternalType('array', $zip->write('file.txt', 'contents', new Config));
         $this->assertCount(1, $zip->listContents());
-        $this->assertInternalType('array', $zip->write('nested/file.txt', 'contents'));
+        $this->assertInternalType('array', $zip->write('nested/file.txt', 'contents', new Config));
         $this->assertCount(3, $zip->listContents());
         $result = $zip->read('nested/file.txt');
         $this->assertEquals('contents', $result['contents']);
-        $zip->update('nested/file.txt', 'new contents');
+        $zip->update('nested/file.txt', 'new contents', new Config);
         $result = $zip->read('nested/file.txt');
         $this->assertEquals('new contents', $result['contents']);
         $result = $zip->readStream('nested/file.txt');
@@ -56,14 +59,14 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $stream = tmpfile();
         fwrite($stream, 'something');
         rewind($stream);
-        $zip->writeStream('streamed.txt', $stream);
+        $zip->writeStream('streamed.txt', $stream, new Config);
         fclose($stream);
         $this->assertInternalType('array', $zip->has('streamed.txt'));
 
         $stream = tmpfile();
         fwrite($stream, 'something');
         rewind($stream);
-        $zip->updateStream('streamed-other.txt', $stream);
+        $zip->updateStream('streamed-other.txt', $stream, new Config);
         fclose($stream);
         $this->assertInternalType('array', $zip->has('streamed-other.txt'));
     }
@@ -72,9 +75,9 @@ class ZipTests extends PHPUnit_Framework_TestCase
      * @dataProvider zipProvider
      * @expectedException  LogicException
      */
-    public function testWriteStreamFail($zip)
+    public function testWriteStreamFail(Zip $zip)
     {
-        $zip->writeStream('file.txt', tmpfile(), 'private');
+        $zip->writeStream('file.txt', tmpfile(), 'private', new Config);
     }
 
     /**
@@ -101,7 +104,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
      */
     public function testSetVisibilityWrite($zip)
     {
-        $zip->write('path', 'contents', 'public');
+        $zip->write('path', 'contents', new Config);
     }
 
     /**
@@ -134,7 +137,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('getStream')->andReturn(false);
         $zip = new Zip('location', $mock);
 
-        $this->assertFalse($zip->write('file', 'contents'));
+        $this->assertFalse($zip->write('file', 'contents', new Config));
         $this->assertFalse($zip->read('file'));
         $this->assertFalse($zip->getMimetype('file'));
         $this->assertFalse($zip->readStream('file'));

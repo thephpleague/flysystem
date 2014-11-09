@@ -55,7 +55,7 @@ class Rackspace extends AbstractAdapter
      * @param   mixed   $config
      * @return  array   file metadata
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $headers = [];
@@ -77,7 +77,7 @@ class Rackspace extends AbstractAdapter
      * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         $object = $this->getObject($path);
         $object->setContent($contents);
@@ -172,7 +172,7 @@ class Rackspace extends AbstractAdapter
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         return array('path' => $dirname);
     }
@@ -180,7 +180,7 @@ class Rackspace extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         return $this->write($path, $resource, $config);
     }
@@ -188,7 +188,7 @@ class Rackspace extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         return $this->update($path, $resource, $config);
     }

@@ -82,14 +82,13 @@ class Zip extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $dirname = Util::dirname($path);
-        $config = Util::ensureConfig($config);
 
         if (! empty($dirname) && ! $this->has($dirname)) {
-            $this->createDir($dirname);
+            $this->createDir($dirname, $config);
         }
 
         if (! $this->archive->addFromString($location, $contents)) {
@@ -108,7 +107,7 @@ class Zip extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         $this->delete($path);
 
@@ -163,12 +162,12 @@ class Zip extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
+     * @param   string  $dirname directory name
+     * @param   Config  $config
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         if (! $this->has($dirname)) {
             $location = $this->applyPathPrefix($dirname);

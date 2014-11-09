@@ -9,8 +9,14 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
+    /**
+     * @var int
+     */
     protected $transferMode = FTP_BINARY;
 
+    /**
+     * @var array
+     */
     protected $configurable = array(
         'host', 'port', 'username',
         'password', 'ssl', 'timeout',
@@ -65,6 +71,9 @@ class Ftp extends AbstractFtpAdapter
         return $this->root;
     }
 
+    /**
+     * Connect to the FTP server
+     */
     public function connect()
     {
         if ($this->ssl) {
@@ -82,6 +91,11 @@ class Ftp extends AbstractFtpAdapter
         $this->setConnectionRoot();
     }
 
+    /**
+     * Set the connections to passive mode
+     *
+     * @throws RuntimeException
+     */
     protected function setConnectionPassiveMode()
     {
         if (! ftp_pasv($this->getConnection(), $this->passive)) {
@@ -89,6 +103,9 @@ class Ftp extends AbstractFtpAdapter
         }
     }
 
+    /**
+     * Set the connection root
+     */
     protected function setConnectionRoot()
     {
         $connection = $this->getConnection();
@@ -104,6 +121,11 @@ class Ftp extends AbstractFtpAdapter
         $this->root = ftp_pwd($connection);
     }
 
+    /**
+     * Login
+     *
+     * @throws RuntimeException
+     */
     protected function login()
     {
         set_error_handler(function () {});
@@ -116,6 +138,9 @@ class Ftp extends AbstractFtpAdapter
         }
     }
 
+    /**
+     * Disconnect from the FTP server
+     */
     public function disconnect()
     {
         if ($this->connection) {
@@ -125,7 +150,7 @@ class Ftp extends AbstractFtpAdapter
         $this->connection = null;
     }
 
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $mimetype = Util::guessMimeType($path, $contents);
         $config = Util::ensureConfig($config);
@@ -146,7 +171,7 @@ class Ftp extends AbstractFtpAdapter
         return compact('path', 'contents', 'mimetype', 'visibility');
     }
 
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         $this->ensureDirectory(Util::dirname($path));
         $config = Util::ensureConfig($config);
@@ -162,33 +187,41 @@ class Ftp extends AbstractFtpAdapter
         return compact('path', 'visibility');
     }
 
-    public function update($path, $contents, $config = null)
+    /**
+     * {@inheritdoc}
+     */
+    public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
 
-    public function updateStream($path, $resource, $config = null)
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream($path, $resource, Config $config)
     {
         return $this->writeStream($path, $resource, $config);
     }
 
-
+    /**
+     * {@inheritdoc}
+     */
     public function rename($path, $newpath)
     {
         return ftp_rename($this->getConnection(), $path, $newpath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path)
     {
         return ftp_delete($this->getConnection(), $path);
     }
 
     /**
-     * Removes a directory
-     *
-     * @param   string       $dirname directory name
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function deleteDir($dirname)
     {
@@ -209,14 +242,9 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         $result = false;
         $connection = $this->getConnection();
@@ -241,6 +269,13 @@ class Ftp extends AbstractFtpAdapter
         return array('path' => $dirname);
     }
 
+    /**
+     * Create a directory
+     *
+     * @param string $directory
+     * @param resource $connection
+     * @return boolean
+     */
     protected function createActualDirectory($directory, $connection)
     {
         // List the current directory
@@ -254,9 +289,12 @@ class Ftp extends AbstractFtpAdapter
             return true;
         }
 
-        return ftp_mkdir($connection, $directory);
+        return (boolean) ftp_mkdir($connection, $directory);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($path)
     {
         if (empty($path) ||  ! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path)) || count($object) < 3) {
@@ -266,6 +304,9 @@ class Ftp extends AbstractFtpAdapter
         return $this->normalizeObject($object[1], '');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMimetype($path)
     {
         if (! $metadata = $this->read($path)) {
@@ -277,6 +318,9 @@ class Ftp extends AbstractFtpAdapter
         return $metadata;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($path)
     {
         if (! $object = $this->readStream($path)) {
@@ -290,6 +334,9 @@ class Ftp extends AbstractFtpAdapter
         return $object;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function readStream($path)
     {
         $stream = fopen('php://temp', 'w+');
@@ -305,6 +352,9 @@ class Ftp extends AbstractFtpAdapter
         return compact('stream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setVisibility($path, $visibility)
     {
         $mode = $visibility === AdapterInterface::VISIBILITY_PUBLIC ? $this->getPermPublic() : $this->getPermPrivate();
@@ -316,6 +366,9 @@ class Ftp extends AbstractFtpAdapter
         return compact('visibility');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function listDirectoryContents($directory, $recursive = true)
     {
         $listing = ftp_rawlist($this->getConnection(), '-lna ' . $directory, $recursive);

@@ -128,7 +128,7 @@ class Sftp extends AbstractFtpAdapter
         $this->connection = null;
     }
 
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $connection = $this->getConnection();
         $this->ensureDirectory(Util::dirname($path));
@@ -156,7 +156,7 @@ class Sftp extends AbstractFtpAdapter
         return compact('contents');
     }
 
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
@@ -227,7 +227,7 @@ class Sftp extends AbstractFtpAdapter
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         $connection = $this->getConnection();
 

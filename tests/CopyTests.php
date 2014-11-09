@@ -1,6 +1,8 @@
 <?php
 
+use Barracuda\Copy\API;
 use League\Flysystem\Adapter\Copy;
+use League\Flysystem\Config;
 
 class CopyFile
 {
@@ -49,12 +51,12 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $contents = 'contents';
 
         $mock->shouldReceive('uploadFromString')->andReturn(
-            (object)array(
+            (object) array(
                 'type' => 'file',
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
         ), false);
-        $result = $adapter->write('something', $contents);
+        $result = $adapter->write('something', $contents, new Config);
 
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
@@ -84,9 +86,8 @@ class CopyTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  copyProvider
      */
-    public function testWriteStream($adapter, $mock)
+    public function testWriteStream(Copy $adapter, API $mock)
     {
-        $contents = 'contents';
         $mock->shouldReceive('uploadFromStream')->andReturn(
             (object)array(
                 'type' => 'file',
@@ -104,8 +105,8 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
 
-        $fh = fopen($filepath, 'r');
-        $this->assertFalse($adapter->writeStream('something', $fh));
+        $fh = fopen($filepath, 'r');        
+        $this->assertFalse($adapter->writeStream('something', $fh, new Config));
     }
 
      /**
@@ -127,7 +128,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
         file_put_contents($filepath, 'copy==');
         $fh = fopen($filepath, 'r');
 
-        $result = $adapter->updateStream('something', $fh);
+        $result = $adapter->updateStream('something', $fh, new Config);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
@@ -220,7 +221,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $this->assertInternalType('array', $adapter->createDir('something'));
+        $this->assertInternalType('array', $adapter->createDir('something', new Config));
     }
 
     /**
@@ -264,7 +265,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider  copyProvider
      */
-    public function testCopy($adapter, $mock)
+    public function testCopy(Copy $adapter, $mock)
     {
         $mock->shouldReceive('copy')->andReturn((object)array('type' => 'file', 'path' => 'something'));
         $this->assertInternalType('array', $adapter->copy('something', 'something'));

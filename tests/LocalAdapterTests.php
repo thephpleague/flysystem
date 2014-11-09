@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
+
 function fopen($result)
 {
     if (substr($result, -5) === 'false') {
@@ -35,6 +37,9 @@ function fclose($result)
 
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Local
+     */
     protected $adapter;
     protected $root;
 
@@ -64,7 +69,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testReadStream()
     {
         $adapter = $this->adapter;
-        $adapter->write('file.txt', 'contents');
+        $adapter->write('file.txt', 'contents', new Config);
         $result = $adapter->readStream('file.txt');
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('stream', $result);
@@ -79,7 +84,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $temp = tmpfile();
         fwrite($temp, 'dummy');
         rewind($temp);
-        $adapter->writeStream('dir/file.txt', $temp, 'public');
+        $adapter->writeStream('dir/file.txt', $temp, new Config);
         fclose($temp);
         $this->assertTrue($adapter->has('dir/file.txt'));
         $result = $adapter->read('dir/file.txt');
@@ -96,10 +101,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testUpdateStream()
     {
         $adapter = $this->adapter;
-        $adapter->write('file.txt', 'initial');
+        $adapter->write('file.txt', 'initial', new Config);
         $temp = tmpfile();
         fwrite($temp, 'dummy');
-        $adapter->updateStream('file.txt', $temp);
+        $adapter->updateStream('file.txt', $temp, new Config);
         fclose($temp);
         $this->assertTrue($adapter->has('file.txt'));
         $adapter->delete('file.txt');
@@ -107,7 +112,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testCreateZeroDir()
     {
-        $this->adapter->createDir('0');
+        $this->adapter->createDir('0', new Config);
         $this->assertTrue(is_dir($this->adapter->applyPathPrefix('0')));
         $this->adapter->deleteDir('0');
     }
@@ -115,7 +120,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testCopy()
     {
         $adapter = $this->adapter;
-        $adapter->write('file.ext', 'content');
+        $adapter->write('file.ext', 'content', new Config);
         $this->assertTrue($adapter->copy('file.ext', 'new.ext'));
         $this->assertTrue($adapter->has('new.ext'));
         $adapter->delete('file.ext');
@@ -124,8 +129,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testFailingStreamCalls()
     {
-        $this->assertFalse($this->adapter->writeStream('false', tmpfile()));
-        $this->assertFalse($this->adapter->writeStream('dummy', tmpfile()));
+        $this->assertFalse($this->adapter->writeStream('false', tmpfile(), new Config));
+        $this->assertFalse($this->adapter->writeStream('dummy', tmpfile(), new Config));
     }
 
     public function testNullPrefix()
@@ -143,7 +148,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testRenameToNonExistsingDirectory()
     {
-        $this->adapter->write('file.txt', 'contents');
+        $this->adapter->write('file.txt', 'contents', new Config);
         $dirname = uniqid();
         $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));

@@ -130,7 +130,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @return  array   file metadata
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $options = $this->getOptions(
             $path,
@@ -139,7 +139,7 @@ class AwsS3 extends AbstractAdapter
                 'ContentType'   => Util::guessMimeType($path, $contents),
                 'ContentLength' => Util::contentSize($contents),
             ),
-            $config = Util::ensureConfig($config)
+            $config
         );
 
         return $this->writeObject($options);
@@ -154,9 +154,8 @@ class AwsS3 extends AbstractAdapter
      *
      * @return  array     file metadata
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
-        $config  = Util::ensureConfig($config);
         $options = array('Body' => $resource);
         $options['ContentLength'] = Util::getStreamSize($resource);
         $options = $this->getOptions($path, $options, $config);
@@ -200,7 +199,7 @@ class AwsS3 extends AbstractAdapter
      * @param   mixed   $config   Config object or visibility setting
      * @return  array   file metadata
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
@@ -210,10 +209,10 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config   Config object or visibility setting
+     * @param   Config    $config   Config object
      * @return  array     file metadata
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         return $this->writeStream($path, $resource, $config);
     }
@@ -335,14 +334,14 @@ class AwsS3 extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string        $path directory name
-     * @param   array|Config  $options
+     * @param   string  $path directory name
+     * @param   Config  $config
      *
      * @return  bool
      */
-    public function createDir($path, $options = null)
+    public function createDir($path, Config $config)
     {
-        $result = $this->write(rtrim($path, '/') . '/', '', $options);
+        $result = $this->write(rtrim($path, '/') . '/', '', $config);
 
         if (! $result) {
             return false;

@@ -69,10 +69,9 @@ class WebDav extends AbstractAdapter
         }
     }
 
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
-        $config = Util::ensureConfig($config);
         $this->client->request('PUT', $location, $contents);
 
         $result = compact('path', 'contents');
@@ -84,7 +83,7 @@ class WebDav extends AbstractAdapter
         return $result;
     }
 
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
@@ -124,12 +123,12 @@ class WebDav extends AbstractAdapter
     /**
      * Create a directory
      *
-     * @param   string       $path directory name
-     * @param   array|Config $options
+     * @param   string $path directory name
+     * @param   Config $config
      *
      * @return  bool
      */
-    public function createDir($path, $options = null)
+    public function createDir($path, Config $config)
     {
         $location = $this->applyPathPrefix($path);
         $response = $this->client->request('MKCOL', $location);

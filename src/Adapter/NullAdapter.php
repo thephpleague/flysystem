@@ -26,7 +26,7 @@ class NullAdapter extends AbstractAdapter
      * @param null $config
      * @return array|bool
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         $type = 'file';
         $config = Util::ensureConfig($config);
@@ -47,7 +47,7 @@ class NullAdapter extends AbstractAdapter
      * @param   mixed        $config   Config object or visibility setting
      * @return  array|bool
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         return false;
     }
@@ -174,7 +174,7 @@ class NullAdapter extends AbstractAdapter
      *
      * @return  bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
         return array('path' => $dirname, 'type' => 'dir');
     }

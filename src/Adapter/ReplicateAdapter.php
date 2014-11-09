@@ -58,7 +58,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @return  false|array  false on failure file meta data on success
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         if (! $this->source->write($path, $contents, $config)) {
             return false;
@@ -76,7 +76,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @return  false|array  false on failure file meta data on success
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         if (! $this->source->writeStream($path, $resource, $config)) {
             return false;
@@ -94,7 +94,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @return  false|array  false on failure file meta data on success
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         if (! $this->source->update($path, $contents, $config)) {
             return false;
@@ -116,7 +116,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @return  false|array  false on failure file meta data on success
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         if (! $this->source->updateStream($path, $resource, $config)) {
             return false;
@@ -201,18 +201,18 @@ class ReplicateAdapter implements AdapterInterface
     /**
      * Create a directory on the source and replica
      *
-     * @param   string       $dirname directory name
-     * @param   array|Config $options
+     * @param string $dirname directory name
+     * @param Config $config
      *
-     * @return  bool
+     * @return bool
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, Config $config)
     {
-        if (! $this->source->createDir($dirname, $options)) {
+        if (! $this->source->createDir($dirname, $config)) {
             return false;
         }
 
-        return $this->replica->createDir($dirname, $options);
+        return $this->replica->createDir($dirname, $config);
     }
 
     /**

@@ -73,10 +73,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Check whether a path exists
-     *
-     * @param  string  $path path to check
-     * @return boolean whether the path exists
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -103,20 +100,13 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Write a file
-     *
-     * @param  string              $path     path to file
-     * @param  string              $contents file contents
-     * @param  mixed               $config
-     * @throws FileExistsException
-     * @return boolean             success boolean
+     * {@inheritdoc}
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, array $config = [])
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
-        $config = Util::ensureConfig($config);
-        $config->setFallback($this->getConfig());
+        $config = $this->prepareConfig($config);
 
         if (! $object = $this->adapter->write($path, $contents, $config)) {
             return false;
@@ -128,20 +118,13 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Write a file using a stream
-     *
-     * @param  string              $path     path to file
-     * @param  resource            $resource file contents
-     * @param  mixed               $config
-     * @throws FileExistsException
-     * @return boolean             success boolean
+     * {@inheritdoc}
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, array $config = [])
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
-        $config = Util::ensureConfig($config);
-        $config->setFallback($this->getConfig());
+        $config = $this->prepareConfig($config);
 
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
@@ -167,7 +150,7 @@ class Filesystem implements FilesystemInterface
      * @throws FileExistsException
      * @return boolean             success boolean
      */
-    public function put($path, $contents, $config = null)
+    public function put($path, $contents, array $config = [])
     {
         $path = Util::normalizePath($path);
 
@@ -186,7 +169,7 @@ class Filesystem implements FilesystemInterface
      * @param   mixed     $config
      * @return  boolean   success boolean
      */
-    public function putStream($path, $resource, $config = null)
+    public function putStream($path, $resource, array $config = [])
     {
         $path = Util::normalizePath($path);
 
@@ -228,9 +211,11 @@ class Filesystem implements FilesystemInterface
      * @throws FileNotFoundException
      * @return boolean               success boolean
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, array $config = [])
     {
         $path = Util::normalizePath($path);
+        $this->prepareConfig($config);
+
         $this->assertPresent($path);
         $object = $this->adapter->update($path, $contents, $config);
 
@@ -252,7 +237,7 @@ class Filesystem implements FilesystemInterface
      * @return  bool      success boolean
      * @throws  InvalidArgumentException
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, array $config = [])
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
@@ -416,14 +401,9 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string        $dirname directory name
-     * @param   array|Config  $options
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
-    public function createDir($dirname, $options = null)
+    public function createDir($dirname, array $config = [])
     {
         $dirname = Util::normalizePath($dirname);
         $result  = $this->adapter->createDir($dirname, $options);
@@ -485,6 +465,8 @@ class Filesystem implements FilesystemInterface
     /**
      * List all paths
      *
+     * @param string $directory
+     * @param bool   $recursive
      * @return  array  paths
      */
     public function listPaths($directory = '', $recursive = false)
@@ -502,7 +484,7 @@ class Filesystem implements FilesystemInterface
     /**
      * List contents with metadata
      *
-     * @param   array   $key  metadata key
+     * @param   array   $keys
      * @param   string  $directory
      * @param   bool    $recursive
      * @return  array   listing with metadata
@@ -725,6 +707,20 @@ class Filesystem implements FilesystemInterface
         $this->cache->flush();
 
         return $this;
+    }
+
+    /**
+     * Convert a config array to a Config object with the correct fallback
+     *
+     * @param array $config
+     * @return array|Config
+     */
+    protected function prepareConfig(array $config)
+    {
+        $config = new Config($config);
+        $config->setFallback($this->config);
+
+        return $config;
     }
 
     /**
