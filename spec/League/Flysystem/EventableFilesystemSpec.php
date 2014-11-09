@@ -17,6 +17,5 @@ class EventableFilesystemSpec extends ObjectBehavior
     {
         $this->shouldHaveType('League\Flysystem\EventableFilesystem');
         $this->shouldHaveType('League\Flysystem\FilesystemInterface');
-        $this->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 }

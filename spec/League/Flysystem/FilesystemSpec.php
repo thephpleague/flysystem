@@ -26,8 +26,6 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->shouldHaveType('League\Flysystem\Filesystem');
         $this->shouldHaveType('League\Flysystem\FilesystemInterface');
-        $this->shouldHaveType('League\Flysystem\ReadInterface');
-        $this->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 
     public function it_should_expose_an_adapter()
