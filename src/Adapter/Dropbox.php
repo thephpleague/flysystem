@@ -170,12 +170,12 @@ class Dropbox extends AbstractAdapter
         $newpath = $this->applyPathPrefix($newpath);
 
         try {
-            $result = $this->client->move($path, $newpath);
+            $this->client->move($path, $newpath);
         } catch (Exception $e) {
             return false;
         }
 
-        return $this->normalizeResponse($result);
+        return true;
     }
 
     public function copy($path, $newpath)
@@ -184,12 +184,12 @@ class Dropbox extends AbstractAdapter
         $newpath = $this->applyPathPrefix($newpath);
 
         try {
-            $result = $this->client->copy($path, $newpath);
+            $this->client->copy($path, $newpath);
         } catch (Exception $e) {
             return false;
         }
 
-        return $this->normalizeResponse($result);
+        return true;
     }
 
     public function delete($path)
