@@ -253,7 +253,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
     public function testRename($adapter, $mock)
     {
         $mock->shouldReceive('rename')->andReturn((object)array('type' => 'file', 'path' => 'something'), false);
-        $this->assertInternalType('array', $adapter->rename('something', 'something'));
+        $this->assertTrue($adapter->rename('something', 'something'));
         $this->assertFalse($adapter->rename('something', 'something'));
     }
 
@@ -263,6 +263,6 @@ class CopyTests extends PHPUnit_Framework_TestCase
     public function testCopy(Copy $adapter, $mock)
     {
         $mock->shouldReceive('copy')->andReturn((object)array('type' => 'file', 'path' => 'something'));
-        $this->assertInternalType('array', $adapter->copy('something', 'something'));
+        $this->assertTrue($adapter->copy('something', 'something'));
     }
 }

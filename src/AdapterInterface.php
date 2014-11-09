@@ -103,7 +103,7 @@ interface AdapterInterface extends ReadInterface
      *
      * @param   string  $path
      * @param   string  $visibility
-     * @return  array   file meta data
+     * @return  array|false   file meta data
      */
     public function setVisibility($path, $visibility);
 }

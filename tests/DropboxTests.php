@@ -199,7 +199,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     public function testRename($adapter, $mock)
     {
         $mock->shouldReceive('move')->andReturn(array('is_dir' => false, 'path' => 'something'));
-        $this->assertInternalType('array', $adapter->rename('something', 'something'));
+        $this->assertTrue($adapter->rename('something', 'something'));
     }
 
     /**
@@ -220,7 +220,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
     public function testCopy($adapter, $mock)
     {
         $mock->shouldReceive('copy')->andReturn(array('is_dir' => false, 'path' => 'something'));
-        $this->assertInternalType('array', $adapter->copy('something', 'something'));
+        $this->assertTrue($adapter->copy('something', 'something'));
     }
 
     /**

@@ -153,11 +153,11 @@ class Copy extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $destination = $this->applyPathPrefix($newpath);
 
-        if (! $result = $this->client->rename($location, $destination)) {
+        if (! $this->client->rename($location, $destination)) {
             return false;
         }
 
-        return $this->normalizeObject($result, $newpath);
+        return true;
     }
 
     /**
@@ -169,9 +169,13 @@ class Copy extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
-        $result = $this->client->copy($path, $newpath);
+        try {
+            $this->client->copy($path, $newpath);
+        } catch (\Exception $e) {
+            return false;
+        }
 
-        return $this->normalizeObject($result, $newpath);
+        return true;
     }
 
     /**
