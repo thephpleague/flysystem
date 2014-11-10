@@ -25,7 +25,7 @@
 ### Fixed
 
 * [AwsS3] Contents supplied during AwsS3::write is now cached like all the other adapters. (Very minor chance of this happening)
-* [AwsS#] Detached stream from guzzle response to prevent it from closing on EntityBody destruction.
+* [AwsS] Detached stream from guzzle response to prevent it from closing on EntityBody destruction.
 * [Util] Paths with directory names or file names with double dots are now allowed.
 * [Cache:Noop] Added missing readStream method.
 
