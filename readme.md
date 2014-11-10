@@ -12,13 +12,6 @@
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
-# Support Flysystem
-
-Do you use Flysystem often? Supporting it through Gittip will help freeing up extra time for me to work on
-bugs, new features and documentation.
-
-[![Support with Gittip](http://img.shields.io/gittip/FrenkyNet.svg)](https://www.gittip.com/FrenkyNet/)
-
 # Goals
 
 * Have a generic API for handling common tasks across multiple file storage engines.
