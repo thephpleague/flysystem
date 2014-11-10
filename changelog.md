@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 - UNRELEASED
+
+### Fixed
+
+* [FilesystemInterface] This interface is now no longer related to the AdapterInterface and now correctly specifies return type.
+* [AdapterInterface] The adapter interface now consistently specifies return type.
+
 ## 0.5.12 - 2014-11-05
 
 ### Fixed
