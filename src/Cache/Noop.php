@@ -144,7 +144,7 @@ class Noop extends AbstractCache
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return false;
+        return [];
     }
 
     /**

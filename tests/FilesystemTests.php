@@ -458,7 +458,7 @@ namespace League\Flysystem
             $this->assertFalse($cache->getSize('something'));
             $this->assertFalse($cache->getTimestamp('something'));
             $this->assertFalse($cache->getVisibility('something'));
-            $this->assertFalse($cache->listContents('', false));
+            $this->assertEmpty($cache->listContents('', false));
             $this->assertFalse($cache->rename('', ''));
             $this->assertFalse($cache->copy('', ''));
             $this->assertNull($cache->save());
