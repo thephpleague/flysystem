@@ -229,7 +229,7 @@ class Copy extends AbstractAdapter
         $location = $this->applyPathPrefix($dirname);
 
         if (! $result = $this->client->listPath($location)) {
-            return false;
+            return [];
         }
 
         foreach ($result as $object) {
