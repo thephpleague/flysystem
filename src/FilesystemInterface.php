@@ -54,7 +54,7 @@ interface FilesystemInterface
     public function getSize($path);
 
     /**
-     * Get the mimetype of a file
+     * Get the mime-type of a file
      *
      * @param   string  $path
      * @return  false|string

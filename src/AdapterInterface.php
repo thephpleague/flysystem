@@ -94,7 +94,7 @@ interface AdapterInterface extends ReadInterface
      * @param   string  $dirname directory name
      * @param   Config  $config
      *
-     * @return  bool|array
+     * @return  array|false
      */
     public function createDir($dirname, Config $config);
 

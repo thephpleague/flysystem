@@ -19,15 +19,15 @@ class Dropbox extends AbstractAdapter
     );
 
     /**
-     * @var  \Dropbox\Client  $client
+     * @var  Client  $client
      */
     protected $client;
 
     /**
      * Constructor
      *
-     * @param  \Dropbox\Client  $client
-     * @param  string           $prefix
+     * @param  Client  $client
+     * @param  string  $prefix
      */
     public function __construct(Client $client, $prefix = null)
     {
@@ -77,7 +77,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   Config  $config   Config object or visibility setting
+     * @param   Config  $config   Config object
      * @return  array   file metadata
      */
     public function update($path, $contents, Config $config)
@@ -90,7 +90,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config   Config object or visibility setting
+     * @param   Config    $config   Config object
      * @return  array     file metadata
      */
     public function updateStream($path, $resource, Config $config)
@@ -136,6 +136,9 @@ class Dropbox extends AbstractAdapter
         return $this->normalizeResponse($result, $path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($path)
     {
         if (! $object = $this->readStream($path)) {
@@ -149,6 +152,9 @@ class Dropbox extends AbstractAdapter
         return $object;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function readStream($path)
     {
         $stream = fopen('php://temp', 'w+');
@@ -164,6 +170,9 @@ class Dropbox extends AbstractAdapter
         return compact('stream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rename($path, $newpath)
     {
         $path = $this->applyPathPrefix($path);
@@ -178,6 +187,9 @@ class Dropbox extends AbstractAdapter
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function copy($path, $newpath)
     {
         $path = $this->applyPathPrefix($path);
@@ -192,6 +204,9 @@ class Dropbox extends AbstractAdapter
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path)
     {
         $location = $this->applyPathPrefix($path);
@@ -199,6 +214,9 @@ class Dropbox extends AbstractAdapter
         return $this->client->delete($location);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteDir($path)
     {
         return $this->delete($path);
@@ -294,20 +312,20 @@ class Dropbox extends AbstractAdapter
     /**
      * Normalize a Dropbox response
      *
-     * @param      $object
-     * @param string|null $path
+     * @param      $response
+     * @param  string $path
      * @return array
      */
-    protected function normalizeResponse($object, $path = null)
+    protected function normalizeResponse(array $response, $path = null)
     {
-        $result = array('path' => trim($path ?: $object['path'], '/'));
+        $result = array('path' => trim($path ?: $response['path'], '/'));
 
-        if (isset($object['modified'])) {
-            $result['timestamp'] = strtotime($object['modified']);
+        if (isset($response['modified'])) {
+            $result['timestamp'] = strtotime($response['modified']);
         }
 
-        $result = array_merge($result, Util::map($object, static::$resultMap));
-        $result['type'] = $object['is_dir'] ? 'dir' : 'file';
+        $result = array_merge($result, Util::map($response, static::$resultMap));
+        $result['type'] = $response['is_dir'] ? 'dir' : 'file';
 
         return $result;
     }

@@ -510,6 +510,10 @@ class Filesystem implements FilesystemInterface
     {
         $object = $this->getMetadata($path);
 
+        if (! $object) {
+            return false;
+        }
+
         foreach ($metadata as $key) {
             if (! method_exists($this, $method = 'get'.ucfirst($key))) {
                 throw new InvalidArgumentException('Could not fetch metadata: '.$key);
@@ -522,12 +526,12 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's mimetype
+     * Get a file's mime-type
      *
      * @param  string                $path path to file
      * @throws FileNotFoundException
-     * @return string|false file mimetype or FALSE when fails
-     *                      to fetch mimetype from existing file
+     * @return string|false file mime-type or FALSE when fails
+     *                      to fetch mime-type from existing file
      */
     public function getMimetype($path)
     {
