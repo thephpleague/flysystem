@@ -8,7 +8,7 @@ interface ReadInterface
      * Check whether a file exists
      *
      * @param   string  $path
-     * @return  bool
+     * @return  array|boolean
      */
     public function has($path);
 

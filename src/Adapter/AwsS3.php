@@ -234,8 +234,10 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * Read an object from the S3Client
+     *
      * @param string $path
+     * @return array
      */
     protected function readObject($path)
     {
@@ -367,8 +369,10 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * The the ACL visibility
+     *
      * @param string $path
+     * @return string
      */
     protected function getObjectACL($path)
     {
@@ -560,7 +564,7 @@ class AwsS3 extends AbstractAdapter
      * Set the S3 UploadBuilder
      *
      * @param   UploadBuilder $uploadBuilder
-     * @return  self
+     * @return  $this
      */
     public function setUploadBuilder(UploadBuilder $uploadBuilder = null)
     {

@@ -29,10 +29,10 @@ class Copy extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  \Barracuda\Copy\API   $client
+     * @param  API   $client
      * @param  string                $prefix
      */
-    public function __construct(\Barracuda\Copy\API $client, $prefix = null)
+    public function __construct(API $client, $prefix = null)
     {
         $this->client = $client;
         $this->setPathPrefix($prefix);
@@ -42,7 +42,7 @@ class Copy extends AbstractAdapter
      * Check weather a file exists
      *
      * @param   string       $path
-     * @return  false|array  false or file metadata
+     * @return  array|false  false or file metadata
      */
     public function has($path)
     {
@@ -57,7 +57,7 @@ class Copy extends AbstractAdapter
      * @param   string  $path
      * @param   string  $contents
      * @param   Config   $config
-     * @return  array   file metadata
+     * @return  array|false   file metadata
      */
     public function write($path, $contents, Config $config)
     {
@@ -89,7 +89,7 @@ class Copy extends AbstractAdapter
      * @param   string  $path
      * @param   string  $contents
      * @param   Config   $config   Config object or visibility setting
-     * @return  array   file metadata
+     * @return  array|false   file metadata
      */
     public function update($path, $contents, Config $config)
     {
@@ -105,7 +105,7 @@ class Copy extends AbstractAdapter
      * @param   string    $path
      * @param   resource  $resource
      * @param   Config     $config   Config object or visibility setting
-     * @return  array     file metadata
+     * @return  array|false     file metadata
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -119,7 +119,7 @@ class Copy extends AbstractAdapter
      * Read a file
      *
      * @param   string  $path
-     * @return  array   contains key of contents that has binary data
+     * @return  array|false   contains key of contents that has binary data
      */
     public function read($path)
     {
@@ -132,7 +132,7 @@ class Copy extends AbstractAdapter
      * Get a read-stream for a file
      *
      * @param   string  $path
-     * @return  array   contains key of stream that has resource
+     * @return  array|false   contains key of stream that has resource
      */
     public function readStream($path)
     {
@@ -309,7 +309,7 @@ class Copy extends AbstractAdapter
      *
      * @param   stdClass   $object
      * @param   string     $path
-     * @return  array      file metadata
+     * @return  array|false      file metadata
      */
     protected function normalizeObject($object, $path)
     {
