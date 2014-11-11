@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -9,6 +10,8 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
+    use StreamedCopyTrait;
+
     /**
      * @var int
      */

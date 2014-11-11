@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -12,6 +13,7 @@ use LogicException;
 class WebDav extends AbstractAdapter
 {
     use StreamedTrait;
+    use StreamedCopyTrait;
 
     protected static $resultMap = array(
         '{DAV:}getcontentlength' => 'size',

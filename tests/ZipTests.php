@@ -142,4 +142,29 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($zip->getMimetype('file'));
         $this->assertFalse($zip->readStream('file'));
     }
+
+    public function testCopy()
+    {
+        $resource = fopen(__DIR__ . '/../changelog.md', 'r+');
+        $mock = Mockery::mock('ZipArchive');
+        $mock->shouldReceive('open')->andReturn(true);
+        $mock->shouldReceive('close')->andReturn(true);
+        $mock->shouldReceive('addFromString')->andReturn(true);
+        $mock->shouldReceive('getStream')->andReturn($resource);
+        $zip = new Zip('location', $mock);
+        $this->assertTrue($zip->copy('old', 'new'));
+
+        // Ensure the resource is closed internally
+        $this->assertFalse(is_resource($resource));
+    }
+
+    public function testCopyFailed()
+    {
+        $mock = Mockery::mock('ZipArchive');
+        $mock->shouldReceive('open')->andReturn(true);
+        $mock->shouldReceive('close')->andReturn(true);
+        $mock->shouldReceive('getStream')->andReturn(false);
+        $zip = new Zip('location', $mock);
+        $this->assertFalse($zip->copy('old', 'new'));
+    }
 }

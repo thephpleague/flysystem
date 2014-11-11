@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -9,6 +10,7 @@ use League\Flysystem\Util;
 class NullAdapter extends AbstractAdapter
 {
     use StreamedTrait;
+    use StreamedCopyTrait;
 
     /**
      * Check whether a file is present

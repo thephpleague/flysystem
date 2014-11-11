@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedWritingTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -11,6 +12,7 @@ use ZipArchive;
 class Zip extends AbstractAdapter
 {
     use StreamedWritingTrait;
+    use StreamedCopyTrait;
 
     /**
      * @var array

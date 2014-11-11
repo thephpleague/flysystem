@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use Net_SFTP;
@@ -14,6 +15,7 @@ use InvalidArgumentException;
 class Sftp extends AbstractFtpAdapter
 {
     use StreamedTrait;
+    use StreamedCopyTrait;
 
     protected $port = 22;
     protected $privatekey;

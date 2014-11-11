@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 use OpenCloud\ObjectStore\Resource\Container;
@@ -11,6 +12,8 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 
 class Rackspace extends AbstractAdapter
 {
+    use StreamedCopyTrait;
+
     /**
      * @var  Container  $container
      */

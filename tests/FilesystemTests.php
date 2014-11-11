@@ -36,16 +36,6 @@ namespace League\Flysystem
             $instance = new Filesystem($adapter = new Adapter\Local(__DIR__ . '/files/deeper'), $cache = new Cache\Memory);
         }
 
-        public function testAbstractAdapterCopy()
-        {
-            $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[readStream,writeStream]');
-            $mock->shouldReceive('readStream')->andReturn(false, ['stream' => tmpfile()], ['stream' => tmpfile()]);
-            $mock->shouldReceive('writeStream')->andReturn(false, true);
-            $this->assertFalse($mock->copy('something', 'other'));
-            $this->assertFalse($mock->copy('something', 'other'));
-            $this->assertTrue($mock->copy('something', 'other'));
-        }
-
         public function filesystemProvider()
         {
             $adapter = new Adapter\Local(__DIR__ . '/files');
