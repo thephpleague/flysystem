@@ -52,12 +52,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Write a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config   $config
-     * @return  array|false   file metadata
+     * {@inheritdoc}
      */
     public function write($path, $contents, Config $config)
     {
@@ -68,12 +63,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Write a file using a stream
-     *
-     * @param   string       $path
-     * @param   resource     $resource
-     * @param   Config        $config
-     * @return  array|false  file metadata
+     * {@inheritdoc}
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -84,12 +74,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Update a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config   $config   Config object or visibility setting
-     * @return  array|false   file metadata
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -100,12 +85,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Update a file using a stream
-     *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config     $config   Config object or visibility setting
-     * @return  array|false     file metadata
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -116,10 +96,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Read a file
-     *
-     * @param   string  $path
-     * @return  array|false   contains key of contents that has binary data
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -129,10 +106,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Get a read-stream for a file
-     *
-     * @param   string  $path
-     * @return  array|false   contains key of stream that has resource
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -142,11 +116,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Rename an object (file or dir)
-     *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  boolean   file metadata
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -161,11 +131,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Copy a file
-     *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  boolean   file metadata
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
@@ -179,10 +145,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Delete a file
-     *
-     * @param   string   $path
-     * @return  boolean  delete result
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -192,10 +155,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Delete a directory (recursive)
-     *
-     * @param   string   $path
-     * @return  boolean  delete result
+     * {@inheritdoc}
      */
     public function deleteDir($path)
     {
@@ -205,12 +165,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string        $path directory name
-     * @param   Config  $config
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($path, Config $config)
     {
@@ -227,10 +182,7 @@ class Copy extends AbstractAdapter
 
 
     /**
-     * Get metadata for a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
@@ -245,10 +197,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Get the mimetype of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
@@ -256,10 +205,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Get the size of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -267,10 +213,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Get the timestamp of a file
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {
@@ -278,11 +221,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * List contents of a directory
-     *
-     * @param   string  $dirname
-     * @param   bool    $recursive
-     * @return  array   directory contents
+     * {@inheritdoc}
      */
     public function listContents($dirname = '', $recursive = false)
     {

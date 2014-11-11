@@ -165,12 +165,7 @@ class Zip extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string  $dirname directory name
-     * @param   Config  $config
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($dirname, Config $config)
     {
@@ -220,6 +215,9 @@ class Zip extends AbstractAdapter
         return compact('stream');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function listContents($dirname = '', $recursive = false)
     {
         $result = array();

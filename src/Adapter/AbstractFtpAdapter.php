@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use Net_SFTP;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
 {
@@ -21,6 +22,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $permPrivate = 0700;
     protected $configurable = array();
 
+    /**
+     * Constructor
+     *
+     * @param array $config
+     */
     public function __construct(array $config)
     {
         $this->setConfig($config);
@@ -199,7 +205,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -331,27 +337,41 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         return array_filter($list, $filter);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function has($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTimestamp($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getVisibility($path)
     {
         return $this->getMetadata($path);
     }
 
     /**
+     * Ensure a directory exists.
+     *
      * @param string $dirname
      */
     public function ensureDirectory($dirname)
@@ -361,6 +381,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         }
     }
 
+    /**
+     * @return resource|Net_SFTP
+     */
     public function getConnection()
     {
         if (! $this->connection) {
@@ -370,16 +393,29 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         return $this->connection;
     }
 
+    /**
+     * Get the public permission value
+     *
+     * @return int
+     */
     public function getPermPublic()
     {
         return $this->permPublic;
     }
 
+    /**
+     * Get the private permission value
+     *
+     * @return int
+     */
     public function getPermPrivate()
     {
         return $this->permPrivate;
     }
 
+    /**
+     * Disconnect on destruction.
+     */
     public function __destruct()
     {
         $this->disconnect();

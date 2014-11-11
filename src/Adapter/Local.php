@@ -51,10 +51,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Check whether a file is present
-     *
-     * @param   string   $path
-     * @return  boolean
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -64,12 +61,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Write a file
-     *
-     * @param $path
-     * @param $contents
-     * @param Config $config
-     * @return array|bool
+     * {@inheritdoc}
      */
     public function write($path, $contents, Config $config)
     {
@@ -92,12 +84,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Write using a stream
-     *
-     * @param $path
-     * @param $resource
-     * @param Config $config
-     * @return array|bool
+     * {@inheritdoc}
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -124,10 +111,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get a read-stream for a file
-     *
-     * @param $path
-     * @return array|bool
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -138,12 +122,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Update a file using a stream
-     *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config     $config   Config object or visibility setting
-     * @return  array|bool
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -151,12 +130,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Update a file
-     *
-     * @param   string       $path
-     * @param   string       $contents
-     * @param   Config        $config   Config object or visibility setting
-     * @return  array|bool
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -171,10 +145,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Read a file
-     *
-     * @param   string  $path
-     * @return  array|bool
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -189,11 +160,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Rename a file
-     *
-     * @param $path
-     * @param $newpath
-     * @return bool
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -206,11 +173,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Copy a file
-     *
-     * @param $path
-     * @param $newpath
-     * @return bool
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
@@ -222,10 +185,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Delete a file
-     *
-     * @param $path
-     * @return bool
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -235,11 +195,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * List contents of a directory
-     *
-     * @param string $directory
-     * @param bool $recursive
-     * @return array
+     * {@inheritdoc}
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -264,10 +220,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the metadata of a file
-     *
-     * @param $path
-     * @return array
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
@@ -278,10 +231,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the size of a file
-     *
-     * @param $path
-     * @return array
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -289,10 +239,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the mimetype of a file
-     *
-     * @param $path
-     * @return array
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
@@ -303,10 +250,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the timestamp of a file
-     *
-     * @param $path
-     * @return array
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {
@@ -314,10 +258,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the visibility of a file
-     *
-     * @param $path
-     * @return array|void
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
@@ -330,11 +271,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Set the visibility of a file
-     *
-     * @param $path
-     * @param $visibility
-     * @return array|void
+     * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
@@ -345,12 +282,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string  $dirname directory name
-     * @param   Config  $config
-     *
-     * @return  false|array
+     * {@inheritdoc}
      */
     public function createDir($dirname, Config $config)
     {
@@ -364,10 +296,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Delete a directory
-     *
-     * @param $dirname
-     * @return bool
+     * {@inheritdoc}
      */
     public function deleteDir($dirname)
     {

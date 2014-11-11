@@ -17,16 +17,43 @@ class Sftp extends AbstractFtpAdapter
     use StreamedTrait;
     use StreamedCopyTrait;
 
+    /**
+     * @var int
+     */
     protected $port = 22;
+
+    /**
+     * @var string
+     */
     protected $privatekey;
+
+    /**
+     * @var array
+     */
     protected $configurable = array('host', 'port', 'username', 'password', 'timeout', 'root', 'privateKey', 'permPrivate', 'permPublic');
+
+    /**
+     * @var array
+     */
     protected $statMap = array('mtime' => 'timestamp', 'size' => 'size');
 
+    /**
+     * Prefix a path
+     *
+     * @param string $path
+     * @return string
+     */
     protected function prefix($path)
     {
         return $this->root.ltrim($path, $this->separator);
     }
 
+    /**
+     * Set the private key (string or path to local file)
+     *
+     * @param string $key
+     * @return $this
+     */
     public function setPrivateKey($key)
     {
         $this->privatekey = $key;
@@ -34,6 +61,12 @@ class Sftp extends AbstractFtpAdapter
         return $this;
     }
 
+    /**
+     * Inject the Net_SFTP instance
+     *
+     * @param Net_SFTP $connection
+     * @return $this
+     */
     public function setNetSftpConnection(Net_SFTP $connection)
     {
         $this->connection = $connection;
@@ -41,6 +74,11 @@ class Sftp extends AbstractFtpAdapter
         return $this;
     }
 
+    /**
+     * Connect
+     *
+     * @return void
+     */
     public function connect()
     {
         $this->connection = $this->connection ?: new Net_SFTP($this->host, $this->port, $this->timeout);
@@ -48,6 +86,12 @@ class Sftp extends AbstractFtpAdapter
         $this->setConnectionRoot();
     }
 
+    /**
+     * Login
+     *
+     * @throws LogicException
+     * @return void
+     */
     protected function login()
     {
         if (! $this->connection->login($this->username, $this->getPassword())) {
@@ -55,6 +99,11 @@ class Sftp extends AbstractFtpAdapter
         }
     }
 
+    /**
+     * Set the connection root
+     *
+     * @return void
+     */
     protected function setConnectionRoot()
     {
         if ($this->root) {
@@ -62,6 +111,11 @@ class Sftp extends AbstractFtpAdapter
         }
     }
 
+    /**
+     * Get the password, either the private key or a plain text password
+     *
+     * @return Crypt_RSA|string
+     */
     public function getPassword()
     {
         if ($this->privatekey) {
@@ -71,6 +125,11 @@ class Sftp extends AbstractFtpAdapter
         return $this->password;
     }
 
+    /**
+     * Get the private get with the password or private key contents.
+     *
+     * @return Crypt_RSA
+     */
     public function getPrivateKey()
     {
         if (is_file($this->privatekey)) {
@@ -88,6 +147,13 @@ class Sftp extends AbstractFtpAdapter
         return $key;
     }
 
+    /**
+     * List the contents of a directory.
+     *
+     * @param string  $directory
+     * @param bool    $recursive
+     * @return array
+     */
     protected function listDirectoryContents($directory, $recursive = true)
     {
         $result = array();
@@ -115,7 +181,14 @@ class Sftp extends AbstractFtpAdapter
         return $result;
     }
 
-    protected function normalizeListingObject($path, $object)
+    /**
+     * Normalize a listing response
+     *
+     * @param string $path
+     * @param array $object
+     * @return array
+     */
+    protected function normalizeListingObject($path, array $object)
     {
         $permissions = $this->normalizePermissions($object['permissions']);
 
@@ -128,11 +201,19 @@ class Sftp extends AbstractFtpAdapter
         );
     }
 
+    /**
+     * Disconnect
+     *
+     * @return void
+     */
     public function disconnect()
     {
         $this->connection = null;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($path, $contents, Config $config)
     {
         $connection = $this->getConnection();
@@ -150,6 +231,9 @@ class Sftp extends AbstractFtpAdapter
         return compact('contents', 'visibility', 'path');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($path)
     {
         $connection = $this->getConnection();
@@ -161,11 +245,17 @@ class Sftp extends AbstractFtpAdapter
         return compact('contents');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path)
     {
         $connection = $this->getConnection();
@@ -173,6 +263,9 @@ class Sftp extends AbstractFtpAdapter
         return $connection->delete($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rename($path, $newpath)
     {
         $connection = $this->getConnection();
@@ -180,6 +273,9 @@ class Sftp extends AbstractFtpAdapter
         return $connection->rename($path, $newpath);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteDir($dirname)
     {
         $connection = $this->getConnection();
@@ -187,11 +283,17 @@ class Sftp extends AbstractFtpAdapter
         return $connection->delete($dirname, true);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function has($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($path)
     {
         $connection = $this->getConnection();
@@ -208,11 +310,17 @@ class Sftp extends AbstractFtpAdapter
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTimestamp($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMimetype($path)
     {
         if (! $data = $this->read($path)) {
@@ -225,11 +333,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string       $dirname directory name
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($dirname, Config $config)
     {
@@ -242,11 +346,17 @@ class Sftp extends AbstractFtpAdapter
         return array('path' => $dirname);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getVisibility($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setVisibility($path, $visibility)
     {
         $visibility = ucfirst($visibility);

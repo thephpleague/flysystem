@@ -109,10 +109,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Check whether a file exists
-     *
-     * @param   string  $path
-     * @return  bool    weather an object result
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -122,13 +119,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Write a file
-     *
-     * @param   string $path
-     * @param   string $contents
-     * @param   Config  $config
-     *
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function write($path, $contents, Config $config)
     {
@@ -146,13 +137,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Write using a stream
-     *
-     * @param   string   $path
-     * @param   resource $resource
-     * @param   Config    $config ['visibility'='private', 'mimetype'='', 'Metadata'=[]]
-     *
-     * @return  array     file metadata
+     * {@inheritdoc}
      */
     public function writeStream($path, $resource, Config $config)
     {

@@ -83,8 +83,9 @@ class Filesystem implements FilesystemInterface
     public function has($path)
     {
         $path = Util::normalizePath($path);
+        $exists = $this->cache->has($path);
 
-        if (($exists = $this->cache->has($path)) !== null) {
+        if (is_bool($exists)) {
             return $exists;
         }
 
@@ -96,11 +97,9 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        if (! is_array($result)) {
-            $result = array();
-        }
 
-        $this->cache->updateObject($path, $result, true);
+        $object = is_array($result) ? $result : compact('path');
+        $this->cache->updateObject($path, $object, true);
 
         return true;
     }

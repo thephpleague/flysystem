@@ -15,6 +15,9 @@ class WebDav extends AbstractAdapter
     use StreamedTrait;
     use StreamedCopyTrait;
 
+    /**
+     * @var array
+     */
     protected static $resultMap = array(
         '{DAV:}getcontentlength' => 'size',
         '{DAV:}getcontenttype' => 'mimetype',
@@ -22,14 +25,26 @@ class WebDav extends AbstractAdapter
         'content-type' => 'mimetype',
     );
 
+    /**
+     * @var Client
+     */
     protected $client;
 
+    /**
+     * Constructor
+     *
+     * @param Client $client
+     * @param string   $prefix
+     */
     public function __construct(Client $client, $prefix = null)
     {
         $this->client = $client;
         $this->setPathPrefix($prefix);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMetadata($path)
     {
         $location = $this->applyPathPrefix($path);
@@ -48,11 +63,17 @@ class WebDav extends AbstractAdapter
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function has($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function read($path)
     {
         $location = $this->applyPathPrefix($path);
@@ -74,6 +95,9 @@ class WebDav extends AbstractAdapter
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
@@ -88,11 +112,17 @@ class WebDav extends AbstractAdapter
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function update($path, $contents, Config $config)
     {
         return $this->write($path, $contents, $config);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function rename($path, $newpath)
     {
         $location = $this->applyPathPrefix($path);
@@ -112,6 +142,9 @@ class WebDav extends AbstractAdapter
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($path)
     {
         $location = $this->applyPathPrefix($path);
@@ -126,12 +159,7 @@ class WebDav extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string $path directory name
-     * @param   Config $config
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($path, Config $config)
     {
@@ -145,11 +173,17 @@ class WebDav extends AbstractAdapter
         return compact('path') + ['type' => 'dir'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deleteDir($dirname)
     {
         return $this->delete($dirname);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function listContents($directory = '', $recursive = false)
     {
         $location = $this->applyPathPrefix($directory);
@@ -178,25 +212,38 @@ class WebDav extends AbstractAdapter
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSize($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getTimestamp($path)
     {
         return $this->getMetadata($path);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMimetype($path)
     {
         return $this->getMetadata($path);
     }
 
     /**
+     * Normalise a WebDAV repsonse object
+     *
+     * @param array  $object
      * @param string $path
+     * @return array
      */
-    protected function normalizeObject($object, $path)
+    protected function normalizeObject(array $object, $path)
     {
         if (! isset($object['{DAV:}getcontentlength'])) {
             return array('type' => 'dir', 'path' => trim($path, '/'));

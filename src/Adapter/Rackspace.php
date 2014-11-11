@@ -51,12 +51,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Write a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config   $config
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function write($path, $contents, Config $config)
     {
@@ -73,12 +68,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Update a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config   $config   Config object or visibility setting
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -95,11 +85,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Rename a file
-     *
-     * @param   string      $path
-     * @param   string      $newpath
-     * @return  boolean  false or file metadata
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -118,10 +104,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Delete a file
-     *
-     * @param   string  $path
-     * @return  boolean
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -141,10 +124,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Delete a directory
-     *
-     * @param   string  $dirname
-     * @return  boolean
+     * {@inheritdoc}
      */
     public function deleteDir($dirname)
     {
@@ -168,11 +148,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Create a directory
-     *
-     * @param   string       $dirname directory name
-     *
-     * @return  bool
+     * {@inheritdoc}
      */
     public function createDir($dirname, Config $config)
     {
@@ -212,10 +188,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's contents
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -227,10 +200,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's contents
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -244,11 +214,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's metadata
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -261,10 +227,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Normalize a DataObject
-     *
-     * @param   DataObject  $object
-     * @return  array       file metadata
+     * {@inheritdoc}
      */
     protected function normalizeObject(DataObject $object)
     {
@@ -283,10 +246,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's metadata
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
@@ -296,10 +256,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's size
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -307,10 +264,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's mimetype
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
@@ -318,10 +272,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get a file's timestamp
-     *
-     * @param   string  $path
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {

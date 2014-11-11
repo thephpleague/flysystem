@@ -36,10 +36,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Check weather a file exists
-     *
-     * @param   string       $path
-     * @return  false|array  false or file metadata
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -47,12 +44,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Write a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config   $config
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function write($path, $contents, Config $config)
     {
@@ -60,12 +52,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Write a file using a stream
-     *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config     $config
-     * @return  array     file metadata
+     * {@inheritdoc}
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -73,12 +60,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Update a file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   Config  $config   Config object
-     * @return  array   file metadata
+     * {@inheritdoc}
      */
     public function update($path, $contents, Config $config)
     {
@@ -86,54 +68,11 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Update a file using a stream
-     *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   Config    $config   Config object
-     * @return  array     file metadata
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, Config $config)
     {
         return $this->uploadStream($path, $resource, WriteMode::force());
-    }
-
-    /**
-     * Do the actual upload of a string file
-     *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   WriteMode  $mode
-     * @return  array|false   file metadata
-     */
-    protected function upload($path, $contents, WriteMode $mode)
-    {
-        $location = $this->applyPathPrefix($path);
-
-        if (! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
-            return false;
-        }
-
-        return $this->normalizeResponse($result, $path);
-    }
-
-    /**
-     * Do the actual upload of a file resource
-     *
-     * @param   string  $path
-     * @param   resource  $resource
-     * @param   WriteMode  $mode
-     * @return  array|false   file metadata
-     */
-    protected function uploadStream($path, $resource, WriteMode $mode)
-    {
-        $location = $this->applyPathPrefix($path);
-
-        if (! $result = $this->client->uploadFile($location, $mode, $resource)) {
-            return false;
-        }
-
-        return $this->normalizeResponse($result, $path);
     }
 
     /**
@@ -310,6 +249,57 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
+     * Apply the path prefix
+     *
+     * @param   string  $path
+     * @return  string  prefixed path
+     */
+    public function applyPathPrefix($path)
+    {
+        $path = parent::applyPathPrefix($path);
+
+        return '/' . rtrim($path, '/');
+    }
+
+    /**
+     * Do the actual upload of a string file
+     *
+     * @param   string  $path
+     * @param   string  $contents
+     * @param   WriteMode  $mode
+     * @return  array|false   file metadata
+     */
+    protected function upload($path, $contents, WriteMode $mode)
+    {
+        $location = $this->applyPathPrefix($path);
+
+        if (! $result = $this->client->uploadFileFromString($location, $mode, $contents)) {
+            return false;
+        }
+
+        return $this->normalizeResponse($result, $path);
+    }
+
+    /**
+     * Do the actual upload of a file resource
+     *
+     * @param   string  $path
+     * @param   resource  $resource
+     * @param   WriteMode  $mode
+     * @return  array|false   file metadata
+     */
+    protected function uploadStream($path, $resource, WriteMode $mode)
+    {
+        $location = $this->applyPathPrefix($path);
+
+        if (! $result = $this->client->uploadFile($location, $mode, $resource)) {
+            return false;
+        }
+
+        return $this->normalizeResponse($result, $path);
+    }
+
+    /**
      * Normalize a Dropbox response
      *
      * @param      $response
@@ -328,18 +318,5 @@ class Dropbox extends AbstractAdapter
         $result['type'] = $response['is_dir'] ? 'dir' : 'file';
 
         return $result;
-    }
-
-    /**
-     * Apply the path prefix
-     *
-     * @param   string  $path
-     * @return  string  prefixed path
-     */
-    public function applyPathPrefix($path)
-    {
-        $path = parent::applyPathPrefix($path);
-
-        return '/' . rtrim($path, '/');
     }
 }
