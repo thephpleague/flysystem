@@ -14,6 +14,7 @@ namespace League\Flysystem\Adapter
 
 namespace League\Flysystem
 {
+    use League\Flysystem\Plugin\GetWithMetadata;
     use Mockery;
 
     class FilesystemTests extends \PHPUnit_Framework_TestCase
@@ -460,6 +461,7 @@ namespace League\Flysystem
             $this->assertFalse($cache->listContents('', false));
             $this->assertFalse($cache->rename('', ''));
             $this->assertFalse($cache->copy('', ''));
+            $this->assertNull($cache->save());
             $filesystem->delete('test.txt');
 
             $this->assertEquals(array(), $cache->storeContents('unknwon', array(
@@ -553,7 +555,8 @@ namespace League\Flysystem
             if ( ! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
-            $listing = $filesystem->listWith(array('unknowntype'));
+
+            $filesystem->listWith(array('unknowntype'));
         }
 
         /**
@@ -629,6 +632,25 @@ namespace League\Flysystem
             $cache->shouldReceive('load');
             $filesystem = new Filesystem($adapter, $cache, $config);
             $this->assertEquals($config, $filesystem->getConfig());
+        }
+
+        public function testGetWithMetadataFail()
+        {
+            $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
+            $filesystem->shouldReceive('getMetadata')->andReturn(false);
+            $plugin = new GetWithMetadata;
+            $plugin->setFilesystem($filesystem);
+            $this->assertFalse($plugin->handle('path', []));
+        }
+
+        public function testGetWithMetadataInvalidKey()
+        {
+            $this->setExpectedException('InvalidArgumentException');
+            $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
+            $filesystem->shouldReceive('getMetadata')->andReturn(['path' => 'something']);
+            $plugin = new GetWithMetadata;
+            $plugin->setFilesystem($filesystem);
+            $this->assertFalse($plugin->handle('path', ['invalid']));
         }
     }
 }

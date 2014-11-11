@@ -201,45 +201,6 @@ interface FilesystemInterface
     public function readAndDelete($path);
 
     /**
-     * List all files in the directory
-     *
-     * @param string      $directory
-     * @param bool        $recursive
-     *
-     * @return array
-     */
-    public function listFiles($directory = '', $recursive = false);
-
-    /**
-     * List all paths
-     *
-     * @param   string  $directory
-     * @param   bool    $recursive
-     * @return  array   paths
-     */
-    public function listPaths($directory = '', $recursive = false);
-
-    /**
-     * List contents with metadata
-     *
-     * @param   array   $keys metadata key
-     * @param   string  $directory
-     * @param   bool    $recursive
-     * @return  array            listing with metadata
-     */
-    public function listWith(array $keys = array(), $directory = '', $recursive = false);
-
-    /**
-     * Get metadata for an object with required metadata
-     *
-     * @param   string  $path      path to file
-     * @param   array   $metadata  metadata keys
-     * @throws  InvalidArgumentException
-     * @return  array   metadata
-     */
-    public function getWithMetadata($path, array $metadata);
-
-    /**
      * Get a file/directory handler
      *
      * @param   string   $path

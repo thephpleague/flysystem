@@ -2,6 +2,10 @@
 
 namespace League\Flysystem;
 
+use League\Flysystem\Plugin\GetWithMetadata;
+use League\Flysystem\Plugin\ListFiles;
+use League\Flysystem\Plugin\ListPaths;
+use League\Flysystem\Plugin\ListWith;
 use LogicException;
 use InvalidArgumentException;
 
@@ -40,6 +44,7 @@ class Filesystem implements FilesystemInterface
         $this->cache = $cache ?: new Cache\Memory;
         $this->cache->load();
         $this->config = Util::ensureConfig($config);
+        $this->addDefaultPlugins();
     }
 
     /**
@@ -440,92 +445,6 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * List all files in the directory
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     *
-     * @return array
-     */
-    public function listFiles($directory = '', $recursive = false)
-    {
-        $contents = $this->listContents($directory, $recursive);
-
-        $filter = function ($object) {
-            return $object['type'] === 'file';
-        };
-
-        return array_filter($contents, $filter);
-    }
-
-    /**
-     * List all paths
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     * @return  array  paths
-     */
-    public function listPaths($directory = '', $recursive = false)
-    {
-        $result = array();
-        $contents = $this->listContents($directory, $recursive);
-
-        foreach ($contents as $object) {
-            $result[] = $object['path'];
-        }
-
-        return $result;
-    }
-
-    /**
-     * List contents with metadata
-     *
-     * @param   array   $keys
-     * @param   string  $directory
-     * @param   bool    $recursive
-     * @return  array   listing with metadata
-     */
-    public function listWith(array $keys = array(), $directory = '', $recursive = false)
-    {
-        $contents = $this->listContents($directory, $recursive);
-
-        foreach ($contents as $index => $object) {
-            if ($object['type'] === 'file') {
-                $contents[$index] = array_merge($object, $this->getWithMetadata($object['path'], $keys));
-            }
-        }
-
-        return $contents;
-    }
-
-    /**
-     * Get metadata for an object with required metadata
-     *
-     * @param   string  $path      path to file
-     * @param   array   $metadata  metadata keys
-     * @throws  InvalidArgumentException
-     * @return  array   metadata
-     */
-    public function getWithMetadata($path, array $metadata)
-    {
-        $object = $this->getMetadata($path);
-
-        if (! $object) {
-            return false;
-        }
-
-        foreach ($metadata as $key) {
-            if (! method_exists($this, $method = 'get'.ucfirst($key))) {
-                throw new InvalidArgumentException('Could not fetch metadata: '.$key);
-            }
-
-            $object[$key] = $this->{$method}($path);
-        }
-
-        return $object;
-    }
-
-    /**
      * Get a file's mime-type
      *
      * @param  string                $path path to file
@@ -750,6 +669,17 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * Add the default plugins.
+     */
+    protected function addDefaultPlugins()
+    {
+        $this->addPlugin(new ListWith);
+        $this->addPlugin(new ListFiles);
+        $this->addPlugin(new ListPaths);
+        $this->addPlugin(new GetWithMetadata);
+    }
+
+    /**
      * Register a plugin
      *
      * @param   PluginInterface  $plugin
@@ -782,7 +712,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Plugins passthrough
+     * Plugins pass-through
      *
      * @param   string  $method
      * @param   array   $arguments
