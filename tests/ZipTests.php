@@ -125,7 +125,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
     public function testZipReadWriteFails()
     {
         if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped('This test results in a fatal error on HHVM');
+            $this->markTestSkipped('HHVM does not support mocking of ZipArchive');
             return;
         }
 
@@ -160,6 +160,11 @@ class ZipTests extends PHPUnit_Framework_TestCase
 
     public function testCopyFailed()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('This test results in a fatal error on HHVM');
+            return;
+        }
+
         $mock = Mockery::mock('ZipArchive');
         $mock->shouldReceive('open')->andReturn(true);
         $mock->shouldReceive('close')->andReturn(true);
