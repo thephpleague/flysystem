@@ -93,7 +93,7 @@ interface FilesystemInterface
      * @param   string       $path
      * @param   resource     $resource
      * @param   array        $config   config array
-     * @return  boolean      false on failure file meta data on success
+     * @return  boolean      success boolean
      */
     public function writeStream($path, $resource, array $config = []);
 
@@ -103,7 +103,7 @@ interface FilesystemInterface
      * @param   string       $path
      * @param   string       $contents
      * @param   array        $config   config array
-     * @return  false|array  false on failure file meta data on success
+     * @return  boolean      success boolean
      */
     public function update($path, $contents, array $config = []);
 
@@ -113,7 +113,7 @@ interface FilesystemInterface
      * @param   string       $path
      * @param   resource     $resource
      * @param   array        $config   config array
-     * @return  false|array  false on failure file meta data on success
+     * @return  boolean      success boolean
      */
     public function updateStream($path, $resource, array $config = []);
 
@@ -156,8 +156,7 @@ interface FilesystemInterface
      *
      * @param   string  $dirname directory name
      * @param   array   $config
-     *
-     * @return  bool
+     * @return  boolean
      */
     public function createDir($dirname, array $config = []);
 
