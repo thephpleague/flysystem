@@ -8,6 +8,7 @@ use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Aws\S3\S3Client;
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
+use Guzzle\Service\Resource\Model;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -271,8 +272,10 @@ class AwsS3 extends AbstractAdapter
     public function delete($path)
     {
         $options = $this->getOptions($path);
+        /** @var Model $response */
+        $response = $this->client->deleteObject($options);
 
-        return $this->client->deleteObject($options);
+        return $response->get('DeleteMarker');
     }
 
     /**
@@ -282,7 +285,7 @@ class AwsS3 extends AbstractAdapter
     {
         $prefix = rtrim($this->applyPathPrefix($path), '/') . '/';
 
-        return $this->client->deleteMatchingObjects($this->bucket, $prefix);
+        return (bool) $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
 
     /**

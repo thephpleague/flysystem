@@ -215,7 +215,9 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $this->expectVisibilityCall(Permission::READ, 'old', $mock);
         $mock->shouldReceive('copyObject')->once()->andReturn(Mockery::self());
-        $mock->shouldReceive('deleteObject')->once()->andReturn(true);
+        $response = Mockery::mock('Guzzle\Service\Resource\Model');
+        $response->shouldReceive('get')->with('DeleteMarker')->andReturn(true);
+        $mock->shouldReceive('deleteObject')->once()->andReturn($response);
         $adapter = new Adapter($mock, 'bucketname');
         $result = $adapter->rename('old', 'new');
         $this->assertTrue($result);

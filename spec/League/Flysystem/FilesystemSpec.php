@@ -233,7 +233,7 @@ class FilesystemSpec extends ObjectBehavior
     {
         $this->adapter->has('file')->willReturn(true);
         $this->cache->has('file')->willReturn(null);
-        $this->cache->updateObject('file', [], true)->shouldBeCalled();
+        $this->cache->updateObject('file', ['path' => 'file'], true)->shouldBeCalled();
         $this->has('file')->shouldReturn(true);
     }
 
