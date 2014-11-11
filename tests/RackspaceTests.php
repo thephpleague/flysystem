@@ -23,7 +23,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         return $mock;
     }
 
-    public function testHas()
+    public function testRead()
     {
         $container = $this->getContainerMock();
         $dataObject = $this->getDataObjectMock('filename.ext');
@@ -31,6 +31,24 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $container->shouldReceive('getObject')->andReturn($dataObject);
         $adapter = new Rackspace($container);
         $this->assertInternalType('array', $adapter->read('filename.ext'));
+    }
+
+    public function testReadStream()
+    {
+        $resource = tmpfile();
+        $container = $this->getContainerMock();
+        $dataObject = $this->getDataObjectMock('filename.ext');
+        $body = Mockery::mock('Guzzle\Http\EntityBody');
+        $body->shouldReceive('close');
+        $body->shouldReceive('getStream')->andReturn($resource);
+        $body->shouldReceive('detachStream');
+        $dataObject->shouldReceive('getContent')->andReturn($body);
+        $container->shouldReceive('getObject')->andReturn($dataObject);
+        $adapter = new Rackspace($container);
+        $response = $adapter->readStream('filename.ext');
+        $this->assertInternalType('array', $response);
+        $this->assertEquals($resource, $response['stream']);
+        fclose($resource);
     }
 
     public function testPrefixed()
@@ -43,7 +61,7 @@ class RackspaceTests extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->read('filename.ext'));
     }
 
-    public function testRead()
+    public function testHas()
     {
         $container = $this->getContainerMock();
         $dataObject = $this->getDataObjectMock('filename.ext');
