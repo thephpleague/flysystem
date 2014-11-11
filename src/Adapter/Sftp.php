@@ -228,7 +228,6 @@ class Sftp extends AbstractFtpAdapter
      * Create a directory
      *
      * @param   string       $dirname directory name
-     * @param   Config $options
      *
      * @return  bool
      */

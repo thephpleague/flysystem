@@ -121,7 +121,7 @@ interface FilesystemInterface
      * Rename a file
      *
      * @param   string  $path
-     * @param   string  $newPath
+     * @param   string  $newpath
      * @return  boolean
      */
     public function rename($path, $newpath);

@@ -632,7 +632,7 @@ class Filesystem implements FilesystemInterface
      * Convert a config array to a Config object with the correct fallback
      *
      * @param array $config
-     * @return array|Config
+     * @return Config
      */
     protected function prepareConfig(array $config)
     {

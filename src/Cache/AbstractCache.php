@@ -162,7 +162,7 @@ abstract class AbstractCache implements CacheInterface
      * Check whether an object has been cached
      *
      * @param   string   $path
-     * @return  boolean  cached boolean
+     * @return  null|boolean  cached boolean
      */
     public function has($path)
     {

@@ -7,7 +7,7 @@ class Directory extends Handler
     /**
      * Delete the directory
      *
-     * @return  void
+     * @return  boolean
      */
     public function delete()
     {

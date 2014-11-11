@@ -98,7 +98,7 @@ class Util
     /**
      * Normalize relative directories in a path
      *
-     * @param $path
+     * @param string $path
      * @return string
      */
     public static function normalizeRelativePath($path)

@@ -56,7 +56,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config
+     * @param   Config   $config
      * @return  array   file metadata
      */
     public function write($path, $contents, Config $config)
@@ -72,7 +72,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string       $path
      * @param   resource     $resource
-     * @param   mixed        $config
+     * @param   Config        $config
      * @return  array|false  file metadata
      */
     public function writeStream($path, $resource, Config $config)
@@ -88,7 +88,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config   Config object or visibility setting
+     * @param   Config   $config   Config object or visibility setting
      * @return  array   file metadata
      */
     public function update($path, $contents, Config $config)
@@ -104,7 +104,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config   Config object or visibility setting
+     * @param   Config     $config   Config object or visibility setting
      * @return  array     file metadata
      */
     public function updateStream($path, $resource, Config $config)
@@ -146,7 +146,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $newpath
-     * @return  array   file metadata
+     * @return  boolean   file metadata
      */
     public function rename($path, $newpath)
     {
@@ -165,7 +165,7 @@ class Copy extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $newpath
-     * @return  array   file metadata
+     * @return  boolean   file metadata
      */
     public function copy($path, $newpath)
     {

@@ -54,7 +54,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @param   string $path
      * @param   string $contents
-     * @param   mixed  $config Config object or visibility setting
+     * @param   Config  $config Config object or visibility setting
      *
      * @return  false|array  false on failure file meta data on success
      */
@@ -72,7 +72,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @param   string $path
      * @param   resource $resource
-     * @param   mixed  $config Config object or visibility setting
+     * @param   Config  $config Config object or visibility setting
      *
      * @return  false|array  false on failure file meta data on success
      */
@@ -90,7 +90,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @param   string $path
      * @param   string $contents
-     * @param   mixed  $config Config object or visibility setting
+     * @param   Config  $config Config object or visibility setting
      *
      * @return  false|array  false on failure file meta data on success
      */
@@ -112,7 +112,7 @@ class ReplicateAdapter implements AdapterInterface
      *
      * @param   string $path
      * @param   resource $resource
-     * @param   mixed  $config Config object or visibility setting
+     * @param   Config  $config Config object or visibility setting
      *
      * @return  false|array  false on failure file meta data on success
      */

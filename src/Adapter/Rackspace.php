@@ -55,7 +55,7 @@ class Rackspace extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config
+     * @param   Config   $config
      * @return  array   file metadata
      */
     public function write($path, $contents, Config $config)
@@ -77,7 +77,7 @@ class Rackspace extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config   Config object or visibility setting
+     * @param   Config   $config   Config object or visibility setting
      * @return  array   file metadata
      */
     public function update($path, $contents, Config $config)
@@ -99,7 +99,7 @@ class Rackspace extends AbstractAdapter
      *
      * @param   string      $path
      * @param   string      $newpath
-     * @return  bool|array  false or file metadata
+     * @return  boolean  false or file metadata
      */
     public function rename($path, $newpath)
     {
@@ -171,7 +171,6 @@ class Rackspace extends AbstractAdapter
      * Create a directory
      *
      * @param   string       $dirname directory name
-     * @param   array|Config $options
      *
      * @return  bool
      */

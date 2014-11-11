@@ -351,6 +351,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
+    /**
+     * @param string $dirname
+     */
     public function ensureDirectory($dirname)
     {
         if (! empty($dirname) && ! $this->has($dirname)) {

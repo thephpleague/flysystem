@@ -20,7 +20,7 @@ interface AdapterInterface extends ReadInterface
      * @param   string       $path
      * @param   string       $contents
      * @param   Config       $config   Config object
-     * @return  false|array  false on failure file meta data on success
+     * @return  string  false on failure file meta data on success
      */
     public function write($path, $contents, Config $config);
 
@@ -30,7 +30,7 @@ interface AdapterInterface extends ReadInterface
      * @param   string       $path
      * @param   resource     $resource
      * @param   Config       $config   Config object
-     * @return  false|array  false on failure file meta data on success
+     * @return  string  false on failure file meta data on success
      */
     public function writeStream($path, $resource, Config $config);
 
@@ -40,7 +40,7 @@ interface AdapterInterface extends ReadInterface
      * @param   string       $path
      * @param   string       $contents
      * @param   Config       $config   Config object
-     * @return  false|array  false on failure file meta data on success
+     * @return  string  false on failure file meta data on success
      */
     public function update($path, $contents, Config $config);
 
@@ -50,7 +50,7 @@ interface AdapterInterface extends ReadInterface
      * @param   string       $path
      * @param   resource     $resource
      * @param   Config        $config   Config object
-     * @return  false|array  false on failure file meta data on success
+     * @return  string  false on failure file meta data on success
      */
     public function updateStream($path, $resource, Config $config);
 

@@ -30,7 +30,7 @@ class Before extends AbstractEvent
 
     /**
      * @param FilesystemInterface $filesystem
-     * @param $method
+     * @param string $method
      * @param array $arguments
      */
     public function __construct(FilesystemInterface $filesystem, $method, array $arguments)

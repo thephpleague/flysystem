@@ -51,7 +51,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string  $path
      * @param   string  $contents
-     * @param   mixed   $config
+     * @param   Config   $config
      * @return  array   file metadata
      */
     public function write($path, $contents, Config $config)
@@ -64,7 +64,7 @@ class Dropbox extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config
+     * @param   Config     $config
      * @return  array     file metadata
      */
     public function writeStream($path, $resource, Config $config)
