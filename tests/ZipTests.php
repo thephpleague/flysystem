@@ -145,6 +145,11 @@ class ZipTests extends PHPUnit_Framework_TestCase
 
     public function testCopy()
     {
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped('This test results in a fatal error on HHVM');
+            return;
+        }
+
         $resource = fopen(__DIR__ . '/../changelog.md', 'r+');
         $mock = Mockery::mock('ZipArchive');
         $mock->shouldReceive('open')->andReturn(true);
