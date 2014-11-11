@@ -22,4 +22,4 @@ abstract class AbstractPlugin implements PluginInterface
     {
         $this->filesystem = $filesystem;
     }
-} 
+}
