@@ -27,7 +27,6 @@
         "rackspace/php-opencloud": "~1.10.0",
         "sabre/dav": "~2.0.2",
         "barracuda/copy": "~1.1.4",
-        "guzzlehttp/guzzle": "~4.0",
         "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
