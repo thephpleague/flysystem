@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
+
 
 class SynologyFtpTests extends \PHPUnit_Framework_TestCase
 {
@@ -41,9 +43,9 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->getSize('syno.not.found'));
         $this->assertFalse($adapter->getMimetype('syno.not.found'));
         $this->assertFalse($adapter->getTimestamp('syno.not.found'));
-        $this->assertFalse($adapter->write('write.fail', 'contents'));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile()));
-        $this->assertFalse($adapter->update('write.fail', 'contents'));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
         $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
@@ -54,10 +56,10 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
-        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail'));
-        $this->assertInternalType('array', $adapter->write('syno.unknowndir/file.txt', 'contents', 'public'));
-        $this->assertInternalType('array', $adapter->writeStream('syno.unknowndir/file.txt', tmpfile(), 'public'));
-        $this->assertInternalType('array', $adapter->updateStream('syno.unknowndir/file.txt', tmpfile(), 'public'));
+        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config));
+        $this->assertInternalType('array', $adapter->write('syno.unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
+        $this->assertInternalType('array', $adapter->writeStream('syno.unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
+        $this->assertInternalType('array', $adapter->updateStream('syno.unknowndir/file.txt', tmpfile(), new Config));
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
