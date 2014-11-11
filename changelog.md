@@ -7,6 +7,10 @@
 * [FilesystemInterface] This interface is now no longer related to the AdapterInterface and now correctly specifies return type.
 * [AdapterInterface] The adapter interface now consistently specifies return type.
 
+### Altered
+
+* [AbstractAdapter / Polyfills] Polyfill methods from the AbstractAdapter are now moved to their own traits and only included in adapters that need them.
+
 ## 0.5.12 - 2014-11-05
 
 ### Fixed
