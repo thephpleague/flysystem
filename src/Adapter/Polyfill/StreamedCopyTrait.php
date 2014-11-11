@@ -30,4 +30,8 @@ trait StreamedCopyTrait
 
         return (boolean) $result;
     }
-} 
+
+    // Required abstract method
+    abstract public function readStream($path);
+    abstract public function writeStream($path, $resource, Config $config);
+}

@@ -24,4 +24,7 @@ trait StreamedReadingTrait
 
         return $data;
     }
+
+    // Required abstract method
+    abstract public function read($path);
 }

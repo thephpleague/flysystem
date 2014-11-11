@@ -18,8 +18,9 @@ trait StreamedWritingTrait
     protected function stream($path, $resource, Config $config, $fallback)
     {
         $contents = stream_get_contents($resource);
+        $fallbackCall = [$this, $fallback];
 
-        return $this->{$fallback}($path, $contents, $config);
+        return call_user_func($fallbackCall, $path, $contents, $config);
     }
 
     /**
@@ -47,4 +48,8 @@ trait StreamedWritingTrait
     {
         return $this->stream($path, $resource, $config, 'update');
     }
+
+    // Required abstract methods
+    abstract public function write($pash, $contents, Config $config);
+    abstract public function update($pash, $contents, Config $config);
 }
