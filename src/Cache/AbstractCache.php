@@ -159,10 +159,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Check whether an object has been cached
-     *
-     * @param   string   $path
-     * @return  boolean  cached boolean
+     * {@inheritdoc}
      */
     public function has($path)
     {
@@ -176,10 +173,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve the contents of an object
-     *
-     * @param   string       $path
-     * @return  false|string  contents or null on failure
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -191,10 +185,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve the contents of an object
-     *
-     * @param   string       $path
-     * @return  false|string  contents or null on failure
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -210,10 +201,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Rename an object
-     *
-     * @param  string  $path
-     * @param  string  $newpath
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -231,11 +219,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Copy an object
-     *
-     * @param  string $path
-     * @param  string $newpath
-     * @return bool|array
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
@@ -250,10 +234,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete an object from cache
-     *
-     * @param   string  $path  object path
-     * @return  $this
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -267,9 +248,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Delete a directory from cache and all its siblings
-     *
-     * @param  string  $dirname  object path
+     * {@inheritdoc}
      */
     public function deleteDir($dirname)
     {
@@ -306,10 +285,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve the size of an object
-     *
-     * @param   string       $path
-     * @return  false|string  size or null on failure
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -321,50 +297,43 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve the timestamp of an object
-     *
-     * @param   string        $path
-     * @return  null|integer  timestamp or null on failure
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {
         if (isset($this->cache[$path]['timestamp'])) {
             return $this->cache[$path]['timestamp'];
         }
+
+        return false;
     }
 
     /**
-     * Retrieve the visibility of an object
-     *
-     * @param   string       $path
-     * @return  null|string  visibility or null on failure
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
         if (isset($this->cache[$path]['visibility'])) {
             return $this->cache[$path]['visibility'];
         }
+
+        return false;
     }
 
     /**
-     * Retrieve the metadata of an object
-     *
-     * @param   string      $path
-     * @return  null|array  metadata or null on failure
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
         if (isset($this->cache[$path]['type'])) {
             return $this->cache[$path];
         }
+
+        return false;
     }
 
     /**
-     * Check whether the listing is complete
-     *
-     * @param  string  $dirname
-     * @param  boolean $recursive
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isComplete($dirname, $recursive)
     {
@@ -380,11 +349,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Set the cache to complete
-     *
-     * @param   string   $dirname
-     * @param   boolean  $recursive
-     * @return  $this
+     * {@inheritdoc}
      */
     public function setComplete($dirname, $recursive)
     {
@@ -416,7 +381,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Flush the cache
+     * {@inheritdoc}
      */
     public function flush()
     {
@@ -426,7 +391,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Trigger autosaving
+     * {@inheritdoc}
      */
     public function autosave()
     {
