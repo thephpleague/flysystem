@@ -225,6 +225,23 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
+     * Get a file's contents
+     *
+     * @param   string  $path
+     * @return  array   file metadata
+     */
+    public function readStream($path)
+    {
+        $object = $this->getObject($path);
+        $data = $this->normalizeObject($object);
+        $responseBody = $object->getContent();
+        $data['stream'] = $responseBody->getStream();
+        $responseBody->detachStream();
+
+        return $data;
+    }
+
+    /**
      * Get a file's metadata
      *
      * @param string $directory
@@ -251,7 +268,6 @@ class Rackspace extends AbstractAdapter
     {
         $name = $object->getName();
         $name = $this->removePathPrefix($name);
-
         $mimetype = explode('; ', $object->getContentType());
 
         return array(

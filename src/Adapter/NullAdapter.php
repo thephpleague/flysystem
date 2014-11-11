@@ -2,11 +2,14 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class NullAdapter extends AbstractAdapter
 {
+    use StreamedTrait;
+
     /**
      * Check whether a file is present
      *

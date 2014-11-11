@@ -606,15 +606,6 @@ namespace League\Flysystem
             $this->assertCount(2, $cache->listContents('deeply', true));
         }
 
-        public function testAbstractReadStream()
-        {
-            $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[read,write,update,getTimestamp,getMetadata,getMimetype,getSize,delete,deleteDir,listContents,has,createDir,rename]');
-            $mock->shouldReceive('read')->twice()->andReturn(false, array('contents' => 'something'));
-            $this->assertFalse($mock->readStream('path'));
-            $data = $mock->readStream('path');
-            $this->assertInternalType('resource', $data['stream']);
-        }
-
         public function testReadAndDelete()
         {
             $path = 'path.ext';

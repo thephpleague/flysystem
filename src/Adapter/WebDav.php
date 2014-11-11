@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 use Sabre\DAV\Client;
@@ -10,6 +11,8 @@ use LogicException;
 
 class WebDav extends AbstractAdapter
 {
+    use StreamedTrait;
+
     protected static $resultMap = array(
         '{DAV:}getcontentlength' => 'size',
         '{DAV:}getcontenttype' => 'mimetype',

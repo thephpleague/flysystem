@@ -227,6 +227,21 @@ class WebDavTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($result);
     }
 
+    public function testReadStreamFail()
+    {
+        $mock = $this->getClient();
+        $mock->shouldReceive('request')->andReturn(array(
+            'statusCode' => 404,
+            'body' => 'contents',
+            'headers' => array(
+                'last-modified' => date('Y-m-d H:i:s'),
+            ),
+        ));
+        $adapter = new Adapter($mock, 'bucketname', 'prefix');
+        $result = $adapter->readStream('file.txt');
+        $this->assertFalse($result);
+    }
+
     public function testReadException()
     {
         $mock = $this->getClient();

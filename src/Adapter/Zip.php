@@ -2,13 +2,16 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\StreamedWritingTrait;
 use League\Flysystem\Config;
+use League\Flysystem\Util;
 use LogicException;
 use ZipArchive;
-use League\Flysystem\Util;
 
 class Zip extends AbstractAdapter
 {
+    use StreamedWritingTrait;
+
     /**
      * @var array
      */
