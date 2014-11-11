@@ -63,7 +63,7 @@ class Predis extends AbstractCache
      *
      * @param   string  $name
      * @param   array   $arguments
-     * @return  mixed
+     * @return  string
      */
     protected function executeCommand($name, array $arguments)
     {

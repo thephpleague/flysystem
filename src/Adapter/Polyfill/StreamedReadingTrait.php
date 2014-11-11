@@ -26,5 +26,11 @@ trait StreamedReadingTrait
     }
 
     // Required abstract method
+
+    /**
+     * @param string $path
+     *
+     * @return resource
+     */
     abstract public function read($path);
 }

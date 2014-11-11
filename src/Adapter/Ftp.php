@@ -371,6 +371,7 @@ class Ftp extends AbstractFtpAdapter
 
     /**
      * {@inheritdoc}
+     * @param string $directory
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {

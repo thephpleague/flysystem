@@ -126,7 +126,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string $path
      * @param   string $contents
-     * @param   mixed  $config
+     * @param   Config  $config
      *
      * @return  array   file metadata
      */
@@ -150,7 +150,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @param   string   $path
      * @param   resource $resource
-     * @param   mixed    $config ['visibility'='private', 'mimetype'='', 'Metadata'=[]]
+     * @param   Config    $config ['visibility'='private', 'mimetype'='', 'Metadata'=[]]
      *
      * @return  array     file metadata
      */
@@ -235,6 +235,7 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * {@inheritdoc}
+     * @param string $path
      */
     protected function readObject($path)
     {
@@ -367,6 +368,7 @@ class AwsS3 extends AbstractAdapter
 
     /**
      * {@inheritdoc}
+     * @param string $path
      */
     protected function getObjectACL($path)
     {

@@ -193,6 +193,9 @@ class WebDav extends AbstractAdapter
         return $this->getMetadata($path);
     }
 
+    /**
+     * @param string $path
+     */
     protected function normalizeObject($object, $path)
     {
         if (! isset($object['{DAV:}getcontentlength'])) {

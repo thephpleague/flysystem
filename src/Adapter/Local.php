@@ -68,7 +68,7 @@ class Local extends AbstractAdapter
      *
      * @param $path
      * @param $contents
-     * @param null $config
+     * @param Config $config
      * @return array|bool
      */
     public function write($path, $contents, Config $config)
@@ -96,7 +96,7 @@ class Local extends AbstractAdapter
      *
      * @param $path
      * @param $resource
-     * @param null $config
+     * @param Config $config
      * @return array|bool
      */
     public function writeStream($path, $resource, Config $config)
@@ -142,7 +142,7 @@ class Local extends AbstractAdapter
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config   Config object or visibility setting
+     * @param   Config     $config   Config object or visibility setting
      * @return  array|bool
      */
     public function updateStream($path, $resource, Config $config)
@@ -155,7 +155,7 @@ class Local extends AbstractAdapter
      *
      * @param   string       $path
      * @param   string       $contents
-     * @param   mixed        $config   Config object or visibility setting
+     * @param   Config        $config   Config object or visibility setting
      * @return  array|bool
      */
     public function update($path, $contents, Config $config)
@@ -427,7 +427,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return RecursiveIteratorIterator
      */
     protected function getRecursiveDirectoryIterator($path)
@@ -439,7 +439,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return DirectoryIterator
      */
     protected function getDirectoryIterator($path)

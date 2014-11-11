@@ -41,7 +41,7 @@ trait StreamedWritingTrait
      *
      * @param   string    $path
      * @param   resource  $resource
-     * @param   mixed     $config   Config object or visibility setting
+     * @param   Config     $config   Config object or visibility setting
      * @return  mixed     false of file metadata
      */
     public function updateStream($path, $resource, Config $config)
