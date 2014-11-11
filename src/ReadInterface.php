@@ -16,7 +16,7 @@ interface ReadInterface
      * Read a file
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function read($path);
 
@@ -24,7 +24,7 @@ interface ReadInterface
      * Read a file as a stream
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function readStream($path);
 
@@ -41,7 +41,7 @@ interface ReadInterface
      * Get all the meta data of a file or directory
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function getMetadata($path);
 
@@ -49,7 +49,7 @@ interface ReadInterface
      * Get all the meta data of a file or directory
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function getSize($path);
 
@@ -57,7 +57,7 @@ interface ReadInterface
      * Get the mimetype of a file
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function getMimetype($path);
 
@@ -65,7 +65,7 @@ interface ReadInterface
      * Get the timestamp of a file
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function getTimestamp($path);
 
@@ -73,7 +73,7 @@ interface ReadInterface
      * Get the visibility of a file
      *
      * @param   string  $path
-     * @return  false|array
+     * @return  array|false
      */
     public function getVisibility($path);
 }
