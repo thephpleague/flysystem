@@ -162,17 +162,17 @@ abstract class AbstractCache implements CacheInterface
      * Check whether an object has been cached
      *
      * @param   string   $path
-     * @return  null|boolean  cached boolean
+     * @return  boolean  cached boolean
      */
     public function has($path)
     {
-        if (! isset($this->cache[$path])) {
-            $dirname = Util::dirname($path);
-
-            return $this->isComplete($dirname, false) ? false : null;
+        if (array_key_exists($path, $this->cache)) {
+            return $this->cache[$path] !== false;
         }
 
-        return $this->cache[$path] !== false;
+        if ($this->isComplete(Util::dirname($path), false)) {
+            return false;
+        }
     }
 
     /**

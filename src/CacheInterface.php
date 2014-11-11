@@ -18,7 +18,7 @@ interface CacheInterface extends ReadInterface
      *
      * @param  string  $dirname
      * @param  bool    $recursive
-     * @return Cache\AbstractCache|null
+     * @return $this
      */
     public function setComplete($dirname, $recursive);
 
