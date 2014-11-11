@@ -2,11 +2,6 @@
 
 namespace League\Flysystem\Adapter;
 
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Config;
-use League\Flysystem\Util;
-use RuntimeException;
-
 class SynologyFtp extends FTP
 {
 
