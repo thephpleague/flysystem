@@ -287,10 +287,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve the mime-type of an object
-     *
-     * @param   string       $path
-     * @return  null|string  mime-type or null on failure
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
