@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
@@ -14,6 +15,7 @@ class WebDav extends AbstractAdapter
 {
     use StreamedTrait;
     use StreamedCopyTrait;
+    use NotSupportingVisibilityTrait;
 
     /**
      * @var array

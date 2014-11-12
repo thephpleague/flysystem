@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -13,6 +14,7 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 class Rackspace extends AbstractAdapter
 {
     use StreamedCopyTrait;
+    use NotSupportingVisibilityTrait;
 
     /**
      * @var  Container  $container

@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedWritingTrait;
 use League\Flysystem\Config;
@@ -13,6 +14,7 @@ class Zip extends AbstractAdapter
 {
     use StreamedWritingTrait;
     use StreamedCopyTrait;
+    use NotSupportingVisibilityTrait;
 
     /**
      * @var array

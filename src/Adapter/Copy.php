@@ -3,11 +3,14 @@
 namespace League\Flysystem\Adapter;
 
 use Barracuda\Copy\API;
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class Copy extends AbstractAdapter
 {
+    use NotSupportingVisibilityTrait;
+
     /**
      * Result key map
      *

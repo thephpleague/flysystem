@@ -81,20 +81,4 @@ abstract class AbstractAdapter implements AdapterInterface
 
         return substr($path, $length);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVisibility($path)
-    {
-        throw new LogicException(get_class($this).' does not support visibility settings.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setVisibility($path, $visibility)
-    {
-        throw new LogicException(get_class($this).' does not support visibility settings.');
-    }
 }

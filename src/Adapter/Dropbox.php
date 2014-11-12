@@ -5,11 +5,14 @@ namespace League\Flysystem\Adapter;
 use Dropbox\Client;
 use Dropbox\WriteMode;
 use Dropbox\Exception;
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 
 class Dropbox extends AbstractAdapter
 {
+    use NotSupportingVisibilityTrait;
+
     /**
      * @var  array  $resultMap
      */
