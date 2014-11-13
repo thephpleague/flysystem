@@ -22,6 +22,26 @@ class MyPlugin implements PluginInterface
     }
 }
 
+class FsPlugin implements PluginInterface
+{
+    public $filesystem;
+
+    public function getMethod()
+    {
+        return 'fs_plugin';
+    }
+
+    public function setFilesystem(FilesystemInterface $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
+    public function handle($arg = false)
+    {
+        return $arg;
+    }
+}
+
 class InvalidPlugin implements PluginInterface
 {
     public function getMethod()
@@ -37,11 +57,17 @@ class InvalidPlugin implements PluginInterface
 
 class PluginTests extends PHPUnit_Framework_TestCase
 {
+    protected $manager;
+
     protected $filesystem;
+    protected $filesystem_other;
+    protected $filesystem_another;
 
     public function setup()
     {
         $this->filesystem = new Filesystem(Mockery::mock('League\Flysystem\AdapterInterface'));
+        $this->filesystem_other = new Filesystem(Mockery::mock('League\Flysystem\AdapterInterface'));
+        $this->filesystem_another = new Filesystem(Mockery::mock('League\Flysystem\AdapterInterface'));
     }
 
     /**
@@ -61,5 +87,21 @@ class PluginTests extends PHPUnit_Framework_TestCase
     {
         $this->filesystem->addPlugin(new InvalidPlugin);
         $this->filesystem->beInvalid();
+    }
+
+    public function testPluginOnMultipleFilesystems()
+    {
+        $plugin = new FsPlugin();
+
+        $this->manager = new \League\Flysystem\MountManager();
+        $this->manager->mountFilesystem('base', $this->filesystem);
+        $this->manager->mountFilesystem('other', $this->filesystem_other);
+        $this->manager->mountFilesystem('another', $this->filesystem_another);
+
+        $this->manager->addSharedPlugin($plugin);
+
+        $this->assertTrue($this->manager->getFilesystem('base')->hasPlugin($plugin));
+        $this->assertTrue($this->manager->getFilesystem('other')->hasPlugin($plugin));
+        $this->assertTrue($this->manager->getFilesystem('another')->hasPlugin($plugin));
     }
 }

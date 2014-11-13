@@ -222,4 +222,12 @@ interface FilesystemInterface
      * @return  $this
      */
     public function addPlugin(PluginInterface $plugin);
+
+    /**
+     * Checks for a registered plugin
+     *
+     * @param PluginInterface $plugin
+     * @return mixed
+     */
+    public function hasPlugin(PluginInterface $plugin);
 }
