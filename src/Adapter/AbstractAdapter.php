@@ -2,7 +2,6 @@
 
 namespace League\Flysystem\Adapter;
 
-use LogicException;
 use League\Flysystem\AdapterInterface;
 
 abstract class AbstractAdapter implements AdapterInterface
