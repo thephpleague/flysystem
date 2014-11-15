@@ -53,7 +53,7 @@ class GridFS extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        return $this->client->findOne($path) !== null;
+        return $this->client->findOne($location) !== null;
     }
 
     /**
