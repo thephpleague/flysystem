@@ -2,8 +2,8 @@
 
 namespace League\Flysystem;
 
-use LogicException;
 use League\Flysystem\Util\MimeType;
+use LogicException;
 
 class Util
 {

@@ -2,10 +2,10 @@
 
 namespace League\Flysystem;
 
-use League\Event\EmitterTrait;
 use League\Event\Emitter;
-use League\Flysystem\Event\Before as BeforeEvent;
+use League\Event\EmitterTrait;
 use League\Flysystem\Event\After as AfterEvent;
+use League\Flysystem\Event\Before as BeforeEvent;
 
 class EventableFilesystem extends Filesystem
 {

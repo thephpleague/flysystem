@@ -2,12 +2,12 @@
 
 namespace League\Flysystem;
 
+use InvalidArgumentException;
 use League\Flysystem\Plugin\GetWithMetadata;
 use League\Flysystem\Plugin\ListFiles;
 use League\Flysystem\Plugin\ListPaths;
 use League\Flysystem\Plugin\ListWith;
 use LogicException;
-use InvalidArgumentException;
 
 class Filesystem implements FilesystemInterface
 {

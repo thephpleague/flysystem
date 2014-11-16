@@ -3,11 +3,11 @@
 namespace League\Flysystem\Adapter;
 
 use Aws\Common\Exception\MultipartUploadException;
+use Aws\S3\Enum\Group;
+use Aws\S3\Enum\Permission;
 use Aws\S3\Model\MultipartUpload\AbstractTransfer;
 use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Aws\S3\S3Client;
-use Aws\S3\Enum\Group;
-use Aws\S3\Enum\Permission;
 use Guzzle\Service\Resource\Model;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;

@@ -2,14 +2,14 @@
 
 namespace League\Flysystem\Adapter;
 
+use Guzzle\Http\Exception\ClientErrorResponseException;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
+use OpenCloud\ObjectStore\Exception\ObjectNotFoundException;
 use OpenCloud\ObjectStore\Resource\Container;
 use OpenCloud\ObjectStore\Resource\DataObject;
-use OpenCloud\ObjectStore\Exception\ObjectNotFoundException;
-use Guzzle\Http\Exception\ClientErrorResponseException;
 
 class Rackspace extends AbstractAdapter
 {

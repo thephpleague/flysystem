@@ -2,8 +2,8 @@
 
 namespace League\Flysystem;
 
-use LogicException;
 use InvalidArgumentException;
+use LogicException;
 
 /**
  * Class MountManager
