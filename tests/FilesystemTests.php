@@ -476,27 +476,27 @@ namespace League\Flysystem
         {
             $filesystem->flushCache();
 
-            if ( ! $filesystem->has('test.txt')) {
+            if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
 
-            if ( ! $filesystem->has('othertest.txt')) {
+            if (! $filesystem->has('othertest.txt')) {
                 $filesystem->write('othertest.txt', 'something');
             }
 
-            if ( ! $filesystem->has('subdir/test.txt')) {
+            if (! $filesystem->has('subdir/test.txt')) {
                 $filesystem->write('subdir/test.txt', 'something');
             }
 
-            if ( ! $filesystem->has('subdir/other-test.txt')) {
+            if (! $filesystem->has('subdir/other-test.txt')) {
                 $filesystem->write('subdir/other-test.txt', 'something');
             }
 
-            if ( ! $filesystem->has('subdir/subsubdir/test.txt')) {
+            if (! $filesystem->has('subdir/subsubdir/test.txt')) {
                 $filesystem->write('subdir/subsubdir/test.txt', 'something');
             }
 
-            if ( ! $filesystem->has('subdir2/test.txt')) {
+            if (! $filesystem->has('subdir2/test.txt')) {
                 $filesystem->write('subdir2/test.txt', 'something');
             }
 
@@ -520,7 +520,7 @@ namespace League\Flysystem
          */
         public function testListPaths($filesystem)
         {
-            if ( ! $filesystem->has('test.txt')) {
+            if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
             $filesystem->flushCache();
@@ -535,7 +535,7 @@ namespace League\Flysystem
         {
             $filesystem->flushCache();
 
-            if ( ! $filesystem->has('test.txt')) {
+            if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
 
@@ -552,7 +552,7 @@ namespace League\Flysystem
         public function testListWithInvalid($filesystem)
         {
             $filesystem->flushCache();
-            if ( ! $filesystem->has('test.txt')) {
+            if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
 
@@ -564,7 +564,7 @@ namespace League\Flysystem
          */
         public function testGet($filesystem, $adapter, $cache)
         {
-            if ( ! $filesystem->has('nested/file.txt')) {
+            if (! $filesystem->has('nested/file.txt')) {
                 $filesystem->write('nested/file.txt', 'contents');
             }
 
