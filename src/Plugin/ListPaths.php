@@ -1,12 +1,9 @@
 <?php
 
-
 namespace League\Flysystem\Plugin;
-
 
 class ListPaths extends AbstractPlugin
 {
-
     /**
      * Get the method name
      *

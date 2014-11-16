@@ -1,11 +1,9 @@
 <?php
 
-
 namespace League\Flysystem\Plugin;
 
 class ListWith extends AbstractPlugin
 {
-
     /**
      * Get the method name
      *

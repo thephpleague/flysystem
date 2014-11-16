@@ -2,15 +2,15 @@
 
 namespace League\Flysystem\Adapter;
 
+use Crypt_RSA;
+use InvalidArgumentException;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
-use Net_SFTP;
-use Crypt_RSA;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Util;
 use LogicException;
-use InvalidArgumentException;
+use Net_SFTP;
 
 class Sftp extends AbstractFtpAdapter
 {

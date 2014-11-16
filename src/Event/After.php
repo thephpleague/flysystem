@@ -5,7 +5,6 @@ namespace League\Flysystem\Event;
 use League\Event\AbstractEvent;
 use League\Flysystem\FilesystemInterface;
 
-
 class After extends AbstractEvent
 {
     /**

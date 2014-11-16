@@ -2,15 +2,15 @@
 
 namespace League\Flysystem\Adapter;
 
-use Finfo;
-use League\Flysystem\Config;
-use SplFileInfo;
-use FilesystemIterator;
 use DirectoryIterator;
+use FilesystemIterator;
+use Finfo;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
+use League\Flysystem\Util;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use League\Flysystem\Util;
-use League\Flysystem\AdapterInterface;
+use SplFileInfo;
 
 class Local extends AbstractAdapter
 {

@@ -2,9 +2,8 @@
 
 namespace spec\League\Flysystem;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use League\Flysystem\AdapterInterface;
+use PhpSpec\ObjectBehavior;
 
 class EventableFilesystemSpec extends ObjectBehavior
 {

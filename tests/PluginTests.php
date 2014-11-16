@@ -1,8 +1,8 @@
 <?php
 
-use League\Flysystem\PluginInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use League\Flysystem\PluginInterface;
 
 class MyPlugin implements PluginInterface
 {

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace League\Flysystem\Adapter\Polyfill;
-
 
 use LogicException;
 
@@ -30,4 +28,4 @@ trait NotSupportingVisibilityTrait
     {
         throw new LogicException(get_class($this).' does not support visibility settings.');
     }
-} 
+}

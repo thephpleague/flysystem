@@ -2,12 +2,12 @@
 
 namespace spec\League\Flysystem;
 
-use PhpSpec\ObjectBehavior;
-use Prophecy\Argument;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\CacheInterface;
-use League\Flysystem\Stub\PluginStub;
 use League\Flysystem\Config;
+use League\Flysystem\Stub\PluginStub;
+use PhpSpec\ObjectBehavior;
+use Prophecy\Argument;
 
 class FilesystemSpec extends ObjectBehavior
 {

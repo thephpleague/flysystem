@@ -3,8 +3,8 @@
 namespace League\Flysystem\Adapter;
 
 use Dropbox\Client;
-use Dropbox\WriteMode;
 use Dropbox\Exception;
+use Dropbox\WriteMode;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;

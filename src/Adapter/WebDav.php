@@ -7,9 +7,9 @@ use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
+use LogicException;
 use Sabre\DAV\Client;
 use Sabre\DAV\Exception;
-use LogicException;
 
 class WebDav extends AbstractAdapter
 {
