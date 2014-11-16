@@ -1,8 +1,6 @@
 <?php
 
-
 namespace League\Flysystem\Plugin;
-
 
 class ListPaths extends AbstractPlugin
 {

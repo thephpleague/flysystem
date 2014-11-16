@@ -1,6 +1,5 @@
 <?php
 
-
 namespace League\Flysystem\Plugin;
 
 use League\Flysystem\FilesystemInterface;

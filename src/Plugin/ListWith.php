@@ -1,6 +1,5 @@
 <?php
 
-
 namespace League\Flysystem\Plugin;
 
 class ListWith extends AbstractPlugin

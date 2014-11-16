@@ -6,4 +6,5 @@ use LogicException;
 
 class RootViolationException extends LogicException
 {
+    //
 }

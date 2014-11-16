@@ -1,6 +1,5 @@
 <?php
 
-
 namespace League\Flysystem\Adapter\Polyfill;
 
 use League\Flysystem\Config;
