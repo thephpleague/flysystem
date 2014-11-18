@@ -67,6 +67,21 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testHasWithDir()
+    {
+        $this->adapter->createDir('0', new Config);
+        $this->assertTrue($this->adapter->has('0'));
+        $this->adapter->deleteDir('0');
+    }
+
+    public function testHasWithFile()
+    {
+        $adapter = $this->adapter;
+        $adapter->write('file.txt', 'content', new Config());
+        $this->assertTrue($adapter->has('file.txt'));
+        $adapter->delete('file.txt');
+    }
+
     public function testReadStream()
     {
         $adapter = $this->adapter;
