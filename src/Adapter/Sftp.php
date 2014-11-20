@@ -11,6 +11,7 @@ use League\Flysystem\Config;
 use League\Flysystem\Util;
 use LogicException;
 use Net_SFTP;
+use RuntimeException;
 
 class Sftp extends AbstractFtpAdapter
 {
@@ -106,8 +107,14 @@ class Sftp extends AbstractFtpAdapter
      */
     protected function setConnectionRoot()
     {
-        if ($this->root) {
-            $this->connection->chdir($this->root);
+        $root = $this->getRoot();
+
+        if (! $root) {
+            return;
+        }
+
+        if ( ! $this->connection->chdir($root)) {
+            throw new RuntimeException('Root is invalid or does not exist: ' . $root);
         }
     }
 

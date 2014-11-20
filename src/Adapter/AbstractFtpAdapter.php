@@ -110,6 +110,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
+     * Returns the root folder to work from
+     *
+     * @return string
+     */
+    public function getRoot()
+    {
+        return $this->root;
+    }
+
+    /**
      * Set the ftp port
      *
      * @param   int|string $port

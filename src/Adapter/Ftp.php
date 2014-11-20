@@ -65,16 +65,6 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Returns the root folder to work from
-     *
-     * @return string
-     */
-    public function getRoot()
-    {
-        return $this->root;
-    }
-
-    /**
      * Connect to the FTP server
      */
     public function connect()
@@ -111,9 +101,10 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function setConnectionRoot()
     {
+        $root = $this->getRoot();
         $connection = $this->getConnection();
 
-        if ($this->root && ! ftp_chdir($connection, $this->getRoot())) {
+        if ($root && ! ftp_chdir($connection, $root)) {
             throw new RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
 

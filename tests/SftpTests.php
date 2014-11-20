@@ -350,8 +350,21 @@ class SftpTests extends PHPUnit_Framework_TestCase
         $adapter->setRoot('/root');
         $adapter->setNetSftpConnection($mock);
         $mock->shouldReceive('login')->with('test', 'test')->andReturn(true);
-        $mock->shouldReceive('chdir')->with('/root/');
+        $mock->shouldReceive('chdir')->with('/root/')->andReturn(true);
         $adapter->connect();
         $adapter->disconnect();
+    }
+
+    /**
+     * @dataProvider  adapterProvider
+     * @expectedException RuntimeException
+     */
+    public function testConnectWithInvalidRoot($filesystem, $adapter, $mock)
+    {
+        $adapter->setRoot('/root');
+        $adapter->setNetSftpConnection($mock);
+        $mock->shouldReceive('login')->with('test', 'test')->andReturn(true);
+        $mock->shouldReceive('chdir')->with('/root/')->andReturn(false);
+        $adapter->connect();
     }
 }
