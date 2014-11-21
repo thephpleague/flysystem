@@ -167,7 +167,7 @@ class MountManager
         list($prefixFrom, $arguments) = $this->filterPrefix([$from]);
 
         $fsFrom = $this->getFilesystem($prefixFrom);
-        $buffer = call_user_func_array([$fsFrom, 'read'], $arguments);
+        $buffer = call_user_func_array([$fsFrom, 'readStream'], $arguments);
 
         if ($buffer === false) {
             return false;
@@ -176,18 +176,26 @@ class MountManager
         list($prefixTo, $arguments) = $this->filterPrefix([$to]);
 
         $fsTo = $this->getFilesystem($prefixTo);
-        return call_user_func_array([$fsTo, 'write'], array_merge($arguments, [$buffer]));
+        $result =  call_user_func_array([$fsTo, 'writeStream'], array_merge($arguments, [$buffer]));
+
+        if (is_resource($buffer)) {
+            fclose($buffer);
+        }
+
+        return $result;
     }
 
     /**
+     * Move a file.
+     *
      * @param $from
      * @param $to
      */
     public function move($from, $to)
     {
-        $retCode = $this->copy($from, $to);
+        $copied = $this->copy($from, $to);
 
-        if ($retCode) {
+        if ($copied) {
             return $this->delete($from);
         }
 

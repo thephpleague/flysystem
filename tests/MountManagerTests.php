@@ -73,27 +73,26 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $manager->mountFilesystem('fs2', $fs2);
 
         $filename = 'test.txt';
-        $buffer = 'a string inside filename';
-        $fs1->shouldReceive('read')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('write')->once()->with($filename, $buffer)->andReturn(true);
-
-        $manager->copy("fs1://{$filename}", "fs2://{$filename}");
+        $buffer = tmpfile();
+        $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(true);
+        $response = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
+        $this->assertTrue($response);
 
         // test failed status
-        $fs1->shouldReceive('read')->once()->with($filename)->andReturn(false);
-
+        $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn(false);
         $status = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertFalse($status);
 
-        $fs1->shouldReceive('read')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('write')->once()->with($filename, $buffer)->andReturn(false);
-
+        $buffer = tmpfile();
+        $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(false);
         $status = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertFalse($status);
 
-        $fs1->shouldReceive('read')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('write')->once()->with($filename, $buffer)->andReturn(true);
-
+        $buffer = tmpfile();
+        $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(true);
         $status = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertTrue($status);
     }
@@ -107,12 +106,11 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $manager->mountFilesystem('fs2', $fs2);
 
         $filename = 'test.txt';
-        $buffer = 'a string inside filename';
-        $fs1->shouldReceive('read')->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('write')->with($filename, $buffer)->andReturn(false);
+        $buffer = tmpfile();
+        $fs1->shouldReceive('readStream')->with($filename)->andReturn($buffer);
+        $fs2->shouldReceive('writeStream')->with($filename, $buffer)->andReturn(false);
         $code = $manager->move("fs1://{$filename}", "fs2://{$filename}");
         $this->assertFalse($code);
-
 
         $manager->shouldReceive('copy')->with("fs1://{$filename}", "fs2://{$filename}")->andReturn(true);
         $manager->shouldReceive('delete')->with("fs1://{$filename}")->andReturn(true);
