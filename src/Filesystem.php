@@ -9,6 +9,12 @@ use League\Flysystem\Plugin\ListPaths;
 use League\Flysystem\Plugin\ListWith;
 use LogicException;
 
+/**
+ * @method array getWithMetadata(string $path, array $metadata)
+ * @method array listFiles(string $path = '', boolean $recursive = false)
+ * @method array listPaths(string $path = '', boolean $recursive = false)
+ * @method array listWith(array $keys = [], $directory = '', $recursive = false)
+ */
 class Filesystem implements FilesystemInterface
 {
     /**
@@ -410,7 +416,7 @@ class Filesystem implements FilesystemInterface
     public function createDir($dirname, array $config = [])
     {
         $dirname = Util::normalizePath($dirname);
-        $config = Util::ensureConfig($config);
+        $config = $this->prepareConfig($config);
         $result  = $this->adapter->createDir($dirname, $config);
 
         if ($result === false) {
