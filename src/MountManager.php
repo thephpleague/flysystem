@@ -24,7 +24,6 @@ use LogicException;
  * @method string|false read($path)
  * @method resource|false readStream($path)
  * @method bool rename($path, $newpath)
- * @method bool copy($path, $newpath)
  * @method bool delete($path)
  * @method bool deleteDir($dirname)
  * @method bool createDir($dirname, $config = [])
@@ -156,5 +155,42 @@ class MountManager
         $callback = array($filesystem, $method);
 
         return call_user_func_array($callback, $arguments);
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     * @return bool
+     */
+    public function copy($from, $to)
+    {
+        list($prefixFrom, $arguments) = $this->filterPrefix([$from]);
+
+        $fsFrom = $this->getFilesystem($prefixFrom);
+        $buffer = call_user_func_array([$fsFrom, 'read'], $arguments);
+
+        if ($buffer === false) {
+            return false;
+        }
+
+        list($prefixTo, $arguments) = $this->filterPrefix([$to]);
+
+        $fsTo = $this->getFilesystem($prefixTo);
+        return call_user_func_array([$fsTo, 'write'], array_merge($arguments, [$buffer]));
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     */
+    public function move($from, $to)
+    {
+        $retCode = $this->copy($from, $to);
+
+        if ($retCode) {
+            return $this->delete($from);
+        }
+
+        return false;
     }
 }
