@@ -57,7 +57,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
 
-        return is_file($location);
+        return file_exists($location);
     }
 
     /**
