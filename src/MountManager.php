@@ -3,6 +3,8 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
+use League\Flysystem\Plugin\PluggableTrait;
+use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
 
 /**
@@ -48,6 +50,8 @@ use LogicException;
  */
 class MountManager
 {
+    use PluggableTrait;
+
     /**
      * @var  array  $filesystems
      */
@@ -152,6 +156,13 @@ class MountManager
         list($prefix, $arguments) = $this->filterPrefix($arguments);
 
         $filesystem = $this->getFilesystem($prefix);
+
+        try {
+            return $this->invokePlugin($method, $arguments, $filesystem);
+        } catch (PluginNotFoundException $e) {
+            // Let it pass, it's ok, don't panic.
+        }
+
         $callback = array($filesystem, $method);
 
         return call_user_func_array($callback, $arguments);

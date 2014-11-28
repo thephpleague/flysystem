@@ -660,5 +660,13 @@ namespace League\Flysystem
             $plugin->setFilesystem($filesystem);
             $this->assertFalse($plugin->handle('path', ['invalid']));
         }
+
+        public function testCallMethodDelegation()
+        {
+            $this->setExpectedException('BadMethodCallException');
+            $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+            $filesystem = new Filesystem($adapter);
+            $filesystem->badMethodCall();
+        }
     }
 }
