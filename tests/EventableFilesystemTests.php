@@ -197,7 +197,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $mock = $this->getMockeryMock('adapter');
         $config = [];
         $plugin = Mockery::mock('League\Flysystem\PluginInterface');
-        $plugin->shouldReceive('setFilesystem')->once();
         $plugin->shouldReceive('getMethod')->andReturn('methodName');
         $mock->shouldReceive('addPlugin')->with($plugin, $config)->andReturn($mock);
         $filesystem = new EventableFilesystem($mock);

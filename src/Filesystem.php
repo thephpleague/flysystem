@@ -7,7 +7,8 @@ use League\Flysystem\Plugin\GetWithMetadata;
 use League\Flysystem\Plugin\ListFiles;
 use League\Flysystem\Plugin\ListPaths;
 use League\Flysystem\Plugin\ListWith;
-use LogicException;
+use League\Flysystem\Plugin\PluggableTrait;
+use League\Flysystem\Plugin\PluginNotFoundException;
 
 /**
  * @method array getWithMetadata(string $path, array $metadata)
@@ -17,6 +18,8 @@ use LogicException;
  */
 class Filesystem implements FilesystemInterface
 {
+    use PluggableTrait;
+
     /**
      * @var  AdapterInterface  $adapter
      */
@@ -685,54 +688,21 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Register a plugin
-     *
-     * @param   PluginInterface  $plugin
-     * @return  $this
-     */
-    public function addPlugin(PluginInterface $plugin)
-    {
-        $plugin->setFilesystem($this);
-        $method = $plugin->getMethod();
-
-        $this->plugins[$method] = $plugin;
-
-        return $this;
-    }
-
-    /**
-     * Register a plugin
-     *
-     * @param   string           $method
-     * @return  PluginInterface  $plugin
-     * @throws  LogicException
-     */
-    protected function findPlugin($method)
-    {
-        if (! isset($this->plugins[$method])) {
-            throw new LogicException('Plugin not found for method: '.$method);
-        }
-
-        return $this->plugins[$method];
-    }
-
-    /**
      * Plugins pass-through
      *
-     * @param   string  $method
-     * @param   array   $arguments
+     * @param   string $method
+     * @param   array  $arguments
      * @return  mixed
      */
     public function __call($method, array $arguments)
     {
-        $plugin = $this->findPlugin($method);
-
-        if (! method_exists($plugin, 'handle')) {
-            throw new LogicException(get_class($plugin).' should define a handle method.');
+        try {
+            return $this->invokePlugin($method, $arguments, $this);
+        } catch (PluginNotFoundException $e) {
+            throw new \BadMethodCallException(
+                'Call to undefined method '
+                . __CLASS__
+                . '::' . $method);
         }
-
-        $callback = array($plugin, 'handle');
-
-        return call_user_func_array($callback, $arguments);
     }
 }
