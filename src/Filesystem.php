@@ -36,11 +36,6 @@ class Filesystem implements FilesystemInterface
     protected $config;
 
     /**
-     * @var  array  $plugins
-     */
-    protected $plugins = array();
-
-    /**
      * Constructor
      *
      * @param AdapterInterface $adapter

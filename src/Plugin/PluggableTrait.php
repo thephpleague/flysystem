@@ -9,6 +9,11 @@ use LogicException;
 trait PluggableTrait
 {
     /**
+     * @var  array  $plugins
+     */
+    protected $plugins = array();
+
+    /**
      * Register a plugin
      *
      * @param   PluginInterface  $plugin
