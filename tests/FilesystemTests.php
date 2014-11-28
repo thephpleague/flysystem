@@ -15,6 +15,9 @@ namespace League\Flysystem\Adapter
 namespace League\Flysystem
 {
     use League\Flysystem\Plugin\GetWithMetadata;
+    use League\Flysystem\Plugin\ListFiles;
+    use League\Flysystem\Plugin\ListPaths;
+    use League\Flysystem\Plugin\ListWith;
     use Mockery;
 
     class FilesystemTests extends \PHPUnit_Framework_TestCase
@@ -475,6 +478,7 @@ namespace League\Flysystem
         public function testListFiles($filesystem)
         {
             $filesystem->flushCache();
+            $filesystem->addPlugin(new ListFiles);
 
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
@@ -520,6 +524,8 @@ namespace League\Flysystem
          */
         public function testListPaths($filesystem)
         {
+            $filesystem->addPlugin(new ListPaths);
+
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
@@ -531,9 +537,10 @@ namespace League\Flysystem
         /**
          * @dataProvider filesystemProvider
          */
-        public function testListWith($filesystem)
+        public function testListWith(FilesystemInterface $filesystem)
         {
             $filesystem->flushCache();
+            $filesystem->addPlugin(new ListWith);
 
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
@@ -551,6 +558,7 @@ namespace League\Flysystem
          */
         public function testListWithInvalid($filesystem)
         {
+            $filesystem->addPlugin(new ListWith);
             $filesystem->flushCache();
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');

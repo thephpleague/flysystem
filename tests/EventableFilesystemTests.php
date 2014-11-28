@@ -1,6 +1,10 @@
 <?php
 
 use League\Flysystem\EventableFilesystem;
+use League\Flysystem\Plugin\GetWithMetadata;
+use League\Flysystem\Plugin\ListFiles;
+use League\Flysystem\Plugin\ListPaths;
+use League\Flysystem\Plugin\ListWith;
 use League\Flysystem\Util;
 
 class EventableFilesystemTests extends PHPUnit_Framework_TestCase
@@ -100,6 +104,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         ];
 
         $filesystem = new EventableFilesystem($adapter);
+        $filesystem->addPlugin(new ListFiles);
         $this->assertEquals($expected, $filesystem->listFiles(''));
     }
 
@@ -115,6 +120,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         ];
 
         $filesystem = new EventableFilesystem($adapter);
+        $filesystem->addPlugin(new ListWith);
         $this->assertEquals($expected, $filesystem->listWith(['mimetype'], ''));
     }
 
@@ -129,6 +135,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $expected = ['path', 'path2'];
 
         $filesystem = new EventableFilesystem($adapter);
+        $filesystem->addPlugin(new ListPaths);
         $this->assertEquals($expected, $filesystem->listPaths(''));
     }
 
@@ -141,6 +148,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         );
         $adapter->shouldReceive('getMimetype')->andReturn(['mimetype' => 'text/plain']);
         $filesystem = new EventableFilesystem($adapter);
+        $filesystem->addPlugin(new GetWithMetadata);
         $result = $filesystem->getWithMetadata('path', ['mimetype']);
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('mimetype', $result);

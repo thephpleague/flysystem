@@ -3,10 +3,6 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
-use League\Flysystem\Plugin\GetWithMetadata;
-use League\Flysystem\Plugin\ListFiles;
-use League\Flysystem\Plugin\ListPaths;
-use League\Flysystem\Plugin\ListWith;
 use LogicException;
 
 /**
@@ -50,7 +46,6 @@ class Filesystem implements FilesystemInterface
         $this->cache = $cache ?: new Cache\Memory;
         $this->cache->load();
         $this->config = Util::ensureConfig($config);
-        $this->addDefaultPlugins();
     }
 
     /**
@@ -671,17 +666,6 @@ class Filesystem implements FilesystemInterface
         if ($this->has($path)) {
             throw new FileExistsException($path);
         }
-    }
-
-    /**
-     * Add the default plugins.
-     */
-    protected function addDefaultPlugins()
-    {
-        $this->addPlugin(new ListWith);
-        $this->addPlugin(new ListFiles);
-        $this->addPlugin(new ListPaths);
-        $this->addPlugin(new GetWithMetadata);
     }
 
     /**
