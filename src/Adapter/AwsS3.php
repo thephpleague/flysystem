@@ -36,6 +36,9 @@ class AwsS3 extends AbstractAdapter
         'Metadata',
         'ACL',
         'ContentType'
+        'ContentDisposition',
+        'ContentLanguage',
+        'ContentEncoding',
     );
 
     /**
