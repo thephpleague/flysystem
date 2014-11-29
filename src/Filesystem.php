@@ -535,7 +535,7 @@ class Filesystem implements FilesystemInterface
             return $cached;
         }
 
-        if (($object = $this->adapter->getSize($path)) === false) {
+        if (($object = $this->adapter->getSize($path)) === false || !isset($object['size'])) {
             return false;
         }
 
