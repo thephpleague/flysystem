@@ -2,17 +2,21 @@
 
 namespace League\Flysystem\Adapter;
 
-use League\Flysystem\Util;
 use WindowsAzure\Blob\Internal\IBlob;
 use WindowsAzure\Blob\Models\Blob;
-use WindowsAzure\Blob\Models\CopyBlobResult;
-use WindowsAzure\Blob\Models\GetBlobResult;
 use WindowsAzure\Blob\Models\ListBlobsOptions;
 use WindowsAzure\Blob\Models\ListBlobsResult;
 use WindowsAzure\Common\ServiceException;
 
-class Azure extends AbstractAdapter
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
+use League\Flysystem\Config;
+use League\Flysystem\Util;
+
+class Azure implements AdapterInterface
 {
+    use NotSupportingVisibilityTrait;
+
     /**
      * @var string
      */
@@ -24,10 +28,8 @@ class Azure extends AbstractAdapter
     protected $client;
 
     /**
-     * {@inheritdoc}
-     *
-     * @param IBlob $azureClient
-     * @param $container
+     * @param IBlob  $azureClient
+     * @param string $container
      */
     public function __construct(IBlob $azureClient, $container)
     {
@@ -38,29 +40,36 @@ class Azure extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function write($path, $contents, $visibility = null)
+    public function write($path, $contents, Config $config)
     {
         /** @var CopyBlobResult $result */
         $result = $this->client->createBlockBlob($this->container, $path, $contents);
-        return $this->normalizeObject($path, $result->getLastModified()->format('U'), $contents);
-    }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @todo check what expected behaviour here is
-     */
-    public function writeStream($path, $resource, $config = null)
-    {
-        return $this->write($path, $resource);
+        return $this->normalize($path, $result->getLastModified()->format('U'), $contents);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function update($path, $contents)
+    public function writeStream($path, $resource, Config $config)
     {
-        $this->write($path, $contents);
+        return $this->write($path, $resource, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update($path, $contents, Config $config)
+    {
+        $this->write($path, $contents, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateStream($path, $resource, Config $config)
+    {
+        $this->write($path, $resource, $config);
     }
 
     /**
@@ -68,9 +77,17 @@ class Azure extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
+        $this->client->copyBlob($this->container, $newpath, $this->container, $path);
+
+        return $this->delete($path);
+    }
+
+    public function copy($path, $newpath)
+    {
         /** @var CopyBlobResult $result */
         $result = $this->client->copyBlob($this->container, $newpath, $this->container, $path);
-        return $this->normalizeObject($path, $result->getLastModified()->format('U'));
+
+        return true;
     }
 
     /**
@@ -79,6 +96,7 @@ class Azure extends AbstractAdapter
     public function delete($path)
     {
         $this->client->deleteBlob($this->container, $path);
+
         return true;
     }
 
@@ -93,7 +111,7 @@ class Azure extends AbstractAdapter
         /** @var ListBlobsResult $listResults */
         $listResults = $this->client->listBlobs($this->container, $options);
 
-        foreach($listResults->getBlobs() as $blob){
+        foreach ($listResults->getBlobs() as $blob) {
             /** @var Blob $blob */
             $this->client->deleteBlob($this->container, $blob->getName());
         }
@@ -104,7 +122,7 @@ class Azure extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function createDir($dirname)
+    public function createDir($dirname, Config $config)
     {
         return array('path' => $dirname, 'type' => 'dir');
     }
@@ -116,15 +134,15 @@ class Azure extends AbstractAdapter
     {
         try {
             $this->client->getBlob($this->container, $path);
-            return true;
         } catch (ServiceException $e) {
-
-            if ($e->getCode() != 404) {
+            if ($e->getCode() !== 404) {
                 throw $e;
             }
 
             return false;
         }
+
+        return true;
     }
 
     /**
@@ -136,10 +154,27 @@ class Azure extends AbstractAdapter
         $blobResult = $this->client->getBlob($this->container, $path);
         $properties = $blobResult->getProperties();
 
-        return $this->normalizeObject(
+        return $this->normalize(
             $path,
             $properties->getLastModified()->format('U'),
             $this->streamContentsToString($blobResult->getContentStream())
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readStream($path)
+    {
+        /** @var GetBlobResult $blobResult */
+        $blobResult = $this->client->getBlob($this->container, $path);
+        $properties = $blobResult->getProperties();
+
+        return array(
+            'path'     => $path,
+            'size'     => $properties->getContentLength(),
+            'mimetype' => $properties->getContentType(),
+            'stream'   => $blobResult->getContentStream(),
         );
     }
 
@@ -155,22 +190,22 @@ class Azure extends AbstractAdapter
         $listResults = $this->client->listBlobs($this->container, $options);
 
         $contents = array();
-        foreach($listResults->getBlobs() as $blob){
-            /** @var Blob $blob */
-            $contents[] = $this->read($blob->getName());
+        foreach ($listResults->getBlobs() as $blob) {
+            $contents[] = $this->normalizeBlob($blob);
         }
 
-        return true;
+        return $contents;
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @todo confirm expected return content for this function
      */
     public function getMetadata($path)
     {
-        return $this->read($path);
+        /** @var GetBlobResult $result */
+        $result = $this->client->getBlob($this->container, $path);
+
+        return $this->normalizeBlob($result);
     }
 
     /**
@@ -178,9 +213,7 @@ class Azure extends AbstractAdapter
      */
     public function getSize($path)
     {
-        /** @var GetBlobResult $result */
-        $result = $this->client->getBlob($this->container, $path);
-        return $result->getProperties()->getContentLength();
+        return $this->getMetadata($path);
     }
 
     /**
@@ -188,9 +221,7 @@ class Azure extends AbstractAdapter
      */
     public function getMimetype($path)
     {
-        /** @var GetBlobResult $result */
-        $result = $this->client->getBlob($this->container, $path);
-        return $result->getProperties()->getContentType();
+        return $this->getMetadata($path);
     }
 
     /**
@@ -198,36 +229,54 @@ class Azure extends AbstractAdapter
      */
     public function getTimestamp($path)
     {
-        /** @var GetBlobResult $result */
-        $result = $this->client->getBlob($this->container, $path);
-        return $result->getProperties()->getLastModified();
+        return $this->getMetadata($path);
     }
 
     /**
      * Builds the normalized output array
      *
-     * @todo confirm expected content of normalized return data
-     *
      * @param string $path
-     * @param int $timestamp
+     * @param int    $timestamp
      * @param string $content
+     *
      * @return array
      */
-    protected function normalizeObject( $path, $timestamp, $content = null)
+    protected function normalize($path, $timestamp, $content = null)
     {
         return array(
             'path'      => $path,
             'timestamp' => $timestamp,
             'dirname'   => Util::dirname($path),
             'contents'  => $content,
-            'type'      => 'file'
+            'type'      => 'file',
+        );
+    }
+
+    /**
+     * Builds the normalized output array from a Blob object.
+     *
+     * @param Blob $blob
+     *
+     * @return array
+     */
+    protected function normalizeBlob(Blob $blob)
+    {
+        $properties = $blob->getProperties();
+
+        return array(
+            'path'      => $blob->getName(),
+            'timestamp' => $properties->getLastModified()->format('U'),
+            'dirname'   => Util::dirname($blob->getName()),
+            'mimetype'  => $properties->getContentType(),
+            'size'      => $properties->getContentLength(),
+            'type'      => 'file',
         );
     }
 
     /**
      * Retrieves content streamed by Azure into a string
      *
-     * @param resource $resource
+     * @param  resource $resource
      * @return string
      */
     protected function streamContentsToString($resource)

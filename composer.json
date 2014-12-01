@@ -31,6 +31,9 @@
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
         "phpspec/phpspec": "~2.0",
+        "pear-pear.php.net/mail_mime" : "*",
+        "pear-pear.php.net/http_request2" : "*",
+        "pear-pear.php.net/mail_mimedecode" : "*",
         "microsoft/windowsazure": "~0.4.0"
     },
     "autoload": {
