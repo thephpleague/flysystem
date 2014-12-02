@@ -42,10 +42,7 @@ class Azure implements AdapterInterface
      */
     public function write($path, $contents, Config $config)
     {
-        /** @var CopyBlobResult $result */
-        $result = $this->client->createBlockBlob($this->container, $path, $contents);
-
-        return $this->normalize($path, $result->getLastModified()->format('U'), $contents);
+        return $this->upload($path, $contents, $config);
     }
 
     /**
@@ -53,7 +50,7 @@ class Azure implements AdapterInterface
      */
     public function writeStream($path, $resource, Config $config)
     {
-        return $this->write($path, $resource, $config);
+        return $this->upload($path, $resource, $config);
     }
 
     /**
@@ -61,7 +58,7 @@ class Azure implements AdapterInterface
      */
     public function update($path, $contents, Config $config)
     {
-        return $this->write($path, $contents, $config);
+        return $this->upload($path, $contents, $config);
     }
 
     /**
@@ -69,7 +66,7 @@ class Azure implements AdapterInterface
      */
     public function updateStream($path, $resource, Config $config)
     {
-        return $this->writeStream($path, $resource, $config);
+        return $this->upload($path, $resource, $config);
     }
 
     /**
@@ -278,5 +275,22 @@ class Azure implements AdapterInterface
     protected function streamContentsToString($resource)
     {
         return stream_get_contents($resource);
+    }
+
+    /**
+     * Upload a file.
+     *
+     * @param string $path
+     * @param mixed  $content Either a string or a stream.
+     * @param Config $config
+     *
+     * @return array
+     */
+    protected function upload($path, $contents, Config $config)
+    {
+        /** @var CopyBlobResult $result */
+        $result = $this->client->createBlockBlob($this->container, $path, $contents);
+
+        return $this->normalize($path, $result->getLastModified()->format('U'), $contents);
     }
 }
