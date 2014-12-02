@@ -70,6 +70,7 @@ Want to get started quickly? Check out some of these integrations:
 * Sftp (through phpseclib)
 * Zip (through ZipArchive)
 * WebDAV (through SabreDAV)
+* Azure Blob Storage
 * NullAdapter
 
 ### Planned Adapters
@@ -208,6 +209,19 @@ $filesystem = new Filesystem(new Adapter(array(
 $client = new Sabre\DAV\Client($settings);
 $adapter = new League\Flysystem\Adapter\WebDav($client);
 $flysystem = new League\Flysystem\Filesystem($adapter);
+```
+
+## Azure Blob Storage Setup
+
+```php
+use WindowsAzure\Common\ServicesBuilder;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Azure as Adapter;
+
+$endpoint = sprintf('DefaultEndpointsProtocol=https;AccountName=%s;AccountKey=%s', 'account-name', 'api-key');
+$blobRestProxy = ServicesBuilder::getInstance()->createBlobService($endpoint);
+
+$filesystem = new Filesystem(new Adapter($blobRestProxy, 'my-container'));
 ```
 
 ## NullAdapter Setup
