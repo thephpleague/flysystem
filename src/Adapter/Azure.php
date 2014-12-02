@@ -3,7 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use WindowsAzure\Blob\Internal\IBlob;
-use WindowsAzure\Blob\Models\Blob;
+use WindowsAzure\Blob\Models\BlobProperties;
 use WindowsAzure\Blob\Models\ListBlobsOptions;
 use WindowsAzure\Blob\Models\ListBlobsResult;
 use WindowsAzure\Common\ServiceException;
@@ -61,7 +61,7 @@ class Azure implements AdapterInterface
      */
     public function update($path, $contents, Config $config)
     {
-        $this->write($path, $contents, $config);
+        return $this->write($path, $contents, $config);
     }
 
     /**
@@ -69,7 +69,7 @@ class Azure implements AdapterInterface
      */
     public function updateStream($path, $resource, Config $config)
     {
-        $this->write($path, $resource, $config);
+        return $this->writeStream($path, $resource, $config);
     }
 
     /**
@@ -85,7 +85,7 @@ class Azure implements AdapterInterface
     public function copy($path, $newpath)
     {
         /** @var CopyBlobResult $result */
-        $result = $this->client->copyBlob($this->container, $newpath, $this->container, $path);
+        $this->client->copyBlob($this->container, $newpath, $this->container, $path);
 
         return true;
     }
@@ -153,12 +153,9 @@ class Azure implements AdapterInterface
         /** @var GetBlobResult $blobResult */
         $blobResult = $this->client->getBlob($this->container, $path);
         $properties = $blobResult->getProperties();
+        $content = $this->streamContentsToString($blobResult->getContentStream());
 
-        return $this->normalize(
-            $path,
-            $properties->getLastModified()->format('U'),
-            $this->streamContentsToString($blobResult->getContentStream())
-        );
+        return $this->normalizeBlobProperties($path, $properties) + array('contents' => $content);
     }
 
     /**
@@ -170,12 +167,7 @@ class Azure implements AdapterInterface
         $blobResult = $this->client->getBlob($this->container, $path);
         $properties = $blobResult->getProperties();
 
-        return array(
-            'path'     => $path,
-            'size'     => $properties->getContentLength(),
-            'mimetype' => $properties->getContentType(),
-            'stream'   => $blobResult->getContentStream(),
-        );
+        return $this->normalizeBlobProperties($path, $properties) + array('stream' => $blobResult->getContentStream());
     }
 
     /**
@@ -191,7 +183,7 @@ class Azure implements AdapterInterface
 
         $contents = array();
         foreach ($listResults->getBlobs() as $blob) {
-            $contents[] = $this->normalizeBlob($blob);
+            $contents[] = $this->normalizeBlobProperties($blob->getName(), $blob->getProperties());
         }
 
         return $contents;
@@ -205,7 +197,7 @@ class Azure implements AdapterInterface
         /** @var GetBlobResult $result */
         $result = $this->client->getBlob($this->container, $path);
 
-        return $this->normalizeBlob($result);
+        return $this->normalizeBlobProperties($path, $result->getProperties());
     }
 
     /**
@@ -237,36 +229,40 @@ class Azure implements AdapterInterface
      *
      * @param string $path
      * @param int    $timestamp
-     * @param string $content
+     * @param mixed  $content
      *
      * @return array
      */
     protected function normalize($path, $timestamp, $content = null)
     {
-        return array(
+        $data = array(
             'path'      => $path,
-            'timestamp' => $timestamp,
+            'timestamp' => (int) $timestamp,
             'dirname'   => Util::dirname($path),
-            'contents'  => $content,
             'type'      => 'file',
         );
+
+        if (is_string($content)) {
+            $data['contents'] = $content;
+        }
+
+        return $data;
     }
 
     /**
      * Builds the normalized output array from a Blob object.
      *
-     * @param Blob $blob
+     * @param string         $path
+     * @param BlobProperties $properties
      *
      * @return array
      */
-    protected function normalizeBlob(Blob $blob)
+    protected function normalizeBlobProperties($path, BlobProperties $properties)
     {
-        $properties = $blob->getProperties();
-
         return array(
-            'path'      => $blob->getName(),
-            'timestamp' => $properties->getLastModified()->format('U'),
-            'dirname'   => Util::dirname($blob->getName()),
+            'path'      => $path,
+            'timestamp' => (int) $properties->getLastModified()->format('U'),
+            'dirname'   => Util::dirname($path),
             'mimetype'  => $properties->getContentType(),
             'size'      => $properties->getContentLength(),
             'type'      => 'file',
