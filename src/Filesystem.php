@@ -47,6 +47,17 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * @param PluginInterface $plugin
+     * @return bool
+     */
+    public function hasPlugin(PluginInterface $plugin)
+    {
+        return array_filter($this->plugins, function (PluginInterface $innerPlugin) use ($plugin) {
+            return is_a($innerPlugin, get_class($plugin));
+        }) > 0;
+    }
+
+    /**
      * Get the Adapter
      *
      * @return  AdapterInterface  adapter

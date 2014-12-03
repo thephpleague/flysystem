@@ -58,6 +58,11 @@ class MountManager
     protected $filesystems = array();
 
     /**
+     * @var array|PluginInterface[]
+     */
+    protected $sharedPlugins = array();
+
+    /**
      * Constructor
      *
      * @param   array  $filesystems
@@ -65,6 +70,26 @@ class MountManager
     public function __construct(array $filesystems = array())
     {
         $this->mountFilesystems($filesystems);
+    }
+
+    /**
+     * @param FilesystemInterface $filesystem
+     */
+    protected function setPluginsToFilesystem(FilesystemInterface $filesystem)
+    {
+        foreach ($this->sharedPlugins as $plugin) {
+            if (!$filesystem->hasPlugin($plugin)) {
+                $filesystem->addPlugin(clone $plugin);
+            }
+        }
+    }
+
+    /**
+     * @param PluginInterface $plugin
+     */
+    public function addSharedPlugin(PluginInterface $plugin)
+    {
+        $this->sharedPlugins[] = $plugin;
     }
 
     /**
@@ -113,7 +138,9 @@ class MountManager
             throw new LogicException('No filesystem mounted with prefix ' . $prefix);
         }
 
-        return $this->filesystems[$prefix];
+        $filesystem = $this->filesystems[$prefix];
+        $this->setPluginsToFilesystem($filesystem);
+        return $filesystem;
     }
 
     /**
