@@ -2,6 +2,7 @@
 
 use Aws\S3\Enum\Group;
 use Aws\S3\Enum\Permission;
+use Guzzle\Service\Resource\Model;
 use League\Flysystem\Adapter\AwsS3 as Adapter;
 use League\Flysystem\Config;
 
@@ -67,6 +68,7 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
         $mock = $this->getS3Client();
         $mock->shouldReceive('putObject')->times(2);
         $adapter = new Adapter($mock, 'bucketname', 'prefix');
+        $this->expectVisibilityCall(Permission::READ, 'something', $mock);
         $adapter->update('something', 'something', new Config);
         $adapter->write('something', 'something', new Config(['visibility' => 'private']));
     }
@@ -130,7 +132,8 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
                 'Metadata' => array(),
             ))
         );
-        $adapter->updateStream('something', $temp, new Config);
+        $this->expectVisibilityCall(Permission::READ, '/prefix/something', $mockS3Client);
+        $this->assertInternalType('array', $adapter->updateStream('something', $temp, new Config));
         fclose($temp);
     }
 
@@ -363,9 +366,9 @@ class AwsS3Tests extends PHPUnit_Framework_TestCase
      */
     protected function expectVisibilityCall($permission, $uri, $mock)
     {
-        $mock->shouldReceive('getObjectAcl')->once()->andReturn(Mockery::self());
         $grant = array('Permission' => $permission, 'Grantee' => array('URI' => $uri));
         $grants = array('Grants' => array($grant));
-        $mock->shouldReceive('getAll')->once()->andReturn($grants);
+        $result = new Model($grants);
+        $mock->shouldReceive('getObjectAcl')->once()->andReturn($result);
     }
 }

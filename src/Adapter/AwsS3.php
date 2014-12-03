@@ -182,6 +182,10 @@ class AwsS3 extends AbstractAdapter
      */
     public function update($path, $contents, Config $config)
     {
+        if (! $config->has('visibility') && ! $config->has('ACL')) {
+            $config->set('ACL', $this->getObjectACL($path));
+        }
+
         return $this->write($path, $contents, $config);
     }
 
@@ -190,6 +194,10 @@ class AwsS3 extends AbstractAdapter
      */
     public function updateStream($path, $resource, Config $config)
     {
+        if (! $config->has('visibility') && ! $config->has('ACL')) {
+            $config->set('ACL', $this->getObjectACL($path));
+        }
+
         return $this->writeStream($path, $resource, $config);
     }
 
