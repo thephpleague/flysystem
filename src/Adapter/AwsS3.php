@@ -35,7 +35,10 @@ class AwsS3 extends AbstractAdapter
         'ServerSideEncryption',
         'Metadata',
         'ACL',
-        'ContentType'
+        'ContentType',
+        'ContentDisposition',
+        'ContentLanguage',
+        'ContentEncoding'
     );
 
     /**
