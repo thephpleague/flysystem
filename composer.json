@@ -30,7 +30,11 @@
         "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
-        "phpspec/phpspec": "~2.0"
+        "phpspec/phpspec": "~2.0",
+        "pear-pear.php.net/mail_mime" : "*",
+        "pear-pear.php.net/http_request2" : "*",
+        "pear-pear.php.net/mail_mimedecode" : "*",
+        "microsoft/windowsazure": "~0.4.0"
     },
     "autoload": {
         "psr-4": {
@@ -53,7 +57,8 @@
         "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files",
         "barracuda/copy": "Allows you to use Copy.com storage",
         "guzzlehttp/guzzle": "Allows you to use http files (reading only)",
-        "tedivm/stash": "Allows you to use Stash as cache implementation"
+        "tedivm/stash": "Allows you to use Stash as cache implementation",
+        "microsoft/windowsazure": "Allows you to use Windows Azure Blob storage"
     },
     "config": {
         "bin-dir": "bin"
@@ -62,5 +67,11 @@
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "pear",
+            "url": "http://pear.php.net"
+        }
+    ]
 }
