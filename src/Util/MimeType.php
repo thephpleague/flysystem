@@ -15,7 +15,7 @@ class MimeType
     public static function detectByContent($content)
     {
         if (! class_exists('Finfo')) {
-            return null;
+            return;
         }
 
         $finfo = new Finfo(FILEINFO_MIME_TYPE);
@@ -48,7 +48,7 @@ class MimeType
      */
     public static function getExtensionToMimeTypeMap()
     {
-        return array(
+        return [
             'hqx'   => 'application/mac-binhex40',
             'cpt'   => 'application/mac-compactpro',
             'csv'   => 'text/x-comma-separated-values',
@@ -188,6 +188,6 @@ class MimeType
             'cdr'   => 'application/cdr',
             'wma'   => 'audio/x-ms-wma',
             'jar'   => 'application/java-archive',
-        );
+        ];
     }
 }

@@ -19,11 +19,11 @@ class Zip extends AbstractAdapter
     /**
      * @var array
      */
-    protected static $resultMap = array(
+    protected static $resultMap = [
         'size'  => 'size',
         'mtime' => 'timestamp',
         'name'  => 'path',
-    );
+    ];
 
     /**
      * @var ZipArchive
@@ -37,7 +37,7 @@ class Zip extends AbstractAdapter
      */
     public function __construct($location, ZipArchive $archive = null, $prefix = null)
     {
-        $this->setArchive($archive ?: new ZipArchive);
+        $this->setArchive($archive ?: new ZipArchive());
         $this->openArchive($location);
         $this->setPathPrefix($prefix);
     }
@@ -176,7 +176,7 @@ class Zip extends AbstractAdapter
             $this->archive->addEmptyDir($location);
         }
 
-        return array('path' => $dirname);
+        return ['path' => $dirname];
     }
 
     /**
@@ -222,7 +222,7 @@ class Zip extends AbstractAdapter
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        $result = array();
+        $result = [];
 
         // This is needed to ensure the right number of
         // files are set to the $numFiles property.
@@ -260,13 +260,13 @@ class Zip extends AbstractAdapter
     protected function normalizeObject(array $object)
     {
         if (substr($object['name'], -1) === '/') {
-            return array(
+            return [
                 'path' => $this->removePathPrefix(trim($object['name'], '/')),
-                'type' => 'dir'
-            );
+                'type' => 'dir',
+            ];
         }
 
-        $result = array('type' => 'file');
+        $result = ['type' => 'file'];
         $normalised = Util::map($object, static::$resultMap);
         $normalised['path'] = $this->removePathPrefix($normalised['path']);
 

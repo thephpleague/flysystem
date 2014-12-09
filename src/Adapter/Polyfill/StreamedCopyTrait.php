@@ -21,7 +21,7 @@ trait StreamedCopyTrait
             return false;
         }
 
-        $result = $this->writeStream($newpath, $response['stream'], new Config);
+        $result = $this->writeStream($newpath, $response['stream'], new Config());
 
         if (is_resource($response['stream'])) {
             fclose($response['stream']);

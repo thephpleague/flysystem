@@ -47,7 +47,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
     {
         $expected = 'result';
         $parameters = array_pad([], $arguments - 1, 'value');
-        $parameters[] = new Config;
+        $parameters[] = new Config();
 
         $call = $this->source->shouldReceive($method)->twice();
         $call = call_user_func_array([$call, 'with'], $parameters);
@@ -77,7 +77,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
     {
         $this->source->shouldReceive('update')->once()->andReturn(false);
 
-        $this->assertFalse(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config]));
+        $this->assertFalse(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config()]));
     }
 
     public function testMethodUpdateSourceWillUpdateAndReplicaWillUpdate()
@@ -86,7 +86,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
         $this->replica->shouldReceive('has')->once()->andReturn(true);
         $this->replica->shouldReceive('update')->once()->andReturn(true);
 
-        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config]));
+        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config()]));
     }
 
     public function testMethodUpdateSourceWillUpdateAndReplicaWillWrite()
@@ -95,14 +95,14 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
         $this->replica->shouldReceive('has')->once()->andReturn(false);
         $this->replica->shouldReceive('write')->once()->andReturn(true);
 
-        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config]));
+        $this->assertTrue(call_user_func_array([$this->adapter, 'update'], ['value', 'value', new Config()]));
     }
 
     public function testMethodUpdateStreamSourceWillNotUpdate()
     {
         $this->source->shouldReceive('updateStream')->once()->andReturn(false);
 
-        $this->assertFalse(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config]));
+        $this->assertFalse(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config()]));
     }
 
     public function testMethodUpdateStreamSourceWillUpdateAndReplicaWillUpdate()
@@ -111,7 +111,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
         $this->replica->shouldReceive('has')->once()->andReturn(true);
         $this->replica->shouldReceive('updateStream')->once()->andReturn(true);
 
-        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config]));
+        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config()]));
     }
 
     public function testMethodUpdateStreamSourceWillUpdateAndReplicaWillWrite()
@@ -120,7 +120,7 @@ class ReplicateAdapterTests extends \PHPUnit_Framework_TestCase
         $this->replica->shouldReceive('has')->once()->andReturn(false);
         $this->replica->shouldReceive('writeStream')->once()->andReturn(true);
 
-        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config]));
+        $this->assertTrue(call_user_func_array([$this->adapter, 'updateStream'], ['value', 'value', new Config()]));
     }
 
     public function testMethodDeleteSourceWillNotDelete()

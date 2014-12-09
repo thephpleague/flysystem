@@ -55,14 +55,14 @@ class MountManager
     /**
      * @var  array  $filesystems
      */
-    protected $filesystems = array();
+    protected $filesystems = [];
 
     /**
      * Constructor
      *
      * @param   array  $filesystems
      */
-    public function __construct(array $filesystems = array())
+    public function __construct(array $filesystems = [])
     {
         $this->mountFilesystems($filesystems);
     }
@@ -110,7 +110,7 @@ class MountManager
     public function getFilesystem($prefix)
     {
         if (! isset($this->filesystems[$prefix])) {
-            throw new LogicException('No filesystem mounted with prefix ' . $prefix);
+            throw new LogicException('No filesystem mounted with prefix '.$prefix);
         }
 
         return $this->filesystems[$prefix];
@@ -135,13 +135,13 @@ class MountManager
         }
 
         if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
-            throw new InvalidArgumentException('No prefix detected in for path: ' . $path);
+            throw new InvalidArgumentException('No prefix detected in for path: '.$path);
         }
 
         list($prefix, $path) = explode('://', $path, 2);
         array_unshift($arguments, $path);
 
-        return array($prefix, $arguments);
+        return [$prefix, $arguments];
     }
 
     /**
@@ -163,7 +163,7 @@ class MountManager
             // Let it pass, it's ok, don't panic.
         }
 
-        $callback = array($filesystem, $method);
+        $callback = [$filesystem, $method];
 
         return call_user_func_array($callback, $arguments);
     }

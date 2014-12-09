@@ -16,11 +16,11 @@ class Copy extends AbstractAdapter
      *
      * @var array
      */
-    protected static $resultMap = array(
+    protected static $resultMap = [
         'size'           => 'size',
         'mime_type'      => 'mimetype',
         'type'           => 'type',
-    );
+    ];
 
     /**
      * Copy API
@@ -183,7 +183,6 @@ class Copy extends AbstractAdapter
         return compact('path') + ['type' => 'dir'];
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -228,7 +227,7 @@ class Copy extends AbstractAdapter
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        $listing = array();
+        $listing = [];
         $location = $this->applyPathPrefix($dirname);
 
         if (! $result = $this->client->listPath($location)) {
@@ -278,6 +277,6 @@ class Copy extends AbstractAdapter
     {
         $prefixed = parent::applyPathPrefix($path);
 
-        return '/' . ltrim($prefixed, '/');
+        return '/'.ltrim($prefixed, '/');
     }
 }

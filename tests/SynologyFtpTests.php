@@ -4,10 +4,9 @@ namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
 
-
 class SynologyFtpTests extends \PHPUnit_Framework_TestCase
 {
-    protected $options = array(
+    protected $options = [
         'host' => 'example.org',
         'port' => 40,
         'ssl' => true,
@@ -18,13 +17,12 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         'passive' => false,
         'username' => 'user',
         'password' => 'password',
-    );
+    ];
 
     public function testInstantiable()
     {
         if (!defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
-            return;
         }
 
         $adapter = new SynologyFtp($this->options);
@@ -43,9 +41,9 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->getSize('syno.not.found'));
         $this->assertFalse($adapter->getMimetype('syno.not.found'));
         $this->assertFalse($adapter->getTimestamp('syno.not.found'));
-        $this->assertFalse($adapter->write('write.fail', 'contents', new Config));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config));
-        $this->assertFalse($adapter->update('write.fail', 'contents', new Config));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
         $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
@@ -56,10 +54,10 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
-        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config));
+        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config()));
         $this->assertInternalType('array', $adapter->write('syno.unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->writeStream('syno.unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->updateStream('syno.unknowndir/file.txt', tmpfile(), new Config));
+        $this->assertInternalType('array', $adapter->updateStream('syno.unknowndir/file.txt', tmpfile(), new Config()));
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
@@ -70,7 +68,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testConnectFail()
     {
-        $adapter = new SynologyFtp(array('host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY));
+        $adapter = new SynologyFtp(['host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY]);
         $adapter->connect();
     }
 
@@ -81,7 +79,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new SynologyFtp($this->options);
         $result = $adapter->listContents('fail.rawlist');
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     /**
@@ -90,7 +88,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testConnectFailSsl()
     {
-        $adapter = new SynologyFtp(array('host' => 'fail.me', 'ssl' => true));
+        $adapter = new SynologyFtp(['host' => 'fail.me', 'ssl' => true]);
         $adapter->connect();
     }
 
@@ -100,7 +98,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testLoginFailSsl()
     {
-        $adapter = new SynologyFtp(array('host' => 'login.fail', 'ssl' => true));
+        $adapter = new SynologyFtp(['host' => 'login.fail', 'ssl' => true]);
         $adapter->connect();
     }
 
@@ -110,7 +108,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testRootFailSsl()
     {
-        $adapter = new SynologyFtp(array('host' => 'chdir.fail', 'ssl' => true, 'root' => 'somewhere'));
+        $adapter = new SynologyFtp(['host' => 'chdir.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
 
@@ -120,7 +118,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testPassiveFailSsl()
     {
-        $adapter = new SynologyFtp(array('host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere'));
+        $adapter = new SynologyFtp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
 }

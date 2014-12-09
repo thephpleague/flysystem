@@ -22,7 +22,7 @@ class ListWith extends AbstractPlugin
      * @param   bool    $recursive
      * @return  array   listing with metadata
      */
-    public function handle(array $keys = array(), $directory = '', $recursive = false)
+    public function handle(array $keys = [], $directory = '', $recursive = false)
     {
         $contents = $this->filesystem->listContents($directory, $recursive);
 
@@ -45,10 +45,10 @@ class ListWith extends AbstractPlugin
      */
     protected function getMetadataByName(array $object, $key)
     {
-        $method = 'get' . ucfirst($key);
+        $method = 'get'.ucfirst($key);
 
         if (! method_exists($this->filesystem, $method)) {
-            throw new \InvalidArgumentException('Could not get meta-data for key: ' . $key);
+            throw new \InvalidArgumentException('Could not get meta-data for key: '.$key);
         }
 
         $object[$key] = $this->filesystem->{$method}($object['path']);

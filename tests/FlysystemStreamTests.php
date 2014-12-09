@@ -8,7 +8,7 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
     {
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->andReturn(false);
-        $adapter->shouldReceive('writeStream')->andReturn(array('path' => 'file.txt'), false);
+        $adapter->shouldReceive('writeStream')->andReturn(['path' => 'file.txt'], false);
         $filesystem = new Filesystem($adapter);
         $this->assertTrue($filesystem->writeStream('file.txt', tmpfile()));
         $filesystem->flushCache();
@@ -30,7 +30,7 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
     {
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->andReturn(true);
-        $adapter->shouldReceive('updateStream')->andReturn(array('path' => 'file.txt'), false);
+        $adapter->shouldReceive('updateStream')->andReturn(['path' => 'file.txt'], false);
         $filesystem = new Filesystem($adapter);
         $this->assertTrue($filesystem->updateStream('file.txt', tmpfile()));
         $filesystem->flushCache();
@@ -53,7 +53,7 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
         $adapter->shouldReceive('has')->andReturn(true);
         $stream = tmpfile();
-        $adapter->shouldReceive('readStream')->times(3)->andReturn(array('stream' => $stream), false, false);
+        $adapter->shouldReceive('readStream')->times(3)->andReturn(['stream' => $stream], false, false);
         $filesystem = new Filesystem($adapter);
         $this->assertInternalType('resource', $filesystem->readStream('file.txt'));
         $this->assertFalse($filesystem->readStream('other.txt'));

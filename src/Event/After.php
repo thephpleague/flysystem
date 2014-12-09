@@ -44,7 +44,6 @@ class After extends AbstractEvent
         return $this->filesystem;
     }
 
-
     /**
      * Get the event name
      *
@@ -54,7 +53,7 @@ class After extends AbstractEvent
     {
         $method = $this->getMethod();
 
-        return 'after.' . strtolower($method);
+        return 'after.'.strtolower($method);
     }
 
     /**

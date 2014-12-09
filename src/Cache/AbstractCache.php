@@ -15,12 +15,12 @@ abstract class AbstractCache implements CacheInterface
     /**
      * @var  array  $cache
      */
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * @var  array  $complete
      */
-    protected $complete = array();
+    protected $complete = [];
 
     /**
      * Destructor
@@ -65,7 +65,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function storeContents($directory, array $contents, $recursive = false)
     {
-        $directories = array($directory);
+        $directories = [$directory];
 
         foreach ($contents as $index => $object) {
             $object = $this->updateObject($object['path'], $object);
@@ -141,7 +141,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->cache as $object) {
             if ($object['dirname'] !== $dirname) {
@@ -385,8 +385,8 @@ abstract class AbstractCache implements CacheInterface
      */
     public function flush()
     {
-        $this->cache = array();
-        $this->complete = array();
+        $this->cache = [];
+        $this->complete = [];
         $this->autosave();
     }
 
@@ -409,7 +409,7 @@ abstract class AbstractCache implements CacheInterface
     {
         $cleaned = $this->cleanContents($this->cache);
 
-        return json_encode(array($cleaned, $this->complete));
+        return json_encode([$cleaned, $this->complete]);
     }
 
     /**

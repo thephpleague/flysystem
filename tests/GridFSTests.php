@@ -29,7 +29,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
         return Mockery::mock('MongoGridFs');
     }
 
-    protected function getMongoFile(array $data = array(), $content = null)
+    protected function getMongoFile(array $data = [], $content = null)
     {
         if (!self::$isMongoExtensionInstalled) {
             $file = Mockery::mock('MongoGridFSFile')->shouldIgnoreMissing();
@@ -47,19 +47,19 @@ class GridFSTests extends PHPUnit_Framework_TestCase
             }
         }
 
-        $file->file = array_merge(array(
+        $file->file = array_merge([
             '_id'           => self::FILE_ID,
-            'uploadDate'    => (object) array(
+            'uploadDate'    => (object) [
                 'sec' => self::FILE_CREATED_AT,
-            ),
-        ), $data);
+            ],
+        ], $data);
 
         return $file;
     }
 
     public function testGetClient()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
 
         $this->assertSame($client, $adapter->getClient());
@@ -67,7 +67,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testHas()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
 
         $client->shouldReceive('findOne')->once()->andReturn('something not null');
@@ -77,7 +77,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testHasWhenFileDoesntExist()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
 
         $client->shouldReceive('findOne')->once()->andReturn(null);
@@ -87,25 +87,25 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testWriteAndUpdate()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
-        $file = $this->getMongoFile(array(
-            'metadata'      => array(
-                'mimetype' => 'text/plain'
-            ),
-        ));
+        $file = $this->getMongoFile([
+            'metadata'      => [
+                'mimetype' => 'text/plain',
+            ],
+        ]);
 
         $client->shouldReceive('storeBytes')->times(2)->andReturn('some_id');
         $client->shouldReceive('findOne')->times(2)->andReturn($file);
 
-        $expectedResult = array(
+        $expectedResult = [
             'path'      => 'file.txt',
             'type'      => 'file',
             'size'      => null,
             'timestamp' => self::FILE_CREATED_AT,
             'dirname'   => '',
-            'mimetype'  => 'text/plain'
-        );
+            'mimetype'  => 'text/plain',
+        ];
 
         $this->assertSame($expectedResult, $adapter->write('file.txt', 'content', new Config()));
         $this->assertSame($expectedResult, $adapter->update('file.txt', 'content', new Config()));
@@ -113,29 +113,29 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testMimeTypeCanBeOverridenOnWrite()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
-        $client->shouldReceive('storeBytes')->once()->with('content', array('filename' => 'file.txt', 'metadata' => array('mimetype' => 'application/json')))->andReturn('some_id');
+        $client->shouldReceive('storeBytes')->once()->with('content', ['filename' => 'file.txt', 'metadata' => ['mimetype' => 'application/json']])->andReturn('some_id');
         $client->shouldReceive('findOne')->once()->andReturn($file);
 
-        $expectedResult = array(
+        $expectedResult = [
             'path'      => 'file.txt',
             'type'      => 'file',
             'size'      => null,
             'timestamp' => self::FILE_CREATED_AT,
             'dirname'   => '',
-        );
+        ];
 
-        $this->assertSame($expectedResult, $adapter->write('file.txt', 'content', new Config(array(
-            'mimetype' => 'application/json'
-        ))));
+        $this->assertSame($expectedResult, $adapter->write('file.txt', 'content', new Config([
+            'mimetype' => 'application/json',
+        ])));
     }
 
     public function testWriteHandleErrors()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -146,7 +146,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testWriteStreamAndUpdateStream()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
         $stream = fopen('php://memory', 'r');
@@ -154,13 +154,13 @@ class GridFSTests extends PHPUnit_Framework_TestCase
         $client->shouldReceive('storeFile')->times(2)->andReturn('some_id');
         $client->shouldReceive('findOne')->times(2)->andReturn($file);
 
-        $expectedResult = array(
+        $expectedResult = [
             'path'      => 'file.txt',
             'type'      => 'file',
             'size'      => null,
             'timestamp' => self::FILE_CREATED_AT,
             'dirname'   => '',
-        );
+        ];
 
         $this->assertSame($expectedResult, $adapter->writeStream('file.txt', $stream, new Config()));
         $this->assertSame($expectedResult, $adapter->updateStream('file.txt', $stream, new Config()));
@@ -168,24 +168,24 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testGetMetadata()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
-        $file = $this->getMongoFile(array(
-            'metadata' => array(
+        $file = $this->getMongoFile([
+            'metadata' => [
                 'mimetype' => 'text/plain',
-            )
-        ));
+            ],
+        ]);
 
         $client->shouldReceive('findOne')->times(4)->andReturn($file);
 
-        $expectedResult = array(
+        $expectedResult = [
             'path'      => 'file.txt',
             'type'      => 'file',
             'size'      => null,
             'timestamp' => self::FILE_CREATED_AT,
             'dirname'   => '',
             'mimetype'  => 'text/plain',
-        );
+        ];
 
         $this->assertSame($expectedResult, $adapter->getMetadata('file.txt'));
         $this->assertSame($expectedResult, $adapter->getMimetype('file.txt'));
@@ -195,7 +195,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -207,7 +207,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testDeleteWhenFileDoesNotExist()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -218,20 +218,20 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
-        $file = $this->getMongoFile(array(), 'bytes');
+        $file = $this->getMongoFile([], 'bytes');
 
         $client->shouldReceive('findOne')->once()->andReturn($file);
 
-        $this->assertEquals(array('contents' => 'bytes'), $adapter->read('file.txt'));
+        $this->assertEquals(['contents' => 'bytes'], $adapter->read('file.txt'));
     }
 
     public function testReadStream()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
-        $file = $this->getMongoFile(array(), 'bytes');
+        $file = $this->getMongoFile([], 'bytes');
 
         $client->shouldReceive('findOne')->once()->andReturn($file);
 
@@ -242,7 +242,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testReadWhenFileDoesntExist()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -253,7 +253,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testDeleteDir()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -300,26 +300,26 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testContentCanBeListed()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
-        $client->shouldReceive('find')->once()->andReturn(array($file));
+        $client->shouldReceive('find')->once()->andReturn([$file]);
 
-        $this->assertSame(array(
-            array(
+        $this->assertSame([
+            [
                 'path'      => '',
                 'type'      => 'file',
                 'size'      => null,
                 'timestamp' => self::FILE_CREATED_AT,
                 'dirname'   => '',
-            ),
-        ), $adapter->listContents('lala'));
+            ],
+        ], $adapter->listContents('lala'));
     }
 
     public function testCopy()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 
@@ -335,7 +335,7 @@ class GridFSTests extends PHPUnit_Framework_TestCase
 
     public function testRename()
     {
-        $client= $this->getClient();
+        $client = $this->getClient();
         $adapter = new Adapter($client);
         $file = $this->getMongoFile();
 

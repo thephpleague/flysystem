@@ -120,7 +120,7 @@ class Noop extends AbstractCache
      */
     public function has($path)
     {
-        return null;
+        return;
     }
 
     /**

@@ -30,7 +30,7 @@ class Predis extends AbstractCache
      */
     public function __construct(Client $client = null, $key = 'flysystem', $expire = null)
     {
-        $this->client = $client ?: new Client;
+        $this->client = $client ?: new Client();
         $this->key = $key;
         $this->expire = $expire;
     }
@@ -40,7 +40,7 @@ class Predis extends AbstractCache
      */
     public function load()
     {
-        if (($contents = $this->executeCommand('get', array($this->key))) !== null) {
+        if (($contents = $this->executeCommand('get', [$this->key])) !== null) {
             $this->setFromStorage($contents);
         }
     }
@@ -51,10 +51,10 @@ class Predis extends AbstractCache
     public function save()
     {
         $contents = $this->getForStorage();
-        $this->executeCommand('set', array($this->key, $contents));
+        $this->executeCommand('set', [$this->key, $contents]);
 
         if ($this->expire !== null) {
-            $this->executeCommand('expire', array($this->key, $this->expire));
+            $this->executeCommand('expire', [$this->key, $this->expire]);
         }
     }
 

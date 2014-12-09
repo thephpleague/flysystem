@@ -18,7 +18,7 @@ class StashTests extends PHPUnit_Framework_TestCase
 
     public function testLoadSuccess()
     {
-        $response = json_encode(array(array(), array('' => true)));
+        $response = json_encode([[], ['' => true]]);
         $pool = Mockery::mock('Stash\Pool');
         $item = Mockery::mock('Stash\Item');
         $item->shouldReceive('get')->once()->andReturn($response);
@@ -31,7 +31,7 @@ class StashTests extends PHPUnit_Framework_TestCase
 
     public function testSave()
     {
-        $response = json_encode(array(array(), array()));
+        $response = json_encode([[], []]);
         $pool = Mockery::mock('Stash\Pool');
         $item = Mockery::mock('Stash\Item');
         $item->shouldReceive('set')->once()->andReturn($response);

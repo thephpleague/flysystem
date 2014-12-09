@@ -18,17 +18,17 @@ class AwsS3 extends AbstractAdapter
     /**
      * @var  array  $resultMap
      */
-    protected static $resultMap = array(
+    protected static $resultMap = [
         'Body'          => 'raw_contents',
         'ContentLength' => 'size',
         'ContentType'   => 'mimetype',
         'Size'          => 'size',
-    );
+    ];
 
     /**
      * @var  array  $metaOptions
      */
-    protected static $metaOptions = array(
+    protected static $metaOptions = [
         'CacheControl',
         'Expires',
         'StorageClass',
@@ -38,8 +38,8 @@ class AwsS3 extends AbstractAdapter
         'ContentType',
         'ContentDisposition',
         'ContentLanguage',
-        'ContentEncoding'
-    );
+        'ContentEncoding',
+    ];
 
     /**
      * @var  string  $bucket  bucket name
@@ -58,11 +58,11 @@ class AwsS3 extends AbstractAdapter
      *                            Concurrency=3 - If multipart is used, how many concurrent connections should be used
      *                            ]
      */
-    protected $options = array(
+    protected $options = [
         'Multipart' => 1024,
         'MinPartSize' => 32,
         'Concurrency' => 3,
-    );
+    ];
 
     /**
      * @var  UploadBuilder $uploadBuilder Used to upload object using a multipart transfer
@@ -82,7 +82,7 @@ class AwsS3 extends AbstractAdapter
         S3Client $client,
         $bucket,
         $prefix = null,
-        array $options = array(),
+        array $options = [],
         UploadBuilder $uploadBuilder = null
     ) {
         $this->client  = $client;
@@ -129,11 +129,11 @@ class AwsS3 extends AbstractAdapter
     {
         $options = $this->getOptions(
             $path,
-            array(
+            [
                 'Body'          => $contents,
                 'ContentType'   => Util::guessMimeType($path, $contents),
                 'ContentLength' => Util::contentSize($contents),
-            ),
+            ],
             $config
         );
 
@@ -145,7 +145,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function writeStream($path, $resource, Config $config)
     {
-        $options = array('Body' => $resource);
+        $options = ['Body' => $resource];
         $options['ContentLength'] = Util::getStreamSize($resource);
         $options = $this->getOptions($path, $options, $config);
 
@@ -249,11 +249,11 @@ class AwsS3 extends AbstractAdapter
      */
     public function rename($path, $newpath)
     {
-        $options = $this->getOptions($newpath, array(
+        $options = $this->getOptions($newpath, [
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
             'ACL' => $this->getObjectACL($path),
-        ));
+        ]);
 
         $this->client->copyObject($options);
         $this->delete($path);
@@ -266,11 +266,11 @@ class AwsS3 extends AbstractAdapter
      */
     public function copy($path, $newpath)
     {
-        $options = $this->getOptions($newpath, array(
+        $options = $this->getOptions($newpath, [
             'Bucket' => $this->bucket,
             'CopySource' => $this->bucket.'/'.$this->applyPathPrefix($path),
             'ACL' => $this->getObjectACL($path),
-        ));
+        ]);
 
         $this->client->copyObject($options)->getAll();
 
@@ -294,7 +294,7 @@ class AwsS3 extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        $prefix = rtrim($this->applyPathPrefix($path), '/') . '/';
+        $prefix = rtrim($this->applyPathPrefix($path), '/').'/';
 
         return (bool) $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
@@ -304,13 +304,13 @@ class AwsS3 extends AbstractAdapter
      */
     public function createDir($path, Config $config)
     {
-        $result = $this->write(rtrim($path, '/') . '/', '', $config);
+        $result = $this->write(rtrim($path, '/').'/', '', $config);
 
         if (! $result) {
             return false;
         }
 
-        return array('path' => $path, 'type' => 'dir');
+        return ['path' => $path, 'type' => 'dir'];
     }
 
     /**
@@ -385,9 +385,9 @@ class AwsS3 extends AbstractAdapter
      */
     public function setVisibility($path, $visibility)
     {
-        $options = $this->getOptions($path, array(
+        $options = $this->getOptions($path, [
             'ACL' => $visibility === AdapterInterface::VISIBILITY_PUBLIC ? 'public-read' : 'private',
-        ));
+        ]);
 
         $this->client->putObjectAcl($options);
 
@@ -399,13 +399,13 @@ class AwsS3 extends AbstractAdapter
      */
     public function listContents($dirname = '', $recursive = false)
     {
-        $objectsIterator = $this->client->getIterator('listObjects', array(
+        $objectsIterator = $this->client->getIterator('listObjects', [
             'Bucket' => $this->bucket,
             'Prefix' => $this->applyPathPrefix($dirname),
-        ));
+        ]);
 
         $contents = iterator_to_array($objectsIterator);
-        $result = array_map(array($this, 'normalizeResponse'), $contents);
+        $result = array_map([$this, 'normalizeResponse'], $contents);
 
         return Util::emulateDirectories($result);
     }
@@ -419,7 +419,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function normalizeResponse(array $object, $path = null)
     {
-        $result = array('path' => $path ?: $this->removePathPrefix($object['Key']));
+        $result = ['path' => $path ?: $this->removePathPrefix($object['Key'])];
         $result['dirname'] = Util::dirname($result['path']);
 
         if (isset($object['LastModified'])) {
@@ -433,7 +433,7 @@ class AwsS3 extends AbstractAdapter
             return $result;
         }
 
-        $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
+        $result = array_merge($result, Util::map($object, static::$resultMap), ['type' => 'file']);
 
         return $result;
     }
@@ -447,7 +447,7 @@ class AwsS3 extends AbstractAdapter
      *
      * @return  array   AWS options
      */
-    protected function getOptions($path, array $options = array(), Config $config = null)
+    protected function getOptions($path, array $options = [], Config $config = null)
     {
         $options = array_merge($this->options, $options);
         $options['Key']    = $this->applyPathPrefix($path);
@@ -468,7 +468,7 @@ class AwsS3 extends AbstractAdapter
      */
     protected function getOptionsFromConfig(Config $config)
     {
-        $options = array();
+        $options = [];
 
         foreach (static::$metaOptions as $option) {
             if (! $config->has($option)) {

@@ -23,7 +23,7 @@ class ListPaths extends AbstractPlugin
      */
     public function handle($directory = '', $recursive = false)
     {
-        $result = array();
+        $result = [];
         $contents = $this->filesystem->listContents($directory, $recursive);
 
         foreach ($contents as $object) {

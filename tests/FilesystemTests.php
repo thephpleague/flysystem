@@ -25,9 +25,9 @@ namespace League\Flysystem
         public function setup()
         {
             clearstatcache();
-            $fs = new Adapter\Local(__DIR__ . '/');
+            $fs = new Adapter\Local(__DIR__.'/');
             $fs->deleteDir('files');
-            $fs->createDir('files', new Config);
+            $fs->createDir('files', new Config());
         }
 
         public function teardown()
@@ -37,18 +37,18 @@ namespace League\Flysystem
 
         public function testInstantiable()
         {
-            $instance = new Filesystem($adapter = new Adapter\Local(__DIR__ . '/files/deeper'), $cache = new Cache\Memory);
+            $instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory());
         }
 
         public function filesystemProvider()
         {
-            $adapter = new Adapter\Local(__DIR__ . '/files');
-            $cache = new Cache\Memory;
+            $adapter = new Adapter\Local(__DIR__.'/files');
+            $cache = new Cache\Memory();
             $filesystem = new Filesystem($adapter, $cache);
 
-            return array(
-                array($filesystem, $adapter, $cache),
-            );
+            return [
+                [$filesystem, $adapter, $cache],
+            ];
         }
 
         /**
@@ -134,9 +134,9 @@ namespace League\Flysystem
         public function testCopyFail()
         {
             $mock = Mockery::mock('League\Flysystem\AdapterInterface');
-            $mock->shouldReceive('write')->andReturn(array(
+            $mock->shouldReceive('write')->andReturn([
                 'path' => 'path.txt',
-            ));
+            ]);
             $mock->shouldReceive('copy')->andReturn(false);
             $mock->shouldReceive('has')->with('path.txt')->andReturn(false, true);
             $mock->shouldReceive('has')->with('new.txt')->andReturn(false);
@@ -249,16 +249,16 @@ namespace League\Flysystem
 
         public function metaProvider()
         {
-            $adapter = new Adapter\Local(__DIR__ . '/files');
-            $cache = new Cache\Memory;
+            $adapter = new Adapter\Local(__DIR__.'/files');
+            $cache = new Cache\Memory();
             $filesystem = new Filesystem($adapter, $cache);
 
-            return array(
-                array($filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int', 100),
-                array($filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string', 'plain/text'),
-                array($filesystem, $adapter, $cache, 'getSize', 'size', 'int', 10),
-                array($filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string', 'public'),
-            );
+            return [
+                [$filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int', 100],
+                [$filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string', 'plain/text'],
+                [$filesystem, $adapter, $cache, 'getSize', 'size', 'int', 10],
+                [$filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string', 'public'],
+            ];
         }
 
         /**
@@ -271,7 +271,7 @@ namespace League\Flysystem
             $this->assertEquals('something', $filesystem->read('test.txt'));
             $value = $filesystem->{$method}('test.txt');
             $this->assertInternalType($type, $value);
-            $cache->updateObject('test.txt', array($key => $mockValue));
+            $cache->updateObject('test.txt', [$key => $mockValue]);
             $this->assertEquals($mockValue, $filesystem->{$method}('test.txt'));
             $cache->flush();
             $this->assertEquals($value, $filesystem->{$method}('test.txt'));
@@ -304,7 +304,7 @@ namespace League\Flysystem
         public function testVisibility($filesystem, $adapter, $cache)
         {
             if (strtolower(substr(php_uname('a'), 0, 3)) === 'win') {
-                return $this->markTestSkipped('Windows does not support file permissions.');
+                $this->markTestSkipped('Windows does not support file permissions.');
             }
 
             $filesystem->write('test.txt', 'something', ['visibility' => 'private']);
@@ -350,13 +350,13 @@ namespace League\Flysystem
         public function testCacheStorage()
         {
             $cache = new Cache\Memory(__DIR__);
-            $input = array(array('contents' => 'hehe', 'filename' => 'with contents'), array('filename' => 'no contents'));
-            $expected = array(array('filename' => 'with contents'), array('filename' => 'no contents'));
-            $json = json_encode(array(array(), array()));
+            $input = [['contents' => 'hehe', 'filename' => 'with contents'], ['filename' => 'no contents']];
+            $expected = [['filename' => 'with contents'], ['filename' => 'no contents']];
+            $json = json_encode([[], []]);
             $output = $cache->cleanContents($input);
             $this->assertEquals($expected, $output);
             $this->assertEquals($json, $cache->getForStorage());
-            $input = json_encode(array(array(), array()));
+            $input = json_encode([[], []]);
             $cache->setFromStorage($input);
             $this->assertEquals($input, $cache->getForStorage());
         }
@@ -371,20 +371,20 @@ namespace League\Flysystem
 
         public function failProvider()
         {
-            return array(
-                array('rename', true),
-                array('write', false),
-                array('update', true),
-                array('read', true),
-                array('delete', true),
-                array('deleteDir', true),
-                array('getMimetype', true),
-                array('getTimestamp', true),
-                array('getSize', true),
-                array('getVisibility', true),
-                array('setVisibility', true),
-                array('getMetadata', true),
-            );
+            return [
+                ['rename', true],
+                ['write', false],
+                ['update', true],
+                ['read', true],
+                ['delete', true],
+                ['deleteDir', true],
+                ['getMimetype', true],
+                ['getTimestamp', true],
+                ['getSize', true],
+                ['getVisibility', true],
+                ['setVisibility', true],
+                ['getMetadata', true],
+            ];
         }
 
         /**
@@ -394,7 +394,7 @@ namespace League\Flysystem
         {
             $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
             $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
-            $cachemock->shouldReceive('load')->andReturn(array());
+            $cachemock->shouldReceive('load')->andReturn([]);
             $cachemock->shouldReceive('has')->andReturn(null);
             $cachemock->shouldReceive('isComplete')->andReturn(false);
             $cachemock->shouldReceive('updateObject')->andReturn(false);
@@ -413,7 +413,7 @@ namespace League\Flysystem
         {
             $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
             $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
-            $cachemock->shouldReceive('load')->andReturn(array());
+            $cachemock->shouldReceive('load')->andReturn([]);
             $cachemock->shouldReceive('has')->andReturn(false);
             $cachemock->shouldReceive('isComplete')->andReturn(false);
             $cachemock->shouldReceive('updateObject')->andReturn(false);
@@ -437,14 +437,14 @@ namespace League\Flysystem
         public function testCreateDir($filesystem)
         {
             $filesystem->createDir('dirname');
-            $this->assertTrue(is_dir(__DIR__ . '/files/dirname'));
+            $this->assertTrue(is_dir(__DIR__.'/files/dirname'));
             $this->assertFalse($filesystem->createDir('mkdir.fail'));
             $filesystem->deleteDir('dirname');
         }
 
         public function testNoop()
         {
-            $filesystem = new Filesystem(new Adapter\Local(__DIR__ . '/files'), new Cache\Noop);
+            $filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\Noop());
             $filesystem->write('test.txt', 'contents');
             $this->assertTrue($filesystem->has('test.txt'));
             $this->assertInternalType('array', $filesystem->listContents());
@@ -467,9 +467,9 @@ namespace League\Flysystem
             $this->assertNull($cache->save());
             $filesystem->delete('test.txt');
 
-            $this->assertEquals(array(), $cache->storeContents('unknwon', array(
-                array('path' => 'some/file.txt'),
-            ), false));
+            $this->assertEquals([], $cache->storeContents('unknwon', [
+                ['path' => 'some/file.txt'],
+            ], false));
         }
 
         /**
@@ -478,7 +478,7 @@ namespace League\Flysystem
         public function testListFiles($filesystem)
         {
             $filesystem->flushCache();
-            $filesystem->addPlugin(new ListFiles);
+            $filesystem->addPlugin(new ListFiles());
 
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
@@ -524,7 +524,7 @@ namespace League\Flysystem
          */
         public function testListPaths($filesystem)
         {
-            $filesystem->addPlugin(new ListPaths);
+            $filesystem->addPlugin(new ListPaths());
 
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
@@ -540,13 +540,13 @@ namespace League\Flysystem
         public function testListWith(FilesystemInterface $filesystem)
         {
             $filesystem->flushCache();
-            $filesystem->addPlugin(new ListWith);
+            $filesystem->addPlugin(new ListWith());
 
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
 
-            $listing = $filesystem->listWith(array('mimetype'), '', true);
+            $listing = $filesystem->listWith(['mimetype'], '', true);
             $this->assertContainsOnly('array', $listing, true);
             $first = reset($listing);
             $this->assertArrayHasKey('mimetype', $first);
@@ -558,13 +558,13 @@ namespace League\Flysystem
          */
         public function testListWithInvalid($filesystem)
         {
-            $filesystem->addPlugin(new ListWith);
+            $filesystem->addPlugin(new ListWith());
             $filesystem->flushCache();
             if (! $filesystem->has('test.txt')) {
                 $filesystem->write('test.txt', 'something');
             }
 
-            $filesystem->listWith(array('unknowntype'));
+            $filesystem->listWith(['unknowntype']);
         }
 
         /**
@@ -614,7 +614,7 @@ namespace League\Flysystem
             $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[has,read,delete]');
             $adapter = new Filesystem($mock);
             $mock->shouldReceive('has')->andReturn(true);
-            $mock->shouldReceive('read')->once()->with($path)->andReturn(array('contents' => $expected));
+            $mock->shouldReceive('read')->once()->with($path)->andReturn(['contents' => $expected]);
             $mock->shouldReceive('delete')->once()->andReturn(true);
             $result = $adapter->readAndDelete($path);
             $this->assertEquals($expected, $result);
@@ -646,7 +646,7 @@ namespace League\Flysystem
         {
             $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
             $filesystem->shouldReceive('getMetadata')->andReturn(false);
-            $plugin = new GetWithMetadata;
+            $plugin = new GetWithMetadata();
             $plugin->setFilesystem($filesystem);
             $this->assertFalse($plugin->handle('path', []));
         }
@@ -656,7 +656,7 @@ namespace League\Flysystem
             $this->setExpectedException('InvalidArgumentException');
             $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
             $filesystem->shouldReceive('getMetadata')->andReturn(['path' => 'something']);
-            $plugin = new GetWithMetadata;
+            $plugin = new GetWithMetadata();
             $plugin->setFilesystem($filesystem);
             $this->assertFalse($plugin->handle('path', ['invalid']));
         }
