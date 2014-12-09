@@ -10,14 +10,14 @@ class ZipTests extends PHPUnit_Framework_TestCase
      */
     public function zipProvider()
     {
-        return array(
-            array(new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive))
-        );
+        return [
+            [new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive())],
+        ];
     }
 
     public function testInstance()
     {
-        $adapter = new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive);
+        $adapter = new League\Flysystem\Adapter\Zip(__DIR__.'/files/tester.zip', new ZipArchive());
         $this->assertInstanceOf('League\Flysystem\AdapterInterface', $adapter);
     }
 
@@ -35,13 +35,13 @@ class ZipTests extends PHPUnit_Framework_TestCase
     public function testZip(Zip $zip)
     {
         $this->assertCount(0, $zip->listContents());
-        $this->assertInternalType('array', $zip->write('file.txt', 'contents', new Config));
+        $this->assertInternalType('array', $zip->write('file.txt', 'contents', new Config()));
         $this->assertCount(1, $zip->listContents());
-        $this->assertInternalType('array', $zip->write('nested/file.txt', 'contents', new Config));
+        $this->assertInternalType('array', $zip->write('nested/file.txt', 'contents', new Config()));
         $this->assertCount(3, $zip->listContents());
         $result = $zip->read('nested/file.txt');
         $this->assertEquals('contents', $result['contents']);
-        $zip->update('nested/file.txt', 'new contents', new Config);
+        $zip->update('nested/file.txt', 'new contents', new Config());
         $result = $zip->read('nested/file.txt');
         $this->assertEquals('new contents', $result['contents']);
         $result = $zip->readStream('nested/file.txt');
@@ -59,14 +59,14 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $stream = tmpfile();
         fwrite($stream, 'something');
         rewind($stream);
-        $zip->writeStream('streamed.txt', $stream, new Config);
+        $zip->writeStream('streamed.txt', $stream, new Config());
         fclose($stream);
         $this->assertInternalType('array', $zip->has('streamed.txt'));
 
         $stream = tmpfile();
         fwrite($stream, 'something');
         rewind($stream);
-        $zip->updateStream('streamed-other.txt', $stream, new Config);
+        $zip->updateStream('streamed-other.txt', $stream, new Config());
         fclose($stream);
         $this->assertInternalType('array', $zip->has('streamed-other.txt'));
     }
@@ -114,7 +114,6 @@ class ZipTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test results in a fatal error on HHVM');
-            return;
         }
 
         $mock = Mockery::mock('ZipArchive');
@@ -126,7 +125,6 @@ class ZipTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM does not support mocking of ZipArchive');
-            return;
         }
 
         $mock = Mockery::mock('ZipArchive');
@@ -137,7 +135,7 @@ class ZipTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('getStream')->andReturn(false);
         $zip = new Zip('location', $mock);
 
-        $this->assertFalse($zip->write('file', 'contents', new Config));
+        $this->assertFalse($zip->write('file', 'contents', new Config()));
         $this->assertFalse($zip->read('file'));
         $this->assertFalse($zip->getMimetype('file'));
         $this->assertFalse($zip->readStream('file'));
@@ -147,10 +145,9 @@ class ZipTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test results in a fatal error on HHVM');
-            return;
         }
 
-        $resource = fopen(__DIR__ . '/../changelog.md', 'r+');
+        $resource = fopen(__DIR__.'/../changelog.md', 'r+');
         $mock = Mockery::mock('ZipArchive');
         $mock->shouldReceive('open')->andReturn(true);
         $mock->shouldReceive('close')->andReturn(true);
@@ -167,7 +164,6 @@ class ZipTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('This test results in a fatal error on HHVM');
-            return;
         }
 
         $mock = Mockery::mock('ZipArchive');

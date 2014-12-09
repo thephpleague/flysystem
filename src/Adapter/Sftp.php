@@ -4,9 +4,9 @@ namespace League\Flysystem\Adapter;
 
 use Crypt_RSA;
 use InvalidArgumentException;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 use LogicException;
@@ -31,12 +31,12 @@ class Sftp extends AbstractFtpAdapter
     /**
      * @var array
      */
-    protected $configurable = array('host', 'port', 'username', 'password', 'timeout', 'root', 'privateKey', 'permPrivate', 'permPublic');
+    protected $configurable = ['host', 'port', 'username', 'password', 'timeout', 'root', 'privateKey', 'permPrivate', 'permPublic'];
 
     /**
      * @var array
      */
-    protected $statMap = array('mtime' => 'timestamp', 'size' => 'size');
+    protected $statMap = ['mtime' => 'timestamp', 'size' => 'size'];
 
     /**
      * Prefix a path
@@ -113,8 +113,8 @@ class Sftp extends AbstractFtpAdapter
             return;
         }
 
-        if ( ! $this->connection->chdir($root)) {
-            throw new RuntimeException('Root is invalid or does not exist: ' . $root);
+        if (! $this->connection->chdir($root)) {
+            throw new RuntimeException('Root is invalid or does not exist: '.$root);
         }
     }
 
@@ -163,21 +163,21 @@ class Sftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {
-        $result = array();
+        $result = [];
         $connection = $this->getConnection();
         $location = $this->prefix($directory);
         $listing = $connection->rawlist($location);
 
         if ($listing === false) {
-            return array();
+            return [];
         }
 
         foreach ($listing as $filename => $object) {
-            if (in_array($filename, array('.', '..'))) {
+            if (in_array($filename, ['.', '..'])) {
                 continue;
             }
 
-            $path = empty($directory) ? $filename : ($directory . DIRECTORY_SEPARATOR . $filename);
+            $path = empty($directory) ? $filename : ($directory.DIRECTORY_SEPARATOR.$filename);
             $result[] = $this->normalizeListingObject($path, $object);
 
             if ($recursive && $object['type'] === NET_SFTP_TYPE_DIRECTORY) {
@@ -199,13 +199,13 @@ class Sftp extends AbstractFtpAdapter
     {
         $permissions = $this->normalizePermissions($object['permissions']);
 
-        return array(
+        return [
             'path' => $path,
             'size' => $object['size'],
             'timestamp' => $object['mtime'],
             'type' => ($object['type'] === 1 ? 'file' : 'dir'),
             'visibility' => $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE,
-        );
+        ];
     }
 
     /**
@@ -350,7 +350,7 @@ class Sftp extends AbstractFtpAdapter
             return false;
         }
 
-        return array('path' => $dirname);
+        return ['path' => $dirname];
     }
 
     /**

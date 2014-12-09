@@ -41,7 +41,7 @@ class Filesystem implements FilesystemInterface
     public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
     {
         $this->adapter = $adapter;
-        $this->cache = $cache ?: new Cache\Memory;
+        $this->cache = $cache ?: new Cache\Memory();
         $this->cache->load();
         $this->config = Util::ensureConfig($config);
     }
@@ -95,7 +95,6 @@ class Filesystem implements FilesystemInterface
 
             return false;
         }
-
 
         $object = is_array($result) ? $result : compact('path');
         $this->cache->updateObject($path, $object, true);
@@ -680,8 +679,8 @@ class Filesystem implements FilesystemInterface
         } catch (PluginNotFoundException $e) {
             throw new \BadMethodCallException(
                 'Call to undefined method '
-                . __CLASS__
-                . '::' . $method);
+                .__CLASS__
+                .'::'.$method);
         }
     }
 }

@@ -8,7 +8,6 @@ class MemcachedTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM has a bug breaking mockery');
-            return;
         }
 
         $client = Mockery::mock('Memcached');
@@ -22,10 +21,9 @@ class MemcachedTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM has a bug breaking mockery');
-            return;
         }
 
-        $response = json_encode(array(array(), array('' => true)));
+        $response = json_encode([[], ['' => true]]);
         $client = Mockery::mock('Memcached');
         $client->shouldReceive('get')->once()->andReturn($response);
         $cache = new Memcached($client);
@@ -37,10 +35,9 @@ class MemcachedTests extends PHPUnit_Framework_TestCase
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM has a bug breaking mockery');
-            return;
         }
 
-        $response = json_encode(array(array(), array()));
+        $response = json_encode([[], []]);
         $client = Mockery::mock('Memcached');
         $client->shouldReceive('set')->once()->andReturn($response);
         $cache = new Memcached($client);

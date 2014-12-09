@@ -59,6 +59,7 @@ function ftp_login($connection)
 {
     if ($connection === 'login.fail') {
         trigger_error('FTP login failed!!', E_WARNING);
+
         return false;
     }
 
@@ -82,22 +83,22 @@ function ftp_pwd($connection)
 function ftp_raw($connection, $command)
 {
     if ($command === 'STAT not.found') {
-        return array(0 => '213-Status follows:', 1 => '213 End of status');
+        return [0 => '213-Status follows:', 1 => '213 End of status'];
     }
 
     if ($command === 'STAT syno.not.found') {
-        return array(0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status');
+        return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
 
     if ($command === 'syno.unknowndir') {
-        return array(0 => '211- status of syno.unknowndir:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status');
+        return [0 => '211- status of syno.unknowndir:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
 
     if (strpos($command, 'unknowndir') !== false) {
         return false;
     }
 
-    return array( 0 => '211-Status of somewhere/folder/dummy.txt:', 1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt', 2 => '211 End of status' );
+    return [ 0 => '211-Status of somewhere/folder/dummy.txt:', 1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt', 2 => '211 End of status' ];
 }
 
 function ftp_rawlist($connection, $directory)
@@ -107,14 +108,14 @@ function ftp_rawlist($connection, $directory)
     }
 
     if (strpos($directory, 'rmdir.nested.fail') !== false) {
-        return array(
+        return [
             'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
             'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
             '-rw-r--r--   1 ftp      ftp           409 Oct 13  2012 rm.fail.txt',
-        );
+        ];
     }
 
-    return array(
+    return [
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
         'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 cgi-bin',
@@ -129,7 +130,7 @@ function ftp_rawlist($connection, $directory)
          'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 .',
          'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
          '-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt',
-    );
+    ];
 }
 
 function ftp_mkdir($connection, $dirname)
@@ -164,7 +165,7 @@ function ftp_fget($connection, $resource, $path)
 
 function ftp_nlist($connection, $directory)
 {
-    return array('./some.nested');
+    return ['./some.nested'];
 }
 
 function ftp_chmod($connection, $mode, $path)
@@ -178,7 +179,7 @@ function ftp_chmod($connection, $mode, $path)
 
 class FtpTests extends \PHPUnit_Framework_TestCase
 {
-    protected $options = array(
+    protected $options = [
         'host' => 'example.org',
         'port' => 40,
         'ssl' => true,
@@ -189,13 +190,12 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         'passive' => false,
         'username' => 'user',
         'password' => 'password',
-    );
+    ];
 
     public function testInstantiable()
     {
         if (! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
-            return;
         }
 
         $adapter = new Ftp($this->options);
@@ -214,9 +214,9 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->getSize('not.found'));
         $this->assertFalse($adapter->getMimetype('not.found'));
         $this->assertFalse($adapter->getTimestamp('not.found'));
-        $this->assertFalse($adapter->write('write.fail', 'contents', new Config));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config));
-        $this->assertFalse($adapter->update('write.fail', 'contents', new Config));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
         $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
@@ -227,10 +227,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('contents', $result['contents']);
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
-        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config));
+        $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config()));
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config));
+        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
         $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
@@ -241,7 +241,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testConnectFail()
     {
-        $adapter = new Ftp(array('host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY));
+        $adapter = new Ftp(['host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY]);
         $adapter->connect();
     }
 
@@ -252,7 +252,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp($this->options);
         $result = $adapter->listContents('fail.rawlist');
-        $this->assertEquals(array(), $result);
+        $this->assertEquals([], $result);
     }
 
     /**
@@ -261,7 +261,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testConnectFailSsl()
     {
-        $adapter = new Ftp(array('host' => 'fail.me', 'ssl' => true));
+        $adapter = new Ftp(['host' => 'fail.me', 'ssl' => true]);
         $adapter->connect();
     }
 
@@ -271,7 +271,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testLoginFailSsl()
     {
-        $adapter = new Ftp(array('host' => 'login.fail', 'ssl' => true));
+        $adapter = new Ftp(['host' => 'login.fail', 'ssl' => true]);
         $adapter->connect();
     }
 
@@ -281,7 +281,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testRootFailSsl()
     {
-        $adapter = new Ftp(array('host' => 'chdir.fail', 'ssl' => true, 'root' => 'somewhere'));
+        $adapter = new Ftp(['host' => 'chdir.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
 
@@ -291,7 +291,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
      */
     public function testPassiveFailSsl()
     {
-        $adapter = new Ftp(array('host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere'));
+        $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
 }

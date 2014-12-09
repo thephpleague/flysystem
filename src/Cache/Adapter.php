@@ -91,7 +91,7 @@ class Adapter extends AbstractCache
     {
         $cleaned = $this->cleanContents($this->cache);
 
-        return json_encode(array($cleaned, $this->complete, $this->expire));
+        return json_encode([$cleaned, $this->complete, $this->expire]);
     }
 
     /**
@@ -99,7 +99,7 @@ class Adapter extends AbstractCache
      */
     public function save()
     {
-        $config = new Config;
+        $config = new Config();
         $contents = $this->getForStorage();
 
         if ($this->adapter->has($this->file)) {

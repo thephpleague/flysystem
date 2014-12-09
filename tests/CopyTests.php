@@ -23,9 +23,9 @@ class CopyTests extends PHPUnit_Framework_TestCase
     {
         $mock = $this->getClientMock();
 
-        return array(
-            array(new Copy($mock, 'prefix'), $mock),
-        );
+        return [
+            [new Copy($mock, 'prefix'), $mock],
+        ];
     }
 
     /**
@@ -36,17 +36,17 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $contents = 'contents';
 
         $mock->shouldReceive('uploadFromString')->andReturn(
-            (object) array(
+            (object) [
                 'type' => 'file',
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
-        ), false);
-        $result = $adapter->write('something', $contents, new Config);
+        ], false);
+        $result = $adapter->write('something', $contents, new Config());
 
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
-        $this->assertFalse($adapter->write('something', 'something', new Config));
+        $this->assertFalse($adapter->write('something', 'something', new Config()));
     }
 
     /**
@@ -57,12 +57,12 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $contents = 'contents';
 
         $mock->shouldReceive('uploadFromString')->andReturn(
-            (object)array(
+            (object) [
                 'type' => 'file',
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
-        ));
-        $result = $adapter->update('something', $contents, new Config);
+        ]);
+        $result = $adapter->update('something', $contents, new Config());
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
@@ -74,24 +74,24 @@ class CopyTests extends PHPUnit_Framework_TestCase
     public function testWriteStream(Copy $adapter, API $mock)
     {
         $mock->shouldReceive('uploadFromStream')->andReturn(
-            (object)array(
+            (object) [
                 'type' => 'file',
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
-        ), false);
+        ], false);
 
         // generate dummy data file
         $filepath = tempnam(sys_get_temp_dir(), 'copy-unit-test.tmp');
         file_put_contents($filepath, 'copy==');
         $fh = fopen($filepath, 'r');
 
-        $result = $adapter->writeStream('something', $fh, new Config);
+        $result = $adapter->writeStream('something', $fh, new Config());
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
 
         $fh = fopen($filepath, 'r');
-        $this->assertFalse($adapter->writeStream('something', $fh, new Config));
+        $this->assertFalse($adapter->writeStream('something', $fh, new Config()));
     }
 
      /**
@@ -102,18 +102,18 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $contents = 'contents';
 
         $mock->shouldReceive('uploadFromStream')->andReturn(
-            (object)array(
+            (object) [
                 'type' => 'file',
                 'path' => 'something',
                 'modified_time' => '10 September 2000',
-        ));
+        ]);
 
         // generate dummy data file
         $filepath = tempnam(sys_get_temp_dir(), 'copy-unit-test.tmp');
         file_put_contents($filepath, 'copy==');
         $fh = fopen($filepath, 'r');
 
-        $result = $adapter->updateStream('something', $fh, new Config);
+        $result = $adapter->updateStream('something', $fh, new Config());
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertEquals('file', $result['type']);
@@ -121,13 +121,13 @@ class CopyTests extends PHPUnit_Framework_TestCase
 
     public function metadataProvider()
     {
-        return array(
-            array('getMetadata'),
-            array('getMimetype'),
-            array('getTimestamp'),
-            array('getSize'),
-            array('has'),
-        );
+        return [
+            ['getMetadata'],
+            ['getMimetype'],
+            ['getTimestamp'],
+            ['getSize'],
+            ['has'],
+        ];
     }
 
     /**
@@ -136,15 +136,15 @@ class CopyTests extends PHPUnit_Framework_TestCase
     public function testMetadataCalls($method)
     {
         $mock = $this->getClientMock();
-        $mock->shouldReceive('listPath')->twice()->andReturn(array(
-            (object)array(
+        $mock->shouldReceive('listPath')->twice()->andReturn([
+            (object) [
                 'type' => 'file',
                 'modified_time' => '10 September 2000',
                 'path' => 'something',
                 'size' => 15,
                 'mime_type' => 'application/octet-stream',
-                ),
-            ),
+                ],
+            ],
             false
         );
 
@@ -160,7 +160,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
     {
         $contents = 'something';
 
-        $mock->shouldReceive('readToString')->andReturn(array('contents' => $contents), false);
+        $mock->shouldReceive('readToString')->andReturn(['contents' => $contents], false);
 
         $stream = tmpfile();
         fwrite($stream, 'something');
@@ -176,7 +176,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
     {
         $stream = tmpfile();
         fwrite($stream, 'something');
-        $mock->shouldReceive('readToStream')->andReturn(array('stream' => $stream), false);
+        $mock->shouldReceive('readToStream')->andReturn(['stream' => $stream], false);
         $this->assertInternalType('array', $adapter->readStream('something'));
         $this->assertFalse($adapter->readStream('something'));
         fclose($stream);
@@ -198,15 +198,15 @@ class CopyTests extends PHPUnit_Framework_TestCase
      */
     public function testCreateDir($adapter, $mock)
     {
-        $mock->shouldReceive('createDir')->andReturn(array(
-                (object)array(
+        $mock->shouldReceive('createDir')->andReturn([
+                (object) [
                     'type' => 'dir',
                     'modified_time' => '10 September 2000',
                     'path' => 'something',
-                ),
-            )
+                ],
+            ]
         );
-        $this->assertInternalType('array', $adapter->createDir('something', new Config));
+        $this->assertInternalType('array', $adapter->createDir('something', new Config()));
     }
 
     /**
@@ -216,7 +216,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
     {
         /** @var \Mockery\Mock $mock */
         $mock->shouldReceive('createDir')->andThrow('Exception');
-        $this->assertFalse($adapter->createDir('something', new Config));
+        $this->assertFalse($adapter->createDir('something', new Config()));
     }
 
     /**
@@ -224,21 +224,21 @@ class CopyTests extends PHPUnit_Framework_TestCase
      */
     public function testListContents($adapter, $mock)
     {
-        $mock->shouldReceive('listPath')->andReturn(array(
-            (object)array(
+        $mock->shouldReceive('listPath')->andReturn([
+            (object) [
                 'type' => 'dir',
                 'path' => 'dirname',
                 'modified_time' => '10 September 2000',
-                ),
-            (object)array(
+                ],
+            (object) [
                 'type' => 'file',
                 'path' => 'dirname/file',
                 'modified_time' => '10 September 2000',
                 'mime_type' => 'application/octet-stream',
                 'size' => 15,
-                ),
-            ),
-            (object)array(),
+                ],
+            ],
+            (object) [],
             false
         );
 
@@ -252,7 +252,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
      */
     public function testRename($adapter, $mock)
     {
-        $mock->shouldReceive('rename')->andReturn((object)array('type' => 'file', 'path' => 'something'), false);
+        $mock->shouldReceive('rename')->andReturn((object) ['type' => 'file', 'path' => 'something'], false);
         $this->assertTrue($adapter->rename('something', 'something'));
         $this->assertFalse($adapter->rename('something', 'something'));
     }
@@ -262,7 +262,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
      */
     public function testCopy(Copy $adapter, $mock)
     {
-        $mock->shouldReceive('copy')->andReturn((object)array('type' => 'file', 'path' => 'something'));
+        $mock->shouldReceive('copy')->andReturn((object) ['type' => 'file', 'path' => 'something']);
         $this->assertTrue($adapter->copy('something', 'something'));
     }
 

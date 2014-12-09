@@ -2,13 +2,12 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Config;
 use Mockery;
 use WindowsAzure\Blob\Models\CopyBlobResult;
 use WindowsAzure\Blob\Models\GetBlobResult;
 use WindowsAzure\Common\Internal\Resources;
 use WindowsAzure\Common\ServiceException;
-
-use League\Flysystem\Config;
 
 class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 {
@@ -24,22 +23,22 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
     protected function getCopyBlobResult($lastModified)
     {
-        return CopyBlobResult::create(array(
-            Resources::LAST_MODIFIED => $lastModified
-        ));
+        return CopyBlobResult::create([
+            Resources::LAST_MODIFIED => $lastModified,
+        ]);
     }
 
     protected function getReadBlobResult($lastModified, $contentString)
     {
-        return GetBlobResult::create(array(
+        return GetBlobResult::create([
             Resources::LAST_MODIFIED  => $lastModified,
             Resources::CONTENT_LENGTH => strlen($contentString),
-        ), $contentString, array());
+        ], $contentString, []);
     }
 
     protected function getStreamFromString($string)
     {
-        $stream = fopen('php://memory','r+');
+        $stream = fopen('php://memory', 'r+');
         fwrite($stream, $string);
         rewind($stream);
 
@@ -58,13 +57,13 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
         $resultBlob = $this->getCopyBlobResult('Tue, 02 Dec 2014 08:09:01 +0000');
         $this->azure->shouldReceive('createBlockBlob')->once()->andReturn($resultBlob);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'type'      => 'file',
             'contents'  => 'content',
-        ), $this->adapter->write('bar/foo.txt', 'content', new Config()));
+        ], $this->adapter->write('bar/foo.txt', 'content', new Config()));
     }
 
     public function testUpdate()
@@ -72,13 +71,13 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
         $resultBlob = $this->getCopyBlobResult('Tue, 02 Dec 2014 08:09:01 +0000');
         $this->azure->shouldReceive('createBlockBlob')->once()->andReturn($resultBlob);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'type'      => 'file',
             'contents'  => 'content',
-        ), $this->adapter->update('bar/foo.txt', 'content', new Config()));
+        ], $this->adapter->update('bar/foo.txt', 'content', new Config()));
     }
 
     public function testWriteStream()
@@ -88,12 +87,12 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
         $this->azure->shouldReceive('createBlockBlob')->once()->andReturn($resultBlob);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'type'      => 'file',
-        ), $this->adapter->writeStream('bar/foo.txt', $stream, new Config()));
+        ], $this->adapter->writeStream('bar/foo.txt', $stream, new Config()));
     }
 
     public function testUpdateStream()
@@ -103,12 +102,12 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
         $this->azure->shouldReceive('createBlockBlob')->once()->andReturn($resultBlob);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'type'      => 'file',
-        ), $this->adapter->updateStream('bar/foo.txt', $stream, new Config()));
+        ], $this->adapter->updateStream('bar/foo.txt', $stream, new Config()));
     }
 
     public function testRead()
@@ -117,7 +116,7 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
         $this->azure->shouldReceive('getBlob')->once()->andReturn($resultBlob);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
@@ -125,7 +124,7 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
             'size'      => 7,
             'type'      => 'file',
             'contents'  => 'foo bar',
-        ), $this->adapter->read('bar/foo.txt', new Config()));
+        ], $this->adapter->read('bar/foo.txt', new Config()));
     }
 
     public function testReadStream()
@@ -140,14 +139,14 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
         unset($result['stream']);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'mimetype'  => null,
             'size'      => 7,
             'type'      => 'file',
-        ), $result);
+        ], $result);
     }
 
     public function testGetMetadata()
@@ -156,14 +155,14 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
         $this->azure->shouldReceive('getBlob')->andReturn($resultBlob);
 
-        $expectedResult = array(
+        $expectedResult = [
             'path'      => 'bar/foo.txt',
             'timestamp' => 1417507741,
             'dirname'   => 'bar',
             'mimetype'  => null,
             'size'      => 7,
             'type'      => 'file',
-        );
+        ];
 
         $this->assertSame($expectedResult, $this->adapter->getMetadata('bar/foo.txt'));
         $this->assertSame($expectedResult, $this->adapter->getTimestamp('bar/foo.txt'));
@@ -197,10 +196,10 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testCreateDir()
     {
-        $this->assertSame(array(
+        $this->assertSame([
             'path' => 'foo-dir',
-            'type' => 'dir'
-        ), $this->adapter->createDir('foo-dir', new Config()));
+            'type' => 'dir',
+        ], $this->adapter->createDir('foo-dir', new Config()));
     }
 
     public function testCopy()
@@ -231,7 +230,7 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
         $blob->shouldReceive('getName')->once();
 
         $blobsList = Mockery::mock('WindowsAzure\Blob\Models\ListBlobsResult');
-        $blobsList->shouldReceive('getBlobs')->once()->andReturn(array($blob));
+        $blobsList->shouldReceive('getBlobs')->once()->andReturn([$blob]);
 
         $this->azure->shouldReceive('listBlobs')->once()->andReturn($blobsList);
         $this->azure->shouldReceive('deleteBlob')->once();
@@ -251,19 +250,19 @@ class AzureAdapterTests extends \PHPUnit_Framework_TestCase
         $blob->shouldReceive('getProperties')->once()->andReturn($properties);
 
         $blobsList = Mockery::mock('WindowsAzure\Blob\Models\ListBlobsResult');
-        $blobsList->shouldReceive('getBlobs')->once()->andReturn(array($blob));
+        $blobsList->shouldReceive('getBlobs')->once()->andReturn([$blob]);
 
         $this->azure->shouldReceive('listBlobs')->once()->andReturn($blobsList);
 
-        $this->assertSame(array(
-            array(
+        $this->assertSame([
+            [
                 'path'      => 'foo.txt',
                 'timestamp' => 1417507741,
                 'dirname'   => '',
                 'mimetype'  => 'text/plain',
                 'size'      => 42,
                 'type'      => 'file',
-            )
-        ), $this->adapter->listContents());
+            ],
+        ], $this->adapter->listContents());
     }
 }

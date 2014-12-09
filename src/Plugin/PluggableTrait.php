@@ -11,7 +11,7 @@ trait PluggableTrait
     /**
      * @var  array  $plugins
      */
-    protected $plugins = array();
+    protected $plugins = [];
 
     /**
      * Register a plugin
@@ -40,7 +40,7 @@ trait PluggableTrait
         }
 
         if (! method_exists($this->plugins[$method], 'handle')) {
-            throw new LogicException(get_class($this->plugins[$method]) . ' does not have a handle method.');
+            throw new LogicException(get_class($this->plugins[$method]).' does not have a handle method.');
         }
 
         return $this->plugins[$method];
@@ -57,7 +57,7 @@ trait PluggableTrait
     {
         $plugin = $this->findPlugin($method);
         $plugin->setFilesystem($filesystem);
-        $callback = array($plugin, 'handle');
+        $callback = [$plugin, 'handle'];
 
         return call_user_func_array($callback, $arguments);
     }

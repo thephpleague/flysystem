@@ -20,12 +20,12 @@ class WebDav extends AbstractAdapter
     /**
      * @var array
      */
-    protected static $resultMap = array(
+    protected static $resultMap = [
         '{DAV:}getcontentlength' => 'size',
         '{DAV:}getcontenttype' => 'mimetype',
         'content-length' => 'size',
         'content-type' => 'mimetype',
-    );
+    ];
 
     /**
      * @var Client
@@ -52,12 +52,12 @@ class WebDav extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
 
         try {
-            $result = $this->client->propFind($location, array(
+            $result = $this->client->propFind($location, [
                 '{DAV:}displayname',
                 '{DAV:}getcontentlength',
                 '{DAV:}getcontenttype',
                 '{DAV:}getlastmodified',
-            ));
+            ]);
 
             return $this->normalizeObject($result, $path);
         } catch (Exception\FileNotFound $e) {
@@ -87,11 +87,11 @@ class WebDav extends AbstractAdapter
                 return false;
             }
 
-            return array_merge(array(
+            return array_merge([
                 'contents' => $response['body'],
                 'timestamp' => strtotime($response['headers']['last-modified']),
                 'path' => $path,
-            ), Util::map($response['headers'], static::$resultMap));
+            ], Util::map($response['headers'], static::$resultMap));
         } catch (Exception\FileNotFound $e) {
             return false;
         }
@@ -108,7 +108,7 @@ class WebDav extends AbstractAdapter
         $result = compact('path', 'contents');
 
         if ($config->get('visibility')) {
-            throw new LogicException(__CLASS__ . ' does not support visibility settings.');
+            throw new LogicException(__CLASS__.' does not support visibility settings.');
         }
 
         return $result;
@@ -130,9 +130,9 @@ class WebDav extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
 
         try {
-            $response = $this->client->request('MOVE', '/'.ltrim($location, '/'), null, array(
+            $response = $this->client->request('MOVE', '/'.ltrim($location, '/'), null, [
                 'Destination' => '/'.ltrim($newpath, '/'),
-            ));
+            ]);
 
             if ($response['statusCode'] >= 200 && $response['statusCode'] < 300) {
                 return true;
@@ -190,16 +190,16 @@ class WebDav extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($directory);
 
-        $response = $this->client->propFind($location, array(
+        $response = $this->client->propFind($location, [
             '{DAV:}displayname',
             '{DAV:}getcontentlength',
             '{DAV:}getcontenttype',
             '{DAV:}getlastmodified',
-        ), 1);
+        ], 1);
 
         array_shift($response);
 
-        $result = array();
+        $result = [];
 
         foreach ($response as $path => $object) {
             $path = $this->removePathPrefix($path);
@@ -248,7 +248,7 @@ class WebDav extends AbstractAdapter
     protected function normalizeObject(array $object, $path)
     {
         if (! isset($object['{DAV:}getcontentlength'])) {
-            return array('type' => 'dir', 'path' => trim($path, '/'));
+            return ['type' => 'dir', 'path' => trim($path, '/')];
         }
 
         $result = Util::map($object, static::$resultMap);

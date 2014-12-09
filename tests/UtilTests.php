@@ -6,7 +6,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 {
     public function testEmulateDirectories()
     {
-        $input = array(array('dirname' => '', 'filename' => 'dummy'), array('dirname' => 'something', 'filename' => 'dummy'));
+        $input = [['dirname' => '', 'filename' => 'dummy'], ['dirname' => 'something', 'filename' => 'dummy']];
         $output = Util::emulateDirectories($input);
         $this->assertCount(3, $output);
     }
@@ -19,10 +19,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function mapProvider()
     {
-        return array(
-            array(array('from.this' => 'value'), array('from.this' => 'to.this'), array('to.this' => 'value')),
-            array(array('from.this' => 'value', 'no.mapping' => 'lost'), array('from.this' => 'to.this'), array('to.this' => 'value')),
-        );
+        return [
+            [['from.this' => 'value'], ['from.this' => 'to.this'], ['to.this' => 'value']],
+            [['from.this' => 'value', 'no.mapping' => 'lost'], ['from.this' => 'to.this'], ['to.this' => 'value']],
+        ];
     }
 
     /**
@@ -36,11 +36,11 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function dirnameProvider()
     {
-        return array(
-            array('filename.txt', ''),
-            array('dirname/filename.txt', 'dirname'),
-            array('dirname/subdir', 'dirname'),
-        );
+        return [
+            ['filename.txt', ''],
+            ['dirname/filename.txt', 'dirname'],
+            ['dirname/subdir', 'dirname'],
+        ];
     }
 
     /**
@@ -54,10 +54,10 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function testEnsureConfig()
     {
-        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(array()));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig([]));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig('string'));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(null));
-        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config));
+        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config()));
     }
 
     /**
@@ -88,17 +88,17 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function pathProvider()
     {
-        return array(
-            array('/dirname/', 'dirname'),
-            array('dirname/..', ''),
-            array('./dir/../././', ''),
-            array('00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'),
-            array('/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'),
-            array('\dirname\\\\subdir\\\\\\subsubdir', 'dirname\subdir\subsubdir'),
-            array('\\\\some\shared\\\\drive', 'some\shared\drive'),
-            array('C:\dirname\\\\subdir\\\\\\subsubdir', 'C:\dirname\subdir\subsubdir'),
-            array('C:\\\\dirname\subdir\\\\subsubdir', 'C:\dirname\subdir\subsubdir'),
-        );
+        return [
+            ['/dirname/', 'dirname'],
+            ['dirname/..', ''],
+            ['./dir/../././', ''],
+            ['00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'],
+            ['/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'],
+            ['\dirname\\\\subdir\\\\\\subsubdir', 'dirname\subdir\subsubdir'],
+            ['\\\\some\shared\\\\drive', 'some\shared\drive'],
+            ['C:\dirname\\\\subdir\\\\\\subsubdir', 'C:\dirname\subdir\subsubdir'],
+            ['C:\\\\dirname\subdir\\\\subsubdir', 'C:\dirname\subdir\subsubdir'],
+        ];
     }
 
     /**
@@ -112,11 +112,11 @@ class UtilTests extends \PHPUnit_Framework_TestCase
 
     public function pathAndContentProvider()
     {
-        return array(
-            array('/some/file.css', 'body { background: #000; } ', 'text/css'),
-            array('/some/file.txt', 'body { background: #000; } ', 'text/plain'),
-            array('/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif')
-        );
+        return [
+            ['/some/file.css', 'body { background: #000; } ', 'text/css'],
+            ['/some/file.txt', 'body { background: #000; } ', 'text/plain'],
+            ['/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif'],
+        ];
     }
 
     /**

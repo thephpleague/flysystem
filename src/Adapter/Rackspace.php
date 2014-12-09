@@ -130,10 +130,10 @@ class Rackspace extends AbstractAdapter
      */
     public function deleteDir($dirname)
     {
-        $paths = array();
+        $paths = [];
         $prefix = '/'.$this->container->getName().'/';
         $location = $this->applyPathPrefix($dirname);
-        $objects = $this->container->objectList(array('prefix' => $location));
+        $objects = $this->container->objectList(['prefix' => $location]);
 
         foreach ($objects as $object) {
             $paths[] = $prefix.ltrim($object->getName(), '/');
@@ -154,7 +154,7 @@ class Rackspace extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        return array('path' => $dirname);
+        return ['path' => $dirname];
     }
 
     /**
@@ -221,9 +221,9 @@ class Rackspace extends AbstractAdapter
     public function listContents($directory = '', $recursive = false)
     {
         $location = $this->applyPathPrefix($directory);
-        $response = $this->container->objectList(array('prefix' => $location));
+        $response = $this->container->objectList(['prefix' => $location]);
         $response = iterator_to_array($response);
-        $contents = array_map(array($this, 'normalizeObject'), $response);
+        $contents = array_map([$this, 'normalizeObject'], $response);
 
         return Util::emulateDirectories($contents);
     }
@@ -237,14 +237,14 @@ class Rackspace extends AbstractAdapter
         $name = $this->removePathPrefix($name);
         $mimetype = explode('; ', $object->getContentType());
 
-        return array(
+        return [
             'type' => 'file',
             'dirname' => Util::dirname($name),
             'path' => $name,
             'timestamp' => strtotime($object->getLastModified()),
             'mimetype' => reset($mimetype),
             'size' => $object->getContentLength(),
-        );
+        ];
     }
 
     /**

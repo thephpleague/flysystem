@@ -16,10 +16,10 @@ class Dropbox extends AbstractAdapter
     /**
      * @var  array  $resultMap
      */
-    protected static $resultMap = array(
+    protected static $resultMap = [
         'bytes'          => 'size',
         'mime_type'      => 'mimetype',
-    );
+    ];
 
     /**
      * @var  Client  $client
@@ -104,6 +104,7 @@ class Dropbox extends AbstractAdapter
 
         if (! $this->client->getFile($location, $stream)) {
             fclose($stream);
+
             return false;
         }
 
@@ -231,12 +232,12 @@ class Dropbox extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $listing = array();
+        $listing = [];
         $directory = trim($directory, '/.');
         $location = $this->applyPathPrefix($directory);
 
         if (! $result = $this->client->getMetadataWithChildren($location)) {
-            return array();
+            return [];
         }
 
         foreach ($result['contents'] as $object) {
@@ -261,7 +262,7 @@ class Dropbox extends AbstractAdapter
     {
         $path = parent::applyPathPrefix($path);
 
-        return '/' . rtrim($path, '/');
+        return '/'.rtrim($path, '/');
     }
 
     /**
@@ -311,7 +312,7 @@ class Dropbox extends AbstractAdapter
      */
     protected function normalizeResponse(array $response, $path = null)
     {
-        $result = array('path' => trim($path ?: $response['path'], '/'));
+        $result = ['path' => trim($path ?: $response['path'], '/')];
 
         if (isset($response['modified'])) {
             $result['timestamp'] = strtotime($response['modified']);

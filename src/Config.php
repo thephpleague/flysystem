@@ -7,7 +7,7 @@ class Config
     /**
      * @var  array  $settings
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * @var  Config  $fallback
@@ -19,7 +19,7 @@ class Config
      *
      * @param  array  $settings
      */
-    public function __construct(array $settings = array())
+    public function __construct(array $settings = [])
     {
         $this->settings = $settings;
     }

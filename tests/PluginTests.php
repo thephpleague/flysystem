@@ -49,7 +49,7 @@ class PluginTests extends PHPUnit_Framework_TestCase
      */
     public function testPlugin()
     {
-        $this->filesystem->addPlugin(new MyPlugin);
+        $this->filesystem->addPlugin(new MyPlugin());
         $this->assertEquals('result', $this->filesystem->beAwesome('result'));
         $this->filesystem->unknownPlugin();
     }
@@ -59,7 +59,7 @@ class PluginTests extends PHPUnit_Framework_TestCase
      */
     public function testInvalidPlugin()
     {
-        $this->filesystem->addPlugin(new InvalidPlugin);
+        $this->filesystem->addPlugin(new InvalidPlugin());
         $this->filesystem->beInvalid();
     }
 }

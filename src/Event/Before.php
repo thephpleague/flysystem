@@ -56,7 +56,7 @@ class Before extends AbstractEvent
     {
         $method = $this->getMethod();
 
-        return 'before.' . strtolower($method);
+        return 'before.'.strtolower($method);
     }
 
     /**

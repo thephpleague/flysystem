@@ -56,7 +56,7 @@ class Util
      */
     public static function map(array $object, array $map)
     {
-        $result = array();
+        $result = [];
 
         foreach ($map as $from => $to) {
             if (! isset($object[$from])) {
@@ -85,7 +85,7 @@ class Util
         $normalized = static::normalizeRelativePath($normalized);
 
         if (preg_match('#/\.{2}|^\.{2}/#', $normalized)) {
-            throw new LogicException('Path is outside of the defined root, path: [' . $path . '], resolved: [' . $normalized . ']');
+            throw new LogicException('Path is outside of the defined root, path: ['.$path.'], resolved: ['.$normalized.']');
         }
 
         // Replace any double directory separators
@@ -169,7 +169,7 @@ class Util
      */
     public static function emulateDirectories(array $listing)
     {
-        $directories = array();
+        $directories = [];
 
         foreach ($listing as $object) {
             if (empty($object['dirname'])) {
@@ -188,7 +188,7 @@ class Util
         $directories = array_unique($directories);
 
         foreach ($directories as $directory) {
-            $listing[] = static::pathinfo($directory) + array('type' => 'dir');
+            $listing[] = static::pathinfo($directory) + ['type' => 'dir'];
         }
 
         return $listing;
@@ -204,7 +204,7 @@ class Util
     public static function ensureConfig($config)
     {
         if ($config === null) {
-            return new Config;
+            return new Config();
         }
 
         if ($config instanceof Config) {
@@ -213,7 +213,7 @@ class Util
 
         // Backwards compatibility
         if (is_string($config)) {
-            $config = array('visibility' => $config);
+            $config = ['visibility' => $config];
         }
 
         if (is_array($config)) {

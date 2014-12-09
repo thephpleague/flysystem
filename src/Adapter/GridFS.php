@@ -2,18 +2,17 @@
 
 namespace League\Flysystem\Adapter;
 
+use BadMethodCallException;
 use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedReadingTrait;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
-
-use \BadMethodCallException;
-use \LogicException;
-use \MongoGridFs;
-use \MongoGridFSException;
-use \MongoGridFSFile;
-use \MongoRegex;
+use LogicException;
+use MongoGridFs;
+use MongoGridFSException;
+use MongoGridFSFile;
+use MongoRegex;
 
 class GridFS extends AbstractAdapter
 {
@@ -61,16 +60,16 @@ class GridFS extends AbstractAdapter
      */
     public function write($path, $contents, Config $config)
     {
-        $metadata = array();
+        $metadata = [];
 
         if ($config->has('mimetype')) {
             $metadata['mimetype'] = $config->get('mimetype');
         }
 
-        return $this->writeObject($path, $contents, array(
+        return $this->writeObject($path, $contents, [
             'filename' => $path,
             'metadata' => $metadata,
-        ));
+        ]);
     }
 
     /**
@@ -148,7 +147,7 @@ class GridFS extends AbstractAdapter
     {
         $file = $this->client->findOne($path);
 
-        return $file ? array('contents' => $file->getBytes()) : false;
+        return $file ? ['contents' => $file->getBytes()] : false;
     }
 
     /**
@@ -172,11 +171,11 @@ class GridFS extends AbstractAdapter
      */
     public function deleteDir($path)
     {
-        $prefix = rtrim($this->applyPathPrefix($path), '/') . '/';
+        $prefix = rtrim($this->applyPathPrefix($path), '/').'/';
 
-        $result = $this->client->remove(array(
-            'filename' => new MongoRegex(sprintf('/^%s/', $prefix))
-        ));
+        $result = $this->client->remove([
+            'filename' => new MongoRegex(sprintf('/^%s/', $prefix)),
+        ]);
 
         return $result === true;
     }
@@ -192,10 +191,10 @@ class GridFS extends AbstractAdapter
             throw new BadMethodCallException('Recursive listing is not yet implemented');
         }
 
-        $keys = array();
-        $cursor = $this->client->find(array(
-            'filename' => new MongoRegex(sprintf('/^%s/', $dirname))
-        ));
+        $keys = [];
+        $cursor = $this->client->find([
+            'filename' => new MongoRegex(sprintf('/^%s/', $dirname)),
+        ]);
         foreach ($cursor as $file) {
             $keys[] = $this->normalizeGridFSFile($file);
         }
@@ -221,7 +220,7 @@ class GridFS extends AbstractAdapter
             return false;
         }
 
-        $file = $this->client->findOne(array('_id' => $id));
+        $file = $this->client->findOne(['_id' => $id]);
 
         return $this->normalizeGridFSFile($file, $path);
     }
@@ -235,12 +234,12 @@ class GridFS extends AbstractAdapter
      */
     protected function normalizeGridFSFile(MongoGridFSFile $file, $path = null)
     {
-        $result = array(
+        $result = [
             'path'      => trim($path ?: $file->getFilename(), '/'),
             'type'      => 'file',
             'size'      => $file->getSize(),
             'timestamp' => $file->file['uploadDate']->sec,
-        );
+        ];
 
         $result['dirname'] = Util::dirname($result['path']);
 

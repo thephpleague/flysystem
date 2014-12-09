@@ -2,16 +2,15 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\Config;
+use League\Flysystem\Util;
 use WindowsAzure\Blob\Internal\IBlob;
 use WindowsAzure\Blob\Models\BlobProperties;
 use WindowsAzure\Blob\Models\ListBlobsOptions;
 use WindowsAzure\Blob\Models\ListBlobsResult;
 use WindowsAzure\Common\ServiceException;
-
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Adapter\Polyfill\NotSupportingVisibilityTrait;
-use League\Flysystem\Config;
-use League\Flysystem\Util;
 
 class Azure implements AdapterInterface
 {
@@ -121,7 +120,7 @@ class Azure implements AdapterInterface
      */
     public function createDir($dirname, Config $config)
     {
-        return array('path' => $dirname, 'type' => 'dir');
+        return ['path' => $dirname, 'type' => 'dir'];
     }
 
     /**
@@ -152,7 +151,7 @@ class Azure implements AdapterInterface
         $properties = $blobResult->getProperties();
         $content = $this->streamContentsToString($blobResult->getContentStream());
 
-        return $this->normalizeBlobProperties($path, $properties) + array('contents' => $content);
+        return $this->normalizeBlobProperties($path, $properties) + ['contents' => $content];
     }
 
     /**
@@ -164,7 +163,7 @@ class Azure implements AdapterInterface
         $blobResult = $this->client->getBlob($this->container, $path);
         $properties = $blobResult->getProperties();
 
-        return $this->normalizeBlobProperties($path, $properties) + array('stream' => $blobResult->getContentStream());
+        return $this->normalizeBlobProperties($path, $properties) + ['stream' => $blobResult->getContentStream()];
     }
 
     /**
@@ -178,7 +177,7 @@ class Azure implements AdapterInterface
         /** @var ListBlobsResult $listResults */
         $listResults = $this->client->listBlobs($this->container, $options);
 
-        $contents = array();
+        $contents = [];
         foreach ($listResults->getBlobs() as $blob) {
             $contents[] = $this->normalizeBlobProperties($blob->getName(), $blob->getProperties());
         }
@@ -232,12 +231,12 @@ class Azure implements AdapterInterface
      */
     protected function normalize($path, $timestamp, $content = null)
     {
-        $data = array(
+        $data = [
             'path'      => $path,
             'timestamp' => (int) $timestamp,
             'dirname'   => Util::dirname($path),
             'type'      => 'file',
-        );
+        ];
 
         if (is_string($content)) {
             $data['contents'] = $content;
@@ -256,14 +255,14 @@ class Azure implements AdapterInterface
      */
     protected function normalizeBlobProperties($path, BlobProperties $properties)
     {
-        return array(
+        return [
             'path'      => $path,
             'timestamp' => (int) $properties->getLastModified()->format('U'),
             'dirname'   => Util::dirname($path),
             'mimetype'  => $properties->getContentType(),
             'size'      => $properties->getContentLength(),
             'type'      => 'file',
-        );
+        ];
     }
 
     /**
