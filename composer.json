@@ -25,7 +25,6 @@
         "predis/predis": "~1.0",
         "dropbox/dropbox-sdk": "~1.1.1",
         "rackspace/php-opencloud": "~1.11",
-        "sabre/dav": "~2.0",
         "barracuda/copy": "~1.1.4",
         "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
@@ -54,7 +53,8 @@
         "barracuda/copy": "Allows you to use Copy.com storage",
         "guzzlehttp/guzzle": "Allows you to use http files (reading only)",
         "tedivm/stash": "Allows you to use Stash as cache implementation",
-        "league/flysystem-azure": "Allows you to use Windows Azure Blob storage"
+        "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
+        "league/flysystem-webdav": "Allows you to use WebDAV storage"
     },
     "config": {
         "bin-dir": "bin"
