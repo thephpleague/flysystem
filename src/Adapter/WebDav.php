@@ -260,6 +260,10 @@ class WebDav extends AbstractAdapter
         $result['type'] = 'file';
         $result['path'] = trim($path, '/');
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return $result;
     }
 }

@@ -265,6 +265,10 @@ class Copy extends AbstractAdapter
 
         $result = Util::map((array) $object, static::$resultMap);
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return compact('timestamp', 'path') + $result;
     }
 

@@ -106,4 +106,24 @@ interface AdapterInterface extends ReadInterface
      * @return  array|false   file meta data
      */
     public function setVisibility($path, $visibility);
+
+    /**
+     * Returns true if the alias is set in the filesystem
+     *
+     * @return string|null
+     */
+    public function hasAlias();
+
+    /**
+     * Returns the alias of the filesystem in the mount manager, null if not set
+     *
+     * @return string|null
+     */
+    public function getAlias();
+
+    /**
+     * @param $alias
+     * @return AdapterInterface
+     */
+    public function setAlias($alias);
 }

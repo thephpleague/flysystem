@@ -338,6 +338,10 @@ class Local extends AbstractAdapter
             $normalized['size'] = $file->getSize();
         }
 
+        if ($this->hasAlias()) {
+            $normalized['filesystem'] = $this->getAlias();
+        }
+
         return $normalized;
     }
 

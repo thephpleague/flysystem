@@ -244,6 +244,7 @@ class Rackspace extends AbstractAdapter
             'timestamp' => strtotime($object->getLastModified()),
             'mimetype' => reset($mimetype),
             'size' => $object->getContentLength(),
+            'filesystem' => $this->getAlias(),
         );
     }
 

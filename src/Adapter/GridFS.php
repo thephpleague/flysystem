@@ -248,6 +248,10 @@ class GridFS extends AbstractAdapter
             $result['mimetype'] = $file->file['metadata']['mimetype'];
         }
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return $result;
     }
 }

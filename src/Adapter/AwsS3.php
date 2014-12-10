@@ -435,6 +435,10 @@ class AwsS3 extends AbstractAdapter
 
         $result = array_merge($result, Util::map($object, static::$resultMap), array('type' => 'file'));
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return $result;
     }
 

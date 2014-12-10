@@ -320,6 +320,10 @@ class Dropbox extends AbstractAdapter
         $result = array_merge($result, Util::map($response, static::$resultMap));
         $result['type'] = $response['is_dir'] ? 'dir' : 'file';
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return $result;
     }
 }

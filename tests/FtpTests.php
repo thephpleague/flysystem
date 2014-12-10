@@ -114,6 +114,14 @@ function ftp_rawlist($connection, $directory)
         );
     }
 
+    if (strpos($directory, 'mount_manager.test') !== false) {
+        return array(
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp           409 Oct 13  2012 test.txt',
+        );
+    }
+
     return array(
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',

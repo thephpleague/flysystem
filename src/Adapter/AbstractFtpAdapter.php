@@ -287,7 +287,12 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
         $size = (int) $size;
 
-        return compact('type', 'path', 'visibility', 'size', 'timestamp');
+        $filesystem = null;
+        if ($this->hasAlias()) {
+            $filesystem = $this->getAlias();
+        }
+
+        return compact('type', 'path', 'visibility', 'size', 'timestamp', 'filesystem');
     }
 
     /**

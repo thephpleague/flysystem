@@ -17,6 +17,11 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $pathSeparator = '/';
 
     /**
+     * @var string
+     */
+    protected $alias;
+
+    /**
      * Set the path prefix
      *
      * @param   string  $prefix
@@ -79,5 +84,31 @@ abstract class AbstractAdapter implements AdapterInterface
         $length = strlen($this->pathPrefix);
 
         return substr($path, $length);
+    }
+
+    /**
+     * @param $alias
+     * @return AdapterInterface|void
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAlias()
+    {
+        return !is_null($this->alias);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

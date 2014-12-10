@@ -270,6 +270,10 @@ class Zip extends AbstractAdapter
         $normalised = Util::map($object, static::$resultMap);
         $normalised['path'] = $this->removePathPrefix($normalised['path']);
 
+        if ($this->hasAlias()) {
+            $result['filesystem'] = $this->getAlias();
+        }
+
         return array_merge($result, $normalised);
     }
 

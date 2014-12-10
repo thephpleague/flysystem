@@ -222,4 +222,21 @@ interface FilesystemInterface
      * @return  $this
      */
     public function addPlugin(PluginInterface $plugin);
+
+    /**
+     * @return AdapterInterface
+     */
+    public function getAdapter();
+
+    /**
+     * Returns if the filesystem has an alias related in the mount manager
+     *
+     * @return boolean
+     */
+    public function hasAlias();
+
+    /**
+     * @return string
+     */
+    public function getAlias();
 }

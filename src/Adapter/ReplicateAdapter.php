@@ -18,6 +18,11 @@ class ReplicateAdapter implements AdapterInterface
     protected $source;
 
     /**
+     * @var string
+     */
+    protected $alias;
+
+    /**
      * Constructor
      *
      * @param AdapterInterface $source
@@ -251,5 +256,35 @@ class ReplicateAdapter implements AdapterInterface
         }
 
         return $this->replica->setVisibility($path, $visibility);
+    }
+
+    /**
+     * Returns true if the alias is set in the filesystem
+     *
+     * @return string|null
+     */
+    public function hasAlias()
+    {
+        return !is_null($this->alias);
+    }
+
+    /**
+     * Returns the alias of the filesystem in the mount manager, null if not set
+     *
+     * @return string|null
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param $alias
+     * @return AdapterInterface
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        return $this;
     }
 }

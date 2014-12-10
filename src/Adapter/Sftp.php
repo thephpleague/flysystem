@@ -205,6 +205,7 @@ class Sftp extends AbstractFtpAdapter
             'timestamp' => $object['mtime'],
             'type' => ($object['type'] === 1 ? 'file' : 'dir'),
             'visibility' => $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE,
+            'filesystem' => $this->getAlias(),
         );
     }
 

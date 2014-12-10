@@ -47,6 +47,22 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
+     * @return bool
+     */
+    public function hasAlias()
+    {
+        return $this->adapter->hasAlias();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->adapter->getAlias();
+    }
+
+    /**
      * Get the Adapter
      *
      * @return  AdapterInterface  adapter

@@ -95,6 +95,10 @@ class MountManager
             throw new InvalidArgumentException(__METHOD__.' expects argument #1 to be a string.');
         }
 
+        if ($adapter = $filesystem->getAdapter()) {
+            $adapter->setAlias($prefix);
+        }
+
         $this->filesystems[$prefix] = $filesystem;
 
         return $this;
@@ -201,6 +205,7 @@ class MountManager
      *
      * @param $from
      * @param $to
+     * @return bool
      */
     public function move($from, $to)
     {

@@ -28,6 +28,11 @@ class Azure implements AdapterInterface
     protected $client;
 
     /**
+     * @var string
+     */
+    protected $alias;
+
+    /**
      * @param IBlob  $azureClient
      * @param string $container
      */
@@ -256,7 +261,7 @@ class Azure implements AdapterInterface
      */
     protected function normalizeBlobProperties($path, BlobProperties $properties)
     {
-        return array(
+        $data = array(
             'path'      => $path,
             'timestamp' => (int) $properties->getLastModified()->format('U'),
             'dirname'   => Util::dirname($path),
@@ -264,6 +269,12 @@ class Azure implements AdapterInterface
             'size'      => $properties->getContentLength(),
             'type'      => 'file',
         );
+
+        if ($this->hasAlias()) {
+            $data['filesystem'] = $this->getAlias();
+        }
+
+        return $data;
     }
 
     /**
@@ -292,5 +303,35 @@ class Azure implements AdapterInterface
         $result = $this->client->createBlockBlob($this->container, $path, $contents);
 
         return $this->normalize($path, $result->getLastModified()->format('U'), $contents);
+    }
+
+    /**
+     * Returns true if the alias is set in the filesystem
+     *
+     * @return string|null
+     */
+    public function hasAlias()
+    {
+        return !is_null($this->alias);
+    }
+
+    /**
+     * Returns the alias of the filesystem in the mount manager, null if not set
+     *
+     * @return string|null
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param $alias
+     * @return AdapterInterface
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+        return $this;
     }
 }
