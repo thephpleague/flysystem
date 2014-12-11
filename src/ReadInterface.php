@@ -5,6 +5,16 @@ namespace League\Flysystem;
 interface ReadInterface
 {
     /**
+     * @const MODE_RECURSIVE enable recursive mode
+     */
+    const MODE_RECURSIVE = 1;
+
+    /**
+     * @const MODE_GLOB_ENABLE allows glob pattern matching
+     */
+    const MODE_GLOB_ENABLED = 2;
+
+    /**
      * Check whether a file exists
      *
      * @param   string  $path
@@ -31,11 +41,11 @@ interface ReadInterface
     /**
      * List contents of a directory
      *
-     * @param   string  $directory
-     * @param   bool    $recursive
+     * @param   string $directory
+     * @param int $mode
      * @return  array
      */
-    public function listContents($directory = '', $recursive = false);
+    public function listContents($directory = '', $mode = 0);
 
     /**
      * Get all the meta data of a file or directory

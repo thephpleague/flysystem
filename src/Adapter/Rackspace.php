@@ -218,7 +218,7 @@ class Rackspace extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($directory = '', $mode = 0)
     {
         $location = $this->applyPathPrefix($directory);
         $response = $this->container->objectList(['prefix' => $location]);

@@ -230,7 +230,7 @@ class Dropbox extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($directory = '', $mode = 0)
     {
         $listing = [];
         $directory = trim($directory, '/.');
@@ -244,8 +244,8 @@ class Dropbox extends AbstractAdapter
             $path = $this->removePathPrefix($object['path']);
             $listing[] = $this->normalizeResponse($object, $path);
 
-            if ($recursive && $object['is_dir']) {
-                $listing = array_merge($listing, $this->listContents($path, true));
+            if ($mode & self::MODE_RECURSIVE && $object['is_dir']) {
+                $listing = array_merge($listing, $this->listContents($path, $mode));
             }
         }
 

@@ -196,9 +196,9 @@ class ReplicateAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($directory = '', $mode = 0)
     {
-        return $this->source->listContents($directory, $recursive);
+        return $this->source->listContents($directory, $mode);
     }
 
     /**
