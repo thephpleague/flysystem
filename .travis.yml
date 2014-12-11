@@ -6,14 +6,15 @@ php:
   - 5.6
   - hhvm
 
-before_script:
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml.dist; fi;'
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then mv phpunit.xml.hhvm phpunit.xml.dist; fi;'
-  - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source --dev
+before_install:
   - mkdir tests/files
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then mv phpunit.hhvm.xml phpunit.xml; fi;'
+
+install:
+  - travis_retry composer install --no-interaction --prefer-source
 
 script:
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then bin/phpunit --verbose; fi;'
-  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then bin/phpunit --verbose --coverage-text --coverage-clover /tmp/flysystem/coverage.xml; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then bin/phpunit; fi;'
+  - bash -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then bin/phpunit --coverage-text --coverage-clover coverage.xml; fi;'
   - bin/phpspec run

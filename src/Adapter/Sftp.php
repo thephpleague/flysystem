@@ -42,6 +42,7 @@ class Sftp extends AbstractFtpAdapter
      * Prefix a path
      *
      * @param string $path
+     *
      * @return string
      */
     protected function prefix($path)
@@ -53,6 +54,7 @@ class Sftp extends AbstractFtpAdapter
      * Set the private key (string or path to local file)
      *
      * @param string $key
+     *
      * @return $this
      */
     public function setPrivateKey($key)
@@ -66,6 +68,7 @@ class Sftp extends AbstractFtpAdapter
      * Inject the Net_SFTP instance
      *
      * @param Net_SFTP $connection
+     *
      * @return $this
      */
     public function setNetSftpConnection(Net_SFTP $connection)
@@ -91,6 +94,7 @@ class Sftp extends AbstractFtpAdapter
      * Login
      *
      * @throws LogicException
+     *
      * @return void
      */
     protected function login()
@@ -157,8 +161,9 @@ class Sftp extends AbstractFtpAdapter
     /**
      * List the contents of a directory.
      *
-     * @param string  $directory
-     * @param bool    $recursive
+     * @param string $directory
+     * @param bool   $recursive
+     *
      * @return array
      */
     protected function listDirectoryContents($directory, $recursive = true)
@@ -192,7 +197,8 @@ class Sftp extends AbstractFtpAdapter
      * Normalize a listing response
      *
      * @param string $path
-     * @param array $object
+     * @param array  $object
+     *
      * @return array
      */
     protected function normalizeListingObject($path, array $object)

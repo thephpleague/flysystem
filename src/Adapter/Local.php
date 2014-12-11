@@ -27,7 +27,7 @@ class Local extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  string  $root
+     * @param string $root
      */
     public function __construct($root)
     {
@@ -38,8 +38,9 @@ class Local extends AbstractAdapter
     /**
      * Ensure the root directory exists.
      *
-     * @param   string  $root  root directory path
-     * @return  string  real path to root
+     * @param string $root root directory path
+     *
+     * @return string real path to root
      */
     protected function ensureDirectory($root)
     {
@@ -324,6 +325,7 @@ class Local extends AbstractAdapter
      * Normalize the file info
      *
      * @param SplFileInfo $file
+     *
      * @return array
      */
     protected function normalizeFileInfo(SplFileInfo $file)
@@ -344,8 +346,9 @@ class Local extends AbstractAdapter
     /**
      * Get the normalized path from a SplFileInfo object
      *
-     * @param   SplFileInfo  $file
-     * @return  string
+     * @param SplFileInfo $file
+     *
+     * @return string
      */
     protected function getFilePath(SplFileInfo $file)
     {
@@ -357,6 +360,7 @@ class Local extends AbstractAdapter
 
     /**
      * @param string $path
+     *
      * @return RecursiveIteratorIterator
      */
     protected function getRecursiveDirectoryIterator($path)
@@ -369,6 +373,7 @@ class Local extends AbstractAdapter
 
     /**
      * @param string $path
+     *
      * @return DirectoryIterator
      */
     protected function getDirectoryIterator($path)

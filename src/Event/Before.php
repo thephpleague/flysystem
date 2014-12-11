@@ -29,8 +29,8 @@ class Before extends AbstractEvent
 
     /**
      * @param FilesystemInterface $filesystem
-     * @param string $method
-     * @param array $arguments
+     * @param string              $method
+     * @param array               $arguments
      */
     public function __construct(FilesystemInterface $filesystem, $method, array $arguments)
     {
@@ -50,7 +50,7 @@ class Before extends AbstractEvent
     /**
      * Get the event name
      *
-     * @return  string  event name
+     * @return string event name
      */
     public function getName()
     {
@@ -62,7 +62,7 @@ class Before extends AbstractEvent
     /**
      * Get the called method name
      *
-     * @return  string  method
+     * @return string method
      */
     public function getMethod()
     {
@@ -72,7 +72,7 @@ class Before extends AbstractEvent
     /**
      * Get the passed arguments
      *
-     * @return  array  method arguments
+     * @return array method arguments
      */
     public function getArguments()
     {
@@ -82,9 +82,10 @@ class Before extends AbstractEvent
     /**
      * Get an argument by key
      *
-     * @param   string  $key      argument key
-     * @param   mixed   $default  default return value
-     * @return  mixed
+     * @param string $key     argument key
+     * @param mixed  $default default return value
+     *
+     * @return mixed
      */
     public function getArgument($key, $default = null)
     {
@@ -100,6 +101,7 @@ class Before extends AbstractEvent
      *
      * @param string $key
      * @param mixed  $value
+     *
      * @return $this
      */
     public function setArgument($key, $value)
@@ -112,8 +114,9 @@ class Before extends AbstractEvent
     /**
      * Set the arguments
      *
-     * @param   array  $arguments
-     * @return  self
+     * @param array $arguments
+     *
+     * @return self
      */
     public function setArguments(array $arguments)
     {
@@ -125,8 +128,9 @@ class Before extends AbstractEvent
     /**
      * Set the result, used when the operation is canceled
      *
-     * @param   mixed  $result
-     * @return  self
+     * @param mixed $result
+     *
+     * @return self
      */
     public function setResult($result)
     {
@@ -138,7 +142,7 @@ class Before extends AbstractEvent
     /**
      * Get the result, used when the operation is canceled
      *
-     * @return  mixed
+     * @return mixed
      */
     public function getResult()
     {
@@ -148,8 +152,9 @@ class Before extends AbstractEvent
     /**
      * Cancel the operation
      *
-     * @param   mixed $result
-     * @return  void
+     * @param mixed $result
+     *
+     * @return void
      */
     public function cancelOperation($result = false)
     {

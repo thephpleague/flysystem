@@ -60,7 +60,7 @@ class MountManager
     /**
      * Constructor
      *
-     * @param   array  $filesystems
+     * @param array $filesystems
      */
     public function __construct(array $filesystems = [])
     {
@@ -70,8 +70,9 @@ class MountManager
     /**
      * Mount filesystems
      *
-     * @param   array  $filesystems  [:prefix => Filesystem,]
-     * @return  $this
+     * @param array $filesystems [:prefix => Filesystem,]
+     *
+     * @return $this
      */
     public function mountFilesystems(array $filesystems)
     {
@@ -85,9 +86,10 @@ class MountManager
     /**
      * Mount filesystems
      *
-     * @param   string               $prefix
-     * @param   FilesystemInterface  $filesystem
-     * @return  $this
+     * @param string              $prefix
+     * @param FilesystemInterface $filesystem
+     *
+     * @return $this
      */
     public function mountFilesystem($prefix, FilesystemInterface $filesystem)
     {
@@ -103,9 +105,11 @@ class MountManager
     /**
      * Get the filesystem with the corresponding prefix
      *
-     * @param    string               $prefix
-     * @return   FilesystemInterface
-     * @throws   LogicException
+     * @param string $prefix
+     *
+     * @return FilesystemInterface
+     *
+     * @throws LogicException
      */
     public function getFilesystem($prefix)
     {
@@ -119,8 +123,9 @@ class MountManager
     /**
      * Retrieve the prefix form an arguments array
      *
-     * @param   array  $arguments
-     * @return  array  [:prefix, :arguments]
+     * @param array $arguments
+     *
+     * @return array [:prefix, :arguments]
      */
     public function filterPrefix(array $arguments)
     {
@@ -147,9 +152,10 @@ class MountManager
     /**
      * Call forwarder
      *
-     * @param   string  $method
-     * @param   array   $arguments
-     * @return  mixed
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
      */
     public function __call($method, $arguments)
     {
@@ -171,6 +177,7 @@ class MountManager
     /**
      * @param $from
      * @param $to
+     *
      * @return bool
      */
     public function copy($from, $to)

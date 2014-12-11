@@ -25,9 +25,9 @@ class Adapter extends AbstractCache
     /**
      * Constructor
      *
-     * @param AdapterInterface  $adapter  adapter
-     * @param string            $file     the file to cache to
-     * @param int|null          $expire   seconds until cache expiration
+     * @param AdapterInterface $adapter adapter
+     * @param string           $file    the file to cache to
+     * @param int|null         $expire  seconds until cache expiration
      */
     public function __construct(AdapterInterface $adapter, $file, $expire = null)
     {
@@ -39,7 +39,7 @@ class Adapter extends AbstractCache
     /**
      * Set the expiration time in seconds
      *
-     * @param  int  $expire  relative expiration time
+     * @param int $expire relative expiration time
      */
     protected function setExpire($expire)
     {
@@ -51,8 +51,9 @@ class Adapter extends AbstractCache
     /**
      * Get expiration time in seconds
      *
-     * @param  int  $time  relative expiration time
-     * @return int  actual expiration time
+     * @param int $time relative expiration time
+     *
+     * @return int actual expiration time
      */
     protected function getTime($time = 0)
     {

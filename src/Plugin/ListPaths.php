@@ -7,7 +7,7 @@ class ListPaths extends AbstractPlugin
     /**
      * Get the method name
      *
-     * @return  string
+     * @return string
      */
     public function getMethod()
     {
@@ -19,7 +19,8 @@ class ListPaths extends AbstractPlugin
      *
      * @param string $directory
      * @param bool   $recursive
-     * @return  array  paths
+     *
+     * @return array paths
      */
     public function handle($directory = '', $recursive = false)
     {

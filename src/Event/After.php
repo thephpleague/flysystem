@@ -24,8 +24,8 @@ class After extends AbstractEvent
 
     /**
      * @param FilesystemInterface $filesystem
-     * @param string $method
-     * @param mixed $result
+     * @param string              $method
+     * @param mixed               $result
      */
     public function __construct(FilesystemInterface $filesystem, $method, $result)
     {
@@ -80,6 +80,7 @@ class After extends AbstractEvent
      * Overwrite the result
      *
      * @param mixed $result
+     *
      * @return $this
      */
     public function setResult($result)

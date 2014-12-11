@@ -35,7 +35,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Get the autosave setting
      *
-     * @return  boolean  autosave
+     * @return boolean autosave
      */
     public function getAutosave()
     {
@@ -45,8 +45,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Get the autosave setting
      *
-     * @param   boolean  $autosave
-     * @return  $this
+     * @param boolean $autosave
+     *
+     * @return $this
      */
     public function setAutosave($autosave)
     {
@@ -58,10 +59,11 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Store the contents listing
      *
-     * @param   string   $directory
-     * @param   array    $contents
-     * @param   boolean  $recursive
-     * @return  array  contents listing
+     * @param string  $directory
+     * @param array   $contents
+     * @param boolean $recursive
+     *
+     * @return array contents listing
      */
     public function storeContents($directory, array $contents, $recursive = false)
     {
@@ -97,9 +99,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Update the metadata for an object
      *
-     * @param   string   $path      object path
-     * @param   array    $object    object metadata
-     * @param   boolean  $autosave  whether to trigger the autosave routine
+     * @param string  $path     object path
+     * @param array   $object   object metadata
+     * @param boolean $autosave whether to trigger the autosave routine
      */
     public function updateObject($path, array $object, $autosave = false)
     {
@@ -121,8 +123,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Store object hit miss
      *
-     * @param   string   $path
-     * @return  $this
+     * @param string $path
+     *
+     * @return $this
      */
     public function storeMiss($path)
     {
@@ -135,9 +138,10 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Get the contents listing
      *
-     * @param   string   $dirname
-     * @param   boolean  $recursive
-     * @return  array    contents listing
+     * @param string  $dirname
+     * @param boolean $recursive
+     *
+     * @return array contents listing
      */
     public function listContents($dirname = '', $recursive = false)
     {
@@ -361,8 +365,9 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Filter the contents from a listing
      *
-     * @param   array  $contents  object listing
-     * @return  array  filtered contents
+     * @param array $contents object listing
+     *
+     * @return array filtered contents
      */
     public function cleanContents(array $contents)
     {
@@ -403,7 +408,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Retrieve serialized cache data
      *
-     * @return  string  serialized data
+     * @return string serialized data
      */
     public function getForStorage()
     {
@@ -415,7 +420,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Load from serialized cache data
      *
-     * @param  string  $json
+     * @param string $json
      */
     public function setFromStorage($json)
     {
@@ -430,7 +435,7 @@ abstract class AbstractCache implements CacheInterface
     /**
      * Ensure parent directories of an object
      *
-     * @param   string  $path  object path
+     * @param string $path object path
      */
     public function ensureParentDirectories($path)
     {

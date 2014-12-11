@@ -15,8 +15,9 @@ class NullAdapter extends AbstractAdapter
     /**
      * Check whether a file is present
      *
-     * @param   string   $path
-     * @return  boolean
+     * @param string $path
+     *
+     * @return boolean
      */
     public function has($path)
     {

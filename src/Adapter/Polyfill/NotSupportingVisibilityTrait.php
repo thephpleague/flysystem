@@ -9,8 +9,9 @@ trait NotSupportingVisibilityTrait
     /**
      * Get the visibility of a file
      *
-     * @param   string  $path
-     * @return  array|false
+     * @param string $path
+     *
+     * @return array|false
      */
     public function getVisibility($path)
     {
@@ -20,9 +21,10 @@ trait NotSupportingVisibilityTrait
     /**
      * Set the visibility for a file
      *
-     * @param   string  $path
-     * @param   string  $visibility
-     * @throws  LogicException
+     * @param string $path
+     * @param string $visibility
+     *
+     * @throws LogicException
      */
     public function setVisibility($path, $visibility)
     {

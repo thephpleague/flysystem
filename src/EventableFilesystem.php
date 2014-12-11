@@ -19,10 +19,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Constructor
      *
-     * @param  AdapterInterface  $adapter
-     * @param  CacheInterface    $cache
-     * @param  mixed             $config
-     * @param  Emitter           $emitter
+     * @param AdapterInterface $adapter
+     * @param CacheInterface   $cache
+     * @param mixed            $config
+     * @param Emitter          $emitter
      */
     public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null, Emitter $emitter = null)
     {
@@ -41,11 +41,13 @@ class EventableFilesystem extends Filesystem
     /**
      * Create a file or update if exists
      *
-     * @param  string              $path     path to file
-     * @param  string              $contents file contents
-     * @param  array               $config
+     * @param string $path     path to file
+     * @param string $contents file contents
+     * @param array  $config
+     *
      * @throws FileExistsException
-     * @return boolean             success boolean
+     *
+     * @return boolean success boolean
      */
     public function put($path, $contents, array $config = [])
     {
@@ -55,10 +57,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Create a file or update if exists using a stream
      *
-     * @param   string    $path
-     * @param   resource  $resource
-     * @param   array    $config
-     * @return  boolean   success boolean
+     * @param string   $path
+     * @param resource $resource
+     * @param array    $config
+     *
+     * @return boolean success boolean
      */
     public function putStream($path, $resource, array $config = [])
     {
@@ -68,10 +71,12 @@ class EventableFilesystem extends Filesystem
     /**
      * Read and delete a file.
      *
-     * @param   string  $path
-     * @param   array    $config
-     * @return  string  file contents
-     * @throws  FileNotFoundException
+     * @param string $path
+     * @param array  $config
+     *
+     * @return string file contents
+     *
+     * @throws FileNotFoundException
      */
     public function readAndDelete($path, array $config = [])
     {
@@ -95,10 +100,11 @@ class EventableFilesystem extends Filesystem
     /**
      * List all paths
      *
-     * @param   string   $directory
-     * @param   boolean  $recursive
-     * @param   mixed    $config
-     * @return  array  paths
+     * @param string  $directory
+     * @param boolean $recursive
+     * @param mixed   $config
+     *
+     * @return array paths
      */
     public function listPaths($directory = '', $recursive = false, array $config = [])
     {
@@ -108,11 +114,12 @@ class EventableFilesystem extends Filesystem
     /**
      * List contents with metadata
      *
-     * @param   array    $keys  metadata key
-     * @param   string   $directory
-     * @param   boolean  $recursive
-     * @param   mixed    $config
-     * @return  array            listing with metadata
+     * @param array   $keys      metadata key
+     * @param string  $directory
+     * @param boolean $recursive
+     * @param mixed   $config
+     *
+     * @return array listing with metadata
      */
     public function listWith(array $keys = [], $directory = '', $recursive = false, array $config = [])
     {
@@ -122,11 +129,13 @@ class EventableFilesystem extends Filesystem
     /**
      * Get metadata for an object with required metadata
      *
-     * @param   string  $path      path to file
-     * @param   array   $metadata  metadata keys
-     * @param   array   $config
-     * @throws  InvalidArgumentException
-     * @return  array   metadata
+     * @param string $path     path to file
+     * @param array  $metadata metadata keys
+     * @param array  $config
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return array metadata
      */
     public function getWithMetadata($path, array $metadata, array $config = [])
     {
@@ -136,10 +145,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Get a file/directory handler
      *
-     * @param   string   $path
-     * @param   Handler  $handler
-     * @param   mixed    $config
-     * @return  Handler  file or directory handler
+     * @param string  $path
+     * @param Handler $handler
+     * @param mixed   $config
+     *
+     * @return Handler file or directory handler
      */
     public function get($path, Handler $handler = null, array $config = [])
     {
@@ -149,8 +159,9 @@ class EventableFilesystem extends Filesystem
     /**
      * Flush the cache
      *
-     * @param   mixed  $config
-     * @return  $this
+     * @param mixed $config
+     *
+     * @return $this
      */
     public function flushCache(array $config = [])
     {
@@ -162,9 +173,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Register a plugin
      *
-     * @param   PluginInterface  $plugin
-     * @param   mixed            $config
-     * @return  $this
+     * @param PluginInterface $plugin
+     * @param mixed           $config
+     *
+     * @return $this
      */
     public function addPlugin(PluginInterface $plugin, array $config = [])
     {
@@ -176,9 +188,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Check whether a file exists
      *
-     * @param   string  $path
-     * @param   array   $config
-     * @return  bool
+     * @param string $path
+     * @param array  $config
+     *
+     * @return bool
      */
     public function has($path, array $config = [])
     {
@@ -188,9 +201,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Read a file
      *
-     * @param   string  $path
-     * @param   array   $config
-     * @return  false|array
+     * @param string $path
+     * @param array  $config
+     *
+     * @return false|array
      */
     public function read($path, array $config = [])
     {
@@ -200,9 +214,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Read a file as a stream
      *
-     * @param   string  $path
-     * @param   array   $config
-     * @return  false|array
+     * @param string $path
+     * @param array  $config
+     *
+     * @return false|array
      */
     public function readStream($path, $config = [])
     {
@@ -212,10 +227,11 @@ class EventableFilesystem extends Filesystem
     /**
      * List contents of a directory
      *
-     * @param   string  $directory
-     * @param   bool    $recursive
-     * @param   array   $config
-     * @return  false|array
+     * @param string $directory
+     * @param bool   $recursive
+     * @param array  $config
+     *
+     * @return false|array
      */
     public function listContents($directory = '', $recursive = false, array $config = [])
     {
@@ -225,9 +241,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Get all the meta data of a file or directory
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  false|array
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return false|array
      */
     public function getMetadata($path, array $config = [])
     {
@@ -237,9 +254,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Get all the meta data of a file or directory
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  false|array
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return false|array
      */
     public function getSize($path, array $config = [])
     {
@@ -249,9 +267,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Get the mimetype of a file
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  false|array
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return false|array
      */
     public function getMimetype($path, array $config = [])
     {
@@ -261,9 +280,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Get the timestamp of a file
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  false|array
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return false|array
      */
     public function getTimestamp($path, array $config = [])
     {
@@ -273,9 +293,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Get the visibility of a file
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  false|array
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return false|array
      */
     public function getVisibility($path, array $config = [])
     {
@@ -285,10 +306,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Write a new file
      *
-     * @param   string       $path
-     * @param   string       $contents
-     * @param   mixed        $config   Config object or visibility setting
-     * @return  false|array  false on failure file meta data on success
+     * @param string $path
+     * @param string $contents
+     * @param mixed  $config   Config object or visibility setting
+     *
+     * @return false|array false on failure file meta data on success
      */
     public function write($path, $contents, array $config = [])
     {
@@ -298,10 +320,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Update a file
      *
-     * @param   string       $path
-     * @param   string       $contents
-     * @param   mixed        $config   Config object or visibility setting
-     * @return  false|array  false on failure file meta data on success
+     * @param string $path
+     * @param string $contents
+     * @param mixed  $config   Config object or visibility setting
+     *
+     * @return false|array false on failure file meta data on success
      */
     public function update($path, $contents, array $config = [])
     {
@@ -311,10 +334,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Write a new file using a stream
      *
-     * @param   string       $path
-     * @param   resource     $resource
-     * @param   mixed        $config   Config object or visibility setting
-     * @return  false|array  false on failure file meta data on success
+     * @param string   $path
+     * @param resource $resource
+     * @param mixed    $config   Config object or visibility setting
+     *
+     * @return false|array false on failure file meta data on success
      */
     public function writeStream($path, $resource, array $config = [])
     {
@@ -324,10 +348,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Update a file using a stream
      *
-     * @param   string       $path
-     * @param   resource     $resource
-     * @param   mixed        $config   Config object or visibility setting
-     * @return  false|array  false on failure file meta data on success
+     * @param string   $path
+     * @param resource $resource
+     * @param mixed    $config   Config object or visibility setting
+     *
+     * @return false|array false on failure file meta data on success
      */
     public function updateStream($path, $resource, array $config = [])
     {
@@ -337,10 +362,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Rename a file
      *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @param   mixed    $config
-     * @return  boolean
+     * @param string $path
+     * @param string $newpath
+     * @param mixed  $config
+     *
+     * @return boolean
      */
     public function rename($path, $newpath, array $config = [])
     {
@@ -350,10 +376,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Copy a file
      *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @param   mixed    $config
-     * @return  boolean
+     * @param string $path
+     * @param string $newpath
+     * @param mixed  $config
+     *
+     * @return boolean
      */
     public function copy($path, $newpath, array $config = [])
     {
@@ -363,9 +390,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Delete a file
      *
-     * @param   string  $path
-     * @param   mixed   $config
-     * @return  boolean
+     * @param string $path
+     * @param mixed  $config
+     *
+     * @return boolean
      */
     public function delete($path, array $config = [])
     {
@@ -375,9 +403,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Delete a directory
      *
-     * @param   string  $dirname
-     * @param   mixed    $config
-     * @return  boolean
+     * @param string $dirname
+     * @param mixed  $config
+     *
+     * @return boolean
      */
     public function deleteDir($dirname, array $config = [])
     {
@@ -387,10 +416,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Create a directory
      *
-     * @param   string  $dirname  directory name
-     * @param   mixed   $config
+     * @param string $dirname directory name
+     * @param mixed  $config
      *
-     * @return  bool
+     * @return bool
      */
     public function createDir($dirname, array $config = [])
     {
@@ -400,10 +429,11 @@ class EventableFilesystem extends Filesystem
     /**
      * Set the visibility for a file
      *
-     * @param   string  $path
-     * @param   string  $visibility
-     * @param   mixed   $config
-     * @return  file meta data
+     * @param string $path
+     * @param string $visibility
+     * @param mixed  $config
+     *
+     * @return file meta data
      */
     public function setVisibility($path, $visibility, array $config = [])
     {
@@ -413,8 +443,9 @@ class EventableFilesystem extends Filesystem
     /**
      * Do all the work to call the method and emit the events
      *
-     * @param  string  $method
-     * @param  array   $arguments
+     * @param string $method
+     * @param array  $arguments
+     *
      * @return mixed
      */
     public function delegateMethodCall($method, array $arguments = [])
@@ -439,9 +470,10 @@ class EventableFilesystem extends Filesystem
     /**
      * Emit the before event
      *
-     * @param   string  $method
-     * @param   array   $arguments
-     * @return  array   [continue, call result]
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return array [continue, call result]
      */
     protected function emitBefore($method, array $arguments)
     {
@@ -458,8 +490,9 @@ class EventableFilesystem extends Filesystem
     /**
      * Call the underlying filesystem method
      *
-     * @param  string  $method
-     * @param  array   $arguments
+     * @param string $method
+     * @param array  $arguments
+     *
      * @return mixed
      */
     protected function callFilesystemMethod($method, array $arguments)
@@ -473,8 +506,9 @@ class EventableFilesystem extends Filesystem
     /**
      * Emit the after event
      *
-     * @param  string  $method
-     * @param  mixed   $result
+     * @param string $method
+     * @param mixed  $result
+     *
      * @return mixed
      */
     protected function emitAfter($method, $result)

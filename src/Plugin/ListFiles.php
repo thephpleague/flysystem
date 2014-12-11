@@ -7,7 +7,7 @@ class ListFiles extends AbstractPlugin
     /**
      * Get the method name
      *
-     * @return  string
+     * @return string
      */
     public function getMethod()
     {

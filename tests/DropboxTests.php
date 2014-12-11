@@ -78,7 +78,7 @@ class DropboxTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->writeStream('something', 'something', new Config()));
     }
 
-     /**
+    /**
      * @dataProvider  dropboxProvider
      */
     public function testUpdateStream(Dropbox $adapter, $mock)

@@ -29,8 +29,8 @@ class Dropbox extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  Client  $client
-     * @param  string  $prefix
+     * @param Client $client
+     * @param string $prefix
      */
     public function __construct(Client $client, $prefix = null)
     {
@@ -255,8 +255,9 @@ class Dropbox extends AbstractAdapter
     /**
      * Apply the path prefix
      *
-     * @param   string  $path
-     * @return  string  prefixed path
+     * @param string $path
+     *
+     * @return string prefixed path
      */
     public function applyPathPrefix($path)
     {
@@ -268,10 +269,11 @@ class Dropbox extends AbstractAdapter
     /**
      * Do the actual upload of a string file
      *
-     * @param   string  $path
-     * @param   string  $contents
-     * @param   WriteMode  $mode
-     * @return  array|false   file metadata
+     * @param string    $path
+     * @param string    $contents
+     * @param WriteMode $mode
+     *
+     * @return array|false file metadata
      */
     protected function upload($path, $contents, WriteMode $mode)
     {
@@ -287,10 +289,11 @@ class Dropbox extends AbstractAdapter
     /**
      * Do the actual upload of a file resource
      *
-     * @param   string  $path
-     * @param   resource  $resource
-     * @param   WriteMode  $mode
-     * @return  array|false   file metadata
+     * @param string    $path
+     * @param resource  $resource
+     * @param WriteMode $mode
+     *
+     * @return array|false file metadata
      */
     protected function uploadStream($path, $resource, WriteMode $mode)
     {
@@ -306,8 +309,9 @@ class Dropbox extends AbstractAdapter
     /**
      * Normalize a Dropbox response
      *
-     * @param      $response
-     * @param  string $path
+     * @param        $response
+     * @param string $path
+     *
      * @return array
      */
     protected function normalizeResponse(array $response, $path = null)

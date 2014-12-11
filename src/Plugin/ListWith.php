@@ -7,7 +7,7 @@ class ListWith extends AbstractPlugin
     /**
      * Get the method name
      *
-     * @return  string
+     * @return string
      */
     public function getMethod()
     {
@@ -17,10 +17,11 @@ class ListWith extends AbstractPlugin
     /**
      * List contents with metadata
      *
-     * @param   array   $keys
-     * @param   string  $directory
-     * @param   bool    $recursive
-     * @return  array   listing with metadata
+     * @param array  $keys
+     * @param string $directory
+     * @param bool   $recursive
+     *
+     * @return array listing with metadata
      */
     public function handle(array $keys = [], $directory = '', $recursive = false)
     {
@@ -41,6 +42,7 @@ class ListWith extends AbstractPlugin
      *
      * @param array $object
      * @param       $key
+     *
      * @return array
      */
     protected function getMetadataByName(array $object, $key)

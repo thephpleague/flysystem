@@ -9,8 +9,9 @@ class MimeType
     /**
      * Detects MIME Type based on given content
      *
-     * @param  string $content
-     * @return string|null     MIME Type or NULL if no mime type detected
+     * @param string $content
+     *
+     * @return string|null MIME Type or NULL if no mime type detected
      */
     public static function detectByContent($content)
     {
@@ -27,8 +28,9 @@ class MimeType
     /**
      * Detects MIME Type based on file extension
      *
-     * @param  string $extension
-     * @return string|null       MIME Type or NULL if no extension detected
+     * @param string $extension
+     *
+     * @return string|null MIME Type or NULL if no extension detected
      */
     public static function detectByFileExtension($extension)
     {
