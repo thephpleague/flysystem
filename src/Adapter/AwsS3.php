@@ -397,7 +397,7 @@ class AwsS3 extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($dirname = '', $recursive = false)
+    public function listContents($dirname = '', $mode = 0)
     {
         $objectsIterator = $this->client->getIterator('listObjects', [
             'Bucket' => $this->bucket,

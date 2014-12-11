@@ -74,7 +74,7 @@ class NullAdapter extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($directory = '', $mode = 0)
     {
         return [];
     }

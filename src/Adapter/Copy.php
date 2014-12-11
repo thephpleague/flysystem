@@ -225,7 +225,7 @@ class Copy extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($dirname = '', $recursive = false)
+    public function listContents($dirname = '', $mode = 0)
     {
         $listing = [];
         $location = $this->applyPathPrefix($dirname);
@@ -237,8 +237,8 @@ class Copy extends AbstractAdapter
         foreach ($result as $object) {
             $listing[] = $this->normalizeObject($object, $object->path);
 
-            if ($recursive && $object->type == 'dir') {
-                $listing = array_merge($listing, $this->listContents($object->path, $recursive));
+            if ($mode & self::MODE_RECURSIVE && $object->type == 'dir') {
+                $listing = array_merge($listing, $this->listContents($object->path, $mode));
             }
         }
 

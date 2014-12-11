@@ -220,7 +220,7 @@ class Zip extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($dirname = '', $recursive = false)
+    public function listContents($dirname = '', $mode = 0)
     {
         $result = [];
 

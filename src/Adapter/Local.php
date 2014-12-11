@@ -5,6 +5,7 @@ namespace League\Flysystem\Adapter;
 use DirectoryIterator;
 use FilesystemIterator;
 use Finfo;
+use GlobIterator;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -197,16 +198,31 @@ class Local extends AbstractAdapter
     /**
      * {@inheritdoc}
      */
-    public function listContents($directory = '', $recursive = false)
+    public function listContents($directory = '', $mode = 0)
     {
         $result = [];
-        $location = $this->applyPathPrefix($directory).$this->pathSeparator;
+        $location = $this->applyPathPrefix($directory);
 
-        if (! is_dir($location)) {
+        if (
+            ! ($mode & self::MODE_GLOB_ENABLED) &&
+            ! is_dir($location.$this->pathSeparator)
+        ) {
             return [];
         }
 
-        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
+        switch (true) {
+            case $mode & self::MODE_GLOB_ENABLED:
+                $iterator = $this->getGlobDirectoryIterator($location);
+                break;
+            case $mode & self::MODE_RECURSIVE:
+                $location .= $this->pathSeparator;
+                $iterator = $this->getRecursiveDirectoryIterator($location);
+                break;
+            default:
+                $location .= $this->pathSeparator;
+                $iterator = $this->getDirectoryIterator($location);
+                break;
+        }
 
         foreach ($iterator as $file) {
             $path = $this->getFilePath($file);
@@ -363,6 +379,17 @@ class Local extends AbstractAdapter
     {
         $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
         $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
+
+        return $iterator;
+    }
+
+    /**
+     * @param $path
+     * @return GlobIterator
+     */
+    protected function getGlobDirectoryIterator($path)
+    {
+        $iterator = new GlobIterator($path);
 
         return $iterator;
     }

@@ -169,4 +169,36 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_dir($this->root.DIRECTORY_SEPARATOR.$dirname));
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
     }
+
+    public function testModeGlobEnabled()
+    {
+        $dummyFile = function ($pattern, $howMany = 6) {
+            return array_map(
+                function ($k, $v) {
+                    return sprintf($k, $v);
+                },
+                array_fill(0, $howMany + 1, $pattern),
+                range(0, $howMany)
+            );
+        };
+
+        $testData = array_merge(
+            $dummyFile('bar/f-00%d.txt'),
+            $dummyFile('baz/f-00%d.txt')
+        );
+
+        $cfg = new Config();
+        $this->adapter->createDir('foo', $cfg);
+        $this->adapter->createDir('bar', $cfg);
+        $this->adapter->createDir('baz', $cfg);
+        foreach ($testData as $path) {
+            $this->adapter->write($path, 'content', $cfg);
+        }
+
+        $contents = $this->adapter->listContents('ba*/f-00*.txt', Local::MODE_GLOB_ENABLED | Local::MODE_RECURSIVE);
+
+        foreach ($contents as $file) {
+            $this->assertContains($file['path'], $testData);
+        }
+    }
 }
