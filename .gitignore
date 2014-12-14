@@ -1,6 +1,7 @@
-/.idea
-/bin
-/coverage
-/vendor
-/tests/files
+.idea
+vendor
+bin
+coverage
+coverage.xml
 composer.lock
+tests/files

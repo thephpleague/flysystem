@@ -72,11 +72,11 @@ class AwsS3 extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  S3Client      $client
-     * @param  string        $bucket
-     * @param  string        $prefix
-     * @param  array         $options
-     * @param  UploadBuilder $uploadBuilder
+     * @param S3Client      $client
+     * @param string        $bucket
+     * @param string        $prefix
+     * @param array         $options
+     * @param UploadBuilder $uploadBuilder
      */
     public function __construct(
         S3Client $client,
@@ -95,7 +95,7 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the S3Client bucket
      *
-     * @return  string
+     * @return string
      */
     public function getBucket()
     {
@@ -105,7 +105,7 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get the S3Client instance
      *
-     * @return  S3Client
+     * @return S3Client
      */
     public function getClient()
     {
@@ -155,8 +155,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Write an object to S3
      *
-     * @param   array  $options
-     * @return  array   file metadata
+     * @param array $options
+     *
+     * @return array file metadata
      */
     protected function writeObject(array $options)
     {
@@ -234,6 +235,7 @@ class AwsS3 extends AbstractAdapter
      * Read an object from the S3Client
      *
      * @param string $path
+     *
      * @return array
      */
     protected function readObject($path)
@@ -371,6 +373,7 @@ class AwsS3 extends AbstractAdapter
      * The the ACL visibility
      *
      * @param string $path
+     *
      * @return string
      */
     protected function getObjectACL($path)
@@ -413,9 +416,10 @@ class AwsS3 extends AbstractAdapter
     /**
      * Normalize a result from AWS
      *
-     * @param   array  $object
-     * @param   string  $path
-     * @return  array   file metadata
+     * @param array  $object
+     * @param string $path
+     *
+     * @return array file metadata
      */
     protected function normalizeResponse(array $object, $path = null)
     {
@@ -441,11 +445,11 @@ class AwsS3 extends AbstractAdapter
     /**
      * Get options for a AWS call
      *
-     * @param   string $path
-     * @param   array  $options
-     * @param   Config $config
+     * @param string $path
+     * @param array  $options
+     * @param Config $config
      *
-     * @return  array   AWS options
+     * @return array AWS options
      */
     protected function getOptions($path, array $options = [], Config $config = null)
     {
@@ -463,8 +467,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Retrieve options from a Config instance
      *
-     * @param   Config  $config
-     * @return  array
+     * @param Config $config
+     *
+     * @return array
      */
     protected function getOptionsFromConfig(Config $config)
     {
@@ -497,9 +502,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Sends an object to a bucket using a multipart transfer, possibly also using concurrency
      *
-     * @param   array $options Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL, Metadata]
+     * @param array $options Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL, Metadata]
      *
-     * @return  bool
+     * @return bool
      */
     protected function putObjectMultipart(array $options)
     {
@@ -530,9 +535,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Perform the upload. Abort the upload if something goes wrong.
      *
-     * @param   AbstractTransfer $uploader
+     * @param AbstractTransfer $uploader
      *
-     * @return  bool
+     * @return bool
      */
     protected function upload(AbstractTransfer $uploader)
     {
@@ -550,9 +555,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Convert megabytes to bytes
      *
-     * @param   int $megabytes
+     * @param int $megabytes
      *
-     * @return  int
+     * @return int
      */
     protected function mbToBytes($megabytes)
     {
@@ -562,8 +567,9 @@ class AwsS3 extends AbstractAdapter
     /**
      * Set the S3 UploadBuilder
      *
-     * @param   UploadBuilder $uploadBuilder
-     * @return  $this
+     * @param UploadBuilder $uploadBuilder
+     *
+     * @return $this
      */
     public function setUploadBuilder(UploadBuilder $uploadBuilder = null)
     {

@@ -9,7 +9,7 @@ class GetWithMetadata extends AbstractPlugin
     /**
      * Get the method name
      *
-     * @return  string
+     * @return string
      */
     public function getMethod()
     {
@@ -19,10 +19,12 @@ class GetWithMetadata extends AbstractPlugin
     /**
      * Get metadata for an object with required metadata
      *
-     * @param   string  $path      path to file
-     * @param   array   $metadata  metadata keys
-     * @throws  InvalidArgumentException
-     * @return  array   metadata
+     * @param string $path     path to file
+     * @param array  $metadata metadata keys
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return array metadata
      */
     public function handle($path, array $metadata)
     {

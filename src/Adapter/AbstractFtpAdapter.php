@@ -35,8 +35,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the config
      *
-     * @param   array  $config
-     * @return  $this
+     * @param array $config
+     *
+     * @return $this
      */
     public function setConfig(array $config)
     {
@@ -53,7 +54,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Returns the host
      *
-     * @return  string
+     * @return string
      */
     public function getHost()
     {
@@ -63,8 +64,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the host
      *
-     * @param   string  $host
-     * @return  $this
+     * @param string $host
+     *
+     * @return $this
      */
     public function setHost($host)
     {
@@ -76,8 +78,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the public permission value
      *
-     * @param   int  $permPublic
-     * @return  $this
+     * @param int $permPublic
+     *
+     * @return $this
      */
     public function setPermPublic($permPublic)
     {
@@ -89,8 +92,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the private permission value
      *
-     * @param   int  $permPrivate
-     * @return  $this
+     * @param int $permPrivate
+     *
+     * @return $this
      */
     public function setPermPrivate($permPrivate)
     {
@@ -122,8 +126,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the ftp port
      *
-     * @param   int|string $port
-     * @return  $this
+     * @param int|string $port
+     *
+     * @return $this
      */
     public function setPort($port)
     {
@@ -135,8 +140,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the root folder to work from
      *
-     * @param   string  $root
-     * @return  $this
+     * @param string $root
+     *
+     * @return $this
      */
     public function setRoot($root)
     {
@@ -148,7 +154,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Returns the ftp username
      *
-     * @return  string  username
+     * @return string username
      */
     public function getUsername()
     {
@@ -158,8 +164,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set ftp username
      *
-     * @param   string  $username
-     * @return  $this
+     * @param string $username
+     *
+     * @return $this
      */
     public function setUsername($username)
     {
@@ -171,7 +178,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Returns the password
      *
-     * @return  string  password
+     * @return string password
      */
     public function getPassword()
     {
@@ -181,8 +188,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the ftp password
      *
-     * @param   string  $password
-     * @return  $this
+     * @param string $password
+     *
+     * @return $this
      */
     public function setPassword($password)
     {
@@ -194,7 +202,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Returns the amount of seconds before the connection will timeout
      *
-     * @return  int
+     * @return int
      */
     public function getTimeout()
     {
@@ -204,8 +212,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Set the amount of seconds before the connection should timeout
      *
-     * @param   int    $timeout
-     * @return  $this
+     * @param int $timeout
+     *
+     * @return $this
      */
     public function setTimeout($timeout)
     {
@@ -225,9 +234,10 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Normalize a directory listing
      *
-     * @param   array   $listing
-     * @param   string  $prefix
-     * @return  array   directory listing
+     * @param array  $listing
+     * @param string $prefix
+     *
+     * @return array directory listing
      */
     protected function normalizeListing(array $listing, $prefix = '')
     {
@@ -250,8 +260,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Sort a directory listing
      *
-     * @param   array   $result
-     * @return  array   sorted listing
+     * @param array $result
+     *
+     * @return array sorted listing
      */
     protected function sortListing(array $result)
     {
@@ -267,9 +278,10 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Normalize a file entry
      *
-     * @param   string  $item
-     * @param   string  $base
-     * @return  array   normalized file array
+     * @param string $item
+     * @param string $base
+     *
+     * @return array normalized file array
      */
     protected function normalizeObject($item, $base)
     {
@@ -293,8 +305,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Get the file type from the permissions
      *
-     * @param   string  $permissions
-     * @return  string  file type
+     * @param string $permissions
+     *
+     * @return string file type
      */
     protected function detectType($permissions)
     {
@@ -304,8 +317,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Normalize a permissions string
      *
-     * @param   string  $permissions
-     * @return  integer
+     * @param string $permissions
+     *
+     * @return integer
      */
     protected function normalizePermissions($permissions)
     {
@@ -331,8 +345,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Filter out dot-directories
      *
-     * @param   array   $list
-     * @return  array
+     * @param array $list
+     *
+     * @return array
      */
     public function removeDotDirectories(array $list)
     {

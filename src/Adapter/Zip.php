@@ -255,6 +255,7 @@ class Zip extends AbstractAdapter
      * Normalize a zip response array
      *
      * @param array $object
+     *
      * @return array
      */
     protected function normalizeObject(array $object)

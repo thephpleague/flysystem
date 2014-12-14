@@ -7,8 +7,9 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         stopOnFailure="true"
+         stopOnFailure="false"
          syntaxCheck="true"
+         verbose="true"
 >
     <testsuites>
         <testsuite name="flysystem/tests">

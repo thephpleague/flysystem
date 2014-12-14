@@ -7,7 +7,7 @@ class Directory extends Handler
     /**
      * Delete the directory
      *
-     * @return  boolean
+     * @return boolean
      */
     public function delete()
     {
@@ -17,8 +17,9 @@ class Directory extends Handler
     /**
      * List the directory contents
      *
-     * @param   boolean        $recursive
-     * @return  array|boolean  directory contents or false
+     * @param boolean $recursive
+     *
+     * @return array|boolean directory contents or false
      */
     public function getContents($recursive = false)
     {

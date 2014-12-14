@@ -32,8 +32,8 @@ class Copy extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  API   $client
-     * @param  string                $prefix
+     * @param API    $client
+     * @param string $prefix
      */
     public function __construct(API $client, $prefix = null)
     {
@@ -44,8 +44,9 @@ class Copy extends AbstractAdapter
     /**
      * Check weather a file exists
      *
-     * @param   string       $path
-     * @return  array|false  false or file metadata
+     * @param string $path
+     *
+     * @return array|false false or file metadata
      */
     public function has($path)
     {
@@ -248,9 +249,10 @@ class Copy extends AbstractAdapter
     /**
      * Normalize a result from Copy
      *
-     * @param   stdClass   $object
-     * @param   string     $path
-     * @return  array|false      file metadata
+     * @param stdClass $object
+     * @param string   $path
+     *
+     * @return array|false file metadata
      */
     protected function normalizeObject($object, $path)
     {
@@ -270,8 +272,9 @@ class Copy extends AbstractAdapter
     /**
      * Apply the path prefix
      *
-     * @param   string  $path
-     * @return  string  prefixed path
+     * @param string $path
+     *
+     * @return string prefixed path
      */
     public function applyPathPrefix($path)
     {

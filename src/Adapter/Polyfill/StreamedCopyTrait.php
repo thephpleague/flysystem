@@ -9,9 +9,10 @@ trait StreamedCopyTrait
     /**
      * Copy a file
      *
-     * @param   string  $path
-     * @param   string  $newpath
-     * @return  boolean
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return boolean
      */
     public function copy($path, $newpath)
     {

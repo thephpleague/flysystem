@@ -31,8 +31,9 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Set the transfer mode
      *
-     * @param   int  $mode
-     * @return  $this
+     * @param int $mode
+     *
+     * @return $this
      */
     public function setTransferMode($mode)
     {
@@ -45,6 +46,7 @@ class Ftp extends AbstractFtpAdapter
      * Set if Ssl is enabled
      *
      * @param bool $ssl
+     *
      * @return $this
      */
     public function setSsl($ssl)
@@ -271,8 +273,9 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Create a directory
      *
-     * @param string $directory
+     * @param string   $directory
      * @param resource $connection
+     *
      * @return boolean
      */
     protected function createActualDirectory($directory, $connection)
@@ -367,6 +370,7 @@ class Ftp extends AbstractFtpAdapter
 
     /**
      * {@inheritdoc}
+     *
      * @param string $directory
      */
     protected function listDirectoryContents($directory, $recursive = true)

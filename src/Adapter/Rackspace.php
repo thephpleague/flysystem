@@ -29,8 +29,8 @@ class Rackspace extends AbstractAdapter
     /**
      * Constructor
      *
-     * @param  Container  $container
-     * @param  string     $prefix
+     * @param Container $container
+     * @param string    $prefix
      */
     public function __construct(Container $container, $prefix = null)
     {
@@ -42,8 +42,9 @@ class Rackspace extends AbstractAdapter
     /**
      * Get an object
      *
-     * @param   string  $path
-     * @return  DataObject
+     * @param string $path
+     *
+     * @return DataObject
      */
     protected function getObject($path)
     {

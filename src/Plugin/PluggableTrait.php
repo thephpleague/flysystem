@@ -16,8 +16,9 @@ trait PluggableTrait
     /**
      * Register a plugin
      *
-     * @param   PluginInterface  $plugin
-     * @return  $this
+     * @param PluginInterface $plugin
+     *
+     * @return $this
      */
     public function addPlugin(PluginInterface $plugin)
     {
@@ -29,9 +30,11 @@ trait PluggableTrait
     /**
      * Register a plugin
      *
-     * @param   string           $method
-     * @return  PluginInterface  $plugin
-     * @throws  LogicException
+     * @param string $method
+     *
+     * @return PluginInterface $plugin
+     *
+     * @throws LogicException
      */
     protected function findPlugin($method)
     {
@@ -50,7 +53,8 @@ trait PluggableTrait
      * Invoke a plugin by method name.
      *
      * @param string $method
-     * @param array $arguments
+     * @param array  $arguments
+     *
      * @return mixed
      */
     protected function invokePlugin($method, array $arguments, FilesystemInterface $filesystem)

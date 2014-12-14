@@ -94,7 +94,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($adapter->writeStream('something', $fh, new Config()));
     }
 
-     /**
+    /**
      * @dataProvider  copyProvider
      */
     public function testUpdateStream(Copy $adapter, $mock)
