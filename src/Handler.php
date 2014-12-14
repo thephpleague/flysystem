@@ -12,7 +12,6 @@ abstract class Handler
     /**
      * @var  FilesystemInterface  $filesystem
      */
-
     protected $filesystem;
 
     /**
