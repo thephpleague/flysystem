@@ -251,7 +251,7 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->getConnection();
         $directories = explode('/', $dirname);
 
-        while ($directory = array_shift($directories)) {
+        foreach ($directories as $directory) {
             $result = $this->createActualDirectory($directory, $connection);
 
             if (! $result) {
