@@ -9,7 +9,7 @@ use LogicException;
 trait PluggableTrait
 {
     /**
-     * @var array $plugins
+     * @var array
      */
     protected $plugins = [];
 

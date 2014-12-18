@@ -53,7 +53,7 @@ class MountManager
     use PluggableTrait;
 
     /**
-     * @var array $filesystems
+     * @var array
      */
     protected $filesystems = [];
 

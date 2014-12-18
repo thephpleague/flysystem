@@ -12,7 +12,7 @@ class EventableFilesystem extends Filesystem
     use EmitterTrait;
 
     /**
-     * @var FilesystemInterface $filesystem
+     * @var FilesystemInterface
      */
     protected $filesystem;
 

@@ -17,17 +17,17 @@ class Filesystem implements FilesystemInterface
     use PluggableTrait;
 
     /**
-     * @var AdapterInterface $adapter
+     * @var AdapterInterface
      */
     protected $adapter;
 
     /**
-     * @var CacheInterface $cache
+     * @var CacheInterface
      */
     protected $cache;
 
     /**
-     * @var Config $config
+     * @var Config
      */
     protected $config;
 
