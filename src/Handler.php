@@ -5,12 +5,12 @@ namespace League\Flysystem;
 abstract class Handler
 {
     /**
-     * @var  string  $path
+     * @var string $path
      */
     protected $path;
 
     /**
-     * @var  FilesystemInterface  $filesystem
+     * @var FilesystemInterface $filesystem
      */
     protected $filesystem;
 

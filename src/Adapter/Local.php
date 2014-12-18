@@ -20,7 +20,7 @@ class Local extends AbstractAdapter
     ];
 
     /**
-     * @var  string  $pathSeparator
+     * @var string $pathSeparator
      */
     protected $pathSeparator = DIRECTORY_SEPARATOR;
 

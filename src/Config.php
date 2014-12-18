@@ -5,12 +5,12 @@ namespace League\Flysystem;
 class Config
 {
     /**
-     * @var  array  $settings
+     * @var array $settings
      */
     protected $settings = [];
 
     /**
-     * @var  Config  $fallback
+     * @var Config $fallback
      */
     protected $fallback;
 

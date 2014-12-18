@@ -14,7 +14,7 @@ class Dropbox extends AbstractAdapter
     use NotSupportingVisibilityTrait;
 
     /**
-     * @var  array  $resultMap
+     * @var array $resultMap
      */
     protected static $resultMap = [
         'bytes'          => 'size',
@@ -22,7 +22,7 @@ class Dropbox extends AbstractAdapter
     ];
 
     /**
-     * @var  Client  $client
+     * @var Client $client
      */
     protected $client;
 

@@ -8,22 +8,22 @@ use League\Flysystem\FilesystemInterface;
 class Before extends AbstractEvent
 {
     /**
-     * @var  FilesystemInterface  $filesystem
+     * @var FilesystemInterface $filesystem
      */
     protected $filesystem;
 
     /**
-     * @var  string  $method
+     * @var string $method
      */
     protected $method;
 
     /**
-     * @var  array  $arguments
+     * @var array $arguments
      */
     protected $arguments;
 
     /**
-     * @var  mixed  $result
+     * @var mixed $result
      */
     protected $result = false;
 

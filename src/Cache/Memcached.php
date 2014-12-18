@@ -7,17 +7,17 @@ use Memcached as NativeMemcached;
 class Memcached extends AbstractCache
 {
     /**
-     * @var  string  $key  storage key
+     * @var string $key  storage key
      */
     protected $key;
 
     /**
-     * @var  int|null  $expire  seconds until cache expiration
+     * @var int|null $expire  seconds until cache expiration
      */
     protected $expire;
 
     /**
-     * @var  \Memcached  $memcached  Memcached instance
+     * @var \Memcached $memcached  Memcached instance
      */
     protected $memcached;
 
