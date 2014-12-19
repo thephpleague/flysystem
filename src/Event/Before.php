@@ -153,8 +153,6 @@ class Before extends AbstractEvent
      * Cancel the operation
      *
      * @param mixed $result
-     *
-     * @return void
      */
     public function cancelOperation($result = false)
     {

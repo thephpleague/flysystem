@@ -15,8 +15,6 @@ interface PluginInterface
      * Set the Filesystem object
      *
      * @param FilesystemInterface $filesystem
-     *
-     * @return void
      */
     public function setFilesystem(FilesystemInterface $filesystem);
 }
