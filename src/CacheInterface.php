@@ -64,6 +64,26 @@ interface CacheInterface extends ReadInterface
     public function load();
 
     /**
+     * Rename a file
+     *
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return boolean
+     */
+    public function rename($path, $newpath);
+
+    /**
+     * Copy a file
+     *
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return boolean
+     */
+    public function copy($path, $newpath);
+
+    /**
      * Delete an object from cache
      *
      * @param string $path object path
