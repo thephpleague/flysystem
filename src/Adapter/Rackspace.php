@@ -17,12 +17,12 @@ class Rackspace extends AbstractAdapter
     use NotSupportingVisibilityTrait;
 
     /**
-     * @var  Container  $container
+     * @var Container
      */
     protected $container;
 
     /**
-     * @var  string  $prefix
+     * @var string
      */
     protected $prefix;
 

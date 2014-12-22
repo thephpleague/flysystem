@@ -80,8 +80,6 @@ class Sftp extends AbstractFtpAdapter
 
     /**
      * Connect
-     *
-     * @return void
      */
     public function connect()
     {
@@ -94,8 +92,6 @@ class Sftp extends AbstractFtpAdapter
      * Login
      *
      * @throws LogicException
-     *
-     * @return void
      */
     protected function login()
     {
@@ -106,8 +102,6 @@ class Sftp extends AbstractFtpAdapter
 
     /**
      * Set the connection root
-     *
-     * @return void
      */
     protected function setConnectionRoot()
     {
@@ -216,8 +210,6 @@ class Sftp extends AbstractFtpAdapter
 
     /**
      * Disconnect
-     *
-     * @return void
      */
     public function disconnect()
     {

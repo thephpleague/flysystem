@@ -8,17 +8,17 @@ use League\Flysystem\FilesystemInterface;
 class After extends AbstractEvent
 {
     /**
-     * @var  FilesystemInterface  $filesystem
+     * @var FilesystemInterface
      */
     protected $filesystem;
 
     /**
-     * @var  string  $method
+     * @var string
      */
     protected $method;
 
     /**
-     * @var  mixed  $result
+     * @var mixed
      */
     protected $result;
 

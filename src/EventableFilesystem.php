@@ -12,7 +12,7 @@ class EventableFilesystem extends Filesystem
     use EmitterTrait;
 
     /**
-     * @var  FilesystemInterface  $filesystem
+     * @var FilesystemInterface
      */
     protected $filesystem;
 
@@ -74,9 +74,9 @@ class EventableFilesystem extends Filesystem
      * @param string $path
      * @param array  $config
      *
-     * @return string file contents
-     *
      * @throws FileNotFoundException
+     *
+     * @return string file contents
      */
     public function readAndDelete($path, array $config = [])
     {

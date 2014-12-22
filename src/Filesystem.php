@@ -17,17 +17,17 @@ class Filesystem implements FilesystemInterface
     use PluggableTrait;
 
     /**
-     * @var  AdapterInterface  $adapter
+     * @var AdapterInterface
      */
     protected $adapter;
 
     /**
-     * @var  CacheInterface  $cache
+     * @var CacheInterface
      */
     protected $cache;
 
     /**
-     * @var  Config  $config
+     * @var Config
      */
     protected $config;
 
@@ -191,9 +191,9 @@ class Filesystem implements FilesystemInterface
      *
      * @param string $path
      *
-     * @return string file contents
-     *
      * @throws FileNotFoundException
+     *
+     * @return string file contents
      */
     public function readAndDelete($path)
     {
@@ -245,9 +245,9 @@ class Filesystem implements FilesystemInterface
      * @param resource $resource
      * @param mixed    $config   Config object or visibility setting
      *
-     * @return bool success boolean
-     *
      * @throws InvalidArgumentException
+     *
+     * @return bool success boolean
      */
     public function updateStream($path, $resource, array $config = [])
     {

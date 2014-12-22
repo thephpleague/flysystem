@@ -7,12 +7,12 @@ use League\Flysystem\AdapterInterface;
 abstract class AbstractAdapter implements AdapterInterface
 {
     /**
-     * @var  string  $prefixPrefix  path prefix
+     * @var string path prefix
      */
     protected $pathPrefix;
 
     /**
-     * @var  string  $pathSeparator
+     * @var string
      */
     protected $pathSeparator = '/';
 

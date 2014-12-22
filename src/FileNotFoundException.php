@@ -7,7 +7,7 @@ use Exception as BaseException;
 class FileNotFoundException extends Exception
 {
     /**
-     * @var  string  $path
+     * @var string
      */
     protected $path;
 

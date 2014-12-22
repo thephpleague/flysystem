@@ -78,9 +78,9 @@ class Util
      *
      * @param string $path
      *
-     * @return string
-     *
      * @throws LogicException
+     *
+     * @return string
      */
     public static function normalizePath($path)
     {

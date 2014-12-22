@@ -7,17 +7,17 @@ use Predis\Client;
 class Predis extends AbstractCache
 {
     /**
-     * @var  \Predis\Client  $client  Predis Client
+     * @var \Predis\Client Predis Client
      */
     protected $client;
 
     /**
-     * @var  string  $key  storage key
+     * @var string storage key
      */
     protected $key;
 
     /**
-     * @var  int|null  $expire  seconds until cache expiration
+     * @var int|null seconds until cache expiration
      */
     protected $expire;
 

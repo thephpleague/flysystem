@@ -9,7 +9,7 @@ use LogicException;
 trait PluggableTrait
 {
     /**
-     * @var  array  $plugins
+     * @var array
      */
     protected $plugins = [];
 
@@ -32,9 +32,9 @@ trait PluggableTrait
      *
      * @param string $method
      *
-     * @return PluginInterface $plugin
-     *
      * @throws LogicException
+     *
+     * @return PluginInterface $plugin
      */
     protected function findPlugin($method)
     {

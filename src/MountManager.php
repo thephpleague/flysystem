@@ -53,7 +53,7 @@ class MountManager
     use PluggableTrait;
 
     /**
-     * @var  array  $filesystems
+     * @var array
      */
     protected $filesystems = [];
 
@@ -107,9 +107,9 @@ class MountManager
      *
      * @param string $prefix
      *
-     * @return FilesystemInterface
-     *
      * @throws LogicException
+     *
+     * @return FilesystemInterface
      */
     public function getFilesystem($prefix)
     {

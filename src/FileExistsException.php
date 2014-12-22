@@ -7,7 +7,7 @@ use Exception as BaseException;
 class FileExistsException extends Exception
 {
     /**
-     * @var  string  $path
+     * @var string
      */
     protected $path;
 

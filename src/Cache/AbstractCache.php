@@ -8,17 +8,17 @@ use League\Flysystem\Util;
 abstract class AbstractCache implements CacheInterface
 {
     /**
-     * @var  boolean  $autosave
+     * @var boolean
      */
     protected $autosave = true;
 
     /**
-     * @var  array  $cache
+     * @var array
      */
     protected $cache = [];
 
     /**
-     * @var  array  $complete
+     * @var array
      */
     protected $complete = [];
 

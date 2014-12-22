@@ -8,12 +8,12 @@ use League\Flysystem\Config;
 class ReplicateAdapter implements AdapterInterface
 {
     /**
-     * @var AdapterInterface $replica
+     * @var AdapterInterface
      */
     protected $replica;
 
     /**
-     * @var AdapterInterface $source
+     * @var AdapterInterface
      */
     protected $source;
 

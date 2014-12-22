@@ -8,17 +8,17 @@ use League\Flysystem\Config;
 class Adapter extends AbstractCache
 {
     /**
-     * @var  AdapterInterface  $adapter  An adapter
+     * @var AdapterInterface An adapter
      */
     protected $adapter;
 
     /**
-     * @var  string  $file  the file to cache to
+     * @var string the file to cache to
      */
     protected $file;
 
     /**
-     * @var  int|null  $expire  seconds until cache expiration
+     * @var int|null seconds until cache expiration
      */
     protected $expire = null;
 

@@ -8,7 +8,7 @@ use League\Flysystem\PluginInterface;
 abstract class AbstractPlugin implements PluginInterface
 {
     /**
-     * @var  FilesystemInterface
+     * @var FilesystemInterface
      */
     protected $filesystem;
 

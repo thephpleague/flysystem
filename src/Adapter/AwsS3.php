@@ -16,7 +16,7 @@ use League\Flysystem\Util;
 class AwsS3 extends AbstractAdapter
 {
     /**
-     * @var  array  $resultMap
+     * @var array
      */
     protected static $resultMap = [
         'Body'          => 'raw_contents',
@@ -26,7 +26,7 @@ class AwsS3 extends AbstractAdapter
     ];
 
     /**
-     * @var  array  $metaOptions
+     * @var array
      */
     protected static $metaOptions = [
         'CacheControl',
@@ -42,21 +42,21 @@ class AwsS3 extends AbstractAdapter
     ];
 
     /**
-     * @var  string  $bucket  bucket name
+     * @var string bucket name
      */
     protected $bucket;
 
     /**
-     * @var  S3Client  $client  S3 Client
+     * @var S3Client S3 Client
      */
     protected $client;
 
     /**
-     * @var  array  $options  default options[
-     *                            Multipart=1024 Mb - After what size should multipart be used
-     *                            MinPartSize=32 Mb - Minimum size of parts for each part
-     *                            Concurrency=3 - If multipart is used, how many concurrent connections should be used
-     *                            ]
+     * @var array default options[
+     *            Multipart=1024 Mb - After what size should multipart be used
+     *            MinPartSize=32 Mb - Minimum size of parts for each part
+     *            Concurrency=3 - If multipart is used, how many concurrent connections should be used
+     *            ]
      */
     protected $options = [
         'Multipart' => 1024,
@@ -65,7 +65,7 @@ class AwsS3 extends AbstractAdapter
     ];
 
     /**
-     * @var  UploadBuilder $uploadBuilder Used to upload object using a multipart transfer
+     * @var UploadBuilder Used to upload object using a multipart transfer
      */
     protected $uploadBuilder;
 

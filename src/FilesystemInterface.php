@@ -217,9 +217,9 @@ interface FilesystemInterface
      *
      * @param string $path
      *
-     * @return string|false file contents
-     *
      * @throws FileNotFoundException
+     *
+     * @return string|false file contents
      */
     public function readAndDelete($path);
 

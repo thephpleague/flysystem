@@ -37,29 +37,21 @@ interface CacheInterface extends ReadInterface
 
     /**
      * Flush the cache
-     *
-     * @return void
      */
     public function flush();
 
     /**
      * Autosave trigger
-     *
-     * @return void
      */
     public function autosave();
 
     /**
      * Store the cache
-     *
-     * @return void
      */
     public function save();
 
     /**
      * Load the cache
-     *
-     * @return void
      */
     public function load();
 
