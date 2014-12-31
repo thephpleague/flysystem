@@ -33,7 +33,7 @@ class After extends AbstractEvent
      * @param mixed               $result
      * @param array               $arguments
      */
-    public function __construct(FilesystemInterface $filesystem, $method, $result, array $arguments = array())
+    public function __construct(FilesystemInterface $filesystem, $method, $result, array $arguments = [])
     {
         $this->filesystem = $filesystem;
         $this->method = $method;
