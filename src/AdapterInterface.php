@@ -15,7 +15,7 @@ interface AdapterInterface extends ReadInterface
     const VISIBILITY_PRIVATE = 'private';
 
     /**
-     * Write a new file
+     * Write a new file.
      *
      * @param string $path
      * @param string $contents
@@ -26,7 +26,7 @@ interface AdapterInterface extends ReadInterface
     public function write($path, $contents, Config $config);
 
     /**
-     * Write a new file using a stream
+     * Write a new file using a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -37,7 +37,7 @@ interface AdapterInterface extends ReadInterface
     public function writeStream($path, $resource, Config $config);
 
     /**
-     * Update a file
+     * Update a file.
      *
      * @param string $path
      * @param string $contents
@@ -48,7 +48,7 @@ interface AdapterInterface extends ReadInterface
     public function update($path, $contents, Config $config);
 
     /**
-     * Update a file using a stream
+     * Update a file using a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -59,45 +59,45 @@ interface AdapterInterface extends ReadInterface
     public function updateStream($path, $resource, Config $config);
 
     /**
-     * Rename a file
+     * Rename a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function rename($path, $newpath);
 
     /**
-     * Copy a file
+     * Copy a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($path, $newpath);
 
     /**
-     * Delete a file
+     * Delete a file.
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($path);
 
     /**
-     * Delete a directory
+     * Delete a directory.
      *
      * @param string $dirname
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteDir($dirname);
 
     /**
-     * Create a directory
+     * Create a directory.
      *
      * @param string $dirname directory name
      * @param Config $config
@@ -107,7 +107,7 @@ interface AdapterInterface extends ReadInterface
     public function createDir($dirname, Config $config);
 
     /**
-     * Set the visibility for a file
+     * Set the visibility for a file.
      *
      * @param string $path
      * @param string $visibility

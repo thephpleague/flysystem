@@ -5,7 +5,7 @@ namespace League\Flysystem\Plugin;
 class ListPaths extends AbstractPlugin
 {
     /**
-     * Get the method name
+     * Get the method name.
      *
      * @return string
      */
@@ -15,7 +15,7 @@ class ListPaths extends AbstractPlugin
     }
 
     /**
-     * List all paths
+     * List all paths.
      *
      * @param string $directory
      * @param bool   $recursive

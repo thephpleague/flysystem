@@ -48,7 +48,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Get the event name
+     * Get the event name.
      *
      * @return string event name
      */
@@ -60,7 +60,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Get the called method name
+     * Get the called method name.
      *
      * @return string method
      */
@@ -70,7 +70,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Get the passed arguments
+     * Get the passed arguments.
      *
      * @return array method arguments
      */
@@ -80,7 +80,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Get an argument by key
+     * Get an argument by key.
      *
      * @param string $key     argument key
      * @param mixed  $default default return value
@@ -97,7 +97,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Set an argument value
+     * Set an argument value.
      *
      * @param string $key
      * @param mixed  $value
@@ -112,7 +112,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Set the arguments
+     * Set the arguments.
      *
      * @param array $arguments
      *
@@ -126,7 +126,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Set the result, used when the operation is canceled
+     * Set the result, used when the operation is canceled.
      *
      * @param mixed $result
      *
@@ -140,7 +140,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Get the result, used when the operation is canceled
+     * Get the result, used when the operation is canceled.
      *
      * @return mixed
      */
@@ -150,7 +150,7 @@ class Before extends AbstractEvent
     }
 
     /**
-     * Cancel the operation
+     * Cancel the operation.
      *
      * @param mixed $result
      */

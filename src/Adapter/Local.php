@@ -25,7 +25,7 @@ class Local extends AbstractAdapter
     protected $pathSeparator = DIRECTORY_SEPARATOR;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $root
      */
@@ -322,7 +322,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Normalize the file info
+     * Normalize the file info.
      *
      * @param SplFileInfo $file
      *
@@ -344,7 +344,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * Get the normalized path from a SplFileInfo object
+     * Get the normalized path from a SplFileInfo object.
      *
      * @param SplFileInfo $file
      *

@@ -8,7 +8,7 @@ use LogicException;
 class Util
 {
     /**
-     * Get normalized pathinfo
+     * Get normalized pathinfo.
      *
      * @param string $path
      *
@@ -23,7 +23,7 @@ class Util
     }
 
     /**
-     * Normalize a dirname return value
+     * Normalize a dirname return value.
      *
      * @param string $dirname
      *
@@ -39,7 +39,7 @@ class Util
     }
 
     /**
-     * Get a normalized dirname from a path
+     * Get a normalized dirname from a path.
      *
      * @param string $path
      *
@@ -51,7 +51,7 @@ class Util
     }
 
     /**
-     * Map result arrays
+     * Map result arrays.
      *
      * @param array $object
      * @param array $map
@@ -74,7 +74,7 @@ class Util
     }
 
     /**
-     * Normalize path
+     * Normalize path.
      *
      * @param string $path
      *
@@ -101,7 +101,7 @@ class Util
     }
 
     /**
-     * Normalize relative directories in a path
+     * Normalize relative directories in a path.
      *
      * @param string $path
      *
@@ -123,7 +123,7 @@ class Util
     }
 
     /**
-     * Normalize prefix
+     * Normalize prefix.
      *
      * @param string $prefix
      * @param string $separator
@@ -136,7 +136,7 @@ class Util
     }
 
     /**
-     * Get content size
+     * Get content size.
      *
      * @param string $contents
      *
@@ -148,7 +148,7 @@ class Util
     }
 
     /**
-     * Guess MIME Type based on the path of the file and it's content
+     * Guess MIME Type based on the path of the file and it's content.
      *
      * @param string $path
      * @param string $content
@@ -171,7 +171,7 @@ class Util
     }
 
     /**
-     * Emulate directories
+     * Emulate directories.
      *
      * @param array $listing
      *
@@ -205,7 +205,7 @@ class Util
     }
 
     /**
-     * Ensure a Config instance
+     * Ensure a Config instance.
      *
      * @param string|array|Config $config
      *
@@ -236,7 +236,7 @@ class Util
     }
 
     /**
-     * Rewind a stream
+     * Rewind a stream.
      *
      * @param resource $resource
      */
@@ -248,7 +248,7 @@ class Util
     }
 
     /**
-     * Get the size of a stream
+     * Get the size of a stream.
      *
      * @param resource $resource
      *

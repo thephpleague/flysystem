@@ -8,7 +8,7 @@ use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
 
 /**
- * Class MountManager
+ * Class MountManager.
  *
  * Proxies methods to Filesystem (@see __call):
  *
@@ -45,8 +45,6 @@ use LogicException;
  * @method assertPresent($path)
  * @method assertAbsent($path)
  * @method Filesystem addPlugin(PluginInterface $plugin)
- *
- * @package League\Flysystem
  */
 class MountManager
 {
@@ -58,7 +56,7 @@ class MountManager
     protected $filesystems = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $filesystems
      */
@@ -68,7 +66,7 @@ class MountManager
     }
 
     /**
-     * Mount filesystems
+     * Mount filesystems.
      *
      * @param array $filesystems [:prefix => Filesystem,]
      *
@@ -84,7 +82,7 @@ class MountManager
     }
 
     /**
-     * Mount filesystems
+     * Mount filesystems.
      *
      * @param string              $prefix
      * @param FilesystemInterface $filesystem
@@ -103,7 +101,7 @@ class MountManager
     }
 
     /**
-     * Get the filesystem with the corresponding prefix
+     * Get the filesystem with the corresponding prefix.
      *
      * @param string $prefix
      *
@@ -121,7 +119,7 @@ class MountManager
     }
 
     /**
-     * Retrieve the prefix form an arguments array
+     * Retrieve the prefix form an arguments array.
      *
      * @param array $arguments
      *
@@ -150,7 +148,7 @@ class MountManager
     }
 
     /**
-     * Call forwarder
+     * Call forwarder.
      *
      * @param string $method
      * @param array  $arguments

@@ -17,7 +17,7 @@ class EventableFilesystem extends Filesystem
     protected $filesystem;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AdapterInterface $adapter
      * @param CacheInterface   $cache
@@ -39,7 +39,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Create a file or update if exists
+     * Create a file or update if exists.
      *
      * @param string $path     path to file
      * @param string $contents file contents
@@ -47,7 +47,7 @@ class EventableFilesystem extends Filesystem
      *
      * @throws FileExistsException
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function put($path, $contents, array $config = [])
     {
@@ -55,13 +55,13 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Create a file or update if exists using a stream
+     * Create a file or update if exists using a stream.
      *
      * @param string   $path
      * @param resource $resource
      * @param array    $config
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function putStream($path, $resource, array $config = [])
     {
@@ -84,7 +84,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * List all files in the directory
+     * List all files in the directory.
      *
      * @param string $directory
      * @param bool   $recursive
@@ -98,11 +98,11 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * List all paths
+     * List all paths.
      *
-     * @param string  $directory
-     * @param boolean $recursive
-     * @param mixed   $config
+     * @param string $directory
+     * @param bool   $recursive
+     * @param mixed  $config
      *
      * @return array paths
      */
@@ -112,12 +112,12 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * List contents with metadata
+     * List contents with metadata.
      *
-     * @param array   $keys      metadata key
-     * @param string  $directory
-     * @param boolean $recursive
-     * @param mixed   $config
+     * @param array  $keys      metadata key
+     * @param string $directory
+     * @param bool   $recursive
+     * @param mixed  $config
      *
      * @return array listing with metadata
      */
@@ -127,7 +127,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get metadata for an object with required metadata
+     * Get metadata for an object with required metadata.
      *
      * @param string $path     path to file
      * @param array  $metadata metadata keys
@@ -143,7 +143,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get a file/directory handler
+     * Get a file/directory handler.
      *
      * @param string  $path
      * @param Handler $handler
@@ -157,7 +157,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Flush the cache
+     * Flush the cache.
      *
      * @param mixed $config
      *
@@ -171,7 +171,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Register a plugin
+     * Register a plugin.
      *
      * @param PluginInterface $plugin
      * @param mixed           $config
@@ -186,7 +186,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Check whether a file exists
+     * Check whether a file exists.
      *
      * @param string $path
      * @param array  $config
@@ -199,7 +199,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Read a file
+     * Read a file.
      *
      * @param string $path
      * @param array  $config
@@ -212,7 +212,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Read a file as a stream
+     * Read a file as a stream.
      *
      * @param string $path
      * @param array  $config
@@ -225,7 +225,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * List contents of a directory
+     * List contents of a directory.
      *
      * @param string $directory
      * @param bool   $recursive
@@ -239,7 +239,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get all the meta data of a file or directory
+     * Get all the meta data of a file or directory.
      *
      * @param string $path
      * @param mixed  $config
@@ -252,7 +252,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get all the meta data of a file or directory
+     * Get all the meta data of a file or directory.
      *
      * @param string $path
      * @param mixed  $config
@@ -265,7 +265,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get the mimetype of a file
+     * Get the mimetype of a file.
      *
      * @param string $path
      * @param mixed  $config
@@ -278,7 +278,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get the timestamp of a file
+     * Get the timestamp of a file.
      *
      * @param string $path
      * @param mixed  $config
@@ -291,7 +291,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get the visibility of a file
+     * Get the visibility of a file.
      *
      * @param string $path
      * @param mixed  $config
@@ -304,7 +304,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Write a new file
+     * Write a new file.
      *
      * @param string $path
      * @param string $contents
@@ -318,7 +318,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Update a file
+     * Update a file.
      *
      * @param string $path
      * @param string $contents
@@ -332,7 +332,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Write a new file using a stream
+     * Write a new file using a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -346,7 +346,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Update a file using a stream
+     * Update a file using a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -360,13 +360,13 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Rename a file
+     * Rename a file.
      *
      * @param string $path
      * @param string $newpath
      * @param mixed  $config
      *
-     * @return boolean
+     * @return bool
      */
     public function rename($path, $newpath, array $config = [])
     {
@@ -374,13 +374,13 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Copy a file
+     * Copy a file.
      *
      * @param string $path
      * @param string $newpath
      * @param mixed  $config
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($path, $newpath, array $config = [])
     {
@@ -388,12 +388,12 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Delete a file
+     * Delete a file.
      *
      * @param string $path
      * @param mixed  $config
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($path, array $config = [])
     {
@@ -401,12 +401,12 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Delete a directory
+     * Delete a directory.
      *
      * @param string $dirname
      * @param mixed  $config
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteDir($dirname, array $config = [])
     {
@@ -414,7 +414,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Create a directory
+     * Create a directory.
      *
      * @param string $dirname directory name
      * @param mixed  $config
@@ -427,7 +427,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Set the visibility for a file
+     * Set the visibility for a file.
      *
      * @param string $path
      * @param string $visibility
@@ -441,7 +441,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Do all the work to call the method and emit the events
+     * Do all the work to call the method and emit the events.
      *
      * @param string $method
      * @param array  $arguments
@@ -468,7 +468,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Emit the before event
+     * Emit the before event.
      *
      * @param string $method
      * @param array  $arguments
@@ -488,7 +488,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Call the underlying filesystem method
+     * Call the underlying filesystem method.
      *
      * @param string $method
      * @param array  $arguments
@@ -504,7 +504,7 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Emit the after event
+     * Emit the after event.
      *
      * @param string $method
      * @param mixed  $result

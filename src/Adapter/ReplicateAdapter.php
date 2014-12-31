@@ -18,7 +18,7 @@ class ReplicateAdapter implements AdapterInterface
     protected $source;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AdapterInterface $source
      * @param AdapterInterface $replica
@@ -30,7 +30,7 @@ class ReplicateAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the replica adapter
+     * Returns the replica adapter.
      *
      * @return AdapterInterface
      */
@@ -40,7 +40,7 @@ class ReplicateAdapter implements AdapterInterface
     }
 
     /**
-     * Returns the source adapter
+     * Returns the source adapter.
      *
      * @return AdapterInterface
      */

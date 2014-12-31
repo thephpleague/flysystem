@@ -7,7 +7,7 @@ use Finfo;
 class MimeType
 {
     /**
-     * Detects MIME Type based on given content
+     * Detects MIME Type based on given content.
      *
      * @param string $content
      *
@@ -26,7 +26,7 @@ class MimeType
     }
 
     /**
-     * Detects MIME Type based on file extension
+     * Detects MIME Type based on file extension.
      *
      * @param string $extension
      *

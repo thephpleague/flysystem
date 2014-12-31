@@ -23,7 +23,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $configurable = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $config
      */
@@ -33,7 +33,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the config
+     * Set the config.
      *
      * @param array $config
      *
@@ -52,7 +52,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the host
+     * Returns the host.
      *
      * @return string
      */
@@ -62,7 +62,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the host
+     * Set the host.
      *
      * @param string $host
      *
@@ -76,7 +76,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the public permission value
+     * Set the public permission value.
      *
      * @param int $permPublic
      *
@@ -90,7 +90,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the private permission value
+     * Set the private permission value.
      *
      * @param int $permPrivate
      *
@@ -104,7 +104,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the ftp port
+     * Returns the ftp port.
      *
      * @return int
      */
@@ -114,7 +114,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the root folder to work from
+     * Returns the root folder to work from.
      *
      * @return string
      */
@@ -124,7 +124,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the ftp port
+     * Set the ftp port.
      *
      * @param int|string $port
      *
@@ -138,7 +138,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the root folder to work from
+     * Set the root folder to work from.
      *
      * @param string $root
      *
@@ -152,7 +152,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the ftp username
+     * Returns the ftp username.
      *
      * @return string username
      */
@@ -162,7 +162,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set ftp username
+     * Set ftp username.
      *
      * @param string $username
      *
@@ -176,7 +176,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the password
+     * Returns the password.
      *
      * @return string password
      */
@@ -186,7 +186,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the ftp password
+     * Set the ftp password.
      *
      * @param string $password
      *
@@ -200,7 +200,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Returns the amount of seconds before the connection will timeout
+     * Returns the amount of seconds before the connection will timeout.
      *
      * @return int
      */
@@ -210,7 +210,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the amount of seconds before the connection should timeout
+     * Set the amount of seconds before the connection should timeout.
      *
      * @param int $timeout
      *
@@ -232,7 +232,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Normalize a directory listing
+     * Normalize a directory listing.
      *
      * @param array  $listing
      * @param string $prefix
@@ -258,7 +258,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Sort a directory listing
+     * Sort a directory listing.
      *
      * @param array $result
      *
@@ -276,7 +276,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Normalize a file entry
+     * Normalize a file entry.
      *
      * @param string $item
      * @param string $base
@@ -303,7 +303,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Get the file type from the permissions
+     * Get the file type from the permissions.
      *
      * @param string $permissions
      *
@@ -315,11 +315,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Normalize a permissions string
+     * Normalize a permissions string.
      *
      * @param string $permissions
      *
-     * @return integer
+     * @return int
      */
     protected function normalizePermissions($permissions)
     {
@@ -343,7 +343,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Filter out dot-directories
+     * Filter out dot-directories.
      *
      * @param array $list
      *
@@ -419,7 +419,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Get the public permission value
+     * Get the public permission value.
      *
      * @return int
      */
@@ -429,7 +429,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Get the private permission value
+     * Get the private permission value.
      *
      * @return int
      */

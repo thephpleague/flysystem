@@ -12,7 +12,7 @@ class FileExistsException extends Exception
     protected $path;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string     $path
      * @param int        $code
@@ -26,7 +26,7 @@ class FileExistsException extends Exception
     }
 
     /**
-     * Get the path which was not found
+     * Get the path which was not found.
      *
      * @return string
      */

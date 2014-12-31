@@ -7,7 +7,7 @@ use League\Flysystem\Config;
 trait StreamedWritingTrait
 {
     /**
-     * Stream fallback delegator
+     * Stream fallback delegator.
      *
      * @param string   $path
      * @param resource $resource
@@ -25,7 +25,7 @@ trait StreamedWritingTrait
     }
 
     /**
-     * Write using a stream
+     * Write using a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -39,7 +39,7 @@ trait StreamedWritingTrait
     }
 
     /**
-     * Update a file using a stream
+     * Update a file using a stream.
      *
      * @param string   $path
      * @param resource $resource

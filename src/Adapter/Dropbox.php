@@ -27,7 +27,7 @@ class Dropbox extends AbstractAdapter
     protected $client;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Client $client
      * @param string $prefix
@@ -253,7 +253,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Apply the path prefix
+     * Apply the path prefix.
      *
      * @param string $path
      *
@@ -267,7 +267,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Do the actual upload of a string file
+     * Do the actual upload of a string file.
      *
      * @param string    $path
      * @param string    $contents
@@ -287,7 +287,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Do the actual upload of a file resource
+     * Do the actual upload of a file resource.
      *
      * @param string    $path
      * @param resource  $resource
@@ -307,7 +307,7 @@ class Dropbox extends AbstractAdapter
     }
 
     /**
-     * Normalize a Dropbox response
+     * Normalize a Dropbox response.
      *
      * @param        $response
      * @param string $path

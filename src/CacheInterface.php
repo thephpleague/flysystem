@@ -5,7 +5,7 @@ namespace League\Flysystem;
 interface CacheInterface extends ReadInterface
 {
     /**
-     * Check whether the directory listing of a given directory is complete
+     * Check whether the directory listing of a given directory is complete.
      *
      * @param string $dirname
      * @param bool   $recursive
@@ -15,7 +15,7 @@ interface CacheInterface extends ReadInterface
     public function isComplete($dirname, $recursive);
 
     /**
-     * Set a directory to completely listed
+     * Set a directory to completely listed.
      *
      * @param string $dirname
      * @param bool   $recursive
@@ -25,7 +25,7 @@ interface CacheInterface extends ReadInterface
     public function setComplete($dirname, $recursive);
 
     /**
-     * Store the contents of a directory
+     * Store the contents of a directory.
      *
      * @param string $directory
      * @param array  $contents
@@ -36,47 +36,47 @@ interface CacheInterface extends ReadInterface
     public function storeContents($directory, array $contents, $recursive);
 
     /**
-     * Flush the cache
+     * Flush the cache.
      */
     public function flush();
 
     /**
-     * Autosave trigger
+     * Autosave trigger.
      */
     public function autosave();
 
     /**
-     * Store the cache
+     * Store the cache.
      */
     public function save();
 
     /**
-     * Load the cache
+     * Load the cache.
      */
     public function load();
 
     /**
-     * Rename a file
+     * Rename a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function rename($path, $newpath);
 
     /**
-     * Copy a file
+     * Copy a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($path, $newpath);
 
     /**
-     * Delete an object from cache
+     * Delete an object from cache.
      *
      * @param string $path object path
      *
@@ -85,16 +85,16 @@ interface CacheInterface extends ReadInterface
     public function delete($path);
 
     /**
-     * Update the metadata for an object
+     * Update the metadata for an object.
      *
-     * @param string  $path     object path
-     * @param array   $object   object metadata
-     * @param boolean $autosave whether to trigger the autosave routine
+     * @param string $path     object path
+     * @param array  $object   object metadata
+     * @param bool   $autosave whether to trigger the autosave routine
      */
     public function updateObject($path, array $object, $autosave = false);
 
     /**
-     * Store object hit miss
+     * Store object hit miss.
      *
      * @param string $path
      *

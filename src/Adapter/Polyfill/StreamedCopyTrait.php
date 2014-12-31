@@ -7,12 +7,12 @@ use League\Flysystem\Config;
 trait StreamedCopyTrait
 {
     /**
-     * Copy a file
+     * Copy a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($path, $newpath)
     {

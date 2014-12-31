@@ -14,7 +14,7 @@ trait PluggableTrait
     protected $plugins = [];
 
     /**
-     * Register a plugin
+     * Register a plugin.
      *
      * @param PluginInterface $plugin
      *
@@ -28,7 +28,7 @@ trait PluggableTrait
     }
 
     /**
-     * Register a plugin
+     * Register a plugin.
      *
      * @param string $method
      *

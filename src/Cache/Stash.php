@@ -22,7 +22,7 @@ class Stash extends AbstractCache
     protected $pool;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Stash\Pool $pool
      * @param string      $key    storage key

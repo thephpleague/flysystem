@@ -22,7 +22,7 @@ class Predis extends AbstractCache
     protected $expire;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Predis\Client $client predis client
      * @param string         $key    storage key
@@ -59,7 +59,7 @@ class Predis extends AbstractCache
     }
 
     /**
-     * Execute a Predis command
+     * Execute a Predis command.
      *
      * @param string $name
      * @param array  $arguments

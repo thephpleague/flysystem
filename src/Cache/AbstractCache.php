@@ -8,7 +8,7 @@ use League\Flysystem\Util;
 abstract class AbstractCache implements CacheInterface
 {
     /**
-     * @var boolean
+     * @var bool
      */
     protected $autosave = true;
 
@@ -23,7 +23,7 @@ abstract class AbstractCache implements CacheInterface
     protected $complete = [];
 
     /**
-     * Destructor
+     * Destructor.
      */
     public function __destruct()
     {
@@ -33,9 +33,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Get the autosave setting
+     * Get the autosave setting.
      *
-     * @return boolean autosave
+     * @return bool autosave
      */
     public function getAutosave()
     {
@@ -43,9 +43,9 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Get the autosave setting
+     * Get the autosave setting.
      *
-     * @param boolean $autosave
+     * @param bool $autosave
      *
      * @return $this
      */
@@ -57,11 +57,11 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Store the contents listing
+     * Store the contents listing.
      *
-     * @param string  $directory
-     * @param array   $contents
-     * @param boolean $recursive
+     * @param string $directory
+     * @param array  $contents
+     * @param bool   $recursive
      *
      * @return array contents listing
      */
@@ -97,11 +97,11 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Update the metadata for an object
+     * Update the metadata for an object.
      *
-     * @param string  $path     object path
-     * @param array   $object   object metadata
-     * @param boolean $autosave whether to trigger the autosave routine
+     * @param string $path     object path
+     * @param array  $object   object metadata
+     * @param bool   $autosave whether to trigger the autosave routine
      */
     public function updateObject($path, array $object, $autosave = false)
     {
@@ -121,7 +121,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Store object hit miss
+     * Store object hit miss.
      *
      * @param string $path
      *
@@ -136,10 +136,10 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Get the contents listing
+     * Get the contents listing.
      *
-     * @param string  $dirname
-     * @param boolean $recursive
+     * @param string $dirname
+     * @param bool   $recursive
      *
      * @return array contents listing
      */
@@ -363,7 +363,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Filter the contents from a listing
+     * Filter the contents from a listing.
      *
      * @param array $contents object listing
      *
@@ -406,7 +406,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Retrieve serialized cache data
+     * Retrieve serialized cache data.
      *
      * @return string serialized data
      */
@@ -418,7 +418,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Load from serialized cache data
+     * Load from serialized cache data.
      *
      * @param string $json
      */
@@ -433,7 +433,7 @@ abstract class AbstractCache implements CacheInterface
     }
 
     /**
-     * Ensure parent directories of an object
+     * Ensure parent directories of an object.
      *
      * @param string $path object path
      */

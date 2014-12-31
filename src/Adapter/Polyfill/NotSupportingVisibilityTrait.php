@@ -7,7 +7,7 @@ use LogicException;
 trait NotSupportingVisibilityTrait
 {
     /**
-     * Get the visibility of a file
+     * Get the visibility of a file.
      *
      * @param string $path
      *
@@ -19,7 +19,7 @@ trait NotSupportingVisibilityTrait
     }
 
     /**
-     * Set the visibility for a file
+     * Set the visibility for a file.
      *
      * @param string $path
      * @param string $visibility
