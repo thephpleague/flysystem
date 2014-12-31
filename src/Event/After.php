@@ -21,7 +21,7 @@ class After extends AbstractEvent
      * @var mixed
      */
     protected $result;
-    
+
     /**
      * @var array
      */
@@ -96,7 +96,7 @@ class After extends AbstractEvent
 
         return $this;
     }
-    
+
     /**
      * Get the passed arguments.
      *
