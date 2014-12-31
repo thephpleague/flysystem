@@ -31,6 +31,7 @@ class After extends AbstractEvent
      * @param FilesystemInterface $filesystem
      * @param string              $method
      * @param mixed               $result
+     * @param array               $arguments
      */
     public function __construct(FilesystemInterface $filesystem, $method, $result, array $arguments = array())
     {
