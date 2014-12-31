@@ -98,7 +98,7 @@ class After extends AbstractEvent
     }
     
     /**
-     * Get the passed arguments
+     * Get the passed arguments.
      *
      * @return array method arguments
      */
@@ -106,9 +106,9 @@ class After extends AbstractEvent
     {
         return $this->arguments;
     }
-    
+
     /**
-     * Get an argument by key
+     * Get an argument by key.
      *
      * @param string $key     argument key
      * @param mixed  $default default return value
@@ -120,12 +120,12 @@ class After extends AbstractEvent
         if (! array_key_exists($key, $this->arguments)) {
             return $default;
         }
-    
+
         return $this->arguments[$key];
     }
-    
+
     /**
-     * Set an argument value
+     * Set an argument value.
      *
      * @param string $key
      * @param mixed  $value
@@ -135,21 +135,21 @@ class After extends AbstractEvent
     public function setArgument($key, $value)
     {
         $this->arguments[$key] = $value;
-    
+
         return $this;
     }
-    
+
     /**
-     * Set the arguments
+     * Set the arguments.
      *
      * @param array $arguments
      *
-     * @return self
+     * @return $this
      */
     public function setArguments(array $arguments)
     {
         $this->arguments = array_merge($this->arguments, $arguments);
-    
+
         return $this;
     }
 }
