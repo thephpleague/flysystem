@@ -15,7 +15,7 @@ class Config
     protected $fallback;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $settings
      */
@@ -25,7 +25,7 @@ class Config
     }
 
     /**
-     * Get a setting
+     * Get a setting.
      *
      * @param string $key
      * @param mixed  $default
@@ -42,7 +42,7 @@ class Config
     }
 
     /**
-     * Check if an item exists by key
+     * Check if an item exists by key.
      *
      * @param string $key
      *
@@ -54,7 +54,7 @@ class Config
     }
 
     /**
-     * Try to retrieve a default setting from a config fallback
+     * Try to retrieve a default setting from a config fallback.
      *
      * @param string $key
      * @param mixed  $default
@@ -71,7 +71,7 @@ class Config
     }
 
     /**
-     * Set a setting
+     * Set a setting.
      *
      * @param string $key
      * @param mixed  $value
@@ -86,7 +86,7 @@ class Config
     }
 
     /**
-     * Set the fallback
+     * Set the fallback.
      *
      * @param Config $fallback
      *

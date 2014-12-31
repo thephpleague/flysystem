@@ -13,7 +13,7 @@ abstract class AbstractPlugin implements PluginInterface
     protected $filesystem;
 
     /**
-     * Set the Filesystem object
+     * Set the Filesystem object.
      *
      * @param FilesystemInterface $filesystem
      */

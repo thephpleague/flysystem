@@ -15,7 +15,7 @@ abstract class Handler
     protected $filesystem;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param FilesystemInterface $filesystem
      * @param string              $path
@@ -27,9 +27,9 @@ abstract class Handler
     }
 
     /**
-     * Check whether the entree is a directory
+     * Check whether the entree is a directory.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDir()
     {
@@ -37,9 +37,9 @@ abstract class Handler
     }
 
     /**
-     * Check whether the entree is a file
+     * Check whether the entree is a file.
      *
-     * @return boolean
+     * @return bool
      */
     public function isFile()
     {
@@ -47,7 +47,7 @@ abstract class Handler
     }
 
     /**
-     * Retrieve the entree type (file|dir)
+     * Retrieve the entree type (file|dir).
      *
      * @return string file or dir
      */
@@ -59,7 +59,7 @@ abstract class Handler
     }
 
     /**
-     * Set the Filesystem object
+     * Set the Filesystem object.
      *
      * @param FilesystemInterface $filesystem
      *
@@ -73,7 +73,7 @@ abstract class Handler
     }
 
     /**
-     * Set the entree path
+     * Set the entree path.
      *
      * @param string $path
      *
@@ -87,7 +87,7 @@ abstract class Handler
     }
 
     /**
-     * Retrieve the entree path
+     * Retrieve the entree path.
      *
      * @return string path
      */

@@ -17,7 +17,7 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $pathSeparator = '/';
 
     /**
-     * Set the path prefix
+     * Set the path prefix.
      *
      * @param string $prefix
      *
@@ -35,7 +35,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Get the path prefix
+     * Get the path prefix.
      *
      * @return string path prefix
      */
@@ -45,7 +45,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Prefix a path
+     * Prefix a path.
      *
      * @param string $path
      *
@@ -67,7 +67,7 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
-     * Remove a path prefix
+     * Remove a path prefix.
      *
      * @param string $path
      *

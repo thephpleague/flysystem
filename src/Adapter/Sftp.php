@@ -39,7 +39,7 @@ class Sftp extends AbstractFtpAdapter
     protected $statMap = ['mtime' => 'timestamp', 'size' => 'size'];
 
     /**
-     * Prefix a path
+     * Prefix a path.
      *
      * @param string $path
      *
@@ -51,7 +51,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set the private key (string or path to local file)
+     * Set the private key (string or path to local file).
      *
      * @param string $key
      *
@@ -65,7 +65,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Inject the Net_SFTP instance
+     * Inject the Net_SFTP instance.
      *
      * @param Net_SFTP $connection
      *
@@ -79,7 +79,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Connect
+     * Connect.
      */
     public function connect()
     {
@@ -89,7 +89,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Login
+     * Login.
      *
      * @throws LogicException
      */
@@ -101,7 +101,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set the connection root
+     * Set the connection root.
      */
     protected function setConnectionRoot()
     {
@@ -117,7 +117,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Get the password, either the private key or a plain text password
+     * Get the password, either the private key or a plain text password.
      *
      * @return Crypt_RSA|string
      */
@@ -188,7 +188,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Normalize a listing response
+     * Normalize a listing response.
      *
      * @param string $path
      * @param array  $object
@@ -209,7 +209,7 @@ class Sftp extends AbstractFtpAdapter
     }
 
     /**
-     * Disconnect
+     * Disconnect.
      */
     public function disconnect()
     {

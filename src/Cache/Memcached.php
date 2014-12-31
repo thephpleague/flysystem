@@ -22,7 +22,7 @@ class Memcached extends AbstractCache
     protected $memcached;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param \Memcached $memcached
      * @param string     $key       storage key

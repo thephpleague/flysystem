@@ -23,7 +23,7 @@ class Adapter extends AbstractCache
     protected $expire = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AdapterInterface $adapter adapter
      * @param string           $file    the file to cache to
@@ -37,7 +37,7 @@ class Adapter extends AbstractCache
     }
 
     /**
-     * Set the expiration time in seconds
+     * Set the expiration time in seconds.
      *
      * @param int $expire relative expiration time
      */
@@ -49,7 +49,7 @@ class Adapter extends AbstractCache
     }
 
     /**
-     * Get expiration time in seconds
+     * Get expiration time in seconds.
      *
      * @param int $time relative expiration time
      *

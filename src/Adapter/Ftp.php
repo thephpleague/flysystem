@@ -29,7 +29,7 @@ class Ftp extends AbstractFtpAdapter
     ];
 
     /**
-     * Set the transfer mode
+     * Set the transfer mode.
      *
      * @param int $mode
      *
@@ -43,7 +43,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set if Ssl is enabled
+     * Set if Ssl is enabled.
      *
      * @param bool $ssl
      *
@@ -57,7 +57,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set if passive mode should be used
+     * Set if passive mode should be used.
      *
      * @param bool $passive
      */
@@ -67,7 +67,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Connect to the FTP server
+     * Connect to the FTP server.
      */
     public function connect()
     {
@@ -87,7 +87,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set the connections to passive mode
+     * Set the connections to passive mode.
      *
      * @throws RuntimeException
      */
@@ -99,7 +99,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set the connection root
+     * Set the connection root.
      */
     protected function setConnectionRoot()
     {
@@ -118,7 +118,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Login
+     * Login.
      *
      * @throws RuntimeException
      */
@@ -135,7 +135,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Disconnect from the FTP server
+     * Disconnect from the FTP server.
      */
     public function disconnect()
     {
@@ -271,12 +271,12 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Create a directory
+     * Create a directory.
      *
      * @param string   $directory
      * @param resource $connection
      *
-     * @return boolean
+     * @return bool
      */
     protected function createActualDirectory($directory, $connection)
     {

@@ -13,11 +13,11 @@ class NullAdapter extends AbstractAdapter
     use StreamedCopyTrait;
 
     /**
-     * Check whether a file is present
+     * Check whether a file is present.
      *
      * @param string $path
      *
-     * @return boolean
+     * @return bool
      */
     public function has($path)
     {

@@ -12,7 +12,7 @@ class Copy extends AbstractAdapter
     use NotSupportingVisibilityTrait;
 
     /**
-     * Result key map
+     * Result key map.
      *
      * @var array
      */
@@ -23,14 +23,14 @@ class Copy extends AbstractAdapter
     ];
 
     /**
-     * Copy API
+     * Copy API.
      *
      * @var API
      */
     protected $client;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param API    $client
      * @param string $prefix
@@ -42,7 +42,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Check weather a file exists
+     * Check weather a file exists.
      *
      * @param string $path
      *
@@ -247,7 +247,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Normalize a result from Copy
+     * Normalize a result from Copy.
      *
      * @param stdClass $object
      * @param string   $path
@@ -270,7 +270,7 @@ class Copy extends AbstractAdapter
     }
 
     /**
-     * Apply the path prefix
+     * Apply the path prefix.
      *
      * @param string $path
      *

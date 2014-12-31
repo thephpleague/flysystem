@@ -5,7 +5,7 @@ namespace League\Flysystem\Adapter\Polyfill;
 trait StreamedReadingTrait
 {
     /**
-     * Get the contents of a file in a stream
+     * Get the contents of a file in a stream.
      *
      * @param string $path
      *

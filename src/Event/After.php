@@ -35,7 +35,7 @@ class After extends AbstractEvent
     }
 
     /**
-     * Get the Filesystem instance
+     * Get the Filesystem instance.
      *
      * @return FilesystemInterface
      */
@@ -45,7 +45,7 @@ class After extends AbstractEvent
     }
 
     /**
-     * Get the event name
+     * Get the event name.
      *
      * @return string
      */
@@ -57,7 +57,7 @@ class After extends AbstractEvent
     }
 
     /**
-     * Get the called method
+     * Get the called method.
      *
      * @return string
      */
@@ -67,7 +67,7 @@ class After extends AbstractEvent
     }
 
     /**
-     * Get the method call result
+     * Get the method call result.
      *
      * @return mixed
      */
@@ -77,7 +77,7 @@ class After extends AbstractEvent
     }
 
     /**
-     * Overwrite the result
+     * Overwrite the result.
      *
      * @param mixed $result
      *

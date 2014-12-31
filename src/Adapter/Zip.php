@@ -53,7 +53,7 @@ class Zip extends AbstractAdapter
     }
 
     /**
-     * ZipArchive setter
+     * ZipArchive setter.
      *
      * @param ZipArchive $archive
      */
@@ -63,7 +63,7 @@ class Zip extends AbstractAdapter
     }
 
     /**
-     * Get the used ZipArchive
+     * Get the used ZipArchive.
      *
      * @return ZipArchive
      */
@@ -252,7 +252,7 @@ class Zip extends AbstractAdapter
     }
 
     /**
-     * Normalize a zip response array
+     * Normalize a zip response array.
      *
      * @param array $object
      *

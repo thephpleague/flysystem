@@ -5,7 +5,7 @@ namespace League\Flysystem\Plugin;
 class ListWith extends AbstractPlugin
 {
     /**
-     * Get the method name
+     * Get the method name.
      *
      * @return string
      */
@@ -15,7 +15,7 @@ class ListWith extends AbstractPlugin
     }
 
     /**
-     * List contents with metadata
+     * List contents with metadata.
      *
      * @param array  $keys
      * @param string $directory

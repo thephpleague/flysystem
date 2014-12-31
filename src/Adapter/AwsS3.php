@@ -70,7 +70,7 @@ class AwsS3 extends AbstractAdapter
     protected $uploadBuilder;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param S3Client      $client
      * @param string        $bucket
@@ -93,7 +93,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the S3Client bucket
+     * Get the S3Client bucket.
      *
      * @return string
      */
@@ -103,7 +103,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the S3Client instance
+     * Get the S3Client instance.
      *
      * @return S3Client
      */
@@ -153,7 +153,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Write an object to S3
+     * Write an object to S3.
      *
      * @param array $options
      *
@@ -233,7 +233,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Read an object from the S3Client
+     * Read an object from the S3Client.
      *
      * @param string $path
      *
@@ -371,7 +371,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * The the ACL visibility
+     * The the ACL visibility.
      *
      * @param string $path
      *
@@ -415,7 +415,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Normalize a result from AWS
+     * Normalize a result from AWS.
      *
      * @param array  $object
      * @param string $path
@@ -444,7 +444,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get options for a AWS call
+     * Get options for a AWS call.
      *
      * @param string $path
      * @param array  $options
@@ -466,7 +466,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Retrieve options from a Config instance
+     * Retrieve options from a Config instance.
      *
      * @param Config $config
      *
@@ -501,7 +501,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Sends an object to a bucket using a multipart transfer, possibly also using concurrency
+     * Sends an object to a bucket using a multipart transfer, possibly also using concurrency.
      *
      * @param array $options Can have: [Body, Bucket, Key, MinPartSize, Concurrency, ContentType, ACL, Metadata]
      *
@@ -554,7 +554,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Convert megabytes to bytes
+     * Convert megabytes to bytes.
      *
      * @param int $megabytes
      *
@@ -566,7 +566,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Set the S3 UploadBuilder
+     * Set the S3 UploadBuilder.
      *
      * @param UploadBuilder $uploadBuilder
      *
@@ -580,7 +580,7 @@ class AwsS3 extends AbstractAdapter
     }
 
     /**
-     * Get the S3 UploadBuilder
+     * Get the S3 UploadBuilder.
      *
      * @return UploadBuilder
      */

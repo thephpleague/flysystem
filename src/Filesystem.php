@@ -32,7 +32,7 @@ class Filesystem implements FilesystemInterface
     protected $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param AdapterInterface $adapter
      * @param CacheInterface   $cache
@@ -47,7 +47,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get the Adapter
+     * Get the Adapter.
      *
      * @return AdapterInterface adapter
      */
@@ -57,7 +57,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get the Config
+     * Get the Config.
      *
      * @return Config config object
      */
@@ -67,7 +67,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get the Cache
+     * Get the Cache.
      *
      * @return CacheInterface adapter
      */
@@ -145,7 +145,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a file or update if exists
+     * Create a file or update if exists.
      *
      * @param string $path     path to file
      * @param string $contents file contents
@@ -153,7 +153,7 @@ class Filesystem implements FilesystemInterface
      *
      * @throws FileExistsException
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function put($path, $contents, array $config = [])
     {
@@ -167,13 +167,13 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a file or update if exists using a stream
+     * Create a file or update if exists using a stream.
      *
      * @param string   $path
      * @param resource $resource
      * @param mixed    $config
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function putStream($path, $resource, array $config = [])
     {
@@ -211,7 +211,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Update a file
+     * Update a file.
      *
      * @param string $path     path to file
      * @param string $contents file contents
@@ -219,7 +219,7 @@ class Filesystem implements FilesystemInterface
      *
      * @throws FileNotFoundException
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function update($path, $contents, array $config = [])
     {
@@ -239,7 +239,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Update a file with the contents of a stream
+     * Update a file with the contents of a stream.
      *
      * @param string   $path
      * @param resource $resource
@@ -270,7 +270,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Read a file
+     * Read a file.
      *
      * @param string $path path to file
      *
@@ -298,7 +298,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Retrieves a read-stream for a path
+     * Retrieves a read-stream for a path.
      *
      * @param string $path
      *
@@ -323,7 +323,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Rename a file
+     * Rename a file.
      *
      * @param string $path    path to file
      * @param string $newpath new path
@@ -331,7 +331,7 @@ class Filesystem implements FilesystemInterface
      * @throws FileExistsException
      * @throws FileNotFoundException
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function rename($path, $newpath)
     {
@@ -350,12 +350,12 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Copy a file
+     * Copy a file.
      *
      * @param string $path
      * @param string $newpath
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($path, $newpath)
     {
@@ -374,13 +374,13 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Delete a file
+     * Delete a file.
      *
      * @param string $path path to file
      *
      * @throws FileNotFoundException
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function delete($path)
     {
@@ -397,11 +397,11 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Delete a directory
+     * Delete a directory.
      *
      * @param string $dirname path to directory
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function deleteDir($dirname)
     {
@@ -440,10 +440,10 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * List the filesystem contents
+     * List the filesystem contents.
      *
-     * @param string  $directory
-     * @param boolean $recursive
+     * @param string $directory
+     * @param bool   $recursive
      *
      * @return array contents
      */
@@ -461,7 +461,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's mime-type
+     * Get a file's mime-type.
      *
      * @param string $path path to file
      *
@@ -489,7 +489,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's timestamp
+     * Get a file's timestamp.
      *
      * @param string $path path to file
      *
@@ -517,7 +517,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's visibility
+     * Get a file's visibility.
      *
      * @param string $path path to file
      *
@@ -543,7 +543,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's size
+     * Get a file's size.
      *
      * @param string $path path to file
      *
@@ -569,12 +569,12 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's size
+     * Get a file's size.
      *
      * @param string $path       path to file
      * @param string $visibility visibility
      *
-     * @return boolean success boolean
+     * @return bool success boolean
      */
     public function setVisibility($path, $visibility)
     {
@@ -594,7 +594,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's metadata
+     * Get a file's metadata.
      *
      * @param string $path path to file
      *
@@ -620,7 +620,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file/directory handler
+     * Get a file/directory handler.
      *
      * @param string  $path
      * @param Handler $handler
@@ -643,7 +643,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Flush the cache
+     * Flush the cache.
      *
      * @return $this
      */
@@ -655,7 +655,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Convert a config array to a Config object with the correct fallback
+     * Convert a config array to a Config object with the correct fallback.
      *
      * @param array $config
      *
@@ -670,7 +670,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Assert a file is present
+     * Assert a file is present.
      *
      * @param string $path path to file
      *
@@ -684,7 +684,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Assert a file is absent
+     * Assert a file is absent.
      *
      * @param string $path path to file
      *
@@ -698,7 +698,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Plugins pass-through
+     * Plugins pass-through.
      *
      * @param string $method
      * @param array  $arguments

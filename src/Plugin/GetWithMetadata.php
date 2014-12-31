@@ -7,7 +7,7 @@ use InvalidArgumentException;
 class GetWithMetadata extends AbstractPlugin
 {
     /**
-     * Get the method name
+     * Get the method name.
      *
      * @return string
      */
@@ -17,7 +17,7 @@ class GetWithMetadata extends AbstractPlugin
     }
 
     /**
-     * Get metadata for an object with required metadata
+     * Get metadata for an object with required metadata.
      *
      * @param string $path     path to file
      * @param array  $metadata metadata keys

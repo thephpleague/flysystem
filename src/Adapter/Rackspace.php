@@ -27,7 +27,7 @@ class Rackspace extends AbstractAdapter
     protected $prefix;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Container $container
      * @param string    $prefix
@@ -40,7 +40,7 @@ class Rackspace extends AbstractAdapter
     }
 
     /**
-     * Get an object
+     * Get an object.
      *
      * @param string $path
      *
