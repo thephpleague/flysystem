@@ -169,4 +169,17 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_dir($this->root.DIRECTORY_SEPARATOR.$dirname));
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
     }
+
+    public function testNotWritableRoot()
+    {
+        try {
+            $root = __DIR__ . '/files/not-writable';
+            mkdir($root, 0000, true);
+            $this->setExpectedException('LogicException');
+            new Local($root);
+        } catch (\Exception $e) {
+            rmdir($root);
+            throw $e;
+        }
+    }
 }

@@ -31,8 +31,13 @@ class Local extends AbstractAdapter
      */
     public function __construct($root)
     {
-        $root = $this->ensureDirectory($root);
-        $this->setPathPrefix($root);
+        $realRoot = $this->ensureDirectory($root);
+
+        if (! is_writable($realRoot)) {
+            throw new \LogicException('The root path '.$root.' is not writable.');
+        }
+
+        $this->setPathPrefix($realRoot);
     }
 
     /**

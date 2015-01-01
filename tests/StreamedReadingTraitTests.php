@@ -10,9 +10,9 @@ class StreamedReadingTraitTests extends \PHPUnit_Framework_TestCase
     {
         $stub = new StreamedReadingStub();
         $result = $stub->readStream($input = 'true.ext');
-        $this->assertInternalType('resource', $result);
-        $this->assertEquals($input, stream_get_contents($result));
-        fclose($result);
+        $this->assertInternalType('resource', $result['stream']);
+        $this->assertEquals($input, stream_get_contents($result['stream']));
+        fclose($result['stream']);
     }
 
     public function testStreamReadFail()
