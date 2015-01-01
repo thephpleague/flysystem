@@ -70,7 +70,11 @@ abstract class AbstractCache implements CacheInterface
         $directories = [$directory];
 
         foreach ($contents as $index => $object) {
-            $object = $this->updateObject($object['path'], $object);
+			if (empty($object['path'])) {
+				continue;
+			}
+
+			$object = $this->updateObject($object['path'], $object);
             $contents[$index] = $object;
 
             if (! empty($directory) && strpos($object['path'], $directory) === false) {
