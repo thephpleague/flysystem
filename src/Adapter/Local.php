@@ -41,18 +41,18 @@ class Local extends AbstractAdapter
      *
      * @param string $root root directory path
      *
-	 * @throws RootViolationException
+     * @throws RootViolationException
 	 *
 	 * @return string real path to root
      */
     protected function ensureDirectory($root)
     {
         if (is_dir($root) === false) {
-			if (is_writable($root) === false) {
-				throw new RootViolationException("The root directory does not exist and is not writable.");
-			}
+            if (is_writable($root) === false) {
+                throw new RootViolationException("The root directory does not exist and is not writable.");
+            }
 
-			mkdir($root, 0755, true);
+            mkdir($root, 0755, true);
         }
 
         return realpath($root);
