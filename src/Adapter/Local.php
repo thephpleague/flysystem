@@ -53,7 +53,7 @@ class Local extends AbstractAdapter
             if (is_dir($root) === false) {
                 throw new RootViolationException("The root directory does not exist and cannot be created.");
             }
-		}
+        }
 
         return realpath($root);
     }
