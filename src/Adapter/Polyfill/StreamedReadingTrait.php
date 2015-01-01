@@ -20,8 +20,8 @@ trait StreamedReadingTrait
         $stream = tmpfile();
         fwrite($stream, $data['contents']);
         rewind($stream);
-
         $data['stream'] = $stream;
+        unset($data['contents']);
 
         return $data;
     }
