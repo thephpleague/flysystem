@@ -7,6 +7,7 @@ use FilesystemIterator;
 use Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\RootViolationException;
 use League\Flysystem\Util;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -40,12 +41,18 @@ class Local extends AbstractAdapter
      *
      * @param string $root root directory path
      *
-     * @return string real path to root
+	 * @throws RootViolationException
+	 *
+	 * @return string real path to root
      */
     protected function ensureDirectory($root)
     {
         if (is_dir($root) === false) {
-            mkdir($root, 0755, true);
+			if (is_writable($root) === false) {
+				throw new RootViolationException("The root directory does not exist and is not writable.");
+			}
+
+			mkdir($root, 0755, true);
         }
 
         return realpath($root);
