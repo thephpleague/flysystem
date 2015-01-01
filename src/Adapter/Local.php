@@ -48,12 +48,12 @@ class Local extends AbstractAdapter
     protected function ensureDirectory($root)
     {
         if (is_dir($root) === false) {
-            if (is_writable($root) === false) {
-                throw new RootViolationException("The root directory does not exist and is not writable.");
-            }
+            @mkdir($root, 0755, true);
 
-            mkdir($root, 0755, true);
-        }
+            if (is_dir($root) === false) {
+                throw new RootViolationException("The root directory does not exist and cannot be created.");
+            }
+		}
 
         return realpath($root);
     }
