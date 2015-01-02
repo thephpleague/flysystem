@@ -195,7 +195,11 @@ class Util
                 $parent = static::dirname($parent);
             }
 
+<<<<<<< HEAD
             if ($object['type'] == 'dir') {
+=======
+            if (isset($object['type']) && $object['type'] === 'dir') {
+>>>>>>> Prevent duplicate listing of directories.
                 $listedDirectories[] = $object['path'];
             }
         }
