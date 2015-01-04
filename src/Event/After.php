@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Event;
 
+use ErrorException;
 use League\Event\AbstractEvent;
 use League\Flysystem\FilesystemInterface;
 
@@ -111,45 +112,17 @@ class After extends AbstractEvent
      * Get an argument by key.
      *
      * @param string $key     argument key
-     * @param mixed  $default default return value
      *
      * @return mixed
+     *
+     * @throws ErrorException
      */
-    public function getArgument($key, $default = null)
+    public function getArgument($key)
     {
         if (! array_key_exists($key, $this->arguments)) {
-            return $default;
+            throw new ErrorException('Undefined index: '.$key);
         }
 
         return $this->arguments[$key];
-    }
-
-    /**
-     * Set an argument value.
-     *
-     * @param string $key
-     * @param mixed  $value
-     *
-     * @return $this
-     */
-    public function setArgument($key, $value)
-    {
-        $this->arguments[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set the arguments.
-     *
-     * @param array $arguments
-     *
-     * @return $this
-     */
-    public function setArguments(array $arguments)
-    {
-        $this->arguments = array_merge($this->arguments, $arguments);
-
-        return $this;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use League\Flysystem\Event\After;
+use League\Flysystem\Event\Before;
 use League\Flysystem\EventableFilesystem;
 use League\Flysystem\Plugin\GetWithMetadata;
 use League\Flysystem\Plugin\ListFiles;
@@ -278,7 +280,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testBeforeEvent()
     {
-        $before = new League\Flysystem\Event\Before($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
+        $before = new Before($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
         $this->assertSame($filesystem, $before->getFilesystem());
         $this->assertEquals('methodName', $before->getMethod());
         $this->assertEquals($arguments, $before->getArguments());
@@ -288,8 +290,19 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 
     public function testAfterEvent()
     {
-        $before = new League\Flysystem\Event\After($filesystem = $this->getMockeryMock('filesystem'), 'methodName', $arguments = ['argu' => 'ment']);
-        $this->assertSame($filesystem, $before->getFilesystem());
+        $arguments = ['argu' => 'ment'];
+        $after = new After($filesystem = $this->getMockeryMock('filesystem'), 'methodName', 'result', $arguments);
+        $this->assertEquals($arguments, $after->getArguments());
+        $this->assertEquals($arguments['argu'], $after->getArgument('argu'));
+        $this->assertSame($filesystem, $after->getFilesystem());
+    }
+
+    public function testAfterEventGetArgument()
+    {
+        $arguments = ['argu' => 'ment'];
+        $after = new After($filesystem = $this->getMockeryMock('filesystem'), 'methodName', 'result', $arguments);
+        $this->setExpectedException('ErrorException');
+        $after->getArgument('unknown');
     }
 
     public function testAfterSetResult()
