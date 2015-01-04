@@ -23,33 +23,8 @@
     </filter>
     <listeners>
         <listener class="Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>
-        <listener class="League\PHPUnitCoverageListener\Listener">
-            <arguments>
-                <array>
-                    <element key="printer">
-                      <object class="League\PHPUnitCoverageListener\Printer\StdOut"/>
-                    </element>
-                    <element key="hook">
-                      <object class="League\PHPUnitCoverageListener\Hook\Travis"/>
-                    </element>
-                    <element key="namespace">
-                        <string>League\Flysystem</string>
-                    </element>
-                    <element key="repo_token">
-                        <string>O6jilIz6cIrJ6t7sHUfKgmA5wUUOoXdQ6</string>
-                    </element>
-                    <element key="target_url">
-                        <string>https://coveralls.io/api/v1/jobs</string>
-                    </element>
-                    <element key="coverage_dir">
-                        <string>/tmp/flysystem/</string>
-                    </element>
-                </array>
-            </arguments>
-        </listener>
     </listeners>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
-        <log type="coverage-clover" target="/tmp/flysystem/coverage.xml" />
     </logging>
 </phpunit>
