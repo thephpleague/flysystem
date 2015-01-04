@@ -173,7 +173,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testNotWritableRoot()
     {
         try {
-            $root = __DIR__ . '/files/not-writable';
+            $root = __DIR__.'/files/not-writable';
             mkdir($root, 0000, true);
             $this->setExpectedException('LogicException');
             new Local($root);
