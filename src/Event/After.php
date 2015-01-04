@@ -23,15 +23,22 @@ class After extends AbstractEvent
     protected $result;
 
     /**
+     * @var array
+     */
+    protected $arguments;
+
+    /**
      * @param FilesystemInterface $filesystem
      * @param string              $method
      * @param mixed               $result
+     * @param array               $arguments
      */
-    public function __construct(FilesystemInterface $filesystem, $method, $result)
+    public function __construct(FilesystemInterface $filesystem, $method, $result, array $arguments = [])
     {
         $this->filesystem = $filesystem;
         $this->method = $method;
         $this->result = $result;
+        $this->arguments = $arguments;
     }
 
     /**
@@ -86,6 +93,62 @@ class After extends AbstractEvent
     public function setResult($result)
     {
         $this->result = $result;
+
+        return $this;
+    }
+
+    /**
+     * Get the passed arguments.
+     *
+     * @return array method arguments
+     */
+    public function getArguments()
+    {
+        return $this->arguments;
+    }
+
+    /**
+     * Get an argument by key.
+     *
+     * @param string $key     argument key
+     * @param mixed  $default default return value
+     *
+     * @return mixed
+     */
+    public function getArgument($key, $default = null)
+    {
+        if (! array_key_exists($key, $this->arguments)) {
+            return $default;
+        }
+
+        return $this->arguments[$key];
+    }
+
+    /**
+     * Set an argument value.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return $this
+     */
+    public function setArgument($key, $value)
+    {
+        $this->arguments[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Set the arguments.
+     *
+     * @param array $arguments
+     *
+     * @return $this
+     */
+    public function setArguments(array $arguments)
+    {
+        $this->arguments = array_merge($this->arguments, $arguments);
 
         return $this;
     }

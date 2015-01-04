@@ -464,7 +464,7 @@ class EventableFilesystem extends Filesystem
 
         $result = $this->callFilesystemMethod($method, $result);
 
-        return $this->emitAfter($method, $result);
+        return $this->emitAfter($method, $result, $arguments);
     }
 
     /**
@@ -508,12 +508,13 @@ class EventableFilesystem extends Filesystem
      *
      * @param string $method
      * @param mixed  $result
+     * @param array  $arguments
      *
      * @return mixed
      */
-    protected function emitAfter($method, $result)
+    protected function emitAfter($method, $result, array $arguments)
     {
-        $event = new AfterEvent($this, $method, $result);
+        $event = new AfterEvent($this, $method, $result, $arguments);
         $this->emit($event);
 
         return $event->getResult();
