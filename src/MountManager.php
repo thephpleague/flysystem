@@ -29,7 +29,6 @@ use LogicException;
  * @method bool delete($path)
  * @method bool deleteDir($dirname)
  * @method bool createDir($dirname, $config = [])
- * @method array listContents($directory = '', $recursive = false)
  * @method array listFiles($directory = '', $recursive = false)
  * @method array listPaths($directory = '', $recursive = false)
  * @method array listWith(array $keys = array(), $directory = '', $recursive = false)
@@ -148,7 +147,28 @@ class MountManager
     }
 
     /**
-     * Call forwarder.
+     * @param string $directory
+     * @param bool $recursive
+     * @return array
+     */
+    public function listContents($directory = '', $recursive = false)
+    {
+        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+
+        $filesystem = $this->getFilesystem($prefix);
+        $directory = array_shift($arguments);
+
+        $result = $filesystem->listContents($directory, $recursive);
+
+        foreach ($result as &$file) {
+            $file['filesystem'] = $prefix;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Call forwarder
      *
      * @param string $method
      * @param array  $arguments
