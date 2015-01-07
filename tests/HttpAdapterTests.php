@@ -147,13 +147,27 @@ class HttpAdapterTests extends PHPUnit_Framework_TestCase
      */
     public function testExpectedFails($method)
     {
-        $adapter = new HttpAdapter('http://any.url.com/bla/dibla/dibla');
+        $adapter = new HttpAdapter($this->fakeUrl);
         $this->assertFalse($adapter->{$method}('one', 'two', new Config));
     }
 
     public function testExpectedFailCreateDir()
     {
-        $adapter = new HttpAdapter('http://any.url.com/bla/dibla/dibla');
+        $adapter = new HttpAdapter($this->fakeUrl);
         $this->assertFalse($adapter->createDir('one', new Config));
+    }
+
+
+    public function testBuildUrl()
+    {
+        $adapter = new HttpAdapter($this->fakeUrl);
+
+        $class = new \ReflectionClass($adapter);
+        $method = $class->getMethod("buildUrl");
+        $method->setAccessible(true);
+
+        $filename = "file1.txt";
+        $url = $method->invokeArgs($adapter, [$filename]);
+        $this->assertSame($this->fakeUrl . "/" . $filename, $url);
     }
 }
