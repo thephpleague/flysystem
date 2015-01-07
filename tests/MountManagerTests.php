@@ -122,26 +122,26 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
 
     protected function mockFileIterator()
     {
-        $file = Mockery::mock('\SplFileInfo', array(
+        $file = Mockery::mock('\SplFileInfo', [
             'getPathname' => 'path/file/test',
             'getFilename' => 'test',
             'getType' => 'file',
             'getSize' => 12361863,
-            'getMTime' => (new \DateTime())->format('U')
-        ), array('test'));
+            'getMTime' => (new \DateTime())->format('U'),
+        ], ['test']);
 
-        return array($file);
+        return [$file];
     }
 
     protected function mockHugeFileIterator()
     {
-        $file = Mockery::mock('\SplFileInfo', array(
+        $file = Mockery::mock('\SplFileInfo', [
             'getPathname' => 'path/file/test',
             'getFilename' => 'test',
             'getType' => 'file',
             'getSize' => 12361863,
-            'getMTime' => (new \DateTime())->format('U')
-        ), array('test'));
+            'getMTime' => (new \DateTime())->format('U'),
+        ], ['test']);
 
         return array_fill(0, 1000, $file);
     }

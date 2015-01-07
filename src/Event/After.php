@@ -111,7 +111,7 @@ class After extends AbstractEvent
     /**
      * Get an argument by key.
      *
-     * @param string $key     argument key
+     * @param string $key argument key
      *
      * @return mixed
      *

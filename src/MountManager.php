@@ -147,8 +147,8 @@ class MountManager
     }
 
     /**
-     * @param string $directory
-     * @param bool $recursive
+     * @param  string $directory
+     * @param  bool   $recursive
      * @return array
      */
     public function listContents($directory = '', $recursive = false)
