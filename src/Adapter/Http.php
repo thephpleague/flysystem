@@ -15,6 +15,11 @@ class Http extends AbstractAdapter
     /** @var  string  */
     protected $host;
 
+    /**
+     * @var string $path The base path.
+     */
+    protected $path;
+
     /** @var  ClientInterface  */
     protected $client;
 
@@ -32,6 +37,8 @@ class Http extends AbstractAdapter
             $this->host .= $parsedUrl['user'] . ':' . $parsedUrl['pass'] . '@';
         };
         $this->host .= $parsedUrl['host'];
+
+        $this->path = $parsedUrl['path'];
 
         if (null !== $client) {
             $this->setClient($client);
@@ -379,7 +386,7 @@ class Http extends AbstractAdapter
      */
     protected function buildUrl($path)
     {
-        return $this->host . '/' . ltrim($path, '/');
+        return $this->host . rtrim($this->path, '/') . '/' . ltrim($path, '/');
     }
 
     /**
