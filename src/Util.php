@@ -180,6 +180,7 @@ class Util
     public static function emulateDirectories(array $listing)
     {
         $directories = [];
+        $listedDirectories = [];
 
         foreach ($listing as $object) {
             if (empty($object['dirname'])) {
@@ -193,9 +194,17 @@ class Util
 
                 $parent = static::dirname($parent);
             }
+
+<<<<<<< HEAD
+            if ($object['type'] == 'dir') {
+=======
+            if (isset($object['type']) && $object['type'] === 'dir') {
+>>>>>>> Prevent duplicate listing of directories.
+                $listedDirectories[] = $object['path'];
+            }
         }
 
-        $directories = array_unique($directories);
+        $directories = array_diff(array_unique($directories), array_unique($listedDirectories));
 
         foreach ($directories as $directory) {
             $listing[] = static::pathinfo($directory) + ['type' => 'dir'];
