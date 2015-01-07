@@ -1,6 +1,7 @@
 <?php
 
 use League\Flysystem\Adapter\Http as HttpAdapter;
+use League\Flysystem\Config;
 
 class HttpAdapterTests extends PHPUnit_Framework_TestCase
 {
@@ -147,12 +148,12 @@ class HttpAdapterTests extends PHPUnit_Framework_TestCase
     public function testExpectedFails($method)
     {
         $adapter = new HttpAdapter('http://any.url.com/bla/dibla/dibla');
-        $this->assertFalse($adapter->{$method}('one', 'two', 'three'));
+        $this->assertFalse($adapter->{$method}('one', 'two', new Config));
     }
 
     public function testExpectedFailCreateDir()
     {
         $adapter = new HttpAdapter('http://any.url.com/bla/dibla/dibla');
-        $this->assertFalse($adapter->createDir('one'));
+        $this->assertFalse($adapter->createDir('one', new Config));
     }
 }

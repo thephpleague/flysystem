@@ -69,11 +69,11 @@ class Http extends AbstractAdapter
      *
      * @param  string  $path
      * @param  string  $contents
-     * @param  null    $config
+     * @param  Config  $config
      *
      * @return  array|bool
      */
-    public function write($path, $contents, $config = null)
+    public function write($path, $contents, Config $config)
     {
         return false;
     }
@@ -84,11 +84,11 @@ class Http extends AbstractAdapter
      *
      * @param  string  $path
      * @param  string  $resource
-     * @param  null    $config
+     * @param  Config  $config
      *
      * @return array|bool
      */
-    public function writeStream($path, $resource, $config = null)
+    public function writeStream($path, $resource, Config $config)
     {
         return false;
     }
@@ -116,11 +116,11 @@ class Http extends AbstractAdapter
      *
      * @param  string    $path
      * @param  resource  $resource
-     * @param  mixed     $config Config object or visibility setting
+     * @param  Config    $config
      *
      * @return  array|bool
      */
-    public function updateStream($path, $resource, $config = null)
+    public function updateStream($path, $resource, Config $config)
     {
         return false;
     }
@@ -131,11 +131,11 @@ class Http extends AbstractAdapter
      *
      * @param  string  $path
      * @param  string  $contents
-     * @param  mixed   $config Config object or visibility setting
+     * @param  Config  $config
      *
      * @return  array|bool
      */
-    public function update($path, $contents, $config = null)
+    public function update($path, $contents, Config $config)
     {
         return false;
     }
@@ -280,14 +280,14 @@ class Http extends AbstractAdapter
     }
 
     /**
-     * Create a directory
+     * Create a directory.
      *
-     * @param   string        $path
-     * @param   array|Config  $options
+     * @param string $dirname directory name
+     * @param Config $config
      *
-     * @return  bool
+     * @return array|false
      */
-    public function createDir($path, $options = null)
+    public function createDir($dirname, Config $config)
     {
         return false;
     }
@@ -301,6 +301,21 @@ class Http extends AbstractAdapter
      * @return  bool
      */
     public function deleteDir($path)
+    {
+        return false;
+    }
+
+    /**
+     * Set the visibility for a file.
+     *
+     * It's not possible to write to HTTP so it will always do nothing and return false
+     *
+     * @param string $path
+     * @param string $visibility
+     *
+     * @return array|false file meta data
+     */
+    public function setVisibility($path, $visibility)
     {
         return false;
     }
