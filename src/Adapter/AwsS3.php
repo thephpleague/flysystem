@@ -411,6 +411,10 @@ class AwsS3 extends AbstractAdapter
         $contents = iterator_to_array($objectsIterator);
         $result = array_map([$this, 'normalizeResponse'], $contents);
 
+        $result = array_filter($result, function ($value) {
+            return $value['path'] !== false;
+        });
+
         return Util::emulateDirectories($result);
     }
 
