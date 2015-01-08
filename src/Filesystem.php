@@ -713,7 +713,8 @@ class Filesystem implements FilesystemInterface
             throw new \BadMethodCallException(
                 'Call to undefined method '
                 .__CLASS__
-                .'::'.$method);
+                .'::'.$method
+            );
         }
     }
 }
