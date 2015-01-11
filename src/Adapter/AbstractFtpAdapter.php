@@ -445,4 +445,14 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     {
         $this->disconnect();
     }
+
+    /**
+     * Establish a connection.
+     */
+    abstract public function connect();
+
+    /**
+     * Close the connection
+     */
+    abstract public function disconnect();
 }
