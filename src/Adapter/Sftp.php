@@ -4,9 +4,9 @@ namespace League\Flysystem\Adapter;
 
 use Crypt_RSA;
 use InvalidArgumentException;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
 use LogicException;
