@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "phpspec/prophecy-phpunit": "~1.0"
+        "php": ">=5.4.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -30,7 +29,8 @@
         "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
-        "phpspec/phpspec": "~2.0.0"
+        "phpspec/phpspec": "~2.0.0",
+        "phpspec/prophecy-phpunit": "~1.0"
     },
     "autoload": {
         "psr-4": {
