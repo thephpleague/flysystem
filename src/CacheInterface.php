@@ -85,6 +85,15 @@ interface CacheInterface extends ReadInterface
     public function delete($path);
 
     /**
+     * Delete all objects from from a directory.
+     *
+     * @param string $dirname directory path
+     *
+     * @return $this
+     */
+    public function deleteDir($dirname);
+
+    /**
      * Update the metadata for an object.
      *
      * @param string $path     object path
