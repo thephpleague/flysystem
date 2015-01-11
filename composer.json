@@ -44,17 +44,16 @@
     "suggest": {
         "ext-fileinfo": "Required for MimeType",
         "league/event": "Required for EventableFilesystem",
-        "aws/aws-sdk-php": "Allows you to use AWS S3 storage",
         "predis/predis": "Allows you to use Predis for caching",
-        "dropbox/dropbox-sdk": "Allows you to use Dropbox storage",
         "phpseclib/phpseclib": "Allows SFTP server storage",
-        "sabre/dav": "Enables WebDav support",
-        "rackspace/php-opencloud": "Allows you to use Rackspace Cloud Files",
-        "barracuda/copy": "Allows you to use Copy.com storage",
-        "guzzlehttp/guzzle": "Allows you to use http files (reading only)",
+        "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
+        "league/flysystem-copy": "Allows you to use Copy.com storage",
         "tedivm/stash": "Allows you to use Stash as cache implementation",
         "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
-        "league/flysystem-webdav": "Allows you to use WebDAV storage"
+        "league/flysystem-webdav": "Allows you to use WebDAV storage",
+        "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
+        "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
+        "league/flysystem-dropbox": "Use Dropbox storage"
     },
     "config": {
         "bin-dir": "bin"
