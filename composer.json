@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "phpspec/prophecy-phpunit": "~1.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
@@ -53,7 +54,8 @@
         "league/flysystem-webdav": "Allows you to use WebDAV storage",
         "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
         "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
-        "league/flysystem-dropbox": "Use Dropbox storage"
+        "league/flysystem-dropbox": "Use Dropbox storage",
+        "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching"
     },
     "config": {
         "bin-dir": "bin"

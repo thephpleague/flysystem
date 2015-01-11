@@ -34,7 +34,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         return [
             ['read', ['path.txt'], ['contents' => 'contents'], 'contents'],
             ['write', ['path.txt', 'contents'], ['contents' => 'contents'], true, false],
-            ['update', ['path.txt', 'contents'], [], true],
+            ['update', ['path.txt', 'contents'], ['path' => 'path.txt'], true],
             ['readStream', ['path.txt'], ['stream' => 'stream'], 'stream'],
             ['writeStream', ['path.txt', tmpfile()], ['stream' => tmpfile()], true, false],
             ['updateStream', ['path.txt', tmpfile()], ['stream' => tmpfile()], true],
@@ -42,13 +42,7 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
             ['deleteDir', ['path.txt'], true, true],
             ['createDir', ['path'], ['path' => 'path'], true],
             ['has', ['path'], true, true],
-            ['getMetadata', ['path'], ['mimetype' => 'plain/text'], [
-                'mimetype' => 'plain/text',
-                'basename' => 'path',
-                'dirname' => '',
-                'path' => 'path',
-                'filename' => 'path',
-            ]],
+            ['getMetadata', ['path'], ['mimetype' => 'plain/text'], ['mimetype' => 'plain/text',]],
             ['getSize', ['path'], ['size' => 1], 1],
             ['getTimestamp', ['path'], ['timestamp' => 1], 1],
             ['getMimetype', ['path'], ['mimetype' => 'type'], 'type'],
@@ -57,9 +51,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
             ['listContents', [''], [['path' => 'path', 'type' => 'file']], [[
                 'path' => 'path',
                 'type' => 'file',
-                'basename' => 'path',
-                'dirname' => '',
-                'filename' => 'path',
             ]]],
         ];
     }
@@ -91,70 +82,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $adapter->shouldReceive('delete')->andReturn(true);
         $filesystem = new EventableFilesystem($adapter);
         $this->assertEquals('contents', $filesystem->readAndDelete('filename'));
-    }
-
-    public function testListFiles()
-    {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('listContents')->andReturn([
-            ['type' => 'file', 'path' => 'path', 'dirname' => ''],
-            ['type' => 'dir', 'path' => 'path', 'dirname' => ''],
-        ]);
-
-        $expected = [
-            ['type' => 'file', 'path' => 'path'] + Util::pathinfo('path'),
-        ];
-
-        $filesystem = new EventableFilesystem($adapter);
-        $filesystem->addPlugin(new ListFiles());
-        $this->assertEquals($expected, $filesystem->listFiles(''));
-    }
-
-    public function testListWith()
-    {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('listContents')->andReturn([
-            ['type' => 'file', 'path' => 'path', 'dirname' => '', 'mimetype' => 'mimetype'],
-        ]);
-
-        $expected = [
-            ['type' => 'file', 'path' => 'path', 'mimetype' => 'mimetype'] + Util::pathinfo('path'),
-        ];
-
-        $filesystem = new EventableFilesystem($adapter);
-        $filesystem->addPlugin(new ListWith());
-        $this->assertEquals($expected, $filesystem->listWith(['mimetype'], ''));
-    }
-
-    public function testListPaths()
-    {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('listContents')->andReturn([
-            ['type' => 'file', 'path' => 'path', 'dirname' => ''],
-            ['type' => 'dir', 'path' => 'path2', 'dirname' => ''],
-        ]);
-
-        $expected = ['path', 'path2'];
-
-        $filesystem = new EventableFilesystem($adapter);
-        $filesystem->addPlugin(new ListPaths());
-        $this->assertEquals($expected, $filesystem->listPaths(''));
-    }
-
-    public function testGetWithMetadata()
-    {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(true);
-        $adapter->shouldReceive('getMetadata')->andReturn(
-            ['type' => 'file', 'path' => 'path']
-        );
-        $adapter->shouldReceive('getMimetype')->andReturn(['mimetype' => 'text/plain']);
-        $filesystem = new EventableFilesystem($adapter);
-        $filesystem->addPlugin(new GetWithMetadata());
-        $result = $filesystem->getWithMetadata('path', ['mimetype']);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('mimetype', $result);
-        $this->assertEquals($result['mimetype'], 'text/plain');
     }
 
     public function testGet()
@@ -211,18 +138,6 @@ class EventableFilesystemTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('addPlugin')->with($plugin, $config)->andReturn($mock);
         $filesystem = new EventableFilesystem($mock);
         $filesystem->addPlugin($plugin, $config);
-    }
-
-    public function testFlushCache()
-    {
-        $mock = $this->getMockeryMock('cache');
-        $mock->shouldReceive('load');
-        $config = [];
-        $mock->shouldReceive('flush')->once()->andReturn($mock);
-        $adapter = $this->getMockeryMock('adapter');
-
-        $filesystem = new EventableFilesystem($adapter, $mock);
-        $filesystem->flushCache($config);
     }
 
     public function testBeforeEventAbort()

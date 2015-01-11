@@ -143,7 +143,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             'getMTime' => (new \DateTime())->format('U'),
         ], ['test']);
 
-        return array_fill(0, 1000, $file);
+        return array_fill(0, 100, $file);
     }
 
     protected function mockLocalAdapter($which = 'small')
@@ -162,22 +162,10 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         return $localAdapter;
     }
 
-    protected function mockPassthruCache()
-    {
-        $cache = Mockery::mock('\League\Flysystem\Cache\Memory');
-        $cache->makePartial();
-        $cache->shouldReceive('isComplete')->andReturn(false);
-        $cache->shouldReceive('storeContents')->andReturnUsing(function ($directory, $contents, $recursive) {
-            return $contents;
-        });
-
-        return $cache;
-    }
-
     public function testFileWithAliasWithMountManager()
     {
-        $fs = new Filesystem($this->mockLocalAdapter('small'), $this->mockPassthruCache());
-        $fs2 = new Filesystem($this->mockLocalAdapter('huge'), $this->mockPassthruCache());
+        $fs = new Filesystem($this->mockLocalAdapter('small'));
+        $fs2 = new Filesystem($this->mockLocalAdapter('huge'));
 
         $mountManager = new MountManager();
         $mountManager->mountFilesystem('local', $fs);

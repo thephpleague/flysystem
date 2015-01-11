@@ -2,6 +2,7 @@
 
 namespace League\Flysystem;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
@@ -22,11 +23,6 @@ class Filesystem implements FilesystemInterface
     protected $adapter;
 
     /**
-     * @var CacheInterface
-     */
-    protected $cache;
-
-    /**
      * @var Config
      */
     protected $config;
@@ -35,14 +31,11 @@ class Filesystem implements FilesystemInterface
      * Constructor.
      *
      * @param AdapterInterface $adapter
-     * @param CacheInterface   $cache
-     * @param mixed            $config
+     * @param Config|array     $config
      */
-    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null)
+    public function __construct(AdapterInterface $adapter, $config = null)
     {
         $this->adapter = $adapter;
-        $this->cache = $cache ?: new Cache\Memory();
-        $this->cache->load();
         $this->config = Util::ensureConfig($config);
     }
 
@@ -67,39 +60,13 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get the Cache.
-     *
-     * @return CacheInterface adapter
-     */
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function has($path)
     {
         $path = Util::normalizePath($path);
-        $exists = $this->cache->has($path);
 
-        if (is_bool($exists)) {
-            return $exists;
-        }
-
-        $result = $this->adapter->has($path);
-
-        if (! $result) {
-            $this->cache->storeMiss($path);
-
-            return false;
-        }
-
-        $object = is_array($result) ? $result : compact('path');
-        $this->cache->updateObject($path, $object, true);
-
-        return true;
+        return (bool) $this->adapter->has($path);
     }
 
     /**
@@ -111,13 +78,7 @@ class Filesystem implements FilesystemInterface
         $this->assertAbsent($path);
         $config = $this->prepareConfig($config);
 
-        if (! $object = $this->adapter->write($path, $contents, $config)) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object + compact('contents'), true);
-
-        return true;
+        return (bool) $this->adapter->write($path, $contents, $config);
     }
 
     /**
@@ -125,23 +86,17 @@ class Filesystem implements FilesystemInterface
      */
     public function writeStream($path, $resource, array $config = [])
     {
-        $path = Util::normalizePath($path);
-        $this->assertAbsent($path);
-        $config = $this->prepareConfig($config);
-
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
+        $path = Util::normalizePath($path);
+        $this->assertAbsent($path);
+        $config = $this->prepareConfig($config);
+
         Util::rewindStream($resource);
 
-        if (! $object = $this->adapter->writeStream($path, $resource, $config)) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object + ['contents' => false], true);
-
-        return true;
+        return (bool) $this->adapter->writeStream($path, $resource, $config);
     }
 
     /**
@@ -227,15 +182,8 @@ class Filesystem implements FilesystemInterface
         $config = $this->prepareConfig($config);
 
         $this->assertPresent($path);
-        $object = $this->adapter->update($path, $contents, $config);
 
-        if ($object === false) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object + compact('contents'), true);
-
-        return true;
+        return (bool) $this->adapter->update($path, $contents, $config);
     }
 
     /**
@@ -260,13 +208,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         Util::rewindStream($resource);
 
-        if (! $object = $this->adapter->updateStream($path, $resource, $config)) {
-            return false;
-        }
-
-        $this->cache->updateObject($path, $object + ['contents' => false], true);
-
-        return true;
+        return (bool) $this->adapter->updateStream($path, $resource, $config);
     }
 
     /**
@@ -284,15 +226,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($contents = $this->cache->read($path)) {
-            return $contents;
-        }
-
         if (! ($object = $this->adapter->read($path))) {
             return false;
         }
-
-        $this->cache->updateObject($path, $object, true);
 
         return $object['contents'];
     }
@@ -309,15 +245,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($stream = $this->cache->readStream($path)) {
-            return $stream;
-        }
-
         if (! $object = $this->adapter->readStream($path)) {
             return false;
         }
-
-        $this->cache->updateObject($path, $object, true);
 
         return $object['stream'];
     }
@@ -340,13 +270,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
-        if ($this->adapter->rename($path, $newpath) === false) {
-            return false;
-        }
-
-        $this->cache->rename($path, $newpath);
-
-        return true;
+        return (bool) $this->adapter->rename($path, $newpath);
     }
 
     /**
@@ -364,13 +288,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
-        if ($this->adapter->copy($path, $newpath) === false) {
-            return false;
-        }
-
-        $this->cache->copy($path, $newpath);
-
-        return true;
+        return $this->adapter->copy($path, $newpath);
     }
 
     /**
@@ -387,13 +305,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($this->adapter->delete($path) === false) {
-            return false;
-        }
-
-        $this->cache->delete($path);
-
-        return true;
+        return $this->adapter->delete($path);
     }
 
     /**
@@ -411,13 +323,7 @@ class Filesystem implements FilesystemInterface
             throw new RootViolationException('Root directories can not be deleted.');
         }
 
-        if ($this->adapter->deleteDir($dirname) === false) {
-            return false;
-        }
-
-        $this->cache->deleteDir($dirname);
-
-        return true;
+        return (bool) $this->adapter->deleteDir($dirname);
     }
 
     /**
@@ -427,16 +333,8 @@ class Filesystem implements FilesystemInterface
     {
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);
-        $result  = $this->adapter->createDir($dirname, $config);
 
-        if ($result === false) {
-            return false;
-        }
-
-        $result['type'] = 'dir';
-        $this->cache->updateObject($dirname, $result, true);
-
-        return true;
+        return (bool) $this->adapter->createDir($dirname, $config);
     }
 
     /**
@@ -450,14 +348,19 @@ class Filesystem implements FilesystemInterface
     public function listContents($directory = '', $recursive = false)
     {
         $directory = Util::normalizePath($directory);
-
-        if ($this->cache->isComplete($directory, $recursive)) {
-            return $this->cache->listContents($directory, $recursive);
-        }
-
         $contents = $this->adapter->listContents($directory, $recursive);
 
-        return $this->cache->storeContents($directory, $contents, $recursive);
+        return array_values(array_filter($contents, function ($entry) use ($directory, $recursive) {
+            if (! empty($directory) && strpos($entry['path'], $directory) === false) {
+                return false;
+            }
+
+            if ($recursive === false && Util::dirname($entry['path']) !== $directory) {
+                return false;
+            }
+
+            return true;
+        }));
     }
 
     /**
@@ -475,15 +378,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($mimetype = $this->cache->getMimetype($path)) {
-            return $mimetype;
-        }
-
         if (! $object = $this->adapter->getMimetype($path)) {
             return false;
         }
-
-        $object = $this->cache->updateObject($path, $object, true);
 
         return $object['mimetype'];
     }
@@ -503,15 +400,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($timestamp = $this->cache->getTimestamp($path)) {
-            return $timestamp;
-        }
-
         if (! $object = $this->adapter->getTimestamp($path)) {
             return false;
         }
-
-        $object = $this->cache->updateObject($path, $object, true);
 
         return $object['timestamp'];
     }
@@ -529,15 +420,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($visibility = $this->cache->getVisibility($path)) {
-            return $visibility;
-        }
-
         if (($object = $this->adapter->getVisibility($path)) === false) {
             return false;
         }
-
-        $this->cache->updateObject($path, $object, true);
 
         return $object['visibility'];
     }
@@ -553,19 +438,12 @@ class Filesystem implements FilesystemInterface
     public function getSize($path)
     {
         $path = Util::normalizePath($path);
-        $cached = $this->cache->getSize($path);
-
-        if ($cached !== false) {
-            return $cached;
-        }
 
         if (($object = $this->adapter->getSize($path)) === false || !isset($object['size'])) {
             return false;
         }
 
-        $this->cache->updateObject($path, $object, true);
-
-        return (integer) $object['size'];
+        return (int) $object['size'];
     }
 
     /**
@@ -580,17 +458,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        if (! $object = $this->adapter->setVisibility($path, $visibility)) {
-            return false;
-        }
-
-        if ($object === true) {
-            $object = compact('visibility');
-        }
-
-        $this->cache->updateObject($path, $object, true);
-
-        return true;
+        return (bool) $this->adapter->setVisibility($path, $visibility);
     }
 
     /**
@@ -608,15 +476,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if ($metadata = $this->cache->getMetadata($path)) {
-            return $metadata;
-        }
-
-        if (! $metadata = $this->adapter->getMetadata($path)) {
-            return false;
-        }
-
-        return $this->cache->updateObject($path, $metadata, true);
+        return $this->adapter->getMetadata($path);
     }
 
     /**
@@ -640,18 +500,6 @@ class Filesystem implements FilesystemInterface
         $handler->setFilesystem($this);
 
         return $handler;
-    }
-
-    /**
-     * Flush the cache.
-     *
-     * @return $this
-     */
-    public function flushCache()
-    {
-        $this->cache->flush();
-
-        return $this;
     }
 
     /**
@@ -703,6 +551,8 @@ class Filesystem implements FilesystemInterface
      * @param string $method
      * @param array  $arguments
      *
+     * @throws BadMethodCallException
+     *
      * @return mixed
      */
     public function __call($method, array $arguments)
@@ -710,7 +560,7 @@ class Filesystem implements FilesystemInterface
         try {
             return $this->invokePlugin($method, $arguments, $this);
         } catch (PluginNotFoundException $e) {
-            throw new \BadMethodCallException(
+            throw new BadMethodCallException(
                 'Call to undefined method '
                 .__CLASS__
                 .'::'.$method

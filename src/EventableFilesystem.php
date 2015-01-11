@@ -20,14 +20,13 @@ class EventableFilesystem extends Filesystem
      * Constructor.
      *
      * @param AdapterInterface $adapter
-     * @param CacheInterface   $cache
      * @param mixed            $config
      * @param Emitter          $emitter
      */
-    public function __construct(AdapterInterface $adapter, CacheInterface $cache = null, $config = null, Emitter $emitter = null)
+    public function __construct(AdapterInterface $adapter, $config = null, Emitter $emitter = null)
     {
         $this->setEmitter($emitter);
-        parent::__construct($adapter, $cache, $config);
+        parent::__construct($adapter, $config);
     }
 
     /**
@@ -84,49 +83,6 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * List all files in the directory.
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     * @param mixed  $config
-     *
-     * @return array
-     */
-    public function listFiles($directory = '', $recursive = false, array $config = [])
-    {
-        return $this->delegateMethodCall('listFiles', compact('directory', 'recursive', 'config'));
-    }
-
-    /**
-     * List all paths.
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     * @param mixed  $config
-     *
-     * @return array paths
-     */
-    public function listPaths($directory = '', $recursive = false, array $config = [])
-    {
-        return $this->delegateMethodCall('listPaths', compact('directory', 'recursive', 'config'));
-    }
-
-    /**
-     * List contents with metadata.
-     *
-     * @param array  $keys      metadata key
-     * @param string $directory
-     * @param bool   $recursive
-     * @param mixed  $config
-     *
-     * @return array listing with metadata
-     */
-    public function listWith(array $keys = [], $directory = '', $recursive = false, array $config = [])
-    {
-        return $this->delegateMethodCall('listWith', compact('keys', 'directory', 'recursive', 'config'));
-    }
-
-    /**
      * Get metadata for an object with required metadata.
      *
      * @param string $path     path to file
@@ -154,20 +110,6 @@ class EventableFilesystem extends Filesystem
     public function get($path, Handler $handler = null, array $config = [])
     {
         return $this->delegateMethodCall('get', compact('path', 'handler', 'config'));
-    }
-
-    /**
-     * Flush the cache.
-     *
-     * @param mixed $config
-     *
-     * @return $this
-     */
-    public function flushCache(array $config = [])
-    {
-        $this->delegateMethodCall('flushCache', compact('config'));
-
-        return $this;
     }
 
     /**

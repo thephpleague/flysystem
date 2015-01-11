@@ -170,7 +170,6 @@ class SftpTests extends PHPUnit_Framework_TestCase
         ]);
         $listing = $filesystem->listContents('', true);
         $this->assertInternalType('array', $listing);
-        $filesystem->getCache()->flush();
         $listing = $filesystem->listContents('', true);
         $this->assertInternalType('array', $listing);
         $this->assertCount(2, $listing);
@@ -194,7 +193,6 @@ class SftpTests extends PHPUnit_Framework_TestCase
      */
     public function testMetaMethods($filesystem, $adapter, $mock, $method, $type)
     {
-        $filesystem->flushCache();
         $mock->shouldReceive('stat')->andReturn([
             'type' => NET_SFTP_TYPE_DIRECTORY,
             'mtime' => time(),
@@ -284,7 +282,6 @@ class SftpTests extends PHPUnit_Framework_TestCase
         $result = $filesystem->getMimetype('some.file');
         $this->assertInternalType('string', $result);
         $this->assertEquals('text/plain', $result);
-        $filesystem->flushCache();
         $this->assertFalse($filesystem->getMimetype('some.file'));
     }
 

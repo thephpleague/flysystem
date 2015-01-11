@@ -24,7 +24,7 @@ class NullAdapterTest extends PHPUnit_Framework_TestCase
         $fs = $this->getFilesystem();
         $result = $fs->write('path', 'contents');
         $this->assertTrue($result);
-        $this->assertTrue($fs->has('path'));
+        $this->assertFalse($fs->has('path'));
     }
 
     /**
