@@ -255,9 +255,9 @@ class Util
     /**
      * Emulate the directories of a single object.
      *
-     * @param array $object
-     * @param array $directories
-     * @param array $listedDirectories
+     * @param  array $object
+     * @param  array $directories
+     * @param  array $listedDirectories
      * @return array
      */
     protected static function emulateObjectDirectories(array $object, array $directories, array $listedDirectories)
