@@ -182,7 +182,7 @@ abstract class AbstractCache implements CacheInterface
     public function read($path)
     {
         if (isset($this->cache[$path]['contents'])) {
-            return $this->cache[$path]['contents'];
+            return $this->cache[$path];
         }
 
         return false;
@@ -267,17 +267,17 @@ abstract class AbstractCache implements CacheInterface
     public function getMimetype($path)
     {
         if (isset($this->cache[$path]['mimetype'])) {
-            return $this->cache[$path]['mimetype'];
+            return $this->cache[$path];
         }
 
-        if (! $contents = $this->read($path)) {
+        if (! $result = $this->read($path)) {
             return false;
         }
 
-        $mimetype = Util::guessMimeType($path, $contents);
+        $mimetype = Util::guessMimeType($path, $result['contents']);
         $this->cache[$path]['mimetype'] = $mimetype;
 
-        return $mimetype;
+        return $this->cache[$path];
     }
 
     /**
@@ -286,7 +286,7 @@ abstract class AbstractCache implements CacheInterface
     public function getSize($path)
     {
         if (isset($this->cache[$path]['size'])) {
-            return $this->cache[$path]['size'];
+            return $this->cache[$path];
         }
 
         return false;
@@ -298,7 +298,7 @@ abstract class AbstractCache implements CacheInterface
     public function getTimestamp($path)
     {
         if (isset($this->cache[$path]['timestamp'])) {
-            return $this->cache[$path]['timestamp'];
+            return $this->cache[$path];
         }
 
         return false;
@@ -310,7 +310,7 @@ abstract class AbstractCache implements CacheInterface
     public function getVisibility($path)
     {
         if (isset($this->cache[$path]['visibility'])) {
-            return $this->cache[$path]['visibility'];
+            return $this->cache[$path];
         }
 
         return false;
@@ -365,7 +365,7 @@ abstract class AbstractCache implements CacheInterface
     {
         $cachedProperties = array_flip([
             'path', 'dirname', 'basename', 'extension', 'filename',
-            'size', 'mimetype', 'visibility', 'timestamp',
+            'size', 'mimetype', 'visibility', 'timestamp', 'type',
         ]);
 
         foreach ($contents as $path => $object) {
