@@ -16,7 +16,7 @@ class CopyTests extends PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        $adapter = new Copy($this->getClientMock(), 'prefix');
+        new Copy($this->getClientMock(), 'prefix');
     }
 
     public function copyProvider()
