@@ -193,15 +193,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function readStream($path)
     {
-        if (! isset($this->cache[$path]['stream'])) {
-            return false;
-        }
-
-        if (! is_resource($this->cache[$path]['stream'])) {
-            return false;
-        }
-
-        return $this->cache[$path]['stream'];
+        return false;
     }
 
     /**
