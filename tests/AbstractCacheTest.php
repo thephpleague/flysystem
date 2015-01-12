@@ -27,5 +27,6 @@ class AbstractCacheTest extends PHPUnit_Framework_TestCase
     {
         $cache = new Memory();
         $this->assertFalse($cache->copy('one', 'two'));
+        $this->assertNull($cache->load());
     }
 }

@@ -23,7 +23,7 @@ class GetWithMetadataTests extends ProphecyTestCase
     public function setupFilesystem()
     {
         $this->prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
-        $this->filesystem= $this->prophecy->reveal();
+        $this->filesystem = $this->prophecy->reveal();
     }
 
     public function testGetMethod()

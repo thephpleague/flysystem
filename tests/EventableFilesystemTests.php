@@ -3,11 +3,6 @@
 use League\Flysystem\Event\After;
 use League\Flysystem\Event\Before;
 use League\Flysystem\EventableFilesystem;
-use League\Flysystem\Plugin\GetWithMetadata;
-use League\Flysystem\Plugin\ListFiles;
-use League\Flysystem\Plugin\ListPaths;
-use League\Flysystem\Plugin\ListWith;
-use League\Flysystem\Util;
 
 class EventableFilesystemTests extends PHPUnit_Framework_TestCase
 {

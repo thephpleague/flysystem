@@ -11,7 +11,7 @@ class ListWithTests extends ProphecyTestCase
     {
         $prophecy = $this->prophesize('League\Flysystem\Filesystem');
         $prophecy->listContents('', true)->willReturn([
-           ['path' => 'path.txt', 'type' => 'file']
+           ['path' => 'path.txt', 'type' => 'file'],
         ]);
         $prophecy->getMimetype('path.txt')->willReturn('text/plain');
         $filesystem = $prophecy->reveal();
@@ -29,7 +29,7 @@ class ListWithTests extends ProphecyTestCase
     {
         $prophecy = $this->prophesize('League\Flysystem\Filesystem');
         $prophecy->listContents('', true)->willReturn([
-            ['path' => 'path.txt', 'type' => 'file']
+            ['path' => 'path.txt', 'type' => 'file'],
         ]);
         $filesystem = $prophecy->reveal();
 
@@ -37,6 +37,5 @@ class ListWithTests extends ProphecyTestCase
         $plugin = new ListWith();
         $plugin->setFilesystem($filesystem);
         $plugin->handle(['invalid'], '', true);
-
     }
 }

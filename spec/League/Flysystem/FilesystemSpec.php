@@ -3,7 +3,6 @@
 namespace spec\League\Flysystem;
 
 use League\Flysystem\AdapterInterface;
-use League\Flysystem\CacheInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Stub\PluginStub;
 use PhpSpec\ObjectBehavior;

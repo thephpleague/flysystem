@@ -2,7 +2,6 @@
 
 namespace League\Flysystem\Cache;
 
-use League\Flysystem\Util;
 
 class Noop extends AbstractCache
 {
