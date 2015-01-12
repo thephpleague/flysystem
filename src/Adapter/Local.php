@@ -50,7 +50,7 @@ class Local extends AbstractAdapter
     protected function ensureDirectory($root)
     {
         if (is_dir($root) === false) {
-            mkdir($root, 0755, true);
+            @mkdir($root, 0755, true);
         }
 
         return realpath($root);
