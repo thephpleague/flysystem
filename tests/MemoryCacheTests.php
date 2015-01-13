@@ -1,6 +1,7 @@
 <?php
 
 use League\Flysystem\Cache\Memory;
+use League\Flysystem\Util;
 
 class MemoryCacheTests extends PHPUnit_Framework_TestCase
 {
@@ -100,5 +101,56 @@ class MemoryCacheTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($cache->isComplete('dirname', true));
     }
 
+    public function testGetMetadataFail()
+    {
+        $cache = new Memory();
+        $this->assertFalse($cache->getMetadata('path.txt'));
+    }
 
+    public function metaGetterProvider()
+    {
+        return [
+            ['getTimestamp', 'timestamp', 12344],
+            ['getMimetype', 'mimetype', 'text/plain'],
+            ['getSize', 'size', 12],
+            ['getVisibility', 'visibility', 'private'],
+            ['read', 'contents', '__contents__'],
+        ];
+    }
+
+    /**
+     * @dataProvider metaGetterProvider
+     * @param $method
+     * @param $key
+     * @param $value
+     */
+    public function testMetaGetters($method, $key, $value)
+    {
+        $cache = new Memory();
+        $this->assertFalse($cache->{$method}('path.txt'));
+        $cache->updateObject('path.txt', $object = [
+            'path' => 'path.txt',
+            'type' => 'file',
+            $key => $value,
+        ] + Util::pathinfo('path.txt'), true);
+        $this->assertEquals($object, $cache->{$method}('path.txt'));
+        $this->assertEquals($object, $cache->getMetadata('path.txt'));
+    }
+
+    public function testGetDerivedMimetype()
+    {
+        $cache = new Memory();
+        $cache->updateObject('path.txt', [
+            'contents' => 'something',
+        ]);
+        $response = $cache->getMimetype('path.txt');
+        $this->assertEquals('text/plain', $response['mimetype']);
+    }
+
+    public function testCopyFail()
+    {
+        $cache = new Memory();
+        $this->assertFalse($cache->copy('one', 'two'));
+        $this->assertNull($cache->load());
+    }
 }

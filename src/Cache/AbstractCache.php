@@ -73,17 +73,9 @@ abstract class AbstractCache implements CacheInterface
             $object = $this->updateObject($object['path'], $object);
             $contents[$index] = $object;
 
-            if (! empty($directory) && strpos($object['path'], $directory) === false) {
-                unset($contents[$index]);
-                continue;
-            }
-
             if ($recursive && ! in_array($object['dirname'], $directories)) {
                 $directories[] = $object['dirname'];
-            }
-
-            if ($recursive === false && $object['dirname'] !== $directory) {
-                unset($contents[$index]);
+                $this->setComplete($object['dirname'], $recursive);
             }
         }
 
