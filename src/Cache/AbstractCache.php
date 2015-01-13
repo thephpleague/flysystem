@@ -66,7 +66,8 @@ abstract class AbstractCache implements CacheInterface
         $directories = [$directory];
 
         foreach ($contents as $index => $object) {
-            $object = $this->updateObject($object['path'], $object);
+            $this->updateObject($object['path'], $object);
+            $object = $this->cache[$object['path']];
 
             if ($recursive && (empty($directory) || strpos($object['dirname'], $directory) !== false)) {
                 $directories[] = $object['dirname'];

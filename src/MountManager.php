@@ -154,10 +154,8 @@ class MountManager
     public function listContents($directory = '', $recursive = false)
     {
         list($prefix, $arguments) = $this->filterPrefix([$directory]);
-
         $filesystem = $this->getFilesystem($prefix);
         $directory = array_shift($arguments);
-
         $result = $filesystem->listContents($directory, $recursive);
 
         foreach ($result as &$file) {
