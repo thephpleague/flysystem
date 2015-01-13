@@ -179,17 +179,14 @@ abstract class AbstractCache implements CacheInterface
      */
     public function rename($path, $newpath)
     {
-        if (! $this->has($path)) {
-            return false;
+        if ($this->has($path)) {
+            $object = $this->cache[$path];
+            unset($this->cache[$path]);
+            $object['path'] = $newpath;
+            $object = array_merge($object, Util::pathinfo($newpath));
+            $this->cache[$newpath] = $object;
+            $this->autosave();
         }
-
-        $object = $this->cache[$path];
-        unset($this->cache[$path]);
-        $object['path'] = $newpath;
-        $object = array_merge($object, Util::pathinfo($newpath));
-        $this->cache[$newpath] = $object;
-
-        $this->autosave();
     }
 
     /**
@@ -197,14 +194,11 @@ abstract class AbstractCache implements CacheInterface
      */
     public function copy($path, $newpath)
     {
-        if (! $this->has($path)) {
-            return false;
+        if ($this->has($path)) {
+            $object = $this->cache[$path];
+            $object = array_merge($object, Util::pathinfo($newpath));
+            $this->updateObject($newpath, $object, true);
         }
-
-        $object = $this->cache[$path];
-        $object = array_merge($object, Util::pathinfo($newpath));
-
-        return $this->updateObject($newpath, $object, true);
     }
 
     /**
@@ -212,11 +206,7 @@ abstract class AbstractCache implements CacheInterface
      */
     public function delete($path)
     {
-        if (isset($this->cache[$path])) {
-            unset($this->cache[$path]);
-        }
-
-        $this->autosave();
+        $this->storeMiss($path);
     }
 
     /**

@@ -150,7 +150,8 @@ class MemoryCacheTests extends PHPUnit_Framework_TestCase
     public function testCopyFail()
     {
         $cache = new Memory();
-        $this->assertFalse($cache->copy('one', 'two'));
+        $cache->copy('one', 'two');
+        $this->assertNull($cache->has('two'));
         $this->assertNull($cache->load());
     }
 
@@ -165,5 +166,63 @@ class MemoryCacheTests extends PHPUnit_Framework_TestCase
         ], true);
 
         $this->isTrue($cache->isComplete('other/nested', true));
+    }
+
+    public function testDelete()
+    {
+        $cache = new Memory();
+        $cache->updateObject('path.txt', ['type' => 'file']);
+        $this->assertTrue($cache->has('path.txt'));
+        $cache->delete('path.txt');
+        $this->assertFalse($cache->has('path.txt'));
+    }
+
+    public function testDeleteDir()
+    {
+        $cache = new Memory();
+        $cache->storeContents('dirname', [
+            ['path' => 'dirname/path.txt', 'type' => 'file']
+        ]);
+        $this->assertTrue($cache->isComplete('dirname', false));
+        $this->assertTrue($cache->has('dirname/path.txt'));
+        $cache->deleteDir('dirname');
+        $this->assertFalse($cache->isComplete('dirname', false));
+        $this->assertNull($cache->has('dirname/path.txt'));
+    }
+
+    public function testReadStream()
+    {
+        $cache = new Memory();
+        $this->assertFalse($cache->readStream('path.txt'));
+    }
+
+    public function testRename()
+    {
+        $cache = new Memory();
+        $cache->updateObject('path.txt', ['type' => 'file']);
+        $cache->rename('path.txt', 'newpath.txt');
+        $this->assertTrue($cache->has('newpath.txt'));
+    }
+
+    public function testCopy()
+    {
+        $cache = new Memory();
+        $cache->updateObject('path.txt', ['type' => 'file']);
+        $cache->copy('path.txt', 'newpath.txt');
+        $this->assertTrue($cache->has('newpath.txt'));
+    }
+
+    public function testComplextListContents()
+    {
+        $cache = new Memory();
+        $cache->storeContents('', [
+            ['path' => 'dirname', 'type' => 'dir'],
+            ['path' => 'dirname/file.txt', 'type' => 'file'],
+            ['path' => 'other', 'type' => 'dir'],
+            ['path' => 'other/file.txt', 'type' => 'file'],
+            ['path' => 'other/nested/file.txt', 'type' => 'file'],
+        ]);
+
+        $this->assertCount(3, $cache->listContents('other', true));
     }
 }
