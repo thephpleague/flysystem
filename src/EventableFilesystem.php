@@ -83,22 +83,6 @@ class EventableFilesystem extends Filesystem
     }
 
     /**
-     * Get metadata for an object with required metadata.
-     *
-     * @param string $path     path to file
-     * @param array  $metadata metadata keys
-     * @param array  $config
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return array metadata
-     */
-    public function getWithMetadata($path, array $metadata, array $config = [])
-    {
-        return $this->delegateMethodCall('getWithMetadata', compact('path', 'metadata', 'config'));
-    }
-
-    /**
      * Get a file/directory handler.
      *
      * @param string  $path
