@@ -1,6 +1,7 @@
 <?php
 
 
+use League\Flysystem\Directory;
 use League\Flysystem\File;
 use Prophecy\PhpUnit\ProphecyTestCase;
 
@@ -116,5 +117,27 @@ class HandlerTests extends ProphecyTestCase
         $file = new File();
         $file->setPath('path.txt');
         $this->assertEquals('path.txt', $file->getPath());
+    }
+
+    public function testDirDelete()
+    {
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $prophecy->deleteDir('path')->willReturn(true);
+        $filesystem = $prophecy->reveal();
+        $dir = new Directory(null, 'path');
+        $dir->setFilesystem($filesystem);
+        $output = $dir->delete();
+        $this->assertTrue($output);
+    }
+
+    public function testDirListContents()
+    {
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $prophecy->listContents('path', true)->willReturn($listing = ['listing']);
+        $filesystem = $prophecy->reveal();
+        $dir = new Directory(null, 'path');
+        $dir->setFilesystem($filesystem);
+        $output = $dir->getContents(true);
+        $this->assertEquals($listing, $output);
     }
 }
