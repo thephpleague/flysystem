@@ -260,4 +260,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
     }
+
+    public function testApplyPathPrefix()
+    {
+        $this->adapter->setPathPrefix('');
+        $this->assertEquals('', $this->adapter->applyPathPrefix(''));
+    }
 }
