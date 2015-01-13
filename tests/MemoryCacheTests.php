@@ -153,4 +153,17 @@ class MemoryCacheTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($cache->copy('one', 'two'));
         $this->assertNull($cache->load());
     }
+
+    public function testStoreContents()
+    {
+        $cache = new Memory();
+        $cache->storeContents('dirname', [
+            ['path' => 'dirname', 'type' => 'dir'],
+            ['path' => 'dirname/nested', 'type' => 'dir'],
+            ['path' => 'dirname/nested/deep', 'type' => 'dir'],
+            ['path' => 'other/nested/deep', 'type' => 'dir'],
+        ], true);
+
+        $this->isTrue($cache->isComplete('other/nested', true));
+    }
 }

@@ -71,11 +71,9 @@ abstract class AbstractCache implements CacheInterface
 
         foreach ($contents as $index => $object) {
             $object = $this->updateObject($object['path'], $object);
-            $contents[$index] = $object;
 
-            if ($recursive && ! in_array($object['dirname'], $directories)) {
+            if ($recursive && (empty($directory) || strpos($object['dirname'], $directory) !== false)) {
                 $directories[] = $object['dirname'];
-                $this->setComplete($object['dirname'], $recursive);
             }
         }
 
@@ -84,8 +82,6 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->autosave();
-
-        return array_values($contents);
     }
 
     /**
@@ -108,23 +104,17 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->ensureParentDirectories($path);
-
-        return $this->cache[$path];
     }
 
     /**
      * Store object hit miss.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function storeMiss($path)
     {
         $this->cache[$path] = false;
         $this->autosave();
-
-        return $this;
     }
 
     /**

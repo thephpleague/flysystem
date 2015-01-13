@@ -19,8 +19,6 @@ interface CacheInterface extends ReadInterface
      *
      * @param string $dirname
      * @param bool   $recursive
-     *
-     * @return $this
      */
     public function setComplete($dirname, $recursive);
 
@@ -30,8 +28,6 @@ interface CacheInterface extends ReadInterface
      * @param string $directory
      * @param array  $contents
      * @param bool   $recursive
-     *
-     * @return array contents
      */
     public function storeContents($directory, array $contents, $recursive);
 
@@ -60,8 +56,6 @@ interface CacheInterface extends ReadInterface
      *
      * @param string $path
      * @param string $newpath
-     *
-     * @return bool
      */
     public function rename($path, $newpath);
 
@@ -70,8 +64,6 @@ interface CacheInterface extends ReadInterface
      *
      * @param string $path
      * @param string $newpath
-     *
-     * @return bool
      */
     public function copy($path, $newpath);
 
@@ -79,8 +71,6 @@ interface CacheInterface extends ReadInterface
      * Delete an object from cache.
      *
      * @param string $path object path
-     *
-     * @return $this
      */
     public function delete($path);
 
@@ -88,8 +78,6 @@ interface CacheInterface extends ReadInterface
      * Delete all objects from from a directory.
      *
      * @param string $dirname directory path
-     *
-     * @return $this
      */
     public function deleteDir($dirname);
 
@@ -106,8 +94,6 @@ interface CacheInterface extends ReadInterface
      * Store object hit miss.
      *
      * @param string $path
-     *
-     * @return $this
      */
     public function storeMiss($path);
 }
