@@ -87,4 +87,34 @@ class HandlerTests extends ProphecyTestCase
         $output = $file->{$method}();
         $this->assertEquals($response, $output);
     }
+
+    public function testFileIsFile()
+    {
+        $response = ['type' => 'file'];
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $prophecy->getMetadata('path.txt')->willReturn($response);
+        $filesystem = $prophecy->reveal();
+        $file = new File(null, 'path.txt');
+        $file->setFilesystem($filesystem);
+        $this->assertTrue($file->isFile());
+    }
+
+    public function testFileIsDir()
+    {
+        $response = ['type' => 'file'];
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $prophecy->getMetadata('path.txt')->willReturn($response);
+        $filesystem = $prophecy->reveal();
+        $file = new File();
+        $file->setPath('path.txt');
+        $file->setFilesystem($filesystem);
+        $this->assertFalse($file->isDir());
+    }
+
+    public function testFileGetPath()
+    {
+        $file = new File();
+        $file->setPath('path.txt');
+        $this->assertEquals('path.txt', $file->getPath());
+    }
 }
