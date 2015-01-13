@@ -46,14 +46,10 @@ abstract class AbstractCache implements CacheInterface
      * Get the autosave setting.
      *
      * @param bool $autosave
-     *
-     * @return $this
      */
     public function setAutosave($autosave)
     {
         $this->autosave = $autosave;
-
-        return $this;
     }
 
     /**
@@ -221,8 +217,6 @@ abstract class AbstractCache implements CacheInterface
         }
 
         $this->autosave();
-
-        return $this;
     }
 
     /**
@@ -332,8 +326,6 @@ abstract class AbstractCache implements CacheInterface
     public function setComplete($dirname, $recursive)
     {
         $this->complete[$dirname] = $recursive ? 'recursive' : true;
-
-        return $this;
     }
 
     /**
