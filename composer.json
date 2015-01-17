@@ -22,7 +22,6 @@
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
         "predis/predis": "~1.0",
-        "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
         "phpspec/phpspec": "~2.0.0",
@@ -42,7 +41,6 @@
         "ext-fileinfo": "Required for MimeType",
         "league/event": "Required for EventableFilesystem",
         "predis/predis": "Allows you to use Predis for caching",
-        "phpseclib/phpseclib": "Allows SFTP server storage",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
         "league/flysystem-copy": "Allows you to use Copy.com storage",
         "tedivm/stash": "Allows you to use Stash as cache implementation",
@@ -51,7 +49,8 @@
         "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
         "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
         "league/flysystem-dropbox": "Use Dropbox storage",
-        "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching"
+        "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
+        "league/flysystem-sftp": "Allows SFTP server storage via phpseclib"
     },
     "config": {
         "bin-dir": "bin"
