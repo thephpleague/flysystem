@@ -2,8 +2,6 @@
 
 namespace League\Flysystem\Cache;
 
-use Memcached as NativeMemcached;
-
 class Memcached extends AbstractCache
 {
     /**
@@ -28,7 +26,7 @@ class Memcached extends AbstractCache
      * @param string     $key       storage key
      * @param int|null   $expire    seconds until cache expiration
      */
-    public function __construct(NativeMemcached $memcached, $key = 'flysystem', $expire = null)
+    public function __construct(\Memcached $memcached, $key = 'flysystem', $expire = null)
     {
         $this->key = $key;
         $this->expire = $expire;
