@@ -18,7 +18,6 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
         "predis/predis": "~1.0",
