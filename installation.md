@@ -8,12 +8,8 @@ title: Installation
 
 Through Composer, obviously:
 
-~~~ json
-{
-    "require": {
-        "league/flysystem": "0.5.*"
-    }
-}
+~~~ bash
+composer require league/flysystem
 ~~~
 
 You can also use Flysystem without using Composer by registering an autoloader function:

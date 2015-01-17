@@ -6,11 +6,21 @@ title: Dropbox Adapter
 
 # Dropbox Adapter
 
-~~~ php
-use Dropbox\Client;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Dropbox as Adapter;
+## Installation
 
-$client = new Client($token, $appName);
-$filesystem = new Filesystem(new Adapter($client, 'optional/path/prefix'));
+~~~ bash
+composer require league/flysystem-dropbox
+~~~
+
+## Usage
+
+~~~ php
+use League\Flysystem\Dropbox\DropboxAdapter;
+use League\Flysystem\Filesystem;
+use Dropbox\Client;
+
+$client = new Client(/* CREDENTIALS */);
+$adapter = new DropboxAdapter($client, [$prefix]);
+
+$filesystem = new Filesystem($adapter);
 ~~~

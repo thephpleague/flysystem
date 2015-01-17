@@ -6,11 +6,19 @@ title: Rackspace Adapter
 
 # Rackspace Adapter
 
+## Installation
+
+~~~ bash
+composer require league/flysystem-rackspace
+~~~
+
+## Usage
+
 ~~~ php
 use OpenCloud\OpenStack;
 use OpenCloud\Rackspace;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Rackspace as Adapter;
+use League\Flysystem\Rackspace\RackspaceAdapter;
 
 $client = new OpenStack(Rackspace::UK_IDENTITY_ENDPOINT, array(
     'username' => ':username',
@@ -20,5 +28,5 @@ $client = new OpenStack(Rackspace::UK_IDENTITY_ENDPOINT, array(
 $store = $client->objectStoreService('cloudFiles', 'LON');
 $container = $store->getContainer('flysystem');
 
-$filesystem = new Filesystem(new Adapter($container));
+$filesystem = new Filesystem(new RackspaceAdapter($container));
 ~~~

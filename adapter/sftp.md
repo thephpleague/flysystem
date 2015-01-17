@@ -6,11 +6,19 @@ title: SFTP Adapter
 
 # SFTP Adapter
 
+## Installation
+
+~~~ bash
+composer require league/flysystem-sftp
+~~~
+
+## Usage
+
 ~~~ php
 use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Sftp as Adapter;
+use League\Flysystem\Sftp\SftpAdapter;
 
-$filesystem = new Filesystem(new Adapter(array(
+$filesystem = new Filesystem(new SftpAdapter(array(
     'host' => 'example.com',
     'port' => 21,
     'username' => 'username',

@@ -6,7 +6,8 @@ Getting Started:
     Caching: '/caching/'
 Adapters:
     Local: '/adapter/local/'
-    AWS S3: '/adapter/aws-s3/'
+    AWS S3 V2: '/adapter/aws-s3-v2/'
+    AWS S3 V3: '/adapter/aws-s3-v3/'
     Copy.com: '/adapter/copy/'
     Dropbox: '/adapter/dropbox/'
     FTP: '/adapter/ftp/'
