@@ -14,7 +14,6 @@ use LogicException;
  *
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
- * @method CacheInterface getCache($prefix)
  * @method bool has($path)
  * @method bool write($path, $contents, array $config = [])
  * @method bool writeStream($path, $resource, array $config = [])
