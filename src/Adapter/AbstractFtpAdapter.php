@@ -452,7 +452,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     abstract public function connect();
 
     /**
-     * Close the connection
+     * Close the connection.
      */
     abstract public function disconnect();
 }
