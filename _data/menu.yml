@@ -4,6 +4,7 @@ Getting Started:
     Integrations: '/integrations/'
     The API: '/api/'
     Caching: '/caching/'
+    Upgrade to 1.0.0: '/upgrade-to-1.0.0/'
 Adapters:
     Local: '/adapter/local/'
     AWS S3 V2: '/adapter/aws-s3-v2/'
