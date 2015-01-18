@@ -14,7 +14,6 @@ use LogicException;
  *
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
- * @method CacheInterface getCache($prefix)
  * @method bool has($path)
  * @method bool write($path, $contents, array $config = [])
  * @method bool writeStream($path, $resource, array $config = [])
@@ -147,17 +146,16 @@ class MountManager
     }
 
     /**
-     * @param  string $directory
-     * @param  bool   $recursive
+     * @param string $directory
+     * @param bool   $recursive
+     *
      * @return array
      */
     public function listContents($directory = '', $recursive = false)
     {
         list($prefix, $arguments) = $this->filterPrefix([$directory]);
-
         $filesystem = $this->getFilesystem($prefix);
         $directory = array_shift($arguments);
-
         $result = $filesystem->listContents($directory, $recursive);
 
         foreach ($result as &$file) {
@@ -168,7 +166,7 @@ class MountManager
     }
 
     /**
-     * Call forwarder
+     * Call forwarder.
      *
      * @param string $method
      * @param array  $arguments

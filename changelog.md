@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.6.0 - UNRELEASED
+## 1.0.0 - UNRELEASED
+
+### Removed
+
+* Adapters moved into their own repo's: AwsS3, Dropbox, GridFS, Rackspace
+* [Filesystem] Caching is removed and moved into it's own repo as an adapter decorator.
 
 ### Fixed
 

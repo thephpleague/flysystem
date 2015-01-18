@@ -30,6 +30,6 @@ class ListFiles extends AbstractPlugin
             return $object['type'] === 'file';
         };
 
-        return array_filter($contents, $filter);
+        return array_values(array_filter($contents, $filter));
     }
 }

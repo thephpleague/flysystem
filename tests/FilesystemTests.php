@@ -1,672 +1,365 @@
 <?php
 
-namespace League\Flysystem\Adapter
-{
-    function mkdir($path, $mode, $recursive)
-    {
-        if (strpos($path, 'mkdir.fail') !== false) {
-            return false;
-        }
+use League\Flysystem\Config;
+use League\Flysystem\Filesystem;
+use Prophecy\Argument;
+use Prophecy\Argument\Token\TypeToken;
+use Prophecy\PhpUnit\ProphecyTestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
-        return \mkdir($path, $mode, $recursive);
+class FilesystemTests extends ProphecyTestCase
+{
+    /**
+     * @var ObjectProphecy
+     */
+    protected $prophecy;
+
+    /**
+     * @var AdapterInterface
+     */
+    protected $adapter;
+
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var TypeToken
+     */
+    protected $config;
+
+    /**
+     * @before
+     */
+    public function setupAdapter()
+    {
+        $this->prophecy = $this->prophesize('League\\Flysystem\\AdapterInterface');
+        $this->adapter = $this->prophecy->reveal();
+        $this->filesystem = new Filesystem($this->adapter);
+        $this->config = Argument::type('League\\Flysystem\\Config');
     }
-}
 
-namespace League\Flysystem
-{
-    use League\Flysystem\Plugin\GetWithMetadata;
-    use League\Flysystem\Plugin\ListFiles;
-    use League\Flysystem\Plugin\ListPaths;
-    use League\Flysystem\Plugin\ListWith;
-    use Mockery;
-
-    class FilesystemTests extends \PHPUnit_Framework_TestCase
+    public function testGetAdapter()
     {
-        public function setup()
-        {
-            clearstatcache();
-            $fs = new Adapter\Local(__DIR__.'/');
-            $fs->deleteDir('files');
-            $fs->createDir('files', new Config());
-        }
-
-        public function teardown()
-        {
-            $this->setup();
-        }
-
-        public function testInstantiable()
-        {
-            $instance = new Filesystem($adapter = new Adapter\Local(__DIR__.'/files/deeper'), $cache = new Cache\Memory());
-        }
-
-        public function filesystemProvider()
-        {
-            $adapter = new Adapter\Local(__DIR__.'/files');
-            $cache = new Cache\Memory();
-            $filesystem = new Filesystem($adapter, $cache);
-
-            return [
-                [$filesystem, $adapter, $cache],
-            ];
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testListContents($filesystem)
-        {
-            $result = $filesystem->listContents();
-            $this->assertInternalType('array', $result);
-            $this->assertCount(0, $result);
-            $filesystem->flushCache();
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testIsComplete(FilesystemInterface $filesystem, AdapterInterface $adapter, $cache)
-        {
-            $this->assertFalse($cache->isComplete('', false));
-            $filesystem->listContents();
-            $this->assertTrue($cache->isComplete('', false));
-            $cache->flush();
-            $this->assertFalse($cache->isComplete('', false));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testDepGetters($filesystem)
-        {
-            $this->assertInstanceOf('League\Flysystem\CacheInterface', $filesystem->getCache());
-            $this->assertInstanceOf('League\Flysystem\ReadInterface', $filesystem->getCache());
-            $this->assertInstanceOf('League\Flysystem\Cache\AbstractCache', $filesystem->getCache());
-            $this->assertInstanceOf('League\Flysystem\AdapterInterface', $filesystem->getAdapter());
-            $this->assertInstanceOf('League\Flysystem\ReadInterface', $filesystem->getAdapter());
-            $this->assertInstanceOf('League\Flysystem\Adapter\AbstractAdapter', $filesystem->getAdapter());
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testWrite(Filesystem $filesystem, AdapterInterface $adapter, $cache)
-        {
-            $this->assertTrue($filesystem->write('some_file.txt', 'some content'));
-            $this->assertTrue($filesystem->has('some_file.txt'));
-            $this->assertTrue($cache->has('some_file.txt'));
-            $this->assertTrue($adapter->has('some_file.txt'));
-            $this->assertCount(1, $filesystem->listContents());
-            $this->assertCount(1, $cache->listContents('', false));
-            $this->assertCount(1, $adapter->listContents('', false));
-
-            $filesystem->rename('some_file.txt', 'other_name.txt');
-            $this->assertFalse($filesystem->has('some_file.txt'));
-            $this->assertFalse($cache->has('some_file.txt'));
-            $this->assertFalse($adapter->has('some_file.txt'));
-            $this->assertTrue($filesystem->has('other_name.txt'));
-            $this->assertTrue($cache->has('other_name.txt'));
-            $this->assertTrue($adapter->has('other_name.txt'));
-            $this->assertCount(1, $filesystem->listContents());
-            $this->assertCount(1, $cache->listContents('', false));
-            $this->assertCount(1, $adapter->listContents('', false));
-
-            $filesystem->delete('other_name.txt');
-            $this->assertFalse($filesystem->has('other_name.txt'));
-            $this->assertFalse($cache->has('other_name.txt'));
-            $this->assertFalse($adapter->has('other_name.txt'));
-            $this->assertCount(0, $filesystem->listContents());
-            $this->assertCount(0, $cache->listContents('', false));
-            $this->assertCount(0, $adapter->listContents('', false));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testCopy(Filesystem $filesystem, $adapter, $cache)
-        {
-            $filesystem->write('test.txt', 'dummy');
-            $this->assertFalse($filesystem->has('copied.txt'));
-            $filesystem->copy('test.txt', 'copied.txt');
-            $this->assertTrue($filesystem->has('copied.txt'));
-        }
-
-        public function testCopyFail()
-        {
-            $mock = Mockery::mock('League\Flysystem\AdapterInterface');
-            $mock->shouldReceive('write')->andReturn([
-                'path' => 'path.txt',
-            ]);
-            $mock->shouldReceive('copy')->andReturn(false);
-            $mock->shouldReceive('has')->with('path.txt')->andReturn(false, true);
-            $mock->shouldReceive('has')->with('new.txt')->andReturn(false);
-
-            $filesystem = new Filesystem($mock);
-            $filesystem->write('path.txt', 'content');
-            $this->assertFalse($filesystem->copy('path.txt', 'new.txt'));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testPut(Filesystem $filesystem, $adapter, $cache)
-        {
-            $filesystem->flushCache();
-            $this->assertFalse($filesystem->has('new_file.txt'));
-            $this->assertTrue($filesystem->put('new_file.txt', 'new content'));
-            $this->assertTrue($filesystem->has('new_file.txt'));
-            $this->assertEquals('new content', $filesystem->read('new_file.txt'));
-
-            $this->assertTrue($filesystem->put('new_file.txt', 'modified content'));
-            $this->assertEquals('modified content', $filesystem->read('new_file.txt'));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testPutStream(Filesystem $filesystem, $adapter, $cache)
-        {
-            $filesystem->flushCache();
-            $stream = tmpfile();
-            fwrite($stream, 'new content');
-            $this->assertFalse($filesystem->has('new_file.txt'));
-            $this->assertTrue($filesystem->putStream('new_file.txt', $stream));
-            fclose($stream);
-            unset($stream);
-            $this->assertTrue($filesystem->has('new_file.txt'));
-            $this->assertEquals('new content', $filesystem->read('new_file.txt'));
-
-            $update = tmpfile();
-            fwrite($update, 'modified content');
-            $this->assertTrue($filesystem->putStream('new_file.txt', $update));
-            $filesystem->flushCache();
-            fclose($update);
-            $this->assertEquals('modified content', $filesystem->read('new_file.txt'));
-        }
-
-        public function testPutFail()
-        {
-            $mock = \Mockery::mock('League\Flysystem\AdapterInterface');
-            $mock->shouldReceive('has')->andReturn(true);
-            $mock->shouldReceive('update')->andReturn(false);
-            $filesystem = new Filesystem($mock);
-            $this->assertFalse($filesystem->put('something', 'something'));
-        }
-
-        /**
-         * @expectedException  \League\Flysystem\FileExistsException
-         */
-        public function testFileExists()
-        {
-            $filesystem = new Filesystem(new Adapter\Local(__DIR__));
-            $filesystem->write('FilesystemTests.php', 'something');
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         * @expectedException  \League\Flysystem\FileNotFoundException
-         */
-        public function testFileNotFoundUpdate($filesystem)
-        {
-            $filesystem->update('not_found', 'content');
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         * @expectedException  \League\Flysystem\FileNotFoundException
-         */
-        public function testFileNotFoundDelete($filesystem)
-        {
-            $filesystem->delete('not_found');
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         * @expectedException  \League\Flysystem\RootViolationException
-         */
-        public function testRootViolationProtection($filesystem)
-        {
-            $filesystem->deleteDir('./');
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testImplicitDirs($filesystem, $adapter, $cache)
-        {
-            $this->assertCount(0, $filesystem->listContents());
-            $filesystem->write('dummy.txt', 'content');
-            $this->assertCount(1, $filesystem->listContents());
-            $filesystem->write('nested/dir/dummy.txt', 'text');
-            $this->assertCount(4, $filesystem->listContents('', true));
-            $this->assertTrue($cache->isComplete('nested/dir', true));
-            $filesystem->deleteDir('nested');
-            $this->assertCount(1, $filesystem->listContents('', true));
-            $filesystem->delete('dummy.txt');
-            $this->assertCount(0, $filesystem->listContents('', true));
-            $filesystem->flushCache();
-        }
-
-        public function metaProvider()
-        {
-            $adapter = new Adapter\Local(__DIR__.'/files');
-            $cache = new Cache\Memory();
-            $filesystem = new Filesystem($adapter, $cache);
-
-            return [
-                [$filesystem, $adapter, $cache, 'getTimestamp', 'timestamp', 'int', 100],
-                [$filesystem, $adapter, $cache, 'getMimetype', 'mimetype', 'string', 'plain/text'],
-                [$filesystem, $adapter, $cache, 'getSize', 'size', 'int', 10],
-                [$filesystem, $adapter, $cache, 'getVisibility', 'visibility', 'string', 'public'],
-            ];
-        }
-
-        /**
-         * @dataProvider metaProvider
-         */
-        public function testGetters($filesystem, $adapter, $cache, $method, $key, $type, $mockValue)
-        {
-            $filesystem->write('test.txt', 'something');
-            $cache->flush();
-            $this->assertEquals('something', $filesystem->read('test.txt'));
-            $value = $filesystem->{$method}('test.txt');
-            $this->assertInternalType($type, $value);
-            $cache->updateObject('test.txt', [$key => $mockValue]);
-            $this->assertEquals($mockValue, $filesystem->{$method}('test.txt'));
-            $cache->flush();
-            $this->assertEquals($value, $filesystem->{$method}('test.txt'));
-            $filesystem->delete('test.txt');
-            $cache->flush();
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testWriteReadUpdate($filesystem, $adapter, $cache)
-        {
-            $filesystem->write('test.txt', 'first');
-            $this->assertEquals('first', $filesystem->read('test.txt'));
-            $this->assertEquals('first', $cache->read('test.txt'));
-            $cache->flush();
-            $this->assertEquals('first', $filesystem->read('test.txt'));
-            $filesystem->update('test.txt', 'second');
-            $this->assertEquals('second', $filesystem->read('test.txt'));
-            $this->assertEquals('second', $cache->read('test.txt'));
-            $cache->flush();
-            $this->assertEquals('second', $filesystem->read('test.txt'));
-            $filesystem->delete('test.txt');
-            $cache->flush();
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testVisibility($filesystem, $adapter, $cache)
-        {
-            if (strtolower(substr(php_uname('a'), 0, 3)) === 'win') {
-                $this->markTestSkipped('Windows does not support file permissions.');
-            }
-
-            $filesystem->write('test.txt', 'something', ['visibility' => 'private']);
-            $this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $filesystem->getVisibility('test.txt'));
-            $this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $cache->getVisibility('test.txt'));
-            $filesystem->flushCache();
-            $this->assertEquals(AdapterInterface::VISIBILITY_PRIVATE, $filesystem->getVisibility('test.txt'));
-            $filesystem->setVisibility('test.txt', AdapterInterface::VISIBILITY_PUBLIC);
-            $this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $filesystem->getVisibility('test.txt'));
-            $this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $cache->getVisibility('test.txt'));
-            $filesystem->flushCache();
-            $this->assertEquals(AdapterInterface::VISIBILITY_PUBLIC, $filesystem->getVisibility('test.txt'));
-            $filesystem->delete('test.txt');
-            $cache->flush();
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testGetMetadata($filesystem)
-        {
-            $filesystem->write('test.txt', 'contents');
-            $meta = $filesystem->getMetadata('test.txt');
-            $this->assertInternalType('array', $meta);
-            $filesystem->flushCache();
-            $meta = $filesystem->getMetadata('test.txt');
-            $this->assertInternalType('array', $meta);
-            $this->assertArrayHasKey('filename', $meta);
-            $this->assertArrayHasKey('dirname', $meta);
-            $this->assertArrayHasKey('path', $meta);
-            $this->assertArrayHasKey('type', $meta);
-            $this->assertArrayHasKey('basename', $meta);
-            $this->assertArrayHasKey('extension', $meta);
-            $filesystem->delete('test.txt');
-        }
-
-        public function testRenameFailure()
-        {
-            $cache = new Cache\Memory(__DIR__);
-            $this->assertFalse($cache->rename('something', 'to.this'));
-        }
-
-        public function testCacheStorage()
-        {
-            $cache = new Cache\Memory(__DIR__);
-            $input = [['contents' => 'hehe', 'filename' => 'with contents'], ['filename' => 'no contents']];
-            $expected = [['filename' => 'with contents'], ['filename' => 'no contents']];
-            $json = json_encode([[], []]);
-            $output = $cache->cleanContents($input);
-            $this->assertEquals($expected, $output);
-            $this->assertEquals($json, $cache->getForStorage());
-            $input = json_encode([[], []]);
-            $cache->setFromStorage($input);
-            $this->assertEquals($input, $cache->getForStorage());
-        }
-
-        public function testAutosave()
-        {
-            $cache = new Cache\Memory(__DIR__);
-            $this->assertTrue($cache->getAutosave());
-            $cache->setAutosave(false);
-            $this->assertFalse($cache->getAutosave());
-        }
-
-        public function failProvider()
-        {
-            return [
-                ['rename', true],
-                ['write', false],
-                ['update', true],
-                ['read', true],
-                ['delete', true],
-                ['deleteDir', true],
-                ['getMimetype', true],
-                ['getTimestamp', true],
-                ['getSize', true],
-                ['getVisibility', true],
-                ['setVisibility', true],
-                ['getMetadata', true],
-            ];
-        }
-
-        /**
-         * @dataProvider failProvider
-         */
-        public function testAdapterFail($method, $hasfile)
-        {
-            $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
-            $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
-            $cachemock->shouldReceive('load')->andReturn([]);
-            $cachemock->shouldReceive('has')->andReturn(null);
-            $cachemock->shouldReceive('isComplete')->andReturn(false);
-            $cachemock->shouldReceive('updateObject')->andReturn(false);
-            $cachemock->shouldReceive('storeMiss')->andReturn(false);
-            $mock->shouldReceive('__toString')->andReturn('Flysystem\Adapter\AbstractAdapter');
-            $cachemock->shouldReceive('__toString')->andReturn('Flysystem\Cache\AbstractCache');
-            $mock->shouldReceive('has')->with('other.txt')->andReturn(false);
-            $cachemock->shouldReceive($method)->andReturn(false);
-            $mock->shouldReceive('has')->with('dummy.txt')->andReturn($hasfile);
-            $mock->shouldReceive($method)->andReturn(false);
-            $filesystem = new Filesystem($mock, $cachemock);
-            $this->assertFalse($filesystem->{$method}('dummy.txt', 'other.txt'));
-        }
-
-        public function testFailingPut()
-        {
-            $mock = \Mockery::mock('League\Flysystem\Adapter\AbstractAdapter');
-            $cachemock = \Mockery::mock('League\Flysystem\Cache\AbstractCache');
-            $cachemock->shouldReceive('load')->andReturn([]);
-            $cachemock->shouldReceive('has')->andReturn(false);
-            $cachemock->shouldReceive('isComplete')->andReturn(false);
-            $cachemock->shouldReceive('updateObject')->andReturn(false);
-            $mock->shouldReceive('__toString')->andReturn('Flysystem\Adapter\AbstractAdapter');
-            $cachemock->shouldReceive('__toString')->andReturn('Flysystem\Cache\AbstractCache');
-
-            $filesystem = new Filesystem($mock, $cachemock);
-            $mock->shouldReceive('write')->andReturn(false);
-            $mock->shouldReceive('update')->andReturn(false);
-
-            $mock->shouldReceive('has')->with('dummy.txt')->andReturn(true);
-            $this->assertFalse($filesystem->put('dummy.txt', 'content'));
-
-            $mock->shouldReceive('has')->with('dummy2.txt')->andReturn(false);
-            $this->assertFalse($filesystem->put('dummy2.txt', 'content'));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testCreateDir($filesystem)
-        {
-            $filesystem->createDir('dirname');
-            $this->assertTrue(is_dir(__DIR__.'/files/dirname'));
-            $this->assertFalse($filesystem->createDir('mkdir.fail'));
-            $filesystem->deleteDir('dirname');
-        }
-
-        public function testNoop()
-        {
-            $filesystem = new Filesystem(new Adapter\Local(__DIR__.'/files'), new Cache\Noop());
-            $filesystem->write('test.txt', 'contents');
-            $this->assertTrue($filesystem->has('test.txt'));
-            $this->assertInternalType('array', $filesystem->listContents());
-            $this->assertInternalType('array', $filesystem->listContents('', true));
-            $cache = $filesystem->getCache();
-            $cache->setComplete('', false);
-            $cache->flush();
-            $cache->autosave();
-            $this->assertFalse($cache->isComplete('', false));
-            $this->assertFalse($cache->read('something'));
-            $this->assertFalse($cache->readStream('something'));
-            $this->assertFalse($cache->getMetadata('something'));
-            $this->assertFalse($cache->getMimetype('something'));
-            $this->assertFalse($cache->getSize('something'));
-            $this->assertFalse($cache->getTimestamp('something'));
-            $this->assertFalse($cache->getVisibility('something'));
-            $this->assertEmpty($cache->listContents('', false));
-            $this->assertFalse($cache->rename('', ''));
-            $this->assertFalse($cache->copy('', ''));
-            $this->assertNull($cache->save());
-            $filesystem->delete('test.txt');
-
-            $this->assertEquals([], $cache->storeContents('unknwon', [
-                ['path' => 'some/file.txt'],
-            ], false));
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testListFiles($filesystem)
-        {
-            $filesystem->flushCache();
-            $filesystem->addPlugin(new ListFiles());
-
-            if (! $filesystem->has('test.txt')) {
-                $filesystem->write('test.txt', 'something');
-            }
-
-            if (! $filesystem->has('othertest.txt')) {
-                $filesystem->write('othertest.txt', 'something');
-            }
-
-            if (! $filesystem->has('subdir/test.txt')) {
-                $filesystem->write('subdir/test.txt', 'something');
-            }
-
-            if (! $filesystem->has('subdir/other-test.txt')) {
-                $filesystem->write('subdir/other-test.txt', 'something');
-            }
-
-            if (! $filesystem->has('subdir/subsubdir/test.txt')) {
-                $filesystem->write('subdir/subsubdir/test.txt', 'something');
-            }
-
-            if (! $filesystem->has('subdir2/test.txt')) {
-                $filesystem->write('subdir2/test.txt', 'something');
-            }
-
-            $rootFiles = $filesystem->listFiles();
-            $this->assertContainsOnly('array', $rootFiles, true);
-
-            foreach ($rootFiles as $file) {
-                $this->assertEquals('file', $file['type']);
-            }
-
-            $subDirFiles = $filesystem->listFiles('subdir');
-            $this->assertContainsOnly('array', $subDirFiles, true);
-
-            foreach ($subDirFiles as $subDirFile) {
-                $this->assertEquals('file', $subDirFile['type']);
-            }
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testListPaths($filesystem)
-        {
-            $filesystem->addPlugin(new ListPaths());
-
-            if (! $filesystem->has('test.txt')) {
-                $filesystem->write('test.txt', 'something');
-            }
-            $filesystem->flushCache();
-            $listing = $filesystem->listPaths();
-            $this->assertContainsOnly('string', $listing, true);
-        }
-
-        /**
-         * @dataProvider filesystemProvider
-         */
-        public function testListWith(FilesystemInterface $filesystem)
-        {
-            $filesystem->flushCache();
-            $filesystem->addPlugin(new ListWith());
-
-            if (! $filesystem->has('test.txt')) {
-                $filesystem->write('test.txt', 'something');
-            }
-
-            $listing = $filesystem->listWith(['mimetype'], '', true);
-            $this->assertContainsOnly('array', $listing, true);
-            $first = reset($listing);
-            $this->assertArrayHasKey('mimetype', $first);
-        }
-
-        /**
-         * @dataProvider  filesystemProvider
-         * @expectedException  InvalidArgumentException
-         */
-        public function testListWithInvalid($filesystem)
-        {
-            $filesystem->addPlugin(new ListWith());
-            $filesystem->flushCache();
-            if (! $filesystem->has('test.txt')) {
-                $filesystem->write('test.txt', 'something');
-            }
-
-            $filesystem->listWith(['unknowntype']);
-        }
-
-        /**
-         * @dataProvider  filesystemProvider
-         */
-        public function testGet($filesystem, $adapter, $cache)
-        {
-            if (! $filesystem->has('nested/file.txt')) {
-                $filesystem->write('nested/file.txt', 'contents');
-            }
-
-            $handler = $filesystem->get('nested/file.txt');
-            $this->assertInstanceOf('League\Flysystem\Handler', $handler);
-            $this->assertInstanceOf('League\Flysystem\File', $handler);
-            $this->assertEquals(8, $handler->getSize());
-            $this->assertEquals('nested/file.txt', $handler->getPath());
-            $this->assertEquals('text/plain', $handler->getMimetype());
-            $this->assertEquals('file', $handler->getType());
-            $this->assertTrue($handler->isFile());
-            $this->assertFalse($handler->isDir());
-            $this->assertInternalType('integer', $handler->getTimestamp());
-            $this->assertEquals('contents', $handler->read());
-            $handler->delete();
-            $this->assertFalse($filesystem->has('nested/file.txt'));
-            $handler = $filesystem->get('nested');
-            $this->assertTrue($handler->isDir());
-            $this->assertCount(0, $handler->getContents(true));
-            $filesystem->write('nested/other.txt', 'contents');
-            $this->assertCount(1, $handler->getContents(true));
-            $handler->delete();
-            $this->assertFalse($filesystem->has('nested'));
-
-            $cache->flush();
-            $filesystem->write('deeply/nested/thing.txt', 'contents');
-            $filesystem->write('other/nested/thing.txt', 'contents');
-            $this->assertCount(1, $filesystem->listContents('deeply'));
-            $this->assertCount(2, $filesystem->listContents('deeply', true));
-            $this->assertCount(2, $filesystem->listContents('deeply', true));
-            $this->assertCount(1, $cache->listContents('deeply'));
-            $this->assertCount(2, $cache->listContents('deeply', true));
-        }
-
-        public function testReadAndDelete()
-        {
-            $path = 'path.ext';
-            $expected = 'contents';
-            $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[has,read,delete]');
-            $adapter = new Filesystem($mock);
-            $mock->shouldReceive('has')->andReturn(true);
-            $mock->shouldReceive('read')->once()->with($path)->andReturn(['contents' => $expected]);
-            $mock->shouldReceive('delete')->once()->andReturn(true);
-            $result = $adapter->readAndDelete($path);
-            $this->assertEquals($expected, $result);
-        }
-
-        public function testReadAndDeleteFail()
-        {
-            $path = 'path.ext';
-            $expected = false;
-            $mock = Mockery::mock('League\Flysystem\Adapter\AbstractAdapter[has,read,delete]');
-            $adapter = new Filesystem($mock);
-            $mock->shouldReceive('has')->andReturn(true);
-            $mock->shouldReceive('read')->once()->with($path)->andReturn($expected);
-            $result = $adapter->readAndDelete($path);
-            $this->assertEquals($expected, $result);
-        }
-
-        public function testGetConfig()
-        {
-            $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-            $cache = Mockery::mock('League\Flysystem\CacheInterface');
-            $config = Mockery::mock('League\Flysystem\Config');
-            $cache->shouldReceive('load');
-            $filesystem = new Filesystem($adapter, $cache, $config);
-            $this->assertEquals($config, $filesystem->getConfig());
-        }
-
-        public function testGetWithMetadataFail()
-        {
-            $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
-            $filesystem->shouldReceive('getMetadata')->andReturn(false);
-            $plugin = new GetWithMetadata();
-            $plugin->setFilesystem($filesystem);
-            $this->assertFalse($plugin->handle('path', []));
-        }
-
-        public function testGetWithMetadataInvalidKey()
-        {
-            $this->setExpectedException('InvalidArgumentException');
-            $filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
-            $filesystem->shouldReceive('getMetadata')->andReturn(['path' => 'something']);
-            $plugin = new GetWithMetadata();
-            $plugin->setFilesystem($filesystem);
-            $this->assertFalse($plugin->handle('path', ['invalid']));
-        }
-
-        public function testCallMethodDelegation()
-        {
-            $this->setExpectedException('BadMethodCallException');
-            $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-            $filesystem = new Filesystem($adapter);
-            $filesystem->badMethodCall();
-        }
+        $this->assertEquals($this->adapter, $this->filesystem->getAdapter());
+    }
+
+    public function testGetConfig()
+    {
+        $this->assertInstanceOf('League\\Flysystem\\Config', $this->filesystem->getConfig());
+    }
+
+    public function testHas()
+    {
+        $this->prophecy->has('path.txt')->willReturn(true);
+        $this->assertTrue($this->filesystem->has('path.txt'));
+    }
+
+    public function testWrite()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->has($path)->willReturn(false);
+        $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->write($path, $contents));
+    }
+
+    public function testWriteStream()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->has($path)->willReturn(false);
+        $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->writeStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testUpdate()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->update($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->update($path, $contents));
+    }
+
+    public function testUpdateStream()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->updateStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->updateStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testPutNew()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->has($path)->willReturn(false);
+        $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->put($path, $contents));
+    }
+
+    public function testPutNewStream()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->has($path)->willReturn(false);
+        $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->putStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testPutUpdate()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->update($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->put($path, $contents));
+    }
+
+    public function testPutUpdateStream()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->updateStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->putStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testWriteStreamInvalid()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $this->filesystem->writeStream('path.txt', '__INVALID__');
+    }
+
+    public function testUpdateStreamInvalid()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $this->filesystem->updateStream('path.txt', '__INVALID__');
+    }
+
+    public function testReadAndDelete()
+    {
+        $path = 'path.txt';
+        $output = '__CONTENTS__';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->read($path)->willReturn(['contents' => $output]);
+        $this->prophecy->delete($path)->willReturn(true);
+        $response = $this->filesystem->readAndDelete($path);
+        $this->assertEquals($output, $response);
+    }
+
+    public function testReadAndDeleteFailedRead()
+    {
+        $path = 'path.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->read($path)->willReturn(false);
+        $response = $this->filesystem->readAndDelete($path);
+        $this->assertFalse($response);
+    }
+
+    public function testRead()
+    {
+        $path = 'path.txt';
+        $output = '__CONTENTS__';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->read($path)->willReturn(['contents' => $output]);
+        $response = $this->filesystem->read($path);
+        $this->assertEquals($response, $output);
+    }
+
+    public function testReadStream()
+    {
+        $path = 'path.txt';
+        $output = '__CONTENTS__';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->readStream($path)->willReturn(['stream' => $output]);
+        $response = $this->filesystem->readStream($path);
+        $this->assertEquals($response, $output);
+    }
+
+    public function testReadStreamFail()
+    {
+        $path = 'path.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->readStream($path)->willReturn(false);
+        $response = $this->filesystem->readStream($path);
+        $this->assertFalse($response);
+    }
+
+    public function testRename()
+    {
+        $old = 'old.txt';
+        $new = 'new.txt';
+        $this->prophecy->has($old)->willReturn(true);
+        $this->prophecy->has($new)->willReturn(false);
+        $this->prophecy->rename($old, $new)->willReturn(true);
+        $response = $this->filesystem->rename($old, $new);
+        $this->assertTrue($response);
+    }
+
+    public function testCopy()
+    {
+        $old = 'old.txt';
+        $new = 'new.txt';
+        $this->prophecy->has($old)->willReturn(true);
+        $this->prophecy->has($new)->willReturn(false);
+        $this->prophecy->copy($old, $new)->willReturn(true);
+        $response = $this->filesystem->copy($old, $new);
+        $this->assertTrue($response);
+    }
+
+    public function testDeleteDirRootViolation()
+    {
+        $this->setExpectedException('League\Flysystem\RootViolationException');
+        $this->filesystem->deleteDir('');
+    }
+
+    public function testDeleteDir()
+    {
+        $this->prophecy->deleteDir('dirname')->willReturn(true);
+        $response = $this->filesystem->deleteDir('dirname');
+        $this->assertTrue($response);
+    }
+
+    public function testCreateDir()
+    {
+        $this->prophecy->createDir('dirname', $this->config)->willReturn(['path' => 'dirname', 'type' => 'dir']);
+        $output = $this->filesystem->createDir('dirname');
+        $this->assertTrue($output);
+    }
+
+    public function metaGetterProvider()
+    {
+        return [
+            ['getSize', 1234],
+            ['getVisibility', 'public'],
+            ['getMimetype', 'text/plain'],
+            ['getTimestamp', 2345],
+            ['getMetadata', [
+                'path' => 'success.txt',
+                'size' => 1234,
+                'visibility' => 'public',
+                'mimetype' => 'text/plain',
+                'timestamp' => 2345,
+            ]],
+        ];
+    }
+
+    /**
+     * @dataProvider metaGetterProvider
+     */
+    public function testMetaGetterSuccess($method, $value)
+    {
+        $path = 'success.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->{$method}($path)->willReturn([
+            'path' => $path,
+            'size' => 1234,
+            'visibility' => 'public',
+            'mimetype' => 'text/plain',
+            'timestamp' => 2345,
+        ]);
+        $output = $this->filesystem->{$method}($path);
+        $this->assertEquals($value, $output);
+    }
+
+    /**
+     * @dataProvider metaGetterProvider
+     */
+    public function testMetaGetterFails($method)
+    {
+        $path = 'success.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->{$method}($path)->willReturn(false);
+        $output = $this->filesystem->{$method}($path);
+        $this->assertFalse($output);
+    }
+
+    public function testAssertPresentThrowsException()
+    {
+        $this->setExpectedException('League\Flysystem\FileExistsException');
+        $this->prophecy->has('path.txt')->willReturn(true);
+        $this->filesystem->write('path.txt', 'contents');
+    }
+
+    public function testAssertAbsentThrowsException()
+    {
+        $this->setExpectedException('League\Flysystem\FileNotFoundException');
+        $this->prophecy->has('path.txt')->willReturn(false);
+        $this->filesystem->read('path.txt');
+    }
+
+    public function testSetVisibility()
+    {
+        $path = 'path.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->setVisibility($path, 'public')->willReturn(['path' => $path, 'visibility' => 'public']);
+        $output = $this->filesystem->setVisibility($path, 'public');
+        $this->assertTrue($output);
+    }
+
+    public function testSetVisibilityFail()
+    {
+        $path = 'path.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->setVisibility($path, 'public')->willReturn(false);
+        $output = $this->filesystem->setVisibility($path, 'public');
+        $this->assertFalse($output);
+    }
+
+    public function testGetFile()
+    {
+        $path = 'path.txt';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->getMetadata($path)->willReturn([
+            'path' => $path,
+            'type' => 'file',
+        ]);
+
+        $output = $this->filesystem->get($path);
+        $this->assertInstanceOf('League\Flysystem\File', $output);
+    }
+
+    public function testGetDirectory()
+    {
+        $path = 'path';
+        $this->prophecy->has($path)->willReturn(true);
+        $this->prophecy->getMetadata($path)->willReturn([
+            'path' => $path,
+            'type' => 'dir',
+        ]);
+
+        $output = $this->filesystem->get($path);
+        $this->assertInstanceOf('League\Flysystem\Directory', $output);
+    }
+
+    public function testListContents()
+    {
+        $rawListing = [
+           ['path' => 'other_root/file.txt'],
+           ['path' => 'valid/to_deep/file.txt'],
+           ['path' => 'valid/file.txt'],
+        ];
+
+        $expected = [
+            ['path' => 'valid/file.txt'],
+        ];
+
+        $this->prophecy->listContents('valid', false)->willReturn($rawListing);
+        $output = $this->filesystem->listContents('valid', false);
+        $this->assertEquals($expected, $output);
+    }
+
+    public function testInvalidPluginCall()
+    {
+        $this->setExpectedException('BadMethodCallException');
+        $this->filesystem->invalidCall();
     }
 }

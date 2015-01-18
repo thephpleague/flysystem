@@ -35,6 +35,15 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
+function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
+{
+    if (strpos($pathname, 'fail.plz') !== false) {
+        return false;
+    }
+
+    return call_user_func_array('mkdir', func_get_args());
+}
+
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -181,5 +190,80 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
             rmdir($root);
             throw $e;
         }
+    }
+
+    public function testListContents()
+    {
+        $this->adapter->write('dirname/file.txt', 'contents', new Config());
+        $contents = $this->adapter->listContents('dirname', false);
+        $this->assertCount(1, $contents);
+        $this->assertArrayHasKey('type', $contents[0]);
+    }
+
+    public function testGetSize()
+    {
+        $this->adapter->write('dummy.txt', '1234', new Config());
+        $result = $this->adapter->getSize('dummy.txt');
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('size', $result);
+        $this->assertEquals(4, $result['size']);
+    }
+
+    public function testGetTimestamp()
+    {
+        $this->adapter->write('dummy.txt', '1234', new Config());
+        $result = $this->adapter->getTimestamp('dummy.txt');
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('timestamp', $result);
+        $this->assertInternalType('int', $result['timestamp']);
+    }
+
+    public function testGetMimetype()
+    {
+        $this->adapter->write('text.txt', 'contents', new Config());
+        $result = $this->adapter->getMimetype('text.txt');
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('mimetype', $result);
+        $this->assertEquals('text/plain', $result['mimetype']);
+    }
+
+    public function testCreateDirFail()
+    {
+        $this->assertFalse($this->adapter->createDir('fail.plz', new Config()));
+    }
+
+    public function testDeleteDir()
+    {
+        $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
+        $this->assertTrue(is_dir(__DIR__.'/files/nested/dir'));
+        $this->adapter->deleteDir('nested');
+        $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
+        $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
+    }
+
+    public function testVisibilityPublic()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->setVisibility('path.txt', 'public');
+        $output = $this->adapter->getVisibility('path.txt');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
+    }
+
+    public function testVisibilityPrivate()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->setVisibility('path.txt', 'private');
+        $output = $this->adapter->getVisibility('path.txt');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('private', $output['visibility']);
+    }
+
+    public function testApplyPathPrefix()
+    {
+        $this->adapter->setPathPrefix('');
+        $this->assertEquals('', $this->adapter->applyPathPrefix(''));
     }
 }

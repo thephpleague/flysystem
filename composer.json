@@ -18,18 +18,13 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "league/event": "~1.0",
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "~0.9",
-        "aws/aws-sdk-php": "~2.4",
         "predis/predis": "~1.0",
-        "dropbox/dropbox-sdk": "~1.1.1",
-        "rackspace/php-opencloud": "~1.11",
-        "barracuda/copy": "~1.1.4",
-        "phpseclib/phpseclib": "~0.3.5",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
-        "phpspec/phpspec": "~2.0.0"
+        "phpspec/phpspec": "~2.0.0",
+        "phpspec/prophecy-phpunit": "~1.0"
     },
     "autoload": {
         "psr-4": {
@@ -45,15 +40,15 @@
         "ext-fileinfo": "Required for MimeType",
         "league/event": "Required for EventableFilesystem",
         "predis/predis": "Allows you to use Predis for caching",
-        "phpseclib/phpseclib": "Allows SFTP server storage",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
         "league/flysystem-copy": "Allows you to use Copy.com storage",
-        "tedivm/stash": "Allows you to use Stash as cache implementation",
         "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
         "league/flysystem-webdav": "Allows you to use WebDAV storage",
         "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
         "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
-        "league/flysystem-dropbox": "Use Dropbox storage"
+        "league/flysystem-dropbox": "Use Dropbox storage",
+        "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
+        "league/flysystem-sftp": "Allows SFTP server storage via phpseclib"
     },
     "config": {
         "bin-dir": "bin"

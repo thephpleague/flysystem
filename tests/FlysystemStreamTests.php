@@ -11,7 +11,6 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
         $adapter->shouldReceive('writeStream')->andReturn(['path' => 'file.txt'], false);
         $filesystem = new Filesystem($adapter);
         $this->assertTrue($filesystem->writeStream('file.txt', tmpfile()));
-        $filesystem->flushCache();
         $this->assertFalse($filesystem->writeStream('file.txt', tmpfile()));
     }
 
@@ -33,7 +32,6 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
         $adapter->shouldReceive('updateStream')->andReturn(['path' => 'file.txt'], false);
         $filesystem = new Filesystem($adapter);
         $this->assertTrue($filesystem->updateStream('file.txt', tmpfile()));
-        $filesystem->flushCache();
         $this->assertFalse($filesystem->updateStream('file.txt', tmpfile()));
     }
 
@@ -57,10 +55,6 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
         $filesystem = new Filesystem($adapter);
         $this->assertInternalType('resource', $filesystem->readStream('file.txt'));
         $this->assertFalse($filesystem->readStream('other.txt'));
-
-        // Another time to hit the cache
-        $this->assertInternalType('resource', $filesystem->readStream('file.txt'));
-
         fclose($stream);
         $this->assertFalse($filesystem->readStream('other.txt'));
     }

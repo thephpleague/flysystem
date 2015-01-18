@@ -120,70 +120,27 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $this->assertTrue($code);
     }
 
-    protected function mockFileIterator()
+    protected function mockFilesystem()
     {
-        $file = Mockery::mock('\SplFileInfo', [
-            'getPathname' => 'path/file/test',
-            'getFilename' => 'test',
-            'getType' => 'file',
-            'getSize' => 12361863,
-            'getMTime' => (new \DateTime())->format('U'),
-        ], ['test']);
+        $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $mock->shouldReceive('listContents')->andReturn([
+           ['path' => 'path.txt', 'type' => 'file'],
+           ['path' => 'dirname/path.txt', 'type' => 'file'],
+        ]);
 
-        return [$file];
-    }
-
-    protected function mockHugeFileIterator()
-    {
-        $file = Mockery::mock('\SplFileInfo', [
-            'getPathname' => 'path/file/test',
-            'getFilename' => 'test',
-            'getType' => 'file',
-            'getSize' => 12361863,
-            'getMTime' => (new \DateTime())->format('U'),
-        ], ['test']);
-
-        return array_fill(0, 1000, $file);
-    }
-
-    protected function mockLocalAdapter($which = 'small')
-    {
-        $localAdapter = Mockery::mock('\League\Flysystem\Adapter\Local');
-        $localAdapter->makePartial();
-        $localAdapter->shouldAllowMockingProtectedMethods();
-
-        $localAdapter->shouldReceive('getDirectoryIterator')->andReturn(
-            $which == 'small' ? $this->mockFileIterator() : $this->mockHugeFileIterator()
-        );
-        $localAdapter->shouldReceive('getFilePath')->andReturnUsing(function ($file) {
-            return $file->getPathname();
-        });
-
-        return $localAdapter;
-    }
-
-    protected function mockPassthruCache()
-    {
-        $cache = Mockery::mock('\League\Flysystem\Cache\Memory');
-        $cache->makePartial();
-        $cache->shouldReceive('isComplete')->andReturn(false);
-        $cache->shouldReceive('storeContents')->andReturnUsing(function ($directory, $contents, $recursive) {
-            return $contents;
-        });
-
-        return $cache;
+        return $mock;
     }
 
     public function testFileWithAliasWithMountManager()
     {
-        $fs = new Filesystem($this->mockLocalAdapter('small'), $this->mockPassthruCache());
-        $fs2 = new Filesystem($this->mockLocalAdapter('huge'), $this->mockPassthruCache());
+        $fs = $this->mockFilesystem();
+        $fs2 = $this->mockFilesystem();
 
         $mountManager = new MountManager();
         $mountManager->mountFilesystem('local', $fs);
         $mountManager->mountFilesystem('huge', $fs2);
-
         $results = $mountManager->listContents("local://tests/files");
+
         foreach ($results as $result) {
             $this->assertArrayHasKey('filesystem', $result);
             $this->assertEquals($result['filesystem'], 'local');

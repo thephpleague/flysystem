@@ -91,7 +91,7 @@ interface FilesystemInterface
      *
      * @param string $path
      * @param string $contents
-     * @param array  $config   Config object or visibility setting
+     * @param array  $config   Config array
      *
      * @return bool success boolean
      */
@@ -232,13 +232,6 @@ interface FilesystemInterface
      * @return Handler file or directory handler
      */
     public function get($path, Handler $handler = null);
-
-    /**
-     * Flush the cache.
-     *
-     * @return $this
-     */
-    public function flushCache();
 
     /**
      * Register a plugin.

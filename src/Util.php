@@ -198,7 +198,7 @@ class Util
     /**
      * Ensure a Config instance.
      *
-     * @param string|array|Config $config
+     * @param string|null|array|Config $config
      *
      * @return Config config instance
      *
@@ -255,9 +255,10 @@ class Util
     /**
      * Emulate the directories of a single object.
      *
-     * @param  array $object
-     * @param  array $directories
-     * @param  array $listedDirectories
+     * @param array $object
+     * @param array $directories
+     * @param array $listedDirectories
+     *
      * @return array
      */
     protected static function emulateObjectDirectories(array $object, array $directories, array $listedDirectories)

@@ -69,6 +69,26 @@ class File extends Handler
     }
 
     /**
+     * Get the file's visibility.
+     *
+     * @return string visibility
+     */
+    public function getVisibility()
+    {
+        return $this->filesystem->getVisibility($this->path);
+    }
+
+    /**
+     * Get the file's metadata.
+     *
+     * @return array
+     */
+    public function getMetadata()
+    {
+        return $this->filesystem->getMetadata($this->path);
+    }
+
+    /**
      * Get the file size.
      *
      * @return int file size
