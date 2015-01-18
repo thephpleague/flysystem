@@ -42,7 +42,6 @@
         "predis/predis": "Allows you to use Predis for caching",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
         "league/flysystem-copy": "Allows you to use Copy.com storage",
-        "tedivm/stash": "Allows you to use Stash as cache implementation",
         "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
         "league/flysystem-webdav": "Allows you to use WebDAV storage",
         "league/flysystem-aws-s3-v2": "Use S3 storage with AWS SDK v2",
