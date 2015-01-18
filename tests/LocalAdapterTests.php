@@ -35,7 +35,7 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
-function mkdir ($pathname, $mode = 0777, $recursive = false, $context = null)
+function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 {
     if (strpos($pathname, 'fail.plz') !== false) {
         return false;
@@ -194,7 +194,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testListContents()
     {
-        $this->adapter->write('dirname/file.txt', 'contents', new Config);
+        $this->adapter->write('dirname/file.txt', 'contents', new Config());
         $contents = $this->adapter->listContents('dirname', false);
         $this->assertCount(1, $contents);
         $this->assertArrayHasKey('type', $contents[0]);
@@ -220,7 +220,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetMimetype()
     {
-        $this->adapter->write('text.txt', 'contents', new Config);
+        $this->adapter->write('text.txt', 'contents', new Config());
         $result = $this->adapter->getMimetype('text.txt');
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('mimetype', $result);
@@ -229,12 +229,12 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testCreateDirFail()
     {
-        $this->assertFalse($this->adapter->createDir('fail.plz', new Config));
+        $this->assertFalse($this->adapter->createDir('fail.plz', new Config()));
     }
 
     public function testDeleteDir()
     {
-        $this->adapter->write('nested/dir/path.txt', 'contents', new Config);
+        $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
         $this->assertTrue(is_dir(__DIR__.'/files/nested/dir'));
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));

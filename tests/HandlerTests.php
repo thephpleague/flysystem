@@ -75,6 +75,7 @@ class HandlerTests extends ProphecyTestCase
 
     /**
      * @dataProvider getterProvider
+     *
      * @param $method
      * @param $response
      */
