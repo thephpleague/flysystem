@@ -59,6 +59,7 @@ Want to get started quickly? Check out some of these integrations:
 * Zend Framework integration: https://github.com/bushbaby/BsbFlysystem
 * CakePHP integration: https://github.com/WyriHaximus/FlyPie
 * Silex integration: https://github.com/WyriHaximus/SliFly
+* Yii 2 integration: https://github.com/creocoder/yii2-flysystem
 * Backup manager: https://github.com/heybigname/backup-manager
 
 ## Adapters
