@@ -48,7 +48,8 @@
         "league/flysystem-aws-s3-v3": "Use S3 storage with AWS SDK v3",
         "league/flysystem-dropbox": "Use Dropbox storage",
         "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
-        "league/flysystem-sftp": "Allows SFTP server storage via phpseclib"
+        "league/flysystem-sftp": "Allows SFTP server storage via phpseclib",
+        "league/flysystem-ziparchive": "Allows you to use ZipArchive"
     },
     "config": {
         "bin-dir": "bin"
