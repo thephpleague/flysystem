@@ -38,8 +38,8 @@
     },
     "suggest": {
         "ext-fileinfo": "Required for MimeType",
-        "league/event": "Required for EventableFilesystem",
         "predis/predis": "Allows you to use Predis for caching",
+        "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
         "league/flysystem-copy": "Allows you to use Copy.com storage",
         "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
