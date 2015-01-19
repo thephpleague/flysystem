@@ -49,7 +49,7 @@
         "league/flysystem-dropbox": "Use Dropbox storage",
         "league/flysystem-cached-adapter": "Flysystem adapter decorator for metadata caching",
         "league/flysystem-sftp": "Allows SFTP server storage via phpseclib",
-        "league/flysystem-ziparchive": "Allows you to use ZipArchive"
+        "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
     },
     "config": {
         "bin-dir": "bin"
