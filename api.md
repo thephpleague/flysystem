@@ -104,7 +104,7 @@ Visibility is the abstraction of file permissions across multiple platforms. Vis
 ~~~ php
 use League\Flysystem\AdapterInterface;
 $filesystem->write('db.backup', $backup, [
-    'visibility' => AdapterInterface::VISIBILITY_PRIVATE),
+    'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
 // or simply
 $filesystem->write('db.backup', $backup, ['visibility' => 'private']);
@@ -185,7 +185,9 @@ $stream = fopen('/path/to/database.backup', 'r+');
 $flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
 
 // Using write you can also directly set the visibility
-$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, 'private');
+$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, [
+    'visibility' => AdapterInterface::VISIBILITY_PRIVATE
+]);
 
 // Or update a file with stream contents
 $flysystem->updateStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
