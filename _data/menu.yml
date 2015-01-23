@@ -12,6 +12,7 @@ Adapters:
     Copy.com: '/adapter/copy/'
     Dropbox: '/adapter/dropbox/'
     FTP: '/adapter/ftp/'
+    GridFS: '/adapter/gridfs/'
     Null / Test: '/adapter/null-test/'
     Rackspace: '/adapter/rackspace/'
     ReplicateAdapter: '/adapter/replicate/'

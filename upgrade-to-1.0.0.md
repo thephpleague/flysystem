@@ -19,7 +19,7 @@ repository. These adapters are:
 * AwsS3V3: AWS SDK V3 Adapter - [docs](/adapter/aws-s3-v3/)
 * Dropbox: [docs](/adapter/dropbox/)
 * Rackspace: [docs](/adapter/rackspace/)
-* GridFS: [docs](/adapter/grid-fs/)
+* GridFS: [docs](/adapter/gridfs/)
 * Sftp: [docs](/adapter/sftp/)
 * WebDAV: [docs](/adapter/webdav/)
 * ZipArchive: [docs](/adapter/zip-archive/)
