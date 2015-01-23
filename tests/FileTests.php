@@ -120,10 +120,36 @@ class FileTests extends \PHPUnit_Framework_TestCase
     public function testRename()
     {
         $file = $this->getFile();
-        $file->rename('files/renamed.txt');
+        $result = $file->rename('files/renamed.txt');
+        $this->assertTrue($result);
         $this->assertFalse($this->filesystem->has('file.txt'));
         $this->assertTrue($this->filesystem->has('files/renamed.txt'));
         $this->assertEquals('files/renamed.txt', $file->getPath());
+    }
+
+    public function testRenameFails()
+    {
+        $adapter = $this->getMock('League\Flysystem\AdapterInterface');
+        $adapter
+            ->expects($this->exactly(2))
+            ->method('has')
+            ->withConsecutive(
+                ['file.txt'],
+                ['files/renamed.txt']
+            )
+            ->willReturnOnConsecutiveCalls(true, false);
+        $adapter
+            ->expects($this->once())
+            ->method('rename')
+            ->with('file.txt', 'files/renamed.txt')
+            ->willReturn(false);
+
+        $filesystem = new Filesystem($adapter);
+        /** @var File $file */
+        $file = $filesystem->get('file.txt', new File());
+        $result = $file->rename('files/renamed.txt');
+        $this->assertFalse($result);
+        $this->assertEquals('file.txt', $file->getPath());
     }
 
     public function testCopy()
@@ -134,5 +160,71 @@ class FileTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->filesystem->has('files/copied.txt'));
         $this->assertEquals('file.txt', $file->getPath());
         $this->assertEquals('files/copied.txt', $copied->getPath());
+    }
+
+    public function testCopyFails()
+    {
+        $adapter = $this->getMock('League\Flysystem\AdapterInterface');
+        $adapter
+            ->expects($this->exactly(2))
+            ->method('has')
+            ->withConsecutive(
+                ['file.txt'],
+                ['files/copied.txt']
+            )
+            ->willReturnOnConsecutiveCalls(true, false);
+        $adapter
+            ->expects($this->once())
+            ->method('copy')
+            ->with('file.txt', 'files/copied.txt')
+            ->willReturn(false);
+
+        $filesystem = new Filesystem($adapter);
+        /** @var File $file */
+        $file = $filesystem->get('file.txt', new File());
+        $result = $file->copy('files/copied.txt');
+        $this->assertFalse($result);
+    }
+
+    public function testTimestamp()
+    {
+        $file = $this->getFile();
+        $timestamp = $this->filesystem->getTimestamp($file->getPath());
+        $this->assertEquals($timestamp, $file->getTimestamp());
+    }
+
+    public function testMimetype()
+    {
+        $file = $this->getFile();
+        $mimetype = $this->filesystem->getMimetype($file->getPath());
+        $this->assertEquals($mimetype, $file->getMimetype());
+    }
+
+    public function testVisibility()
+    {
+        $file = $this->getFile();
+        $visibility = $this->filesystem->getVisibility($file->getPath());
+        $this->assertEquals($visibility, $file->getVisibility());
+    }
+
+    public function testMetadata()
+    {
+        $file = $this->getFile();
+        $metadata = $this->filesystem->getMetadata($file->getPath());
+        $this->assertEquals($metadata, $file->getMetadata());
+    }
+
+    public function testSize()
+    {
+        $file = $this->getFile();
+        $size = $this->filesystem->getSize($file->getPath());
+        $this->assertEquals($size, $file->getSize());
+    }
+
+    public function testDelete()
+    {
+        $file = $this->getFile();
+        $file->delete();
+        $this->assertFalse($this->filesystem->has('file.txt'));
     }
 }
