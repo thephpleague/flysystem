@@ -349,8 +349,9 @@ class Filesystem implements FilesystemInterface
     {
         $directory = Util::normalizePath($directory);
         $contents = $this->adapter->listContents($directory, $recursive);
+        $mapper = function ($entry) use ($directory, $recursive) {
+            $entry = $entry + Util::pathinfo($entry['path']);
 
-        return array_values(array_filter($contents, function ($entry) use ($directory, $recursive) {
             if (! empty($directory) && strpos($entry['path'], $directory) === false) {
                 return false;
             }
@@ -359,8 +360,10 @@ class Filesystem implements FilesystemInterface
                 return false;
             }
 
-            return true;
-        }));
+            return $entry;
+        };
+
+        return array_values(array_filter(array_map($mapper, $contents)));
     }
 
     /**

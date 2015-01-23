@@ -2,6 +2,7 @@
 
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Util;
 use Prophecy\Argument;
 use Prophecy\Argument\Token\TypeToken;
 use Prophecy\PhpUnit\ProphecyTestCase;
@@ -349,7 +350,7 @@ class FilesystemTests extends ProphecyTestCase
         ];
 
         $expected = [
-            ['path' => 'valid/file.txt'],
+            Util::pathinfo('valid/file.txt'),
         ];
 
         $this->prophecy->listContents('valid', false)->willReturn($rawListing);
