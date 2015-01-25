@@ -82,9 +82,6 @@ function ftp_pwd($connection)
 
 function ftp_raw($connection, $command)
 {
-    if ($command === 'STAT not.found') {
-        return [0 => '213-Status follows:', 1 => '213 End of status'];
-    }
 
     if ($command === 'STAT syno.not.found') {
         return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
@@ -103,9 +100,8 @@ function ftp_raw($connection, $command)
 
 function ftp_rawlist($connection, $directory)
 {
-    if (strpos($directory, 'fail.rawlist') !== false) {
-        return false;
-    }
+    if (strpos($directory, 'fail.rawlist') !== false) return false;
+    if ($directory === 'not.found') return false;
 
     if (strpos($directory, 'rmdir.nested.fail') !== false) {
         return [
@@ -199,25 +195,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         }
 
         $adapter = new Ftp($this->options);
-        $this->assertEquals('example.org', $adapter->getHost());
-        $this->assertEquals(40, $adapter->getPort());
-        $this->assertEquals(35, $adapter->getTimeout());
-        $this->assertEquals('/somewhere/', $adapter->getRoot());
-        $this->assertEquals(0777, $adapter->getPermPublic());
-        $this->assertEquals(0000, $adapter->getPermPrivate());
-        $this->assertEquals('user', $adapter->getUsername());
-        $this->assertEquals('password', $adapter->getPassword());
+        $this->assertOptionsAreRetrievable($adapter);
         $listing = $adapter->listContents('', true);
         $this->assertInternalType('array', $listing);
-        $this->assertFalse($adapter->has('not.found'));
-        $this->assertFalse($adapter->getVisibility('not.found'));
-        $this->assertFalse($adapter->getSize('not.found'));
-        $this->assertFalse($adapter->getMimetype('not.found'));
-        $this->assertFalse($adapter->getTimestamp('not.found'));
-        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
-        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
-        $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
+        $this->assertGetterFailuresReturnFalse($adapter);
         $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
         $this->assertFalse($adapter->deleteDir('some.nested/rmdir.fail'));
@@ -231,7 +212,6 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
-        $adapter->deleteDir('');
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
 
@@ -293,5 +273,36 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
+    }
+
+    /**
+     * @param $adapter
+     */
+    protected function assertOptionsAreRetrievable($adapter)
+    {
+        $this->assertEquals('example.org', $adapter->getHost());
+        $this->assertEquals(40, $adapter->getPort());
+        $this->assertEquals(35, $adapter->getTimeout());
+        $this->assertEquals('/somewhere/', $adapter->getRoot());
+        $this->assertEquals(0777, $adapter->getPermPublic());
+        $this->assertEquals(0000, $adapter->getPermPrivate());
+        $this->assertEquals('user', $adapter->getUsername());
+        $this->assertEquals('password', $adapter->getPassword());
+    }
+
+    /**
+     * @param $adapter
+     */
+    protected function assertGetterFailuresReturnFalse($adapter)
+    {
+        $this->assertFalse($adapter->has('not.found'));
+        $this->assertFalse($adapter->getVisibility('not.found'));
+        $this->assertFalse($adapter->getSize('not.found'));
+        $this->assertFalse($adapter->getMimetype('not.found'));
+        $this->assertFalse($adapter->getTimestamp('not.found'));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
     }
 }

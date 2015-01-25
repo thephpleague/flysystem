@@ -299,11 +299,19 @@ class Ftp extends AbstractFtpAdapter
      */
     public function getMetadata($path)
     {
-        if (empty($path) ||  ! ($object = ftp_raw($this->getConnection(), 'STAT '.$path)) || count($object) < 3) {
+        $listing = ftp_rawlist($this->getConnection(), $path);
+
+        if (empty($listing)) {
             return false;
         }
 
-        return $this->normalizeObject($object[1], '');
+        $metadata = $this->normalizeObject($listing[0], '');
+
+        if ($metadata['path'] === '.') {
+            $metadata['path'] = $path;
+        }
+
+        return $metadata;
     }
 
     /**
