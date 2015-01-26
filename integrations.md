@@ -8,9 +8,13 @@ title: Integrations
 
 Want to get started quickly? Check out some of these bridging packages:
 
-* Laravel Bridge: https://github.com/GrahamCampbell/Laravel-Flysystem
-* Symfony Bundle: https://github.com/1up-lab/OneupFlysystemBundle
-* Backup Manager: https://github.com/heybigname/backup-manager
+* Laravel integration: https://github.com/GrahamCampbell/Laravel-Flysystem
+* Symfony integration: https://github.com/1up-lab/OneupFlysystemBundle
+* Zend Framework integration: https://github.com/bushbaby/BsbFlysystem
+* CakePHP integration: https://github.com/WyriHaximus/FlyPie
+* Silex integration: https://github.com/WyriHaximus/SliFly
+* Yii 2 integration: https://github.com/creocoder/yii2-flysystem
+* Backup manager: https://github.com/heybigname/backup-manager
 
 ### Other integrations
 
