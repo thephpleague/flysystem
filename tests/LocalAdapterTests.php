@@ -181,6 +181,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testNotWritableRoot()
     {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("File permissions not supported on Windows.");
+        }
+
         try {
             $root = __DIR__.'/files/not-writable';
             mkdir($root, 0000, true);
@@ -243,6 +247,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testVisibilityPublic()
     {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
         $this->adapter->write('path.txt', 'contents', new Config());
         $this->adapter->setVisibility('path.txt', 'public');
         $output = $this->adapter->getVisibility('path.txt');
@@ -253,6 +261,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testVisibilityPrivate()
     {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
         $this->adapter->write('path.txt', 'contents', new Config());
         $this->adapter->setVisibility('path.txt', 'private');
         $output = $this->adapter->getVisibility('path.txt');

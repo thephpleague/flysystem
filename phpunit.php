@@ -15,3 +15,6 @@ foreach (array_reverse($fs->listContents()) as $info) {
         rmdir(__DIR__.'/tests/files/'.$info['path']);
     }
 }
+
+// Constant which show when tests are run on windows
+define("IS_WINDOWS", strtolower(substr(PHP_OS, 0, 3)) === 'win');
