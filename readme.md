@@ -65,14 +65,14 @@ Want to get started quickly? Check out some of these integrations:
 ## Adapters
 
 * Local
-* Amazon Web Services - S3
-* Rackspace Cloud Files
-* Dropbox
-* Copy
+* Amazon Web Services - S3: https://github.com/thephpleague/flysystem-aws-s3-v2
+* Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
+* Dropbox: https://github.com/thephpleague/flysystem-dropbox
+* Copy: https://github.com/thephpleague/flysystem-copy
 * Ftp
-* Sftp (through phpseclib)
-* Zip (through ZipArchive)
-* WebDAV (through SabreDAV)
+* Sftp (through phpseclib): https://github.com/thephpleague/flysystem-sftp
+* Zip (through ZipArchive): https://github.com/thephpleague/flysystem-ziparchive
+* WebDAV (through SabreDAV): https://github.com/thephpleague/flysystem-webdav
 * Azure Blob Storage
 * NullAdapter
 
