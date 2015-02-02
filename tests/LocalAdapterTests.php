@@ -76,33 +76,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testHasWithDir()
-    {
-        $this->adapter->createDir('0', new Config());
-        $this->assertTrue($this->adapter->has('0'));
-        $this->adapter->deleteDir('0');
-    }
-
-    public function testHasWithFile()
-    {
-        $adapter = $this->adapter;
-        $adapter->write('file.txt', 'content', new Config());
-        $this->assertTrue($adapter->has('file.txt'));
-        $adapter->delete('file.txt');
-    }
-
-    public function testReadStream()
-    {
-        $adapter = $this->adapter;
-        $adapter->write('file.txt', 'contents', new Config());
-        $result = $adapter->readStream('file.txt');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('stream', $result);
-        $this->assertInternalType('resource', $result['stream']);
-        fclose($result['stream']);
-        $adapter->delete('file.txt');
-    }
-
     public function testWriteStream()
     {
         $adapter = $this->adapter;
@@ -115,12 +88,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $result = $adapter->read('dir/file.txt');
         $this->assertEquals('dummy', $result['contents']);
         $adapter->deleteDir('dir');
-    }
-
-    public function testListingNonexistingDirectory()
-    {
-        $result = $this->adapter->listContents('nonexisting/directory');
-        $this->assertEquals([], $result);
     }
 
     public function testUpdateStream()
@@ -158,19 +125,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->adapter->writeStream('dummy', tmpfile(), new Config()));
     }
 
-    public function testNullPrefix()
-    {
-        $this->adapter->setPathPrefix('');
-        $path = 'some/path.ext';
-        $this->assertEquals($path, $this->adapter->applyPathPrefix($path));
-        $this->assertEquals($path, $this->adapter->removePathPrefix($path));
-    }
-
-    public function testGetPathPrefix()
-    {
-        $this->assertEquals(realpath($this->root).DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
-    }
-
     public function testRenameToNonExistsingDirectory()
     {
         $this->adapter->write('file.txt', 'contents', new Config());
@@ -196,41 +150,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testListContents()
-    {
-        $this->adapter->write('dirname/file.txt', 'contents', new Config());
-        $contents = $this->adapter->listContents('dirname', false);
-        $this->assertCount(1, $contents);
-        $this->assertArrayHasKey('type', $contents[0]);
-    }
-
-    public function testGetSize()
-    {
-        $this->adapter->write('dummy.txt', '1234', new Config());
-        $result = $this->adapter->getSize('dummy.txt');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('size', $result);
-        $this->assertEquals(4, $result['size']);
-    }
-
-    public function testGetTimestamp()
-    {
-        $this->adapter->write('dummy.txt', '1234', new Config());
-        $result = $this->adapter->getTimestamp('dummy.txt');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('timestamp', $result);
-        $this->assertInternalType('int', $result['timestamp']);
-    }
-
-    public function testGetMimetype()
-    {
-        $this->adapter->write('text.txt', 'contents', new Config());
-        $result = $this->adapter->getMimetype('text.txt');
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('mimetype', $result);
-        $this->assertEquals('text/plain', $result['mimetype']);
-    }
-
     public function testCreateDirFail()
     {
         $this->assertFalse($this->adapter->createDir('fail.plz', new Config()));
@@ -243,39 +162,5 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
         $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
-    }
-
-    public function testVisibilityPublic()
-    {
-        if (IS_WINDOWS) {
-            $this->markTestSkipped("Visibility not supported on Windows.");
-        }
-
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->setVisibility('path.txt', 'public');
-        $output = $this->adapter->getVisibility('path.txt');
-        $this->assertInternalType('array', $output);
-        $this->assertArrayHasKey('visibility', $output);
-        $this->assertEquals('public', $output['visibility']);
-    }
-
-    public function testVisibilityPrivate()
-    {
-        if (IS_WINDOWS) {
-            $this->markTestSkipped("Visibility not supported on Windows.");
-        }
-
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->setVisibility('path.txt', 'private');
-        $output = $this->adapter->getVisibility('path.txt');
-        $this->assertInternalType('array', $output);
-        $this->assertArrayHasKey('visibility', $output);
-        $this->assertEquals('private', $output['visibility']);
-    }
-
-    public function testApplyPathPrefix()
-    {
-        $this->adapter->setPathPrefix('');
-        $this->assertEquals('', $this->adapter->applyPathPrefix(''));
     }
 }
