@@ -14,7 +14,7 @@ composer require league/flysystem-aws-s3-v2
 
 ~~~ php
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3V2\AwsS3Adapter;
+use League\Flysystem\AwsS3v2\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 
 $client = S3Client::factory(array(
