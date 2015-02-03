@@ -123,7 +123,7 @@ if ($filesystem->getVisibility('secret.txt') === 'private') {
 You can set the visibility as a default, which prevents you from setting it all over the place.
 
 ~~~ php
-$filesystem = new League\Flysystem\Filesystem($adapter, $cache, [
+$filesystem = new League\Flysystem\Filesystem($adapter, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
 ~~~
