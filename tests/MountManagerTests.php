@@ -157,6 +157,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
     public function dataProviderTestGetFilesystemRoot()
     {
         return [
+            [__DIR__ . '/foo.bar', '/'],
             ['file://' . __DIR__ . '/foo.bar', '/'],
             ['ftp://usr@ftphost.com/folder1/foo.bar', '/'],
             ['ftp://usr:pass@ftphost.com/folder1/foo.bar', '/'],
@@ -179,6 +180,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
     public function dataProviderGetFilesystemPrefix()
     {
         return [
+            [__DIR__ . '/foo.bar', 'file'],
             ['file://' . __DIR__ . '/foo.bar', 'file'],
             ['ftp://usr@ftphost.com/folder1/foo.bar', 'ftp://usr@ftphost.com/'],
             ['ftp://usr:pass@ftphost.com/folder1/foo.bar', 'ftp://usr:pass@ftphost.com/'],

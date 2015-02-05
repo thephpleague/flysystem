@@ -296,6 +296,7 @@ class MountManager
     public function getFilesystemPrefix(Uri $uri)
     {
         switch ($uri->getScheme()) {
+            case '':
             case 'file':
                 return 'file';
 
@@ -314,7 +315,8 @@ class MountManager
     public function getFilesystemRoot(Uri $uri)
     {
         switch ($uri->getScheme()) {
-            case 'file':
+            case '': // local file, without "file://"
+            case 'file': // local file
             case 'ftp':
                 return '/';
 
