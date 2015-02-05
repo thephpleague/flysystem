@@ -272,6 +272,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     public function testPassiveFailSsl()
     {
         $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
+        $adapter->setPassive(true);
         $adapter->connect();
     }
 

@@ -15,7 +15,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $password;
     protected $ssl = false;
     protected $timeout = 90;
-    protected $passive = true;
+    protected $passive = null;
     protected $separator = '/';
     protected $root;
     protected $permPublic = 0744;
