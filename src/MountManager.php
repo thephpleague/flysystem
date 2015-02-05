@@ -3,14 +3,19 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Ftp;
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
+use Phly\Http\Uri;
 
 /**
  * Class MountManager.
  *
  * Proxies methods to Filesystem (@see __call):
+ *
+ * If "automount" is enabled it automatically mounts required Filesystems based on provided URI
  *
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
@@ -54,9 +59,14 @@ class MountManager
     protected $filesystems = [];
 
     /**
+     * @var bool
+     */
+    protected $automount = false;
+
+    /**
      * Constructor.
      *
-     * @param array $filesystems
+     * @param array $filesystems [string $filesystemPrefix => FilesystemInterface]
      */
     public function __construct(array $filesystems = [])
     {
@@ -99,6 +109,17 @@ class MountManager
     }
 
     /**
+     * @param bool $automount
+     * @return $this
+     */
+    public function setAutomount($automount)
+    {
+        $this->automount = $automount;
+
+        return $this;
+    }
+
+    /**
      * Get the filesystem with the corresponding prefix.
      *
      * @param string $prefix
@@ -109,15 +130,32 @@ class MountManager
      */
     public function getFilesystem($prefix)
     {
-        if (! isset($this->filesystems[$prefix])) {
+        $filesystem = $this->findFilesystem($prefix);
+        if (false === $filesystem) {
             throw new LogicException('No filesystem mounted with prefix '.$prefix);
         }
 
-        return $this->filesystems[$prefix];
+        return $filesystem;
     }
 
     /**
-     * Retrieve the prefix form an arguments array.
+     * @param string $prefix
+     * @return FilesystemInterface|bool File system or FALSE if not found for given prefix
+     */
+    public function findFilesystem($prefix)
+    {
+        if (isset($this->filesystems[$prefix])) {
+            return $this->filesystems[$prefix];
+        } elseif ($this->automount) {
+            $prefix = $this->automountFilesystem($prefix);
+            return $this->filesystems[$prefix];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Retrieve the prefix from an arguments array.
      *
      * @param array $arguments
      *
@@ -130,6 +168,10 @@ class MountManager
         }
 
         $path = array_shift($arguments);
+
+        if (is_array($path)) {
+            return [$path['prefix'], [$path['path']]];
+        }
 
         if (! is_string($path)) {
             throw new InvalidArgumentException('First argument should be a string');
@@ -175,7 +217,12 @@ class MountManager
      */
     public function __call($method, $arguments)
     {
-        list($prefix, $arguments) = $this->filterPrefix($arguments);
+        if ($this->automount) {
+            $prefix = $this->automountFilesystem($arguments[0]);
+            $arguments = [(new Uri($arguments[0]))->getPath()];
+        } else {
+            list($prefix, $arguments) = $this->filterPrefix($arguments);
+        }
 
         $filesystem = $this->getFilesystem($prefix);
 
@@ -198,19 +245,25 @@ class MountManager
      */
     public function copy($from, $to)
     {
-        list($prefixFrom, $arguments) = $this->filterPrefix([$from]);
+        if ($this->automount) {
+            $prefixFrom = $this->automountFilesystem($from);
+            $argumentsFrom = [(new Uri($from))->getPath()];
+            $prefixTo = $this->automountFilesystem($to);
+            $argumentsTo = [(new Uri($to))->getPath()];
+        } else {
+            list($prefixFrom, $argumentsFrom) = $this->filterPrefix([$from]);
+            list($prefixTo, $argumentsTo) = $this->filterPrefix([$to]);
+        }
 
         $fsFrom = $this->getFilesystem($prefixFrom);
-        $buffer = call_user_func_array([$fsFrom, 'readStream'], $arguments);
+        $buffer = call_user_func_array([$fsFrom, 'readStream'], $argumentsFrom);
 
         if ($buffer === false) {
             return false;
         }
 
-        list($prefixTo, $arguments) = $this->filterPrefix([$to]);
-
         $fsTo = $this->getFilesystem($prefixTo);
-        $result =  call_user_func_array([$fsTo, 'writeStream'], array_merge($arguments, [$buffer]));
+        $result =  call_user_func_array([$fsTo, 'writeStream'], array_merge($argumentsTo, [$buffer]));
 
         if (is_resource($buffer)) {
             fclose($buffer);
@@ -234,5 +287,79 @@ class MountManager
         }
 
         return false;
+    }
+
+    /**
+     * @param Uri $uri
+     * @return string
+     */
+    public function getFilesystemPrefix(Uri $uri)
+    {
+        switch ($uri->getScheme()) {
+            case 'file':
+                return 'file';
+
+            case 'ftp':
+                return ($uri->withPath('')->withFragment('')->withQuery('')->__toString());
+
+            default:
+                throw new \InvalidArgumentException('Could not determine filesystem prefix for URI: ' . $uri);
+        }
+    }
+
+    /**
+     * @param Uri $uri
+     * @return string
+     */
+    public function getFilesystemRoot(Uri $uri)
+    {
+        switch ($uri->getScheme()) {
+            case 'file':
+            case 'ftp':
+                return '/';
+
+            default:
+                throw new \InvalidArgumentException('Could not determine filesystem root for URI: ' . $uri);
+        }
+    }
+
+    /**
+     * @param Uri $uriString
+     * @return string mounted filesystem prefix
+     */
+    private function automountFilesystem($uriString)
+    {
+        $uri = new Uri($uriString);
+        $filesystemPrefix = $this->getFilesystemPrefix($uri);
+        $filesystemRoot = $this->getFilesystemRoot($uri);
+
+        $filesystem = isset($this->filesystems[$filesystemPrefix]) ? $this->filesystems[$filesystemPrefix] : false;
+        if (false === $filesystem) {
+            $adapter = null;
+
+            switch ($uri->getScheme()) {
+                case 'file':
+                    $adapter = new Local($filesystemRoot);
+                    break;
+
+                case 'ftp':
+                    $adapter = new Ftp([
+                        'host' => $uri->getHost(),
+                        'username' => explode(':', $uri->getUserInfo())[0],
+                        'password' => explode(':', $uri->getUserInfo())[1],
+                        'port' => $uri->getPort(),
+                        'root' => $filesystemRoot
+                    ]);
+                    break;
+
+                default:
+                    throw new \InvalidArgumentException('Adapter not found for given URI Scheme: ' . $uriString->getScheme());
+            }
+
+            $filesystem = new Filesystem($adapter);
+            $this->mountFilesystem($filesystemPrefix, $filesystem);
+        }
+
+        return $filesystemPrefix;
     }
 }

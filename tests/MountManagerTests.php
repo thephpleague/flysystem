@@ -2,6 +2,7 @@
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\MountManager;
+use Phly\Http\Uri;
 
 class MountManagerTests extends PHPUnit_Framework_TestCase
 {
@@ -150,6 +151,95 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         foreach ($results as $result) {
             $this->assertArrayHasKey('filesystem', $result);
             $this->assertEquals($result['filesystem'], 'huge');
+        }
+    }
+
+    public function dataProviderTestGetFilesystemRoot()
+    {
+        return [
+            ['file://' . __DIR__ . '/foo.bar', '/'],
+            ['ftp://usr@ftphost.com/folder1/foo.bar', '/'],
+            ['ftp://usr:pass@ftphost.com/folder1/foo.bar', '/'],
+            ['ftp://usr:pass@ftphost.com/foo.bar', '/'],
+            ['ftp://usr:pass@ftphost.com', '/'],
+        ];
+    }
+
+    /**
+     * @param string $path
+     * @param string $root
+     * @dataProvider dataProviderTestGetFilesystemRoot
+     */
+    public function testGetFilesystemRoot($path, $root)
+    {
+        $mountManager = new MountManager();
+        $this->assertEquals($root, $mountManager->getFilesystemRoot(new Uri($path)));
+    }
+
+    public function dataProviderGetFilesystemPrefix()
+    {
+        return [
+            ['file://' . __DIR__ . '/foo.bar', 'file'],
+            ['ftp://usr@ftphost.com/folder1/foo.bar', 'ftp://usr@ftphost.com/'],
+            ['ftp://usr:pass@ftphost.com/folder1/foo.bar', 'ftp://usr:pass@ftphost.com/'],
+            ['ftp://usr:pass@ftphost.com/foo.bar', 'ftp://usr:pass@ftphost.com/'],
+            ['ftp://usr:pass@ftphost.com', 'ftp://usr:pass@ftphost.com/'],
+        ];
+    }
+
+    /**
+     * @param string $path
+     * @param string $prefix
+     * @dataProvider dataProviderGetFilesystemPrefix
+     */
+    public function testGetFilesystemPrefix($path, $prefix)
+    {
+        $mountManager = new MountManager();
+        $this->assertEquals($prefix, $mountManager->getFilesystemPrefix(new Uri($path)));
+    }
+
+    public function dataProviderTestCopy()
+    {
+        $data = [
+              ['file://' . __DIR__ . '/../changelog.md', 'file://' . __DIR__ . '/files/changelog.md'],
+        ];
+
+        if ($_ENV['ftp.enable_tests'] == 1) {
+            $data[] = ['file://' . __DIR__ . '/../changelog.md', $_ENV['ftp.uri'] . '/changelog.md'];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $sourcePath
+     * @param string $targetPath
+     * @dataProvider dataProviderTestCopy
+     */
+    public function testCopy($sourcePath, $targetPath)
+    {
+        $filesToCopy = 3;
+        $mountManager = (new MountManager())->setAutomount(true);
+        // cleanup
+        for ($i = 1; $i <= $filesToCopy; ++$i) {
+            $iTargetPath = $targetPath . $i;
+            if ($mountManager->has($iTargetPath)) {
+                $mountManager->delete($iTargetPath);
+            }
+        }
+
+        for ($i = 0; $i < $filesToCopy; $i++) {
+            $iTargetPath = $targetPath . $i;
+            $mountManager->copy($sourcePath, $iTargetPath);
+            $this->assertTrue($mountManager->has($iTargetPath));
+        }
+
+        // cleanup
+        for ($i = 1; $i <= $filesToCopy; ++$i) {
+            $iTargetPath = $targetPath . $i;
+            if ($mountManager->has($iTargetPath)) {
+                $mountManager->delete($iTargetPath);
+            }
         }
     }
 }

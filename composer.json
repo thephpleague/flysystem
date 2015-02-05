@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "phly/http": "~1.0-dev@dev"
     },
     "require-dev": {
         "ext-fileinfo": "*",

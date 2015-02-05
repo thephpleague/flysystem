@@ -16,6 +16,10 @@
             <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
+    <php>
+        <env name="ftp.enable_tests" value="0"/>
+        <env name="ftp.uri" value="ftp://user:pass@ftp.domain.foo/test_folder/"/>
+    </php>
     <filter>
         <whitelist>
             <directory suffix=".php">./src/</directory>
