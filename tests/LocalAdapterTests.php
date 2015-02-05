@@ -179,23 +179,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
     }
 
-    public function testNotWritableRoot()
-    {
-        if (IS_WINDOWS) {
-            $this->markTestSkipped("File permissions not supported on Windows.");
-        }
-
-        try {
-            $root = __DIR__.'/files/not-writable';
-            mkdir($root, 0000, true);
-            $this->setExpectedException('LogicException');
-            new Local($root);
-        } catch (\Exception $e) {
-            rmdir($root);
-            throw $e;
-        }
-    }
-
     public function testListContents()
     {
         $this->adapter->write('dirname/file.txt', 'contents', new Config());
