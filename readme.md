@@ -85,6 +85,8 @@ Want to get started quickly? Check out some of these integrations:
 * Adapter
 * Stash
 
+Caching requires https://github.com/thephpleague/flysystem-cached-adapter
+
 ## Documentation
 
 [Check out the documentation](http://flysystem.thephpleague.com/)
