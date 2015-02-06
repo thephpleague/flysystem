@@ -73,6 +73,7 @@ Want to get started quickly? Check out some of these integrations:
 * Sftp (through phpseclib): https://github.com/thephpleague/flysystem-sftp
 * Zip (through ZipArchive): https://github.com/thephpleague/flysystem-ziparchive
 * WebDAV (through SabreDAV): https://github.com/thephpleague/flysystem-webdav
+* PHPCR: https://github.com/thephpleague/flysystem-phpcr
 * Azure Blob Storage
 * NullAdapter
 
