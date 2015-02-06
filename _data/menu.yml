@@ -19,4 +19,5 @@ Adapters:
     ReplicateAdapter: '/adapter/replicate/'
     SFTP: '/adapter/sftp/'
     WebDAV: '/adapter/webdav/'
+    PHPCR: '/adapter/phpcr/'
     ZipArchive: '/adapter/zip-archive/'
