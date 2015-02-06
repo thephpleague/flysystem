@@ -355,7 +355,7 @@ class MountManager
                     break;
 
                 default:
-                    throw new \InvalidArgumentException('Adapter not found for given URI Scheme: ' . $uriString->getScheme());
+                    throw new \InvalidArgumentException('Adapter not found for given URI Scheme: ' . $uri->getScheme());
             }
 
             $filesystem = new Filesystem($adapter);
