@@ -288,7 +288,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $item = preg_replace('#\s+#', ' ', trim($item));
         list($permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $time, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
-        $timestamp = strtotime($month.' '.$day.' '.$time);
+        $timestamp = ftp_mdtm($this->getConnection(), $name);
         $path = empty($base) ? $name : $base.$this->separator.$name;
 
         if ($type === 'dir') {

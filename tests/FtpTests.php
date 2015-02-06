@@ -111,6 +111,17 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
+    if (strpos($directory, 'lastfiledir') !== false) {
+        return [
+            'drwxr-xr-x   2 ftp      ftp          4096 Feb  6  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 14 09:01 file2.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Feb  6 10:06 file3.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Mar 20  2014 file4.txt',
+        ];
+    }
+
     return [
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
@@ -129,6 +140,31 @@ function ftp_rawlist($connection, $directory)
     ];
 }
 
+function ftp_mdtm($connection, $path)
+{
+    switch ($path) {
+        case 'file1.txt':
+            return 1408438882;
+            break;
+
+        case 'file2.txt':
+            return 1408006883;
+            break;
+
+        case 'file3.txt':
+            return 1423217165;
+            break;
+
+        case 'file4.txt':
+            return 1395305765;
+            break;
+
+        default:
+            return 1395305765;
+            break;
+    }
+
+}
 function ftp_mkdir($connection, $dirname)
 {
     if (strpos($dirname, 'mkdir.fail') !== false) {
@@ -213,6 +249,22 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+    }
+
+    public function testGetLasFile()
+    {
+        $adapter = new Ftp($this->options);
+
+        $listing = $adapter->listContents('lastfiledir');
+
+        $last_modified_file = null;
+        foreach ($listing as $file) {
+            if (empty($last_modified_file) or $last_modified_file['timestamp'] < $file['timestamp']) {
+                $last_modified_file = $file;
+            }
+        }
+
+        $this->assertEquals('lastfiledir/file3.txt', $last_modified_file['path']);
     }
 
     /**
