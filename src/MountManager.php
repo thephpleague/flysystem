@@ -340,6 +340,7 @@ class MountManager
             $adapter = null;
 
             switch ($uri->getScheme()) {
+                case '':
                 case 'file':
                     $adapter = new Local($filesystemRoot);
                     break;
