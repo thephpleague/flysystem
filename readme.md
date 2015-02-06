@@ -82,7 +82,7 @@ Want to get started quickly? Check out some of these integrations:
 * Memory (array caching)
 * Redis (through Predis)
 * Memcached
-* Adapter: https://github.com/thephpleague/flysystem-cached-adapter
+* Adapter
 * Stash
 
 Caching requires https://github.com/thephpleague/flysystem-cached-adapter
