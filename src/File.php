@@ -117,8 +117,10 @@ class File extends Handler
     {
         if ($this->filesystem->rename($this->path, $newpath)) {
             $this->path = $newpath;
+
             return true;
         }
+
         return false;
     }
 
@@ -134,6 +136,7 @@ class File extends Handler
         if ($this->filesystem->copy($this->path, $newpath)) {
             return new File($this->filesystem, $newpath);
         }
+
         return false;
     }
 

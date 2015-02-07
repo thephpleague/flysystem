@@ -28,7 +28,7 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $adapter = new SynologyFtp($this->options);
         $listing = $adapter->listContents('', true);
         $this->assertInternalType('array', $listing);
-        $this->assertFalse($adapter->has('syno.not.found'));;
+        $this->assertFalse($adapter->has('syno.not.found'));
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
         $this->assertInternalType('array', $adapter->write('syno.unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));

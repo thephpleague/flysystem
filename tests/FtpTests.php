@@ -82,7 +82,6 @@ function ftp_pwd($connection)
 
 function ftp_raw($connection, $command)
 {
-
     if ($command === 'STAT syno.not.found') {
         return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
@@ -100,8 +99,12 @@ function ftp_raw($connection, $command)
 
 function ftp_rawlist($connection, $directory)
 {
-    if (strpos($directory, 'fail.rawlist') !== false) return false;
-    if ($directory === 'not.found') return false;
+    if (strpos($directory, 'fail.rawlist') !== false) {
+        return false;
+    }
+    if ($directory === 'not.found') {
+        return false;
+    }
 
     if (strpos($directory, 'rmdir.nested.fail') !== false) {
         return [

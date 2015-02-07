@@ -21,7 +21,8 @@ class FileTests extends \PHPUnit_Framework_TestCase
     {
         try {
             $this->filesystem->delete('file.txt');
-        } catch (FileNotFoundException $e) { }
+        } catch (FileNotFoundException $e) {
+        }
         $this->filesystem->deleteDir('files');
     }
 
