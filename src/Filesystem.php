@@ -46,7 +46,11 @@ class Filesystem implements FilesystemInterface
      */
     public function getAdapter()
     {
-        return $this->adapter;
+        if (method_exists($this->adapter, 'getAdapter')) {
+            return $this->adapter->getAdapter();
+        } else {
+            return $this->adapter;
+        }
     }
 
     /**
