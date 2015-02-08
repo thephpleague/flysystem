@@ -46,7 +46,11 @@ class Filesystem implements FilesystemInterface
      */
     public function getAdapter()
     {
-        return $this->adapter;
+        if (is_a($this->adapter, 'League\Flysystem\Cached\CachedAdapter')) {
+            return $this->adapter->getAdapter();
+        } else {
+            return $this->adapter;
+        }
     }
 
     /**
