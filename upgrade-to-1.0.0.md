@@ -26,7 +26,7 @@ repository. These adapters are:
 
 ##  Caching
 
-Caching has been removed from the main Filesystem class and is not implemented
+Caching has been removed from the main Filesystem class and is now implemented
 as an adapter decorator.
 
 ### Version 0.x
