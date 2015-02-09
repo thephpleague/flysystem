@@ -87,12 +87,18 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * Set the connections to passive mode.
+     * Set the connections to passive mode if specified
      *
      * @throws RuntimeException
      */
     protected function setConnectionPassiveMode()
     {
+        if ($this->passive === null) {
+            // sometimes it's better not to set it explicitly
+            // http://www.elitehosts.com/blog/php-ftp-passive-ftp-server-behind-nat-nightmare/
+            return;
+        }
+
         if (! ftp_pasv($this->getConnection(), $this->passive)) {
             throw new RuntimeException('Could not set passive mode for connection: '.$this->getHost().'::'.$this->getPort());
         }

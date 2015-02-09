@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "xstream/flysystem",
     "description": "Many filesystems, one API.",
     "keywords": [
         "filesystem", "files", "storage", "dropbox", "aws",
@@ -14,7 +14,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "phly/http": "0.10.1"
     },
     "require-dev": {
         "ext-fileinfo": "*",
