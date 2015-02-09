@@ -163,6 +163,10 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             ['ftp://usr:pass@ftphost.com/folder1/foo.bar', '/'],
             ['ftp://usr:pass@ftphost.com/foo.bar', '/'],
             ['ftp://usr:pass@ftphost.com', '/'],
+            ['sftp://usr@ftphost.com/folder1/foo.bar', '/'],
+            ['sftp://usr:pass@ftphost.com/folder1/foo.bar', '/'],
+            ['sftp://usr:pass@ftphost.com/foo.bar', '/'],
+            ['sftp://usr:pass@ftphost.com', '/'],
         ];
     }
 
@@ -186,6 +190,10 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             ['ftp://usr:pass@ftphost.com/folder1/foo.bar', 'ftp://usr:pass@ftphost.com/'],
             ['ftp://usr:pass@ftphost.com/foo.bar', 'ftp://usr:pass@ftphost.com/'],
             ['ftp://usr:pass@ftphost.com', 'ftp://usr:pass@ftphost.com/'],
+            ['sftp://usr@ftphost.com/folder1/foo.bar', 'sftp://usr@ftphost.com/'],
+            ['sftp://usr:pass@ftphost.com/folder1/foo.bar', 'sftp://usr:pass@ftphost.com/'],
+            ['sftp://usr:pass@ftphost.com/foo.bar', 'sftp://usr:pass@ftphost.com/'],
+            ['sftp://usr:pass@ftphost.com', 'sftp://usr:pass@ftphost.com/'],
         ];
     }
 
@@ -210,6 +218,10 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             $data[] = ['file://' . __DIR__ . '/../changelog.md', $_ENV['ftp.uri'] . '/changelog.md'];
         }
 
+        if ($_ENV['sftp.enable_tests'] == 1) {
+            $data[] = ['file://' . __DIR__ . '/../changelog.md', $_ENV['sftp.uri'] . '/changelog.md'];
+        }
+
         return $data;
     }
 
@@ -230,7 +242,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             }
         }
 
-        for ($i = 0; $i < $filesToCopy; $i++) {
+        for ($i = 1; $i < $filesToCopy; $i++) {
             $iTargetPath = $targetPath . $i;
             $mountManager->copy($sourcePath, $iTargetPath);
             $this->assertTrue($mountManager->has($iTargetPath));

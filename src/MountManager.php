@@ -301,6 +301,7 @@ class MountManager
                 return 'file';
 
             case 'ftp':
+            case 'sftp':
                 return ($uri->withPath('')->withFragment('')->withQuery('')->__toString());
 
             default:
@@ -318,6 +319,7 @@ class MountManager
             case '': // local file, without "file://"
             case 'file': // local file
             case 'ftp':
+            case 'sftp':
                 return '/';
 
             default:
@@ -347,6 +349,20 @@ class MountManager
 
                 case 'ftp':
                     $adapter = new Ftp([
+                        'host' => $uri->getHost(),
+                        'username' => explode(':', $uri->getUserInfo())[0],
+                        'password' => explode(':', $uri->getUserInfo())[1],
+                        'port' => $uri->getPort(),
+                        'root' => $filesystemRoot
+                    ]);
+                    break;
+
+                case 'sftp':
+                    if (!class_exists('\League\Flysystem\Sftp\SftpAdapter')) {
+                        throw new \InvalidArgumentException('League\Flysystem\Sftp\SftpAdapter class not found. Forgot to install league/flysystem-sftp via Composer?');
+                    }
+
+                    $adapter = new \League\Flysystem\Sftp\SftpAdapter([
                         'host' => $uri->getHost(),
                         'username' => explode(':', $uri->getUserInfo())[0],
                         'password' => explode(':', $uri->getUserInfo())[1],
