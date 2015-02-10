@@ -146,24 +146,27 @@ function ftp_rawlist($connection, $directory)
 function ftp_mdtm($connection, $path)
 {
     switch ($path) {
-        case 'file1.txt':
+        case 'lastfiledir/file1.txt':
             return 1408438882;
             break;
 
-        case 'file2.txt':
+        case 'lastfiledir/file2.txt':
             return 1408006883;
             break;
 
-        case 'file3.txt':
+        case 'lastfiledir/file3.txt':
             return 1423217165;
             break;
 
-        case 'file4.txt':
+        case 'lastfiledir/file4.txt':
             return 1395305765;
             break;
 
+        case 'some/file.ext':
+            return 1408438882;
+            break;
         default:
-            return 1395305765;
+            return -1;
             break;
     }
 
@@ -262,12 +265,23 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
         $last_modified_file = null;
         foreach ($listing as $file) {
-            if (empty($last_modified_file) or $last_modified_file['timestamp'] < $file['timestamp']) {
+            if (empty($last_modified_file)
+                or $adapter->getTimestamp($last_modified_file['path']) < $adapter->getTimestamp($file['path'])) {
                 $last_modified_file = $file;
             }
         }
 
         $this->assertEquals('lastfiledir/file3.txt', $last_modified_file['path']);
+    }
+
+    public function testListingDoNotIncludeTimestamp()
+    {
+        $adapter = new Ftp($this->options);
+
+        $listing = $adapter->listContents('');
+
+        $this->assertNotEmpty($listing);
+        $this->assertArrayNotHasKey('timestamp', $listing);
     }
 
     /**
