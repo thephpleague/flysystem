@@ -233,9 +233,16 @@ class Util
      */
     public static function rewindStream($resource)
     {
-        if (ftell($resource) !== 0) {
+        if (ftell($resource) !== 0 and static::isSeekableStream($resource)) {
             rewind($resource);
         }
+    }
+
+    public static function isSeekableStream($resource)
+    {
+        $metadata = stream_get_meta_data($resource);
+
+        return $metadata['seekable'];
     }
 
     /**
