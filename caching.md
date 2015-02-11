@@ -6,7 +6,7 @@ title: Caching
 
 # Caching
 
-Filesystem I/O is slow, so Flysystems cached filesystem meta-data to boost performance. When your application needs to scale you can also choose to use a (shared) persistent caching solution for this.
+Filesystem I/O is slow, so Flysystem uses cached filesystem meta-data to boost performance. When your application needs to scale you can also choose to use a (shared) persistent caching solution for this.
 Or enable a per request caching (recommended).
 
 Flysystem caches anything but the file contents. This keeps the cache small enough to be benefitial and covers all the filesystem inspection operations.
