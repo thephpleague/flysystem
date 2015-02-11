@@ -59,7 +59,6 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function testEnsureConfig()
     {
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig([]));
-        $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig('string'));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(null));
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config()));
     }
