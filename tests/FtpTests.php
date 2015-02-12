@@ -254,6 +254,9 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
 
+    /**
+     * @depends testInstantiable
+     */
     public function testGetLasFile()
     {
         $adapter = new Ftp($this->options);
@@ -271,6 +274,9 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('lastfiledir/file3.txt', $last_modified_file['path']);
     }
 
+    /**
+     * @depends testInstantiable
+     */
     public function testListingDoNotIncludeTimestamp()
     {
         $adapter = new Ftp($this->options);
