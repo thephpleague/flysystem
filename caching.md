@@ -25,7 +25,7 @@ The easiest way to boost the performance of Flysystem is to add Memory caching.
 This type of caching will cache everything in the lifetime of the current process (cli-job or http-request).
 Setting it up is easy:
 
-```php
+~~~ php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -42,7 +42,7 @@ $adapter = new CachedAdapter($localAdapter, $cacheStore);
 
 // And use that to create the filesystem
 $filesystem = new Filesystem($adapter);
-```
+~~~
 
 You can now use the filesystem as you would have before, but caching will be done for you on the fly.
 
