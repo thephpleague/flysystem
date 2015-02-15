@@ -228,7 +228,7 @@ class Util
      */
     public static function rewindStream($resource)
     {
-        if (ftell($resource) !== 0 and static::isSeekableStream($resource)) {
+        if (ftell($resource) !== 0 && static::isSeekableStream($resource)) {
             rewind($resource);
         }
     }
