@@ -86,7 +86,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
      */
     public function testOutsideRootPath($path)
     {
-        Util::normalizePath('something/../../../hehe');
+        Util::normalizePath($path);
     }
 
     public function pathProvider()
