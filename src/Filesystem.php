@@ -156,7 +156,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $contents = $this->read($path);
 
-        if (! $contents) {
+        if ($contents === false) {
             return false;
         }
 
