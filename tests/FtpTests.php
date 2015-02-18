@@ -94,7 +94,11 @@ function ftp_raw($connection, $command)
         return false;
     }
 
-    return [ 0 => '211-Status of somewhere/folder/dummy.txt:', 1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt', 2 => '211 End of status' ];
+    return [
+        0 => '211-Status of somewhere/folder/dummy.txt:',
+        1 => ' -rw-r--r-- 1 ftp ftp 0 Nov 24 13:59 somewhere/folder/dummy.txt',
+        2 => '211 End of status'
+    ];
 }
 
 function ftp_rawlist($connection, $directory)

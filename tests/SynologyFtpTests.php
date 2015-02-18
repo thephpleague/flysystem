@@ -44,4 +44,14 @@ class SynologyFtpTests extends \PHPUnit_Framework_TestCase
         $result = $adapter->listContents('fail.rawlist');
         $this->assertEquals([], $result);
     }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetMetadata()
+    {
+        $adapter = new SynologyFtp($this->options);
+        $result = $adapter->getMetadata('something.txt');
+        $this->assertNotEmpty($result);
+    }
 }
