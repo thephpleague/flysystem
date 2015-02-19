@@ -285,8 +285,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     protected function normalizeObject($item, $base)
     {
-        $item = preg_replace('#\s+#', ' ', trim($item));
-        list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = explode(' ', $item, 9);
+        // split with any number of whitespace but preserve any extra spaces for the filename
+        $regex = '/(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s(.+)/';
+        preg_match($regex, $item, $matches);
+        array_shift($matches);
+        list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = $matches;
         $type = $this->detectType($permissions);
         $path = empty($base) ? $name : $base.$this->separator.$name;
 
