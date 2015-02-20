@@ -224,6 +224,7 @@ class MountManager
      *
      * @param $from
      * @param $to
+     * @return bool
      */
     public function move($from, $to)
     {
