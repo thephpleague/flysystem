@@ -11,7 +11,7 @@ trait NotSupportingVisibilityTrait
      *
      * @param string $path
      *
-     * @return array|false
+     * @throws LogicException
      */
     public function getVisibility($path)
     {
