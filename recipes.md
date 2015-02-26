@@ -30,8 +30,8 @@ $file = $request->files->get($uploadname);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
-    $filesystem->writeStream('uploads/'.$stream);;
-    fclose($stream);;
+    $filesystem->writeStream('uploads/', $stream);
+    fclose($stream);
 }
 ~~~
 
