@@ -71,7 +71,7 @@ $file = Request::file($uploadname);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
-    $filesystem->writeStream('uploads/'.$stream);;
-    fclose($stream);;
+    $filesystem->writeStream('uploads/', $stream);
+    fclose($stream);
 }
 ~~~
