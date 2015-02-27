@@ -75,3 +75,28 @@ if ($file->isValid()) {
     fclose($stream);
 }
 ~~~
+
+### Yii 2 Upload
+
+~~~ php
+<?php
+
+namespace app\controllers;
+
+use yii\web\Controller;
+use yii\web\UploadedFile;
+
+class FileController extends Controller
+{
+    public function actionUpload()
+    {
+        $file = UploadedFile::getInstanceByName($uploadname);
+        
+        if ($file->error === UPLOAD_ERR_OK) {
+            $stream = fopen($file->tempName, 'r+');
+            $filesystem->writeStream('uploads/'.$file->name, $stream);
+            fclose($stream);
+        }
+    }
+}
+~~~
