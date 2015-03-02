@@ -76,6 +76,17 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testConstructorWithLink()
+    {
+        $target = __DIR__.'/files/';
+        $link = __DIR__ . '/link_to_files';
+        symlink($target, $link);
+
+        $this->adapter = new Local($link);
+        $this->assertEquals($target, $this->adapter->getPathPrefix());
+        unlink($link);
+    }
+
     public function testHasWithDir()
     {
         $this->adapter->createDir('0', new Config());
