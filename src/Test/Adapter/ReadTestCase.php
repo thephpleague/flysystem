@@ -2,12 +2,10 @@
 
 namespace League\Flysystem\Test\Adapter;
 
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\ReadInterface;
-use League\Flysystem\Config;
 
 /**
- * Base test case for reading adapters
+ * Base test case for read operations by adapters
  *
  * Extend for your adapter, overwrite the setup<Type> methods to change how
  * fixtures are prepared.

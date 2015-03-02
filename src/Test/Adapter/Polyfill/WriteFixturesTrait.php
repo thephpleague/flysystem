@@ -1,6 +1,7 @@
 <?php
 
 namespace League\Flysystem\Test\Adapter\Polyfill;
+
 use League\Flysystem\Config;
 
 /**
@@ -53,4 +54,3 @@ trait WriteFixturesTrait
         $this->adapter->createDir($location, new Config());
     }
 }
-

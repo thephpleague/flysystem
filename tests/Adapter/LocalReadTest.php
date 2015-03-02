@@ -15,7 +15,7 @@ class LocalReadTest extends ReadTestCase
      */
     protected function getRoot()
     {
-        return __DIR__.'/files/';
+        return __DIR__.DIRECTORY_SEPARATOR.'files'.DIRECTORY_SEPARATOR;
     }
 
     /**
