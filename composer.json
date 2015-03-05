@@ -18,7 +18,7 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "phpunit/phpunit": "~4.0",
+        "phpunit/phpunit": "~4.1",
         "mockery/mockery": "~0.9",
         "predis/predis": "~1.0",
         "tedivm/stash": "~0.12.0",
