@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.0.0 - UNRELEASED
+## 1.0.1 - 2015-01-23
+
+### Fixed
+
+* Re-added missing metadata from pathinfo to `getMetadata` calls.
+
+## 1.0.0 - 2015-01-19
 
 ### Removed
 
