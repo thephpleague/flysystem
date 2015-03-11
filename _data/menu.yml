@@ -6,6 +6,7 @@ Getting Started:
     Mount Manager: '/mount-manager/'
     Caching: '/caching/'
     Recipes: '/recipes/'
+    Plugins: '/plugins/'
     Upgrade to 1.0.0: '/upgrade-to-1.0.0/'
 Adapters:
     Local: '/adapter/local/'
