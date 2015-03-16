@@ -24,11 +24,11 @@ trait StreamedCopyTrait
 
         $result = $this->writeStream($newpath, $response['stream'], new Config());
 
-        if (is_resource($response['stream'])) {
+        if ($result !== false && is_resource($response['stream'])) {
             fclose($response['stream']);
         }
 
-        return (boolean) $result;
+        return $result !== false;
     }
 
     // Required abstract method

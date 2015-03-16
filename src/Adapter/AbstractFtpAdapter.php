@@ -383,7 +383,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function getTimestamp($path)
     {
         $timestamp = ftp_mdtm($this->getConnection(), $path);
-        return ( $timestamp !== -1) ? ['timestamp' => $timestamp] : false;
+
+        return ($timestamp !== -1) ? ['timestamp' => $timestamp] : false;
     }
 
     /**

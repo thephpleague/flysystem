@@ -173,7 +173,6 @@ function ftp_mdtm($connection, $path)
             return -1;
             break;
     }
-
 }
 function ftp_mkdir($connection, $dirname)
 {
