@@ -75,11 +75,11 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function removePathPrefix($path)
     {
-        if ($this->pathPrefix === null) {
+        if ($this->getPathPrefix() === null) {
             return $path;
         }
 
-        $length = strlen($this->pathPrefix);
+        $length = strlen($this->getPathPrefix());
 
         return substr($path, $length);
     }
