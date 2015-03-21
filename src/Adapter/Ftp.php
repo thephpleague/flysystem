@@ -283,9 +283,9 @@ class Ftp extends AbstractFtpAdapter
         // List the current directory
         $listing = ftp_nlist($connection, '.');
 
-        foreach ($listing as $k => $item) {
-            if (in_array($item, ['.', '..'])) {
-                unset($listing[$k]);
+        foreach ($listing as $key => $item) {
+            if (preg_match('~^\./.*~', $item)) {
+                $listing[$key] = substr($item, 2);
             }
         }
 
