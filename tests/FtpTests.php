@@ -129,6 +129,16 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
+    if (strpos($directory, 'spaces') !== false) {
+        return [
+            'drwxr-xr-x   2 ftp      ftp          4096 Feb  6  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01  file1.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 14 09:01 file2.txt ',
+            '-rw-r--r--   1 ftp      ftp           409 Feb  6 10:06 file 3.txt'
+        ];
+    }
+
     return [
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
@@ -291,6 +301,21 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($listing);
         $this->assertArrayNotHasKey('timestamp', $listing);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testListingLeadingTrailingSpace()
+    {
+        $adapter = new Ftp($this->options);
+
+        $listing = $adapter->listContents('spaces');
+
+        $this->assertNotEmpty($listing);
+        $this->assertEquals('spaces/ file1.txt', $listing[0]['path']);
+        $this->assertEquals('spaces/file2.txt ', $listing[1]['path']);
+        $this->assertEquals('spaces/file 3.txt', $listing[2]['path']);
     }
 
     /**
