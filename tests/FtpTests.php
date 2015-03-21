@@ -129,6 +129,15 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
+    if (strpos($directory, 'spaced.files') !== false) {
+        return [
+            'drwxr-xr-x   2 ftp      ftp          4096 Feb  6  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01  file1.txt',
+
+        ];
+    }
+
     return [
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
@@ -263,7 +272,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     /**
      * @depends testInstantiable
      */
-    public function testGetLasFile()
+    public function testGetLastFile()
     {
         $adapter = new Ftp($this->options);
 
@@ -279,6 +288,20 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('lastfiledir/file3.txt', $last_modified_file['path']);
     }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testListDirWithFileWithLeadingSpace()
+    {
+        $adapter = new Ftp($this->options);
+        $listing = $adapter->listContents('spaced.files');
+        $file = array_pop($listing);
+
+        $this->assertEquals('spaced.files/ file1.txt', $file['path']);
+    }
+
+
 
     /**
      * @depends testInstantiable
