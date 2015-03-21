@@ -31,6 +31,11 @@ class Local extends AbstractAdapter
      */
     public function __construct($root)
     {
+
+        if (is_link($root)) {
+            $root = readlink($root);
+        }
+
         $realRoot = $this->ensureDirectory($root);
 
         if ( ! is_dir($realRoot) || ! is_readable($realRoot)) {
