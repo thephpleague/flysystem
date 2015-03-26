@@ -272,7 +272,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($root . '/', $adapter->getPathPrefix());
     }
 
-    public function testConstructorWithExistentDirAndTrailingSlash()
+    public function testConstructorWithExistentRootAndTrailingSlash()
     {
         $root = __DIR__.'/files/';
         $adapter = new Local($root);
