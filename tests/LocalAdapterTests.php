@@ -76,17 +76,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testConstructorWithLink()
-    {
-        $target = __DIR__.'/files/';
-        $link = __DIR__ . '/link_to_files';
-        symlink($target, $link);
-
-        $this->adapter = new Local($link);
-        $this->assertEquals($target, $this->adapter->getPathPrefix());
-        unlink($link);
-    }
-
     public function testHasWithDir()
     {
         $this->adapter->createDir('0', new Config());
@@ -190,22 +179,6 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
     }
 
-    public function testNotWritableRoot()
-    {
-        if (IS_WINDOWS) {
-            $this->markTestSkipped("File permissions not supported on Windows.");
-        }
-
-        try {
-            $root = __DIR__.'/files/not-writable';
-            mkdir($root, 0000, true);
-            $this->setExpectedException('LogicException');
-            new Local($root);
-        } catch (\Exception $e) {
-            rmdir($root);
-            throw $e;
-        }
-    }
 
     public function testListContents()
     {
@@ -290,14 +263,121 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $this->adapter->applyPathPrefix(''));
     }
 
-    public function testConstructorWithLink()
+    public function testConstructorWithExistentRoot()
     {
+        $root = __DIR__.'/files';
+        $adapter = new Local($root);
+
+        $this->assertTrue(is_dir($adapter->getPathPrefix()));
+        $this->assertEquals($root . '/', $adapter->getPathPrefix());
+    }
+
+    public function testConstructorWithExistentDirAndTrailingSlash()
+    {
+        $root = __DIR__.'/files/';
+        $adapter = new Local($root);
+
+        $this->assertTrue(is_dir($adapter->getPathPrefix()));
+        $this->assertEquals($root, $adapter->getPathPrefix());
+    }
+
+    public function testConstructorNotExistentRoot()
+    {
+        $root = __DIR__.'/files/root_dir';
+        $adapter = new Local($root);
+
+        $this->assertTrue(is_dir($adapter->getPathPrefix()));
+        $this->assertEquals($root . '/', $adapter->getPathPrefix());
+
+        rmdir($root);
+    }
+
+    public function testConstructorNotExistentRootAndTrailingSlash()
+    {
+        $root = __DIR__.'/files/root_dir/';
+        $adapter = new Local($root);
+
+        $this->assertTrue(is_dir($adapter->getPathPrefix()));
+        $this->assertEquals($root, $adapter->getPathPrefix());
+
+        rmdir($root);
+    }
+
+    public function testConstructorNotWritableRoot()
+    {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("File permissions not supported on Windows.");
+        }
+
+        try {
+            $root = __DIR__.'/files/not-writable';
+            mkdir($root, 0000, true);
+            $this->setExpectedException('LogicException');
+            new Local($root);
+        } catch (\Exception $e) {
+            rmdir($root);
+            throw $e;
+        }
+    }
+
+    public function testConstructorWithLinkToDir()
+    {
+        //Note: Windows versions prior to Vista/Windows Server 2008 do not support symbolic links
+
         $target = __DIR__.'/files/';
-        $link = __DIR__ . '/link_to_files';
+        $link = __DIR__ . '/link_to_target';
+        symlink($target, $link);
+        $adapter = new Local($link);
+
+        $this->assertTrue(is_dir($adapter->getPathPrefix()));
+        $this->assertEquals($target, $adapter->getPathPrefix());
+
+        unlink($link);
+    }
+
+    public function testConstructorUsingFileAsDir()
+    {
+        $filename = __DIR__.'/files/touch';
+        touch($filename);
+
+        try {
+            $this->setExpectedException('LogicException');
+            new Local($filename);
+        } catch (\Exception $e) {
+            unlink($filename);
+            throw $e;
+        }
+    }
+
+    public function testConstructorUsingFileAsDirWithTrailingSlash()
+    {
+        $filename = __DIR__.'/files/touch';
+        touch($filename);
+        $root = $filename . '/';
+
+        try {
+            $this->setExpectedException('LogicException');
+            new Local($root);
+        } catch (\Exception $e) {
+            unlink($filename);
+            throw $e;
+        }
+    }
+
+    public function testConstructorUsingLinkToFileAsDir()
+    {
+        $target = __DIR__.'/files/touch';
+        touch($target);
+        $link = __DIR__ . '/link_to_target';
         symlink($target, $link);
 
-        $adapter = new Local($link);
-        $this->assertEquals($target, $adapter->getPathPrefix());
-        unlink($link);
+        try {
+            $this->setExpectedException('LogicException');
+            $this->adapter = new Local($link);
+        } catch (\Exception $e) {
+            unlink($link);
+            unlink($target);
+            throw $e;
+        }
     }
 }
