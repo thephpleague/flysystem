@@ -320,7 +320,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testConstructorWithLinkToDir()
+    public function testConstructorUsingLinkToDirAsRoot()
     {
         //Note: Windows versions prior to Vista/Windows Server 2008 do not support symbolic links
 
@@ -335,7 +335,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         unlink($link);
     }
 
-    public function testConstructorUsingFileAsDir()
+    public function testConstructorUsingFileAsRoot()
     {
         $filename = __DIR__.'/files/touch';
         touch($filename);
@@ -349,7 +349,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testConstructorUsingFileAsDirWithTrailingSlash()
+    public function testConstructorUsingFileAsRootWithTrailingSlash()
     {
         $filename = __DIR__.'/files/touch';
         touch($filename);
@@ -364,7 +364,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testConstructorUsingLinkToFileAsDir()
+    public function testConstructorUsingLinkToFileAsRoot()
     {
         $target = __DIR__.'/files/touch';
         touch($target);
