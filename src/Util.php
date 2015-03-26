@@ -88,7 +88,7 @@ class Util
         $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
         $normalized = static::normalizeRelativePath($normalized);
 
-        if (preg_match('#/\.{2}|^\.{2}/|^..$#', $normalized)) {
+        if (preg_match('#/\.{2}|^\.{2}/|^\.{2}$#', $normalized)) {
             throw new LogicException('Path is outside of the defined root, path: ['.$path.'], resolved: ['.$normalized.']');
         }
 
