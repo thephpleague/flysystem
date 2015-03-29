@@ -30,7 +30,6 @@ use LogicException;
  * @method bool createDir($dirname, $config = [])
  * @method array listFiles($directory = '', $recursive = false)
  * @method array listPaths($directory = '', $recursive = false)
- * @method array listWith(array $keys = array(), $directory = '', $recursive = false)
  * @method array getWithMetadata($path, array $metadata)
  * @method string|false getMimetype($path)
  * @method string|false getTimestamp($path)
