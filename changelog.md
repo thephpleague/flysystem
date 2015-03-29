@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.0.3 - UNRELEASED
+## 1.0.4 - UNRELEASED
+
+## 1.0.3 - 2015-03-29
 
 ### Fixed
 
