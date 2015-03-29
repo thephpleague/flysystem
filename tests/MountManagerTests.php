@@ -152,4 +152,14 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
             $this->assertEquals($result['filesystem'], 'huge');
         }
     }
+
+    public function testListWith()
+    {
+        $manager = new MountManager();
+        $response = ['path' => 'file.ext', 'timestamp' => time()];
+        $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $mock->shouldReceive('listWith')->with(['timestamp'], 'file.ext', false)->once()->andReturn($response);
+        $manager->mountFilesystem('prot', $mock);
+        $this->assertEquals($response, $manager->listWith(['timestamp'], 'prot://file.ext', false));
+    }
 }

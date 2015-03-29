@@ -177,17 +177,7 @@ class MountManager
     {
         list($prefix, $arguments) = $this->filterPrefix($arguments);
 
-        $filesystem = $this->getFilesystem($prefix);
-
-        try {
-            return $this->invokePlugin($method, $arguments, $filesystem);
-        } catch (PluginNotFoundException $e) {
-            // Let it pass, it's ok, don't panic.
-        }
-
-        $callback = [$filesystem, $method];
-
-        return call_user_func_array($callback, $arguments);
+        return $this->invokePluginOnFilesystem($method, $arguments, $prefix);
     }
 
     /**
@@ -220,6 +210,22 @@ class MountManager
     }
 
     /**
+     * List with plugin adapter.
+     *
+     * @param array $keys
+     * @param string $directory
+     * @param bool $recursive
+     */
+    public function listWith(array $keys = [], $directory = '', $recursive = false)
+    {
+        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        $directory = $arguments[0];
+        $arguments = [$keys, $directory, $recursive];
+
+        return $this->invokePluginOnFilesystem('listWith', $arguments, $prefix);
+    }
+
+    /**
      * Move a file.
      *
      * @param $from
@@ -235,5 +241,28 @@ class MountManager
         }
 
         return false;
+    }
+
+    /**
+     * Invoke a plugin on a filesystem mounted on a given prefix.
+     *
+     * @param $method
+     * @param $arguments
+     * @param $prefix
+     * @return mixed
+     */
+    public function invokePluginOnFilesystem($method, $arguments, $prefix)
+    {
+        $filesystem = $this->getFilesystem($prefix);
+
+        try {
+            return $this->invokePlugin($method, $arguments, $filesystem);
+        } catch (PluginNotFoundException $e) {
+            // Let it pass, it's ok, don't panic.
+        }
+
+        $callback = [$filesystem, $method];
+
+        return call_user_func_array($callback, $arguments);
     }
 }
