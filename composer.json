@@ -23,7 +23,7 @@
         "predis/predis": "~1.0",
         "tedivm/stash": "~0.12.0",
         "league/phpunit-coverage-listener" : "~1.1",
-        "phpspec/phpspec": "~2.0.0",
+        "phpspec/phpspec": "~2.0",
         "phpspec/prophecy-phpunit": "~1.0"
     },
     "autoload": {
