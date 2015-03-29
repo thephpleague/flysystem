@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.3 - UNRELEASED
+
+### Fixed
+
+* #429: Handle FTP filenames with leading spaces.
+* #418: Handle FTP filenames with dot prefixes.
+* #427: Path normalising edge case resolved.
+
 ## 1.0.2 2015-03-10
 
 ### Altered
