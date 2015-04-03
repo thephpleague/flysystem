@@ -47,6 +47,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
             }
 
             $method = 'set'.ucfirst($setting);
+
             if (method_exists($this, $method)) {
                 $this->$method($config[$setting]);
             }
