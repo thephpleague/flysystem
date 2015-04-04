@@ -33,7 +33,7 @@ class Local extends AbstractAdapter
     {
         $realRoot = $this->ensureDirectory($root);
 
-        if ( ! is_dir($realRoot) || ! is_readable($realRoot)) {
+        if (! is_readable($realRoot)) {
             throw new \LogicException('The root path '.$root.' is not readable.');
         }
 
@@ -49,8 +49,19 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if (is_dir($root) === false) {
-            mkdir($root, 0755, true);
+        //see testConstructorUsingFileAsDirWithTrailingSlash()
+        $root = rtrim($root, '/');
+
+        if (is_dir($root)) {
+            return realpath($root);
+        }
+
+        if (is_file($root)) {
+            throw new \LogicException($root.' is a file. Should be a directory.');
+        }
+
+        if (! mkdir($root, 0755, true)) {
+            throw new \LogicException('The root path' . $root.' can not be created.');
         }
 
         return realpath($root);
