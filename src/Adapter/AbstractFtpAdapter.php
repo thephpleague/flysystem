@@ -45,7 +45,12 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
             if (! isset($config[$setting])) {
                 continue;
             }
-            $this->{'set'.ucfirst($setting)}($config[$setting]);
+
+            $method = 'set'.ucfirst($setting);
+
+            if (method_exists($this, $method)) {
+                $this->$method($config[$setting]);
+            }
         }
 
         return $this;
