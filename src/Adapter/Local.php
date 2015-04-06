@@ -316,7 +316,7 @@ class Local extends AbstractAdapter
         $contents = array_reverse($contents);
 
         foreach ($contents as $file) {
-            if ($file['type'] === 'file') {
+            if ($file['type'] !== 'dir') {
                 unlink($this->applyPathPrefix($file['path']));
             } else {
                 rmdir($this->applyPathPrefix($file['path']));
@@ -338,8 +338,12 @@ class Local extends AbstractAdapter
         $normalized = [
             'type' => $file->getType(),
             'path' => $this->getFilePath($file),
-            'timestamp' => $file->getMTime(),
         ];
+        try {
+            $normalized['timestamp'] = $file->getMTime();
+        } catch (\RuntimeException $e) {
+            $normalized['timestamp'] = 0;
+        }
 
         if ($normalized['type'] === 'file') {
             $normalized['size'] = $file->getSize();
