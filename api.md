@@ -178,6 +178,8 @@ echo $info['mimetype'];
 echo $info['timestamp'];
 ~~~
 
+__NOTE__: This requires the `League\Flysystem\Plugin\GetWithMetadata` plugin.
+
 ## Using streams for reads and writes
 
 ~~~ php
