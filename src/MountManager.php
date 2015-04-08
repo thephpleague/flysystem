@@ -211,9 +211,9 @@ class MountManager
     /**
      * List with plugin adapter.
      *
-     * @param array $keys
+     * @param array  $keys
      * @param string $directory
-     * @param bool $recursive
+     * @param bool   $recursive
      */
     public function listWith(array $keys = [], $directory = '', $recursive = false)
     {

@@ -27,7 +27,7 @@ class SynologyFtp extends Ftp
     {
         $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
 
-        if ($listing === false || (!empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
+        if ($listing === false || (! empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
             return [];
         }
 

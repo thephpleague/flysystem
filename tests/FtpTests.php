@@ -301,8 +301,6 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('spaced.files/ file1.txt', $file['path']);
     }
 
-
-
     /**
      * @depends testInstantiable
      */

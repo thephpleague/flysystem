@@ -387,10 +387,6 @@ class Ftp extends AbstractFtpAdapter
     {
         $listing = ftp_rawlist($this->getConnection(), '-lna '.$directory, $recursive);
 
-        if ($listing === false) {
-            return [];
-        }
-
-        return $this->normalizeListing($listing, $directory);
+        return $listing ? $this->normalizeListing($listing, $directory) : [];
     }
 }
