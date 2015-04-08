@@ -55,6 +55,9 @@ class FtpdTests extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($result);
     }
 
+    /**
+     * @depends testInstantiable
+     */
     public function testSynologyFtpLegacyClassName()
     {
         $adapter = new SynologyFtp($this->options);
