@@ -56,6 +56,83 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $manager->filterPrefix($arguments);
     }
 
+    /**
+     * @dataProvider  validPrefixProvider
+     */
+    public function testValidPrefixes($prefix, $arguments)
+    {
+        $manager = new MountManager();
+        $fs = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $manager->mountFilesystem($prefix, $fs);
+        $result = $manager->filterPrefix($arguments);
+        $this->assertEquals($prefix, $result[0], '"' . $prefix . '" should be a valid scheme/prefix');
+    }
+
+    public function validPrefixProvider()
+    {
+        return [
+            [ 'https', ['https://asdf'] ],
+            [ 'user-assets', ['user-assets://some/path.jpg'] ],
+            [ 'article-images', ['article-images://some/path.jpg'] ],
+            [ 'chrome-extension', ['chrome-extension://index.js'] ],
+            [ 'ftp+ssl', ['ftp+ssl://some/file.ext'] ],
+            [ 'svn+ssh', ['svn+ssh://some/pic.png'] ],
+            [ 'web+auth', ['web+auth://some/other/image'] ],
+            [ 'cdn.images', ['cdn.images://category.images.jpg'] ],
+        ];
+    }
+
+    /**
+     * @dataProvider  invalidPrefixProvider
+     */
+    public function testInvalidPrefixes($prefix, $arguments, $exception)
+    {
+        $this->setExpectedException($exception);
+        $manager = new MountManager();
+        $fs = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $manager->mountFilesystem($prefix, $fs);
+        $result = $manager->filterPrefix($arguments);
+    }
+
+    public function invalidPrefixProvider()
+    {
+        return [
+            [ '1up', ['1up://asdf'], 'InvalidArgumentException' ],
+            [ '1337', ['1337://asdf'], 'InvalidArgumentException' ],
+            [ '-foo', ['-foo://asdf'], 'InvalidArgumentException' ],
+            [ '+bar', ['+bar://asdf'], 'InvalidArgumentException' ],
+            [ '.asdf', ['.asdf://asdf'], 'InvalidArgumentException' ],
+            [ '.', ['.://asdf'], 'InvalidArgumentException' ],
+            [ '.http', ['.http://asdf'], 'InvalidArgumentException' ],
+            [ '+', ['+://asdf'], 'InvalidArgumentException' ],
+            [ '+http', ['+http://asdf'], 'InvalidArgumentException' ],
+            [ '-', ['.asdf://asdf'], 'InvalidArgumentException' ],
+            [ '-http', ['-http://asdf'], 'InvalidArgumentException' ],
+            [ '/', ['/://asdf'], 'InvalidArgumentException' ],
+            [ '/http', ['/http://asdf'], 'InvalidArgumentException' ],
+            [ ':', [':://asdf'], 'InvalidArgumentException' ],
+            [ ':http', [':http://asdf'], 'InvalidArgumentException' ],
+            [ '://', ['://://asdf'], 'InvalidArgumentException' ],
+        ];
+    }
+
+    public function testMountFilesystemFailsWithInvalidPrefixGiven()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $manager = new MountManager();
+        $fs = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $manager->mountFilesystem('+invalid', $fs);
+    }
+
+    public function testCaseInsensitivePrefixUsageWorks()
+    {
+        $manager = new MountManager();
+        $fs = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $fs->shouldReceive('aMethodCall')->once()->andReturn('a result');
+        $manager->mountFilesystem('ASSETS', $fs);
+        $this->assertEquals($manager->aMethodCall('assets://file.ext'), 'a result');
+    }
+
     public function testCallForwarder()
     {
         $manager = new MountManager();
