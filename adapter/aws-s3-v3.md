@@ -18,8 +18,10 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 
 $client = S3Client::factory([
-    'key'    => 'your-key',
-    'secret' => 'your-secret',
+    'credentials' => [
+        'key'    => 'your-key',
+        'secret' => 'your-secret',
+    ],
     'region' => 'your-region',
     'version' => 'latest|version',
 ]);
