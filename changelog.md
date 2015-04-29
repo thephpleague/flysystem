@@ -2,6 +2,10 @@
 
 ## 1.0.4 - UNRELEASED
 
+### Fixed
+
+* [Adapter\Local] Symlinks are now explicitly not supported, this was previously broken.
+
 ## 1.0.3 - 2015-03-29
 
 ### Fixed
