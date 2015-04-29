@@ -7,6 +7,7 @@ use FilesystemIterator;
 use Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\NotSupportedException;
 use League\Flysystem\Util;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -335,15 +336,16 @@ class Local extends AbstractAdapter
      */
     protected function normalizeFileInfo(SplFileInfo $file)
     {
+        if ($file->isLink()) {
+            throw NotSupportedException::forLink($file);
+        }
+
         $normalized = [
             'type' => $file->getType(),
             'path' => $this->getFilePath($file),
         ];
-        try {
-            $normalized['timestamp'] = $file->getMTime();
-        } catch (\RuntimeException $e) {
-            $normalized['timestamp'] = 0;
-        }
+
+        $normalized['timestamp'] = $file->getMTime();
 
         if ($normalized['type'] === 'file') {
             $normalized['size'] = $file->getSize();

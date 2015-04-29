@@ -71,7 +71,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
             if ($file->isDir()) {
                 rmdir($file->getRealPath());
             } else {
-                unlink($file->getRealPath());
+                unlink($file->getPathname());
             }
         }
     }
@@ -288,5 +288,19 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $adapter = new Local($link);
         $this->assertEquals($target, $adapter->getPathPrefix());
         unlink($link);
+    }
+
+    /**
+     * @expectedException League\Flysystem\NotSupportedException
+     */
+    public function testLinkCausedUnsupportedException()
+    {
+        $root = __DIR__.'/files/';
+        $original = $root.'original.txt';
+        $link = $root.'link.txt';
+        file_put_contents($original, 'something');
+        symlink($original, $link);
+        $adapter = new Local($root);
+        $adapter->listContents();
     }
 }
