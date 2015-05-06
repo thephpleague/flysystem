@@ -11,43 +11,43 @@ title: API
 __Write Files__
 
 ~~~ php
-$filesystem->write('filename.txt', 'contents');
+$filesystem->write('path/to/file.txt', 'contents');
 ~~~
 
 __Update Files__
 
 ~~~ php
-$filesystem->update('filename.txt', 'new contents');
+$filesystem->update('path/to/file.txt', 'new contents');
 ~~~
 
 __Write or Update Files__
 
 ~~~ php
-$filesystem->put('filename.txt', 'contents');
+$filesystem->put('path/to/file.txt', 'contents');
 ~~~
 
 __Read Files__
 
 ~~~ php
-$contents = $filesystem->read('filename.txt');
+$contents = $filesystem->read('path/to/file.txt');
 ~~~
 
 __Check if a file exists__
 
 ~~~ php
-$exists = $filesystem->has('filename.txt');
+$exists = $filesystem->has('path/to/file.txt');
 ~~~
 
 __Delete Files__
 
 ~~~ php
-$filesystem->delete('filename.txt');
+$filesystem->delete('path/to/file.txt');
 ~~~
 
 __Read and Delete__
 
 ~~~ php
-$contents = $filesystem->readAndDelete('filename.txt');
+$contents = $filesystem->readAndDelete('path/to/file.txt');
 ~~~
 
 __Rename Files__
@@ -65,30 +65,30 @@ $filesystem->copy('filename.txt', 'duplicate.txt');
 __Get Mimetypes__
 
 ~~~ php
-$mimetype = $filesystem->getMimetype('filename.txt');
+$mimetype = $filesystem->getMimetype('path/to/file.txt');
 ~~~
 
 __Get Timestamps__
 
 ~~~ php
-$timestamp = $filesystem->getTimestamp('filename.txt');
+$timestamp = $filesystem->getTimestamp('path/to/file.txt');
 ~~~
 
 __Get File Sizes__
 
 ~~~ php
-$size = $filesystem->getSize('filename.txt');
+$size = $filesystem->getSize('path/to/file.txt');
 ~~~
 
 __Create Directories__
 
 ~~~ php
-$filesystem->createDir('nested/directory');
+$filesystem->createDir('path/to/nested/directory');
 ~~~
 Directories are also made implicitly when writing to a deeper path
 
 ~~~ php
-$filesystem->write('path/to/filename.txt', 'contents');
+$filesystem->write('path/to/file.txt', 'contents');
 ~~~
 
 __Delete Directories__
@@ -96,6 +96,8 @@ __Delete Directories__
 ~~~ php
 $filesystem->deleteDir('path/to/directory');
 ~~~
+
+__NOTE__: All paths used by Flysystem API are relative to the adapter root directory.
 
 __Manage Visibility__
 
