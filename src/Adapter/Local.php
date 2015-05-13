@@ -52,9 +52,7 @@ class Local extends AbstractAdapter
     {
         if (! is_dir($root)) {
             $umask = umask(0);
-            
             mkdir($root, 0777, true);
-            
             umask($umask);
         }
 
@@ -298,7 +296,6 @@ class Local extends AbstractAdapter
     public function createDir($dirname, Config $config)
     {
         $location = $this->applyPathPrefix($dirname);
-
         $umask = umask(0);
         
         if (! is_dir($location) && ! mkdir($location, 0777, true)) {
@@ -308,7 +305,7 @@ class Local extends AbstractAdapter
         }
 
         umask($umask);
-
+        
         return $return;
     }
 
