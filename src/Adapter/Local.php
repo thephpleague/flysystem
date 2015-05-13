@@ -50,8 +50,10 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if (is_dir($root) === false) {
-            mkdir($root, 0755, true);
+        if (! is_dir($root)) {
+            $umask = umask(0);
+            mkdir($root, 0777, true);
+            umask($umask);
         }
 
         return realpath($root);
@@ -294,12 +296,17 @@ class Local extends AbstractAdapter
     public function createDir($dirname, Config $config)
     {
         $location = $this->applyPathPrefix($dirname);
-
+        $umask = umask(0);
+        
         if (! is_dir($location) && ! mkdir($location, 0777, true)) {
-            return false;
+            $return = false;
+        } else {
+            $return = ['path' => $dirname, 'type' => 'dir'];
         }
 
-        return ['path' => $dirname, 'type' => 'dir'];
+        umask($umask);
+        
+        return $return;
     }
 
     /**
