@@ -47,5 +47,5 @@ $client = S3Client::factory([
 
 Known compliant storage providers are:
 
-    * [Google Cloud Storage](https://cloud.google.com/storage/docs/migrating#migration-simple)
-    * Know more? Please submit a PR!
+* [Google Cloud Storage](https://cloud.google.com/storage/docs/migrating#migration-simple)
+* Know more? Please submit a PR!
