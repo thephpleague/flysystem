@@ -1,7 +1,7 @@
 ---
 layout: default
 permalink: /upgrade-to-1.0.0/
-title: Caching
+title: Upgrade to 1.0.0
 ---
 
 # Upgrade to 1.0.0
@@ -15,14 +15,14 @@ In order to have better dependency management, and to remove some of the
 version contstraints, some of the adapters have been moved out or the main
 repository. These adapters are:
 
-* AwsS3: AWS SDK V2 Adapter - [docs](/adapter/aws-s3-v2/)
-* AwsS3V3: AWS SDK V3 Adapter - [docs](/adapter/aws-s3-v3/)
-* Dropbox: [docs](/adapter/dropbox/)
-* Rackspace: [docs](/adapter/rackspace/)
-* GridFS: [docs](/adapter/gridfs/)
-* Sftp: [docs](/adapter/sftp/)
-* WebDAV: [docs](/adapter/webdav/)
-* ZipArchive: [docs](/adapter/zip-archive/)
+* [AwsS3: AWS SDK V2 Adapter](/adapter/aws-s3-v2/)
+* [AwsS3V3: AWS SDK V3 Adapter](/adapter/aws-s3-v3/)
+* [Dropbox](/adapter/dropbox/)
+* [Rackspace](/adapter/rackspace/)
+* [GridFS](/adapter/gridfs/)
+* [Sftp](/adapter/sftp/)
+* [WebDAV](/adapter/webdav/)
+* [ZipArchive](/adapter/zip-archive/)
 
 ##  Caching
 

@@ -6,6 +6,12 @@ title: Null Adapter
 
 # Null Adapter
 
+## Installation
+
+Comes with the main Flysystem package.
+
+## Usage
+
 Acts like /dev/null
 
 ~~~ php
