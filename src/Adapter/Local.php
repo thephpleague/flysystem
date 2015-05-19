@@ -7,6 +7,7 @@ use FilesystemIterator;
 use Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\NotSupportedException;
 use League\Flysystem\Util;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -49,8 +50,10 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if (is_dir($root) === false) {
-            mkdir($root, 0755, true);
+        if (! is_dir($root)) {
+            $umask = umask(0);
+            mkdir($root, 0777, true);
+            umask($umask);
         }
 
         return realpath($root);
@@ -293,12 +296,17 @@ class Local extends AbstractAdapter
     public function createDir($dirname, Config $config)
     {
         $location = $this->applyPathPrefix($dirname);
-
+        $umask = umask(0);
+        
         if (! is_dir($location) && ! mkdir($location, 0777, true)) {
-            return false;
+            $return = false;
+        } else {
+            $return = ['path' => $dirname, 'type' => 'dir'];
         }
 
-        return ['path' => $dirname, 'type' => 'dir'];
+        umask($umask);
+        
+        return $return;
     }
 
     /**
@@ -316,7 +324,7 @@ class Local extends AbstractAdapter
         $contents = array_reverse($contents);
 
         foreach ($contents as $file) {
-            if ($file['type'] === 'file') {
+            if ($file['type'] !== 'dir') {
                 unlink($this->applyPathPrefix($file['path']));
             } else {
                 rmdir($this->applyPathPrefix($file['path']));
@@ -335,11 +343,16 @@ class Local extends AbstractAdapter
      */
     protected function normalizeFileInfo(SplFileInfo $file)
     {
+        if ($file->isLink()) {
+            throw NotSupportedException::forLink($file);
+        }
+
         $normalized = [
             'type' => $file->getType(),
             'path' => $this->getFilePath($file),
-            'timestamp' => $file->getMTime(),
         ];
+
+        $normalized['timestamp'] = $file->getMTime();
 
         if ($normalized['type'] === 'file') {
             $normalized['size'] = $file->getSize();
