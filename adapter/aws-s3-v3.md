@@ -12,6 +12,8 @@ title: Aws S3 Adapter V3
 composer require league/flysystem-aws-s3-v3
 ~~~
 
+## Usage
+
 ~~~ php
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;

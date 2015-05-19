@@ -14,7 +14,6 @@ a problem. Please consider contributing a recipe. Contributions are very welcome
 ### Plain PHP Upload
 
 ~~~ php
-<?php
 $stream = fopen($_FILES[$uploadname]['tmp_name'], 'r+');
 $filesystem->writeStream('uploads/'.$_FILES[$uploadname]['name'], $stream);
 fclose($stream);
@@ -23,14 +22,13 @@ fclose($stream);
 ### Symfony Upload
 
 ~~~ php
-<?php
 /** @var Symfony\Component\HttpFoundation\Request $request */
 /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
 $file = $request->files->get($uploadname);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
-    $filesystem->writeStream('uploads/', $stream);
+    $filesystem->writeStream('uploads/'.$file->getClientOriginalName(), $stream);
     fclose($stream);
 }
 ~~~
@@ -66,12 +64,11 @@ class UploadController extends Controller {
 ### Laravel 4/5 - Static-Access Proxy
 
 ~~~ php
-<?php
 $file = Request::file($uploadname);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
-    $filesystem->writeStream('uploads/', $stream);
+    $filesystem->writeStream('uploads/'.$file->getClientOriginalName(), $stream);
     fclose($stream);
 }
 ~~~

@@ -18,7 +18,7 @@ composer require league/flysystem-sftp
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 
-$filesystem = new Filesystem(new SftpAdapter(array(
+$filesystem = new Filesystem(new SftpAdapter([
     'host' => 'example.com',
     'port' => 21,
     'username' => 'username',
@@ -26,5 +26,5 @@ $filesystem = new Filesystem(new SftpAdapter(array(
     'privateKey' => 'path/to/or/contents/of/privatekey',
     'root' => '/path/to/root',
     'timeout' => 10,
-)));
+]));
 ~~~

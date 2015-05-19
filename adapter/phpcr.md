@@ -32,14 +32,14 @@ use Jackalope\RepositoryFactoryDoctrineDBAL;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
 
-$connection = DriverManager::getConnection(array(
+$connection = DriverManager::getConnection([
     'driver' => 'pdo_sqlite',
     'path'   => '/path/to/sqlite.db',
-));
+]);
 $factory = new RepositoryFactoryDoctrineDBAL();
-$repository = $factory->getRepository(array(
+$repository = $factory->getRepository([
     'jackalope.doctrine_dbal_connection' => $connection,
-));
+]);
 $session = $repository->login(new SimpleCredentials('', ''));
 
 // this part looks the same regardless of your phpcr implementation.

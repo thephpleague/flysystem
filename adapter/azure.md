@@ -12,11 +12,9 @@ title: Azure Blob Storage
 composer require league/flysystem-azure
 ~~~
 
-# Usage
+## Usage
 
 ~~~ php
-<?php
-
 use WindowsAzure\Common\ServicesBuilder;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Azure\AzureAdapter;

@@ -19,7 +19,7 @@ This package supplies an Adapter decorator which acts as a caching proxy.
 
 The CachedAdapter (the decorator) caches anything but the file contents. This keeps the cache small enough to be benefitial and covers all the filesystem inspection operations.
 
-# Memory Caching
+## Memory Caching
 
 The easiest way to boost the performance of Flysystem is to add Memory caching.
 This type of caching will cache everything in the lifetime of the current process (cli-job or http-request).

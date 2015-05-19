@@ -18,10 +18,10 @@ $s3 = new League\Flysystem\Filesystem($s3Adapter);
 $local = new League\Flysystem\Filesystem($localAdapter);
 
 // Add them in the constructor
-$manager = new League\Flysystem\MountManager(array(
+$manager = new League\Flysystem\MountManager([
     'ftp' => $ftp,
     's3' => $s3,
-));
+]);
 
 // Or mount them later
 $manager->mountFilesystem('local', $local);

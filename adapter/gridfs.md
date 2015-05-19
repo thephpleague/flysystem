@@ -6,6 +6,14 @@ title: FTP Adapter
 
 # GridFS Adapter
 
+## Installation
+
+~~~ bash
+composer require league/flysystem-gridfs
+~~~
+
+## Usage
+
 ~~~ php
 use League\Flysystem\GridFS\GridFSAdapter;
 use League\Flysystem\Filesystem;
