@@ -7,9 +7,9 @@ title: Recipes
 # Recipes
 
 Flysystem Recipes describe common tasks and/or describe prefered ways to deal with
-a problem. Please consider contributing a recipie. Contributions are very welcome!
+a problem. Please consider contributing a recipe. Contributions are very welcome!
 
-## Handling uploads.
+## Handling uploads
 
 ### Plain PHP Upload
 
