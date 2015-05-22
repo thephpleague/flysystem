@@ -275,6 +275,17 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     /**
      * @depends testInstantiable
      */
+    public function testGetMetadataForRoot()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('');
+        $expected = ['type' => 'dir', 'path' => ''];
+        $this->assertEquals($expected, $metadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
     public function testGetLastFile()
     {
         $adapter = new Ftp($this->options);
