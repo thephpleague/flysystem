@@ -297,7 +297,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($dirname);
         $umask = umask(0);
-        
+
         if (! is_dir($location) && ! mkdir($location, 0777, true)) {
             $return = false;
         } else {
@@ -305,7 +305,7 @@ class Local extends AbstractAdapter
         }
 
         umask($umask);
-        
+
         return $return;
     }
 

@@ -10,7 +10,7 @@ class NotSupportedException extends RuntimeException
     /**
      * Create a new exception for a link.
      *
-     * @param SplFileInfo $file
+     * @param  SplFileInfo $file
      * @return static
      */
     public static function forLink(SplFileInfo $file)
