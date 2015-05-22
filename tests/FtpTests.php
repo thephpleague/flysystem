@@ -66,9 +66,12 @@ function ftp_login($connection)
     return true;
 }
 
-function ftp_chdir($connection)
+function ftp_chdir($connection, $directory)
 {
     if ($connection === 'chdir.fail') {
+        return false;
+    }
+    if ($directory === 'not.found') {
         return false;
     }
 
