@@ -303,7 +303,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $connection = $this->getConnection();
 
-        if (! strlen($path)) {
+        if (empty($path)) {
             return ['type' => 'dir', 'path' => ''];
         }
 
@@ -320,10 +320,6 @@ class Ftp extends AbstractFtpAdapter
         }
 
         $metadata = $this->normalizeObject($listing[0], '');
-
-        if ($metadata['path'] === '.') {
-            $metadata['path'] = $path;
-        }
 
         return $metadata;
     }

@@ -71,7 +71,12 @@ function ftp_chdir($connection, $directory)
     if ($connection === 'chdir.fail') {
         return false;
     }
+
     if ($directory === 'not.found') {
+        return false;
+    }
+
+    if ($directory === 'file1.txt') {
         return false;
     }
 
@@ -109,8 +114,15 @@ function ftp_rawlist($connection, $directory)
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
     }
+
     if ($directory === 'not.found') {
         return false;
+    }
+
+    if (strpos($directory, 'file1.txt') !== false) {
+        return [
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
     }
 
     if (strpos($directory, 'rmdir.nested.fail') !== false) {
@@ -281,6 +293,18 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $metadata = $adapter->getMetadata('');
         $expected = ['type' => 'dir', 'path' => ''];
         $this->assertEquals($expected, $metadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetMetadata()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('file1.txt');
+        $this->assertInternalType('array', $metadata);
+        $this->assertEquals('file', $metadata['type']);
+        $this->assertEquals('file1.txt', $metadata['path']);
     }
 
     /**
