@@ -76,7 +76,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if ($directory === 'file1.txt') {
+    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1'])) {
         return false;
     }
 
@@ -132,6 +132,18 @@ function ftp_rawlist($connection, $directory)
     if ($directory === '0') {
         return [
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 0',
+        ];
+    }
+
+    if (strpos($directory, 'file2.txt') !== false) {
+        return [
+            '05-23-15  12:09PM                  684 file2.txt',
+        ];
+    }
+
+    if (strpos($directory, 'dir1') !== false) {
+        return [
+            '2015-05-23  12:09       <DIR>          dir1',
         ];
     }
 
@@ -327,6 +339,26 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('0', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetWindowsMetadata()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('file2.txt');
+        $this->assertInternalType('array', $metadata);
+        $this->assertEquals('file', $metadata['type']);
+        $this->assertEquals('file2.txt', $metadata['path']);
+        $this->assertEquals(1432382940, $metadata['timestamp']);
+        $this->assertEquals('public', $metadata['visibility']);
+        $this->assertEquals(684, $metadata['size']);
+
+        $metadata = $adapter->getMetadata('dir1');
+        $this->assertEquals('dir', $metadata['type']);
+        $this->assertEquals('dir1', $metadata['path']);
+        $this->assertEquals(1432382940, $metadata['timestamp']);
     }
 
     /**

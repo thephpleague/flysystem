@@ -2,8 +2,10 @@
 
 namespace League\Flysystem\Adapter;
 
+use DateTime;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
+use League\Flysystem\NotSupportedException;
 use Net_SFTP;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
@@ -21,6 +23,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $permPublic = 0744;
     protected $permPrivate = 0700;
     protected $configurable = [];
+    protected $systemType;
 
     /**
      * Constructor.
@@ -229,6 +232,30 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
+     * Return the FTP system type
+     *
+     * @return string
+     */
+    public function getSystemType()
+    {
+        return $this->systemType;
+    }
+
+    /**
+     * Set the FTP system type (windows or unix)
+     *
+     * @param string $systemType
+     *
+     * @return $this
+     */
+    public function setSystemType($systemType)
+    {
+        $this->systemType = strtolower($systemType);
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function listContents($directory = '', $recursive = false)
@@ -290,6 +317,27 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     protected function normalizeObject($item, $base)
     {
+        $systemType = $this->detectSystemType($item);
+
+        if ($systemType === 'unix') {
+            return $this->normalizeUnixObject($item, $base);
+        } elseif ($systemType === 'windows'){
+            return $this->normalizeWindowsObject($item, $base);
+        }
+
+        throw NotSupportedException::forFtpSystemType($systemType);
+    }
+
+    /**
+     * Normalize a Unix file entry.
+     *
+     * @param string $item
+     * @param string $base
+     *
+     * @return array normalized file array
+     */
+    protected function normalizeUnixObject($item, $base)
+    {
         $item = preg_replace('#\s+#', ' ', trim($item), 7);
         list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
@@ -304,6 +352,54 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $size = (int) $size;
 
         return compact('type', 'path', 'visibility', 'size');
+    }
+
+    /**
+     * Normalize a Windows/DOS file entry.
+     *
+     * @param string $item
+     * @param string $base
+     *
+     * @return array normalized file array
+     */
+    protected function normalizeWindowsObject($item, $base)
+    {
+        $item = preg_replace('#\s+#', ' ', trim($item), 3);
+        list ($date, $time, $size, $name) = explode(' ', $item, 4);
+        $path = empty($base) ? $name : $base.$this->separator.$name;
+
+        // Check for the correct date/time format
+        $format = strlen($date) == 8 ? "m-d-yH:iA" : "Y-m-dH:i";
+        $timestamp = DateTime::createFromFormat($format, $date.$time)->getTimestamp();
+
+        if ($size === '<DIR>') {
+            $type = 'dir';
+            return compact('type', 'path', 'timestamp');
+        }
+
+        $type = 'file';
+        $visibility = AdapterInterface::VISIBILITY_PUBLIC;
+        $size = (int) $size;
+
+        return compact('type', 'path', 'visibility', 'size', 'timestamp');
+    }
+
+    /**
+     * Get the system type from a listing item.
+     *
+     * @param string $item
+     *
+     * @return string the system type
+     */
+    protected function detectSystemType($item)
+    {
+        if ($this->systemType) {
+            return $this->systemType;
+        } elseif (preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', $item)) {
+            return $this->systemType = 'windows';
+        } else {
+            return $this->systemType = 'unix';
+        }
     }
 
     /**
