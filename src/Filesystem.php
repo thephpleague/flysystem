@@ -100,15 +100,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a file or update if exists.
-     *
-     * @param string $path     path to file
-     * @param string $contents file contents
-     * @param mixed  $config
-     *
-     * @throws FileExistsException
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function put($path, $contents, array $config = [])
     {
@@ -122,13 +114,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Create a file or update if exists using a stream.
-     *
-     * @param string   $path
-     * @param resource $resource
-     * @param mixed    $config
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function putStream($path, $resource, array $config = [])
     {
@@ -142,13 +128,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Read and delete a file.
-     *
-     * @param string $path
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string file contents
+     * {@inheritdoc}
      */
     public function readAndDelete($path)
     {
@@ -166,15 +146,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Update a file.
-     *
-     * @param string $path     path to file
-     * @param string $contents file contents
-     * @param mixed  $config   Config object or visibility setting
-     *
-     * @throws FileNotFoundException
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function update($path, $contents, array $config = [])
     {
@@ -187,15 +159,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Update a file with the contents of a stream.
-     *
-     * @param string   $path
-     * @param resource $resource
-     * @param mixed    $config   Config object or visibility setting
-     *
-     * @throws InvalidArgumentException
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function updateStream($path, $resource, array $config = [])
     {
@@ -212,14 +176,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Read a file.
-     *
-     * @param string $path path to file
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false file contents or FALSE when fails
-     *                      to read existing file
+     * {@inheritdoc}
      */
     public function read($path)
     {
@@ -234,11 +191,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Retrieves a read-stream for a path.
-     *
-     * @param string $path
-     *
-     * @return resource|false path resource or false when on failure
+     * {@inheritdoc}
      */
     public function readStream($path)
     {
@@ -253,15 +206,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Rename a file.
-     *
-     * @param string $path    path to file
-     * @param string $newpath new path
-     *
-     * @throws FileExistsException
-     * @throws FileNotFoundException
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function rename($path, $newpath)
     {
@@ -274,12 +219,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Copy a file.
-     *
-     * @param string $path
-     * @param string $newpath
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function copy($path, $newpath)
     {
@@ -292,13 +232,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Delete a file.
-     *
-     * @param string $path path to file
-     *
-     * @throws FileNotFoundException
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function delete($path)
     {
@@ -309,11 +243,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Delete a directory.
-     *
-     * @param string $dirname path to directory
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function deleteDir($dirname)
     {
@@ -338,12 +268,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * List the filesystem contents.
-     *
-     * @param string $directory
-     * @param bool   $recursive
-     *
-     * @return array contents
+     * {@inheritdoc}
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -367,14 +292,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's mime-type.
-     *
-     * @param string $path path to file
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false file mime-type or FALSE when fails
-     *                      to fetch mime-type from existing file
+     * {@inheritdoc}
      */
     public function getMimetype($path)
     {
@@ -389,14 +307,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's timestamp.
-     *
-     * @param string $path path to file
-     *
-     * @throws FileNotFoundException
-     *
-     * @return string|false timestamp or FALSE when fails
-     *                      to fetch timestamp from existing file
+     * {@inheritdoc}
      */
     public function getTimestamp($path)
     {
@@ -411,12 +322,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's visibility.
-     *
-     * @param string $path path to file
-     *
-     * @return string|false visibility (public|private) or FALSE
-     *                      when fails to check it in existing file
+     * {@inheritdoc}
      */
     public function getVisibility($path)
     {
@@ -431,12 +337,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's size.
-     *
-     * @param string $path path to file
-     *
-     * @return int|false file size or FALSE when fails
-     *                   to check size of existing file
+     * {@inheritdoc}
      */
     public function getSize($path)
     {
@@ -450,12 +351,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's size.
-     *
-     * @param string $path       path to file
-     * @param string $visibility visibility
-     *
-     * @return bool success boolean
+     * {@inheritdoc}
      */
     public function setVisibility($path, $visibility)
     {
@@ -465,14 +361,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file's metadata.
-     *
-     * @param string $path path to file
-     *
-     * @throws FileNotFoundException
-     *
-     * @return array|false file metadata or FALSE when fails
-     *                     to fetch it from existing file
+     * {@inheritdoc}
      */
     public function getMetadata($path)
     {
@@ -483,12 +372,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * Get a file/directory handler.
-     *
-     * @param string  $path
-     * @param Handler $handler
-     *
-     * @return Handler file or directory handler
+     * {@inheritdoc}
      */
     public function get($path, Handler $handler = null)
     {
