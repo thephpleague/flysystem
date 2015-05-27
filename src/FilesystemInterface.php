@@ -115,7 +115,7 @@ interface FilesystemInterface
      * Write a new file using a stream.
      *
      * @param string   $path     The path of the new file.
-     * @param resource $contents The file handle.
+     * @param resource $resource The file handle.
      * @param array    $config   An optional configuration array.
      *
      * @throws InvalidArgumentException If $resource is not a file handle.
@@ -142,7 +142,7 @@ interface FilesystemInterface
      * Update an existing file using a stream.
      *
      * @param string   $path     The path of the existing file.
-     * @param resource $contents The file handle.
+     * @param resource $resource The file handle.
      * @param array    $config   An optional configuration array.
      *
      * @throws InvalidArgumentException If $resource is not a file handle.
