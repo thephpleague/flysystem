@@ -47,6 +47,8 @@ class MountManager
 {
     use PluggableTrait;
 
+    const VALID_PREFIX_REGEX = '[a-zA-Z][a-zA-Z0-9\.\-\+]+';
+
     /**
      * @var array
      */
@@ -92,6 +94,12 @@ class MountManager
             throw new InvalidArgumentException(__METHOD__.' expects argument #1 to be a string.');
         }
 
+        if (! preg_match('#^'.self::VALID_PREFIX_REGEX.'$#', $prefix)) {
+            throw new InvalidArgumentException('Invalid prefix provided for filesystem: '.$prefix);
+        }
+
+        $prefix  = strtolower($prefix);
+
         $this->filesystems[$prefix] = $filesystem;
 
         return $this;
@@ -108,11 +116,13 @@ class MountManager
      */
     public function getFilesystem($prefix)
     {
-        if (! isset($this->filesystems[$prefix])) {
+        $key = strtolower($prefix);
+
+        if (! isset($this->filesystems[$key])) {
             throw new LogicException('No filesystem mounted with prefix '.$prefix);
         }
 
-        return $this->filesystems[$prefix];
+        return $this->filesystems[$key];
     }
 
     /**
@@ -134,8 +144,8 @@ class MountManager
             throw new InvalidArgumentException('First argument should be a string');
         }
 
-        if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
-            throw new InvalidArgumentException('No prefix detected in for path: '.$path);
+        if (! preg_match('#^'.self::VALID_PREFIX_REGEX.'\:\/\/.*#', $path)) {
+            throw new InvalidArgumentException('No prefix detected in path: '.$path);
         }
 
         list($prefix, $path) = explode('://', $path, 2);

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0 - UNRELEASED
+
+* Allow filesystem prefixes according to URI schemes in `MountManager`
+
 ## 1.0.4 - UNRELEASED
 
 ### Fixed
