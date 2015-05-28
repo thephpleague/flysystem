@@ -10,25 +10,17 @@ function fopen($result, $mode)
         return false;
     }
 
-    if (substr($result, -5) === 'dummy') {
-        return fopen('data://text/plain,', $mode);
+    if (substr($result, -10) === 'fail.close') {
+        return \fopen('data://text/plain,fail.close', $mode);
     }
 
     return call_user_func_array('fopen', func_get_args());
 }
 
-function fwrite($result)
-{
-    if (is_string($result)) {
-        return 'dummy';
-    }
-
-    return call_user_func_array('fwrite', func_get_args());
-}
-
 function fclose($result)
 {
-    if (is_resource($result) && stream_get_meta_data($result)['stream_type'] === 'RFC2397') {
+    if (is_resource($result) && stream_get_contents($result) === 'fail.close') {
+        \fclose($result);
         return false;
     }
 
@@ -155,7 +147,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testFailingStreamCalls()
     {
         $this->assertFalse($this->adapter->writeStream('false', tmpfile(), new Config()));
-        $this->assertFalse($this->adapter->writeStream('dummy', tmpfile(), new Config()));
+        $this->assertFalse($this->adapter->writeStream('fail.close', tmpfile(), new Config()));
     }
 
     public function testNullPrefix()
