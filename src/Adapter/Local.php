@@ -104,9 +104,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        while (! feof($resource)) {
-            fwrite($stream, fread($resource, 1024), 1024);
-        }
+        stream_copy_to_stream($resource, $stream);
 
         if (! fclose($stream)) {
             return false;

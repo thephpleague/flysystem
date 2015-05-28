@@ -4,14 +4,14 @@ namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
 
-function fopen($result)
+function fopen($result, $mode)
 {
     if (substr($result, -5) === 'false') {
         return false;
     }
 
     if (substr($result, -5) === 'dummy') {
-        return 'dummy';
+        return fopen('data://text/plain,', $mode);
     }
 
     return call_user_func_array('fopen', func_get_args());
@@ -28,7 +28,7 @@ function fwrite($result)
 
 function fclose($result)
 {
-    if (is_string($result) and substr($result, -5) === 'dummy') {
+    if (is_resource($result) && stream_get_meta_data($result)['stream_type'] === 'RFC2397') {
         return false;
     }
 
