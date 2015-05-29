@@ -133,6 +133,12 @@ class FilesystemTests extends ProphecyTestCase
         fclose($stream);
     }
 
+    public function testPutStreamInvalid()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $this->filesystem->putStream('path.txt', '__INVALID__');
+    }
+
     public function testWriteStreamInvalid()
     {
         $this->setExpectedException('InvalidArgumentException');
