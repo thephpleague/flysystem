@@ -151,23 +151,22 @@ class Ftp extends AbstractFtpAdapter
      */
     public function write($path, $contents, Config $config)
     {
-        $mimetype = Util::guessMimeType($path, $contents);
-        $config = Util::ensureConfig($config);
-        $stream = tmpfile();
+        $stream = fopen('php://temp', 'w+b');
         fwrite($stream, $contents);
         rewind($stream);
+
         $result = $this->writeStream($path, $stream, $config);
-        $result = fclose($stream) && $result;
+
+        fclose($stream);
 
         if ($result === false) {
             return false;
         }
 
-        if ($visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
-        }
+        $result['contents'] = $contents;
+        $result['mimetype'] = Util::guessMimeType($path, $contents);
 
-        return compact('path', 'contents', 'mimetype', 'visibility');
+        return $result;
     }
 
     /**
@@ -176,7 +175,6 @@ class Ftp extends AbstractFtpAdapter
     public function writeStream($path, $resource, Config $config)
     {
         $this->ensureDirectory(Util::dirname($path));
-        $config = Util::ensureConfig($config);
 
         if (! ftp_fput($this->getConnection(), $path, $resource, $this->transferMode)) {
             return false;

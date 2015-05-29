@@ -5,7 +5,6 @@ namespace League\Flysystem\Adapter;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use League\Flysystem\Config;
-use League\Flysystem\Util;
 
 class NullAdapter extends AbstractAdapter
 {
@@ -30,7 +29,6 @@ class NullAdapter extends AbstractAdapter
     public function write($path, $contents, Config $config)
     {
         $type = 'file';
-        $config = Util::ensureConfig($config);
         $result = compact('contents', 'type', 'size', 'path');
 
         if ($visibility = $config->get('visibility')) {
