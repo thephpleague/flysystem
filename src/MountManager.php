@@ -116,7 +116,7 @@ class MountManager
     }
 
     /**
-     * Retrieve the prefix form an arguments array.
+     * Retrieve the prefix from an arguments array.
      *
      * @param array $arguments
      *
@@ -135,7 +135,7 @@ class MountManager
         }
 
         if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
-            throw new InvalidArgumentException('No prefix detected in for path: '.$path);
+            throw new InvalidArgumentException('No prefix detected in path: '.$path);
         }
 
         list($prefix, $path) = explode('://', $path, 2);
