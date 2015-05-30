@@ -105,12 +105,13 @@ class Filesystem implements FilesystemInterface
     public function put($path, $contents, array $config = [])
     {
         $path = Util::normalizePath($path);
+        $config = $this->prepareConfig($config);
 
         if ($this->has($path)) {
-            return $this->update($path, $contents, $config);
+            return (bool) $this->getAdapter()->update($path, $contents, $config);
         }
 
-        return $this->write($path, $contents, $config);
+        return (bool) $this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
@@ -118,13 +119,19 @@ class Filesystem implements FilesystemInterface
      */
     public function putStream($path, $resource, array $config = [])
     {
-        $path = Util::normalizePath($path);
-
-        if ($this->has($path)) {
-            return $this->updateStream($path, $resource, $config);
+        if (! is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
         }
 
-        return $this->writeStream($path, $resource, $config);
+        $path = Util::normalizePath($path);
+        $config = $this->prepareConfig($config);
+        Util::rewindStream($resource);
+
+        if ($this->has($path)) {
+            return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
+        }
+
+        return (bool) $this->getAdapter()->writeStream($path, $resource, $config);
     }
 
     /**
