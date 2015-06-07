@@ -25,7 +25,7 @@ class Ftp extends AbstractFtpAdapter
         'password', 'ssl', 'timeout',
         'root', 'permPrivate',
         'permPublic', 'passive',
-        'transferMode',
+        'transferMode', 'systemType',
     ];
 
     /**

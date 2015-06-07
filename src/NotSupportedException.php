@@ -19,4 +19,17 @@ class NotSupportedException extends RuntimeException
 
         return new static($message.$file->getPathname());
     }
+
+    /**
+     * Create a new exception for a link.
+     *
+     * @param  string $systemType
+     * @return static
+     */
+    public static function forFtpSystemType($systemType)
+    {
+        $message = "The FTP system type '$systemType' is currently not supported.";
+
+        return new static($message);
+    }
 }
