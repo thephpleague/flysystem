@@ -1,14 +1,16 @@
 # Changelog
 
-## 1.0.4 - UNRELEASED
+## 1.0.4 - 2015-06-07
 
 ### Fixed
 
+* [Adapter\Ftp] Now handles windows FTP servers.
 * [Adapter\Local] Symlinks are now explicitly not supported, this was previously broken.
 * [Adapter\Ftp] Detecting whether a path is a directory or not is more reliable.
 * [Adapter\SynologyFtp] Has been renamed to Ftpd (The original class still exists for BC).
 * [Filesystem] Not uses `getAdapter` internally to aid extension.
 * [Adapter\Local] Now uses `umask` when creating directories to make it more reliable.
+* [Misc] Coding style fixes.
 
 ## 1.0.3 - 2015-03-29
 
