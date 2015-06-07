@@ -6,23 +6,77 @@ use DateTime;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\NotSupportedException;
-use Net_SFTP;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
 {
+    /**
+     * @var mixed
+     */
     protected $connection;
+
+    /**
+     * @var string
+     */
     protected $host;
+
+    /**
+     * @var int
+     */
     protected $port = 21;
+
+    /**
+     * @var string|null
+     */
     protected $username;
+
+    /**
+     * @var string|null
+     */
     protected $password;
+
+    /**
+     * @var bool
+     */
     protected $ssl = false;
+
+    /**
+     * @var int
+     */
     protected $timeout = 90;
+
+    /**
+     * @var bool
+     */
     protected $passive = true;
+
+    /**
+     * @var string
+     */
     protected $separator = '/';
+
+    /**
+     * @var string|null
+     */
     protected $root;
+
+    /**
+     * @var int
+     */
     protected $permPublic = 0744;
+
+    /**
+     * @var int
+     */
     protected $permPrivate = 0700;
+
+    /**
+     * @var array
+     */
     protected $configurable = [];
+
+    /**
+     * @var string
+     */
     protected $systemType;
 
     /**
@@ -314,10 +368,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @param string $base
      *
      * @return array normalized file array
+     * @throws NotSupportedException
      */
     protected function normalizeObject($item, $base)
     {
-        $systemType = $this->detectSystemType($item);
+        $systemType = $this->systemType ?: $this->detectSystemType($item);
 
         if ($systemType === 'unix') {
             return $this->normalizeUnixObject($item, $base);
@@ -369,7 +424,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $path = empty($base) ? $name : $base.$this->separator.$name;
 
         // Check for the correct date/time format
-        $format = strlen($date) == 8 ? "m-d-yH:iA" : "Y-m-dH:i";
+        $format = strlen($date) === 8 ? "m-d-yH:iA" : "Y-m-dH:i";
         $timestamp = DateTime::createFromFormat($format, $date.$time)->getTimestamp();
 
         if ($size === '<DIR>') {
@@ -393,13 +448,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     protected function detectSystemType($item)
     {
-        if ($this->systemType) {
-            return $this->systemType;
-        } elseif (preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', $item)) {
+        if (preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', $item)) {
             return $this->systemType = 'windows';
-        } else {
-            return $this->systemType = 'unix';
         }
+
+        return $this->systemType = 'unix';
     }
 
     /**
@@ -509,7 +562,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * @return resource|Net_SFTP
+     * @return mixed
      */
     public function getConnection()
     {

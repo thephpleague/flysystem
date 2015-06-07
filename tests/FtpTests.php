@@ -467,6 +467,27 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @depends testInstantiable
+     */
+    public function testItCanSetSystemType()
+    {
+        $adapter = new Ftp($this->options);
+        $this->assertNull($adapter->getSystemType());
+        $adapter->setSystemType('unix');
+        $this->assertEquals('unix', $adapter->getSystemType());
+    }
+
+    /**
+     * @depends testInstantiable
+     * @expectedException \League\Flysystem\NotSupportedException
+     */
+    public function testItThrowsAnExceptionWhenAnInvalidSystemTypeIsSet()
+    {
+        $adapter = new Ftp($this->options + ['systemType' => 'unknown']);
+        $adapter->listContents();
+    }
+
+    /**
      * @param $adapter
      */
     protected function assertOptionsAreRetrievable($adapter)
