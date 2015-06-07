@@ -303,7 +303,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $connection = $this->getConnection();
 
-        if (empty($path)) {
+        if ($path === '') {
             return ['type' => 'dir', 'path' => ''];
         }
 
