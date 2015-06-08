@@ -134,7 +134,7 @@ class MountManager
             throw new InvalidArgumentException('First argument should be a string');
         }
 
-        if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
+        if (! preg_match('#^.+\:\/\/.*#', $path)) {
             throw new InvalidArgumentException('No prefix detected in path: '.$path);
         }
 

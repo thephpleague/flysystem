@@ -99,8 +99,9 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
+        $stream = fopen($location, 'w+');
 
-        if (! $stream = fopen($location, 'w+')) {
+        if (! $stream) {
             return false;
         }
 
@@ -143,8 +144,9 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
         $mimetype = Util::guessMimeType($path, $contents);
+        $size = file_put_contents($location, $contents, LOCK_EX);
 
-        if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
+        if ($size === false) {
             return false;
         }
 
@@ -217,9 +219,11 @@ class Local extends AbstractAdapter
 
         foreach ($iterator as $file) {
             $path = $this->getFilePath($file);
+
             if (preg_match('#(^|/|\\\\)\.{1,2}$#', $path)) {
                 continue;
             }
+
             $result[] = $this->normalizeFileInfo($file);
         }
 

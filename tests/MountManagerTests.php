@@ -7,7 +7,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
 {
     public function testInstantiable()
     {
-        $manager = new MountManager();
+        new MountManager();
     }
 
     public function testConstructorInjection()
@@ -161,5 +161,22 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $mock->shouldReceive('listWith')->with(['timestamp'], 'file.ext', false)->once()->andReturn($response);
         $manager->mountFilesystem('prot', $mock);
         $this->assertEquals($response, $manager->listWith(['timestamp'], 'prot://file.ext', false));
+    }
+
+    public function provideMountSchemas()
+    {
+        return [['with.dot'], ['with-dash'], ['with+plus'], ['with:colon']];
+    }
+
+    /**
+     * @dataProvider provideMountSchemas
+     */
+    public function testMountSchemaTypes($schema)
+    {
+        $manager = new MountManager();
+        $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $mock->shouldReceive('aMethodCall')->once()->andReturn('a result');
+        $manager->mountFilesystem($schema, $mock);
+        $this->assertEquals($manager->aMethodCall($schema.'://file.ext'), 'a result');
     }
 }
