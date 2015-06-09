@@ -186,9 +186,17 @@ class Util
 
         $directories = array_diff(array_unique($directories), array_unique($listedDirectories));
 
+        if (empty($directories)) {
+            return $listing;
+        }
+
         foreach ($directories as $directory) {
             $listing[] = static::pathinfo($directory) + ['type' => 'dir'];
         }
+
+        usort($listing, function ($a, $b) {
+            return strcasecmp($a['path'], $b['path']);
+        });
 
         return $listing;
     }
