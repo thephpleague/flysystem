@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5 - UNRELEASED
+
+* [Util::emulateDirectories] Emulated directories didn't respect the natural sorting, this is now corrected.
+
 ## 1.0.4 - 2015-06-07
 
 ### Fixed
