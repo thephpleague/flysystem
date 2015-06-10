@@ -2,7 +2,7 @@
 
 ## 1.0.5 - UNRELEASED
 
-* [Util::emulateDirectories] Emulated directories didn't respect the natural sorting, this is now corrected.
+* [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
 
 ## 1.0.4 - 2015-06-07
 
