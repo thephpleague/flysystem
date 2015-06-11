@@ -1,10 +1,10 @@
 {
     "name": "league/flysystem",
-    "description": "Many filesystems, one API.",
+    "description": "Filesystem abstraction: Many filesystems, one API.",
     "keywords": [
-        "filesystem", "files", "storage", "dropbox", "aws",
-        "s3", "ftp", "sftp", "remote", "webdav", "file systems", "cloud",
-        "cloud files", "rackspace", "copy.com"
+        "filesystem", "filesystems", "files", "storage", "dropbox", "aws",
+        "abstraction", "s3", "ftp", "sftp", "remote", "webdav",
+        "file systems", "cloud", "cloud files", "rackspace", "copy.com"
     ],
     "license": "MIT",
     "authors": [
@@ -21,9 +21,6 @@
         "ext-fileinfo": "*",
         "phpunit/phpunit": "~4.1",
         "mockery/mockery": "~0.9",
-        "predis/predis": "~1.0",
-        "tedivm/stash": "~0.12.0",
-        "league/phpunit-coverage-listener" : "~1.1",
         "phpspec/phpspec": "~2.0",
         "phpspec/prophecy-phpunit": "~1.0"
     },
@@ -39,7 +36,6 @@
     },
     "suggest": {
         "ext-fileinfo": "Required for MimeType",
-        "predis/predis": "Allows you to use Predis for caching",
         "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
         "league/flysystem-copy": "Allows you to use Copy.com storage",
