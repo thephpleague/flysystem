@@ -2,7 +2,7 @@
 
 namespace League\Flysystem\Adapter\Polyfill;
 
-use LogicException;
+use League\Flysystem\AdapterInterface;
 
 trait NotSupportingVisibilityTrait
 {
@@ -10,12 +10,10 @@ trait NotSupportingVisibilityTrait
      * Get the visibility of a file.
      *
      * @param string $path
-     *
-     * @throws LogicException
      */
     public function getVisibility($path)
     {
-        throw new LogicException(get_class($this).' does not support visibility. Path: '.$path);
+        return ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
     }
 
     /**
@@ -23,11 +21,13 @@ trait NotSupportingVisibilityTrait
      *
      * @param string $path
      * @param string $visibility
-     *
-     * @throws LogicException
      */
     public function setVisibility($path, $visibility)
     {
-        throw new LogicException(get_class($this).' does not support visibility. Path: '.$path.', visibility: '.$visibility);
+        if ($visibility === AdapterInterface::VISIBILITY_PUBLIC) {
+            return ['visibility' => AdapterInterface::VISIBILITY_PUBLIC];
+        }
+
+        return false;
     }
 }
