@@ -26,11 +26,17 @@ class Local extends AbstractAdapter
     protected $pathSeparator = DIRECTORY_SEPARATOR;
 
     /**
+     * @var int
+     */
+    protected $writeFlags;
+
+    /**
      * Constructor.
      *
      * @param string $root
+     * @param int $writeFlags
      */
-    public function __construct($root)
+    public function __construct($root, $writeFlags = LOCK_EX)
     {
         $realRoot = $this->ensureDirectory($root);
 
@@ -39,6 +45,7 @@ class Local extends AbstractAdapter
         }
 
         $this->setPathPrefix($realRoot);
+        $this->writeFlags = $writeFlags;
     }
 
     /**
@@ -77,7 +84,7 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
 
-        if (($size = file_put_contents($location, $contents, LOCK_EX)) === false) {
+        if (($size = file_put_contents($location, $contents, $this->writeFlags)) === false) {
             return false;
         }
 
@@ -144,7 +151,7 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
         $mimetype = Util::guessMimeType($path, $contents);
-        $size = file_put_contents($location, $contents, LOCK_EX);
+        $size = file_put_contents($location, $contents, $this->writeFlags);
 
         if ($size === false) {
             return false;
