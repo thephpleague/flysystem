@@ -7,7 +7,7 @@ title: Core Concepts
 # Core Concepts
 
 In order to better understand how and why Flysystem works
-the way it does, several concepts require some explenation.
+the way it does, several concepts require some explanation.
 
 ## Overview
 
@@ -17,23 +17,23 @@ the way it does, several concepts require some explenation.
 
 ## Adapters
 
-The main entry point for the fielsystem API is the
-FilesystemInterface. When working with Filesystems, this is
+The main entry point for the file system API is the
+FilesystemInterface. When working with file systems, this is
 the class you'll want to be talking to.
 
 The reason why Flysystem works, it because of it's use of the
 adapter pattern. The inconsistencies of the different
-filesystems are elimintated in these adapters.
+file systems are eliminated in these adapters.
 
-While adapters have a public interface (publically accessible
+While adapters have a public interface (publicly accessible
 methods), they should be considered __internal__.
 
 ## Relative Paths
 
 Portability is a very important concept within Flysystem. In order
-to role out this aspect to the fullest all paths in flysystem are
-relative. Filesystem root paths, wether remote or local, are viewed
-as endpoints. Because of this, filesystems are moveable independantly.
+to role out this aspect to the fullest all paths in Flysystem are
+relative. File system root paths, whether remote or local, are viewed
+as endpoints. Because of this, file systems are movable independently.
 This allows parts of the application file handling to move to other
 storage types, while the majority is in a centralized location.
 
@@ -44,12 +44,12 @@ improves.
 ## Files First
 
 Flysystem has a files first approach. Storage systems like AWS S3
-are linear filesystems, this means the path to a file is used as an
+are linear file systems, this means the path to a file is used as an
 identifier, rather than a representation of all the directories it's
 nested in.
 
-This means directories are second class citezens. Because of this
-directories will be automatically be created on filesystems that require
-them when writing files. Not only does this make handing writes a lot
-easier, it also ensures a consistent behavious across all filesystem 
+This means directories are second class citizens. Because of this
+directories will be automatically created on file systems that require
+them when writing files. Not only does this make handling writes a lot
+easier, it also ensures a consistent behaviors across all file system
 types.

@@ -33,7 +33,9 @@ $filesystem = new Filesystem($adapter);
 To enable [reduced redunancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
 
 ~~~ php
-$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional-prefix', ['StorageClass'  =>  'REDUCED_REDUNDANCY']);
+$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional-prefix', [
+    'StorageClass'  =>  'REDUCED_REDUNDANCY',
+]);
 ~~~
 
 ### Compatible storage protocols
@@ -42,8 +44,8 @@ If you're using a storage service which implements the S3 protocols, you can set
 
 ~~~ php
 $client = S3Client::factory([
-    ... // other settings
     'base_url' => 'http://some.other.endpoint',
+    // ... other settings
 ]);
 ~~~
 
