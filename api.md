@@ -105,10 +105,13 @@ Visibility is the abstraction of file permissions across multiple platforms. Vis
 
 ~~~ php
 use League\Flysystem\AdapterInterface;
+
 $filesystem->write('db.backup', $backup, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
+
 // or simply
+
 $filesystem->write('db.backup', $backup, ['visibility' => 'private']);
 ~~~
 
@@ -130,13 +133,13 @@ $filesystem = new League\Flysystem\Filesystem($adapter, [
 ]);
 ~~~
 
-___List Contents___
+__List Contents__
 
 ~~~ php
 $contents = $filemanager->listContents();
 ~~~
 
-The result of a contents listing is a collection of arrays containing all the metadata the file manager knows at that time. By default a you'll receive path info and file type. Additional info could be supplied by default depending on the adapter used.
+The result of a contents listing is a collection of arrays containing all the metadata the file manager knows at that time. By default you'll receive path info and file type. Additional info could be supplied by default depending on the adapter used.
 
 Example:
 
@@ -149,10 +152,10 @@ foreach ($contents as $object) {
 By default Flysystem lists the top directory non-recursively. You can supply a directory name and recursive boolean to get more precise results
 
 ~~~ php
-$contents = $flysystem->listContents('some/dir', true);
+$contents = $filesystem->listContents('some/dir', true);
 ~~~
 
-___List paths___
+__List paths__
 
 ~~~ php
 $paths = $filemanager->listPaths();
@@ -162,20 +165,20 @@ foreach ($paths as $path) {
 }
 ~~~
 
-___List with ensured presence of specific metadata___
+__List with ensured presence of specific metadata__
 
 ~~~ php
-$listing = $flysystem->listWith(['mimetype', 'size', 'timestamp'], 'optional/path/to/dir', true);
+$listing = $filesystem->listWith(['mimetype', 'size', 'timestamp'], 'optional/path/to/dir', true);
 
 foreach ($listing as $object) {
     echo $object['path'].' has mimetype: '.$object['mimetype'];
 }
 ~~~
 
-___Get file into with explicit metadata___
+__Get file into with explicit metadata__
 
 ~~~ php
-$info = $flysystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
+$info = $filesystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);
 echo $info['mimetype'];
 echo $info['timestamp'];
 ~~~
@@ -186,18 +189,18 @@ __NOTE__: This requires the `League\Flysystem\Plugin\GetWithMetadata` plugin.
 
 ~~~ php
 $stream = fopen('/path/to/database.backup', 'r+');
-$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
+$filesystem->writeStream('backups/'.strftime('%G-%m-%d').'.backup', $stream);
 
 // Using write you can also directly set the visibility
-$flysystem->writeStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream, [
+$filesystem->writeStream('backups/'.strftime('%G-%m-%d').'.backup', $stream, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
 
 // Or update a file with stream contents
-$flysystem->updateStream('backups/' . strftime('%G-%m-%d') . '.backup', $stream);
+$filesystem->updateStream('backups/'.strftime('%G-%m-%d').'.backup', $stream);
 
 // Retrieve a read-stream
-$stream = $flysystem->readStream('something/is/here.ext');
+$stream = $filesystem->readStream('something/is/here.ext');
 $contents = stream_get_contents($stream);
 fclose($stream);
 

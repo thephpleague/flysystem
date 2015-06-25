@@ -6,9 +6,9 @@ title: Mount Manager
 
 # Mount Manager
 
-Flysystem comes with an wrapper class to easily work with multiple filesystem instances
+Flysystem comes with an wrapper class to easily work with multiple file system instances
 from a single object. The `League\Flysystem\MountManager` is an easy to use container allowing
-you to simplify more complex cross-filesystem interactions.
+you to simplify more complex cross file system interactions.
 
 Setting up a Mount Manager is easy:
 
@@ -47,9 +47,7 @@ foreach ($contents as $entry) {
 
     if ( ! $manager->has('storage://'.$entry['path'])) {
         $update = true;
-    }
-
-    elseif ($manager->getTimestamp('local://'.$entry['path']) > $manager->getTimestamp('storage://'.$entry['path'])) {
+    } elseif ($manager->getTimestamp('local://'.$entry['path']) > $manager->getTimestamp('storage://'.$entry['path'])) {
         $update = true;
     }
 
@@ -64,7 +62,7 @@ foreach ($contents as $entry) {
 ### Copy
 
 The copy method provided by the Mount Manager takes the origin of the file into account.
-When it detects the source and destination are located on a different filesystem it'll
+When it detects the source and destination are located on a different file systems it'll
 use a streamed upload instead, transparently.
 
 ~~~ php
@@ -73,9 +71,9 @@ $mountManager->copy('local://some/file.ext', 'backup://storage/location.ext');
 
 ### Move
 
-The `move` call is the multi-filesystem counterpart to `rename`. Where rename must be used on
-the same filesystem, the `move` call provides the same conceptual behaviour, but then on two
-different filesystems.
+The `move` call is the multi-file system counterpart to `rename`. Where rename must be used on
+the same file system, the `move` call provides the same conceptual behavior, but then on two
+different file systems.
 
 ~~~ php
 $mountManager->move('local://some/upload.jpeg', 'cdn://users/1/profile-picture.jpeg');

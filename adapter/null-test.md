@@ -12,9 +12,9 @@ Comes with the main Flysystem package.
 
 ## Usage
 
-Acts like /dev/null
+Acts like `/dev/null`
 
 ~~~ php
 $adapter = new League\Flysystem\Adapter\NullAdapter;
-$flysystem = new League\Flysystem\Filesystem($adapter);
+$filesystem = new League\Flysystem\Filesystem($adapter);
 ~~~

@@ -6,7 +6,7 @@ title: Caching
 
 # Caching
 
-Filesystem I/O is slow, so Flysystem uses cached filesystem meta-data to boost performance. When your application needs to scale you can also choose to use a (shared) persistent caching solution for this.
+File system I/O is slow, so Flysystem uses cached file system meta-data to boost performance. When your application needs to scale you can also choose to use a (shared) persistent caching solution for this.
 Or enable a per request caching (recommended).
 
 ## Installing the adapter cache decorator
@@ -17,7 +17,7 @@ composer require league/flysystem-cached-adapter
 
 This package supplies an Adapter decorator which acts as a caching proxy.
 
-The CachedAdapter (the decorator) caches anything but the file contents. This keeps the cache small enough to be benefitial and covers all the filesystem inspection operations.
+The CachedAdapter (the decorator) caches anything but the file contents. This keeps the cache small enough to be beneficial and covers all the file system inspection operations.
 
 ## Memory Caching
 
@@ -40,11 +40,11 @@ $cacheStore = new CacheStore();
 // Decorate the adapter
 $adapter = new CachedAdapter($localAdapter, $cacheStore);
 
-// And use that to create the filesystem
+// And use that to create the file system
 $filesystem = new Filesystem($adapter);
 ~~~
 
-You can now use the filesystem as you would have before, but caching will be done for you on the fly.
+You can now use the file system as you would have before, but caching will be done for you on the fly.
 
 ## Persistent Caching
 
@@ -78,7 +78,10 @@ use League\Flysystem\Cached\Storage\Memcached as Cache;
 $memcached = new Memcached;
 $memcached->addServer('localhost', 11211);
 
-$adapter = new CachedAdapter(new Adapter(__DIR__.'/path/to/root'), new Cache($memcached, 'storageKey', 300));
+$adapter = new CachedAdapter(
+    new Adapter(__DIR__.'/path/to/root'),
+    new Cache($memcached, 'storageKey', 300)
+);
 $filesystem = new Filesystem($adapter);
 // Storage Key and expire time are optional
 ~~~
