@@ -21,7 +21,7 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 * Emulate directories in systems that support none, like AwsS3.
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
-* Support streams for big file handling
+* Support streams for big file handling.
 
 # Installation
 
@@ -95,6 +95,6 @@ Want to get started quickly? Check out some of these integrations:
 If you discover any security related issues, please email frenky@frenky.net instead of using the issue tracker.
 
 
-# Enjoy.
+# Enjoy
 
 Oh and if you've come down this far, you might as well follow me on [twitter](http://twitter.com/frankdejonge).
