@@ -44,12 +44,12 @@ caching decorators to pick it up, and store for further use.
 
 key         | description              | type
 ----------- | ------------------------ | -----------
-type        | `file` or `dir`          | string
-path        | path to the file or dir  | string
-contents    | file contents            | string
-stream      | file contents            | resource
-visibility  | `public` or `private`    | string
-timestamp   | modified time            | integer
+type        | `file` or `dir`          | `string`
+path        | path to the file or dir  | `string`
+contents    | file contents            | `string`
+stream      | file contents            | `resource`
+visibility  | `public` or `private`    | `string`
+timestamp   | modified time            | `integer`
 
 ## Sharing the wealth
 
