@@ -19,6 +19,7 @@ Adapters:
     Dropbox: '/adapter/dropbox/'
     FTP: '/adapter/ftp/'
     GridFS: '/adapter/gridfs/'
+    Memory: '/adapter/memory/'
     Null / Test: '/adapter/null-test/'
     Rackspace: '/adapter/rackspace/'
     ReplicateAdapter: '/adapter/replicate/'
