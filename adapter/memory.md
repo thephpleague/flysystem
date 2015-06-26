@@ -6,7 +6,7 @@ title: Memory Adapter
 
 # Memory Adapter
 
-This adapter keeps the filesystem completely in memory, useful when you need a filesystem but won't want it persisted.
+This adapter keeps the filesystem completely in memory. This is useful when you need a filesystem, but don't want it persisted.
 
 ## Installation
 
