@@ -3,6 +3,7 @@
 ## 1.0.5 - UNRELEASED
 
 * [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
+* [Handler] Added getter for the Filesystem.
 
 ## 1.0.4 - 2015-06-07
 
