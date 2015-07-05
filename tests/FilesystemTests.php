@@ -1,6 +1,5 @@
 <?php
 
-use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Util;
 use Prophecy\Argument;
@@ -353,9 +352,11 @@ class FilesystemTests extends ProphecyTestCase
            ['path' => 'other_root/file.txt'],
            ['path' => 'valid/to_deep/file.txt'],
            ['path' => 'valid/file.txt'],
+           ['path' => 'valid/a-valid-file.txt'],
         ];
 
         $expected = [
+            Util::pathinfo('valid/a-valid-file.txt'),
             Util::pathinfo('valid/file.txt'),
         ];
 
