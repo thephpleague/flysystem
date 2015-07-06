@@ -71,6 +71,16 @@ abstract class Handler
 
         return $this;
     }
+    
+    /**
+     * Retrieve the Filesystem object.
+     *
+     * @return FilesystemInterface
+     */
+    public function getFilesystem()
+    {
+        return $this->filesystem;
+    }
 
     /**
      * Set the entree path.

@@ -141,4 +141,13 @@ class HandlerTests extends ProphecyTestCase
         $output = $dir->getContents(true);
         $this->assertEquals($listing, $output);
     }
+
+    public function testGetFilesystem()
+    {
+        $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $filesystem = $prophecy->reveal();
+        $dir = new Directory(null, 'path');
+        $dir->setFilesystem($filesystem);
+        $this->assertEquals($filesystem, $dir->getFilesystem());
+    }
 }
