@@ -281,19 +281,24 @@ class Filesystem implements FilesystemInterface
     {
         $directory = Util::normalizePath($directory);
         $contents = $this->getAdapter()->listContents($directory, $recursive);
-        $mapper = function ($entry) use ($directory, $recursive) {
-            if (
-                empty($entry['path'])
-                || (! empty($directory) && strpos($entry['path'], $directory) === false)
-                || ($recursive === false && Util::dirname($entry['path']) !== $directory)
-            ) {
+
+        $filter = function (array $entry) use ($directory, $recursive) {
+            if ($entry['path'] === '') {
                 return false;
             }
 
-            return  $entry + Util::pathinfo($entry['path']);
+            if ($recursive) {
+                return $directory === '' || strpos($path, $directory . '/') === 0;
+            }
+
+            return Util::dirname($entry['path']) === $directory;
         };
 
-        $listing = array_values(array_filter(array_map($mapper, $contents)));
+        $mapper = function (array $entry) {
+            return $entry + Util::pathinfo($entry['path']);
+        };
+
+        $listing = array_values(array_map($mapper, array_filter($contents, $filter)));
 
         usort($listing, function ($a, $b) {
             return strcasecmp($a['path'], $b['path']);
