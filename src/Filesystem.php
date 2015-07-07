@@ -284,7 +284,7 @@ class Filesystem implements FilesystemInterface
         $mapper = function ($entry) use ($directory, $recursive) {
             if (
                 empty($entry['path'])
-                || (! empty($directory) && strpos($entry['path'], $directory) === false)
+                || (! empty($directory) && strpos($entry['path'], $directory.'/') === false)
                 || ($recursive === false && Util::dirname($entry['path']) !== $directory)
             ) {
                 return false;
