@@ -285,7 +285,7 @@ class Filesystem implements FilesystemInterface
             if (
                 empty($entry['path'])
                 || (! empty($directory) && strpos($entry['path'], $directory) === false)
-                || ($recursive === false && Util::dirname($entry['path']) !== $directory)
+                || ($recursive === false && Util::dirname($entry['path']).'/' !== $directory.'/')
             ) {
                 return false;
             }
