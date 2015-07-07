@@ -1,5 +1,6 @@
 <?php
 
+use League\Flysystem\File;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\PluginInterface;
@@ -35,6 +36,24 @@ class InvalidPlugin implements PluginInterface
     }
 }
 
+class AuthorizePlugin implements PluginInterface
+{
+    public function getMethod()
+    {
+        return 'authorize';
+    }
+
+    public function setFilesystem(FilesystemInterface $filesystem)
+    {
+        // yay
+    }
+
+    public function handle($path)
+    {
+        return $path !== 'bad';
+    }
+}
+
 class PluginTests extends PHPUnit_Framework_TestCase
 {
     protected $filesystem;
@@ -61,5 +80,25 @@ class PluginTests extends PHPUnit_Framework_TestCase
     {
         $this->filesystem->addPlugin(new InvalidPlugin());
         $this->filesystem->beInvalid();
+    }
+
+    public function testMagicCall()
+    {
+        $this->filesystem->addPlugin(new AuthorizePlugin());
+
+        $badFile = $this->filesystem->get('bad', new File());
+        $this->assertFalse($badFile->authorize());
+
+        $goodFile = $this->filesystem->get('good', new File());
+        $this->assertTrue($goodFile->authorize());
+    }
+
+    /**
+     * @expectedException \BadMethodCallException
+     */
+    public function testBadMagicCall()
+    {
+        $file = $this->filesystem->get('foo', new File());
+        $file->nonExistentMethod();
     }
 }
