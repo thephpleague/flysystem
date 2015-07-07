@@ -4,6 +4,7 @@
 
 * [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
 * [Handler] Added getter for the Filesystem.
+* [Handler] Now allows plugins calls
 
 ## 1.0.4 - 2015-06-07
 
