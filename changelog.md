@@ -2,8 +2,19 @@
 
 ## 1.0.5 - 2015-07-08
 
+### Fixed
+
+* [Adapter\Local] Directories are no longer created with the 0777 permissions which is unsafe for shared hosting environments.
+
+## 1.0.5 - 2015-07-08
+
+### Fixed
+
 * [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
 * [Filesystem::listContents] The result excess from listing calls wasn't filtered strict enough, this is now improved.
+
+### Added
+
 * [Handler] Added getter for the Filesystem.
 * [Handler] Now allows plugins calls.
 
