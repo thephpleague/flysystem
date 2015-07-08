@@ -228,6 +228,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->adapter->createDir('fail.plz', new Config()));
     }
 
+    public function testCreateDirDefaultVisibility()
+    {
+        $this->adapter->createDir('test-dir', new Config());
+        $output = $this->adapter->getVisibility('test-dir');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
+    }
+
     public function testDeleteDir()
     {
         $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
@@ -237,7 +246,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
     }
 
-    public function testVisibilityPublic()
+    public function testVisibilityPublicFile()
     {
         if (IS_WINDOWS) {
             $this->markTestSkipped("Visibility not supported on Windows.");
@@ -251,7 +260,21 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('public', $output['visibility']);
     }
 
-    public function testVisibilityPrivate()
+    public function testVisibilityPublicDir()
+    {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
+        $this->adapter->createDir('public-dir', new Config());
+        $this->adapter->setVisibility('public-dir', 'public');
+        $output = $this->adapter->getVisibility('public-dir');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
+    }
+
+    public function testVisibilityPrivateFile()
     {
         if (IS_WINDOWS) {
             $this->markTestSkipped("Visibility not supported on Windows.");
@@ -260,6 +283,20 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->adapter->write('path.txt', 'contents', new Config());
         $this->adapter->setVisibility('path.txt', 'private');
         $output = $this->adapter->getVisibility('path.txt');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('private', $output['visibility']);
+    }
+
+    public function testVisibilityPrivateDir()
+    {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
+        $this->adapter->createDir('private-dir', new Config());
+        $this->adapter->setVisibility('private-dir', 'private');
+        $output = $this->adapter->getVisibility('private-dir');
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);

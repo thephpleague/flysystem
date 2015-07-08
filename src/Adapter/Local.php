@@ -16,8 +16,14 @@ use SplFileInfo;
 class Local extends AbstractAdapter
 {
     protected static $permissions = [
-        'public' => 0744,
-        'private' => 0700,
+        'file' => [
+            'public' => 0744,
+            'private' => 0700,
+        ],
+        'dir' => [
+            'public' => 0755,
+            'private' => 0700,
+        ]
     ];
 
     /**
@@ -59,7 +65,7 @@ class Local extends AbstractAdapter
     {
         if (! is_dir($root)) {
             $umask = umask(0);
-            mkdir($root, 0777, true);
+            mkdir($root, static::$permissions['dir']['public'], true);
             umask($umask);
         }
 
@@ -294,7 +300,8 @@ class Local extends AbstractAdapter
     public function setVisibility($path, $visibility)
     {
         $location = $this->applyPathPrefix($path);
-        chmod($location, static::$permissions[$visibility]);
+        $type = is_dir($location) ? 'dir' : 'file';
+        chmod($location, static::$permissions[$type][$visibility]);
 
         return compact('visibility');
     }
@@ -306,8 +313,9 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($dirname);
         $umask = umask(0);
+        $visibility = $config->get('visibility', 'public');
 
-        if (! is_dir($location) && ! mkdir($location, 0777, true)) {
+        if (! is_dir($location) && ! mkdir($location, static::$permissions['dir'][$visibility], true)) {
             $return = false;
         } else {
             $return = ['path' => $dirname, 'type' => 'dir'];
