@@ -1,10 +1,11 @@
 # Changelog
 
-## 1.0.5 - UNRELEASED
+## 1.0.5 - 2015-07-08
 
 * [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
+* [Filesystem::listContents] The result excess from listing calls wasn't filtered strict enough, this is now improved.
 * [Handler] Added getter for the Filesystem.
-* [Handler] Now allows plugins calls
+* [Handler] Now allows plugins calls.
 
 ## 1.0.4 - 2015-06-07
 
