@@ -20,7 +20,7 @@
         "ext-fileinfo": "*",
         "phpunit/phpunit": "~4.1",
         "mockery/mockery": "~0.9",
-        "phpspec/phpspec": "~2.0",
+        "phpspec/phpspec": "^2.2",
         "phpspec/prophecy-phpunit": "~1.0"
     },
     "autoload": {
