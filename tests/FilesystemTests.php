@@ -203,8 +203,7 @@ class FilesystemTests extends ProphecyTestCase
     {
         $old = 'old.txt';
         $new = 'new.txt';
-        $this->prophecy->has($old)->willReturn(true);
-        $this->prophecy->has($new)->willReturn(false);
+        $this->prophecy->has(Argument::any())->willReturn(true, false);
         $this->prophecy->rename($old, $new)->willReturn(true);
         $response = $this->filesystem->rename($old, $new);
         $this->assertTrue($response);
