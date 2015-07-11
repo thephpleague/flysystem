@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.7 - 2015-07-11
+
+### Fixed
+
+* [Filesystem] Fixed the handling of directories named "0".
+
 ## 1.0.6 - 2015-07-08
 
 ### Fixed
