@@ -363,6 +363,23 @@ class FilesystemTests extends ProphecyTestCase
         $this->assertEquals($expected, $output);
     }
 
+    public function testListContentZeroName()
+    {
+        $rawListing = [
+            // files
+            ['path' => 0],
+            ['path' => '0'],
+            ['path' => ''],
+            // directories
+            ['path' => 0, 'type' => 'dir'],
+            ['path' => '0', 'type' => 'dir'],
+            ['path' => '', 'type' => 'dir']
+        ];
+        $this->prophecy->listContents('', false)->willReturn($rawListing);
+        $output = $this->filesystem->listContents('', false);
+        $this->assertCount(4, $output);
+    }
+
     public function testInvalidPluginCall()
     {
         $this->setExpectedException('BadMethodCallException');
