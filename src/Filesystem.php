@@ -283,7 +283,7 @@ class Filesystem implements FilesystemInterface
         $contents = $this->getAdapter()->listContents($directory, $recursive);
         $mapper = function ($entry) use ($directory, $recursive) {
             if (
-                empty($entry['path'])
+                strlen($entry['path']) === 0
                 || (! empty($directory) && strpos($entry['path'], $directory.'/') === false)
                 || ($recursive === false && Util::dirname($entry['path']) !== $directory)
             ) {
