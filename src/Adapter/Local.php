@@ -16,12 +16,12 @@ use SplFileInfo;
 class Local extends AbstractAdapter
 {
     /**
-     * @var string
+     * @var bool
      */
     const SKIP_LINKS = true;
 
     /**
-     * @var string
+     * @var bool
      */
     const DISALLOW_LINKS = false;
 
@@ -58,7 +58,7 @@ class Local extends AbstractAdapter
      *
      * @param string $root
      * @param int $writeFlags
-     * @param string $linkHandling
+     * @param bool $linkHandling
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS)
     {
