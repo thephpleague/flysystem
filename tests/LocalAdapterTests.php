@@ -196,6 +196,14 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('type', $contents[0]);
     }
 
+    public function testListContentsRecursive()
+    {
+        $this->adapter->write('dirname/file.txt', 'contents', new Config());
+        $this->adapter->write('dirname/other.txt', 'contents', new Config());
+        $contents = $this->adapter->listContents('', true);
+        $this->assertCount(3, $contents);
+    }
+
     public function testGetSize()
     {
         $this->adapter->write('dummy.txt', '1234', new Config());

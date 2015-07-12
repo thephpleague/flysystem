@@ -15,6 +15,19 @@ use SplFileInfo;
 
 class Local extends AbstractAdapter
 {
+    /**
+     * @var string
+     */
+    const LINKS_SKIP = 'LINKS_SKIP';
+
+    /**
+     * @var string
+     */
+    const LINKS_EXCEPTION = 'LINKS_EXCEPTION';
+
+    /**
+     * @var array
+     */
     protected static $permissions = [
         'file' => [
             'public' => 0744,
@@ -35,14 +48,19 @@ class Local extends AbstractAdapter
      * @var int
      */
     protected $writeFlags;
+    /**
+     * @var string
+     */
+    private $linkHandling;
 
     /**
      * Constructor.
      *
      * @param string $root
      * @param int $writeFlags
+     * @param string $linkHandling
      */
-    public function __construct($root, $writeFlags = LOCK_EX)
+    public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::LINKS_EXCEPTION)
     {
         $realRoot = $this->ensureDirectory($root);
 
@@ -52,6 +70,7 @@ class Local extends AbstractAdapter
 
         $this->setPathPrefix($realRoot);
         $this->writeFlags = $writeFlags;
+        $this->linkHandling = $linkHandling;
     }
 
     /**
@@ -337,14 +356,17 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        $contents = $this->listContents($dirname, true);
-        $contents = array_reverse($contents);
+        $contents = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($location, FilesystemIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
 
+        /** @var SplFileInfo $file */
         foreach ($contents as $file) {
-            if ($file['type'] !== 'dir') {
-                unlink($this->applyPathPrefix($file['path']));
+            if ($file->getType() !== 'dir') {
+                unlink($file->getRealPath());
             } else {
-                rmdir($this->applyPathPrefix($file['path']));
+                rmdir($file->getRealPath());
             }
         }
 
