@@ -310,7 +310,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -516,7 +516,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function has($path)
     {
@@ -524,7 +524,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSize($path)
     {
@@ -532,7 +532,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimestamp($path)
     {
@@ -542,7 +542,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVisibility($path)
     {

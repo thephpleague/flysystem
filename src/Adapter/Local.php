@@ -92,7 +92,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function has($path)
     {
@@ -102,7 +102,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write($path, $contents, Config $config)
     {
@@ -125,7 +125,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -151,7 +151,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function readStream($path)
     {
@@ -162,7 +162,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -170,7 +170,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($path, $contents, Config $config)
     {
@@ -186,7 +186,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read($path)
     {
@@ -201,7 +201,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rename($path, $newpath)
     {
@@ -214,7 +214,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function copy($path, $newpath)
     {
@@ -226,7 +226,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($path)
     {
@@ -236,7 +236,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -263,7 +263,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMetadata($path)
     {
@@ -274,7 +274,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSize($path)
     {
@@ -282,7 +282,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMimetype($path)
     {
@@ -293,7 +293,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimestamp($path)
     {
@@ -301,7 +301,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVisibility($path)
     {
@@ -314,7 +314,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVisibility($path, $visibility)
     {
@@ -326,7 +326,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createDir($dirname, Config $config)
     {
@@ -346,7 +346,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteDir($dirname)
     {

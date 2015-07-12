@@ -5,7 +5,7 @@ namespace League\Flysystem\Adapter;
 class Ftpd extends Ftp
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMetadata($path)
     {
@@ -21,7 +21,7 @@ class Ftpd extends Ftp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {

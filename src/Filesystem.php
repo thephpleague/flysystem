@@ -60,7 +60,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function has($path)
     {
@@ -70,7 +70,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write($path, $contents, array $config = [])
     {
@@ -82,7 +82,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function writeStream($path, $resource, array $config = [])
     {
@@ -100,7 +100,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function put($path, $contents, array $config = [])
     {
@@ -115,7 +115,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function putStream($path, $resource, array $config = [])
     {
@@ -135,7 +135,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function readAndDelete($path)
     {
@@ -153,7 +153,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update($path, $contents, array $config = [])
     {
@@ -166,7 +166,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function updateStream($path, $resource, array $config = [])
     {
@@ -183,7 +183,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function read($path)
     {
@@ -198,7 +198,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function readStream($path)
     {
@@ -213,7 +213,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rename($path, $newpath)
     {
@@ -226,7 +226,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function copy($path, $newpath)
     {
@@ -239,7 +239,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete($path)
     {
@@ -250,7 +250,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteDir($dirname)
     {
@@ -264,7 +264,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function createDir($dirname, array $config = [])
     {
@@ -275,7 +275,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function listContents($directory = '', $recursive = false)
     {
@@ -303,7 +303,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMimetype($path)
     {
@@ -318,7 +318,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTimestamp($path)
     {
@@ -333,7 +333,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVisibility($path)
     {
@@ -348,7 +348,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSize($path)
     {
@@ -362,7 +362,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setVisibility($path, $visibility)
     {
@@ -372,7 +372,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMetadata($path)
     {
@@ -383,7 +383,7 @@ class Filesystem implements FilesystemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($path, Handler $handler = null)
     {
