@@ -30,7 +30,7 @@ second constructor argument.
 $adapter = new Local(__DIR__.'/path/to/too', 0);
 ~~~
 
-## Links
+## Links [added in 1.0.8]
 
 The Local adapter doesn't support links, this violates
 the root path constraint which is enforces throughout
