@@ -259,7 +259,7 @@ class Local extends AbstractAdapter
             $result[] = $this->normalizeFileInfo($file);
         }
 
-        return $result;
+        return array_filter($result);
     }
 
     /**
@@ -382,22 +382,13 @@ class Local extends AbstractAdapter
      */
     protected function normalizeFileInfo(SplFileInfo $file)
     {
-        if ($file->isLink()) {
+        if (! $file->isLink()) {
+            return $this->mapFileInfo($file);
+        }
+
+        if ($this->linkHandling === self::LINKS_EXCEPTION) {
             throw NotSupportedException::forLink($file);
         }
-
-        $normalized = [
-            'type' => $file->getType(),
-            'path' => $this->getFilePath($file),
-        ];
-
-        $normalized['timestamp'] = $file->getMTime();
-
-        if ($normalized['type'] === 'file') {
-            $normalized['size'] = $file->getSize();
-        }
-
-        return $normalized;
     }
 
     /**
@@ -438,5 +429,25 @@ class Local extends AbstractAdapter
         $iterator = new DirectoryIterator($path);
 
         return $iterator;
+    }
+
+    /**
+     * @param SplFileInfo $file
+     * @return array
+     */
+    protected function mapFileInfo(SplFileInfo $file)
+    {
+        $normalized = [
+            'type' => $file->getType(),
+            'path' => $this->getFilePath($file),
+        ];
+
+        $normalized['timestamp'] = $file->getMTime();
+
+        if ($normalized['type'] === 'file') {
+            $normalized['size'] = $file->getSize();
+        }
+
+        return $normalized;
     }
 }

@@ -340,4 +340,16 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $adapter = new Local($root);
         $adapter->listContents();
     }
+
+    public function testLinkIsSkipped()
+    {
+        $root = __DIR__.'/files/';
+        $original = $root.'original.txt';
+        $link = $root.'link.txt';
+        file_put_contents($original, 'something');
+        symlink($original, $link);
+        $adapter = new Local($root, LOCK_EX, Local::LINKS_SKIP);
+        $result = $adapter->listContents();
+        $this->assertCount(1, $result);
+    }
 }
