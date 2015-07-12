@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.8 - 2014-07-12
+
+### Altered
+
+* [Local::deleteDir] This function now uses the correct (reversed) iterator instead of relying in listContents.
+
+### Added
+
+* [Local] The Local adapter now has the ability to skip links using Local::SKIP_LINKS as the third constructor argument.
+
 ## 1.0.7 - 2015-07-11
 
 ### Fixed

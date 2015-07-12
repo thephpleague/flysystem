@@ -16,14 +16,14 @@ use SplFileInfo;
 class Local extends AbstractAdapter
 {
     /**
-     * @var bool
+     * @var int
      */
-    const SKIP_LINKS = true;
+    const SKIP_LINKS = 0001;
 
     /**
-     * @var bool
+     * @var int
      */
-    const DISALLOW_LINKS = false;
+    const DISALLOW_LINKS = 0002;
 
     /**
      * @var array
@@ -49,7 +49,7 @@ class Local extends AbstractAdapter
      */
     protected $writeFlags;
     /**
-     * @var string
+     * @var int
      */
     private $linkHandling;
 
@@ -58,7 +58,7 @@ class Local extends AbstractAdapter
      *
      * @param string $root
      * @param int $writeFlags
-     * @param bool $linkHandling
+     * @param int $linkHandling
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS)
     {
@@ -386,7 +386,7 @@ class Local extends AbstractAdapter
             return $this->mapFileInfo($file);
         }
 
-        if ($this->linkHandling === self::DISALLOW_LINKS) {
+        if ($this->linkHandling & self::DISALLOW_LINKS) {
             throw NotSupportedException::forLink($file);
         }
     }
