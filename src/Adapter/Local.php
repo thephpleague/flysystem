@@ -18,12 +18,12 @@ class Local extends AbstractAdapter
     /**
      * @var string
      */
-    const LINKS_SKIP = 'LINKS_SKIP';
+    const SKIP_LINKS = true;
 
     /**
      * @var string
      */
-    const LINKS_EXCEPTION = 'LINKS_EXCEPTION';
+    const DISALLOW_LINKS = false;
 
     /**
      * @var array
@@ -60,7 +60,7 @@ class Local extends AbstractAdapter
      * @param int $writeFlags
      * @param string $linkHandling
      */
-    public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::LINKS_EXCEPTION)
+    public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS)
     {
         $realRoot = $this->ensureDirectory($root);
 
@@ -386,7 +386,7 @@ class Local extends AbstractAdapter
             return $this->mapFileInfo($file);
         }
 
-        if ($this->linkHandling === self::LINKS_EXCEPTION) {
+        if ($this->linkHandling === self::DISALLOW_LINKS) {
             throw NotSupportedException::forLink($file);
         }
     }

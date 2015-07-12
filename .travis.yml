@@ -9,11 +9,6 @@ php:
 
 sudo: false
 
-cache:
-  directories:
-    - vendor
-    - $HOME/.composer/cache
-
 env:
   - COMPOSER_OPTS=""
   - COMPOSER_OPTS="--prefer-lowest"

@@ -348,7 +348,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $link = $root.'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
-        $adapter = new Local($root, LOCK_EX, Local::LINKS_SKIP);
+        $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
         $result = $adapter->listContents();
         $this->assertCount(1, $result);
     }
