@@ -99,7 +99,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function setConfig(array $config)
     {
         foreach ($this->configurable as $setting) {
-            if (!isset($config[$setting])) {
+            if (! isset($config[$setting])) {
                 continue;
             }
 
@@ -507,7 +507,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            if (!empty($line) && !preg_match('#.* \.(\.)?$|^total#', $line)) {
+            if (! empty($line) && !preg_match('#.* \.(\.)?$|^total#', $line)) {
                 return true;
             }
 
@@ -558,7 +558,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function ensureDirectory($dirname)
     {
-        if (!empty($dirname) && !$this->has($dirname)) {
+        if (! empty($dirname) && !$this->has($dirname)) {
             $this->createDir($dirname, new Config());
         }
     }
@@ -568,7 +568,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function getConnection()
     {
-        if (!$this->connection) {
+        if (! $this->connection) {
             $this->connect();
         }
 

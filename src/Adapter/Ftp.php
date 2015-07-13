@@ -106,7 +106,7 @@ class Ftp extends AbstractFtpAdapter
         $root = $this->getRoot();
         $connection = $this->getConnection();
 
-        if (empty($root) === false && ! ftp_chdir($connection, $root)) {
+        if (empty($root) === false && !ftp_chdir($connection, $root)) {
             throw new RuntimeException('Root is invalid or does not exist: '.$this->getRoot());
         }
 
