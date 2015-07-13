@@ -3,7 +3,6 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
-use League\Flysystem\Adapter\Local;
 use League\Flysystem\Plugin\PluggableTrait;
 
 /**
@@ -279,22 +278,26 @@ class Filesystem implements FilesystemInterface
     public function listContents($directory = '', $recursive = false)
     {
         $directory = Util::normalizePath($directory);
-        $adapter = $this->getAdapter();
-        $separator = $adapter instanceof Local ? DIRECTORY_SEPARATOR : '/';
-        $contents = $adapter->listContents($directory, $recursive);
-        $mapper = function ($entry) use ($directory, $recursive, $separator) {
-            if (
-                strlen($entry['path']) === 0
-                || (!empty($directory) && strpos($entry['path'], $directory . $separator) === false)
-                || ($recursive === false && Util::dirname($entry['path']) !== $directory)
-            ) {
+
+        $contents = $this->getAdapter()->listContents($directory, $recursive);
+
+        $filter = function (array $entry) use ($directory, $recursive) {
+            if (empty($entry['path']) && $entry['path'] !== '0') {
                 return false;
             }
 
+            if ($recursive) {
+                return $directory === '' || strpos($entry['path'], $directory . '/') === 0;
+            }
+
+            return Util::dirname($entry['path']) === $directory;
+        };
+
+        $mapper = function (array $entry) {
             return $entry + Util::pathinfo($entry['path']);
         };
 
-        $listing = array_values(array_filter(array_map($mapper, $contents)));
+        $listing = array_values(array_map($mapper, array_filter($contents, $filter)));
 
         usort(
             $listing,

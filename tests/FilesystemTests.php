@@ -377,7 +377,42 @@ class FilesystemTests extends ProphecyTestCase
         ];
         $this->prophecy->listContents('', false)->willReturn($rawListing);
         $output = $this->filesystem->listContents('', false);
-        $this->assertCount(4, $output);
+        $this->assertCount(2, $output);
+    }
+
+    public function testListContentsRecursize()
+    {
+        $rawListing = [
+           ['path' => 'other_root/file.txt'],
+           ['path' => 'valid/to_deep/file.txt'],
+           ['path' => 'valid/file.txt'],
+           ['path' => 'valid/a-valid-file.txt'],
+        ];
+        $expected = [
+            Util::pathinfo('valid/a-valid-file.txt'),
+            Util::pathinfo('valid/file.txt'),
+            Util::pathinfo('valid/to_deep/file.txt'),
+        ];
+        $this->prophecy->listContents('valid', true)->willReturn($rawListing);
+        $output = $this->filesystem->listContents('valid', true);
+        $this->assertEquals($expected, $output);
+
+        $expected = [
+            Util::pathinfo('other_root/file.txt'),
+            Util::pathinfo('valid/a-valid-file.txt'),
+            Util::pathinfo('valid/file.txt'),
+            Util::pathinfo('valid/to_deep/file.txt'),
+        ];
+        $this->prophecy->listContents('', true)->willReturn($rawListing);
+        $output = $this->filesystem->listContents('', true);
+        $this->assertEquals($expected, $output);
+    }
+    public function testListContentsSubDirectoryMatches()
+    {
+        $rawListing = [['path' => 'a/dir/file.txt']];
+        $this->prophecy->listContents('dir', true)->willReturn($rawListing);
+        $output = $this->filesystem->listContents('dir', true);
+        $this->assertEquals([], $output);
     }
 
     public function testInvalidPluginCall()
