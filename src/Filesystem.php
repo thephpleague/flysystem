@@ -2,11 +2,9 @@
 
 namespace League\Flysystem;
 
-use BadMethodCallException;
 use InvalidArgumentException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Plugin\PluggableTrait;
-use League\Flysystem\Plugin\PluginNotFoundException;
 
 /**
  * @method array getWithMetadata(string $path, array $metadata)
@@ -32,7 +30,7 @@ class Filesystem implements FilesystemInterface
      * Constructor.
      *
      * @param AdapterInterface $adapter
-     * @param Config|array     $config
+     * @param Config|array $config
      */
     public function __construct(AdapterInterface $adapter, $config = null)
     {
@@ -67,7 +65,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        return (bool) $this->getAdapter()->has($path);
+        return (bool)$this->getAdapter()->has($path);
     }
 
     /**
@@ -79,7 +77,7 @@ class Filesystem implements FilesystemInterface
         $this->assertAbsent($path);
         $config = $this->prepareConfig($config);
 
-        return (bool) $this->getAdapter()->write($path, $contents, $config);
+        return (bool)$this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
@@ -87,8 +85,8 @@ class Filesystem implements FilesystemInterface
      */
     public function writeStream($path, $resource, array $config = [])
     {
-        if (! is_resource($resource)) {
-            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
+        if (!is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
         $path = Util::normalizePath($path);
@@ -97,7 +95,7 @@ class Filesystem implements FilesystemInterface
 
         Util::rewindStream($resource);
 
-        return (bool) $this->getAdapter()->writeStream($path, $resource, $config);
+        return (bool)$this->getAdapter()->writeStream($path, $resource, $config);
     }
 
     /**
@@ -109,10 +107,10 @@ class Filesystem implements FilesystemInterface
         $config = $this->prepareConfig($config);
 
         if ($this->has($path)) {
-            return (bool) $this->getAdapter()->update($path, $contents, $config);
+            return (bool)$this->getAdapter()->update($path, $contents, $config);
         }
 
-        return (bool) $this->getAdapter()->write($path, $contents, $config);
+        return (bool)$this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
@@ -120,8 +118,8 @@ class Filesystem implements FilesystemInterface
      */
     public function putStream($path, $resource, array $config = [])
     {
-        if (! is_resource($resource)) {
-            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
+        if (!is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
         $path = Util::normalizePath($path);
@@ -129,10 +127,10 @@ class Filesystem implements FilesystemInterface
         Util::rewindStream($resource);
 
         if ($this->has($path)) {
-            return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
+            return (bool)$this->getAdapter()->updateStream($path, $resource, $config);
         }
 
-        return (bool) $this->getAdapter()->writeStream($path, $resource, $config);
+        return (bool)$this->getAdapter()->writeStream($path, $resource, $config);
     }
 
     /**
@@ -163,7 +161,7 @@ class Filesystem implements FilesystemInterface
 
         $this->assertPresent($path);
 
-        return (bool) $this->getAdapter()->update($path, $contents, $config);
+        return (bool)$this->getAdapter()->update($path, $contents, $config);
     }
 
     /**
@@ -171,8 +169,8 @@ class Filesystem implements FilesystemInterface
      */
     public function updateStream($path, $resource, array $config = [])
     {
-        if (! is_resource($resource)) {
-            throw new InvalidArgumentException(__METHOD__.' expects argument #2 to be a valid resource.');
+        if (!is_resource($resource)) {
+            throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
         $path = Util::normalizePath($path);
@@ -180,7 +178,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         Util::rewindStream($resource);
 
-        return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
+        return (bool)$this->getAdapter()->updateStream($path, $resource, $config);
     }
 
     /**
@@ -191,7 +189,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (! ($object = $this->getAdapter()->read($path))) {
+        if (!($object = $this->getAdapter()->read($path))) {
             return false;
         }
 
@@ -206,7 +204,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (! $object = $this->getAdapter()->readStream($path)) {
+        if (!$object = $this->getAdapter()->readStream($path)) {
             return false;
         }
 
@@ -223,7 +221,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
-        return (bool) $this->getAdapter()->rename($path, $newpath);
+        return (bool)$this->getAdapter()->rename($path, $newpath);
     }
 
     /**
@@ -261,7 +259,7 @@ class Filesystem implements FilesystemInterface
             throw new RootViolationException('Root directories can not be deleted.');
         }
 
-        return (bool) $this->getAdapter()->deleteDir($dirname);
+        return (bool)$this->getAdapter()->deleteDir($dirname);
     }
 
     /**
@@ -272,7 +270,7 @@ class Filesystem implements FilesystemInterface
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);
 
-        return (bool) $this->getAdapter()->createDir($dirname, $config);
+        return (bool)$this->getAdapter()->createDir($dirname, $config);
     }
 
     /**
@@ -287,20 +285,23 @@ class Filesystem implements FilesystemInterface
         $mapper = function ($entry) use ($directory, $recursive, $separator) {
             if (
                 strlen($entry['path']) === 0
-                || (! empty($directory) && strpos($entry['path'], $directory.$separator) === false)
+                || (!empty($directory) && strpos($entry['path'], $directory . $separator) === false)
                 || ($recursive === false && Util::dirname($entry['path']) !== $directory)
             ) {
                 return false;
             }
 
-            return  $entry + Util::pathinfo($entry['path']);
+            return $entry + Util::pathinfo($entry['path']);
         };
 
         $listing = array_values(array_filter(array_map($mapper, $contents)));
 
-        usort($listing, function ($a, $b) {
-            return strcasecmp($a['path'], $b['path']);
-        });
+        usort(
+            $listing,
+            function ($a, $b) {
+                return strcasecmp($a['path'], $b['path']);
+            }
+        );
 
         return $listing;
     }
@@ -313,7 +314,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (! $object = $this->getAdapter()->getMimetype($path)) {
+        if (!$object = $this->getAdapter()->getMimetype($path)) {
             return false;
         }
 
@@ -328,7 +329,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (! $object = $this->getAdapter()->getTimestamp($path)) {
+        if (!$object = $this->getAdapter()->getTimestamp($path)) {
             return false;
         }
 
@@ -361,7 +362,7 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        return (int) $object['size'];
+        return (int)$object['size'];
     }
 
     /**
@@ -371,7 +372,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        return (bool) $this->getAdapter()->setVisibility($path, $visibility);
+        return (bool)$this->getAdapter()->setVisibility($path, $visibility);
     }
 
     /**
@@ -392,7 +393,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        if (! $handler) {
+        if (!$handler) {
             $metadata = $this->getMetadata($path);
             $handler = $metadata['type'] === 'file' ? new File($this, $path) : new Directory($this, $path);
         }
@@ -427,7 +428,7 @@ class Filesystem implements FilesystemInterface
      */
     public function assertPresent($path)
     {
-        if (! $this->has($path)) {
+        if (!$this->has($path)) {
             throw new FileNotFoundException($path);
         }
     }
@@ -443,29 +444,6 @@ class Filesystem implements FilesystemInterface
     {
         if ($this->has($path)) {
             throw new FileExistsException($path);
-        }
-    }
-
-    /**
-     * Plugins pass-through.
-     *
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @throws BadMethodCallException
-     *
-     * @return mixed
-     */
-    public function __call($method, array $arguments)
-    {
-        try {
-            return $this->invokePlugin($method, $arguments, $this);
-        } catch (PluginNotFoundException $e) {
-            throw new BadMethodCallException(
-                'Call to undefined method '
-                .__CLASS__
-                .'::'.$method
-            );
         }
     }
 }
