@@ -4,6 +4,7 @@ namespace League\Flysystem;
 
 use BadMethodCallException;
 use InvalidArgumentException;
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
 
@@ -280,11 +281,13 @@ class Filesystem implements FilesystemInterface
     public function listContents($directory = '', $recursive = false)
     {
         $directory = Util::normalizePath($directory);
-        $contents = $this->getAdapter()->listContents($directory, $recursive);
-        $mapper = function ($entry) use ($directory, $recursive) {
+        $adapter = $this->getAdapter();
+        $separator = $adapter instanceof Local ? DIRECTORY_SEPARATOR : '/';
+        $contents = $adapter->listContents($directory, $recursive);
+        $mapper = function ($entry) use ($directory, $recursive, $separator) {
             if (
                 strlen($entry['path']) === 0
-                || (! empty($directory) && strpos($entry['path'], $directory.'/') === false)
+                || (! empty($directory) && strpos($entry['path'], $directory.$separator) === false)
                 || ($recursive === false && Util::dirname($entry['path']) !== $directory)
             ) {
                 return false;
