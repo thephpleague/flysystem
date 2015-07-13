@@ -403,7 +403,7 @@ class Local extends AbstractAdapter
         $path = $file->getPathname();
         $path = $this->removePathPrefix($path);
 
-        return trim($path, '\\/');
+        return trim(str_replace('\\', '/', $path), '/');
     }
 
     /**
