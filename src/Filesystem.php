@@ -30,7 +30,7 @@ class Filesystem implements FilesystemInterface
      * Constructor.
      *
      * @param AdapterInterface $adapter
-     * @param Config|array $config
+     * @param Config|array     $config
      */
     public function __construct(AdapterInterface $adapter, $config = null)
     {
@@ -65,7 +65,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        return (bool)$this->getAdapter()->has($path);
+        return (bool) $this->getAdapter()->has($path);
     }
 
     /**
@@ -77,7 +77,7 @@ class Filesystem implements FilesystemInterface
         $this->assertAbsent($path);
         $config = $this->prepareConfig($config);
 
-        return (bool)$this->getAdapter()->write($path, $contents, $config);
+        return (bool) $this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
@@ -95,7 +95,7 @@ class Filesystem implements FilesystemInterface
 
         Util::rewindStream($resource);
 
-        return (bool)$this->getAdapter()->writeStream($path, $resource, $config);
+        return (bool) $this->getAdapter()->writeStream($path, $resource, $config);
     }
 
     /**
@@ -107,10 +107,10 @@ class Filesystem implements FilesystemInterface
         $config = $this->prepareConfig($config);
 
         if ($this->has($path)) {
-            return (bool)$this->getAdapter()->update($path, $contents, $config);
+            return (bool) $this->getAdapter()->update($path, $contents, $config);
         }
 
-        return (bool)$this->getAdapter()->write($path, $contents, $config);
+        return (bool) $this->getAdapter()->write($path, $contents, $config);
     }
 
     /**
@@ -127,10 +127,10 @@ class Filesystem implements FilesystemInterface
         Util::rewindStream($resource);
 
         if ($this->has($path)) {
-            return (bool)$this->getAdapter()->updateStream($path, $resource, $config);
+            return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
         }
 
-        return (bool)$this->getAdapter()->writeStream($path, $resource, $config);
+        return (bool) $this->getAdapter()->writeStream($path, $resource, $config);
     }
 
     /**
@@ -161,7 +161,7 @@ class Filesystem implements FilesystemInterface
 
         $this->assertPresent($path);
 
-        return (bool)$this->getAdapter()->update($path, $contents, $config);
+        return (bool) $this->getAdapter()->update($path, $contents, $config);
     }
 
     /**
@@ -178,7 +178,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         Util::rewindStream($resource);
 
-        return (bool)$this->getAdapter()->updateStream($path, $resource, $config);
+        return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
     }
 
     /**
@@ -221,7 +221,7 @@ class Filesystem implements FilesystemInterface
         $this->assertPresent($path);
         $this->assertAbsent($newpath);
 
-        return (bool)$this->getAdapter()->rename($path, $newpath);
+        return (bool) $this->getAdapter()->rename($path, $newpath);
     }
 
     /**
@@ -259,7 +259,7 @@ class Filesystem implements FilesystemInterface
             throw new RootViolationException('Root directories can not be deleted.');
         }
 
-        return (bool)$this->getAdapter()->deleteDir($dirname);
+        return (bool) $this->getAdapter()->deleteDir($dirname);
     }
 
     /**
@@ -270,7 +270,7 @@ class Filesystem implements FilesystemInterface
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);
 
-        return (bool)$this->getAdapter()->createDir($dirname, $config);
+        return (bool) $this->getAdapter()->createDir($dirname, $config);
     }
 
     /**
@@ -362,7 +362,7 @@ class Filesystem implements FilesystemInterface
             return false;
         }
 
-        return (int)$object['size'];
+        return (int) $object['size'];
     }
 
     /**
@@ -372,7 +372,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        return (bool)$this->getAdapter()->setVisibility($path, $visibility);
+        return (bool) $this->getAdapter()->setVisibility($path, $visibility);
     }
 
     /**

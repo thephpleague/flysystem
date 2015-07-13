@@ -21,6 +21,7 @@ function fclose($result)
 {
     if (is_resource($result) && stream_get_contents($result) === 'fail.close') {
         \fclose($result);
+
         return false;
     }
 

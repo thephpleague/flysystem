@@ -99,7 +99,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function setConfig(array $config)
     {
         foreach ($this->configurable as $setting) {
-            if (! isset($config[$setting])) {
+            if (!isset($config[$setting])) {
                 continue;
             }
 
@@ -286,7 +286,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Return the FTP system type
+     * Return the FTP system type.
      *
      * @return string
      */
@@ -296,7 +296,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
-     * Set the FTP system type (windows or unix)
+     * Set the FTP system type (windows or unix).
      *
      * @param string $systemType
      *
@@ -368,6 +368,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @param string $base
      *
      * @return array normalized file array
+     *
      * @throws NotSupportedException
      */
     protected function normalizeObject($item, $base)
@@ -376,7 +377,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         if ($systemType === 'unix') {
             return $this->normalizeUnixObject($item, $base);
-        } elseif ($systemType === 'windows'){
+        } elseif ($systemType === 'windows') {
             return $this->normalizeWindowsObject($item, $base);
         }
 
@@ -420,15 +421,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected function normalizeWindowsObject($item, $base)
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 3);
-        list ($date, $time, $size, $name) = explode(' ', $item, 4);
+        list($date, $time, $size, $name) = explode(' ', $item, 4);
         $path = empty($base) ? $name : $base.$this->separator.$name;
 
         // Check for the correct date/time format
-        $format = strlen($date) === 8 ? "m-d-yH:iA" : "Y-m-dH:i";
+        $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
         $timestamp = DateTime::createFromFormat($format, $date.$time)->getTimestamp();
 
         if ($size === '<DIR>') {
             $type = 'dir';
+
             return compact('type', 'path', 'timestamp');
         }
 
@@ -505,7 +507,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            if (! empty($line) && ! preg_match('#.* \.(\.)?$|^total#', $line)) {
+            if (!empty($line) && !preg_match('#.* \.(\.)?$|^total#', $line)) {
                 return true;
             }
 
@@ -556,7 +558,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function ensureDirectory($dirname)
     {
-        if (! empty($dirname) && ! $this->has($dirname)) {
+        if (!empty($dirname) && !$this->has($dirname)) {
             $this->createDir($dirname, new Config());
         }
     }
@@ -566,7 +568,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function getConnection()
     {
-        if (! $this->connection) {
+        if (!$this->connection) {
             $this->connect();
         }
 

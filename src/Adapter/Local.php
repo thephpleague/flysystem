@@ -57,8 +57,8 @@ class Local extends AbstractAdapter
      * Constructor.
      *
      * @param string $root
-     * @param int $writeFlags
-     * @param int $linkHandling
+     * @param int    $writeFlags
+     * @param int    $linkHandling
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS)
     {
@@ -432,7 +432,7 @@ class Local extends AbstractAdapter
     }
 
     /**
-     * @param SplFileInfo $file
+     * @param  SplFileInfo $file
      * @return array
      */
     protected function mapFileInfo(SplFileInfo $file)
