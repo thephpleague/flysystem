@@ -400,8 +400,8 @@ class Local extends AbstractAdapter
      */
     protected function getFilePath(SplFileInfo $file)
     {
-        $path = $file->getPathname();
-        $path = $this->removePathPrefix($path);
+        $location = $file->getPathname();
+        $path = $this->removePathPrefix($location);
 
         return trim(str_replace('\\', '/', $path), '/');
     }
@@ -450,5 +450,15 @@ class Local extends AbstractAdapter
         }
 
         return $normalized;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function applyPathPrefix($path)
+    {
+        $prefixedPath = parent::applyPathPrefix($path);
+
+        return str_replace('/', DIRECTORY_SEPARATOR, $prefixedPath);
     }
 }
