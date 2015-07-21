@@ -4,6 +4,7 @@ namespace League\Flysystem;
 
 use InvalidArgumentException;
 use League\Flysystem\Plugin\PluggableTrait;
+use League\Flysystem\Util\ContentListingFormatter;
 
 /**
  * @method array getWithMetadata(string $path, array $metadata)
@@ -14,16 +15,12 @@ use League\Flysystem\Plugin\PluggableTrait;
 class Filesystem implements FilesystemInterface
 {
     use PluggableTrait;
+    use ConfigAwareTrait;
 
     /**
      * @var AdapterInterface
      */
     protected $adapter;
-
-    /**
-     * @var Config
-     */
-    protected $config;
 
     /**
      * Constructor.
@@ -34,7 +31,7 @@ class Filesystem implements FilesystemInterface
     public function __construct(AdapterInterface $adapter, $config = null)
     {
         $this->adapter = $adapter;
-        $this->config = Util::ensureConfig($config);
+        $this->setConfig($config);
     }
 
     /**
@@ -45,16 +42,6 @@ class Filesystem implements FilesystemInterface
     public function getAdapter()
     {
         return $this->adapter;
-    }
-
-    /**
-     * Get the Config.
-     *
-     * @return Config config object
-     */
-    public function getConfig()
-    {
-        return $this->config;
     }
 
     /**
@@ -278,35 +265,9 @@ class Filesystem implements FilesystemInterface
     public function listContents($directory = '', $recursive = false)
     {
         $directory = Util::normalizePath($directory);
-
         $contents = $this->getAdapter()->listContents($directory, $recursive);
 
-        $filter = function (array $entry) use ($directory, $recursive) {
-            if (empty($entry['path']) && $entry['path'] !== '0') {
-                return false;
-            }
-
-            if ($recursive) {
-                return $directory === '' || strpos($entry['path'], $directory . '/') === 0;
-            }
-
-            return Util::dirname($entry['path']) === $directory;
-        };
-
-        $mapper = function (array $entry) {
-            return $entry + Util::pathinfo($entry['path']);
-        };
-
-        $listing = array_values(array_map($mapper, array_filter($contents, $filter)));
-
-        usort(
-            $listing,
-            function ($a, $b) {
-                return strcasecmp($a['path'], $b['path']);
-            }
-        );
-
-        return $listing;
+        return (new ContentListingFormatter($directory, $recursive))->formatListing($contents);
     }
 
     /**
@@ -405,21 +366,6 @@ class Filesystem implements FilesystemInterface
         $handler->setFilesystem($this);
 
         return $handler;
-    }
-
-    /**
-     * Convert a config array to a Config object with the correct fallback.
-     *
-     * @param array $config
-     *
-     * @return Config
-     */
-    protected function prepareConfig(array $config)
-    {
-        $config = new Config($config);
-        $config->setFallback($this->config);
-
-        return $config;
     }
 
     /**
