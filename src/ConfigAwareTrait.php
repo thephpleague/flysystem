@@ -15,7 +15,7 @@ trait ConfigAwareTrait
     /**
      * Set the config.
      *
-     * @param Config|array $config
+     * @param Config|array|null $config
      */
     protected function setConfig($config)
     {
