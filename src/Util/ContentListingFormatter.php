@@ -20,7 +20,7 @@ class ContentListingFormatter
 
     /**
      * @param string $directory
-     * @param bool $recursive
+     * @param bool   $recursive
      */
     public function __construct($directory, $recursive)
     {
@@ -45,8 +45,6 @@ class ContentListingFormatter
         );
 
         return $this->sortListing($listing);
-
-        return $listing;
     }
 
     private function addPathInfo(array $entry)

@@ -13,7 +13,7 @@ trait ConfigAwareTrait
     protected $config;
 
     /**
-     * Set the config
+     * Set the config.
      *
      * @param Config|array $config
      */
