@@ -1,10 +1,16 @@
 # Changelog
 
+## 1.0.10 - 2015-07-21
+
+### Fixed
+
+* [Filesystem::listContents] The implementation is clearer now and works more reliably for windows users.
+
 ## 1.0.9 - 2015-07-13
 
 ### Fixed
 
-* [Filesystem::listContent] This function now uses DIRECTORY_SEPARATOR when the local adapter is used. 
+* [Filesystem::listContents] This function now uses DIRECTORY_SEPARATOR when the local adapter is used. 
 
 ## 1.0.8 - 2015-07-12
 
