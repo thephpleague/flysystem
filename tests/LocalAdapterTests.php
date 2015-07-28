@@ -353,4 +353,19 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $result = $adapter->listContents();
         $this->assertCount(1, $result);
     }
+
+    public function testLinksAreDeletedDuringDeleteDir()
+    {
+        $root = __DIR__.'/files/';
+        mkdir($root.'subdir', 0777, true);
+        $original = $root.'original.txt';
+        $link = $root.'subdir/link.txt';
+        file_put_contents($original, 'something');
+        symlink($original, $link);
+        $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
+
+        $this->assertTrue(is_link($link));
+        $adapter->deleteDir('subdir');
+        $this->assertFalse(is_link($link));
+    }
 }
