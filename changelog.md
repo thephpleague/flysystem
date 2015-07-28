@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.11 - 2014-07-18
+
+### Fixed
+
+* [Adapter\Local::deleteDir] Now removes up links correctly.
+
 ## 1.0.10 - 2015-07-21
 
 ### Fixed
