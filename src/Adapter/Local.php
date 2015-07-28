@@ -363,10 +363,15 @@ class Local extends AbstractAdapter
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
-            if ($file->getType() !== 'dir') {
-                unlink($file->getRealPath());
-            } else {
-                rmdir($file->getRealPath());
+            switch ($file->getType()) {
+                case 'dir':
+                    rmdir($file->getRealPath());
+                    break;
+                case 'link':
+                    unlink($file->getPathname());
+                    break;
+                default:
+                    unlink($file->getRealPath());
             }
         }
 
