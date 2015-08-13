@@ -337,6 +337,16 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @inheritdoc
      */
+    public function getTimestamp($path)
+    {
+        $timestamp = ftp_mdtm($this->getConnection(), $path);
+
+        return ($timestamp !== -1) ? ['timestamp' => $timestamp] : false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function read($path)
     {
         if (! $object = $this->readStream($path)) {

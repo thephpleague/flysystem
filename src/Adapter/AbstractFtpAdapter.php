@@ -536,16 +536,6 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function getTimestamp($path)
-    {
-        $timestamp = ftp_mdtm($this->getConnection(), $path);
-
-        return ($timestamp !== -1) ? ['timestamp' => $timestamp] : false;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getVisibility($path)
     {
         return $this->getMetadata($path);
