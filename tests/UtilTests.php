@@ -123,6 +123,8 @@ class UtilTests extends \PHPUnit_Framework_TestCase
             ['/some/file.css', 'body { background: #000; } ', 'text/css'],
             ['/some/file.txt', 'body { background: #000; } ', 'text/plain'],
             ['/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif'],
+            ['/some/file.zip', false, 'application/x-zip'],
+            ['/some/file.zip', null, 'application/x-empty'],
         ];
     }
 

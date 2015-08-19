@@ -153,9 +153,13 @@ class Util
      *
      * @return string|null MIME Type or NULL if no extension detected
      */
-    public static function guessMimeType($path, $content)
+    public static function guessMimeType($path, $content = false)
     {
-        $mimeType = MimeType::detectByContent($content);
+        $mimeType = null;
+
+        if ($content !== false) {
+            $mimeType = MimeType::detectByContent($content);
+        }
 
         if (empty($mimeType) || $mimeType === 'text/plain') {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
