@@ -154,9 +154,7 @@ class Ftp extends AbstractFtpAdapter
         $stream = fopen('php://temp', 'w+b');
         fwrite($stream, $contents);
         rewind($stream);
-
         $result = $this->writeStream($path, $stream, $config);
-
         fclose($stream);
 
         if ($result === false) {
