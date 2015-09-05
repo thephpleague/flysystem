@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.0.11 - 2014-07-18
+## 1.0.12 - 2015-09-05
+
+### Fixed
+
+* [Util::pathinfo] Now checks for existence of the dirname key, it's missing in some PHP versions.
+
+## 1.0.11 - 2015-07-18
 
 ### Fixed
 
