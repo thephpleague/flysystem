@@ -11,7 +11,7 @@ adapter available, you'll need to create your own.
 
 ## What is an adapter
 
-An adapter can be seen as a plug, it bridges the gap
+An adapter can be seen as a plug - it bridges the gap
 between initially incompatible API's. The job of the adapter
 is to translate requests into calls the file system
 understands and re-format responses to comply with
@@ -37,7 +37,7 @@ by the client. In order to be able to optimize file system
 handling, all metadata is returned. For instance, when a
 `listContents` call not only returns the paths, but also
 timestamps or other related metadata, this information is
-not lost. This information is returned through back, allowing
+not lost. This information is returned through metadata, allowing
 caching decorators to pick it up, and store for further use.
 
 ### Response values

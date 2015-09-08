@@ -33,7 +33,7 @@ $adapter = new Local(__DIR__.'/path/to/too', 0);
 ## Links [added in 1.0.8]
 
 The Local adapter doesn't support links, this violates
-the root path constraint which is enforces throughout
+the root path constraint which is enforced throughout
 Flysystem. By default, when links are encountered an
 exception is thrown. This behaviour can be altered
 using the third constructor argument.

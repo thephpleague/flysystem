@@ -6,13 +6,13 @@ title: Upgrade to 1.0.0
 
 # Upgrade to 1.0.0
 
-While version 1.0.0 is largely backwards compatible from in every day usage,
-some parts require a different boostrapping.
+While version 1.0.0 is largely backwards compatible from earlier versions in every 
+day usage, some parts require a different boostrapping.
 
 ## Relocated Adapters
 
 In order to have better dependency management, and to remove some of the
-version contstraints, some of the adapters have been moved out or the main
+version contstraints, some of the adapters have been moved out of the main
 repository. These adapters are:
 
 * [AwsS3: AWS SDK V2 Adapter](/adapter/aws-s3-v2/)
