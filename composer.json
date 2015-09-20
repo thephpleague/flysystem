@@ -47,6 +47,9 @@
         "league/flysystem-sftp": "Allows you to use SFTP server storage via phpseclib",
         "league/flysystem-ziparchive": "Allows you to use ZipArchive adapter"
     },
+    "conflict": {
+        "league/flysystem-sftp": "<1.0.6"
+    },
     "config": {
         "bin-dir": "bin"
     },
