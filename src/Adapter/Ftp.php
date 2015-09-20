@@ -243,25 +243,20 @@ class Ftp extends AbstractFtpAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        $result = false;
         $connection = $this->getConnection();
         $directories = explode('/', $dirname);
 
         foreach ($directories as $directory) {
-            $result = $this->createActualDirectory($directory, $connection);
+            if (false === $this->createActualDirectory($directory, $connection)) {
+                $this->setConnectionRoot();
 
-            if (! $result) {
-                break;
+                return false;
             }
 
             ftp_chdir($connection, $directory);
         }
 
         $this->setConnectionRoot();
-
-        if (! $result) {
-            return false;
-        }
 
         return ['path' => $dirname];
     }
