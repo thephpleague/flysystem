@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.13 - 2015-09-20
+
+### Fixed
+
+* [Adapter\Ftp] Now tries to reconnect when a connection is dropped.
+
 ## 1.0.12 - 2015-09-05
 
 ### Fixed
