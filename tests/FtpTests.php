@@ -4,6 +4,24 @@ namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
 
+function ftp_systype($connection)
+{
+    static $connections = [
+        'reconnect.me',
+        'dont.reconnect.me',
+    ];
+
+    if (is_string($connection) && array_key_exists($connection, $connections)) {
+        $connections[$connection]++;
+
+        if (strpos($connection, 'dont') !== false || $connections[$connection] < 2) {
+            return false;
+        }
+    }
+
+    return 'LINUX';
+}
+
 function ftp_ssl_connect($host)
 {
     if ($host === 'fail.me') {
@@ -464,6 +482,17 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testItReconnects()
+    {
+        $adapter = new Ftp(['host' => 'reconnect.me', 'ssl' => true, 'root' => 'somewhere']);
+        $this->assertFalse($adapter->isConnected());
+        $this->assertNotNull($adapter->getConnection());
+
     }
 
     /**
