@@ -187,6 +187,10 @@ __NOTE__: This requires the `League\Flysystem\Plugin\GetWithMetadata` plugin.
 
 ## Using streams for reads and writes
 
+<p class="message-notice">
+Some SDK's close streams after consuming then, therefor, before calling fclose on the resource, check if it's still valid using <code>is_resource</code>.
+</p>
+
 ~~~ php
 $stream = fopen('/path/to/database.backup', 'r+');
 $filesystem->writeStream('backups/'.strftime('%G-%m-%d').'.backup', $stream);
@@ -195,6 +199,10 @@ $filesystem->writeStream('backups/'.strftime('%G-%m-%d').'.backup', $stream);
 $filesystem->writeStream('backups/'.strftime('%G-%m-%d').'.backup', $stream, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
+
+if (is_resource($stream)) {
+    fclose($stream);
+}
 
 // Or update a file with stream contents
 $filesystem->updateStream('backups/'.strftime('%G-%m-%d').'.backup', $stream);
@@ -209,5 +217,8 @@ $putStream = tmpfile();
 fwrite($putStream, $contents);
 rewind($putStream);
 $filesystem->putStream('somewhere/here.txt', $putStream);
-fclose($putStream);
+
+if (is_resource($putStream)) {
+    fclose($putStream);
+}
 ~~~
