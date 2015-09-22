@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.14 - 2015-09-22
+
+### Added
+
+* [Adapter\Local] Now has configurable file and directory permissions.
+
 ## 1.0.13 - 2015-09-20
 
 ### Fixed
