@@ -45,3 +45,18 @@ $adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::SKIP_LINKS);
 // Throw exceptions (default)
 $adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::DISALLOW_LINKS);
 ~~~
+
+## File and directory permission settings [added in 1.0.14]
+
+``` php
+$adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::DISALLOW_LINKS, [
+    'file' => [
+        'public' => 0744,
+        'private' => 0700,
+    ],
+    'dir' => [
+        'public' => 0755,
+        'private' => 0700,
+    ]
+]);
+```
