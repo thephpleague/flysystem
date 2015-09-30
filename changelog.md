@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.15 - 2015-10-30
+
+### Fixed
+
+* [Util::emulateDirectories] Now emulates correctly when a mix of files and directories are returned.
+
 ## 1.0.14 - 2015-09-28
 
 ### Added
