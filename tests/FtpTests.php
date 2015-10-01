@@ -146,7 +146,7 @@ function ftp_rawlist($connection, $directory)
     }
 
     if ($directory === 'windows.not.found') {
-        return "File not found";
+        return ["File not found"];
     }
 
     if (strpos($directory, 'file1.txt') !== false) {

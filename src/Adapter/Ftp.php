@@ -325,7 +325,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        if(!is_array($listing) && fnmatch('* not found', $listing)) {
+        if(fnmatch('* not found', $listing[0])) {
             return false;
         }
 
