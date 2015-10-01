@@ -94,6 +94,10 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
+    if ($directory === 'windows.not.found') {
+        return false;
+    }
+
     if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1'])) {
         return false;
     }
@@ -139,6 +143,10 @@ function ftp_rawlist($connection, $directory)
 
     if ($directory === 'not.found') {
         return false;
+    }
+
+    if ($directory === 'windows.not.found') {
+        return "File not found";
     }
 
     if (strpos($directory, 'file1.txt') !== false) {
@@ -378,6 +386,37 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('dir1', $metadata['path']);
         $this->assertEquals(1432382940, $metadata['timestamp']);
     }
+
+    /**
+     * @depends testInstantiable
+     *
+     * Some Windows FTP server return a 500 error with the message "File not found" instead of false
+     * when calling ftp_rawlist() on invalid dir
+     */
+    public function testFileNotFoundWindowMetadata()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('windows.not.found');
+        $this->assertFalse($metadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testFileNotFoundWindows()
+    {
+        $adapter = new Ftp($this->options);
+        $this->assertFalse($adapter->has('windows.not.found'));
+        $this->assertFalse($adapter->getVisibility('windows.not.found'));
+        $this->assertFalse($adapter->getSize('windows.not.found'));
+        $this->assertFalse($adapter->getMimetype('windows.not.found'));
+        $this->assertFalse($adapter->getTimestamp('windows.not.found'));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
+    }
+
 
     /**
      * @depends testInstantiable

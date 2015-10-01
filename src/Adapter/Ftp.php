@@ -325,6 +325,10 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
+        if(!is_array($listing) && fnmatch('* not found', $listing)) {
+            return false;
+        }
+
         return $this->normalizeObject($listing[0], '');
     }
 
