@@ -188,7 +188,7 @@ __NOTE__: This requires the `League\Flysystem\Plugin\GetWithMetadata` plugin.
 ## Using streams for reads and writes
 
 <p class="message-notice">
-Some SDK's close streams after consuming then, therefor, before calling fclose on the resource, check if it's still valid using <code>is_resource</code>.
+Some SDK's close streams after consuming them, therefor, before calling fclose on the resource, check if it's still valid using <code>is_resource</code>.
 </p>
 
 ~~~ php
