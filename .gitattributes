@@ -13,4 +13,4 @@
 /phpunit.xml export-ignore
 /phpunit.hhvm.xml export-ignore
 /changelog.md export-ignore
-/readme.md export-ignore
+/README.md export-ignore
