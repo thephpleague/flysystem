@@ -78,6 +78,7 @@ Want to get started quickly? Check out some of these integrations:
 * PHPCR: https://github.com/thephpleague/flysystem-phpcr
 * Azure Blob Storage
 * NullAdapter
+* Fallback: https://github.com/Litipk/flysystem-fallback-adapter
 
 ## Caching
 
