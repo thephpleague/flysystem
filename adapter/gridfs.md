@@ -1,7 +1,7 @@
 ---
 layout: default
 permalink: /adapter/gridfs/
-title: FTP Adapter
+title: GridFS Adapter
 ---
 
 # GridFS Adapter
