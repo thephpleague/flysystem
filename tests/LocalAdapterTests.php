@@ -28,6 +28,15 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
+function chmod ($filename, $mode)
+{
+    if (strpos($filename, 'chmod.fail') !== false) {
+        return false;
+    }
+
+    return \chmod($filename, $mode);
+}
+
 function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 {
     if (strpos($pathname, 'fail.plz') !== false) {
@@ -36,6 +45,8 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
     return call_user_func_array('mkdir', func_get_args());
 }
+
+
 
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
@@ -309,6 +320,13 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
+    }
+
+    public function testVisibilityFail()
+    {
+        $this->assertFalse(
+            $this->adapter->setVisibility('chmod.fail', 'public')
+        );
     }
 
     public function testApplyPathPrefix()
