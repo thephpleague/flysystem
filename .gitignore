@@ -4,3 +4,4 @@ coverage
 coverage.xml
 composer.lock
 tests/files
+.idea
