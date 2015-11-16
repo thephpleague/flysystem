@@ -38,6 +38,10 @@ __Check if a file exists__
 $exists = $filesystem->has('path/to/file.txt');
 ~~~
 
+__NOTE__: This only has consistent behaviour for files, not directories. Directories
+are less important in Flysystem, they're created implicitly and often ignored because
+not every adapter (filesystem type) supports directories.
+
 __Delete Files__
 
 ~~~ php
