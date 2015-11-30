@@ -11,9 +11,9 @@ the way it does, several concepts require some explanation.
 
 ## Overview
 
-* [Adapters](./#adapters)
-* [Relative Paths](./#relative-paths)
-* [Files first](./#files-first)
+* [Adapters](#adapters)
+* [Relative Paths](#relative-paths)
+* [Files first](#files-first)
 
 ## Adapters
 
