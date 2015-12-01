@@ -3,9 +3,9 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
-use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
+use BadMethodCallException;
 
 /**
  * Class MountManager.
@@ -41,11 +41,99 @@ use LogicException;
  * @method Filesystem flushCache()
  * @method assertPresent($path)
  * @method assertAbsent($path)
- * @method Filesystem addPlugin(PluginInterface $plugin)
+ * @method Filesystem DUPE_COMMENTaddPlugin(PluginInterface $plugin)
  */
 class MountManager
 {
+    /*******************************************************************************************************************
     use PluggableTrait;
+     ******************************************************************************************************************/
+
+    /**
+     * @var array
+     */
+    protected $plugins = array();
+
+    /**
+     * Register a plugin.
+     *
+     * @param PluginInterface $plugin
+     *
+     * @return $this
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $this->plugins[$plugin->getMethod()] = $plugin;
+
+        return $this;
+    }
+
+    /**
+     * Find a specific plugin.
+     *
+     * @param string $method
+     *
+     * @throws LogicException
+     *
+     * @return PluginInterface $plugin
+     */
+    protected function findPlugin($method)
+    {
+        if (! isset($this->plugins[$method])) {
+            throw new PluginNotFoundException('Plugin not found for method: '.$method);
+        }
+
+        if (! method_exists($this->plugins[$method], 'handle')) {
+            throw new LogicException(get_class($this->plugins[$method]).' does not have a handle method.');
+        }
+
+        return $this->plugins[$method];
+    }
+
+    /**
+     * Invoke a plugin by method name.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    protected function invokePlugin($method, array $arguments, FilesystemInterface $filesystem)
+    {
+        $plugin = $this->findPlugin($method);
+        $plugin->setFilesystem($filesystem);
+        $callback = array($plugin, 'handle');
+
+        return call_user_func_array($callback, $arguments);
+    }
+
+    /**
+     * Plugins pass-through.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @throws BadMethodCallException
+     *
+     * @return mixed
+     */
+//    public function __call($method, array $arguments)
+//    {
+//        try {
+//            return $this->invokePlugin($method, $arguments, $this);
+//        } catch (PluginNotFoundException $e) {
+//            throw new BadMethodCallException(
+//                'Call to undefined method '
+//                .get_class($this)
+//                .'::'.$method
+//            );
+//        }
+//    }
+
+    /*******************************************************************************************************************
+     * /END Trait PluggableTrait
+     ******************************************************************************************************************/
+
 
     /**
      * @var array
