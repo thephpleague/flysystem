@@ -1,6 +1,6 @@
 # League\Flysystem
 
-**Important note**
+**Important note:**
 
 This fork is being kept 'up to date' for a downgraded version of PHP - PHP 5.3.  Please note: I will try the best I can
 to keep the functionality the same - with minimal changes - but please check this out via git instead of trying to find
@@ -9,6 +9,8 @@ this fork on packagist with composer.
 --Aaron
 
 PS: I really wish I didn't have to do this to this beautiful code :(
+
+---
 
 [![Author](http://img.shields.io/badge/author-@frankdejonge-blue.svg?style=flat-square)](https://twitter.com/frankdejonge)
 [![Build Status](https://img.shields.io/travis/thephpleague/flysystem/master.svg?style=flat-square)](https://travis-ci.org/thephpleague/flysystem)
