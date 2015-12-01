@@ -11,10 +11,14 @@
         {
             "name": "Frank de Jonge",
             "email": "info@frenky.net"
+        },
+        {
+            "name": "Aaron Saray",
+            "email": "aaron@aaronsaray.com"
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.3.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",

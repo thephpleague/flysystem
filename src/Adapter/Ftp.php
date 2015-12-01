@@ -2,7 +2,6 @@
 
 namespace League\Flysystem\Adapter;
 
-use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -10,7 +9,51 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
+    /*******************************************************************************************************************
     use StreamedCopyTrait;
+    *******************************************************************************************************************/
+
+    /**
+     * Copy a file.
+     *
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return bool
+     */
+    public function copy($path, $newpath)
+    {
+        $response = $this->readStream($path);
+
+        if ($response === false || !is_resource($response['stream'])) {
+            return false;
+        }
+
+        $result = $this->writeStream($newpath, $response['stream'], new Config());
+
+        if ($result !== false && is_resource($response['stream'])) {
+            fclose($response['stream']);
+        }
+
+        return $result !== false;
+    }
+
+    // Required abstract method
+
+    /**
+     * @param string $path
+     */
+    //abstract public function readStream($path);
+
+    /**
+     * @param string $path
+     */
+    //abstract public function writeStream($path, $resource, Config $config);
+
+    /*******************************************************************************************************************
+     /END use StreamedCopyTrait;
+    *******************************************************************************************************************/
+
 
     /**
      * @var int
@@ -20,7 +63,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @var array
      */
-    protected $configurable = [
+    protected $configurable = array(
         'host',
         'port',
         'username',
@@ -33,7 +76,7 @@ class Ftp extends AbstractFtpAdapter
         'passive',
         'transferMode',
         'systemType',
-    ];
+    );
 
     /**
      * Set the transfer mode.
@@ -273,7 +316,7 @@ class Ftp extends AbstractFtpAdapter
 
         $this->setConnectionRoot();
 
-        return ['path' => $dirname];
+        return array('path' => $dirname);
     }
 
     /**
@@ -310,13 +353,13 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->getConnection();
 
         if ($path === '') {
-            return ['type' => 'dir', 'path' => ''];
+            return array('type' => 'dir', 'path' => '');
         }
 
         if (@ftp_chdir($connection, $path) === true) {
             $this->setConnectionRoot();
 
-            return ['type' => 'dir', 'path' => $path];
+            return array('type' => 'dir', 'path' => $path);
         }
 
         $listing = ftp_rawlist($connection, $path);
@@ -353,7 +396,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $timestamp = ftp_mdtm($this->getConnection(), $path);
 
-        return ($timestamp !== -1) ? ['timestamp' => $timestamp] : false;
+        return ($timestamp !== -1) ? array('timestamp' => $timestamp) : false;
     }
 
     /**
@@ -413,7 +456,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $listing = ftp_rawlist($this->getConnection(), '-lna ' . $directory, $recursive);
 
-        return $listing ? $this->normalizeListing($listing, $directory) : [];
+        return $listing ? $this->normalizeListing($listing, $directory) : array();
     }
 
     /**

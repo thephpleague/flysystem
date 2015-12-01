@@ -21,7 +21,7 @@ trait StreamedWritingTrait
     {
         Util::rewindStream($resource);
         $contents = stream_get_contents($resource);
-        $fallbackCall = [$this, $fallback];
+        $fallbackCall = array($this, $fallback);
 
         return call_user_func($fallbackCall, $path, $contents, $config);
     }

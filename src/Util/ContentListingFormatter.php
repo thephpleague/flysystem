@@ -39,8 +39,8 @@ class ContentListingFormatter
     {
         $listing = array_values(
             array_map(
-                [$this, 'addPathInfo'],
-                array_filter($listing, [$this, 'isEntryOutOfScope'])
+                array($this, 'addPathInfo'),
+                array_filter($listing, array($this, 'isEntryOutOfScope'))
             )
         );
 

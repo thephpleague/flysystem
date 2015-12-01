@@ -109,7 +109,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function write($path, $contents, array $config = []);
+    public function write($path, $contents, array $config = array());
 
     /**
      * Write a new file using a stream.
@@ -123,7 +123,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function writeStream($path, $resource, array $config = []);
+    public function writeStream($path, $resource, array $config = array());
 
     /**
      * Update an existing file.
@@ -136,7 +136,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function update($path, $contents, array $config = []);
+    public function update($path, $contents, array $config = array());
 
     /**
      * Update an existing file using a stream.
@@ -150,7 +150,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function updateStream($path, $resource, array $config = []);
+    public function updateStream($path, $resource, array $config = array());
 
     /**
      * Rename a file.
@@ -208,7 +208,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function createDir($dirname, array $config = []);
+    public function createDir($dirname, array $config = array());
 
     /**
      * Set the visibility for a file.
@@ -229,7 +229,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function put($path, $contents, array $config = []);
+    public function put($path, $contents, array $config = array());
 
     /**
      * Create a file or update if exists.
@@ -242,7 +242,7 @@ interface FilesystemInterface
      *
      * @return bool True on success, false on failure.
      */
-    public function putStream($path, $resource, array $config = []);
+    public function putStream($path, $resource, array $config = array());
 
     /**
      * Read and delete a file.

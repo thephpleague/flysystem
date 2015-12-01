@@ -119,7 +119,7 @@ abstract class Handler
     public function __call($method, array $arguments)
     {
         array_unshift($arguments, $this->path);
-        $callback = [$this->filesystem, $method];
+        $callback = array($this->filesystem, $method);
 
         try {
             return call_user_func_array($callback, $arguments);

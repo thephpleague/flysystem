@@ -3,9 +3,9 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
-use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
 use LogicException;
+use BadMethodCallException;
 
 /**
  * Class MountManager.
@@ -15,19 +15,19 @@ use LogicException;
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
  * @method bool has($path)
- * @method bool write($path, $contents, array $config = [])
- * @method bool writeStream($path, $resource, array $config = [])
- * @method bool put($path, $contents, $config = [])
- * @method bool putStream($path, $contents, $config = [])
+ * @method bool write($path, $contents, array $config = array())
+ * @method bool writeStream($path, $resource, array $config = array())
+ * @method bool put($path, $contents, $config = array())
+ * @method bool putStream($path, $contents, $config = array())
  * @method string readAndDelete($path)
- * @method bool update($path, $contents, $config = [])
- * @method bool updateStream($path, $resource, $config = [])
+ * @method bool update($path, $contents, $config = array())
+ * @method bool updateStream($path, $resource, $config = array())
  * @method string|false read($path)
  * @method resource|false readStream($path)
  * @method bool rename($path, $newpath)
  * @method bool delete($path)
  * @method bool deleteDir($dirname)
- * @method bool createDir($dirname, $config = [])
+ * @method bool createDir($dirname, $config = array())
  * @method array listFiles($directory = '', $recursive = false)
  * @method array listPaths($directory = '', $recursive = false)
  * @method array getWithMetadata($path, array $metadata)
@@ -41,23 +41,111 @@ use LogicException;
  * @method Filesystem flushCache()
  * @method assertPresent($path)
  * @method assertAbsent($path)
- * @method Filesystem addPlugin(PluginInterface $plugin)
+ * @method Filesystem DUPE_COMMENTaddPlugin(PluginInterface $plugin)
  */
 class MountManager
 {
+    /*******************************************************************************************************************
     use PluggableTrait;
+     ******************************************************************************************************************/
 
     /**
      * @var array
      */
-    protected $filesystems = [];
+    protected $plugins = array();
+
+    /**
+     * Register a plugin.
+     *
+     * @param PluginInterface $plugin
+     *
+     * @return $this
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $this->plugins[$plugin->getMethod()] = $plugin;
+
+        return $this;
+    }
+
+    /**
+     * Find a specific plugin.
+     *
+     * @param string $method
+     *
+     * @throws LogicException
+     *
+     * @return PluginInterface $plugin
+     */
+    protected function findPlugin($method)
+    {
+        if (! isset($this->plugins[$method])) {
+            throw new PluginNotFoundException('Plugin not found for method: '.$method);
+        }
+
+        if (! method_exists($this->plugins[$method], 'handle')) {
+            throw new LogicException(get_class($this->plugins[$method]).' does not have a handle method.');
+        }
+
+        return $this->plugins[$method];
+    }
+
+    /**
+     * Invoke a plugin by method name.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return mixed
+     */
+    protected function invokePlugin($method, array $arguments, FilesystemInterface $filesystem)
+    {
+        $plugin = $this->findPlugin($method);
+        $plugin->setFilesystem($filesystem);
+        $callback = array($plugin, 'handle');
+
+        return call_user_func_array($callback, $arguments);
+    }
+
+    /**
+     * Plugins pass-through.
+     *
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @throws BadMethodCallException
+     *
+     * @return mixed
+     */
+//    public function __call($method, array $arguments)
+//    {
+//        try {
+//            return $this->invokePlugin($method, $arguments, $this);
+//        } catch (PluginNotFoundException $e) {
+//            throw new BadMethodCallException(
+//                'Call to undefined method '
+//                .get_class($this)
+//                .'::'.$method
+//            );
+//        }
+//    }
+
+    /*******************************************************************************************************************
+     * /END Trait PluggableTrait
+     ******************************************************************************************************************/
+
+
+    /**
+     * @var array
+     */
+    protected $filesystems = array();
 
     /**
      * Constructor.
      *
      * @param array $filesystems
      */
-    public function __construct(array $filesystems = [])
+    public function __construct(array $filesystems = array())
     {
         $this->mountFilesystems($filesystems);
     }
@@ -141,7 +229,7 @@ class MountManager
         list($prefix, $path) = explode('://', $path, 2);
         array_unshift($arguments, $path);
 
-        return [$prefix, $arguments];
+        return array($prefix, $arguments);
     }
 
     /**
@@ -152,7 +240,7 @@ class MountManager
      */
     public function listContents($directory = '', $recursive = false)
     {
-        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        list($prefix, $arguments) = $this->filterPrefix(array($directory));
         $filesystem = $this->getFilesystem($prefix);
         $directory = array_shift($arguments);
         $result = $filesystem->listContents($directory, $recursive);
@@ -187,19 +275,19 @@ class MountManager
      */
     public function copy($from, $to)
     {
-        list($prefixFrom, $arguments) = $this->filterPrefix([$from]);
+        list($prefixFrom, $arguments) = $this->filterPrefix(array($from));
 
         $fsFrom = $this->getFilesystem($prefixFrom);
-        $buffer = call_user_func_array([$fsFrom, 'readStream'], $arguments);
+        $buffer = call_user_func_array(array($fsFrom, 'readStream'), $arguments);
 
         if ($buffer === false) {
             return false;
         }
 
-        list($prefixTo, $arguments) = $this->filterPrefix([$to]);
+        list($prefixTo, $arguments) = $this->filterPrefix(array($to));
 
         $fsTo = $this->getFilesystem($prefixTo);
-        $result =  call_user_func_array([$fsTo, 'writeStream'], array_merge($arguments, [$buffer]));
+        $result =  call_user_func_array(array($fsTo, 'writeStream'), array_merge($arguments, array($buffer)));
 
         if (is_resource($buffer)) {
             fclose($buffer);
@@ -215,11 +303,11 @@ class MountManager
      * @param string $directory
      * @param bool   $recursive
      */
-    public function listWith(array $keys = [], $directory = '', $recursive = false)
+    public function listWith(array $keys = array(), $directory = '', $recursive = false)
     {
-        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        list($prefix, $arguments) = $this->filterPrefix(array($directory));
         $directory = $arguments[0];
-        $arguments = [$keys, $directory, $recursive];
+        $arguments = array($keys, $directory, $recursive);
 
         return $this->invokePluginOnFilesystem('listWith', $arguments, $prefix);
     }
@@ -262,7 +350,7 @@ class MountManager
             // Let it pass, it's ok, don't panic.
         }
 
-        $callback = [$filesystem, $method];
+        $callback = array($filesystem, $method);
 
         return call_user_func_array($callback, $arguments);
     }

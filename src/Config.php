@@ -7,7 +7,7 @@ class Config
     /**
      * @var array
      */
-    protected $settings = [];
+    protected $settings = array();
 
     /**
      * @var Config
@@ -19,7 +19,7 @@ class Config
      *
      * @param array $settings
      */
-    public function __construct(array $settings = [])
+    public function __construct(array $settings = array())
     {
         $this->settings = $settings;
     }

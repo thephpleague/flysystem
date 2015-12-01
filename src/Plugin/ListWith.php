@@ -23,14 +23,14 @@ class ListWith extends AbstractPlugin
      *
      * @return array listing with metadata
      */
-    public function handle(array $keys = [], $directory = '', $recursive = false)
+    public function handle(array $keys = array(), $directory = '', $recursive = false)
     {
         $contents = $this->filesystem->listContents($directory, $recursive);
 
         foreach ($contents as $index => $object) {
             if ($object['type'] === 'file') {
                 $missingKeys = array_diff($keys, array_keys($object));
-                $contents[$index] = array_reduce($missingKeys, [$this, 'getMetadataByName'], $object);
+                $contents[$index] = array_reduce($missingKeys, array($this, 'getMetadataByName'), $object);
             }
         }
 
