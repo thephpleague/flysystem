@@ -2,56 +2,23 @@
 
 namespace League\Flysystem\Adapter;
 
+require_once('LocalAdapterTests.php');
+
+function rename ($oldname, $newname, $context = null) {
+    if (strpos($newname, 'rename.fail') !== false)
+    {
+        return false;
+    }
+
+    return call_user_func_array('rename', func_get_args());
+}
+
 use League\Flysystem\Config;
 
-function fopen($result, $mode)
-{
-    if (strpos($result, 'false') !== false) {
-        return false;
-    }
-
-    if (strpos($result, 'fail.close') !== false) {
-        return \fopen('data://text/plain,fail.close', $mode);
-    }
-
-    return call_user_func_array('fopen', func_get_args());
-}
-
-function fclose($result)
-{
-    if (is_resource($result) && stream_get_contents($result) === 'fail.close') {
-        \fclose($result);
-
-        return false;
-    }
-
-    return call_user_func_array('fclose', func_get_args());
-}
-
-function chmod ($filename, $mode)
-{
-    if (strpos($filename, 'chmod.fail') !== false) {
-        return false;
-    }
-
-    return \chmod($filename, $mode);
-}
-
-function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
-{
-    if (strpos($pathname, 'fail.plz') !== false) {
-        return false;
-    }
-
-    return call_user_func_array('mkdir', func_get_args());
-}
-
-
-
-class LocalAdapterTests extends \PHPUnit_Framework_TestCase
+class AtomicLocalAdapterTests extends LocalAdapterTests
 {
     /**
-     * @var Local
+     * @var AtomicLocal
      */
     protected $adapter;
 
@@ -59,15 +26,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->root = __DIR__.'/files/';
-        $this->adapter = new Local($this->root);
+        $this->root = __DIR__ . '/files/';
+        $this->adapter = new AtomicLocal($this->root);
     }
 
     public function teardown()
     {
         $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new \RecursiveIteratorIterator($it,
-                     \RecursiveIteratorIterator::CHILD_FIRST);
+            \RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($files as $file) {
             if ($file->getFilename() === '.' || $file->getFilename() === '..') {
                 continue;
@@ -172,15 +139,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath($this->root).DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+        $this->assertEquals(realpath($this->root) . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
     }
 
     public function testRenameToNonExistsingDirectory()
     {
         $this->adapter->write('file.txt', 'contents', new Config());
         $dirname = uniqid();
-        $this->assertFalse(is_dir($this->root.DIRECTORY_SEPARATOR.$dirname));
-        $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
+        $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
+        $this->assertTrue($this->adapter->rename('file.txt', $dirname . '/file.txt'));
     }
 
     public function testNotWritableRoot()
@@ -190,7 +157,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
 
         try {
-            $root = __DIR__.'/files/not-writable';
+            $root = __DIR__ . '/files/not-writable';
             mkdir($root, 0000, true);
             $this->setExpectedException('LogicException');
             new Local($root);
@@ -260,10 +227,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testDeleteDir()
     {
         $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
-        $this->assertTrue(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertTrue(is_dir(__DIR__ . '/files/nested/dir'));
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
-        $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertFalse(is_dir(__DIR__ . '/files/nested/dir'));
     }
 
     public function testVisibilityPublicFile()
@@ -337,8 +304,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithLink()
     {
-        $target = __DIR__.'/files/';
-        $link = __DIR__.'/link_to_files';
+        $target = __DIR__ . '/files/';
+        $link = __DIR__ . '/link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
@@ -351,9 +318,9 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
      */
     public function testLinkCausedUnsupportedException()
     {
-        $root = __DIR__.'/files/';
-        $original = $root.'original.txt';
-        $link = $root.'link.txt';
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root);
@@ -362,9 +329,9 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testLinkIsSkipped()
     {
-        $root = __DIR__.'/files/';
-        $original = $root.'original.txt';
-        $link = $root.'link.txt';
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
@@ -374,10 +341,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testLinksAreDeletedDuringDeleteDir()
     {
-        $root = __DIR__.'/files/';
-        mkdir($root.'subdir', 0777, true);
-        $original = $root.'original.txt';
-        $link = $root.'subdir/link.txt';
+        $root = __DIR__ . '/files/';
+        mkdir($root . 'subdir', 0777, true);
+        $original = $root . 'original.txt';
+        $link = $root . 'subdir/link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
