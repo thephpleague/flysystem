@@ -2,7 +2,6 @@
 
 namespace League\Flysystem\Adapter;
 
-use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Util;
@@ -10,7 +9,51 @@ use RuntimeException;
 
 class Ftp extends AbstractFtpAdapter
 {
+    /*******************************************************************************************************************
     use StreamedCopyTrait;
+    *******************************************************************************************************************/
+
+    /**
+     * Copy a file.
+     *
+     * @param string $path
+     * @param string $newpath
+     *
+     * @return bool
+     */
+    public function copy($path, $newpath)
+    {
+        $response = $this->readStream($path);
+
+        if ($response === false || !is_resource($response['stream'])) {
+            return false;
+        }
+
+        $result = $this->writeStream($newpath, $response['stream'], new Config());
+
+        if ($result !== false && is_resource($response['stream'])) {
+            fclose($response['stream']);
+        }
+
+        return $result !== false;
+    }
+
+    // Required abstract method
+
+    /**
+     * @param string $path
+     */
+    //abstract public function readStream($path);
+
+    /**
+     * @param string $path
+     */
+    //abstract public function writeStream($path, $resource, Config $config);
+
+    /*******************************************************************************************************************
+     /END use StreamedCopyTrait;
+    *******************************************************************************************************************/
+
 
     /**
      * @var int
