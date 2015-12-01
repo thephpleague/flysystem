@@ -12,7 +12,7 @@ trait PluggableTrait
     /**
      * @var array
      */
-    protected $plugins = [];
+    protected $plugins = array();
 
     /**
      * Register a plugin.
@@ -62,7 +62,7 @@ trait PluggableTrait
     {
         $plugin = $this->findPlugin($method);
         $plugin->setFilesystem($filesystem);
-        $callback = [$plugin, 'handle'];
+        $callback = array($plugin, 'handle');
 
         return call_user_func_array($callback, $arguments);
     }

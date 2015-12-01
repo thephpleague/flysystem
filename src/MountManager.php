@@ -15,19 +15,19 @@ use LogicException;
  * @method AdapterInterface getAdapter($prefix)
  * @method Config getConfig($prefix)
  * @method bool has($path)
- * @method bool write($path, $contents, array $config = [])
- * @method bool writeStream($path, $resource, array $config = [])
- * @method bool put($path, $contents, $config = [])
- * @method bool putStream($path, $contents, $config = [])
+ * @method bool write($path, $contents, array $config = array())
+ * @method bool writeStream($path, $resource, array $config = array())
+ * @method bool put($path, $contents, $config = array())
+ * @method bool putStream($path, $contents, $config = array())
  * @method string readAndDelete($path)
- * @method bool update($path, $contents, $config = [])
- * @method bool updateStream($path, $resource, $config = [])
+ * @method bool update($path, $contents, $config = array())
+ * @method bool updateStream($path, $resource, $config = array())
  * @method string|false read($path)
  * @method resource|false readStream($path)
  * @method bool rename($path, $newpath)
  * @method bool delete($path)
  * @method bool deleteDir($dirname)
- * @method bool createDir($dirname, $config = [])
+ * @method bool createDir($dirname, $config = array())
  * @method array listFiles($directory = '', $recursive = false)
  * @method array listPaths($directory = '', $recursive = false)
  * @method array getWithMetadata($path, array $metadata)
@@ -50,14 +50,14 @@ class MountManager
     /**
      * @var array
      */
-    protected $filesystems = [];
+    protected $filesystems = array();
 
     /**
      * Constructor.
      *
      * @param array $filesystems
      */
-    public function __construct(array $filesystems = [])
+    public function __construct(array $filesystems = array())
     {
         $this->mountFilesystems($filesystems);
     }
@@ -141,7 +141,7 @@ class MountManager
         list($prefix, $path) = explode('://', $path, 2);
         array_unshift($arguments, $path);
 
-        return [$prefix, $arguments];
+        return array($prefix, $arguments);
     }
 
     /**
@@ -152,7 +152,7 @@ class MountManager
      */
     public function listContents($directory = '', $recursive = false)
     {
-        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        list($prefix, $arguments) = $this->filterPrefix(array($directory));
         $filesystem = $this->getFilesystem($prefix);
         $directory = array_shift($arguments);
         $result = $filesystem->listContents($directory, $recursive);
@@ -187,19 +187,19 @@ class MountManager
      */
     public function copy($from, $to)
     {
-        list($prefixFrom, $arguments) = $this->filterPrefix([$from]);
+        list($prefixFrom, $arguments) = $this->filterPrefix(array($from));
 
         $fsFrom = $this->getFilesystem($prefixFrom);
-        $buffer = call_user_func_array([$fsFrom, 'readStream'], $arguments);
+        $buffer = call_user_func_array(array($fsFrom, 'readStream'), $arguments);
 
         if ($buffer === false) {
             return false;
         }
 
-        list($prefixTo, $arguments) = $this->filterPrefix([$to]);
+        list($prefixTo, $arguments) = $this->filterPrefix(array($to));
 
         $fsTo = $this->getFilesystem($prefixTo);
-        $result =  call_user_func_array([$fsTo, 'writeStream'], array_merge($arguments, [$buffer]));
+        $result =  call_user_func_array(array($fsTo, 'writeStream'), array_merge($arguments, array($buffer)));
 
         if (is_resource($buffer)) {
             fclose($buffer);
@@ -215,11 +215,11 @@ class MountManager
      * @param string $directory
      * @param bool   $recursive
      */
-    public function listWith(array $keys = [], $directory = '', $recursive = false)
+    public function listWith(array $keys = array(), $directory = '', $recursive = false)
     {
-        list($prefix, $arguments) = $this->filterPrefix([$directory]);
+        list($prefix, $arguments) = $this->filterPrefix(array($directory));
         $directory = $arguments[0];
-        $arguments = [$keys, $directory, $recursive];
+        $arguments = array($keys, $directory, $recursive);
 
         return $this->invokePluginOnFilesystem('listWith', $arguments, $prefix);
     }
@@ -262,7 +262,7 @@ class MountManager
             // Let it pass, it's ok, don't panic.
         }
 
-        $callback = [$filesystem, $method];
+        $callback = array($filesystem, $method);
 
         return call_user_func_array($callback, $arguments);
     }

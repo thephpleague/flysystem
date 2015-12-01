@@ -62,7 +62,7 @@ class Util
      */
     public static function map(array $object, array $map)
     {
-        $result = [];
+        $result = array();
 
         foreach ($map as $from => $to) {
             if (! isset($object[$from])) {
@@ -181,8 +181,8 @@ class Util
      */
     public static function emulateDirectories(array $listing)
     {
-        $directories = [];
-        $listedDirectories = [];
+        $directories = array();
+        $listedDirectories = array();
 
         foreach ($listing as $object) {
             list($directories, $listedDirectories) = static::emulateObjectDirectories(
@@ -195,7 +195,7 @@ class Util
         $directories = array_diff(array_unique($directories), array_unique($listedDirectories));
 
         foreach ($directories as $directory) {
-            $listing[] = static::pathinfo($directory) + ['type' => 'dir'];
+            $listing[] = static::pathinfo($directory) + array('type' => 'dir');
         }
 
         return $listing;
@@ -276,7 +276,7 @@ class Util
         }
 
         if (empty($object['dirname'])) {
-            return [$directories, $listedDirectories];
+            return array($directories, $listedDirectories);
         }
 
         $parent = $object['dirname'];
@@ -289,9 +289,9 @@ class Util
         if (isset($object['type']) && $object['type'] === 'dir') {
             $listedDirectories[] = $object['path'];
 
-            return [$directories, $listedDirectories];
+            return array($directories, $listedDirectories);
         }
 
-        return [$directories, $listedDirectories];
+        return array($directories, $listedDirectories);
     }
 }

@@ -10,7 +10,7 @@ use League\Flysystem\Util\ContentListingFormatter;
  * @method array getWithMetadata(string $path, array $metadata)
  * @method array listFiles(string $path = '', boolean $recursive = false)
  * @method array listPaths(string $path = '', boolean $recursive = false)
- * @method array listWith(array $keys = [], $directory = '', $recursive = false)
+ * @method array listWith(array $keys = array(), $directory = '', $recursive = false)
  */
 class Filesystem implements FilesystemInterface
 {
@@ -57,7 +57,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function write($path, $contents, array $config = [])
+    public function write($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
         $this->assertAbsent($path);
@@ -69,7 +69,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function writeStream($path, $resource, array $config = [])
+    public function writeStream($path, $resource, array $config = array())
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
@@ -87,7 +87,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function put($path, $contents, array $config = [])
+    public function put($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
@@ -102,7 +102,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function putStream($path, $resource, array $config = [])
+    public function putStream($path, $resource, array $config = array())
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
@@ -140,7 +140,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function update($path, $contents, array $config = [])
+    public function update($path, $contents, array $config = array())
     {
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
@@ -153,7 +153,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function updateStream($path, $resource, array $config = [])
+    public function updateStream($path, $resource, array $config = array())
     {
         if (! is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
@@ -251,7 +251,7 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function createDir($dirname, array $config = [])
+    public function createDir($dirname, array $config = array())
     {
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);

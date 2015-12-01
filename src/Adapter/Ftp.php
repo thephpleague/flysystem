@@ -20,7 +20,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @var array
      */
-    protected $configurable = [
+    protected $configurable = array(
         'host',
         'port',
         'username',
@@ -33,7 +33,7 @@ class Ftp extends AbstractFtpAdapter
         'passive',
         'transferMode',
         'systemType',
-    ];
+    );
 
     /**
      * Set the transfer mode.
@@ -273,7 +273,7 @@ class Ftp extends AbstractFtpAdapter
 
         $this->setConnectionRoot();
 
-        return ['path' => $dirname];
+        return array('path' => $dirname);
     }
 
     /**
@@ -310,13 +310,13 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->getConnection();
 
         if ($path === '') {
-            return ['type' => 'dir', 'path' => ''];
+            return array('type' => 'dir', 'path' => '');
         }
 
         if (@ftp_chdir($connection, $path) === true) {
             $this->setConnectionRoot();
 
-            return ['type' => 'dir', 'path' => $path];
+            return array('type' => 'dir', 'path' => $path);
         }
 
         $listing = ftp_rawlist($connection, $path);
@@ -353,7 +353,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $timestamp = ftp_mdtm($this->getConnection(), $path);
 
-        return ($timestamp !== -1) ? ['timestamp' => $timestamp] : false;
+        return ($timestamp !== -1) ? array('timestamp' => $timestamp) : false;
     }
 
     /**
@@ -413,7 +413,7 @@ class Ftp extends AbstractFtpAdapter
     {
         $listing = ftp_rawlist($this->getConnection(), '-lna ' . $directory, $recursive);
 
-        return $listing ? $this->normalizeListing($listing, $directory) : [];
+        return $listing ? $this->normalizeListing($listing, $directory) : array();
     }
 
     /**

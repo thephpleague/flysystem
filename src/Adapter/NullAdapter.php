@@ -75,7 +75,7 @@ class NullAdapter extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return [];
+        return array();
     }
 
     /**
@@ -131,7 +131,7 @@ class NullAdapter extends AbstractAdapter
      */
     public function createDir($dirname, Config $config)
     {
-        return ['path' => $dirname, 'type' => 'dir'];
+        return array('path' => $dirname, 'type' => 'dir');
     }
 
     /**

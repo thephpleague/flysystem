@@ -28,7 +28,7 @@ class Ftpd extends Ftp
         $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
 
         if ($listing === false || (!empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
-            return [];
+            return array();
         }
 
         return $this->normalizeListing($listing, $directory);
