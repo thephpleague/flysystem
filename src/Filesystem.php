@@ -267,7 +267,8 @@ class Filesystem implements FilesystemInterface
         $directory = Util::normalizePath($directory);
         $contents = $this->getAdapter()->listContents($directory, $recursive);
 
-        return (new ContentListingFormatter($directory, $recursive))->formatListing($contents);
+        $contentListFormatter = new ContentListingFormatter($directory, $recursive);
+        return $contentListFormatter->formatListing($contents);
     }
 
     /**
