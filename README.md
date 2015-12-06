@@ -79,6 +79,7 @@ Want to get started quickly? Check out some of these integrations:
 * Azure Blob Storage
 * NullAdapter
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
+* Fallback: https://github.com/Litipk/flysystem-fallback-adapter
 
 ## Caching
 
