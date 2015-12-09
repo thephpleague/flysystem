@@ -81,6 +81,7 @@ Want to get started quickly? Check out some of these integrations:
 * NullAdapter
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
+* Memory: https://github.com/thephpleague/flysystem-memory
 
 ## Caching
 
