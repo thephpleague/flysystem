@@ -154,7 +154,9 @@ class Ftp extends AbstractFtpAdapter
      */
     public function disconnect()
     {
-        ftp_close($this->connection);
+        if ($this->isConnected()) {
+            ftp_close($this->connection);
+        }
 
         $this->connection = null;
     }
