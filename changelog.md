@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.16 - UNRELEAED
+
+### Fixed
+
+* [Ftp::isConnected] PHP warnings are prevented by improving the connection check.
+
 ## 1.0.15 - 2015-10-01
 
 ### Fixed
