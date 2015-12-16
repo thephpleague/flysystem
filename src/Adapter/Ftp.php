@@ -154,9 +154,7 @@ class Ftp extends AbstractFtpAdapter
      */
     public function disconnect()
     {
-        if ($this->isConnected()) {
-            ftp_close($this->connection);
-        }
+        ftp_close($this->connection);
 
         $this->connection = null;
     }
@@ -325,7 +323,7 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
-        if (fnmatch('* not found', $listing[0])) {
+        if (preg_match('/.* not found/', $listing[0])) {
             return false;
         }
 
