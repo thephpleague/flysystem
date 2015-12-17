@@ -340,6 +340,9 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
 
+    /**
+     * @depends testInstantiable
+     */
     public function testDisconnect()
     {
         $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
