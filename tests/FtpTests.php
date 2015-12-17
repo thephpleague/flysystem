@@ -28,6 +28,10 @@ function ftp_ssl_connect($host)
         return false;
     }
 
+    if ($host === 'disconnect.check') {
+        return tmpfile();
+    }
+
     return $host;
 }
 
@@ -68,8 +72,12 @@ function ftp_rename()
     return true;
 }
 
-function ftp_close()
+function ftp_close($connection)
 {
+    if (is_resource($connection)) {
+        return fclose($connection);
+    }
+
     return true;
 }
 
@@ -330,6 +338,15 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+    }
+
+    public function testDisconnect()
+    {
+        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter->connect();
+        $this->assertTrue($adapter->isConnected());
+        $adapter->disconnect();
+        $this->assertFalse($adapter->isConnected());
     }
 
     /**
