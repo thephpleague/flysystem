@@ -411,6 +411,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {
+        $directory = str_replace('*', '\\*', $directory);
         $options = $recursive ? '-alnR' : '-aln';
         $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
 
