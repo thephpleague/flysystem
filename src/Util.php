@@ -159,7 +159,7 @@ class Util
     {
         $mimeType = MimeType::detectByContent($content);
 
-        if (empty($mimeType) || $mimeType === 'text/plain') {
+        if (empty($mimeType) || in_array($mimeType, ['text/plain', 'application/x-empty'])) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {
