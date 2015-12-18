@@ -319,7 +319,7 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => $path];
         }
 
-        $listing = ftp_rawlist($connection, $path);
+        $listing = ftp_rawlist($connection, str_replace('*', '\\*', $path));
 
         if (empty($listing)) {
             return false;
