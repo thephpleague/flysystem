@@ -5,6 +5,11 @@
 ### Fixed
 
 * [Ftp::isConnected] PHP warnings are prevented by improving the connection check.
+* [Ftp::listContents] Recursive listings not use the `R` flag instead of the function param.
+* [Ftp::listContents] The `*` character is now properly escaped.
+* [Ftp::getMetadata] The `*` character is now properly escaped.
+* [Ftp] An `ignorePassiveAddress` option has been added to allow NAS FTP servers to work.
+* [Util] Mimetype `application/x-empty` is not treated as `text/plain` and will fall back to extension based mimetype checks.
 
 ## 1.0.15 - 2015-10-01
 
