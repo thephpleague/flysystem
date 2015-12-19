@@ -13,11 +13,6 @@ env:
   - COMPOSER_OPTS=""
   - COMPOSER_OPTS="--prefer-lowest"
 
-matrix:
-  allow_failures:
-    - php: hhvm
-  fast_finish: true
-
 before_install:
   - mkdir tests/files
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
