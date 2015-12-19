@@ -47,7 +47,6 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 }
 
 
-
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -66,8 +65,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function teardown()
     {
         $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new \RecursiveIteratorIterator($it,
-                     \RecursiveIteratorIterator::CHILD_FIRST);
+        $files = new \RecursiveIteratorIterator(
+            $it,
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
         foreach ($files as $file) {
             if ($file->getFilename() === '.' || $file->getFilename() === '..') {
                 continue;
@@ -385,5 +386,20 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_link($link));
         $adapter->deleteDir('subdir');
         $this->assertFalse(is_link($link));
+    }
+
+    public function testUnreadableFilesCauseAnError()
+    {
+        $this->setExpectedException('League\Flysystem\UnreadableFileException');
+
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::SKIP_LINKS);
+        $reflection = new \ReflectionClass($adapter);
+        $method = $reflection->getMethod('guardAgainstUnreadableFileInfo');
+        $method->setAccessible(true);
+        /** @var \SplFileInfo $fileInfo */
+        $fileInfo = $this->prophesize('SplFileInfo');
+        $fileInfo->getRealPath()->willReturn('somewhere');
+        $fileInfo->isReadable()->willReturn(false);
+        $method->invoke($adapter, $fileInfo->reveal());
     }
 }

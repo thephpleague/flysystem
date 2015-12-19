@@ -4,10 +4,11 @@ namespace League\Flysystem\Adapter;
 
 use DirectoryIterator;
 use FilesystemIterator;
-use Finfo;
+use finfo as Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\NotSupportedException;
+use League\Flysystem\UnreadableFileException;
 use League\Flysystem\Util;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -368,26 +369,32 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        $contents = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($location, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST
-        );
+        $contents = $this->getRecursiveDirectoryIterator($location, RecursiveIteratorIterator::CHILD_FIRST);
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
-            switch ($file->getType()) {
-                case 'dir':
-                    rmdir($file->getRealPath());
-                    break;
-                case 'link':
-                    unlink($file->getPathname());
-                    break;
-                default:
-                    unlink($file->getRealPath());
-            }
+            $this->guardAgainstUnreadableFileInfo($file);
+            $this->deleteFileInfoObject($file);
         }
 
         return rmdir($location);
+    }
+
+    /**
+     * @param $file
+     */
+    protected function deleteFileInfoObject($file)
+    {
+        switch ($file->getType()) {
+            case 'dir':
+                rmdir($file->getRealPath());
+                break;
+            case 'link':
+                unlink($file->getPathname());
+                break;
+            default:
+                unlink($file->getRealPath());
+        }
     }
 
     /**
@@ -425,15 +432,16 @@ class Local extends AbstractAdapter
 
     /**
      * @param string $path
+     * @param int    $mode
      *
      * @return RecursiveIteratorIterator
      */
-    protected function getRecursiveDirectoryIterator($path)
+    protected function getRecursiveDirectoryIterator($path, $mode = RecursiveIteratorIterator::SELF_FIRST)
     {
-        $directory = new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS);
-        $iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::SELF_FIRST);
-
-        return $iterator;
+        return new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+            $mode
+        );
     }
 
     /**
@@ -477,5 +485,17 @@ class Local extends AbstractAdapter
         $prefixedPath = parent::applyPathPrefix($path);
 
         return str_replace('/', DIRECTORY_SEPARATOR, $prefixedPath);
+    }
+
+    /**
+     * @param SplFileInfo $file
+     *
+     * @throws UnreadableFileException
+     */
+    protected function guardAgainstUnreadableFileInfo(SplFileInfo $file)
+    {
+        if ( ! $file->isReadable()) {
+            throw UnreadableFileException::forFileInfo($file);
+        }
     }
 }
