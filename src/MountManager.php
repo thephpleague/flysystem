@@ -88,8 +88,8 @@ class MountManager
      */
     public function mountFilesystem($prefix, FilesystemInterface $filesystem)
     {
-        if (! is_string($prefix)) {
-            throw new InvalidArgumentException(__METHOD__.' expects argument #1 to be a string.');
+        if ( ! is_string($prefix)) {
+            throw new InvalidArgumentException(__METHOD__ . ' expects argument #1 to be a string.');
         }
 
         $this->filesystems[$prefix] = $filesystem;
@@ -108,8 +108,8 @@ class MountManager
      */
     public function getFilesystem($prefix)
     {
-        if (! isset($this->filesystems[$prefix])) {
-            throw new LogicException('No filesystem mounted with prefix '.$prefix);
+        if ( ! isset($this->filesystems[$prefix])) {
+            throw new LogicException('No filesystem mounted with prefix ' . $prefix);
         }
 
         return $this->filesystems[$prefix];
@@ -130,12 +130,12 @@ class MountManager
 
         $path = array_shift($arguments);
 
-        if (! is_string($path)) {
+        if ( ! is_string($path)) {
             throw new InvalidArgumentException('First argument should be a string');
         }
 
-        if (! preg_match('#^[a-zA-Z0-9]+\:\/\/.*#', $path)) {
-            throw new InvalidArgumentException('No prefix detected in path: '.$path);
+        if ( ! preg_match('#^.+\:\/\/.*#', $path)) {
+            throw new InvalidArgumentException('No prefix detected in path: ' . $path);
         }
 
         list($prefix, $path) = explode('://', $path, 2);
@@ -229,6 +229,7 @@ class MountManager
      *
      * @param $from
      * @param $to
+     *
      * @return bool
      */
     public function move($from, $to)
@@ -248,6 +249,7 @@ class MountManager
      * @param $method
      * @param $arguments
      * @param $prefix
+     *
      * @return mixed
      */
     public function invokePluginOnFilesystem($method, $arguments, $prefix)

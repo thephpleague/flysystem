@@ -2,9 +2,6 @@
 
 namespace spec\League\Flysystem;
 
-use League\Flysystem\AdapterInterface;
-use League\Flysystem\Config;
-use League\Flysystem\Stub\PluginStub;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -13,7 +10,10 @@ class FilesystemSpec extends ObjectBehavior
     protected $adapter;
     protected $cache;
 
-    public function let(AdapterInterface $adapter)
+    /**
+     * @param League\Flysystem\AdapterInterface $adapter
+     */
+    public function let($adapter)
     {
         $this->adapter = $adapter;
         $this->beConstructedWith($adapter);
@@ -30,7 +30,10 @@ class FilesystemSpec extends ObjectBehavior
         $this->getAdapter()->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 
-    public function it_should_delegate_plugin_calls(PluginStub $plugin)
+    /**
+     * @param League\Flysystem\Stub\PluginStub $plugin
+     */
+    public function it_should_delegate_plugin_calls($plugin)
     {
         $plugin->setFilesystem($this)->shouldBeCalled();
         $plugin->getMethod()->willReturn('pluginMethod');

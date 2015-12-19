@@ -21,7 +21,7 @@ class FtpdTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        if (!defined('FTP_BINARY')) {
+        if ( ! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 

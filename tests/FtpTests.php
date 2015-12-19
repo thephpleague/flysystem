@@ -4,10 +4,32 @@ namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
 
+function ftp_systype($connection)
+{
+    static $connections = [
+        'reconnect.me',
+        'dont.reconnect.me',
+    ];
+
+    if (is_string($connection) && array_key_exists($connection, $connections)) {
+        $connections[$connection]++;
+
+        if (strpos($connection, 'dont') !== false || $connections[$connection] < 2) {
+            return false;
+        }
+    }
+
+    return 'LINUX';
+}
+
 function ftp_ssl_connect($host)
 {
     if ($host === 'fail.me') {
         return false;
+    }
+
+    if ($host === 'disconnect.check') {
+        return tmpfile();
     }
 
     return $host;
@@ -50,8 +72,12 @@ function ftp_rename()
     return true;
 }
 
-function ftp_close()
+function ftp_close($connection)
 {
+    if (is_resource($connection)) {
+        return fclose($connection);
+    }
+
     return true;
 }
 
@@ -73,6 +99,10 @@ function ftp_chdir($connection, $directory)
     }
 
     if ($directory === 'not.found') {
+        return false;
+    }
+
+    if ($directory === 'windows.not.found') {
         return false;
     }
 
@@ -121,6 +151,10 @@ function ftp_rawlist($connection, $directory)
 
     if ($directory === 'not.found') {
         return false;
+    }
+
+    if ($directory === 'windows.not.found') {
+        return ["File not found"];
     }
 
     if (strpos($directory, 'file1.txt') !== false) {
@@ -220,6 +254,7 @@ function ftp_mdtm($connection, $path)
             break;
     }
 }
+
 function ftp_mkdir($connection, $dirname)
 {
     if (strpos($dirname, 'mkdir.fail') !== false) {
@@ -264,6 +299,13 @@ function ftp_chmod($connection, $mode, $path)
     return true;
 }
 
+function ftp_set_option($connection, $option, $value)
+{
+    putenv('USE_PASSV_ADDREESS' . $option . '=' . ($value ? 'YES' : 'NO'));
+
+    return true;
+}
+
 class FtpTests extends \PHPUnit_Framework_TestCase
 {
     protected $options = [
@@ -281,7 +323,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        if (! defined('FTP_BINARY')) {
+        if ( ! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -304,6 +346,33 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testDisconnect()
+    {
+        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter->connect();
+        $this->assertTrue($adapter->isConnected());
+        $adapter->disconnect();
+        $this->assertFalse($adapter->isConnected());
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testIgnorePassiveAddress()
+    {
+        if ( ! defined('FTP_USEPASVADDRESS')) {
+            define('FTP_USEPASVADDRESS', 2);
+        }
+
+        $this->assertFalse(getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
+        $adapter = new Ftp(array_merge($this->options, ['ignorePassiveAddress' => true]));
+        $adapter->connect();
+        $this->assertEquals('NO', getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
     }
 
     /**
@@ -360,6 +429,37 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('dir1', $metadata['path']);
         $this->assertEquals(1432382940, $metadata['timestamp']);
     }
+
+    /**
+     * @depends testInstantiable
+     *
+     * Some Windows FTP server return a 500 error with the message "File not found" instead of false
+     * when calling ftp_rawlist() on invalid dir
+     */
+    public function testFileNotFoundWindowMetadata()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('windows.not.found');
+        $this->assertFalse($metadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testFileNotFoundWindows()
+    {
+        $adapter = new Ftp($this->options);
+        $this->assertFalse($adapter->has('windows.not.found'));
+        $this->assertFalse($adapter->getVisibility('windows.not.found'));
+        $this->assertFalse($adapter->getSize('windows.not.found'));
+        $this->assertFalse($adapter->getMimetype('windows.not.found'));
+        $this->assertFalse($adapter->getTimestamp('windows.not.found'));
+        $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
+        $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
+    }
+
 
     /**
      * @depends testInstantiable
@@ -464,6 +564,16 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testItReconnects()
+    {
+        $adapter = new Ftp(['host' => 'reconnect.me', 'ssl' => true, 'root' => 'somewhere']);
+        $this->assertFalse($adapter->isConnected());
+        $this->assertNotNull($adapter->getConnection());
     }
 
     /**

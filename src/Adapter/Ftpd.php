@@ -5,11 +5,11 @@ namespace League\Flysystem\Adapter;
 class Ftpd extends Ftp
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMetadata($path)
     {
-        if (empty($path) || ! ($object = ftp_raw($this->getConnection(), 'STAT '.$path)) || count($object) < 3) {
+        if (empty($path) || ! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path)) || count($object) < 3) {
             return false;
         }
 
@@ -21,13 +21,13 @@ class Ftpd extends Ftp
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {
         $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
 
-        if ($listing === false || (! empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
+        if ($listing === false || ( ! empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
             return [];
         }
 

@@ -1,14 +1,103 @@
 # Changelog
 
-## 1.0.4 - UNRELEASED
+## 1.0.16 - UNRELEAED
 
 ### Fixed
 
+* [Ftp::isConnected] PHP warnings are prevented by improving the connection check.
+* [Ftp::listContents] Recursive listings not use the `R` flag instead of the function param.
+* [Ftp::listContents] The `*` character is now properly escaped.
+* [Ftp::getMetadata] The `*` character is now properly escaped.
+* [Ftp] An `ignorePassiveAddress` option has been added to allow NAS FTP servers to work.
+* [Util] Mimetype `application/x-empty` is not treated as `text/plain` and will fall back to extension based mimetype checks.
+
+## 1.0.15 - 2015-10-01
+
+### Fixed
+
+* [Util::emulateDirectories] Now emulates correctly when a mix of files and directories are returned.
+
+## 1.0.14 - 2015-09-28
+
+### Added
+
+* [Adapter\Local] Now has configurable file and directory permissions.
+
+## 1.0.13 - 2015-09-20
+
+### Fixed
+
+* [Adapter\Ftp] Now tries to reconnect when a connection is dropped.
+
+## 1.0.12 - 2015-09-05
+
+### Fixed
+
+* [Util::pathinfo] Now checks for existence of the dirname key, it's missing in some PHP versions.
+
+## 1.0.11 - 2015-07-18
+
+### Fixed
+
+* [Adapter\Local::deleteDir] Now removes up links correctly.
+
+## 1.0.10 - 2015-07-21
+
+### Fixed
+
+* [Filesystem::listContents] The implementation is clearer now and works more reliably for windows users.
+
+## 1.0.9 - 2015-07-13
+
+### Fixed
+
+* [Filesystem::listContents] This function now uses DIRECTORY_SEPARATOR when the local adapter is used. 
+
+## 1.0.8 - 2015-07-12
+
+### Altered
+
+* [Local::deleteDir] This function now uses the correct (reversed) iterator instead of relying in listContents.
+
+### Added
+
+* [Local] The Local adapter now has the ability to skip links using Local::SKIP_LINKS as the third constructor argument.
+
+## 1.0.7 - 2015-07-11
+
+### Fixed
+
+* [Filesystem] Fixed the handling of directories named "0".
+
+## 1.0.6 - 2015-07-08
+
+### Fixed
+
+* [Adapter\Local] Directories are no longer created with the 0777 permissions which is unsafe for shared hosting environments.
+
+## 1.0.5 - 2015-07-08
+
+### Fixed
+
+* [Filesystem::listContent] Emulated directories didn't respect the natural sorting, this is now corrected in the listContents method.
+* [Filesystem::listContents] The result excess from listing calls wasn't filtered strict enough, this is now improved.
+
+### Added
+
+* [Handler] Added getter for the Filesystem.
+* [Handler] Now allows plugins calls.
+
+## 1.0.4 - 2015-06-07
+
+### Fixed
+
+* [Adapter\Ftp] Now handles windows FTP servers.
 * [Adapter\Local] Symlinks are now explicitly not supported, this was previously broken.
 * [Adapter\Ftp] Detecting whether a path is a directory or not is more reliable.
 * [Adapter\SynologyFtp] Has been renamed to Ftpd (The original class still exists for BC).
 * [Filesystem] Not uses `getAdapter` internally to aid extension.
 * [Adapter\Local] Now uses `umask` when creating directories to make it more reliable.
+* [Misc] Coding style fixes.
 
 ## 1.0.3 - 2015-03-29
 

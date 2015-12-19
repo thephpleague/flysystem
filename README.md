@@ -21,7 +21,7 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 * Emulate directories in systems that support none, like AwsS3.
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
-* Support streams for big file handling
+* Support streams for big file handling.
 
 # Installation
 
@@ -62,11 +62,13 @@ Want to get started quickly? Check out some of these integrations:
 * Cilex integration: https://github.com/WyriHaximus/cli-fly
 * Yii 2 integration: https://github.com/creocoder/yii2-flysystem
 * Backup manager: https://github.com/heybigname/backup-manager
+* Drupal: https://www.drupal.org/project/flysystem
 
 ## Adapters
 
 * Local
-* Amazon Web Services - S3: https://github.com/thephpleague/flysystem-aws-s3-v2
+* Amazon Web Services - S3 V2: https://github.com/thephpleague/flysystem-aws-s3-v2
+* Amazon Web Services - S3 V3: https://github.com/thephpleague/flysystem-aws-s3-v3
 * Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
 * Dropbox: https://github.com/thephpleague/flysystem-dropbox
 * Copy: https://github.com/thephpleague/flysystem-copy
@@ -77,6 +79,9 @@ Want to get started quickly? Check out some of these integrations:
 * PHPCR: https://github.com/thephpleague/flysystem-phpcr
 * Azure Blob Storage
 * NullAdapter
+* Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
+* Fallback: https://github.com/Litipk/flysystem-fallback-adapter
+* Memory: https://github.com/thephpleague/flysystem-memory
 
 ## Caching
 
@@ -95,6 +100,6 @@ Want to get started quickly? Check out some of these integrations:
 If you discover any security related issues, please email frenky@frenky.net instead of using the issue tracker.
 
 
-# Enjoy.
+# Enjoy
 
 Oh and if you've come down this far, you might as well follow me on [twitter](http://twitter.com/frankdejonge).

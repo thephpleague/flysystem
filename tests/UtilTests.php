@@ -7,8 +7,8 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function testEmulateDirectories()
     {
         $input = [
-            ['dirname' => '', 'filename' => 'dummy'],
-            ['dirname' => 'something', 'filename' => 'dummy'],
+            ['dirname' => '', 'filename' => 'dummy', 'path' => 'dummy', 'type' => 'file'],
+            ['dirname' => 'something', 'filename' => 'dummy', 'path' => 'something/dummy', 'type' => 'file'],
             ['dirname' => 'something', 'path' => 'something/dirname', 'type' => 'dir'],
         ];
         $output = Util::emulateDirectories($input);

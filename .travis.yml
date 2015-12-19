@@ -13,13 +13,9 @@ env:
   - COMPOSER_OPTS=""
   - COMPOSER_OPTS="--prefer-lowest"
 
-matrix:
-  allow_failures:
-    - php: 7.0
-  fast_finish: true
-
 before_install:
   - mkdir tests/files
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml; fi
   - if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then mv phpunit.hhvm.xml phpunit.xml; fi
 
@@ -29,7 +25,7 @@ install:
 script:
   - if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then bin/phpunit; fi
   - if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then bin/phpunit --coverage-text --coverage-clover coverage.xml; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then bin/phpspec run; fi
+  - bin/phpspec run
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

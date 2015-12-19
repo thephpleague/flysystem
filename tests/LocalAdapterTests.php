@@ -21,10 +21,20 @@ function fclose($result)
 {
     if (is_resource($result) && stream_get_contents($result) === 'fail.close') {
         \fclose($result);
+
         return false;
     }
 
     return call_user_func_array('fclose', func_get_args());
+}
+
+function chmod($filename, $mode)
+{
+    if (strpos($filename, 'chmod.fail') !== false) {
+        return false;
+    }
+
+    return \chmod($filename, $mode);
 }
 
 function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
@@ -35,6 +45,7 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
     return call_user_func_array('mkdir', func_get_args());
 }
+
 
 class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 {
@@ -47,15 +58,17 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->root = __DIR__.'/files/';
+        $this->root = __DIR__ . '/files/';
         $this->adapter = new Local($this->root);
     }
 
     public function teardown()
     {
         $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $files = new \RecursiveIteratorIterator($it,
-                     \RecursiveIteratorIterator::CHILD_FIRST);
+        $files = new \RecursiveIteratorIterator(
+            $it,
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
         foreach ($files as $file) {
             if ($file->getFilename() === '.' || $file->getFilename() === '..') {
                 continue;
@@ -160,15 +173,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath($this->root).DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+        $this->assertEquals(realpath($this->root) . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
     }
 
     public function testRenameToNonExistsingDirectory()
     {
         $this->adapter->write('file.txt', 'contents', new Config());
         $dirname = uniqid();
-        $this->assertFalse(is_dir($this->root.DIRECTORY_SEPARATOR.$dirname));
-        $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
+        $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
+        $this->assertTrue($this->adapter->rename('file.txt', $dirname . '/file.txt'));
     }
 
     public function testNotWritableRoot()
@@ -178,7 +191,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
 
         try {
-            $root = __DIR__.'/files/not-writable';
+            $root = __DIR__ . '/files/not-writable';
             mkdir($root, 0000, true);
             $this->setExpectedException('LogicException');
             new Local($root);
@@ -194,6 +207,14 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $contents = $this->adapter->listContents('dirname', false);
         $this->assertCount(1, $contents);
         $this->assertArrayHasKey('type', $contents[0]);
+    }
+
+    public function testListContentsRecursive()
+    {
+        $this->adapter->write('dirname/file.txt', 'contents', new Config());
+        $this->adapter->write('dirname/other.txt', 'contents', new Config());
+        $contents = $this->adapter->listContents('', true);
+        $this->assertCount(3, $contents);
     }
 
     public function testGetSize()
@@ -228,16 +249,25 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->adapter->createDir('fail.plz', new Config()));
     }
 
+    public function testCreateDirDefaultVisibility()
+    {
+        $this->adapter->createDir('test-dir', new Config());
+        $output = $this->adapter->getVisibility('test-dir');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
+    }
+
     public function testDeleteDir()
     {
         $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
-        $this->assertTrue(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertTrue(is_dir(__DIR__ . '/files/nested/dir'));
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
-        $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertFalse(is_dir(__DIR__ . '/files/nested/dir'));
     }
 
-    public function testVisibilityPublic()
+    public function testVisibilityPublicFile()
     {
         if (IS_WINDOWS) {
             $this->markTestSkipped("Visibility not supported on Windows.");
@@ -251,7 +281,21 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('public', $output['visibility']);
     }
 
-    public function testVisibilityPrivate()
+    public function testVisibilityPublicDir()
+    {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
+        $this->adapter->createDir('public-dir', new Config());
+        $this->adapter->setVisibility('public-dir', 'public');
+        $output = $this->adapter->getVisibility('public-dir');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('public', $output['visibility']);
+    }
+
+    public function testVisibilityPrivateFile()
     {
         if (IS_WINDOWS) {
             $this->markTestSkipped("Visibility not supported on Windows.");
@@ -265,6 +309,27 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('private', $output['visibility']);
     }
 
+    public function testVisibilityPrivateDir()
+    {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("Visibility not supported on Windows.");
+        }
+
+        $this->adapter->createDir('private-dir', new Config());
+        $this->adapter->setVisibility('private-dir', 'private');
+        $output = $this->adapter->getVisibility('private-dir');
+        $this->assertInternalType('array', $output);
+        $this->assertArrayHasKey('visibility', $output);
+        $this->assertEquals('private', $output['visibility']);
+    }
+
+    public function testVisibilityFail()
+    {
+        $this->assertFalse(
+            $this->adapter->setVisibility('chmod.fail', 'public')
+        );
+    }
+
     public function testApplyPathPrefix()
     {
         $this->adapter->setPathPrefix('');
@@ -273,8 +338,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithLink()
     {
-        $target = __DIR__.'/files/';
-        $link = __DIR__.'/link_to_files';
+        $target = __DIR__ . '/files/';
+        $link = __DIR__ . '/link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
@@ -287,12 +352,54 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
      */
     public function testLinkCausedUnsupportedException()
     {
-        $root = __DIR__.'/files/';
-        $original = $root.'original.txt';
-        $link = $root.'link.txt';
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root);
         $adapter->listContents();
+    }
+
+    public function testLinkIsSkipped()
+    {
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
+        file_put_contents($original, 'something');
+        symlink($original, $link);
+        $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
+        $result = $adapter->listContents();
+        $this->assertCount(1, $result);
+    }
+
+    public function testLinksAreDeletedDuringDeleteDir()
+    {
+        $root = __DIR__ . '/files/';
+        mkdir($root . 'subdir', 0777, true);
+        $original = $root . 'original.txt';
+        $link = $root . 'subdir/link.txt';
+        file_put_contents($original, 'something');
+        symlink($original, $link);
+        $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
+
+        $this->assertTrue(is_link($link));
+        $adapter->deleteDir('subdir');
+        $this->assertFalse(is_link($link));
+    }
+
+    public function testUnreadableFilesCauseAnError()
+    {
+        $this->setExpectedException('League\Flysystem\UnreadableFileException');
+
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::SKIP_LINKS);
+        $reflection = new \ReflectionClass($adapter);
+        $method = $reflection->getMethod('guardAgainstUnreadableFileInfo');
+        $method->setAccessible(true);
+        /** @var \SplFileInfo $fileInfo */
+        $fileInfo = $this->prophesize('SplFileInfo');
+        $fileInfo->getRealPath()->willReturn('somewhere');
+        $fileInfo->isReadable()->willReturn(false);
+        $method->invoke($adapter, $fileInfo->reveal());
     }
 }
