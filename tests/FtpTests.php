@@ -301,7 +301,7 @@ function ftp_chmod($connection, $mode, $path)
 
 function ftp_set_option($connection, $option, $value)
 {
-    putenv('USE_PASSV_ADDREESS'.$option.'='. ($value ? 'YES' : 'NO'));
+    putenv('USE_PASSV_ADDREESS' . $option . '=' . ($value ? 'YES' : 'NO'));
 
     return true;
 }
@@ -323,7 +323,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     public function testInstantiable()
     {
-        if (!defined('FTP_BINARY')) {
+        if ( ! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -369,10 +369,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
             define('FTP_USEPASVADDRESS', 2);
         }
 
-        $this->assertFalse(getenv('USE_PASSV_ADDREESS'.FTP_USEPASVADDRESS));
+        $this->assertFalse(getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
         $adapter = new Ftp(array_merge($this->options, ['ignorePassiveAddress' => true]));
         $adapter->connect();
-        $this->assertEquals('NO', getenv('USE_PASSV_ADDREESS'.FTP_USEPASVADDRESS));
+        $this->assertEquals('NO', getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
     }
 
     /**
@@ -574,7 +574,6 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter = new Ftp(['host' => 'reconnect.me', 'ssl' => true, 'root' => 'somewhere']);
         $this->assertFalse($adapter->isConnected());
         $this->assertNotNull($adapter->getConnection());
-
     }
 
     /**

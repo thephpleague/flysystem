@@ -177,6 +177,6 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $mock = Mockery::mock('League\Flysystem\FilesystemInterface');
         $mock->shouldReceive('aMethodCall')->once()->andReturn('a result');
         $manager->mountFilesystem($schema, $mock);
-        $this->assertEquals($manager->aMethodCall($schema.'://file.ext'), 'a result');
+        $this->assertEquals($manager->aMethodCall($schema . '://file.ext'), 'a result');
     }
 }

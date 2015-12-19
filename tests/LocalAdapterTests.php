@@ -28,7 +28,7 @@ function fclose($result)
     return call_user_func_array('fclose', func_get_args());
 }
 
-function chmod ($filename, $mode)
+function chmod($filename, $mode)
 {
     if (strpos($filename, 'chmod.fail') !== false) {
         return false;
@@ -59,7 +59,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->root = __DIR__.'/files/';
+        $this->root = __DIR__ . '/files/';
         $this->adapter = new Local($this->root);
     }
 
@@ -172,15 +172,15 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath($this->root).DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+        $this->assertEquals(realpath($this->root) . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
     }
 
     public function testRenameToNonExistsingDirectory()
     {
         $this->adapter->write('file.txt', 'contents', new Config());
         $dirname = uniqid();
-        $this->assertFalse(is_dir($this->root.DIRECTORY_SEPARATOR.$dirname));
-        $this->assertTrue($this->adapter->rename('file.txt', $dirname.'/file.txt'));
+        $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
+        $this->assertTrue($this->adapter->rename('file.txt', $dirname . '/file.txt'));
     }
 
     public function testNotWritableRoot()
@@ -190,7 +190,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
 
         try {
-            $root = __DIR__.'/files/not-writable';
+            $root = __DIR__ . '/files/not-writable';
             mkdir($root, 0000, true);
             $this->setExpectedException('LogicException');
             new Local($root);
@@ -260,10 +260,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testDeleteDir()
     {
         $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
-        $this->assertTrue(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertTrue(is_dir(__DIR__ . '/files/nested/dir'));
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
-        $this->assertFalse(is_dir(__DIR__.'/files/nested/dir'));
+        $this->assertFalse(is_dir(__DIR__ . '/files/nested/dir'));
     }
 
     public function testVisibilityPublicFile()
@@ -337,8 +337,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithLink()
     {
-        $target = __DIR__.'/files/';
-        $link = __DIR__.'/link_to_files';
+        $target = __DIR__ . '/files/';
+        $link = __DIR__ . '/link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
@@ -351,9 +351,9 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
      */
     public function testLinkCausedUnsupportedException()
     {
-        $root = __DIR__.'/files/';
-        $original = $root.'original.txt';
-        $link = $root.'link.txt';
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root);
@@ -362,9 +362,9 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testLinkIsSkipped()
     {
-        $root = __DIR__.'/files/';
-        $original = $root.'original.txt';
-        $link = $root.'link.txt';
+        $root = __DIR__ . '/files/';
+        $original = $root . 'original.txt';
+        $link = $root . 'link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);
@@ -374,10 +374,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testLinksAreDeletedDuringDeleteDir()
     {
-        $root = __DIR__.'/files/';
-        mkdir($root.'subdir', 0777, true);
-        $original = $root.'original.txt';
-        $link = $root.'subdir/link.txt';
+        $root = __DIR__ . '/files/';
+        mkdir($root . 'subdir', 0777, true);
+        $original = $root . 'original.txt';
+        $link = $root . 'subdir/link.txt';
         file_put_contents($original, 'something');
         symlink($original, $link);
         $adapter = new Local($root, LOCK_EX, Local::SKIP_LINKS);

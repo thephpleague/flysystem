@@ -22,7 +22,8 @@ return Symfony\CS\Config\Config::create()
         'spaces_cast',
         'ternary_spaces',
         'eof_ending',
-        'logical_not_operators_with_successor_space',
+        'logical_not_operators_with_spaces',
+        'concat_with_spaces',
     ])
     ->finder(Symfony\CS\Finder\DefaultFinder::create()
     ->in(__DIR__.'/src')
