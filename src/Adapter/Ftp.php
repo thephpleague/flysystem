@@ -18,6 +18,11 @@ class Ftp extends AbstractFtpAdapter
     protected $transferMode = FTP_BINARY;
 
     /**
+     * @var null|bool
+     */
+    protected $ignorePassiveAddress = null;
+
+    /**
      * @var array
      */
     protected $configurable = [
@@ -33,6 +38,7 @@ class Ftp extends AbstractFtpAdapter
         'passive',
         'transferMode',
         'systemType',
+        'ignorePassiveAddress',
     ];
 
     /**
@@ -74,6 +80,14 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
+     * @param bool $ignorePassiveAddress
+     */
+    public function setIgnorePassiveAddress($ignorePassiveAddress)
+    {
+        $this->ignorePassiveAddress = $ignorePassiveAddress;
+    }
+
+    /**
      * Connect to the FTP server.
      */
     public function connect()
@@ -100,6 +114,10 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function setConnectionPassiveMode()
     {
+        if (is_bool($this->ignorePassiveAddress) && defined('FTP_USEPASVADDRESS')) {
+            ftp_set_option($this->connection, FTP_USEPASVADDRESS, ! $this->ignorePassiveAddress);
+        }
+
         if ( ! ftp_pasv($this->connection, $this->passive)) {
             throw new RuntimeException(
                 'Could not set passive mode for connection: ' . $this->getHost() . '::' . $this->getPort()

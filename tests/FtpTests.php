@@ -254,6 +254,7 @@ function ftp_mdtm($connection, $path)
             break;
     }
 }
+
 function ftp_mkdir($connection, $dirname)
 {
     if (strpos($dirname, 'mkdir.fail') !== false) {
@@ -294,6 +295,13 @@ function ftp_chmod($connection, $mode, $path)
     if (strpos($path, 'chmod.fail') !== false) {
         return false;
     }
+
+    return true;
+}
+
+function ftp_set_option($connection, $option, $value)
+{
+    putenv('USE_PASSV_ADDREESS'.$option.'='. ($value ? 'YES' : 'NO'));
 
     return true;
 }
@@ -350,6 +358,21 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue($adapter->isConnected());
         $adapter->disconnect();
         $this->assertFalse($adapter->isConnected());
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testIgnorePassiveAddress()
+    {
+        if ( ! defined('FTP_USEPASVADDRESS')) {
+            define('FTP_USEPASVADDRESS', 2);
+        }
+
+        $this->assertFalse(getenv('USE_PASSV_ADDREESS'.FTP_USEPASVADDRESS));
+        $adapter = new Ftp(array_merge($this->options, ['ignorePassiveAddress' => true]));
+        $adapter->connect();
+        $this->assertEquals('NO', getenv('USE_PASSV_ADDREESS'.FTP_USEPASVADDRESS));
     }
 
     /**
