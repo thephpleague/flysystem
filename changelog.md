@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.16 - UNRELEAED
+## 1.0.16 - 2015-12-19
 
 ### Fixed
 
