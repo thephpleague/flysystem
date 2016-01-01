@@ -22,10 +22,7 @@ class MimeType
             return;
         }
 
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($content);
-
-        return $mimeType ?: null;
+        return (new Finfo(FILEINFO_MIME_TYPE))->buffer($content) ?: null;
     }
 
     /**
