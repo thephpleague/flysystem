@@ -3,9 +3,8 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Plugin\ListWith;
-use Prophecy\PhpUnit\ProphecyTestCase;
 
-class ListWithTests extends ProphecyTestCase
+class ListWithTests extends \PHPUnit_Framework_TestCase
 {
     public function testHandle()
     {

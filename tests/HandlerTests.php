@@ -3,9 +3,8 @@
 
 use League\Flysystem\Directory;
 use League\Flysystem\File;
-use Prophecy\PhpUnit\ProphecyTestCase;
 
-class HandlerTests extends ProphecyTestCase
+class HandlerTests extends \PHPUnit_Framework_TestCase
 {
     public function testFileRead()
     {

@@ -4,10 +4,9 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Util;
 use Prophecy\Argument;
 use Prophecy\Argument\Token\TypeToken;
-use Prophecy\PhpUnit\ProphecyTestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 
-class FilesystemTests extends ProphecyTestCase
+class FilesystemTests extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ObjectProphecy
