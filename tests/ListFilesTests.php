@@ -2,9 +2,8 @@
 
 
 use League\Flysystem\Plugin\ListFiles;
-use Prophecy\PhpUnit\ProphecyTestCase;
 
-class ListFilesTests extends ProphecyTestCase
+class ListFilesTests extends \PHPUnit_Framework_TestCase
 {
     private $filesystem;
     private $actualFilesystem;
