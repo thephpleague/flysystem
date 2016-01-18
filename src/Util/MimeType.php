@@ -121,6 +121,7 @@ class MimeType
             'bmp'   => 'image/bmp',
             'tiff'  => 'image/tiff',
             'tif'   => 'image/tiff',
+            'svg'   => 'image/svg+xml',
             'css'   => 'text/css',
             'html'  => 'text/html',
             'htm'   => 'text/html',
