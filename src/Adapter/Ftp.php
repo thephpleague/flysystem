@@ -305,8 +305,8 @@ class Ftp extends AbstractFtpAdapter
     protected function createActualDirectory($directory, $connection)
     {
         // List the current directory
-        $listing = ftp_nlist($connection, '.');
-
+        $listing = ftp_nlist($connection, '.') ?: [];
+        
         foreach ($listing as $key => $item) {
             if (preg_match('~^\./.*~', $item)) {
                 $listing[$key] = substr($item, 2);
