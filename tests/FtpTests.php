@@ -145,6 +145,8 @@ function ftp_raw($connection, $command)
 
 function ftp_rawlist($connection, $directory)
 {
+    $directory = str_replace("-A ", "", $directory);
+    
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
     }
