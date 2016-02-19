@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.17 - 2016-02-19
+
+### Fixed
+
+* [Util::guessMimeType] Worked around incorrect detection of assembly mime-type. (#608)
+
 ## 1.0.16 - 2015-12-19
 
 ### Fixed
