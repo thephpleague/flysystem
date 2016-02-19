@@ -83,6 +83,7 @@ Want to get started quickly? Check out some of these integrations:
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
 * Memory: https://github.com/thephpleague/flysystem-memory
+* Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
 
 ## Caching
 
