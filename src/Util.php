@@ -155,7 +155,7 @@ class Util
     {
         $mimeType = MimeType::detectByContent($content);
 
-        if (empty($mimeType) || in_array($mimeType, self::getUnreliableMimeTypes())) {
+        if (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm'])) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
 
             if ($extension) {
@@ -252,19 +252,6 @@ class Util
         $stat = fstat($resource);
 
         return $stat['size'];
-    }
-
-
-    /**
-     * @return array
-     */
-    protected static function getUnreliableMimeTypes()
-    {
-        return [
-            'application/x-empty',
-            'text/plain',
-            'text/x-asm'
-        ];
     }
 
     /**
