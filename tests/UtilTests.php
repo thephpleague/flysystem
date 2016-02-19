@@ -120,6 +120,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function pathAndContentProvider()
     {
         return [
+            ['/some/file.css', '.event { background: #000; } ', 'text/css'],
             ['/some/file.css', 'body { background: #000; } ', 'text/css'],
             ['/some/file.txt', 'body { background: #000; } ', 'text/plain'],
             ['/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif'],
