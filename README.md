@@ -84,6 +84,7 @@ Want to get started quickly? Check out some of these integrations:
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
 * Memory: https://github.com/thephpleague/flysystem-memory
 * Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
+* SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
 
 ## Caching
 
