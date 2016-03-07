@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.18 - 2016-03-07
+
+### Fixed
+
+* Reverted 57e61131ce6455bf234293f213db3c288098291e which had unexpected side-effects.
+
 ## 1.0.17 - 2016-02-19
 
 ### Fixed
