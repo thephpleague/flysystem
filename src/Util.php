@@ -17,7 +17,9 @@ class Util
     public static function pathinfo($path)
     {
         $pathinfo = pathinfo($path) + compact('path');
-        $pathinfo['dirname'] = static::normalizeDirname($pathinfo['dirname']);
+        $pathinfo['dirname'] = array_key_exists('dirname', $pathinfo)
+            ? static::normalizeDirname($pathinfo['dirname'])
+            : '';
 
         return $pathinfo;
     }
