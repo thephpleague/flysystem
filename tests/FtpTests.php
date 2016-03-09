@@ -106,7 +106,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1'])) {
+    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1', 'file1.with-total-line.txt'])) {
         return false;
     }
 
@@ -208,6 +208,13 @@ function ftp_rawlist($connection, $directory)
             'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01  file1.txt',
 
+        ];
+    }
+
+    if (strpos($directory, 'file1.with-total-line.txt') !== false) {
+        return [
+            'total 0',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
     }
 
@@ -410,6 +417,16 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('0', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetMetadataIgnoresInvalidTotalLine()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('file1.with-total-line.txt');
+        $this->assertEquals('file1.txt', $metadata['path']);
     }
 
     /**
