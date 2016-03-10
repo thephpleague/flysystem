@@ -4,7 +4,7 @@
 
 ### Fixed
 
-* Reverted 57e61131ce6455bf234293f213db3c288098291e which had unexpected side-effects.
+* Reverted "Simplified Util::pathinfo, dirname key always exists." which had unexpected side-effects.
 
 ## 1.0.17 - 2016-02-19
 
