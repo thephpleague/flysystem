@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.19 - 2016-03-12
+
+### Fixed
+
+* [Util::normalizeRelativePath] `'.'` didn't normalize to `''`, this is now fixed.
+
 ## 1.0.18 - 2016-03-07
 
 ### Fixed
