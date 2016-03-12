@@ -92,6 +92,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function pathProvider()
     {
         return [
+            ['/path/to/dir/.', 'path/to/dir'],
             ['/dirname/', 'dirname'],
             ['dirname/..', ''],
             ['dirname/../', ''],
