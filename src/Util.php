@@ -148,14 +148,18 @@ class Util
     /**
      * Guess MIME Type based on the path of the file and it's content.
      *
-     * @param string $path
-     * @param string $content
+     * @param string      $path    The path of the file.
+     * @param string|NULL $content The content of the file, or NULl to only use
+     *                             the file name.
      *
      * @return string|null MIME Type or NULL if no extension detected
      */
-    public static function guessMimeType($path, $content)
+    public static function guessMimeType($path, $content = NULL)
     {
-        $mimeType = MimeType::detectByContent($content);
+        $mimeType = NULL;
+        if ($content) {
+            $mimeType = MimeType::detectByContent($content);
+        }
 
         if (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm'])) {
             $extension = pathinfo($path, PATHINFO_EXTENSION);
