@@ -27,6 +27,6 @@ class UtilMimeTests extends \PHPUnit_Framework_TestCase
 
     public function testNoExtension()
     {
-        $this->assertNull(MimeType::detectByFileExtension(''));
+        $this->assertEquals('text/plain', MimeType::detectByFileExtension('dir/file'));
     }
 }
