@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.20 - 2016-03-14
+
+### Improved
+
+* MimeType detection now falls back on extension guessing when the contents is a resource.
+
 ## 1.0.19 - 2016-03-12
 
 ### Fixed
