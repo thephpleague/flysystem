@@ -416,6 +416,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @param string $item
      * @param string $base
      *
+     * @throws Exception
+     *
      * @return array normalized file array
      */
     protected function normalizeWindowsObject($item, $base)
@@ -424,9 +426,15 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         list($date, $time, $size, $name) = explode(' ', $item, 4);
         $path = empty($base) ? $name : $base . $this->separator . $name;
 
-        // Check for the correct date/time format
-        $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
-        $timestamp = DateTime::createFromFormat($format, $date . $time)->getTimestamp();
+        if ($dt = DateTime::createFromFormat('m-d-YH:iA', $date . $time)) { // dd-mm-yyyy
+            $timestamp = $dt->getTimestamp();
+        } else if ($dt = DateTime::createFromFormat('m-d-yH:iA', $date . $time)) { // dd-mm-yy
+            $timestamp = $dt->getTimestamp();
+        } else if ($dt = DateTime::createFromFormat('Y-m-dH:i', $date . $time)) { // yyyy-mm-dd
+            $timestamp = $dt->getTimestamp();
+        } else {
+            throw new Exception("Invalid datetime format: {$date}{$time}");
+        }
 
         if ($size === '<DIR>') {
             $type = 'dir';
