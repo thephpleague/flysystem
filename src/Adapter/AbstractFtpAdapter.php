@@ -416,8 +416,6 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @param string $item
      * @param string $base
      *
-     * @throws Exception
-     *
      * @return array normalized file array
      */
     protected function normalizeWindowsObject($item, $base)
@@ -433,7 +431,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         } else if ($dt = DateTime::createFromFormat('Y-m-dH:i', $date . $time)) { // yyyy-mm-dd
             $timestamp = $dt->getTimestamp();
         } else {
-            throw new Exception("Invalid datetime format: {$date}{$time}");
+            // Try to parse the given date and time to a timestamp
+            $timestamp = strtotime($date . " " . $time);
         }
 
         if ($size === '<DIR>') {
