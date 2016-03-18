@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use ErrorException;
 use League\Flysystem\Config;
 
 function ftp_systype($connection)
@@ -10,6 +11,15 @@ function ftp_systype($connection)
         'reconnect.me',
         'dont.reconnect.me',
     ];
+
+
+    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
+        throw new ErrorException('ftp_systype');
+    }
+
+    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
+        throw new ErrorException('does not contain the correct message');
+    }
 
     if (is_string($connection) && array_key_exists($connection, $connections)) {
         $connections[$connection]++;
@@ -323,6 +333,11 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         'password' => 'password',
     ];
 
+    public function setUp()
+    {
+        putenv('FTP_CLOSE_THROW=nope');
+    }
+
     public function testInstantiable()
     {
         if ( ! defined('FTP_BINARY')) {
@@ -359,6 +374,31 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $adapter->connect();
         $this->assertTrue($adapter->isConnected());
         $adapter->disconnect();
+        $this->assertFalse($adapter->isConnected());
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testIsConnectedTimeoutPassthu()
+    {
+        putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
+
+        $this->setExpectedException('ErrorException');
+        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter->connect();
+        $adapter->isConnected();
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testIsConnectedTimeout()
+    {
+        putenv('FTP_CLOSE_THROW=DISCONNECT_CATCH');
+
+        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter->connect();
         $this->assertFalse($adapter->isConnected());
     }
 
