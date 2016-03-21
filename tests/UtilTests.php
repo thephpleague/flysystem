@@ -116,7 +116,9 @@ class UtilTests extends \PHPUnit_Framework_TestCase
     public function testNormalizePath($input, $expected)
     {
         $result = Util::normalizePath($input);
+        $double = Util::normalizePath(Util::normalizePath($input));
         $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, $double);
     }
 
     public function pathAndContentProvider()
