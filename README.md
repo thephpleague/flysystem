@@ -72,7 +72,6 @@ Want to get started quickly? Check out some of these integrations:
 * Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
 * Dropbox: https://github.com/thephpleague/flysystem-dropbox
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
-* Copy: https://github.com/thephpleague/flysystem-copy
 * Ftp
 * Sftp (through phpseclib): https://github.com/thephpleague/flysystem-sftp
 * Zip (through ZipArchive): https://github.com/thephpleague/flysystem-ziparchive
