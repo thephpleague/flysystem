@@ -348,6 +348,10 @@ class Ftp extends AbstractFtpAdapter
             return false;
         }
 
+        if (preg_match('/^total [0-9]*$/', $listing[0])) {
+            array_shift($listing);
+        }
+
         return $this->normalizeObject($listing[0], '');
     }
 
