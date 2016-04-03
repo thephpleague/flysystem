@@ -116,7 +116,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1', 'file1.with-total-line.txt'])) {
+    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
         return false;
     }
 
@@ -156,7 +156,7 @@ function ftp_raw($connection, $command)
 function ftp_rawlist($connection, $directory)
 {
     $directory = str_replace("-A ", "", $directory);
-    
+
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
     }
@@ -224,6 +224,13 @@ function ftp_rawlist($connection, $directory)
     if (strpos($directory, 'file1.with-total-line.txt') !== false) {
         return [
             'total 0',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+    }
+
+    if (strpos($directory, 'file1.with-invalid-line.txt') !== false) {
+        return [
+            'invalid line',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
     }
@@ -654,6 +661,28 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         $adapter = new Ftp($this->options + ['systemType' => 'unknown']);
         $adapter->listContents();
+    }
+
+    /**
+     * @depends testInstantiable
+     * @expectedException \RuntimeException
+     */
+    public function testItThrowsAnExceptionWhenAnInvalidUnixListingIsFound()
+    {
+        $adapter = new Ftp($this->options + ['systemType' => 'unix']);
+        $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
+        $this->assertEquals('file1.txt', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     * @expectedException \RuntimeException
+     */
+    public function testItThrowsAnExceptionWhenAnInvalidWindowsListingIsFound()
+    {
+        $adapter = new Ftp($this->options + ['systemType' => 'windows']);
+        $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
+        $this->assertEquals('file1.txt', $metadata['path']);
     }
 
     /**
