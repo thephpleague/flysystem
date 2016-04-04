@@ -63,6 +63,7 @@ Want to get started quickly? Check out some of these integrations:
 * Yii 2 integration: https://github.com/creocoder/yii2-flysystem
 * Backup manager: https://github.com/heybigname/backup-manager
 * Drupal: https://www.drupal.org/project/flysystem
+* elFinder: https://github.com/barryvdh/elfinder-flysystem-driver
 
 ## Adapters
 
