@@ -76,7 +76,7 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $filename = 'test.txt';
         $buffer = tmpfile();
         $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(true);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer, [])->andReturn(true);
         $response = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertTrue($response);
 
@@ -87,13 +87,13 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
 
         $buffer = tmpfile();
         $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(false);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer, [])->andReturn(false);
         $status = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertFalse($status);
 
         $buffer = tmpfile();
         $fs1->shouldReceive('readStream')->once()->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer)->andReturn(true);
+        $fs2->shouldReceive('writeStream')->once()->with($filename, $buffer, [])->andReturn(true);
         $status = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
         $this->assertTrue($status);
     }
@@ -109,11 +109,11 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $filename = 'test.txt';
         $buffer = tmpfile();
         $fs1->shouldReceive('readStream')->with($filename)->andReturn($buffer);
-        $fs2->shouldReceive('writeStream')->with($filename, $buffer)->andReturn(false);
+        $fs2->shouldReceive('writeStream')->with($filename, $buffer, [])->andReturn(false);
         $code = $manager->move("fs1://{$filename}", "fs2://{$filename}");
         $this->assertFalse($code);
 
-        $manager->shouldReceive('copy')->with("fs1://{$filename}", "fs2://{$filename}")->andReturn(true);
+        $manager->shouldReceive('copy')->with("fs1://{$filename}", "fs2://{$filename}", [])->andReturn(true);
         $manager->shouldReceive('delete')->with("fs1://{$filename}")->andReturn(true);
         $code = $manager->move("fs1://{$filename}", "fs2://{$filename}");
 
