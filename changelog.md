@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.21 - 2016-04-22
+
+### Fixed
+
+* Explicitly return false when a `has` call receives an empty filename.
+* MounManager `copy` and `move` operators now comply to the `Filesystem`'s signature.
+
 ## 1.0.20 - 2016-03-14
 
 ### Improved
