@@ -221,4 +221,9 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->delete('file')->shouldBeCalled();
         $this->readAndDelete('file')->shouldReturn('contents');
     }
+
+    public function it_should_return_false_when_checking_if_an_empty_filename_exists()
+    {
+        $this->has('')->shouldReturn(false);
+    }
 }
