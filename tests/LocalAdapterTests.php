@@ -348,7 +348,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException League\Flysystem\NotSupportedException
+     * @expectedException \League\Flysystem\NotSupportedException
      */
     public function testLinkCausedUnsupportedException()
     {
@@ -401,5 +401,14 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $fileInfo->getRealPath()->willReturn('somewhere');
         $fileInfo->isReadable()->willReturn(false);
         $method->invoke($adapter, $fileInfo->reveal());
+    }
+
+    /**
+     * @expectedException \League\Flysystem\Exception
+     */
+    public function testRootDirectoryCreationProblemCausesAnError()
+    {
+        $root = __DIR__ . '/files/fail.plz';
+        new Local($root);
     }
 }
