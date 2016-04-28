@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.22 - 2016-04-28
+
+### Fixed
+
+* Regression fix, the "0" root directory is now possible again.
+
 ## 1.0.21 - 2016-04-22
 
 ### Fixed
