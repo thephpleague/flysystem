@@ -128,6 +128,7 @@ class MountManager
             throw new LogicException('At least one argument needed');
         }
 
+        // The prefix depends on the first argument.
         $path = array_shift($arguments);
 
         if ( ! is_string($path)) {
@@ -139,6 +140,15 @@ class MountManager
         }
 
         list($prefix, $path) = explode('://', $path, 2);
+
+        // If there are more paths in the arguments, we'll fix them as well.
+        foreach ($arguments as $key => $argument) {
+            $parts = explode('://', $argument, 2);
+            if (count($parts) == 2) {
+                $arguments[$key] = $parts[1];
+            }
+        }
+
         array_unshift($arguments, $path);
 
         return [$prefix, $arguments];
