@@ -1,6 +1,5 @@
 <?php
 
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\MountManager;
 
@@ -55,41 +54,6 @@ class MountManagerTests extends PHPUnit_Framework_TestCase
         $this->setExpectedException($exception);
         $manager = new MountManager();
         $manager->filterPrefix($arguments);
-    }
-
-    public function testFilterPrefixProvider()
-    {
-        return [
-            [["tmp://some-dir/foo.jpg"], "tmp", ["some-dir/foo.jpg"]],
-            // Signature for a method call with two paths in it.
-            [
-                ["tmp://some-dir/foo.jpg", "tmp://some-dir/bar.jpg"],
-                "tmp",
-                ["some-dir/foo.jpg", "some-dir/bar.jpg"]
-            ],
-            // Signature for a call with only one path.
-            [
-                ["assets://some-file.png", AdapterInterface::VISIBILITY_PUBLIC],
-                "assets",
-                ["some-file.png", AdapterInterface::VISIBILITY_PUBLIC],
-            ]
-        ];
-    }
-
-    /**
-     * @dataProvider testFilterPrefixProvider
-     */
-    public function testFilterPrefix($values, $expectedPrefix, $expectedValues)
-    {
-        $manager = new MountManager();
-        $prefix = $manager->filterPrefix($values)[0];
-        $this->assertEquals($expectedPrefix, $prefix);
-
-        list ($prefix, $arguments) = $manager->filterPrefix($values);
-
-        foreach ($arguments as $key => $argument) {
-            $this->assertEquals($argument, $expectedValues[$key]);
-        }
     }
 
     public function testCallForwarder()
