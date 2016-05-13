@@ -12,15 +12,6 @@ function ftp_systype($connection)
         'dont.reconnect.me',
     ];
 
-
-    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
-        throw new ErrorException('ftp_systype');
-    }
-
-    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
-        throw new ErrorException('does not contain the correct message');
-    }
-
     if (is_string($connection) && array_key_exists($connection, $connections)) {
         $connections[$connection]++;
 
@@ -156,6 +147,16 @@ function ftp_raw($connection, $command)
 function ftp_rawlist($connection, $directory)
 {
     $directory = str_replace("-A ", "", $directory);
+
+    if ($directory === '/') {
+        if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
+            throw new ErrorException('ftp_rawlist');
+        }
+
+        if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
+            throw new ErrorException('does not contain the correct message');
+        }
+    }
 
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
