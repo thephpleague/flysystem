@@ -279,6 +279,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
+
+        $this->assertEquals("0644", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPublicDir()
@@ -307,6 +309,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
+        $this->assertEquals("0600", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPrivateDir()
