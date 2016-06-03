@@ -40,6 +40,7 @@ class Ftp extends AbstractFtpAdapter
         'transferMode',
         'systemType',
         'ignorePassiveAddress',
+        'alternativeRecursion',
     ];
 
     /**
@@ -86,6 +87,14 @@ class Ftp extends AbstractFtpAdapter
     public function setIgnorePassiveAddress($ignorePassiveAddress)
     {
         $this->ignorePassiveAddress = $ignorePassiveAddress;
+    }
+
+    /**
+     * @param bool $alternativeRecursion
+     */
+    public function setAlternativeRecursion($alternativeRecursion)
+    {
+        $this->alternativeRecursion = $alternativeRecursion;
     }
 
     /**
@@ -435,10 +444,40 @@ class Ftp extends AbstractFtpAdapter
     protected function listDirectoryContents($directory, $recursive = true)
     {
         $directory = str_replace('*', '\\*', $directory);
-        $options = $recursive ? '-alnR' : '-aln';
-        $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
+        if ($recursive && $this->alternativeRecursion)
+        {
+            $listing = $this->listDirectoryContentsRecursive($directory);
+        }
+        else
+        {
+            $options = $recursive ? '-alnR' : '-aln';
+            $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
+        }
 
         return $listing ? $this->normalizeListing($listing, $directory) : [];
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @param string $directory
+     */
+    protected function listDirectoryContentsRecursive($directory)
+    {
+        $listing = ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory);
+        $listing = $listing ? $this->normalizeListing($listing, $directory):[];
+        foreach ($listing as $directory)
+        {
+            if($directory['type'] == 'dir')
+            {
+                $subDirectories = $this->listDirectoryContentsRecursive($directory['path']);
+                foreach ($subDirectories as $dir)
+                {
+                    $listing[] = $dir;
+                }
+            }
+        }
+        return $listing;
     }
 
     /**
