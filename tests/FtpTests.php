@@ -346,6 +346,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         'passive' => false,
         'username' => 'user',
         'password' => 'password',
+        'recurseManually' => false,
     ];
 
     public function setUp()

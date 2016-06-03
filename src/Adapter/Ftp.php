@@ -24,6 +24,11 @@ class Ftp extends AbstractFtpAdapter
     protected $ignorePassiveAddress = null;
 
     /**
+     * @var bool
+     */
+    protected $recurseManually = false;
+
+    /**
      * @var array
      */
     protected $configurable = [
@@ -40,7 +45,7 @@ class Ftp extends AbstractFtpAdapter
         'transferMode',
         'systemType',
         'ignorePassiveAddress',
-        'alternativeRecursion',
+        'recurseManually',
     ];
 
     /**
@@ -90,11 +95,11 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * @param bool $alternativeRecursion
+     * @param bool $recurseManually
      */
-    public function setAlternativeRecursion($alternativeRecursion)
+    public function setRecurseManually($recurseManually)
     {
-        $this->alternativeRecursion = $alternativeRecursion;
+        $this->recurseManually = $recurseManually;
     }
 
     /**
@@ -316,7 +321,7 @@ class Ftp extends AbstractFtpAdapter
     {
         // List the current directory
         $listing = ftp_nlist($connection, '.') ?: [];
-        
+
         foreach ($listing as $key => $item) {
             if (preg_match('~^\./.*~', $item)) {
                 $listing[$key] = substr($item, 2);
@@ -444,12 +449,10 @@ class Ftp extends AbstractFtpAdapter
     protected function listDirectoryContents($directory, $recursive = true)
     {
         $directory = str_replace('*', '\\*', $directory);
-        if ($recursive && $this->alternativeRecursion)
-        {
+
+        if ($recursive && $this->recurseManually) {
             $listing = $this->listDirectoryContentsRecursive($directory);
-        }
-        else
-        {
+        } else {
             $options = $recursive ? '-alnR' : '-aln';
             $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
         }
@@ -465,18 +468,14 @@ class Ftp extends AbstractFtpAdapter
     protected function listDirectoryContentsRecursive($directory)
     {
         $listing = ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory);
-        $listing = $listing ? $this->normalizeListing($listing, $directory):[];
-        foreach ($listing as $directory)
-        {
-            if($directory['type'] == 'dir')
-            {
-                $subDirectories = $this->listDirectoryContentsRecursive($directory['path']);
-                foreach ($subDirectories as $dir)
-                {
-                    $listing[] = $dir;
-                }
-            }
+        $listing = $listing ? $this->normalizeListing($listing, $directory) : [];
+
+        foreach ($listing as $directory) {
+            if ($directory['type'] !== 'dir') continue;
+
+            $listing = array_merge($listing, $this->listDirectoryContentsRecursive($directory['path']));
         }
+
         return $listing;
     }
 
