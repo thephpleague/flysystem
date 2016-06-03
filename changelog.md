@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.24 - 2016-06-03
+
+### Fixed
+
+* [Local] Creating the root directory could lead to raceconditions, which are now handled a lot nicer. Initially only
+  for the constructor but now also fixed the same thing for all the write operations.
+
+
 ## 1.0.23 - 2016-06-03
 
 ### Altered
