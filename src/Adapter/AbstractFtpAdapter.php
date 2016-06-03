@@ -323,6 +323,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         return $this->listDirectoryContents($directory, $recursive);
     }
 
+    abstract protected function listDirectoryContents($directory, $recursive = false);
+
     /**
      * Normalize a directory listing.
      *

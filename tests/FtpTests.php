@@ -158,6 +158,18 @@ function ftp_rawlist($connection, $directory)
         }
     }
 
+    if (strpos($directory, 'recurse.manually') !== false) {
+        return [
+            'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 recurse.folder',
+        ];
+    }
+
+    if (strpos($directory, 'recurse.folder') !== false) {
+        return [
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+    }
+
     if (strpos($directory, 'fail.rawlist') !== false) {
         return false;
     }
@@ -379,6 +391,17 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
         $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testManualRecursion()
+    {
+        $adapter = new Ftp($this->options);
+        $adapter->setRecurseManually(true);
+        $result = $adapter->listContents('recurse.manually', true);
+        $this->assertCount(2, $result);
     }
 
     /**

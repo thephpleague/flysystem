@@ -451,11 +451,11 @@ class Ftp extends AbstractFtpAdapter
         $directory = str_replace('*', '\\*', $directory);
 
         if ($recursive && $this->recurseManually) {
-            $listing = $this->listDirectoryContentsRecursive($directory);
-        } else {
-            $options = $recursive ? '-alnR' : '-aln';
-            $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
+            return $this->listDirectoryContentsRecursive($directory);
         }
+
+        $options = $recursive ? '-alnR' : '-aln';
+        $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
 
         return $listing ? $this->normalizeListing($listing, $directory) : [];
     }
@@ -467,16 +467,17 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContentsRecursive($directory)
     {
-        $listing = ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory);
-        $listing = $listing ? $this->normalizeListing($listing, $directory) : [];
+        $listing = $this->normalizeListing(ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory) ?: []);
+        $output = [];
 
         foreach ($listing as $directory) {
+            $output[] = $directory;
             if ($directory['type'] !== 'dir') continue;
 
-            $listing = array_merge($listing, $this->listDirectoryContentsRecursive($directory['path']));
+            $output = array_merge($output, $this->listDirectoryContentsRecursive($directory['path']));
         }
 
-        return $listing;
+        return $output;
     }
 
     /**
