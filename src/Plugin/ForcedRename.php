@@ -27,11 +27,16 @@ class ForcedRename extends AbstractPlugin
     public function handle($path, $newpath)
     {
         try {
-            $this->filesystem->delete($newpath);
+            $deleted = $this->filesystem->delete($newpath);
         } catch (FileNotFoundException $e) {
             // The destination path does not exist. That's ok.
+            $deleted = true;
         }
 
-        return $this->filesystem->rename($path, $newpath);
+        if ($deleted) {
+            return $this->filesystem->rename($path, $newpath);
+        }
+
+        return false;
     }
 }
