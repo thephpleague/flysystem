@@ -341,6 +341,10 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithLink()
     {
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("File permissions not supported on Windows.");
+        }
+
         $target = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
         $link = __DIR__ . DIRECTORY_SEPARATOR .'link_to_files';
         symlink($target, $link);
