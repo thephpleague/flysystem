@@ -32,4 +32,4 @@ install:
 
 test_script:
   - cd c:\projects\thephpleague\flysystem
-  - vendor\bin\phpunit.bat --verbose
+  - php bin\phpunit --verbose
