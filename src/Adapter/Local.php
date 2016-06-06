@@ -97,7 +97,7 @@ class Local extends AbstractAdapter
     {
         if ( ! is_dir($root)) {
             $umask = umask(0);
-            mkdir($root, $this->permissionMap['dir']['public'], true);
+            @mkdir($root, $this->permissionMap['dir']['public'], true);
             umask($umask);
 
             if ( ! is_dir($root)) {
