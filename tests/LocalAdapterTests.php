@@ -342,7 +342,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testConstructorWithLink()
     {
         $target = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
-        $link = __DIR__ . '/link_to_files';
+        $link = __DIR__ . DIRECTORY_SEPARATOR .'link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
