@@ -7,6 +7,15 @@ php:
   - 7.0
   - hhvm
 
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode7.3
+      language: generic
+      env:
+        - _OSX=10.11
+        - _PHP: php56
+
 sudo: false
 
 env:
@@ -14,6 +23,9 @@ env:
   - COMPOSER_OPTS="--prefer-lowest"
 
 before_install:
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/prepare_osx_env.sh ; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/handle_brew_pkg.sh "${_PHP}" ; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/osx_install_composer.sh ; fi
   - mkdir tests/files
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - if [ "$TRAVIS_PHP_VERSION" == "hhvm" ]; then rm phpunit.xml; fi
