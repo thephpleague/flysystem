@@ -166,7 +166,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     public function testNullPrefix()
     {
         $this->adapter->setPathPrefix('');
-        $path = 'some/path.ext';
+        $path = 'some'.DIRECTORY_SEPARATOR.'path.ext';
         $this->assertEquals($path, $this->adapter->applyPathPrefix($path));
         $this->assertEquals($path, $this->adapter->removePathPrefix($path));
     }
@@ -279,6 +279,8 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
+
+        $this->assertEquals("0644", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPublicDir()
@@ -307,6 +309,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
+        $this->assertEquals("0600", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPrivateDir()
@@ -338,8 +341,12 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testConstructorWithLink()
     {
-        $target = __DIR__ . '/files/';
-        $link = __DIR__ . '/link_to_files';
+        if (IS_WINDOWS) {
+            $this->markTestSkipped("File permissions not supported on Windows.");
+        }
+
+        $target = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
+        $link = __DIR__ . DIRECTORY_SEPARATOR .'link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
@@ -348,7 +355,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException League\Flysystem\NotSupportedException
+     * @expectedException \League\Flysystem\NotSupportedException
      */
     public function testLinkCausedUnsupportedException()
     {
@@ -401,5 +408,14 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $fileInfo->getRealPath()->willReturn('somewhere');
         $fileInfo->isReadable()->willReturn(false);
         $method->invoke($adapter, $fileInfo->reveal());
+    }
+
+    /**
+     * @expectedException \League\Flysystem\Exception
+     */
+    public function testRootDirectoryCreationProblemCausesAnError()
+    {
+        $root = __DIR__ . '/files/fail.plz';
+        new Local($root);
     }
 }

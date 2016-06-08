@@ -6,6 +6,7 @@ use DateTime;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\NotSupportedException;
+use RuntimeException;
 
 abstract class AbstractFtpAdapter extends AbstractAdapter
 {
@@ -78,6 +79,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @var string
      */
     protected $systemType;
+
+    /**
+     * @var bool
+     */
+    protected $alternativeRecursion = false;
 
     /**
      * Constructor.
@@ -317,6 +323,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         return $this->listDirectoryContents($directory, $recursive);
     }
 
+    abstract protected function listDirectoryContents($directory, $recursive = false);
+
     /**
      * Normalize a directory listing.
      *
@@ -395,6 +403,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected function normalizeUnixObject($item, $base)
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 7);
+
+        if (count(explode(' ', $item, 9)) !== 9) {
+            throw new RuntimeException("Metadata can't be parsed from item '$item' , not enough parts.");
+        }
+
         list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
         $path = empty($base) ? $name : $base . $this->separator . $name;
@@ -421,6 +434,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected function normalizeWindowsObject($item, $base)
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 3);
+
+        if (count(explode(' ', $item, 4)) !== 4) {
+            throw new RuntimeException("Metadata can't be parsed from item '$item' , not enough parts.");
+        }
+
         list($date, $time, $size, $name) = explode(' ', $item, 4);
         $path = empty($base) ? $name : $base . $this->separator . $name;
 
