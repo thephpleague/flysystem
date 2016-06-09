@@ -107,7 +107,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if (in_array($directory, ['file1.txt', 'file2.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
+    if (in_array($directory, ['file1.txt', 'file2.txt', 'file3.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
         return false;
     }
 
@@ -197,6 +197,12 @@ function ftp_rawlist($connection, $directory)
     if (strpos($directory, 'file2.txt') !== false) {
         return [
             '05-23-15  12:09PM                  684 file2.txt',
+        ];
+    }
+
+    if (strpos($directory, 'file3.txt') !== false) {
+        return [
+            '16-03-2016  12:28PM                1337 file3.txt',
         ];
     }
 
@@ -514,6 +520,15 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1432382940, $metadata['timestamp']);
         $this->assertEquals('public', $metadata['visibility']);
         $this->assertEquals(684, $metadata['size']);
+
+        // Test file with m-d-Y H:iA time format
+        $metadata = $adapter->getMetadata('file3.txt');
+        $this->assertInternalType('array', $metadata);
+        $this->assertEquals('file', $metadata['type']);
+        $this->assertEquals('file3.txt', $metadata['path']);
+        $this->assertEquals(1458131280, $metadata['timestamp']);
+        $this->assertEquals('public', $metadata['visibility']);
+        $this->assertEquals(1337, $metadata['size']);
 
         $metadata = $adapter->getMetadata('dir1');
         $this->assertEquals('dir', $metadata['type']);

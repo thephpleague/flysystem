@@ -442,9 +442,16 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         list($date, $time, $size, $name) = explode(' ', $item, 4);
         $path = empty($base) ? $name : $base . $this->separator . $name;
 
-        // Check for the correct date/time format
+		// Check for the correct date/time format
         $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
-        $timestamp = DateTime::createFromFormat($format, $date . $time)->getTimestamp();
+        $dt = DateTime::createFromFormat($format, $date . $time);
+
+		// Check if $dt is not false before fetching the timestamp to avoid an exception
+		if (!$dt) {
+            $dt = new DateTime("$date $time");
+		}
+		
+        $timestamp = $dt->getTimestamp();
 
         if ($size === '<DIR>') {
             $type = 'dir';
