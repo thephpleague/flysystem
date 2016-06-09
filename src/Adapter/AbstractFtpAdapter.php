@@ -446,12 +446,12 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
         $dt = DateTime::createFromFormat($format, $date . $time);
 
-		// Check if $dt is not false before fetching to timestamp to avoid an exception
+		// Check if $dt is not false before fetching the timestamp to avoid an exception
 		if (!$dt) {
-			$timestamp = 0;
-		} else {
-			$timestamp = $dt->getTimestamp();
+            $dt = new DateTime("$date $time");
 		}
+		
+        $timestamp = $dt->getTimestamp();
 
         if ($size === '<DIR>') {
             $type = 'dir';
