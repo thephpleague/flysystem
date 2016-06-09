@@ -526,7 +526,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file3.txt', $metadata['path']);
-        $this->assertEquals(1491222480, $metadata['timestamp']);
+        $this->assertEquals(0, $metadata['timestamp']);
         $this->assertEquals('public', $metadata['visibility']);
         $this->assertEquals(1337, $metadata['size']);
 
