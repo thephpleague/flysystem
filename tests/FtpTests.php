@@ -729,6 +729,15 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     /**
      * @depends testInstantiable
+     */
+    public function testReadFailure()
+    {
+        $adapter = new Ftp($this->options + ['systemType' => 'unix']);
+        $this->assertFalse($adapter->read('not.found'));
+    }
+
+    /**
+     * @depends testInstantiable
      * @expectedException \RuntimeException
      */
     public function testItThrowsAnExceptionWhenAnInvalidWindowsListingIsFound()
