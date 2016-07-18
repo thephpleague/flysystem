@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.25 - 2016-07-18
+
+### Improces
+
+* [Local\Ftp] Streams opened with `fopen` now open in binary mode, which is better on Windows environments.
+
 ## 1.0.24 - 2016-06-03
 
 ### Fixed
