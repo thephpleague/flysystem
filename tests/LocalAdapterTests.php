@@ -173,7 +173,7 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath($this->root) . DIRECTORY_SEPARATOR, $this->adapter->getPathPrefix());
+        $this->assertEquals(realpath($this->root), realpath($this->adapter->getPathPrefix()));
     }
 
     public function testRenameToNonExistsingDirectory()
