@@ -105,7 +105,7 @@ class Local extends AbstractAdapter
             }
         }
 
-        return realpath($root);
+        return $root;
     }
 
     /**
