@@ -376,6 +376,8 @@ class Filesystem implements FilesystemInterface
      * @param string $path path to file
      *
      * @throws FileNotFoundException
+     * 
+     * @return void
      */
     public function assertPresent($path)
     {
@@ -390,6 +392,8 @@ class Filesystem implements FilesystemInterface
      * @param string $path path to file
      *
      * @throws FileExistsException
+     * 
+     * @return void
      */
     public function assertAbsent($path)
     {
