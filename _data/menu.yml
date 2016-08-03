@@ -10,6 +10,7 @@ Getting Started:
     Plugins: '/plugins/'
     Upgrade to 1.0.0: '/upgrade-to-1.0.0/'
     Creating an adapter: '/creating-an-adapter/'
+    Performance: '/performance/'
 Adapters:
     Local: '/adapter/local/'
     Azure: '/adapter/azure/'
