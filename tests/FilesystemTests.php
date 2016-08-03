@@ -1,5 +1,6 @@
 <?php
 
+use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Util;
 use Prophecy\Argument;
@@ -29,13 +30,19 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     protected $config;
 
     /**
+     * @var Config
+     */
+    private $filesystemConfig;
+
+    /**
      * @before
      */
     public function setupAdapter()
     {
         $this->prophecy = $this->prophesize('League\\Flysystem\\AdapterInterface');
         $this->adapter = $this->prophecy->reveal();
-        $this->filesystem = new Filesystem($this->adapter);
+        $this->filesystemConfig = new Config();
+        $this->filesystem = new Filesystem($this->adapter, $this->filesystemConfig);
         $this->config = Argument::type('League\\Flysystem\\Config');
     }
 
@@ -60,6 +67,15 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $path = 'path.txt';
         $contents = 'contents';
         $this->prophecy->has($path)->willReturn(false);
+        $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->write($path, $contents));
+    }
+
+    public function testWriteWithoutAsserts()
+    {
+        $this->filesystemConfig->set('disable_asserts', true);
+        $path = 'path.txt';
+        $contents = 'contents';
         $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
         $this->assertTrue($this->filesystem->write($path, $contents));
     }
@@ -213,6 +229,16 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
         $old = 'old.txt';
         $new = 'new.txt';
         $this->prophecy->has(Argument::any())->willReturn(true, false);
+        $this->prophecy->copy($old, $new)->willReturn(true);
+        $response = $this->filesystem->copy($old, $new);
+        $this->assertTrue($response);
+    }
+
+    public function testCopyWithoutAsserts()
+    {
+        $old = 'old.txt';
+        $new = 'new.txt';
+        $this->filesystemConfig->set('disable_asserts', true);
         $this->prophecy->copy($old, $new)->willReturn(true);
         $response = $this->filesystem->copy($old, $new);
         $this->assertTrue($response);

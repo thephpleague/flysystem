@@ -1,8 +1,14 @@
 # Changelog
 
+## 1.0.26 - 2016-08-03
+
+### Added
+
+* [Filesystem] Added an option to disable asserts.
+
 ## 1.0.25 - 2016-07-18
 
-### Improces
+### Improved
 
 * [Local\Ftp] Streams opened with `fopen` now open in binary mode, which is better on Windows environments.
 

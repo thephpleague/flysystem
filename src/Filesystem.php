@@ -376,12 +376,12 @@ class Filesystem implements FilesystemInterface
      * @param string $path path to file
      *
      * @throws FileNotFoundException
-     * 
+     *
      * @return void
      */
     public function assertPresent($path)
     {
-        if ( ! $this->has($path)) {
+        if ($this->config->get('disable_asserts', false) === false && ! $this->has($path)) {
             throw new FileNotFoundException($path);
         }
     }
@@ -392,12 +392,12 @@ class Filesystem implements FilesystemInterface
      * @param string $path path to file
      *
      * @throws FileExistsException
-     * 
+     *
      * @return void
      */
     public function assertAbsent($path)
     {
-        if ($this->has($path)) {
+        if ($this->config->get('disable_asserts', false) === false && $this->has($path)) {
             throw new FileExistsException($path);
         }
     }
