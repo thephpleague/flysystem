@@ -22,3 +22,5 @@ $local = Filesystem($localAdapter, new Config([
 
 This will disable the asserts which happen before the following calls: write, writeStream, update,
 updateStream, copy (2x), and delete.
+
+This functionality is available since `1.0.26`.
