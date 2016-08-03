@@ -164,4 +164,120 @@ class UtilTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('test/', Util::normalizePrefix('test', '/'));
         $this->assertEquals('test/', Util::normalizePrefix('test/', '/'));
     }
+
+    public function pathinfoPathProvider()
+    {
+        return [
+            [''],
+            ['.'],
+            ['..'],
+            ['...'],
+            ['/.'],
+            ['//.'],
+            ['///.'],
+
+            ['foo'],
+            ['/foo'],
+            ['/foo/bar'],
+            ['/foo/bar/'],
+
+            ['file.txt'],
+            ['foo/file.txt'],
+            ['/foo/file.jpeg'],
+
+            ['.txt'],
+            ['dir/.txt'],
+            ['/dir/.txt'],
+
+            ['foo/bar.'],
+            ['foo/bar..'],
+            ['foo/bar/.'],
+
+            ['c:'],
+            ['c:\\'],
+            ['c:/'],
+            ['c:file'],
+            ['c:f:ile'],
+            ['c:f:'],
+            ['c:d:e:'],
+            ['AB:file'],
+            ['AB:'],
+            ['d:\foo\bar'],
+            ['E:\foo\bar\\'],
+            ['f:\foo\bar:baz'],
+            ['G:\foo\bar:'],
+            ['c:/foo/bar'],
+            ['c:/foo/bar/'],
+            ['Y:\foo\bar.txt'],
+            ['z:\foo\bar.'],
+            ['foo\bar'],
+        ];
+    }
+
+    /**
+     * @dataProvider  pathinfoPathProvider
+     */
+    public function testPathinfo($path)
+    {
+        $expected = compact('path') + pathinfo($path);
+
+        if (isset($expected['dirname'])) {
+            $expected['dirname'] = Util::normalizeDirname($expected['dirname']);
+        }
+
+        $this->assertSame($expected, Util::pathinfo($path));
+    }
+
+    public function testPathinfoHandlesUtf8()
+    {
+        $path = 'files/繁體中文字/test.txt';
+        $expected = [
+            'path' => 'files/繁體中文字/test.txt',
+            'dirname' => 'files/繁體中文字',
+            'basename' => 'test.txt',
+            'extension' => 'txt',
+            'filename' => 'test',
+        ];
+        $this->assertSame($expected, Util::pathinfo($path));
+
+        $path = 'files/繁體中文字.txt';
+        $expected = [
+            'path' => 'files/繁體中文字.txt',
+            'dirname' => 'files',
+            'basename' => '繁體中文字.txt',
+            'extension' => 'txt',
+            'filename' => '繁體中文字',
+        ];
+        $this->assertSame($expected, Util::pathinfo($path));
+
+        $path = '👨‍👩‍👧‍👦👨‍👩‍👦‍👦👨‍👩‍👧‍👧/繁體中文字.txt';
+        $expected = [
+            'path' => '👨‍👩‍👧‍👦👨‍👩‍👦‍👦👨‍👩‍👧‍👧/繁體中文字.txt',
+            'dirname' => '👨‍👩‍👧‍👦👨‍👩‍👦‍👦👨‍👩‍👧‍👧',
+            'basename' => '繁體中文字.txt',
+            'extension' => 'txt',
+            'filename' => '繁體中文字',
+        ];
+        $this->assertSame($expected, Util::pathinfo($path));
+
+        $path = 'foo/bar.baz.😀😬😁';
+        $expected = [
+            'path' => 'foo/bar.baz.😀😬😁',
+            'dirname' => 'foo',
+            'basename' => 'bar.baz.😀😬😁',
+            'extension' => '😀😬😁',
+            'filename' => 'bar.baz',
+        ];
+        $this->assertSame($expected, Util::pathinfo($path));
+
+        $path = '繁體中文字/👨‍👩‍👧‍👦.😺😸😹😻.😀😬😁';
+        $expected = [
+            'path' => '繁體中文字/👨‍👩‍👧‍👦.😺😸😹😻.😀😬😁',
+            'dirname' => '繁體中文字',
+            'basename' => '👨‍👩‍👧‍👦.😺😸😹😻.😀😬😁',
+            'extension' => '😀😬😁',
+            'filename' => '👨‍👩‍👧‍👦.😺😸😹😻',
+        ];
+        $this->assertSame($expected, Util::pathinfo($path));
+    }
 }
