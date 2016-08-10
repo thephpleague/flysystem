@@ -410,6 +410,13 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $method->invoke($adapter, $fileInfo->reveal());
     }
 
+    public function testMimetypeFallbackOnExtension()
+    {
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX);
+        $adapter->write('test.xlsx', '', new Config);
+        $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $adapter->getMimetype('test.xlsx')['mimetype']);
+    }
+
     /**
      * @expectedException \League\Flysystem\Exception
      */

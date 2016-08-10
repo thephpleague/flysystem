@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.27 - 2016-08-10
+
+### Fixed
+
+* [#684] The local adapter now infers the mimetype based on the extension for empty files.
+
 ## 1.0.26 - 2016-08-03
 
 ### Added
