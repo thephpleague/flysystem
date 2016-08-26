@@ -87,6 +87,7 @@ Want to get started quickly? Check out some of these integrations:
 * Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
 * SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
 * Gaufrette: https://github.com/jenkoian/flysystem-gaufrette
+* OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 
 ## Caching
 
