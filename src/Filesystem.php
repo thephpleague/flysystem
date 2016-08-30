@@ -275,6 +275,28 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
+    public function listFilteredContents(FilterCriteriaInterface $filterCriteria, $directory = '', $recursive = false)
+    {
+        $directory = Util::normalizePath($directory);
+
+        $filteredContents = [];
+        if ($this->getAdapter() instanceof FilteringReadInterface) {
+            $filteredContents = $this->getAdapter()->listFilteredContents($filterCriteria, $directory, $recursive);
+        } else {
+            $contents = $this->getAdapter()->listContents($directory, $recursive);
+            foreach ($contents as $content) {
+                if ($filterCriteria->isSatisfiedBy(FilterFileInfo::createFromNormalized($content))) {
+                    $filteredContents[] = $content;
+                }
+            }
+        }
+
+        return (new ContentListingFormatter($directory, $recursive))->formatListing($filteredContents);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getMimetype($path)
     {
         $path = Util::normalizePath($path);

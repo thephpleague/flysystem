@@ -3,6 +3,13 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Filter\AndX;
+use League\Flysystem\Filter\ExtensionEquals;
+use League\Flysystem\Filter\FilenameStartsWith;
+use League\Flysystem\Filter\IsFile;
+use League\Flysystem\Filter\OrX;
+use League\Flysystem\Filter\PathContains;
 
 function fopen($result, $mode)
 {
@@ -215,6 +222,33 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->adapter->write('dirname/other.txt', 'contents', new Config());
         $contents = $this->adapter->listContents('', true);
         $this->assertCount(3, $contents);
+    }
+
+    public function testListFilteredContents()
+    {
+        $this->adapter->write('file.txt', 'contents', new Config());
+        $this->adapter->write('file2.jpg', 'contents', new Config());
+        $this->adapter->write('music.mp3', 'contents', new Config());
+
+        $contentsOne = $this->adapter->listFilteredContents(
+            new AndX(
+                new IsFile(),
+                new PathContains('fil')
+            )
+        );
+
+        $contentsTwo = $this->adapter->listFilteredContents(
+            new AndX(
+                new IsFile,
+                new OrX(
+                    new PathContains('jpg'),
+                    new PathContains('mp3')
+                )
+            )
+        );
+
+        $this->assertCount(2, $contentsOne);
+        $this->assertCount(2, $contentsTwo);
     }
 
     public function testGetSize()

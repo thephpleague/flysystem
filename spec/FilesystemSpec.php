@@ -2,6 +2,8 @@
 
 namespace spec\League\Flysystem;
 
+use League\Flysystem\FilterFileInfo;
+use League\Flysystem\UnsupportedFilterException;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
@@ -225,5 +227,122 @@ class FilesystemSpec extends ObjectBehavior
     public function it_should_return_false_when_checking_if_an_empty_filename_exists()
     {
         $this->has('')->shouldReturn(false);
+    }
+
+    /**
+     * @param League\Flysystem\FilterCriteriaInterface $filterCriteria
+     * @param League\Flysystem\FilteringReadInterface $adapter
+     */
+    public function it_should_try_to_outsource_filtering_to_adapter($filterCriteria, $adapter)
+    {
+        $this->adapter = $adapter;
+        $this->beConstructedWith($adapter);
+
+        $filteredContents = [
+            [
+                'type' => 'file',
+                'path' => 'file.txt',
+                'timestamp' => date_timestamp_get(new \DateTime('now')),
+                'size' => 21981278127,
+                'dirname' => '',
+                'basename' => 'file',
+                'extension' => 'txt',
+                'filename' => 'file.txt'
+            ]
+        ];
+
+        $this->adapter->listFilteredContents($filterCriteria, '', false)->willReturn($filteredContents);
+
+        $this->listFilteredContents($filterCriteria, '', false)->shouldReturn($filteredContents);
+    }
+
+    /**
+     * @param League\Flysystem\FilterCriteriaInterface $filterCriteria
+     * @param League\Flysystem\FilteringReadInterface $adapter
+     */
+    public function it_should_throw_exception_if_some_cirteria_is_unsupported_by_adapter($filterCriteria, $adapter)
+    {
+        $this->adapter = $adapter;
+        $this->beConstructedWith($adapter);
+
+        $this->adapter->listFilteredContents($filterCriteria, '', false)->willThrow(new UnsupportedFilterException());
+
+        $this->shouldThrow(new UnsupportedFilterException())->during(
+            'listFilteredContents',
+            [
+                $filterCriteria,
+                '',
+                false
+            ]
+        );
+    }
+
+    /**
+     * @param League\Flysystem\FilterCriteriaInterface $filterCriteria
+     */
+    public function it_should_filter_list_itself_if_adapter_not_support_filtering($filterCriteria)
+    {
+        $matchingFileInfo = [
+            'type' => 'file',
+            'path' => 'file.txt',
+            'timestamp' => date_timestamp_get(new \DateTime('now')),
+            'size' => 21981278127,
+            'dirname' => '',
+            'basename' => 'file',
+            'extension' => 'txt',
+            'filename' => 'file.txt'
+        ];
+        $notMatchingFileInfo = [
+            'type' => 'file2',
+            'path' => 'file2.txt',
+            'timestamp' => date_timestamp_get(new \DateTime('now')),
+            'size' => 219878127,
+            'dirname' => '',
+            'basename' => 'file2',
+            'filename' => 'file2.txt'
+        ];
+
+        $unfilteredContents = [
+            $matchingFileInfo,
+            $notMatchingFileInfo
+        ];
+        $filteredContents = [
+            $matchingFileInfo
+        ];
+
+        $this->adapter->listContents('', false)->willReturn($unfilteredContents);
+
+        $filterCriteria->isSatisfiedBy(FilterFileInfo::createFromNormalized($notMatchingFileInfo))->willReturn(false);
+        $filterCriteria->isSatisfiedBy(FilterFileInfo::createFromNormalized($matchingFileInfo))->willReturn(true);
+
+        $this->listFilteredContents($filterCriteria, '', false)->shouldReturn($filteredContents);
+    }
+
+    /**
+     * @param League\Flysystem\FilterCriteriaInterface $filterCriteria
+     */
+    public function it_should_throw_exception_if_some_cirteria_is_unsupported_while_self_filtering($filterCriteria)
+    {
+        $notFullFileInfo = [
+            'type' => 'file',
+            'path' => 'file.txt',
+            'timestamp' => date_timestamp_get(new \DateTime('now')),
+            'size' => null,
+            'dirname' => '',
+            'basename' => 'file',
+            'extension' => 'txt',
+            'filename' => 'file.txt'
+        ];
+
+        $unfilteredContents = [
+            $notFullFileInfo
+        ];
+
+        $this->adapter->listContents('', false)->willReturn($unfilteredContents);
+
+        $filterCriteria->isSatisfiedBy(FilterFileInfo::createFromNormalized($notFullFileInfo))
+            ->willThrow(new UnsupportedFilterException());
+
+        $this->shouldThrow(new UnsupportedFilterException())->during('listFilteredContents', [$filterCriteria]);
     }
 }

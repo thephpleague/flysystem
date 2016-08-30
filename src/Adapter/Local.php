@@ -8,15 +8,19 @@ use finfo as Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Exception;
+use League\Flysystem\FilterCriteriaInterface;
+use League\Flysystem\FilterFileInfo;
+use League\Flysystem\FilteringReadInterface;
 use League\Flysystem\NotSupportedException;
 use League\Flysystem\UnreadableFileException;
+use League\Flysystem\UnsupportedFilterException;
 use League\Flysystem\Util;
 use LogicException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
-class Local extends AbstractAdapter
+class Local extends AbstractAdapter implements FilteringReadInterface
 {
     /**
      * @var int
@@ -510,5 +514,36 @@ class Local extends AbstractAdapter
         if ( ! $file->isReadable()) {
             throw UnreadableFileException::forFileInfo($file);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function listFilteredContents(FilterCriteriaInterface $filterCriteria, $directory = '', $recursive = false)
+    {
+        $result = [];
+        $location = $this->applyPathPrefix($directory) . $this->pathSeparator;
+
+        if ( ! is_dir($location)) {
+            return [];
+        }
+
+        $iterator = $recursive ? $this->getRecursiveDirectoryIterator($location) : $this->getDirectoryIterator($location);
+
+        foreach ($iterator as $file) {
+            $path = $this->getFilePath($file);
+
+            if (preg_match('#(^|/|\\\\)\.{1,2}$#', $path)) {
+                continue;
+            }
+
+            $normalizedFileInfo = $this->normalizeFileInfo($file);
+
+            if ($filterCriteria->isSatisfiedBy(FilterFileInfo::createFromNormalized($normalizedFileInfo))) {
+                $result[] = $normalizedFileInfo;
+            }
+        }
+
+        return array_filter($result);
     }
 }
