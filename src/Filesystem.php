@@ -202,6 +202,27 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
+    public function appendStream($path, $resource, array $config = [])
+    {
+        $adapter = $this->getAdapter();
+
+        if (!$adapter instanceof AppendableAdapterInterface) {
+            throw new Exception('Filesystem adapter does not support file append');
+        }
+
+        if (!is_resource($resource)) {
+            throw new Exception(__METHOD__ . ' expects argument #2 to be a valid resource.');
+        }
+
+        $path = Util::normalizePath($path);
+        $config = $this->prepareConfig($config);
+
+        return (bool)$adapter->appendStream($path, $resource, $config);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rename($path, $newpath)
     {
         $path = Util::normalizePath($path);

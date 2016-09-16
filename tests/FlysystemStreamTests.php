@@ -14,6 +14,16 @@ class FlysystemStreamTests extends PHPUnit_Framework_TestCase
         $this->assertFalse($filesystem->writeStream('file.txt', tmpfile()));
     }
 
+    public function testAppendStream()
+    {
+        $adapter = Mockery::mock(League\Flysystem\AdapterInterface::class,
+            \League\Flysystem\AppendableAdapterInterface::class);
+        $adapter->shouldReceive('appendStream')->andReturn(['path' => 'file.txt'], ['path' => 'file.txt']);
+        $filesystem = new Filesystem($adapter);
+        $this->assertTrue($filesystem->appendStream('file.txt', tmpfile()));
+        $this->assertTrue($filesystem->appendStream('file.txt', tmpfile()));
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
