@@ -6,6 +6,7 @@ use DirectoryIterator;
 use FilesystemIterator;
 use finfo as Finfo;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\AppendableAdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Exception;
 use League\Flysystem\NotSupportedException;
@@ -16,7 +17,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 
-class Local extends AbstractAdapter
+class Local extends AbstractAdapter implements AppendableAdapterInterface
 {
     /**
      * @var int
@@ -506,5 +507,44 @@ class Local extends AbstractAdapter
         if ( ! $file->isReadable()) {
             throw UnreadableFileException::forFileInfo($file);
         }
+    }
+
+    /**
+     * Append file stream
+     *
+     * @param string $path
+     * @param resource $resource
+     * @param \League\Flysystem\Config $config
+     * @return array|false
+     * @throws \Exception
+     */
+    public function appendStream($path, $resource, Config $config)
+    {
+        $location = $this->applyPathPrefix($path);
+        $this->ensureDirectory(dirname($location));
+        $stream = fopen($location, 'a');
+        
+        if (!$stream) {
+            return false;
+        }
+
+        if (!flock($stream, LOCK_EX)) {
+            throw new \Exception('Could not get file lock');
+        }
+
+        stream_copy_to_stream($resource, $stream);
+
+        fflush($stream);
+        flock($stream, LOCK_UN);
+
+        if (!fclose($stream)) {
+            return false;
+        }
+
+        if ($visibility = $config->get('visibility')) {
+            $this->setVisibility($path, $visibility);
+        }
+
+        return compact('path', 'visibility');
     }
 }
