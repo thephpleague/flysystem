@@ -97,7 +97,7 @@ class ContentListingFormatter
      */
     private function isDirectChild(array $entry)
     {
-        return Util::dirname($entry['path']) === $this->directory;
+        return strtolower(Util::dirname($entry['path'])) === strtolower($this->directory);
     }
 
     /**
