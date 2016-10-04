@@ -23,8 +23,7 @@ class FlysystemStreamTests extends TestCase
 
     public function testAppendStream()
     {
-        $adapter = Mockery::mock(League\Flysystem\AdapterInterface::class,
-            \League\Flysystem\AppendableAdapterInterface::class);
+        $adapter = Mockery::mock('League\Flysystem\AppendableAdapterInterface');
         $adapter->shouldReceive('appendStream')->andReturn(['path' => 'file.txt'], ['path' => 'file.txt']);
         $filesystem = new Filesystem($adapter);
         $this->assertTrue($filesystem->appendStream('file.txt', tmpfile()));
