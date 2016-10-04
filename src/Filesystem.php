@@ -210,13 +210,15 @@ class Filesystem implements AppendableFilesystemInterface
         if (!$adapter instanceof AppendableAdapterInterface) {
             throw new InvalidMethodCallException('Filesystem adapter does not support file append');
         }
-        
+
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
-        
-        $this->assertPresent($path);
-        
-        return (bool)$adapter->append($path, $contents, $config);
+
+        if ($this->has($path)) {
+            return (bool) $adapter->append($path, $contents, $config);
+        }
+
+        return (bool) $this->getAdapter()->write($path, $contents, $config);
     }
 
     /**

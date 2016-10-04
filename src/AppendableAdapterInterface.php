@@ -4,7 +4,7 @@ namespace League\Flysystem;
 interface AppendableAdapterInterface extends AdapterInterface
 {
     /**
-     * Append file
+     * Append existing file or create new
      *
      * @param string   $path
      * @param string   $contents
@@ -15,7 +15,7 @@ interface AppendableAdapterInterface extends AdapterInterface
     public function append($path, $contents, Config $config);
 
     /**
-     * Append file stream
+     * Append existing file or create new using stream
      *
      * @param string   $path
      * @param resource $resource
