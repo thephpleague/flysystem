@@ -14,7 +14,7 @@ use League\Flysystem\Util\ContentListingFormatter;
  * @method array listPaths(string $path = '', boolean $recursive = false)
  * @method array listWith(array $keys = [], $directory = '', $recursive = false)
  */
-class Filesystem implements FilesystemInterface
+class Filesystem implements AppendableFilesystemInterface
 {
     use PluggableTrait;
     use ConfigAwareTrait;
@@ -202,16 +202,35 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
+    public function append($path, $contents, array $config = [])
+    {
+        $adapter = $this->getAdapter();
+
+        if (!$adapter instanceof AppendableAdapterInterface) {
+            throw new InvalidMethodCallException('Filesystem adapter does not support file append');
+        }
+        
+        $path = Util::normalizePath($path);
+        $config = $this->prepareConfig($config);
+        
+        $this->assertPresent($path);
+        
+        return (bool)$adapter->append($path, $contents, $config);
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function appendStream($path, $resource, array $config = [])
     {
         $adapter = $this->getAdapter();
 
         if (!$adapter instanceof AppendableAdapterInterface) {
-            throw new Exception('Filesystem adapter does not support file append');
+            throw new InvalidMethodCallException('Filesystem adapter does not support file append');
         }
 
         if (!is_resource($resource)) {
-            throw new Exception(__METHOD__ . ' expects argument #2 to be a valid resource.');
+            throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
         $path = Util::normalizePath($path);

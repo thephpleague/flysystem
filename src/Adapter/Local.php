@@ -182,6 +182,55 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
     /**
      * @inheritdoc
      */
+    public function append($path, $contents, Config $config)
+    {
+        $location = $this->applyPathPrefix($path);
+        $mimetype = Util::guessMimeType($path, $contents);
+        $size = file_put_contents($location, $contents, FILE_APPEND);
+
+        if ($size === false) {
+            return false;
+        }
+
+        return compact('path', 'contents', 'mimetype');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function appendStream($path, $resource, Config $config)
+    {
+        $location = $this->applyPathPrefix($path);
+        $this->ensureDirectory(dirname($location));
+        $stream = fopen($location, 'a');
+
+        if (!$stream) {
+            return false;
+        }
+
+        if (!flock($stream, LOCK_EX)) {
+            throw new Exception('Could not get file lock');
+        }
+
+        stream_copy_to_stream($resource, $stream);
+
+        fflush($stream);
+        flock($stream, LOCK_UN);
+
+        if (!fclose($stream)) {
+            return false;
+        }
+
+        if ($visibility = $config->get('visibility')) {
+            $this->setVisibility($path, $visibility);
+        }
+
+        return compact('path', 'visibility');
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function updateStream($path, $resource, Config $config)
     {
         return $this->writeStream($path, $resource, $config);
@@ -511,44 +560,5 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
         if ( ! $file->isReadable()) {
             throw UnreadableFileException::forFileInfo($file);
         }
-    }
-
-    /**
-     * Append file stream
-     *
-     * @param string $path
-     * @param resource $resource
-     * @param \League\Flysystem\Config $config
-     * @return array|false
-     * @throws \Exception
-     */
-    public function appendStream($path, $resource, Config $config)
-    {
-        $location = $this->applyPathPrefix($path);
-        $this->ensureDirectory(dirname($location));
-        $stream = fopen($location, 'a');
-        
-        if (!$stream) {
-            return false;
-        }
-
-        if (!flock($stream, LOCK_EX)) {
-            throw new \Exception('Could not get file lock');
-        }
-
-        stream_copy_to_stream($resource, $stream);
-
-        fflush($stream);
-        flock($stream, LOCK_UN);
-
-        if (!fclose($stream)) {
-            return false;
-        }
-
-        if ($visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
-        }
-
-        return compact('path', 'visibility');
     }
 }
