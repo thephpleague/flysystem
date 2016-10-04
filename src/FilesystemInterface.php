@@ -2,6 +2,8 @@
 
 namespace League\Flysystem;
 
+use InvalidArgumentException;
+
 interface FilesystemInterface
 {
     /**
@@ -124,20 +126,6 @@ interface FilesystemInterface
      * @return bool True on success, false on failure.
      */
     public function writeStream($path, $resource, array $config = []);
-
-    /**
-     * Append a file using string
-     *
-     * @param string   $path     The path of the new file.
-     * @param resource $resource The file handle.
-     * @param array    $config   An optional configuration array.
-     *
-     * @throws InvalidArgumentException If $resource is not a file handle.
-     * @throws FileExistsException
-     *
-     * @return bool True on success, false on failure.
-     */
-    public function appendStream($path, $resource, array $config = []);
     
     /**
      * Update an existing file.
