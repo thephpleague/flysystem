@@ -50,6 +50,10 @@ class Config
      */
     public function has($key)
     {
+        if ( ! array_key_exists($key, $this->settings) && $this->fallback) {
+            return $this->fallback->has($key);
+        }
+
         return array_key_exists($key, $this->settings);
     }
 
