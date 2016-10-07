@@ -81,6 +81,22 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testStreamWrappersAreSupported()
+    {
+        (new Local(__DIR__.'/files'))->write('file.txt', 'contents', new Config());
+
+        $adapter = new Local('file://'.__DIR__.'/files');
+        $this->assertCount(1, $adapter->listContents());
+    }
+
+    public function testRelativeRootsAreSupportes()
+    {
+        (new Local(__DIR__.'/files'))->write('file.txt', 'contents', new Config());
+
+        $adapter = new Local(__DIR__.'/files/../files');
+        $this->assertCount(1, $adapter->listContents());
+    }
+
     public function testHasWithDir()
     {
         $this->adapter->createDir('0', new Config());
