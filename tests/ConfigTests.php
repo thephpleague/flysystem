@@ -15,4 +15,13 @@ class ConfigTests extends PHPUnit_Framework_TestCase
         $config->setFallback($fallback);
         $this->assertEquals('fallback_value', $config->get('fallback_setting'));
     }
+
+    public function testFallingBackWhenCallingHas()
+    {
+        $config = new Config();
+        $fallback = new Config(['setting_name' => true]);
+        $config->setFallback($fallback);
+
+        $this->assertTrue($config->has('setting_name'));
+    }
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.28 - 2016-10-07
+
+### Fixed
+
+* [#705] Config::has now also checks the fallback config.
+
 ## 1.0.27 - 2016-08-10
 
 ### Fixed
