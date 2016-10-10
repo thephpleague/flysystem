@@ -353,7 +353,7 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => $path];
         }
 
-        $listing = ftp_rawlist($connection, '-A ' . str_replace('*', '\\*', $path));
+        $listing = $this->ftp_rawlist('-A ', str_replace('*', '\\*', $path));
 
         if (empty($listing)) {
             return false;
@@ -456,7 +456,7 @@ class Ftp extends AbstractFtpAdapter
         }
 
         $options = $recursive ? '-alnR' : '-aln';
-        $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
+        $listing = $this->ftp_rawlist($options, $directory);
 
         return $listing ? $this->normalizeListing($listing, $directory) : [];
     }
@@ -468,7 +468,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContentsRecursive($directory)
     {
-        $listing = $this->normalizeListing(ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory) ?: []);
+        $listing = $this->normalizeListing($this->ftp_rawlist('-aln', $directory) ?: []);
         $output = [];
 
         foreach ($listing as $directory) {
@@ -501,5 +501,11 @@ class Ftp extends AbstractFtpAdapter
 
             return false;
         }
+    }
+
+    protected function ftp_rawlist($options, $path)
+    {
+        $path = str_replace(' ', '\ ', $path);
+        return ftp_rawlist($this->getConnection(), $options . ' ' . $path);
     }
 }
