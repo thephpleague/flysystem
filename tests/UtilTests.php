@@ -107,6 +107,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
             ['\\\\some\shared\\\\drive', 'some\shared\drive'],
             ['C:\dirname\\\\subdir\\\\\\subsubdir', 'C:\dirname\subdir\subsubdir'],
             ['C:\\\\dirname\subdir\\\\subsubdir', 'C:\dirname\subdir\subsubdir'],
+            ['example/path/..txt', 'example/path/..txt'],
         ];
     }
 
