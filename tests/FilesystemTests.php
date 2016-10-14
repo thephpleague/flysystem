@@ -113,6 +113,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     {
         $path = 'path.txt';
         $contents = 'contents';
+        $this->prophecy->putRequiresUpdate()->willReturn(true);
         $this->prophecy->has($path)->willReturn(false);
         $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
         $this->assertTrue($this->filesystem->put($path, $contents));
@@ -122,6 +123,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     {
         $path = 'path.txt';
         $stream = tmpfile();
+        $this->prophecy->putStreamRequiresUpdate()->willReturn(true);
         $this->prophecy->has($path)->willReturn(false);
         $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
         $this->assertTrue($this->filesystem->putStream($path, $stream));
@@ -132,6 +134,7 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     {
         $path = 'path.txt';
         $contents = 'contents';
+        $this->prophecy->putRequiresUpdate()->willReturn(true);
         $this->prophecy->has($path)->willReturn(true);
         $this->prophecy->update($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
         $this->assertTrue($this->filesystem->put($path, $contents));
@@ -141,8 +144,47 @@ class FilesystemTests extends \PHPUnit_Framework_TestCase
     {
         $path = 'path.txt';
         $stream = tmpfile();
+        $this->prophecy->putStreamRequiresUpdate()->willReturn(true);
         $this->prophecy->has($path)->willReturn(true);
         $this->prophecy->updateStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->putStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testPutNewNoUpdate()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->putRequiresUpdate()->willReturn(false);
+        $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->put($path, $contents));
+    }
+
+    public function testPutNewStreamNoUpdate()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->putStreamRequiresUpdate()->willReturn(false);
+        $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->assertTrue($this->filesystem->putStream($path, $stream));
+        fclose($stream);
+    }
+
+    public function testPutUpdateNoUpdate()
+    {
+        $path = 'path.txt';
+        $contents = 'contents';
+        $this->prophecy->putRequiresUpdate()->willReturn(false);
+        $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->assertTrue($this->filesystem->put($path, $contents));
+    }
+
+    public function testPutUpdateStreamNoUpdate()
+    {
+        $path = 'path.txt';
+        $stream = tmpfile();
+        $this->prophecy->putStreamRequiresUpdate()->willReturn(false);
+        $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
         $this->assertTrue($this->filesystem->putStream($path, $stream));
         fclose($stream);
     }

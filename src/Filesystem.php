@@ -94,7 +94,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
 
-        if ($this->has($path)) {
+        if ($this->getAdapter()->putRequiresUpdate() && $this->has($path)) {
             return (bool) $this->getAdapter()->update($path, $contents, $config);
         }
 
@@ -114,7 +114,7 @@ class Filesystem implements FilesystemInterface
         $config = $this->prepareConfig($config);
         Util::rewindStream($resource);
 
-        if ($this->has($path)) {
+        if ($this->getAdapter()->putStreamRequiresUpdate() && $this->has($path)) {
             return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
         }
 
