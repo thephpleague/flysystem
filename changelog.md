@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.29 - 2016-10-18
+
+### Improved
+
+* All FTP-like adapters now have a safe storage for usernames and passwords.
+
 ## 1.0.28 - 2016-10-07
 
 ### Fixed
