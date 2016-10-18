@@ -187,6 +187,7 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
     public function append($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
+        $this->ensureDirectory(dirname($location));
         $mimetype = Util::guessMimeType($path, $contents);
         $size = file_put_contents($location, $contents, FILE_APPEND);
 

@@ -6,9 +6,9 @@ use InvalidArgumentException;
 interface AppendableFilesystemInterface extends FilesystemInterface
 {
     /**
-     * Append a file
+     * Create new or append existing file
      *
-     * @param string   $path     The path of the new file.
+     * @param string   $path     The path of the file.
      * @param string   $contents The file contents.
      * @param array    $config   An optional configuration array.
      *
@@ -19,9 +19,9 @@ interface AppendableFilesystemInterface extends FilesystemInterface
     public function append($path, $contents, array $config = []);
 
     /**
-     * Append a file using stream
+     * Create new or append existing file using stream
      *
-     * @param string   $path     The path of the new file.
+     * @param string   $path     The path of the file.
      * @param resource $resource The file handle.
      * @param array    $config   An optional configuration array.
      *
