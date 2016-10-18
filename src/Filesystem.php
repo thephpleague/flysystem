@@ -2,6 +2,7 @@
 
 namespace League\Flysystem;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Util\ContentListingFormatter;
@@ -206,15 +207,15 @@ class Filesystem implements AppendableFilesystemInterface
     {
         $adapter = $this->getAdapter();
 
-        if (!$adapter instanceof AppendableAdapterInterface) {
-            throw new InvalidMethodCallException('Filesystem adapter does not support file append');
-        }
-
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
 
         if ($this->has($path)) {
-            return (bool) $adapter->append($path, $contents, $config);
+            if ($adapter instanceof AppendableAdapterInterface) {
+                return (bool)$adapter->append($path, $contents, $config);
+            } else {
+                $contents = $adapter->read($path) . $contents;
+            }
         }
 
         return (bool) $this->getAdapter()->write($path, $contents, $config);
@@ -228,7 +229,7 @@ class Filesystem implements AppendableFilesystemInterface
         $adapter = $this->getAdapter();
 
         if (!$adapter instanceof AppendableAdapterInterface) {
-            throw new InvalidMethodCallException('Filesystem adapter does not support file append');
+            throw new BadMethodCallException('Filesystem adapter does not support file append');
         }
 
         if (!is_resource($resource)) {
