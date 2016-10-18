@@ -86,6 +86,11 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('HHVM fails while it should not.');
         }
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $this->markTestSkipped('Windows does not support this.');
+        }
+
         (new Local(__DIR__.'/files'))->write('file.txt', 'contents', new Config());
 
         $adapter = new Local('file://'.__DIR__.'/files');
