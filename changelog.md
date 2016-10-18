@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.30 - 2016-10-18
+
+### Altered
+
+* Lowered minimum PHP version to 5.5.9
+
 ## 1.0.29 - 2016-10-18
 
 ### Improved
