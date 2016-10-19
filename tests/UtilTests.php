@@ -101,6 +101,7 @@ class UtilTests extends \PHPUnit_Framework_TestCase
             ['dirname/./', 'dirname'],
             ['dirname/.', 'dirname'],
             ['./dir/../././', ''],
+            ['/something/deep/../../dirname', 'dirname'],
             ['00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'],
             ['/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'],
             ['\dirname\\\\subdir\\\\\\subsubdir', 'dirname\subdir\subsubdir'],
