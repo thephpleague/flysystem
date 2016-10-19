@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.31 - 2016-10-19
+
+### Fixed
+
+* Relative path resolving was too gready.
+
 ## 1.0.30 - 2016-10-18
 
 ### Altered
