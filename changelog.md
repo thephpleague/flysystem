@@ -10,7 +10,7 @@
 
 ### Fixed
 
-* Relative path resolving was too gready.
+* Relative path resolving was too greedy.
 
 ## 1.0.30 - 2016-10-18
 
