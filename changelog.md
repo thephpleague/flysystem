@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.32 - 2016-10-19
+
+### Fixed
+
+* Fixed listings on windows.
+
 ## 1.0.31 - 2016-10-19
 
 ### Fixed
