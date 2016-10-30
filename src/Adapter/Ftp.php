@@ -50,6 +50,11 @@ class Ftp extends AbstractFtpAdapter
     ];
 
     /**
+     * @var null|string
+     */
+    protected $ftpServerName = null;
+
+    /**
      * Set the transfer mode.
      *
      * @param int $mode
@@ -121,6 +126,8 @@ class Ftp extends AbstractFtpAdapter
         $this->login();
         $this->setConnectionPassiveMode();
         $this->setConnectionRoot();
+
+        $this->ftpServerName = $this->detectFtpServerName();
     }
 
     /**
@@ -353,7 +360,7 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => $path];
         }
 
-        $listing = $this->ftp_rawlist('-A ', str_replace('*', '\\*', $path));
+        $listing = $this->ftp_rawlist('-A', str_replace('*', '\\*', $path));
 
         if (empty($listing)) {
             return false;
@@ -503,9 +510,26 @@ class Ftp extends AbstractFtpAdapter
         }
     }
 
+    protected function detectFtpServerName()
+    {
+        $response = ftp_raw($this->getConnection(), 'HELP');
+        if (!$response) {
+            return null;
+        }
+
+        $response = implode("\n", $response);
+        if (stripos($response, 'Pure-FTPd')) {
+            return 'Pure-FTPd';
+        }
+
+        return null;
+    }
+
     protected function ftp_rawlist($options, $path)
     {
-        $path = str_replace(' ', '\ ', $path);
+        if ($this->ftpServerName == 'Pure-FTPd') {
+            $path = str_replace(' ', '\ ', $path);
+        }
         return ftp_rawlist($this->getConnection(), $options . ' ' . $path);
     }
 }
