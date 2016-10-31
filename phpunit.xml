@@ -14,6 +14,10 @@
     <testsuites>
         <testsuite name="flysystem/tests">
             <directory suffix=".php">./tests/</directory>
+            <exclude>./tests/functional/</exclude>
+        </testsuite>
+        <testsuite name="flysystem/tests/functional/ftp">
+            <directory suffix=".php">./tests/functional/ftp/suites/</directory>
         </testsuite>
     </testsuites>
     <filter>
