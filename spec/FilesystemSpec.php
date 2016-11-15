@@ -11,7 +11,7 @@ class FilesystemSpec extends ObjectBehavior
     protected $cache;
 
     /**
-     * @param League\Flysystem\AdapterInterface $adapter
+     * @param \League\Flysystem\AdapterInterface $adapter
      */
     public function let($adapter)
     {
@@ -31,7 +31,7 @@ class FilesystemSpec extends ObjectBehavior
     }
 
     /**
-     * @param League\Flysystem\Stub\PluginStub $plugin
+     * @param \League\Flysystem\Stub\PluginStub $plugin
      */
     public function it_should_delegate_plugin_calls($plugin)
     {
