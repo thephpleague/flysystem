@@ -21,7 +21,7 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param string $prefix
      *
-     * @return self
+     * @return void
      */
     public function setPathPrefix($prefix)
     {
