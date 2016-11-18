@@ -57,7 +57,7 @@ class MimeType
      */
     public static function detectByFilename($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         return empty($extension) ? 'text/plain' : static::detectByFileExtension($extension);
     }
