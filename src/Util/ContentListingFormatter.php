@@ -24,7 +24,7 @@ class ContentListingFormatter
      */
     public function __construct($directory, $recursive)
     {
-        $this->directory = $directory;
+        $this->directory = strtolower($directory);
         $this->recursive = $recursive;
     }
 
@@ -85,7 +85,7 @@ class ContentListingFormatter
             return true;
         }
 
-        return strpos($entry['path'], $this->directory . '/') === 0;
+        return strpos(strtolower($entry['path']), $this->directory . '/') === 0;
     }
 
     /**
@@ -97,7 +97,7 @@ class ContentListingFormatter
      */
     private function isDirectChild(array $entry)
     {
-        return Util::dirname($entry['path']) === $this->directory;
+        return strtolower(Util::dirname($entry['path'])) === $this->directory;
     }
 
     /**
