@@ -363,6 +363,27 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals('', $this->adapter->applyPathPrefix(''));
     }
 
+    public function testApplyPathPrefixToAbsolute()
+    {
+        $this->adapter->setPathPrefix('/foo');
+        $this->assertEquals('/foo/bar', $this->adapter->applyPathPrefix('/foo/bar'));
+    }
+
+    public function testRemovePathPrefix()
+    {
+        $this->adapter->setPathPrefix('/foo');
+        $this->assertEquals('/baz/bar', $this->adapter->removePathPrefix('/baz/bar'));
+        $this->assertEquals('bar', $this->adapter->removePathPrefix('/foo/bar'));
+    }
+
+    public function testHasPathPrefix()
+    {
+        $this->adapter->setPathPrefix('/foo');
+        $this->assertTrue($this->adapter->hasPathPrefix('/foo/bar'));
+        $this->assertFalse($this->adapter->hasPathPrefix('/baz/bar'));
+        $this->assertFalse($this->adapter->hasPathPrefix('foo/bar'));
+    }
+
     public function testConstructorWithLink()
     {
         if (IS_WINDOWS) {

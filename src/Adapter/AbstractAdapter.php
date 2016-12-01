@@ -45,6 +45,24 @@ abstract class AbstractAdapter implements AdapterInterface
     }
 
     /**
+     * Determine if the path contains the prefix.
+     *
+     * @param string  $path
+     *
+     * @return boolean
+     */
+    public function hasPathPrefix($path)
+    {
+        $pathPrefix = $this->getPathPrefix();
+
+        if ($pathPrefix === null) {
+            return true;
+        }
+
+        return substr($path, 0, strlen($pathPrefix)) === $pathPrefix;
+    }
+
+    /**
      * Prefix a path.
      *
      * @param string $path
@@ -53,6 +71,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function applyPathPrefix($path)
     {
+        if ($this->hasPathPrefix($path)) {
+            return $path;
+        }
+
         $path = ltrim($path, '\\/');
 
         if (strlen($path) === 0) {
@@ -75,6 +97,10 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function removePathPrefix($path)
     {
+        if (!$this->hasPathPrefix($path)) {
+            return $path;
+        }
+
         $pathPrefix = $this->getPathPrefix();
 
         if ($pathPrefix === null) {
