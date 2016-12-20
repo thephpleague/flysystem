@@ -100,6 +100,7 @@ __Delete Directories__
 ~~~ php
 $filesystem->deleteDir('path/to/directory');
 ~~~
+The above method will delete directories recursively
 
 __NOTE__: All paths used by Flysystem API are relative to the adapter root directory.
 
@@ -162,7 +163,9 @@ $contents = $filesystem->listContents('some/dir', true);
 __List paths__
 
 ~~~ php
-$paths = $filemanager->listPaths();
+$filesystem->addPlugin(new ListPaths());
+
+$paths = $filesystem->listPaths();
 
 foreach ($paths as $path) {
     echo $path;
