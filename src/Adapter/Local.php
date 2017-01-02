@@ -497,6 +497,10 @@ class Local extends AbstractAdapter
      */
     public function applyPathPrefix($path)
     {
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            // if is windows do not prefix path
+            return $path;
+        }
         $prefixedPath = parent::applyPathPrefix($path);
 
         return str_replace('/', DIRECTORY_SEPARATOR, $prefixedPath);
