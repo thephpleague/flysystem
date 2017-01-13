@@ -9,7 +9,9 @@ class PassiveWritePluginTests extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $this->filesystem = Mockery::mock(
+            'League\Flysystem\FilesystemInterface'
+        );
         $this->plugin = new PassiveWrite();
         $this->plugin->setFilesystem($this->filesystem);
     }
@@ -17,21 +19,25 @@ class PassiveWritePluginTests extends PHPUnit_Framework_TestCase
     public function testPluginSuccess()
     {
         $this->assertSame('passiveWrite', $this->plugin->getMethod());
-        $this->filesystem->shouldReceive('write')->with('path', 'contents')->andReturn(true);
+        $this->filesystem->shouldReceive('write')
+            ->with('path', 'contents', [])
+            ->andReturn(true);
         $this->assertTrue($this->plugin->handle('path', 'contents'));
     }
 
     public function testPluginFileExists()
     {
         $this->filesystem->shouldReceive('write')
-            ->with('path', 'contents')
+            ->with('path', 'contents', [])
             ->andThrow('League\Flysystem\FileExistsException', 'path');
         $this->assertTrue($this->plugin->handle('path', 'newpath'));
     }
 
     public function testPluginFail()
     {
-        $this->filesystem->shouldReceive('write')->with('path', 'contents')->andReturn(false);
+        $this->filesystem->shouldReceive('write')
+            ->with('path', 'contents', [])
+            ->andReturn(false);
         $this->assertFalse($this->plugin->handle('path', 'contents'));
     }
 }
