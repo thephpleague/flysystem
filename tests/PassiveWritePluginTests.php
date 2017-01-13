@@ -30,7 +30,7 @@ class PassiveWritePluginTests extends PHPUnit_Framework_TestCase
         $this->filesystem->shouldReceive('write')
             ->with('path', 'contents', [])
             ->andThrow('League\Flysystem\FileExistsException', 'path');
-        $this->assertTrue($this->plugin->handle('path', 'newpath'));
+        $this->assertTrue($this->plugin->handle('path', 'contents'));
     }
 
     public function testPluginFail()
