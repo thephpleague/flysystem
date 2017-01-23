@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.33 - 2017-01-23
+
+### Fixed
+
+* Path traversing possibility on Windows.
+
 ## 1.0.32 - 2016-10-19
 
 ### Fixed
