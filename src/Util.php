@@ -81,8 +81,10 @@ class Util
      */
     public static function normalizePath($path)
     {
+        $isWindowsPath = strpos($path, '\\') !== false;
+        $normalized = str_replace('\\', '/', $path);
         // Remove any kind of funky unicode whitespace
-        $normalized = preg_replace('#\p{C}+|^\./#u', '', $path);
+        $normalized = preg_replace('#\p{C}+|^\./#u', '', $normalized);
         $normalized = static::normalizeRelativePath($normalized);
 
         if (preg_match('#(^|/)\.{2}(/|$)#', $normalized)) {
@@ -93,6 +95,10 @@ class Util
 
         $normalized = preg_replace('#\\\{2,}#', '\\', trim($normalized, '\\'));
         $normalized = preg_replace('#/{2,}#', '/', trim($normalized, '/'));
+
+        if ($isWindowsPath) {
+            return str_replace('/', '\\', $normalized);
+        }
 
         return $normalized;
     }
