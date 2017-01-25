@@ -195,6 +195,23 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($path, $this->adapter->removePathPrefix($path));
     }
 
+    public function testWindowsPrefix()
+    {
+        $path = 'some' . DIRECTORY_SEPARATOR . 'path.ext';
+        $expected = 'c:' . DIRECTORY_SEPARATOR . $path;
+
+        $this->adapter->setPathPrefix('c:/');
+        $prefixed = $this->adapter->applyPathPrefix($path);
+        $this->assertEquals($expected, $prefixed);
+        $this->assertEquals($path, $this->adapter->removePathPrefix($prefixed));
+
+        $expected = 'c:\\\\some\\dir' . DIRECTORY_SEPARATOR . $path;
+        $this->adapter->setPathPrefix('c:\\\\some\\dir\\');
+        $prefixed = $this->adapter->applyPathPrefix($path);
+        $this->assertEquals($expected, $prefixed);
+        $this->assertEquals($path, $this->adapter->removePathPrefix($prefixed));
+    }
+
     public function testGetPathPrefix()
     {
         $this->assertEquals(realpath($this->root), realpath($this->adapter->getPathPrefix()));
