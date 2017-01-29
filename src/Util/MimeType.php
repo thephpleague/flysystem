@@ -3,6 +3,7 @@
 namespace League\Flysystem\Util;
 
 use Finfo;
+use ErrorException;
 
 /**
  * @internal
@@ -21,11 +22,13 @@ class MimeType
         if ( ! class_exists('Finfo') || ! is_string($content)) {
             return;
         }
-
-        $finfo = new Finfo(FILEINFO_MIME_TYPE);
-        $mimeType = $finfo->buffer($content);
-
-        return $mimeType ?: null;
+        try {
+            $finfo = new Finfo(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo->buffer($content);
+            return $mimeType ?: null;
+        } catch( ErrorException $e ) {
+            return null;
+        }
     }
 
     /**
