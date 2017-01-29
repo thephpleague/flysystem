@@ -24,10 +24,10 @@ class MimeType
         }
         try {
             $finfo = new Finfo(FILEINFO_MIME_TYPE);
-            $mimeType = $finfo->buffer($content);
-            return $mimeType ?: null;
+
+            return $finfo->buffer($content) ?: null;
         } catch( ErrorException $e ) {
-            return null;
+            // This is caused by an array to string conversion error.
         }
     }
 
