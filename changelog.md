@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.34 - 2017-01-30
+
+### Fixed
+
+* Account for a Finfo buffer error which causes an array to string convertion.
+* Simplified path handling for Windows.
+
 ## 1.0.33 - 2017-01-23
 
 ### Fixed
