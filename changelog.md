@@ -1,10 +1,16 @@
 # Changelog
 
+## 1.0.35 - 2017-02-09
+
+### Fixed 
+
+* Creating a directory in FTP checked whether a directory already existed, the check was not strict enough.
+
 ## 1.0.34 - 2017-01-30
 
 ### Fixed
 
-* Account for a Finfo buffer error which causes an array to string convertion.
+* Account for a Finfo buffer error which causes an array to string conversion.
 * Simplified path handling for Windows.
 
 ## 1.0.33 - 2017-01-23
