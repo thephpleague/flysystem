@@ -25,7 +25,7 @@ $client = S3Client::factory([
     'region' => '[aws-region]',
 ]);
 
-$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional-prefix');
+$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix');
 
 $filesystem = new Filesystem($adapter);
 ~~~
@@ -33,7 +33,7 @@ $filesystem = new Filesystem($adapter);
 To enable [reduced redunancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
 
 ~~~ php
-$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional-prefix', [
+$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
     'StorageClass'  =>  'REDUCED_REDUNDANCY',
 ]);
 ~~~

@@ -28,5 +28,5 @@ $client = S3Client::factory([
     'version' => 'latest|version',
 ]);
 
-$adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional-prefix');
+$adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
 ~~~
