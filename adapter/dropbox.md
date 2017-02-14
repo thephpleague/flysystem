@@ -24,7 +24,7 @@ use League\Flysystem\Filesystem;
 use Dropbox\Client;
 
 $client = new Client($accessToken, $appSecret);
-$adapter = new DropboxAdapter($client, [$prefix]);
+$adapter = new DropboxAdapter($client, 'optional/path/prefix');
 
 $filesystem = new Filesystem($adapter);
 ~~~

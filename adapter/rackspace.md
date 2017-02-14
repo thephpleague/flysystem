@@ -28,5 +28,5 @@ $client = new OpenStack(Rackspace::UK_IDENTITY_ENDPOINT, [
 $store = $client->objectStoreService('cloudFiles', 'LON');
 $container = $store->getContainer('flysystem');
 
-$filesystem = new Filesystem(new RackspaceAdapter($container));
+$filesystem = new Filesystem(new RackspaceAdapter($container, 'optional/path/prefix'));
 ~~~
