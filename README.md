@@ -90,6 +90,7 @@ Want to get started quickly? Check out some of these integrations:
 * Gaufrette: https://github.com/jenkoian/flysystem-gaufrette
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
+* Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
 
 ## Caching
 
