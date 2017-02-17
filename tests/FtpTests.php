@@ -205,13 +205,13 @@ function ftp_rawlist($connection, $directory)
             '06-09-2016  12:09PM                  684 file3.txt',
         ];
     }
-    
+
     if (strpos($directory, 'file4.txt') !== false) {
         return [
             '2016-05-23  12:09PM                  684 file4.txt',
         ];
     }
-    
+
     if (strpos($directory, 'dir1') !== false) {
         return [
             '2015-05-23  12:09       <DIR>          dir1',
@@ -534,7 +534,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1473163740, $metadata['timestamp']);
         $this->assertEquals('public', $metadata['visibility']);
         $this->assertEquals(684, $metadata['size']);
-        
+
         $metadata = $adapter->getMetadata('file4.txt');
         $this->assertInternalType('array', $metadata);
         $this->assertEquals('file', $metadata['type']);
@@ -542,7 +542,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1464005340, $metadata['timestamp']);
         $this->assertEquals('public', $metadata['visibility']);
         $this->assertEquals(684, $metadata['size']);
-        
+
         $metadata = $adapter->getMetadata('dir1');
         $this->assertEquals('dir', $metadata['type']);
         $this->assertEquals('dir1', $metadata['path']);
@@ -589,10 +589,12 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
         $listing = $adapter->listContents('lastfiledir');
 
-        $last_modified_file = null;
+        $last_modified_file = reset($listing);
         foreach ($listing as $file) {
-            if (empty($last_modified_file)
-                or $adapter->getTimestamp($last_modified_file['path']) < $adapter->getTimestamp($file['path'])) {
+            $file_time = $adapter->getTimestamp($file['path'])['timestamp'];
+            $last_file_time = $adapter->getTimestamp($last_modified_file['path'])['timestamp'];
+
+            if ($last_file_time < $file_time) {
                 $last_modified_file = $file;
             }
         }
