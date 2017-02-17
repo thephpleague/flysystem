@@ -492,7 +492,7 @@ class Ftp extends AbstractFtpAdapter
         try {
             return is_resource($this->connection) && ftp_rawlist($this->connection, '/') !== false;
         } catch (ErrorException $e) {
-            fclose($this->connection);
+            is_resource($this->connection) && fclose($this->connection);
             $this->connection = null;
 
             if (strpos($e->getMessage(), 'ftp_rawlist') === false) {
