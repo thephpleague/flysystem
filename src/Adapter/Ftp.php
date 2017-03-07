@@ -512,7 +512,11 @@ class Ftp extends AbstractFtpAdapter
 
     protected function detectFtpServerName()
     {
-        $response = ftp_raw($this->getConnection(), 'HELP');
+        if (!$this->connection) {
+            return null;
+        }
+        
+        $response = ftp_raw($this->connection, 'HELP');
         if (!$response) {
             return null;
         }
