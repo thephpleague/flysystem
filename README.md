@@ -91,6 +91,7 @@ Want to get started quickly? Check out some of these integrations:
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
+* Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
 
 ## Caching
 
