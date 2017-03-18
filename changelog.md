@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.36 - 2017-03-18
+
+### Fixed
+
+* Ensure an FTP connection is still a resource before closing it.
+* Made return values of some internal adapters consistent.
+* Made 0 a valid FTP username.
+* Docblock class reference fixes.
+* Created a more specific exception for when a mount manage is not found (with BC).
+
 ## 1.0.35 - 2017-02-09
 
 ### Fixed 
