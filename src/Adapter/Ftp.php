@@ -50,6 +50,11 @@ class Ftp extends AbstractFtpAdapter
     ];
 
     /**
+     * @var null|string
+     */
+    protected $ftpServerName = null;
+
+    /**
      * Set the transfer mode.
      *
      * @param int $mode
@@ -121,6 +126,8 @@ class Ftp extends AbstractFtpAdapter
         $this->login();
         $this->setConnectionPassiveMode();
         $this->setConnectionRoot();
+
+        $this->ftpServerName = $this->detectFtpServerName();
     }
 
     /**
@@ -355,7 +362,7 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => $path];
         }
 
-        $listing = ftp_rawlist($connection, '-A ' . str_replace('*', '\\*', $path));
+        $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
 
         if (empty($listing)) {
             return false;
@@ -458,7 +465,7 @@ class Ftp extends AbstractFtpAdapter
         }
 
         $options = $recursive ? '-alnR' : '-aln';
-        $listing = ftp_rawlist($this->getConnection(), $options . ' ' . $directory);
+        $listing = $this->ftpRawlist($options, $directory);
 
         return $listing ? $this->normalizeListing($listing, $directory) : [];
     }
@@ -470,7 +477,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContentsRecursive($directory)
     {
-        $listing = $this->normalizeListing(ftp_rawlist($this->getConnection(), '-aln' . ' ' . $directory) ?: []);
+        $listing = $this->normalizeListing($this->ftpRawlist('-aln', $directory) ?: []);
         $output = [];
 
         foreach ($listing as $directory) {
@@ -503,5 +510,32 @@ class Ftp extends AbstractFtpAdapter
 
             return false;
         }
+    }
+
+    protected function detectFtpServerName()
+    {
+        if (!$this->connection) {
+            return null;
+        }
+        
+        $response = ftp_raw($this->connection, 'HELP');
+        if (!$response) {
+            return null;
+        }
+
+        $response = implode("\n", $response);
+        if (stripos($response, 'Pure-FTPd')) {
+            return 'Pure-FTPd';
+        }
+
+        return null;
+    }
+
+    protected function ftpRawlist($options, $path)
+    {
+        if ($this->ftpServerName == 'Pure-FTPd') {
+            $path = str_replace(' ', '\ ', $path);
+        }
+        return ftp_rawlist($this->getConnection(), $options . ' ' . $path);
     }
 }
