@@ -50,9 +50,9 @@ class Ftp extends AbstractFtpAdapter
     ];
 
     /**
-     * @var null|string
+     * @var bool
      */
-    protected $ftpServerName = null;
+    protected $isPureFtpd;
 
     /**
      * Set the transfer mode.
@@ -126,8 +126,7 @@ class Ftp extends AbstractFtpAdapter
         $this->login();
         $this->setConnectionPassiveMode();
         $this->setConnectionRoot();
-
-        $this->ftpServerName = $this->detectFtpServerName();
+        $this->isPureFtpd = $this->isPureFtpdServer();
     }
 
     /**
@@ -174,11 +173,12 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function login()
     {
-        set_error_handler(
-            function () {
-            }
+        set_error_handler(function () {});
+        $isLoggedIn = ftp_login(
+            $this->connection,
+            $this->getUsername(),
+            $this->getPassword()
         );
-        $isLoggedIn = ftp_login($this->connection, $this->getUsername(), $this->getPassword());
         restore_error_handler();
 
         if ( ! $isLoggedIn) {
@@ -512,28 +512,28 @@ class Ftp extends AbstractFtpAdapter
         }
     }
 
-    protected function detectFtpServerName()
+    /**
+     * @return null|string
+     */
+    protected function isPureFtpdServer()
     {
-        if (!$this->connection) {
-            return null;
-        }
-        
-        $response = ftp_raw($this->connection, 'HELP');
-        if (!$response) {
-            return null;
-        }
+        $connection = $this->getConnection();
+        $response = ftp_raw($connection, 'HELP');
 
-        $response = implode("\n", $response);
-        if (stripos($response, 'Pure-FTPd')) {
-            return 'Pure-FTPd';
-        }
-
-        return null;
+        return stripos(implode(' ', $response), 'Pure-FTPd') !== false;
     }
 
+    /**
+     * The ftp_rawlist function with optional escaping.
+     *
+     * @param string $options
+     * @param string $path
+     *
+     * @return array
+     */
     protected function ftpRawlist($options, $path)
     {
-        if ($this->ftpServerName == 'Pure-FTPd') {
+        if ($this->isPureFtpd) {
             $path = str_replace(' ', '\ ', $path);
         }
         return ftp_rawlist($this->getConnection(), $options . ' ' . $path);
