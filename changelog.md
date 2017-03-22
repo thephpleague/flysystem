@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.37 - 2017-03-22
+
+### Fixed
+
+* Space escaping for Pure-FTPd in the FTP adapter.
+
 ## 1.0.36 - 2017-03-18
 
 ### Fixed
