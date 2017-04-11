@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0"
+        "php": ">=5.5.9"
     },
     "require-dev": {
         "ext-fileinfo": "*",
