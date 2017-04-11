@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use ErrorException;
 use League\Flysystem\Config;
+use League\Flysystem\Filesystem;
 
 class FtpTests extends \PHPUnit_Framework_TestCase
 {
@@ -18,17 +19,45 @@ class FtpTests extends \PHPUnit_Framework_TestCase
 
     protected function getResourceAbsolutePath($path)
     {
-        return static::RESOURCES_PATH . $path;
+        return implode('/', array_filter([
+            rtrim(static::RESOURCES_PATH, '/'),
+            trim($this->root, '/'),
+            ltrim($path, '/')
+        ]));
+    }
+
+    protected function createResourceDir($path)
+    {
+        if (empty($path)) {
+            return;
+        }
+        $absolutePath = $this->getResourceAbsolutePath($path);
+        if (!is_dir($absolutePath)) {
+            $umask = umask(0);
+            mkdir($absolutePath, 0777, true);
+            umask($umask);
+        }
+    }
+
+    protected function createResourceFile($path, $filedata = '')
+    {
+        $this->createResourceDir(dirname($path));
+        $absolutePath = $this->getResourceAbsolutePath($path);
+        file_put_contents($absolutePath, $filedata);
     }
 
     protected function clearResources()
     {
         exec('rm -rf ' . escapeshellarg(static::RESOURCES_PATH) . '*');
         exec('rm -rf ' . escapeshellarg(static::RESOURCES_PATH) . '.* 2>/dev/null');
+        clearstatcache();
     }
 
     public function setUp()
     {
+        $this->root = '';
+        $this->createResourceDir('/');
+
         $this->adapter = new Ftp([
             'host' => getenv('FTP_ADAPTER_HOST'),
             'port' => getenv('FTP_ADAPTER_PORT'),
@@ -36,6 +65,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
             'password' => getenv('FTP_ADAPTER_PASSWORD'),
             'ssl' => getenv('FTP_ADAPTER_SSL') == 'true',
             'timeout' => getenv('FTP_ADAPTER_TIMEOUT') ?: 35,
+            'root' => $this->root,
         ]);
     }
 
@@ -51,7 +81,7 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     public function testRead($filename)
     {
         $filedata = 'testdata';
-        file_put_contents($this->getResourceAbsolutePath($filename), $filedata);
+        $this->createResourceFile($filename, $filedata);
 
         $response = $this->adapter->read($filename);
         $this->assertEquals($filedata, $response['contents']);
@@ -74,9 +104,20 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     public function testHas($filename)
     {
         $filedata = 'testdata';
-        file_put_contents($this->getResourceAbsolutePath($filename), $filedata);
+        $this->createResourceFile($filename, $filedata);
 
         $this->assertTrue((bool) $this->adapter->has($filename));
+    }
+
+    /**
+     * @dataProvider filepathProvider
+     */
+    public function testHasInSubFolder($filepath)
+    {
+        $filedata = 'testdata';
+        $this->createResourceFile($filepath, $filedata);
+
+        $this->assertTrue((bool) $this->adapter->has($filepath));
     }
 
     public function filenameProvider()
@@ -86,6 +127,13 @@ class FtpTests extends \PHPUnit_Framework_TestCase
             ['..test.txt'],
             ['test 1.txt'],
             ['тест.txt'],
+        ];
+    }
+
+    public function filepathProvider()
+    {
+        return [
+            ['test/test.txt'],
         ];
     }
 }
