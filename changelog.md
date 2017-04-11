@@ -1,5 +1,64 @@
 # Changelog
 
+## 1.0.37 - 2017-03-22
+
+### Fixed
+
+* Space escaping for Pure-FTPd in the FTP adapter.
+
+## 1.0.36 - 2017-03-18
+
+### Fixed
+
+* Ensure an FTP connection is still a resource before closing it.
+* Made return values of some internal adapters consistent.
+* Made 0 a valid FTP username.
+* Docblock class reference fixes.
+* Created a more specific exception for when a mount manage is not found (with BC).
+
+## 1.0.35 - 2017-02-09
+
+### Fixed 
+
+* Creating a directory in FTP checked whether a directory already existed, the check was not strict enough.
+
+## 1.0.34 - 2017-01-30
+
+### Fixed
+
+* Account for a Finfo buffer error which causes an array to string conversion.
+* Simplified path handling for Windows.
+
+## 1.0.33 - 2017-01-23
+
+### Fixed
+
+* Path traversing possibility on Windows.
+
+## 1.0.32 - 2016-10-19
+
+### Fixed
+
+* Fixed listings on windows.
+
+## 1.0.31 - 2016-10-19
+
+### Fixed
+
+* Relative path resolving was too greedy.
+
+## 1.0.30 - 2016-10-18
+
+### Altered
+
+* Lowered minimum PHP version to 5.5.9
+
+## 1.0.29 - 2016-10-18
+
+### Improved
+
+* All FTP-like adapters now have a safe storage for usernames and passwords.
+
 ## 1.0.28 - 2016-10-07
 
 ### Fixed

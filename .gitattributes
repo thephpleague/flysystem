@@ -1,5 +1,6 @@
 * text=auto
 
+/build export-ignore
 /spec export-ignore
 /stub export-ignore
 /tests export-ignore

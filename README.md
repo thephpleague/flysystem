@@ -38,7 +38,7 @@ You can also use Flysystem without using Composer by registering an autoloader f
 spl_autoload_register(function($class) {
     $prefix = 'League\\Flysystem\\';
 
-    if ( ! substr($class, 0, 17) === $prefix) {
+    if (substr($class, 0, 17) !== $prefix) {
         return;
     }
 
@@ -71,6 +71,7 @@ Want to get started quickly? Check out some of these integrations:
 * Local
 * Amazon Web Services - S3 V2: https://github.com/thephpleague/flysystem-aws-s3-v2
 * Amazon Web Services - S3 V3: https://github.com/thephpleague/flysystem-aws-s3-v3
+* Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
 * Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
 * Dropbox: https://github.com/thephpleague/flysystem-dropbox
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
@@ -88,6 +89,9 @@ Want to get started quickly? Check out some of these integrations:
 * SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
 * Gaufrette: https://github.com/jenkoian/flysystem-gaufrette
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
+* Google Drive: https://github.com/nao-pon/flysystem-google-drive
+* Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
+* Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
 
 ## Caching
 

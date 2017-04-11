@@ -9,8 +9,14 @@ class StreamedCopyStub
 {
     use StreamedCopyTrait;
 
+    /**
+     * @var resource
+     */
     private $readResponse;
 
+    /**
+     * @var resource|null
+     */
     private $writeResponse;
 
     public function __construct($readResponse, $writeResponse = null)
@@ -20,7 +26,8 @@ class StreamedCopyStub
     }
 
     /**
-     * @param string $path
+     * @param  string   $path
+     * @return resource
      */
     public function readStream($path)
     {
@@ -28,7 +35,10 @@ class StreamedCopyStub
     }
 
     /**
-     * @param string $path
+     * @param  string   $path
+     * @param  resource $resource
+     * @param  Config   $config
+     * @return resource
      */
     public function writeStream($path, $resource, Config $config)
     {
