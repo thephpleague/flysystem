@@ -27,7 +27,7 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @return array|false
+     * @return resource|false
      */
     public function readStream($path);
 
