@@ -9,22 +9,21 @@ title: Dropbox Adapter
 ## Installation
 
 ~~~ bash
-composer require league/flysystem-dropbox
+composer require spatie/flysystem-dropbox
 ~~~
 
 ## Usage
 
-Visit [https://www.dropbox.com/developers/apps](https://www.dropbox.com/developers/apps) and get your "*App secret*".
-
-You can also generate OAuth access token for testing using the Dropbox App Console without going through the authorization flow.
+A token can be generated in the [App Console](https://www.dropbox.com/developers/apps) for any Dropbox API app. You'll find more info at [the Dropbox Developer Blog](https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/).
 
 ~~~ php
-use League\Flysystem\Dropbox\DropboxAdapter;
 use League\Flysystem\Filesystem;
-use Dropbox\Client;
+use Spatie\Dropbox\Client;
+use Spatie\FlysystemDropbox\DropboxAdapter;
 
-$client = new Client($accessToken, $appSecret);
-$adapter = new DropboxAdapter($client, 'optional/path/prefix');
+$client = new Client($authorizationToken);
+
+$adapter = new DropboxAdapter($client);
 
 $filesystem = new Filesystem($adapter);
 ~~~
