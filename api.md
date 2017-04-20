@@ -11,41 +11,46 @@ title: API
 __Write Files__
 
 ~~~ php
-$filesystem->write('path/to/file.txt', 'contents');
+array $result = $filesystem->write('path/to/file.txt', 'contents');
 ~~~
+
+The array will contain at least the keys path and contents; it may also
+contain visibility, mimetype and size.
+
 
 __Update Files__
 
 ~~~ php
-$filesystem->update('path/to/file.txt', 'new contents');
+array $result = $filesystem->update('path/to/file.txt', 'new contents');
 ~~~
 
-__Write or Update Files__
+The array will contain at least the keys path and contents; it may also
+contain visibility, mimetype and size.
 
-~~~ php
-$filesystem->put('path/to/file.txt', 'contents');
-~~~
 
 __Read Files__
 
 ~~~ php
-$contents = $filesystem->read('path/to/file.txt');
+array $result = $filesystem->read('path/to/file.txt');
 ~~~
+
+The array will contain the keys path and contents.
 
 __Check if a file exists__
 
 ~~~ php
-$exists = $filesystem->has('path/to/file.txt');
+boolean $bool = $filesystem->has('path/to/file.txt');
 ~~~
 
 __NOTE__: This only has consistent behaviour for files, not directories. Directories
 are less important in Flysystem, they're created implicitly and often ignored because
-not every adapter (filesystem type) supports directories.
+not every adapter (filesystem type) supports directories. This method is optional but
+most adapters implement it.
 
 __Delete Files__
 
 ~~~ php
-$filesystem->delete('path/to/file.txt');
+boolean $bool = $filesystem->delete('path/to/file.txt');
 ~~~
 
 __Read and Delete__
@@ -54,51 +59,70 @@ __Read and Delete__
 $contents = $filesystem->readAndDelete('path/to/file.txt');
 ~~~
 
+__NOTE__: This method is deprecated.
+
 __Rename Files__
 
 ~~~ php
-$filesystem->rename('filename.txt', 'newname.txt');
+boolean $bool = $filesystem->rename('filename.txt', 'newname.txt');
 ~~~
 
 __Copy Files__
 
 ~~~ php
-$filesystem->copy('filename.txt', 'duplicate.txt');
+boolean $bool = $filesystem->copy('filename.txt', 'duplicate.txt');
 ~~~
 
 __Get Mimetypes__
 
 ~~~ php
-$mimetype = $filesystem->getMimetype('path/to/file.txt');
+array $result = $filesystem->getMimetype('path/to/file.txt');
 ~~~
+
+The array will contain the key mimetype and may optionally contain the keys path,
+type, size, and timestamp.
 
 __Get Timestamps__
 
 ~~~ php
-$timestamp = $filesystem->getTimestamp('path/to/file.txt');
+array $result = $filesystem->getTimestamp('path/to/file.txt');
 ~~~
+
+The array will contain the key timestamp and may optionally contain the keys path,
+type, size, and mimetype.
 
 __Get File Sizes__
 
 ~~~ php
-$size = $filesystem->getSize('path/to/file.txt');
+array $result = $filesystem->getSize('path/to/file.txt');
 ~~~
+
+The array will contain the key size and may optionally contain the keys path,
+type, timestamp, and mimetype.
 
 __Create Directories__
 
 ~~~ php
 $filesystem->createDir('path/to/nested/directory');
 ~~~
-Directories are also made implicitly when writing to a deeper path
+
+Directories are also made implicitly when writing to a deeper path.
+
+__NOTE__: The array will contain the key path and may optionally contain the keys
+type, size, timestamp, and mimetype.
+
 
 ~~~ php
-$filesystem->write('path/to/file.txt', 'contents');
+array $result = $filesystem->write('path/to/file.txt', 'contents');
 ~~~
+
+The array will contain the keys contents and mimetype. It may optionally contain the keys
+type, size, visibility, and path.
 
 __Delete Directories__
 
 ~~~ php
-$filesystem->deleteDir('path/to/directory');
+boolean $bool = $filesystem->deleteDir('path/to/directory');
 ~~~
 The above method will delete directories recursively
 
