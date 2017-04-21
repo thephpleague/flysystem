@@ -73,7 +73,7 @@ Want to get started quickly? Check out some of these integrations:
 * Amazon Web Services - S3 V3: https://github.com/thephpleague/flysystem-aws-s3-v3
 * Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
 * Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
-* Dropbox: https://github.com/thephpleague/flysystem-dropbox
+* Dropbox: https://github.com/spatie/flysystem-dropbox
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
 * Ftp
 * Sftp (through phpseclib): https://github.com/thephpleague/flysystem-sftp
