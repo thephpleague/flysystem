@@ -514,8 +514,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function isPureFtpdServer()
     {
-        $connection = $this->getConnection();
-        $response = ftp_raw($connection, 'HELP');
+        $response = ftp_raw($this->connection, 'HELP');
 
         return stripos(implode(' ', $response), 'Pure-FTPd') !== false;
     }
