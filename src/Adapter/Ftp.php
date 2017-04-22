@@ -195,7 +195,7 @@ class Ftp extends AbstractFtpAdapter
      */
     public function disconnect()
     {
-        if ($this->isConnected()) {
+        if (is_resource($this->connection)) {
             ftp_close($this->connection);
         }
 
@@ -501,9 +501,6 @@ class Ftp extends AbstractFtpAdapter
         try {
             return is_resource($this->connection) && ftp_rawlist($this->connection, '/') !== false;
         } catch (ErrorException $e) {
-            is_resource($this->connection) && fclose($this->connection);
-            $this->connection = null;
-
             if (strpos($e->getMessage(), 'ftp_rawlist') === false) {
                 throw $e;
             }
@@ -517,8 +514,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function isPureFtpdServer()
     {
-        $connection = $this->getConnection();
-        $response = ftp_raw($connection, 'HELP');
+        $response = ftp_raw($this->connection, 'HELP');
 
         return stripos(implode(' ', $response), 'Pure-FTPd') !== false;
     }
