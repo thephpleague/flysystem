@@ -120,12 +120,24 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertTrue((bool) $this->adapter->has($filepath));
     }
 
+    /**
+     * @dataProvider filepathProvider
+     */
+    public function testListContents($filepath)
+    {
+        $filedata = 'testdata';
+        $this->createResourceFile($filepath, $filedata);
+
+        $this->assertEquals(1, count($this->adapter->listContents(dirname($filepath))));
+    }
+
     public function filenameProvider()
     {
         return [
             ['test.txt'],
             ['..test.txt'],
             ['test 1.txt'],
+            ['test  2.txt'],
             ['тест.txt'],
         ];
     }
@@ -134,6 +146,10 @@ class FtpTests extends \PHPUnit_Framework_TestCase
     {
         return [
             ['test/test.txt'],
+            ['тёст/тёст.txt'],
+            ['test 1/test.txt'],
+            ['test/test 1.txt'],
+            ['test  1/test  2.txt'],
         ];
     }
 }
