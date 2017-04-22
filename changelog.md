@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.38 - 2017-04-22
+
+### Fixed
+
+* Pure-FTPd now escapes the first call to rawlist too.
+
+### Improved
+
+* You can now optionally put the FTP adapter in `utf8`-mode by setting the `utf8` setting to `true`.
+
 ## 1.0.37 - 2017-03-22
 
 ### Fixed
