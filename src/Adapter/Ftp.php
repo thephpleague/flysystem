@@ -30,6 +30,11 @@ class Ftp extends AbstractFtpAdapter
     protected $recurseManually = false;
 
     /**
+     * @var bool
+     */
+    protected $utf8 = false;
+
+    /**
      * @var array
      */
     protected $configurable = [
@@ -47,6 +52,7 @@ class Ftp extends AbstractFtpAdapter
         'systemType',
         'ignorePassiveAddress',
         'recurseManually',
+        'utf8',
     ];
 
     /**
@@ -109,6 +115,14 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
+     * @param bool $utf8
+     */
+    public function setUtf8($utf8) 
+    {
+        $this->utf8 = (bool) $utf8;
+    }
+
+    /**
      * Connect to the FTP server.
      */
     public function connect()
@@ -124,9 +138,25 @@ class Ftp extends AbstractFtpAdapter
         }
 
         $this->login();
+        $this->setUtf8Mode();
         $this->setConnectionPassiveMode();
         $this->setConnectionRoot();
         $this->isPureFtpd = $this->isPureFtpdServer();
+    }
+
+    /**
+     * Set the connection to UTF-8 mode.
+     */
+    protected function setUtf8Mode()
+    {
+        if ($this->utf8) {
+            $response = ftp_raw($this->connection, "OPTS UTF8 ON");
+            if (substr($response[0], 0, 3) !== '200') {
+                throw new RuntimeException(
+                    'Could not set UTF-8 mode for connection: ' . $this->getHost() . '::' . $this->getPort()
+                );
+            }
+        }
     }
 
     /**
