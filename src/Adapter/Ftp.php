@@ -529,9 +529,11 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function ftpRawlist($options, $path)
     {
+        $connection = $this->getConnection();
+        
         if ($this->isPureFtpd) {
             $path = str_replace(' ', '\ ', $path);
         }
-        return ftp_rawlist($this->getConnection(), $options . ' ' . $path);
+        return ftp_rawlist($connection, $options . ' ' . $path);
     }
 }
