@@ -125,6 +125,10 @@ function ftp_pwd($connection)
 
 function ftp_raw($connection, $command)
 {
+	if ($command === 'OPTS UTF8 ON') {
+        return [0 => '200 UTF8 set to on'];
+    }
+    
     if ($command === 'STAT syno.not.found') {
         return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
