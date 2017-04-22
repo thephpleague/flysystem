@@ -32,7 +32,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @var bool
      */
-    protected $utf8 = true;
+    protected $utf8 = false;
 
     /**
      * @var array
