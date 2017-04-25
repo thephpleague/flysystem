@@ -394,7 +394,7 @@ class Ftp extends AbstractFtpAdapter
 
         $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
 
-        if (empty($listing)) {
+        if (empty($listing) || in_array('total 0', $listing, true)) {
             return false;
         }
 

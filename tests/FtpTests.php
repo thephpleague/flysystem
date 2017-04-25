@@ -107,7 +107,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if (in_array($directory, ['file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
+    if (in_array($directory, ['rawlist-total-0.txt', 'file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
         return false;
     }
 
@@ -252,8 +252,14 @@ function ftp_rawlist($connection, $directory)
 
     if (strpos($directory, 'file1.with-total-line.txt') !== false) {
         return [
-            'total 0',
+            'total 1',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+    }
+
+    if (strpos($directory, 'rawlist-total-0.txt') !== false) {
+        return [
+            'total 0',
         ];
     }
 
@@ -493,6 +499,15 @@ class FtpTests extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file1.txt', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testHasWithTotalZero()
+    {
+        $adapter = new Ftp($this->options);
+        $this->assertFalse($adapter->getMetadata('rawlist-total-0.txt'));
     }
 
     /**
