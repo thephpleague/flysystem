@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.39 - 2017-04-25
+
+### Fixed
+
+* Some FTP servers return the `total` of 0 when a file doesn't exist instead of saying it doesn't exist. 
+
 ## 1.0.38 - 2017-04-22
 
 ### Fixed
