@@ -115,4 +115,18 @@ interface AdapterInterface extends ReadInterface
      * @return array|false file meta data
      */
     public function setVisibility($path, $visibility);
+
+    /**
+     * Returns whether the adapter requires update to be called if path exists
+     *
+     * @return bool
+     */
+    public function putRequiresUpdate();
+
+    /**
+     * Returns whether the adapter requires update to be called if path exists for a stream
+     *
+     * @return bool
+     */
+    public function putStreamRequiresUpdate();
 }

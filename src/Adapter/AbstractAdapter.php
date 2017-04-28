@@ -17,6 +17,16 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $pathSeparator = '/';
 
     /**
+     * @var bool
+     */
+    protected $putRequiresUpdate = true;
+
+    /**
+     * @var bool
+     */
+    protected $putStreamRequiresUpdate = true;
+
+    /**
      * Set the path prefix.
      *
      * @param string $prefix
@@ -67,5 +77,25 @@ abstract class AbstractAdapter implements AdapterInterface
     public function removePathPrefix($path)
     {
         return substr($path, strlen($this->getPathPrefix()));
+    }
+
+    /**
+     * Returns whether the adapter requires update to be called if path exists
+     *
+     * @return bool
+     */
+    public function putRequiresUpdate()
+    {
+        return $this->putRequiresUpdate;
+    }
+
+    /**
+     * Returns whether the adapter requires update to be called if path exists for a stream
+     *
+     * @return bool
+     */
+    public function putStreamRequiresUpdate()
+    {
+        return $this->putStreamRequiresUpdate;
     }
 }
