@@ -2,11 +2,9 @@
 
 namespace League\Flysystem\Adapter;
 
-use function fwrite;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Stub\FileOverwritingAdapterStub;
 use PHPUnit_Framework_TestCase;
-use function tmpfile;
 
 class AdaptersThatCanOverwriteFilesTest extends PHPUnit_Framework_TestCase
 {
