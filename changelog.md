@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.40 - 2017-04-28
+
+### Improved
+
+* Made it possible to indicate an adapter can ovewrite files using the write functions rather than the update ones.
+
 ## 1.0.39 - 2017-04-25
 
 ### Fixed
