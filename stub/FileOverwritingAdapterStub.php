@@ -5,7 +5,6 @@ namespace League\Flysystem\Stub;
 use League\Flysystem\Adapter\CanOverwriteFiles;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
-use function stream_get_contents;
 
 /**
  * @codeCoverageIgnore
