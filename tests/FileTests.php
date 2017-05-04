@@ -222,6 +222,25 @@ class FileTests extends \PHPUnit_Framework_TestCase
         $this->assertEquals($size, $file->getSize());
     }
 
+    public function testLargeFilesize()
+    {
+        $adapter = $this->getMock('League\Flysystem\AdapterInterface');
+        $adapter
+            ->expects($this->once())
+            ->method('getSize')
+            ->with('large.txt')
+            ->willReturn(array (
+                'type' => 'file',
+                'path' => 'file.txt',
+                'timestamp' => 12345678,
+                'size' => (float)3116473263,
+            ));
+        $filesystem = new Filesystem($adapter);
+        /** @var File $file */
+        $size = $filesystem->getSize('large.txt');
+        $this->assertEquals((float)3116473263, $size);
+    }
+
     public function testDelete()
     {
         $file = $this->getFile();
