@@ -36,7 +36,6 @@
         "ext-fileinfo": "Required for MimeType",
         "league/flysystem-eventable-filesystem": "Allows you to use EventableFilesystem",
         "league/flysystem-rackspace": "Allows you to use Rackspace Cloud Files",
-        "league/flysystem-copy": "Allows you to use Copy.com storage",
         "league/flysystem-azure": "Allows you to use Windows Azure Blob storage",
         "league/flysystem-webdav": "Allows you to use WebDAV storage",
         "league/flysystem-aws-s3-v2": "Allows you to use S3 storage with AWS SDK v2",
