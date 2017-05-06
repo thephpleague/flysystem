@@ -507,8 +507,8 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
             return array_sum(str_split($part));
         };
 
-        // get the sum of the groups
-        return array_sum(array_map($mapper, $parts));
+        // converts to decimal number
+        return octdec(implode('', array_map($mapper, $parts)));
     }
 
     /**
