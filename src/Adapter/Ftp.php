@@ -368,7 +368,7 @@ class Ftp extends AbstractFtpAdapter
             }
         }
 
-        if (in_array($directory, $listing, true)) {
+        if (in_array((string)$directory, $listing, true)) {
             return true;
         }
 
