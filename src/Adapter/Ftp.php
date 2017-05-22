@@ -382,11 +382,11 @@ class Ftp extends AbstractFtpAdapter
     {
         $connection = $this->getConnection();
 
-        if ($path === '') {
+        if (Util::dirname($path) === '') {
             return ['type' => 'dir', 'path' => ''];
         }
 
-        if (@ftp_chdir($connection, $path) === true) {
+        if (@ftp_chdir($connection, Util::dirname($path)) === true) {
             $this->setConnectionRoot();
 
             return ['type' => 'dir', 'path' => $path];
