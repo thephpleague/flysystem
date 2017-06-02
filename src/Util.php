@@ -174,9 +174,11 @@ class Util
      *
      * @return string|null MIME Type or NULL if no extension detected
      */
-    public static function guessMimeType($path, $content)
+    public static function guessMimeType($path, $content, $limitFileSize = 1048576)
     {
-        $mimeType = MimeType::detectByContent($content);
+        if (filesize($path) <= $limitFileSize) {
+            $mimeType = MimeType::detectByContent($content);
+        }
 
         if ( ! (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm']))) {
             return $mimeType;
