@@ -69,4 +69,16 @@ trait PathPrefixTrait
         return substr($path, strlen($this->getPathPrefix()));
     }
 
+    /**
+     * Removes the path prefix from a metadata array.
+     * @param array|false $metaData
+     * @return array|false
+     */
+    protected function removePrefixPathFromMetadata($metaData)
+    {
+        if (isset($metaData['path'])) {
+            $metaData['path'] = $this->removePathPrefix($metaData['path']);
+        }
+        return $metaData;
+    }
 }

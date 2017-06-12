@@ -91,7 +91,7 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function deleteDir($dirname)
     {
-        return $this->adapter->delete($this->applyPathPrefix($dirname));
+        return $this->adapter->deleteDir($this->applyPathPrefix($dirname));
     }
 
     /**
@@ -139,7 +139,10 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function listContents($directory = '', $recursive = false)
     {
-        return $this->adapter->listContents($this->applyPathPrefix($directory));
+        $list = $this->adapter->listContents($this->applyPathPrefix($directory));
+
+
+        return is_array($list) ? array_map([$this, 'removePrefixPathFromMetadata'], $list) : $list;
     }
 
     /**
@@ -147,7 +150,7 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function getMetadata($path)
     {
-        return $this->adapter->getMetadata($this->applyPathPrefix($path));
+        return $this->removePrefixPathFromMetadata($this->adapter->getMetadata($this->applyPathPrefix($path)));
     }
 
     /**
@@ -155,7 +158,7 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function getSize($path)
     {
-        return $this->adapter->getSize($this->applyPathPrefix($path));
+        return $this->removePrefixPathFromMetadata($this->adapter->getSize($this->applyPathPrefix($path)));
     }
 
     /**
@@ -163,7 +166,7 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function getMimetype($path)
     {
-        return $this->adapter->getMimetype($this->applyPathPrefix($path));
+        return $this->removePrefixPathFromMetadata($this->adapter->getMimetype($this->applyPathPrefix($path)));
     }
 
     /**
@@ -171,7 +174,7 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function getTimestamp($path)
     {
-        return $this->adapter->getTimestamp($this->applyPathPrefix($path));
+        return $this->removePrefixPathFromMetadata($this->adapter->getTimestamp($this->applyPathPrefix($path)));
     }
 
     /**
@@ -179,6 +182,8 @@ class PathPrefixAdapter implements AdapterInterface
      */
     public function getVisibility($path)
     {
-        return $this->adapter->getVisibility($this->applyPathPrefix($path));
+        return $this->removePrefixPathFromMetadata($this->adapter->getVisibility($this->applyPathPrefix($path)));
     }
+
+
 }
