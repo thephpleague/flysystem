@@ -15,9 +15,7 @@ class PathPrefixAdapterTests extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->adapter = $this->getMock(AdapterInterface::class);
         $this->adapter = $this->getMockBuilder(AdapterInterface::class)
-            ->disableProxyingToOriginalMethods()
             ->getMock();
 
 
@@ -156,45 +154,70 @@ class PathPrefixAdapterTests extends \PHPUnit_Framework_TestCase
     {
         $this->adapter->expects($this->once())
             ->method('listContents')
-            ->with('prefix/test');
+            ->with('prefix/test')
+            ->willReturn([
+                [
+                    'type' => 'file',
+                    'path' => 'prefix/test/coolstuff'
+                ]
+            ]);
 
-        $this->prefixAdapter->listContents('test');
+        $result = $this->prefixAdapter->listContents('test');
+        $this->assertCount(1, $result);
+        $this->assertArrayHasKey('path', $result[0]);
+        $this->assertEquals('test/coolstuff', $result[0]['path']);
     }
 
     public function testGetMetadata()
     {
         $this->adapter->expects($this->once())
             ->method('getMetadata')
-            ->with('prefix/test');
+            ->with('prefix/test')
+            ->willReturn([
+                'path' => 'prefix/test'
+            ]);
 
-        $this->prefixAdapter->getMetadata('test');
+
+        $this->assertEquals(['path' => 'test'], $this->prefixAdapter->getMetadata('test'));
     }
 
     public function testGetMimetype()
     {
         $this->adapter->expects($this->once())
             ->method('getMimetype')
-            ->with('prefix/test');
+            ->with('prefix/test')
+            ->willReturn([
+                'path' => 'prefix/test'
+            ]);
 
-        $this->prefixAdapter->getMimetype('test');
+
+        $this->assertEquals(['path' => 'test'], $this->prefixAdapter->getMimetype('test'));
     }
 
     public function testGetTimestamp()
     {
         $this->adapter->expects($this->once())
             ->method('getTimestamp')
-            ->with('prefix/test');
+            ->with('prefix/test')
+            ->willReturn([
+                'path' => 'prefix/test'
+            ]);
 
-        $this->prefixAdapter->getTimestamp('test');
+
+        $this->assertEquals(['path' => 'test'], $this->prefixAdapter->getTimestamp('test'));
     }
 
     public function testGetVisibility()
     {
         $this->adapter->expects($this->once())
             ->method('getVisibility')
-            ->with('prefix/test');
+            ->with('prefix/test')
+            ->willReturn([
+                'path' => 'prefix/test'
+            ]);
 
-        $this->prefixAdapter->getVisibility('test');
+
+        $this->assertEquals(['path' => 'test'], $this->prefixAdapter->getVisibility('test'));
     }
 
 }
