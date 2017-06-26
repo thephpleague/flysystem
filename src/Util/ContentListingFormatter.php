@@ -4,19 +4,17 @@ namespace League\Flysystem\Util;
 
 use League\Flysystem\Util;
 
-/**
- * @internal
- */
 class ContentListingFormatter
 {
     /**
      * @var string
      */
-    private $directory;
+    protected $directory;
+
     /**
      * @var bool
      */
-    private $recursive;
+    protected $recursive;
 
     /**
      * @param string $directory
@@ -47,7 +45,7 @@ class ContentListingFormatter
         return $this->sortListing($listing);
     }
 
-    private function addPathInfo(array $entry)
+    protected function addPathInfo(array $entry)
     {
         return $entry + Util::pathinfo($entry['path']);
     }
@@ -59,7 +57,7 @@ class ContentListingFormatter
      *
      * @return bool
      */
-    private function isEntryOutOfScope(array $entry)
+    protected function isEntryOutOfScope(array $entry)
     {
         if (empty($entry['path']) && $entry['path'] !== '0') {
             return false;
@@ -79,7 +77,7 @@ class ContentListingFormatter
      *
      * @return bool
      */
-    private function residesInDirectory(array $entry)
+    protected function residesInDirectory(array $entry)
     {
         if ($this->directory === '') {
             return true;
@@ -95,7 +93,7 @@ class ContentListingFormatter
      *
      * @return bool
      */
-    private function isDirectChild(array $entry)
+    protected function isDirectChild(array $entry)
     {
         return Util::dirname($entry['path']) === $this->directory;
     }
@@ -105,7 +103,7 @@ class ContentListingFormatter
      *
      * @return array
      */
-    private function sortListing(array $listing)
+    protected function sortListing(array $listing)
     {
         usort(
             $listing,
