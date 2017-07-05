@@ -386,27 +386,20 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => ''];
         }
 
-        if (@ftp_chdir($connection, $path) === true) {
-            $this->setConnectionRoot();
+        $dirname = strpos($path, '/') ? dirname($path) : '';
 
-            return ['type' => 'dir', 'path' => $path];
-        }
-
-        $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
-
-        if (empty($listing) || in_array('total 0', $listing, true)) {
+        $listing = $this->listDirectoryContents($dirname, false);
+        if (empty($listing)) {
             return false;
         }
 
-        if (preg_match('/.* not found/', $listing[0])) {
-            return false;
+        foreach ($listing as $item) {
+            if ($item['path'] === $path) {
+                return $item;
+            }
         }
 
-        if (preg_match('/^total [0-9]*$/', $listing[0])) {
-            array_shift($listing);
-        }
-
-        return $this->normalizeObject($listing[0], '');
+        return false;
     }
 
     /**
