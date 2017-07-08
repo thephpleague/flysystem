@@ -81,7 +81,7 @@ Want to get started quickly? Check out some of these integrations:
 * Zip (through ZipArchive): https://github.com/thephpleague/flysystem-ziparchive
 * WebDAV (through SabreDAV): https://github.com/thephpleague/flysystem-webdav
 * PHPCR: https://github.com/thephpleague/flysystem-phpcr
-* Azure Blob Storage
+* Azure Blob Storage: https://github.com/thephpleague/flysystem-azure
 * NullAdapter
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
