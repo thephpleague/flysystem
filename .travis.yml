@@ -26,10 +26,9 @@ before_install:
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/handle_brew_pkg.sh "${_PHP}" ; fi
   - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/osx_install_composer.sh ; fi
   - mkdir tests/files
-  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
-  - travis_retry composer update $COMPOSER_OPTS
+  - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 script:
   - bin/phpunit --coverage-text --coverage-clover coverage.xml
