@@ -15,7 +15,6 @@ title: Introduction
 [![Latest Version](//img.shields.io/github/tag/thephpleague/flysystem.svg?style=flat-square)](//github.com/thephpleague/flysystem/releases)
 [![Software License](//img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](//github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Build Status](//img.shields.io/travis/thephpleague/flysystem/master.svg?style=flat-square)](//travis-ci.org/thephpleague/flysystem)
-[![HHVM Status](//img.shields.io/hhvm/league/flysystem.svg?style=flat-square)](//hhvm.h4cc.de/package/league/flysystem)
 [![Coverage Status](//img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg?style=flat-square)](//scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
 [![Quality Score](//img.shields.io/scrutinizer/g/thephpleague/flysystem.svg?style=flat-square)](//scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](//img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](//packagist.org/packages/league/flysystem)
