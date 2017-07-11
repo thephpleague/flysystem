@@ -255,7 +255,7 @@ class MountManager
     {
         list($prefixFrom, $pathFrom) = $this->getPrefixAndPath($from);
         list($prefixTo, $pathTo) = $this->getPrefixAndPath($to);
-        
+
         if ($prefixFrom === $prefixTo) {
             $filesystem = $this->getFilesystem($prefixFrom);
             $renamed = $filesystem->rename($pathFrom, $pathTo);
@@ -263,14 +263,14 @@ class MountManager
             if ($renamed && isset($config['visibility'])) {
                 return $filesystem->setVisibility($pathTo, $config['visibility']);
             }
-            
-            return $renamed;
-        } else {
-            $copied = $this->copy($from, $to, $config);
 
-            if ($copied) {
-                return $this->delete($from);
-            }
+            return $renamed;
+        }
+
+        $copied = $this->copy($from, $to, $config);
+
+        if ($copied) {
+            return $this->delete($from);
         }
 
         return false;
