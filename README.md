@@ -93,6 +93,7 @@ Want to get started quickly? Check out some of these integrations:
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
 * Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
+* AliYun OSS Storage: https://github.com/xxtime/flysystem-aliyun-oss
 
 ## Caching
 
