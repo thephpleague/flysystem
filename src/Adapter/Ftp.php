@@ -313,12 +313,20 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->getConnection();
         $contents = array_reverse($this->listDirectoryContents($dirname));
 
+        foreach ($contents as $key => $object) {
+            if ($object['type'] !== 'file') {
+                continue;
+            }
+
+            unset($contents[$key]);
+
+            if ( ! ftp_delete($connection, $object['path'])) {
+                return false;
+            }
+        }
+
         foreach ($contents as $object) {
-            if ($object['type'] === 'file') {
-                if ( ! ftp_delete($connection, $object['path'])) {
-                    return false;
-                }
-            } elseif ( ! ftp_rmdir($connection, $object['path'])) {
+            if ( ! ftp_rmdir($connection, $object['path'])) {
                 return false;
             }
         }
