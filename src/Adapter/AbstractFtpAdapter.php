@@ -409,7 +409,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
-        $path = empty($base) ? $name : $base . $this->separator . $name;
+        $path = $base === '' ? $name : $base . $this->separator . $name;
 
         if ($type === 'dir') {
             return compact('type', 'path');
@@ -439,7 +439,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         }
 
         list($date, $time, $size, $name) = explode(' ', $item, 4);
-        $path = empty($base) ? $name : $base . $this->separator . $name;
+        $path = $base === '' ? $name : $base . $this->separator . $name;
 
         // Check for the correct date/time format
         $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
@@ -521,7 +521,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function removeDotDirectories(array $list)
     {
         $filter = function ($line) {
-            if ( ! empty($line) && ! preg_match('#.* \.(\.)?$|^total#', $line)) {
+            if ( $line !== '' && ! preg_match('#.* \.(\.)?$|^total#', $line)) {
                 return true;
             }
 
@@ -562,7 +562,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     public function ensureDirectory($dirname)
     {
-        if ( ! empty($dirname) && ! $this->has($dirname)) {
+        $dirname = (string) $dirname;
+
+        if ($dirname !== '' && ! $this->has($dirname)) {
             $this->createDir($dirname, new Config());
         }
     }

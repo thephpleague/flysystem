@@ -58,6 +58,16 @@ class FtpdTests extends \PHPUnit_Framework_TestCase
     /**
      * @depends testInstantiable
      */
+    public function testGetMetadataOnRoot()
+    {
+        $adapter = new Ftpd($this->options);
+        $result = $adapter->getMetadata('');
+        $this->assertNotEmpty($result);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
     public function testSynologyFtpLegacyClassName()
     {
         $adapter = new SynologyFtp($this->options);
