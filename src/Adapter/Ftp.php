@@ -117,7 +117,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * @param bool $utf8
      */
-    public function setUtf8($utf8) 
+    public function setUtf8($utf8)
     {
         $this->utf8 = (bool) $utf8;
     }
@@ -560,7 +560,7 @@ class Ftp extends AbstractFtpAdapter
     protected function ftpRawlist($options, $path)
     {
         $connection = $this->getConnection();
-        
+
         if ($this->isPureFtpd) {
             $path = str_replace(' ', '\ ', $path);
         }
