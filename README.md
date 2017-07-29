@@ -69,6 +69,7 @@ Want to get started quickly? Check out some of these integrations:
 * Symfony integration: https://github.com/1up-lab/OneupFlysystemBundle
 * Yii 2 integration: https://github.com/creocoder/yii2-flysystem
 * Zend Framework integration: https://github.com/bushbaby/BsbFlysystem
+* PSR-11 containers: https://github.com/wshafer/psr11-flysystem
 
 ## Adapters
 
