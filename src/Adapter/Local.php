@@ -130,15 +130,12 @@ class Local extends AbstractAdapter
             return false;
         }
 
+        $visibility = $config->get('visibility', AdapterInterface::VISIBILITY_PUBLIC);
+        $this->setVisibility($path, $visibility);
+
         $type = 'file';
-        $result = compact('contents', 'type', 'size', 'path');
 
-        if ($visibility = $config->get('visibility')) {
-            $result['visibility'] = $visibility;
-            $this->setVisibility($path, $visibility);
-        }
-
-        return $result;
+        return compact('contents', 'type', 'size', 'path', 'visibility');
     }
 
     /**
@@ -160,9 +157,8 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        if ($visibility = $config->get('visibility')) {
-            $this->setVisibility($path, $visibility);
-        }
+        $visibility = $config->get('visibility', AdapterInterface::VISIBILITY_PUBLIC);
+        $this->setVisibility($path, $visibility);
 
         $type = 'file';
 
