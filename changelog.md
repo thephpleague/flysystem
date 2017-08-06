@@ -1,6 +1,6 @@
 # Changelog
 
-## HEAD
+## 1.0.41 - 2017-08-06
 
 ### Fixed
 
