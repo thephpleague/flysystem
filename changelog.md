@@ -2,6 +2,10 @@
 
 ## HEAD
 
+### Fixed
+
+* Response array check mistake was corrected.
+
 ### Altered
 
 * Removed support for HHVM.
