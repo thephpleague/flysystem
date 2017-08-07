@@ -47,6 +47,18 @@ class Filesystem implements FilesystemInterface
         return $this->adapter;
     }
 
+
+    /**
+     * Set the Adapter
+     *
+     * @param AdapterInterface $adapter
+     * @return AdapterInterface
+     */
+    public function setAdapter(AdapterInterface $adapter)
+    {
+        return $this->adapter = $adapter;
+    }
+
     /**
      * @inheritdoc
      */
