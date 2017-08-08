@@ -16,9 +16,15 @@ class Util
      */
     public static function pathinfo($path)
     {
-        $pathinfo = pathinfo($path) + compact('path');
-        $pathinfo['dirname'] = array_key_exists('dirname', $pathinfo)
-            ? static::normalizeDirname($pathinfo['dirname']) : '';
+        $pathinfo = compact('path');
+
+        if ('' !== $dirname = dirname($path)) {
+            $pathinfo['dirname'] = static::normalizeDirname($dirname);
+        }
+
+        $pathinfo['basename'] = static::basename($path);
+
+        $pathinfo += pathinfo($pathinfo['basename']);
 
         return $pathinfo;
     }
@@ -306,5 +312,41 @@ class Util
         }
 
         return [$directories, $listedDirectories];
+    }
+
+    /**
+     * Returns the trailing name component of the path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private static function basename($path)
+    {
+        $separators = DIRECTORY_SEPARATOR === '/' ? '/' : '\/';
+
+        $path = rtrim($path, $separators);
+
+        $basename = preg_replace('#.*?([^' . preg_quote($separators, '#') . ']+$)#', '$1', $path);
+
+        if (DIRECTORY_SEPARATOR === '/') {
+            return $basename;
+        }
+        // @codeCoverageIgnoreStart
+        // Extra Windows path munging. This is tested via AppVeyor, but code
+        // coverage is not reported.
+
+        // Handle relative paths with drive letters. c:file.txt.
+        while (preg_match('#^[a-zA-Z]{1}:[^\\\/]#', $basename)) {
+            $basename = substr($basename, 2);
+        }
+
+        // Remove colon for standalone drive letter names.
+        if (preg_match('#^[a-zA-Z]{1}:$#', $basename)) {
+            $basename = rtrim($basename, ':');
+        }
+
+        return $basename;
+        // @codeCoverageIgnoreEnd
     }
 }
