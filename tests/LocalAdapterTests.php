@@ -462,4 +462,11 @@ class LocalAdapterTests extends \PHPUnit_Framework_TestCase
         $root = __DIR__ . '/files/fail.plz';
         new Local($root);
     }
+
+    public function testRelativePathRootEscape()
+    {
+        // This should fail ?
+        $adapter = new Local(__DIR__ . '/files/');
+        $this->assertFalse($adapter->has('../' . __FILE__));
+    }
 }
