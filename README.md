@@ -93,6 +93,8 @@ Want to get started quickly? Check out some of these integrations:
 * AliYun OSS Storage: https://github.com/xxtime/flysystem-aliyun-oss
 * Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
+* ClamAV Scanner Adapter: https://github.com/mgriego/flysystem-clamav
+* Citrix ShareFile: https://github.com/kapersoft/flysystem-sharefile
 * Dropbox (with PHP 5.6 support): https://github.com/srmklive/flysystem-dropbox-v2
 * Dropbox: https://github.com/spatie/flysystem-dropbox
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
@@ -104,7 +106,6 @@ Want to get started quickly? Check out some of these integrations:
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
 * SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
-* ClamAV Scanner Adapter: https://github.com/mgriego/flysystem-clamav
 
 ## Caching (https://github.com/thephpleague/flysystem-cached-adapter)
 
