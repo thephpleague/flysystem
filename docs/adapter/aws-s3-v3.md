@@ -31,7 +31,7 @@ $client = S3Client::factory([
 $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
 ~~~
 
-The required IAM permissions are as followed:
+The required IAM permissions are:
 
 ~~~ json
 {
