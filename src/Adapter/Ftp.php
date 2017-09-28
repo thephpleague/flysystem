@@ -318,8 +318,8 @@ class Ftp extends AbstractFtpAdapter
                 if ( ! ftp_delete($connection, $object['path'])) {
                     return false;
                 }
-            } elseif ( ! ftp_rmdir($connection, $object['path'])) {
-                return false;
+            } elseif($object['type'] === 'dir'){
+                $this->deleteDir($object['path'])
             }
         }
 
