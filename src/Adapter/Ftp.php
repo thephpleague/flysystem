@@ -319,7 +319,7 @@ class Ftp extends AbstractFtpAdapter
                     return false;
                 }
             } elseif($object['type'] === 'dir'){
-                $this->deleteDir($object['path'])
+                $this->deleteDir($object['path']);
             }
         }
 
