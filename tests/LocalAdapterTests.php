@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use PHPUnit\Framework\TestCase;
 
 function fopen($result, $mode)
 {
@@ -47,7 +48,7 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 }
 
 
-class LocalAdapterTests extends \PHPUnit_Framework_TestCase
+class LocalAdapterTests extends TestCase
 {
     /**
      * @var Local

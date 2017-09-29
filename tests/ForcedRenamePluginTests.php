@@ -1,9 +1,9 @@
 <?php
 
-
 use League\Flysystem\Plugin\ForcedRename;
+use PHPUnit\Framework\TestCase;
 
-class ForcedRenamePluginTests extends PHPUnit_Framework_TestCase
+class ForcedRenamePluginTests extends TestCase
 {
     protected $filesystem;
     protected $plugin;

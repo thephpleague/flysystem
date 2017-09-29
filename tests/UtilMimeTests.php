@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\Util;
 
+use PHPUnit\Framework\TestCase;
+
 $passthru = true;
 
 function class_exists($class_name, $autoload = true)
@@ -15,7 +17,7 @@ function class_exists($class_name, $autoload = true)
     return false;
 }
 
-class UtilMimeTests extends \PHPUnit_Framework_TestCase
+class UtilMimeTests extends TestCase
 {
     public function testNoFinfoFallback()
     {

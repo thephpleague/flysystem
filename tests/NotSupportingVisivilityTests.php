@@ -3,8 +3,9 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Stub\NotSupportingVisibilityStub;
+use PHPUnit\Framework\TestCase;
 
-class NotSupportingVisivilityTests extends \PHPUnit_Framework_TestCase
+class NotSupportingVisivilityTests extends TestCase
 {
     public function testGetVisibility()
     {

@@ -3,7 +3,9 @@
 
 use League\Flysystem\Plugin\EmptyDir;
 
-class EmptyDirPluginTests extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class EmptyDirPluginTests extends TestCase
 {
     public function testPlugin()
     {

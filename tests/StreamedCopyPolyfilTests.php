@@ -3,8 +3,9 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Stub\StreamedCopyStub;
+use PHPUnit\Framework\TestCase;
 
-class StreamedCopyPolyfilTests extends \PHPUnit_Framework_TestCase
+class StreamedCopyPolyfilTests extends TestCase
 {
     public function testReadFail()
     {

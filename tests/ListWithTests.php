@@ -3,8 +3,9 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Plugin\ListWith;
+use PHPUnit\Framework\TestCase;
 
-class ListWithTests extends \PHPUnit_Framework_TestCase
+class ListWithTests extends TestCase
 {
     public function testHandle()
     {

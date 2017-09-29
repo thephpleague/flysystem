@@ -4,6 +4,7 @@ namespace League\Flysystem\Adapter;
 
 use ErrorException;
 use League\Flysystem\Config;
+use PHPUnit\Framework\TestCase;
 
 function ftp_systype($connection)
 {
@@ -367,7 +368,7 @@ function ftp_set_option($connection, $option, $value)
     return true;
 }
 
-class FtpTests extends \PHPUnit_Framework_TestCase
+class FtpTests extends TestCase
 {
     protected $options = [
         'host' => 'example.org',

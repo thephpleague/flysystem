@@ -1,10 +1,10 @@
 <?php
 
-
 use League\Flysystem\Plugin\GetWithMetadata;
 use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\TestCase;
 
-class GetWithMetadataTests extends \PHPUnit_Framework_TestCase
+class GetWithMetadataTests extends TestCase
 {
     /**
      * @var ObjectProphecy

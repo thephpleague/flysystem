@@ -1,9 +1,10 @@
 <?php
 
-
 use League\Flysystem\Plugin\ForcedCopy;
 
-class ForcedCopyPluginTests extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class ForcedCopyPluginTests extends TestCase
 {
     protected $filesystem;
     protected $plugin;
