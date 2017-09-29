@@ -108,7 +108,6 @@ class Util
 
         foreach (explode('/', $path) as $part) {
             switch ($part) {
-                case '':
                 case '.':
                 break;
 
