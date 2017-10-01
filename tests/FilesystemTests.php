@@ -6,8 +6,9 @@ use League\Flysystem\Util;
 use Prophecy\Argument;
 use Prophecy\Argument\Token\TypeToken;
 use Prophecy\Prophecy\ObjectProphecy;
+use PHPUnit\Framework\TestCase;
 
-class FilesystemTests extends \PHPUnit_Framework_TestCase
+class FilesystemTests extends TestCase
 {
     /**
      * @var ObjectProphecy

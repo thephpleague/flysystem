@@ -2,7 +2,9 @@
 
 namespace League\Flysystem;
 
-class FileTests extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FileTests extends TestCase
 {
     /** @var Filesystem */
     protected $filesystem;

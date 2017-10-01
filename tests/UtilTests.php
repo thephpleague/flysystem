@@ -2,7 +2,9 @@
 
 namespace League\Flysystem;
 
-class UtilTests extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class UtilTests extends TestCase
 {
     public function testEmulateDirectories()
     {

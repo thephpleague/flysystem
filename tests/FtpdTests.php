@@ -3,8 +3,9 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use PHPUnit\Framework\TestCase;
 
-class FtpdTests extends \PHPUnit_Framework_TestCase
+class FtpdTests extends TestCase
 {
     protected $options = [
         'host' => 'example.org',

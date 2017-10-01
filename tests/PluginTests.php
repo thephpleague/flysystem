@@ -4,6 +4,7 @@ use League\Flysystem\File;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\PluginInterface;
+use PHPUnit\Framework\TestCase;
 
 class MyPlugin implements PluginInterface
 {
@@ -54,7 +55,7 @@ class AuthorizePlugin implements PluginInterface
     }
 }
 
-class PluginTests extends PHPUnit_Framework_TestCase
+class PluginTests extends TestCase
 {
     protected $filesystem;
 

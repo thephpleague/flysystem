@@ -2,7 +2,9 @@
 
 use League\Flysystem\Filesystem;
 
-class FlysystemStreamTests extends PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class FlysystemStreamTests extends TestCase
 {
     public function testWriteStream()
     {

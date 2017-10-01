@@ -1,8 +1,9 @@
 <?php
 
 use League\Flysystem\MountManager;
+use PHPUnit\Framework\TestCase;
 
-class MountManagerTests extends PHPUnit_Framework_TestCase
+class MountManagerTests extends TestCase
 {
     public function testInstantiable()
     {
