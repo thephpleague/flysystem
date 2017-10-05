@@ -220,7 +220,9 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
             $this->setVisibility($path, $visibility);
         }
 
-        return compact('path', 'visibility');
+        $type = 'file';
+
+        return compact('type', 'path', 'visibility');
     }
 
     /**
