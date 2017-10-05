@@ -16,7 +16,7 @@ use League\Flysystem\Util\ContentListingFormatter;
  * @method array listPaths(string $path = '', boolean $recursive = false)
  * @method array listWith(array $keys = [], $directory = '', $recursive = false)
  */
-class Filesystem implements AppendableFilesystemInterface
+class Filesystem implements FilesystemInterface, AppendableFilesystemInterface
 {
     use PluggableTrait;
     use ConfigAwareTrait;

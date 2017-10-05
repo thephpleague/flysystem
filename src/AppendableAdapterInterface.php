@@ -1,7 +1,7 @@
 <?php
 namespace League\Flysystem;
 
-interface AppendableAdapterInterface extends AdapterInterface
+interface AppendableAdapterInterface
 {
     /**
      * Append existing file or create new

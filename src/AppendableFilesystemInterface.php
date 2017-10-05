@@ -3,7 +3,7 @@ namespace League\Flysystem;
 
 use InvalidArgumentException;
 
-interface AppendableFilesystemInterface extends FilesystemInterface
+interface AppendableFilesystemInterface
 {
     /**
      * Create new or append existing file
