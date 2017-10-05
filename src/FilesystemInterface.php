@@ -2,8 +2,6 @@
 
 namespace League\Flysystem;
 
-use InvalidArgumentException;
-
 interface FilesystemInterface
 {
     /**
@@ -126,7 +124,7 @@ interface FilesystemInterface
      * @return bool True on success, false on failure.
      */
     public function writeStream($path, $resource, array $config = []);
-    
+
     /**
      * Update an existing file.
      *

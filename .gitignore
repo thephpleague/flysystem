@@ -1,10 +1,3 @@
-._*
-.~lock.*
-.buildpath
-.DS_Store
-.idea
-.project
-.settings
 vendor
 bin
 coverage
