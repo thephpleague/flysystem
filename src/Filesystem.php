@@ -213,10 +213,10 @@ class Filesystem implements FilesystemInterface, AppendableFilesystemInterface
 
         if ($this->has($path)) {
             if ($adapter instanceof AppendableAdapterInterface) {
-                return (bool)$adapter->append($path, $contents, $config);
-            } else {
-                $contents = $adapter->read($path) . $contents;
+                return (bool) $adapter->append($path, $contents, $config);
             }
+
+            $contents = $adapter->read($path) . $contents;
         }
 
         return (bool) $this->getAdapter()->write($path, $contents, $config);
@@ -240,7 +240,7 @@ class Filesystem implements FilesystemInterface, AppendableFilesystemInterface
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
 
-        return (bool)$adapter->appendStream($path, $resource, $config);
+        return (bool) $adapter->appendStream($path, $resource, $config);
     }
 
     /**
