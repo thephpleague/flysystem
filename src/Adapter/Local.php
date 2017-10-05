@@ -210,14 +210,7 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
             return false;
         }
 
-        if (!flock($stream, LOCK_EX)) {
-            throw new Exception('Could not get file lock');
-        }
-
         stream_copy_to_stream($resource, $stream);
-
-        fflush($stream);
-        flock($stream, LOCK_UN);
 
         if (!fclose($stream)) {
             return false;
