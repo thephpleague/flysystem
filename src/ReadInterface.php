@@ -9,6 +9,9 @@ interface ReadInterface
      *
      * @param string $path
      *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
+     *
      * @return array|bool|null
      */
     public function has($path);
@@ -18,6 +21,9 @@ interface ReadInterface
      *
      * @param string $path
      *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
+     *
      * @return array|false
      */
     public function read($path);
@@ -26,6 +32,9 @@ interface ReadInterface
      * Read a file as a stream.
      *
      * @param string $path
+     *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -37,6 +46,9 @@ interface ReadInterface
      * @param string $directory
      * @param bool   $recursive
      *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
+     *
      * @return array
      */
     public function listContents($directory = '', $recursive = false);
@@ -45,6 +57,9 @@ interface ReadInterface
      * Get all the meta data of a file or directory.
      *
      * @param string $path
+     *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -55,6 +70,9 @@ interface ReadInterface
      *
      * @param string $path
      *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
+     *
      * @return array|false
      */
     public function getSize($path);
@@ -63,6 +81,9 @@ interface ReadInterface
      * Get the mimetype of a file.
      *
      * @param string $path
+     *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -73,6 +94,9 @@ interface ReadInterface
      *
      * @param string $path
      *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
+     *
      * @return array|false
      */
     public function getTimestamp($path);
@@ -81,6 +105,9 @@ interface ReadInterface
      * Get the visibility of a file.
      *
      * @param string $path
+     *
+     * @throws Exception    If a low-level, adapter-specific error occurs
+     *                      (disk full, permission denied, network error, ...)
      *
      * @return array|false
      */

@@ -11,7 +11,6 @@ use League\Flysystem\Exception;
 use League\Flysystem\NotSupportedException;
 use League\Flysystem\UnreadableFileException;
 use League\Flysystem\Util;
-use LogicException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -69,7 +68,7 @@ class Local extends AbstractAdapter
      * @param int    $linkHandling
      * @param array  $permissions
      *
-     * @throws LogicException
+     * @throws Exception
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
@@ -78,7 +77,7 @@ class Local extends AbstractAdapter
         $this->ensureDirectory($root);
 
         if ( ! is_dir($root) || ! is_readable($root)) {
-            throw new LogicException('The root path ' . $root . ' is not readable.');
+            throw new Exception('The root path ' . $root . ' is not readable.');
         }
 
         $this->setPathPrefix($root);

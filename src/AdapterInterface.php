@@ -21,6 +21,9 @@ interface AdapterInterface extends ReadInterface
      * @param string $contents
      * @param Config $config   Config object
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return array|false false on failure file meta data on success
      */
     public function write($path, $contents, Config $config);
@@ -31,6 +34,9 @@ interface AdapterInterface extends ReadInterface
      * @param string   $path
      * @param resource $resource
      * @param Config   $config   Config object
+     *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
      *
      * @return array|false false on failure file meta data on success
      */
@@ -43,7 +49,11 @@ interface AdapterInterface extends ReadInterface
      * @param string $contents
      * @param Config $config   Config object
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return array|false false on failure file meta data on success
+     *
      */
     public function update($path, $contents, Config $config);
 
@@ -53,6 +63,9 @@ interface AdapterInterface extends ReadInterface
      * @param string   $path
      * @param resource $resource
      * @param Config   $config   Config object
+     *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
      *
      * @return array|false false on failure file meta data on success
      */
@@ -64,6 +77,9 @@ interface AdapterInterface extends ReadInterface
      * @param string $path
      * @param string $newpath
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return bool
      */
     public function rename($path, $newpath);
@@ -74,6 +90,9 @@ interface AdapterInterface extends ReadInterface
      * @param string $path
      * @param string $newpath
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return bool
      */
     public function copy($path, $newpath);
@@ -83,6 +102,9 @@ interface AdapterInterface extends ReadInterface
      *
      * @param string $path
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return bool
      */
     public function delete($path);
@@ -91,6 +113,9 @@ interface AdapterInterface extends ReadInterface
      * Delete a directory.
      *
      * @param string $dirname
+     *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
      *
      * @return bool
      */
@@ -102,6 +127,9 @@ interface AdapterInterface extends ReadInterface
      * @param string $dirname directory name
      * @param Config $config
      *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
+     *
      * @return array|false
      */
     public function createDir($dirname, Config $config);
@@ -111,6 +139,9 @@ interface AdapterInterface extends ReadInterface
      *
      * @param string $path
      * @param string $visibility
+     *
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (disk full, permission denied, network error, ...)
      *
      * @return array|false file meta data
      */
