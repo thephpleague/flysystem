@@ -205,7 +205,7 @@ class Local extends AbstractAdapter implements AppendableAdapterInterface
     {
         $location = $this->applyPathPrefix($path);
         $this->ensureDirectory(dirname($location));
-        $stream = fopen($location, 'a');
+        $stream = fopen($location, 'ab');
 
         if (!$stream) {
             return false;
