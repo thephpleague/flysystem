@@ -3,6 +3,7 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use League\Flysystem\LogicException;
 use PHPUnit\Framework\TestCase;
 
 function fopen($result, $mode)
@@ -231,7 +232,7 @@ class LocalAdapterTests extends TestCase
         try {
             $root = __DIR__ . '/files/not-writable';
             mkdir($root, 0000, true);
-            $this->setExpectedException('LogicException');
+            $this->setExpectedException(LogicException::class);
             new Local($root);
         } catch (\Exception $e) {
             rmdir($root);

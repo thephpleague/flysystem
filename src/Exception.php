@@ -13,6 +13,6 @@ class Exception extends \Exception
      */
     public static function wrap(\Exception $exception)
     {
-        return new self($exception->getMessage(), $exception->getCode(), $exception);
+        return new static($exception->getMessage(), $exception->getCode(), $exception);
     }
 }

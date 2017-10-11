@@ -8,6 +8,7 @@ use finfo as Finfo;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Exception;
+use League\Flysystem\LogicException;
 use League\Flysystem\NotSupportedException;
 use League\Flysystem\UnreadableFileException;
 use League\Flysystem\Util;
@@ -68,7 +69,7 @@ class Local extends AbstractAdapter
      * @param int    $linkHandling
      * @param array  $permissions
      *
-     * @throws Exception
+     * @throws LogicException
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
@@ -77,7 +78,7 @@ class Local extends AbstractAdapter
         $this->ensureDirectory($root);
 
         if ( ! is_dir($root) || ! is_readable($root)) {
-            throw new Exception('The root path ' . $root . ' is not readable.');
+            throw new LogicException('The root path ' . $root . ' is not readable.');
         }
 
         $this->setPathPrefix($root);

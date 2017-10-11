@@ -2,11 +2,11 @@
 
 namespace League\Flysystem\Adapter;
 
-use ErrorException;
 use League\Flysystem\Adapter\Polyfill\StreamedCopyTrait;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
-use League\Flysystem\Exception;
+use League\Flysystem\ErrorException;
+use League\Flysystem\RuntimeException;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 
@@ -125,7 +125,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Connect to the FTP server.
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function connect()
     {
@@ -136,7 +136,7 @@ class Ftp extends AbstractFtpAdapter
         }
 
         if ( ! $this->connection) {
-            throw new Exception('Could not connect to host: ' . $this->getHost() . ', port:' . $this->getPort());
+            throw new RuntimeException('Could not connect to host: ' . $this->getHost() . ', port:' . $this->getPort());
         }
 
         $this->login();
@@ -149,14 +149,14 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Set the connection to UTF-8 mode.
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     protected function setUtf8Mode()
     {
         if ($this->utf8) {
             $response = ftp_raw($this->connection, "OPTS UTF8 ON");
             if (substr($response[0], 0, 3) !== '200') {
-                throw new Exception(
+                throw new RuntimeException(
                     'Could not set UTF-8 mode for connection: ' . $this->getHost() . '::' . $this->getPort()
                 );
             }
@@ -166,7 +166,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Set the connections to passive mode.
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     protected function setConnectionPassiveMode()
     {
@@ -175,7 +175,7 @@ class Ftp extends AbstractFtpAdapter
         }
 
         if ( ! ftp_pasv($this->connection, $this->passive)) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Could not set passive mode for connection: ' . $this->getHost() . '::' . $this->getPort()
             );
         }
@@ -184,7 +184,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Set the connection root.
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     protected function setConnectionRoot()
     {
@@ -192,7 +192,7 @@ class Ftp extends AbstractFtpAdapter
         $connection = $this->connection;
 
         if (isset($root) && ! ftp_chdir($connection, $root)) {
-            throw new Exception('Root is invalid or does not exist: ' . $this->getRoot());
+            throw new RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
 
         // Store absolute path for further reference.
@@ -205,7 +205,7 @@ class Ftp extends AbstractFtpAdapter
     /**
      * Login.
      *
-     * @throws Exception
+     * @throws RuntimeException
      */
     protected function login()
     {
@@ -219,7 +219,7 @@ class Ftp extends AbstractFtpAdapter
 
         if ( ! $isLoggedIn) {
             $this->disconnect();
-            throw new Exception(
+            throw new RuntimeException(
                 'Could not login with connection: ' . $this->getHost() . '::' . $this->getPort(
                 ) . ', username: ' . $this->getUsername()
             );
@@ -386,33 +386,37 @@ class Ftp extends AbstractFtpAdapter
      */
     public function getMetadata($path)
     {
-        $connection = $this->getConnection();
+        try {
+            $connection = $this->getConnection();
 
-        if ($path === '') {
-            return ['type' => 'dir', 'path' => ''];
+            if ($path === '') {
+                return ['type' => 'dir', 'path' => ''];
+            }
+
+            if (@ftp_chdir($connection, $path) === true) {
+                $this->setConnectionRoot();
+
+                return ['type' => 'dir', 'path' => $path];
+            }
+
+            $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
+
+            if (empty($listing) || in_array('total 0', $listing, true)) {
+                return false;
+            }
+
+            if (preg_match('/.* not found/', $listing[0])) {
+                return false;
+            }
+
+            if (preg_match('/^total [0-9]*$/', $listing[0])) {
+                array_shift($listing);
+            }
+
+            return $this->normalizeObject($listing[0], '');
+        } catch (\RuntimeException $e) {
+            throw RuntimeException::wrap($e);
         }
-
-        if (@ftp_chdir($connection, $path) === true) {
-            $this->setConnectionRoot();
-
-            return ['type' => 'dir', 'path' => $path];
-        }
-
-        $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
-
-        if (empty($listing) || in_array('total 0', $listing, true)) {
-            return false;
-        }
-
-        if (preg_match('/.* not found/', $listing[0])) {
-            return false;
-        }
-
-        if (preg_match('/^total [0-9]*$/', $listing[0])) {
-            array_shift($listing);
-        }
-
-        return $this->normalizeObject($listing[0], '');
     }
 
     /**
@@ -536,9 +540,9 @@ class Ftp extends AbstractFtpAdapter
     {
         try {
             return is_resource($this->connection) && ftp_rawlist($this->connection, '/') !== false;
-        } catch (ErrorException $e) {
+        } catch (\ErrorException $e) {
             if (strpos($e->getMessage(), 'ftp_rawlist') === false) {
-                throw Exception::wrap($e);
+                throw ErrorException::wrap($e);
             }
 
             return false;

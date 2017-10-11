@@ -2,8 +2,8 @@
 
 namespace League\Flysystem\Adapter;
 
-use ErrorException;
 use League\Flysystem\Config;
+use League\Flysystem\ErrorException;
 use PHPUnit\Framework\TestCase;
 
 function ftp_systype($connection)
@@ -155,11 +155,11 @@ function ftp_rawlist($connection, $directory)
 
     if ($directory === '/') {
         if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
-            throw new ErrorException('ftp_rawlist');
+            throw new \ErrorException('ftp_rawlist');
         }
 
         if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
-            throw new ErrorException('does not contain the correct message');
+            throw new \ErrorException('does not contain the correct message');
         }
     }
 
@@ -446,7 +446,7 @@ class FtpTests extends TestCase
     {
         putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
 
-        $this->setExpectedException('ErrorException');
+        $this->setExpectedException(ErrorException::class);
         $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
         $adapter->connect();
         $adapter->isConnected();
@@ -649,7 +649,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testConnectFail()
     {
@@ -669,7 +669,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testConnectFailSsl()
     {
@@ -679,7 +679,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testLoginFailSsl()
     {
@@ -689,7 +689,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testRootFailSsl()
     {
@@ -699,7 +699,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testPassiveFailSsl()
     {
@@ -740,7 +740,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException \RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testItThrowsAnExceptionWhenAnInvalidUnixListingIsFound()
     {
@@ -760,7 +760,7 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException \RuntimeException
+     * @expectedException \League\Flysystem\RuntimeException
      */
     public function testItThrowsAnExceptionWhenAnInvalidWindowsListingIsFound()
     {
