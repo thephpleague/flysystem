@@ -299,6 +299,8 @@ class Local extends AbstractAdapter
      */
     public function getSize($path)
     {
+        $location = $this->applyPathPrefix($path);
+        clearstatcache(false, $location);
         return $this->getMetadata($path);
     }
 
