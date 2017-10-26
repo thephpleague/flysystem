@@ -41,17 +41,13 @@ The required IAM permissions are:
             "Sid": "Stmt1420044805001",
             "Effect": "Allow",
             "Action": [
-                "s3:ListObjects",
-                "s3:HeadObject",
-                "s3:CopyObject",
+                "s3:ListBucket",
                 "s3:GetObject",
-                "s3:DeleteObject",
                 "s3:GetObjectAcl",
-                "s3:PutObjectAcl",
                 "s3:PutObject",
-                "s3:CopyObject",
-                "s3:UploadPart",
-                "s3:CreateMultipartUpload"
+                "s3:PutObjectAcl",
+                "s3:ReplicateObject",
+                "s3:DeleteObject"                
             ],
             "Resource": [
                 "arn:aws:s3:::your-bucket-name",
