@@ -77,6 +77,7 @@ interface AdapterInterface extends ReadInterface
      * @param string $path
      * @param string $newpath
      *
+     * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
      *                   (disk full, permission denied, network error, ...)
      *
@@ -90,6 +91,7 @@ interface AdapterInterface extends ReadInterface
      * @param string $path
      * @param string $newpath
      *
+     * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
      *                   (disk full, permission denied, network error, ...)
      *
@@ -102,8 +104,9 @@ interface AdapterInterface extends ReadInterface
      *
      * @param string $path
      *
+     * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return bool
      */
@@ -115,7 +118,7 @@ interface AdapterInterface extends ReadInterface
      * @param string $dirname
      *
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return bool
      */
@@ -140,8 +143,9 @@ interface AdapterInterface extends ReadInterface
      * @param string $path
      * @param string $visibility
      *
+     * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return array|false file meta data
      */

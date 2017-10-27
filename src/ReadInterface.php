@@ -9,8 +9,7 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|bool|null
      */
@@ -21,8 +20,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exist
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -33,8 +32,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exist
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -46,8 +45,8 @@ interface ReadInterface
      * @param string $directory
      * @param bool   $recursive
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If directory doesn't exist
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array
      */
@@ -58,8 +57,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exists
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -70,8 +69,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exists
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -82,8 +81,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exists
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -94,8 +93,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exists
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */
@@ -106,8 +105,8 @@ interface ReadInterface
      *
      * @param string $path
      *
-     * @throws Exception    If a low-level, adapter-specific error occurs
-     *                      (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If file doesn't exists
+     * @throws Exception If a low-level, adapter-specific error occurs (permission denied, network error, ...)
      *
      * @return array|false
      */

@@ -22,7 +22,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return string|false The file contents or false on failure.
      */
@@ -34,8 +34,8 @@ interface FilesystemInterface
      * @param string $path The path to the file.
      *
      * @throws FileNotFoundException
-     * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     * @throws Exception if Adapter fails to read from remote service
+     *                   (connection error, mount not available, ...)
      *
      * @return resource|false The path resource or false on failure.
      */
@@ -47,8 +47,9 @@ interface FilesystemInterface
      * @param string $directory The directory to list.
      * @param bool   $recursive Whether to list recursively.
      *
-     *@throws Exception If a low-level, adapter-specific error occurs
-     *                  (disk full, permission denied, network error, ...)
+     * @throws FileNotFoundException If directory doesn't exist
+     * @throws Exception If a low-level, adapter-specific error occurs
+     *                   (permission denied, network error, ...)
      *
      * @return array A list of file metadata.
      */
@@ -61,7 +62,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return array|false The file metadata or false on failure.
      */
@@ -72,8 +73,9 @@ interface FilesystemInterface
      *
      * @param string $path The path to the file.
      *
+     * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return int|false The file size or false on failure.
      *
@@ -86,9 +88,8 @@ interface FilesystemInterface
      * @param string $path The path to the file.
      *
      * @throws FileNotFoundException
-     *
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return string|false The file mime-type or false on failure.
      */
@@ -101,7 +102,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return string|false The timestamp or false on failure.
      */
@@ -114,7 +115,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return string|false The visibility (public|private) or false on failure.
      */
@@ -219,7 +220,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return bool True on success, false on failure.
      */
@@ -258,7 +259,7 @@ interface FilesystemInterface
      * @param string $visibility One of 'public' or 'private'.
      *
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return bool True on success, false on failure.
      */
@@ -300,7 +301,7 @@ interface FilesystemInterface
      *
      * @throws FileNotFoundException
      * @throws Exception If a low-level, adapter-specific error occurs
-     *                   (disk full, permission denied, network error, ...)
+     *                   (permission denied, network error, ...)
      *
      * @return string|false The file contents, or false on failure.
      */

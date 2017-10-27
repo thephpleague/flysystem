@@ -2,8 +2,6 @@
 
 namespace League\Flysystem;
 
-use Exception as BaseException;
-
 class FileExistsException extends Exception
 {
     /**
@@ -14,11 +12,11 @@ class FileExistsException extends Exception
     /**
      * Constructor.
      *
-     * @param string        $path
-     * @param int           $code
-     * @param BaseException $previous
+     * @param string    $path
+     * @param int       $code
+     * @param Exception $previous
      */
-    public function __construct($path, $code = 0, BaseException $previous = null)
+    public function __construct($path, $code = 0, Exception $previous = null)
     {
         $this->path = $path;
 

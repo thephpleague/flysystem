@@ -29,7 +29,7 @@ class MountManagerTests extends TestCase
     }
 
     /**
-     * @expectedException  LogicException
+     * @expectedException  \League\Flysystem\LogicException
      */
     public function testUndefinedFilesystem()
     {
