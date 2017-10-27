@@ -2,7 +2,6 @@
 
 namespace League\Flysystem;
 
-use RuntimeException;
 use SplFileInfo;
 
 class NotSupportedException extends RuntimeException
