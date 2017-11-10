@@ -95,6 +95,7 @@ Want to get started quickly? Check out some of these integrations:
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
 * ClamAV Scanner Adapter: https://github.com/mgriego/flysystem-clamav
 * Citrix ShareFile: https://github.com/kapersoft/flysystem-sharefile
+* Cloudinary: https://github.com/enl/flysystem-cloudinary
 * Dropbox (with PHP 5.6 support): https://github.com/srmklive/flysystem-dropbox-v2
 * Dropbox: https://github.com/spatie/flysystem-dropbox
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
