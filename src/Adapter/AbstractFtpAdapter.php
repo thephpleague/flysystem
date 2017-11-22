@@ -212,7 +212,11 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     public function setRoot($root)
     {
         $this->root = rtrim($root, '\\/') . $this->separator;
-
+        
+        if (method_exists($this, 'setConnectionRoot')) {
+            $this->setConnectionRoot();
+        }
+        
         return $this;
     }
 
