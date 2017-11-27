@@ -15,7 +15,7 @@ but also impacts performance. You can opt out of this behaviour.
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 
-$local = Filesystem($localAdapter, new Config([
+$local = new Filesystem($localAdapter, new Config([
     'disable_asserts' => true,
 ]));
 ~~~
