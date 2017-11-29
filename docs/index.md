@@ -6,10 +6,6 @@ title: Introduction
 
 # Introduction
 
-<span style="float: left; margin: 0 10px 0 0;">
-[![SensioLabsInsight](//insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/big.png)](//insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
-</span>
-
 [![Author](//img.shields.io/badge/author-@frankdejonge-blue.svg?style=flat-square)](//twitter.com/frankdejonge)
 [![Source Code](//img.shields.io/badge/source-thephpleague/flysystem-blue.svg?style=flat-square)](//github.com/thephpleague/flysystem)
 [![Latest Version](//img.shields.io/github/tag/thephpleague/flysystem.svg?style=flat-square)](//github.com/thephpleague/flysystem/releases)
@@ -32,6 +28,14 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
 * Support streams for big file handling
+
+## Development Sponsors
+
+In order to free up more time to work on maintenance of this package I'm looking for sponsors.
+If you (or your company), want to sponsor my efforts, consider becoming a sponsor via Patreon
+
+<a href="https://www.patreon.com/bePatron?u=8623643" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
+<script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
 
 ## Questions?
 
