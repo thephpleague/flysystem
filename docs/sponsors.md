@@ -6,7 +6,7 @@ title: Sponsors
 
 # Sponsors
 
-Development efforts are sponsored by the sponsors. I'm very grateful for their donations, please check them out! 
+Development efforts are supported by the sponsors. I'm very grateful for their donations, please check them out! 
 
 ## Gold Sponsors
 
