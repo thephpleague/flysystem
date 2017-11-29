@@ -8,14 +8,14 @@ title: Sponsors
 
 Development efforts are sponsored by the sponsors. I'm very grateful for their donations, please check them out! 
 
-# Gold Sponsors
+## Gold Sponsors
 
 <a href="https://laravel.com/">
-    <img src="/logo/laravel.svg" alt="Laravel.com" height="250px" />
-    <h3>Laravel.com</h3>
+<img src="/logo/laravel.svg" alt="Laravel.com" height="250px" />
+<h3>Laravel.com</h3>
 </a>
 
-## Silver Sponsors
+### Silver Sponsors
 
 None
 
