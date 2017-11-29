@@ -254,12 +254,16 @@ class Filesystem implements FilesystemInterface
     /**
      * @inheritdoc
      */
-    public function createDir($dirname, array $config = [])
+    public function createDir($dirname, array $config = [], $return_object = false)
     {
         $dirname = Util::normalizePath($dirname);
         $config = $this->prepareConfig($config);
-
-        return (bool) $this->getAdapter()->createDir($dirname, $config);
+        
+        if (!$return_object) {
+            return (bool) $this->getAdapter()->createDir($dirname, $config);
+        }
+        
+        return $this->getAdapter()->createDir($dirname, $config);
     }
 
     /**
