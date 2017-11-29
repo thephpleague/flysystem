@@ -18,6 +18,12 @@ title: Introduction
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one. Technical debt is reduced as is the chance of vendor lock-in.
 
+### Gold Sponsors
+
+<a href="https://laravel.com/"><img src="/logo/laravel.svg" alt="Laravel.com" height="100px" /></a>
+
+View all the [sponsors](/sponsors/).
+
 ## Goals
 
 * Have a generic API for handling common tasks across multiple file storage engines.

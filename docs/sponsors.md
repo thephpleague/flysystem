@@ -10,10 +10,8 @@ Development efforts are sponsored by the sponsors. I'm very grateful for their d
 
 ## Gold Sponsors
 
-<a href="https://laravel.com/">
-<img src="/logo/laravel.svg" alt="Laravel.com" height="250px" />
-<h3>Laravel.com</h3>
-</a>
+
+<h3><a href="https://laravel.com/"><img src="/logo/laravel.svg" alt="Laravel.com" height="250px" /><br/>Laravel.com</a></h3>
 
 ### Silver Sponsors
 
