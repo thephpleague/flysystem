@@ -16,7 +16,7 @@ before_install:
   - mkdir tests/files
 
 install:
-  - travis_retry composer install --prefer-dist
+  - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require sebastian/exporter:^3.0 --prefer-dist; fi
   - travis_retry composer update --prefer-dist --no-dev $COMPOSER_OPTS
 
 script:
