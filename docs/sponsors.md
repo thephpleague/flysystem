@@ -8,8 +8,7 @@ title: Sponsors
 
 Development efforts are supported by the sponsors. I'm very grateful for their donations, please check them out! 
 
-<a href="https://www.patreon.com/bePatron?u=8623643" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
-<script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+<a href="https://www.patreon.com/bePatron?u=8623643"><img src="/logo/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
 
 ## Gold Sponsors
 

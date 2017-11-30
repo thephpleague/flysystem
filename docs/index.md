@@ -14,7 +14,7 @@ title: Introduction
 [![Coverage Status](//img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg?style=flat-square)](//scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
 [![Quality Score](//img.shields.io/scrutinizer/g/thephpleague/flysystem.svg?style=flat-square)](//scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](//img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](//packagist.org/packages/league/flysystem)
-![php 5.5+](//img.shields.io/badge/php-min%205.5-red.svg?style=flat-square)
+![php 5.5.9+](//img.shields.io/badge/php-min%205.5.9-red.svg?style=flat-square)
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one. Technical debt is reduced as is the chance of vendor lock-in.
 
@@ -40,8 +40,7 @@ View all the [sponsors](/sponsors/).
 In order to free up more time to work on maintenance of this package I'm looking for sponsors.
 If you (or your company), want to sponsor my efforts, consider becoming a sponsor via Patreon
 
-<a href="https://www.patreon.com/bePatron?u=8623643" data-patreon-widget-type="become-patron-button">Become a Patron!</a>
-<script async src="https://c6.patreon.com/becomePatronButton.bundle.js"></script>
+<a href="https://www.patreon.com/bePatron?u=8623643"><img href="/logo/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
 
 ## Questions?
 
