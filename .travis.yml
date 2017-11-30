@@ -5,15 +5,7 @@ php:
   - 5.6
   - 7.0
   - 7.1
-
-matrix:
-  include:
-    - os: osx
-      osx_image: xcode7.3
-      language: generic
-      env:
-        - _OSX=10.11
-        - _PHP: php56
+  - 7.2
 
 sudo: false
 
@@ -22,9 +14,6 @@ env:
   - COMPOSER_OPTS="--prefer-lowest"
 
 before_install:
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/prepare_osx_env.sh ; fi
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/handle_brew_pkg.sh "${_PHP}" ; fi
-  - if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then /usr/bin/env bash build/osx_install_composer.sh ; fi
   - mkdir tests/files
 
 install:
