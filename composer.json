@@ -20,8 +20,7 @@
         "ext-fileinfo": "*",
         "mockery/mockery": "~0.9",
         "phpspec/phpspec": "^3.4",
-        "phpunit/phpunit": "^5.7",
-        "sebastian/exporter": "^2.0||^3.0"
+        "phpunit/phpunit": "^5.7"
     },
     "autoload": {
         "psr-4": {
