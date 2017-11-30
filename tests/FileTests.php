@@ -2,6 +2,7 @@
 
 namespace League\Flysystem;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
 
 class FileTests extends TestCase
@@ -132,20 +133,11 @@ class FileTests extends TestCase
 
     public function testRenameFails()
     {
-        $adapter = $this->getMock('League\Flysystem\AdapterInterface');
-        $adapter
-            ->expects($this->exactly(2))
-            ->method('has')
-            ->withConsecutive(
-                ['file.txt'],
-                ['files/renamed.txt']
-            )
-            ->willReturnOnConsecutiveCalls(true, false);
-        $adapter
-            ->expects($this->once())
-            ->method('rename')
-            ->with('file.txt', 'files/renamed.txt')
-            ->willReturn(false);
+        /** @var AdapterInterface|Mockery\MockInterface $adapter */
+        $adapter = Mockery::mock('\League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->with('file.txt')->andReturn(true);
+        $adapter->shouldReceive('has')->with('files/renamed.txt')->andReturn(false);
+        $adapter->shouldReceive('rename')->with('file.txt', 'files/renamed.txt')->andReturn(false);
 
         $filesystem = new Filesystem($adapter);
         /** @var File $file */
@@ -167,20 +159,10 @@ class FileTests extends TestCase
 
     public function testCopyFails()
     {
-        $adapter = $this->getMock('League\Flysystem\AdapterInterface');
-        $adapter
-            ->expects($this->exactly(2))
-            ->method('has')
-            ->withConsecutive(
-                ['file.txt'],
-                ['files/copied.txt']
-            )
-            ->willReturnOnConsecutiveCalls(true, false);
-        $adapter
-            ->expects($this->once())
-            ->method('copy')
-            ->with('file.txt', 'files/copied.txt')
-            ->willReturn(false);
+        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
+        $adapter->shouldReceive('has')->with('file.txt')->andReturn(true);
+        $adapter->shouldReceive('has')->with('files/copied.txt')->andReturn(false);
+        $adapter->shouldReceive('copy')->with('file.txt', 'files/copied.txt')->andReturn(false);
 
         $filesystem = new Filesystem($adapter);
         /** @var File $file */
