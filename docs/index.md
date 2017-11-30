@@ -40,7 +40,7 @@ View all the [sponsors](/sponsors/).
 In order to free up more time to work on maintenance of this package I'm looking for sponsors.
 If you (or your company), want to sponsor my efforts, consider becoming a sponsor via Patreon
 
-<a href="https://www.patreon.com/bePatron?u=8623643"><img href="/logo/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
+<a href="https://www.patreon.com/bePatron?u=8623643"><img src="/logo/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
 
 ## Questions?
 
