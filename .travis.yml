@@ -16,8 +16,8 @@ before_install:
   - mkdir tests/files
 
 install:
-  - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require sebastian/exporter:^3.0 --prefer-dist; fi
-  - travis_retry composer update --prefer-dist --update-with-dependencies $COMPOSER_OPTS
+  - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require sebastian/exporter:^3.0 --prefer-dist --update-with-dependencies; fi
+  - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 script:
   - bin/phpunit --coverage-text --coverage-clover coverage.xml
