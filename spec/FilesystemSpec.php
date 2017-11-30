@@ -10,11 +10,9 @@ class FilesystemSpec extends ObjectBehavior
     protected $adapter;
     protected $cache;
 
-    /**
-     * @param \League\Flysystem\AdapterInterface $adapter
-     */
     public function let($adapter)
     {
+        $adapter->beADoubleOf('League\Flysystem\AdapterInterface');
         $this->adapter = $adapter;
         $this->beConstructedWith($adapter);
     }
@@ -30,11 +28,9 @@ class FilesystemSpec extends ObjectBehavior
         $this->getAdapter()->shouldHaveType('League\Flysystem\AdapterInterface');
     }
 
-    /**
-     * @param \League\Flysystem\Stub\PluginStub $plugin
-     */
     public function it_should_delegate_plugin_calls($plugin)
     {
+        $plugin->beADoubleOf('League\Flysystem\Stub\PluginStub');
         $plugin->setFilesystem($this)->shouldBeCalled();
         $plugin->getMethod()->willReturn('pluginMethod');
         $plugin->handle()->shouldBeCalled();
