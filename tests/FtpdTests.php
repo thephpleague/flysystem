@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class FtpdTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     protected $options = [
         'host' => 'example.org',

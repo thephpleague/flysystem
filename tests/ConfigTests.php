@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function testGet()
     {

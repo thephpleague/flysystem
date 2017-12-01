@@ -50,7 +50,7 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
 class LocalAdapterTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     /**
      * @var Local

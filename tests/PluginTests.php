@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class MyPlugin implements PluginInterface
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function getMethod()
     {

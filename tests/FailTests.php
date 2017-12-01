@@ -23,12 +23,11 @@ namespace League\Flysystem\Adapter
 
 namespace League\Flysystem
 {
-
     use PHPUnit\Framework\TestCase;
 
     class FailTests extends TestCase
     {
-        use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+        use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
         public function testFails()
         {

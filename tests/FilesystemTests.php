@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class FilesystemTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     /**
      * @var ObjectProphecy

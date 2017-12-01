@@ -19,7 +19,7 @@ function class_exists($class_name, $autoload = true)
 
 class UtilMimeTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function testNoFinfoFallback()
     {

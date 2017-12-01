@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class ForcedCopyPluginTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     protected $filesystem;
     protected $plugin;

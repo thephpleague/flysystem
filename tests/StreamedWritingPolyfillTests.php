@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedWritingPolyfillTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function testWrite()
     {

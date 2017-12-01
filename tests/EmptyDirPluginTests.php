@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class EmptyDirPluginTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function testPlugin()
     {

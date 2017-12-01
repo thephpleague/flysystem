@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class FileTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     /** @var Filesystem */
     protected $filesystem;

@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedReadingTraitTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
 
     public function testStreamRead()
     {
