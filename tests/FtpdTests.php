@@ -7,13 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class FtpdTests extends TestCase
 {
-    /**
-     * @after
-     */
-    public function closeMockery()
-    {
-        \Mockery::close();
-    }
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     protected $options = [
         'host' => 'example.org',

@@ -7,13 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedReadingTraitTests extends TestCase
 {
-    /**
-     * @after
-     */
-    public function closeMockery()
-    {
-        \Mockery::close();
-    }
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     public function testStreamRead()
     {

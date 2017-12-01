@@ -5,13 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListFilesTests extends TestCase
 {
-    /**
-     * @after
-     */
-    public function closeMockery()
-    {
-        \Mockery::close();
-    }
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     private $filesystem;
     private $actualFilesystem;

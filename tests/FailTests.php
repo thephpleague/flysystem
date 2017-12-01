@@ -28,13 +28,7 @@ namespace League\Flysystem
 
     class FailTests extends TestCase
     {
-        /**
-         * @after
-         */
-        public function closeMockery()
-        {
-            \Mockery::close();
-        }
+        use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
         public function testFails()
         {

@@ -6,13 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class GetWithMetadataTests extends TestCase
 {
-    /**
-     * @after
-     */
-    public function closeMockery()
-    {
-        \Mockery::close();
-    }
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     /**
      * @var ObjectProphecy

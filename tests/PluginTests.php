@@ -8,13 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class MyPlugin implements PluginInterface
 {
-    /**
-     * @after
-     */
-    public function closeMockery()
-    {
-        \Mockery::close();
-    }
+    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
     public function getMethod()
     {
