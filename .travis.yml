@@ -21,7 +21,7 @@ before_install:
   - mkdir tests/files
 
 install:
-  - if [[ "${TRAVIS_PHP_VERSION}" == "5.5" ]]; then composer require phpunit/phpunit:^4.8 mockery/mockery:^0.9 phpspec/phpspec:^3 --prefer-dist --update-with-dependencies; fi
+  - if [[ "${TRAVIS_PHP_VERSION}" == "5.5" ]]; then composer require phpunit/phpunit:^4.8 mockery/mockery:^0.9 phpspec/phpspec:^2 --prefer-dist --update-with-dependencies; fi
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require phpunit/phpunit:^6.0 --prefer-dist --update-with-dependencies; fi
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
