@@ -11,6 +11,14 @@ use PHPUnit\Framework\TestCase;
 class FilesystemTests extends TestCase
 {
     /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
+    /**
      * @var ObjectProphecy
      */
     protected $prophecy;

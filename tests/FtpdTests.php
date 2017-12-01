@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class FtpdTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     protected $options = [
         'host' => 'example.org',
         'port' => 40,

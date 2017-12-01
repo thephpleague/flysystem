@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class FlysystemStreamTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testWriteStream()
     {
         $adapter = Mockery::mock('League\Flysystem\AdapterInterface');

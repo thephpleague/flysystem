@@ -5,6 +5,14 @@ use PHPUnit\Framework\TestCase;
 
 class ForcedRenamePluginTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     protected $filesystem;
     protected $plugin;
 

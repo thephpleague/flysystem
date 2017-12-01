@@ -9,6 +9,14 @@ use PHPUnit\Framework\TestCase;
 class AdaptersThatCanOverwriteFilesTest extends TestCase
 {
     /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
+    /**
      * @test
      */
     public function overwriting_files_with_put()

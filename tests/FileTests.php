@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class FileTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     /** @var Filesystem */
     protected $filesystem;
 

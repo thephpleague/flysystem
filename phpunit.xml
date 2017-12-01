@@ -21,9 +21,6 @@
             <directory suffix=".php">./src/</directory>
         </whitelist>
     </filter>
-    <listeners>
-        <listener class="Mockery\Adapter\Phpunit\TestListener" file="./vendor/mockery/mockery/library/Mockery/Adapter/Phpunit/TestListener.php"></listener>
-    </listeners>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true"/>
         <log type="coverage-html" target="coverage" showUncoveredFiles="true"/>

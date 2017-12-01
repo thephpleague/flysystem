@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedCopyPolyfilTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testReadFail()
     {
         $copy = new StreamedCopyStub(false, null);

@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedReadingTraitTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testStreamRead()
     {
         $stub = new StreamedReadingStub();

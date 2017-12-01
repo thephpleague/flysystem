@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class HandlerTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testFileRead()
     {
         $prophecy = $this->prophesize('League\Flysystem\FilesystemInterface');

@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 class NullAdapterTest extends TestCase
 {
     /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
+    /**
      * @return Filesystem
      */
     protected function getFilesystem()

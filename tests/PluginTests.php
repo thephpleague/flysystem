@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class MyPlugin implements PluginInterface
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function getMethod()
     {
         return 'beAwesome';

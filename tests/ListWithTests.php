@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class ListWithTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testHandle()
     {
         $prophecy = $this->prophesize('League\Flysystem\Filesystem');

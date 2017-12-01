@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class EmptyDirPluginTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testPlugin()
     {
         $filesystem = Mockery::mock('League\\Flysystem\\FilesystemInterface');

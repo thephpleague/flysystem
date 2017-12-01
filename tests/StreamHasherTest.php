@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class StreamHasherTest extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testHasher()
     {
         $filename = __DIR__.'/../src/Filesystem.php';

@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class NotSupportingVisivilityTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testGetVisibility()
     {
         $this->setExpectedException('LogicException');

@@ -28,6 +28,14 @@ namespace League\Flysystem
 
     class FailTests extends TestCase
     {
+        /**
+         * @after
+         */
+        public function closeMockery()
+        {
+            \Mockery::close();
+        }
+
         public function testFails()
         {
             $adapter = new Adapter\Local(__DIR__ . '/files');
@@ -37,5 +45,4 @@ namespace League\Flysystem
             $this->assertFalse($adapter->deleteDir('non-existing'));
         }
     }
-
 }

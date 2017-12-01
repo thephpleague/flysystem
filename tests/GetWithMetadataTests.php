@@ -7,6 +7,14 @@ use PHPUnit\Framework\TestCase;
 class GetWithMetadataTests extends TestCase
 {
     /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
+    /**
      * @var ObjectProphecy
      */
     private $prophecy;

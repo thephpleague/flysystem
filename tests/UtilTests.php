@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class UtilTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testEmulateDirectories()
     {
         $input = [

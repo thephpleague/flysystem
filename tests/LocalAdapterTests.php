@@ -51,6 +51,14 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 class LocalAdapterTests extends TestCase
 {
     /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
+    /**
      * @var Local
      */
     protected $adapter;

@@ -5,6 +5,14 @@ use PHPUnit\Framework\TestCase;
 
 class ListPathsTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     private $filesystem;
     private $actualFilesystem;
 

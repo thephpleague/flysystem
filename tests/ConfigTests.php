@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testGet()
     {
         $config = new Config();

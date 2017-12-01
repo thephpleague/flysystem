@@ -5,6 +5,14 @@ use PHPUnit\Framework\TestCase;
 
 class MountManagerTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testInstantiable()
     {
         new MountManager();

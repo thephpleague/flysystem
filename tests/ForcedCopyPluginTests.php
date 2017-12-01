@@ -6,6 +6,14 @@ use PHPUnit\Framework\TestCase;
 
 class ForcedCopyPluginTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     protected $filesystem;
     protected $plugin;
 

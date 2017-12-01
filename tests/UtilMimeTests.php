@@ -19,6 +19,14 @@ function class_exists($class_name, $autoload = true)
 
 class UtilMimeTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testNoFinfoFallback()
     {
         global $passthru;

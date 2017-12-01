@@ -8,6 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedWritingPolyfillTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     public function testWrite()
     {
         $stream = tmpfile();

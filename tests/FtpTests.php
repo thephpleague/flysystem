@@ -370,6 +370,14 @@ function ftp_set_option($connection, $option, $value)
 
 class FtpTests extends TestCase
 {
+    /**
+     * @after
+     */
+    public function closeMockery()
+    {
+        \Mockery::close();
+    }
+
     protected $options = [
         'host' => 'example.org',
         'port' => 40,
