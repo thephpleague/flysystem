@@ -18,7 +18,6 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "mockery/mockery": "^1.0",
         "phpspec/phpspec": "^3.4",
         "phpunit/phpunit": "^5.7"
     },
@@ -32,7 +31,7 @@
             "League\\Flysystem\\Stub\\": "stub/"
         },
         "files": [
-          "tests/PHPUnitExpectedExceptionHack.php"
+          "tests/PHPUnitHacks.php"
         ]
     },
     "suggest": {

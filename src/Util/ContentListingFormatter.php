@@ -107,12 +107,9 @@ class ContentListingFormatter
      */
     private function sortListing(array $listing)
     {
-        usort(
-            $listing,
-            function ($a, $b) {
-                return strcasecmp($a['path'], $b['path']);
-            }
-        );
+        usort($listing, function ($a, $b) {
+            return strcasecmp($a['path'], $b['path']);
+        });
 
         return $listing;
     }

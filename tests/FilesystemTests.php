@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class FilesystemTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     /**
      * @var ObjectProphecy
@@ -152,19 +152,19 @@ class FilesystemTests extends TestCase
 
     public function testPutStreamInvalid()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->filesystem->putStream('path.txt', '__INVALID__');
     }
 
     public function testWriteStreamInvalid()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->filesystem->writeStream('path.txt', '__INVALID__');
     }
 
     public function testUpdateStreamInvalid()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $this->filesystem->updateStream('path.txt', '__INVALID__');
     }
 
@@ -249,7 +249,7 @@ class FilesystemTests extends TestCase
 
     public function testDeleteDirRootViolation()
     {
-        $this->setExpectedException('League\Flysystem\RootViolationException');
+        $this->expectException('League\Flysystem\RootViolationException');
         $this->filesystem->deleteDir('');
     }
 
@@ -316,14 +316,14 @@ class FilesystemTests extends TestCase
 
     public function testAssertPresentThrowsException()
     {
-        $this->setExpectedException('League\Flysystem\FileExistsException');
+        $this->expectException('League\Flysystem\FileExistsException');
         $this->prophecy->has('path.txt')->willReturn(true);
         $this->filesystem->write('path.txt', 'contents');
     }
 
     public function testAssertAbsentThrowsException()
     {
-        $this->setExpectedException('League\Flysystem\FileNotFoundException');
+        $this->expectException('League\Flysystem\FileNotFoundException');
         $this->prophecy->has('path.txt')->willReturn(false);
         $this->filesystem->read('path.txt');
     }
@@ -445,7 +445,7 @@ class FilesystemTests extends TestCase
 
     public function testInvalidPluginCall()
     {
-        $this->setExpectedException('BadMethodCallException');
+        $this->expectException('BadMethodCallException');
         $this->filesystem->invalidCall();
     }
 }

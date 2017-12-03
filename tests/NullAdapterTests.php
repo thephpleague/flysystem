@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class NullAdapterTest extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     /**
      * @return Filesystem

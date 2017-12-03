@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListFilesTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     private $filesystem;
     private $actualFilesystem;

@@ -27,7 +27,7 @@ namespace League\Flysystem
 
     class FailTests extends TestCase
     {
-        use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+        use \PHPUnitHacks;
 
         public function testFails()
         {
