@@ -50,7 +50,7 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
 class LocalAdapterTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     /**
      * @var Local
@@ -233,7 +233,7 @@ class LocalAdapterTests extends TestCase
         try {
             $root = __DIR__ . '/files/not-writable';
             mkdir($root, 0000, true);
-            $this->setExpectedException('LogicException');
+            $this->expectException('LogicException');
             new Local($root);
         } catch (\Exception $e) {
             rmdir($root);
@@ -437,7 +437,7 @@ class LocalAdapterTests extends TestCase
 
     public function testUnreadableFilesCauseAnError()
     {
-        $this->setExpectedException('League\Flysystem\UnreadableFileException');
+        $this->expectException('League\Flysystem\UnreadableFileException');
 
         $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::SKIP_LINKS);
         $reflection = new \ReflectionClass($adapter);

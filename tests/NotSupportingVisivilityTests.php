@@ -7,18 +7,18 @@ use PHPUnit\Framework\TestCase;
 
 class NotSupportingVisivilityTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     public function testGetVisibility()
     {
-        $this->setExpectedException('LogicException');
+        $this->expectException('LogicException');
         $stub = new NotSupportingVisibilityStub();
         $stub->getVisibility('path.txt');
     }
 
     public function testSetVisibility()
     {
-        $this->setExpectedException('LogicException');
+        $this->expectException('LogicException');
         $stub = new NotSupportingVisibilityStub();
         $stub->setVisibility('path.txt', 'public');
     }

@@ -5,42 +5,42 @@ use PHPUnit\Framework\TestCase;
 
 class ForcedRenamePluginTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     protected $filesystem;
     protected $plugin;
 
     public function setUp()
     {
-        $this->filesystem = Mockery::mock('League\Flysystem\FilesystemInterface');
+        $this->filesystem = $this->prophesize('League\Flysystem\FilesystemInterface');
         $this->plugin = new ForcedRename();
-        $this->plugin->setFilesystem($this->filesystem);
+        $this->plugin->setFilesystem($this->filesystem->reveal());
     }
 
     public function testPluginSuccess()
     {
         $this->assertSame('forceRename', $this->plugin->getMethod());
 
-        $this->filesystem->shouldReceive('delete')->with('newpath')->andReturn(true);
-        $this->filesystem->shouldReceive('rename')->with('path', 'newpath')->andReturn(true);
+        $this->filesystem->delete('newpath')->willReturn(true)->shouldBeCalled();
+        $this->filesystem->rename('path', 'newpath')->willReturn(true)->shouldBeCalled();
 
         $this->assertTrue($this->plugin->handle('path', 'newpath'));
     }
 
     public function testPluginDeleteNotExists()
     {
-        $this->filesystem->shouldReceive('delete')
-            ->with('newpath')
-            ->andThrow('League\Flysystem\FileNotFoundException', 'newpath');
+        $this->filesystem->delete('newpath')
+            ->willThrow('League\Flysystem\FileNotFoundException', 'newpath')
+            ->shouldBeCalled();
 
-        $this->filesystem->shouldReceive('rename')->with('path', 'newpath')->andReturn(true);
+        $this->filesystem->rename('path', 'newpath')->willReturn(true)->shouldBeCalled();
 
         $this->assertTrue($this->plugin->handle('path', 'newpath'));
     }
 
     public function testPluginDeleteFail()
     {
-        $this->filesystem->shouldReceive('delete')->with('newpath')->andReturn(false);
+        $this->filesystem->delete('newpath')->willReturn(false)->shouldBeCalled();
         $this->assertFalse($this->plugin->handle('path', 'newpath'));
     }
 }

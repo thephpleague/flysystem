@@ -1,12 +1,11 @@
 <?php
 
 use League\Flysystem\Config;
-
 use PHPUnit\Framework\TestCase;
 
 class ConfigTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     public function testGet()
     {

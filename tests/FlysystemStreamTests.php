@@ -1,21 +1,24 @@
 <?php
 
 use League\Flysystem\Filesystem;
-
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 
 class FlysystemStreamTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     public function testWriteStream()
     {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(false);
-        $adapter->shouldReceive('writeStream')->andReturn(['path' => 'file.txt'], false);
-        $filesystem = new Filesystem($adapter);
-        $this->assertTrue($filesystem->writeStream('file.txt', tmpfile()));
-        $this->assertFalse($filesystem->writeStream('file.txt', tmpfile()));
+        $stream = tmpfile();
+        $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
+        $adapter->has('file.txt')->willReturn(false)->shouldBeCalled();
+        $adapter->writeStream('file.txt', $stream, Argument::type('League\Flysystem\Config'))
+            ->willReturn(['path' => 'file.txt'], false)
+            ->shouldBeCalled();
+        $filesystem = new Filesystem($adapter->reveal());
+        $this->assertTrue($filesystem->writeStream('file.txt', $stream));
+        $this->assertFalse($filesystem->writeStream('file.txt', $stream));
     }
 
     /**
@@ -23,20 +26,24 @@ class FlysystemStreamTests extends TestCase
      */
     public function testWriteStreamFail()
     {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(false);
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem($this->createMock('League\Flysystem\AdapterInterface'));
         $filesystem->writeStream('file.txt', 'not a resource');
     }
 
     public function testUpdateStream()
     {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(true);
-        $adapter->shouldReceive('updateStream')->andReturn(['path' => 'file.txt'], false);
-        $filesystem = new Filesystem($adapter);
-        $this->assertTrue($filesystem->updateStream('file.txt', tmpfile()));
-        $this->assertFalse($filesystem->updateStream('file.txt', tmpfile()));
+        $stream = tmpfile();
+        $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
+        $adapter->has('file.txt')->willReturn(true)->shouldBeCalled();
+
+        $adapter->updateStream('file.txt', $stream, Argument::type('League\Flysystem\Config'))
+            ->willReturn(['path' => 'file.txt'], false)
+            ->shouldBeCalled();
+
+        $filesystem = new Filesystem($adapter->reveal());
+
+        $this->assertTrue($filesystem->updateStream('file.txt', $stream));
+        $this->assertFalse($filesystem->updateStream('file.txt', $stream));
     }
 
     /**
@@ -44,19 +51,18 @@ class FlysystemStreamTests extends TestCase
      */
     public function testUpdateStreamFail()
     {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(true);
-        $filesystem = new Filesystem($adapter);
+        $filesystem = new Filesystem($this->createMock('League\Flysystem\AdapterInterface'));
         $filesystem->updateStream('file.txt', 'not a resource');
     }
 
     public function testReadStream()
     {
-        $adapter = Mockery::mock('League\Flysystem\AdapterInterface');
-        $adapter->shouldReceive('has')->andReturn(true);
+        $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
+        $adapter->has(Argument::type('string'))->willReturn(true)->shouldBeCalled();
         $stream = tmpfile();
-        $adapter->shouldReceive('readStream')->times(3)->andReturn(['stream' => $stream], false, false);
-        $filesystem = new Filesystem($adapter);
+        $adapter->readStream('file.txt')->willReturn(['stream' => $stream])->shouldBeCalled();
+        $adapter->readStream('other.txt')->willReturn(false)->shouldBeCalled();
+        $filesystem = new Filesystem($adapter->reveal());
         $this->assertInternalType('resource', $filesystem->readStream('file.txt'));
         $this->assertFalse($filesystem->readStream('other.txt'));
         fclose($stream);

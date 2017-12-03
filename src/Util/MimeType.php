@@ -26,10 +26,11 @@ class MimeType
             $finfo = new Finfo(FILEINFO_MIME_TYPE);
 
             return $finfo->buffer($content) ?: null;
+        // @codeCoverageIgnoreStart
         } catch( ErrorException $e ) {
             // This is caused by an array to string conversion error.
         }
-    }
+    } // @codeCoverageIgnoreEnd
 
     /**
      * Detects MIME Type based on file extension.

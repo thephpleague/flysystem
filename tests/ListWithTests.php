@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListWithTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     public function testHandle()
     {
@@ -35,7 +35,7 @@ class ListWithTests extends TestCase
         ]);
         $filesystem = $prophecy->reveal();
 
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $plugin = new ListWith();
         $plugin->setFilesystem($filesystem);
         $plugin->handle(['invalid'], '', true);

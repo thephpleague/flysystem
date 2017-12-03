@@ -129,7 +129,7 @@ function ftp_raw($connection, $command)
 	if ($command === 'OPTS UTF8 ON') {
         return [0 => '200 UTF8 set to on'];
     }
-    
+
     if ($command === 'STAT syno.not.found') {
         return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
@@ -370,7 +370,7 @@ function ftp_set_option($connection, $option, $value)
 
 class FtpTests extends TestCase
 {
-    use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration, \PHPUnitExpectedExceptionHack;
+    use \PHPUnitHacks;
 
     protected $options = [
         'host' => 'example.org',
@@ -448,7 +448,7 @@ class FtpTests extends TestCase
     {
         putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
 
-        $this->setExpectedException('ErrorException');
+        $this->expectException('ErrorException');
         $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
         $adapter->connect();
         $adapter->isConnected();
