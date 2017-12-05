@@ -13,6 +13,9 @@
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
+[![Become a Patron](https://flysystem.thephpleague.com/logo/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=8623643)
+https://www.patreon.com/bePatron?u=8623643
+
 ## Goals
 
 * Have a generic API for handling common tasks across multiple file storage engines.
@@ -26,29 +29,8 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 
 ## Installation
 
-Through Composer, obviously:
-
 ```
 composer require league/flysystem
-```
-
-You can also use Flysystem without using Composer by registering an autoloader function:
-
-```php
-spl_autoload_register(function($class) {
-    $prefix = 'League\\Flysystem\\';
-
-    if (substr($class, 0, 17) !== $prefix) {
-        return;
-    }
-
-    $class = substr($class, strlen($prefix));
-    $location = __DIR__ . 'path/to/flysystem/src/' . str_replace('\\', '/', $class) . '.php';
-
-    if (is_file($location)) {
-        require_once($location);
-    }
-});
 ```
 
 ## Documentation
@@ -118,8 +100,7 @@ Want to get started quickly? Check out some of these integrations:
 
 ## Security
 
-If you discover any security related issues, please email frenky@frenky.net instead of using the issue tracker.
-
+If you discover any security related issues, please email info@frankdejonge.nl instead of using the issue tracker.
 
 ## Enjoy
 
