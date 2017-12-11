@@ -7,7 +7,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![Packagist Version](https://img.shields.io/packagist/v/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
-[![Build status](https://ci.appveyor.com/api/projects/status/ooddqdtprpnjyagy/branch/master?svg=true)](https://ci.appveyor.com/project/frankdejonge/flysystem/branch/master)
+[![Build status](https://img.shields.io/appveyor/ci/frankdejonge/flysystem/master.svg?style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/frankdejonge/flysystem/branch/master)
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/big.png)](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
 
