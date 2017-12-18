@@ -218,7 +218,7 @@ class Local extends AbstractAdapter
             return false;
         }
 
-        return ['type' => 'file', 'path' => $path, 'contents' => $contents];
+        return $contents;
     }
 
     /**
