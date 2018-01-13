@@ -185,7 +185,7 @@ class Ftp extends AbstractFtpAdapter
         $root = $this->getRoot();
         $connection = $this->connection;
 
-        if (isset($root) && ! ftp_chdir($connection, $root)) {
+        if ($root && ! ftp_chdir($connection, $root)) {
             throw new RuntimeException('Root is invalid or does not exist: ' . $this->getRoot());
         }
 
@@ -540,7 +540,7 @@ class Ftp extends AbstractFtpAdapter
     }
 
     /**
-     * @return null|string
+     * @return bool
      */
     protected function isPureFtpdServer()
     {

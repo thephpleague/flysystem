@@ -75,7 +75,7 @@ class ContentListingFormatter
     /**
      * Check if the entry resides within the parent directory.
      *
-     * @param $entry
+     * @param array $entry
      *
      * @return bool
      */
@@ -91,7 +91,7 @@ class ContentListingFormatter
     /**
      * Check if the entry is a direct child of the directory.
      *
-     * @param $entry
+     * @param array $entry
      *
      * @return bool
      */
