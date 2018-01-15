@@ -39,20 +39,12 @@ function ftp_ssl_connect($host)
 
 function ftp_delete($conn, $path)
 {
-    if (strpos($path, 'rm.fail.txt')) {
-        return false;
-    }
-
-    return true;
+    return ! strpos($path, 'rm.fail.txt');
 }
 
 function ftp_rmdir($connection, $dirname)
 {
-    if (strpos($dirname, 'rmdir.fail') !== false) {
-        return false;
-    }
-
-    return true;
+    return strpos($dirname, 'rmdir.fail') === false;
 }
 
 function ftp_connect($host)
@@ -62,11 +54,7 @@ function ftp_connect($host)
 
 function ftp_pasv($connection)
 {
-    if ($connection === 'pasv.fail') {
-        return false;
-    }
-
-    return true;
+    return $connection !== 'pasv.fail';
 }
 
 function ftp_rename()
@@ -112,11 +100,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if ($directory === '0') {
-        return false;
-    }
-
-    return true;
+    return $directory !== '0';
 }
 
 function ftp_pwd($connection)
@@ -319,20 +303,12 @@ function ftp_mdtm($connection, $path)
 
 function ftp_mkdir($connection, $dirname)
 {
-    if (strpos($dirname, 'mkdir.fail') !== false) {
-        return false;
-    }
-
-    return true;
+    return strpos($dirname, 'mkdir.fail') === false;
 }
 
 function ftp_fput($connection, $path)
 {
-    if (strpos($path, 'write.fail') !== false) {
-        return false;
-    }
-
-    return true;
+    return strpos($path, 'write.fail') === false;
 }
 
 function ftp_fget($connection, $resource, $path)
@@ -354,11 +330,7 @@ function ftp_nlist($connection, $directory)
 
 function ftp_chmod($connection, $mode, $path)
 {
-    if (strpos($path, 'chmod.fail') !== false) {
-        return false;
-    }
-
-    return true;
+    return strpos($path, 'chmod.fail') === false;
 }
 
 function ftp_set_option($connection, $option, $value)
