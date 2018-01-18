@@ -137,14 +137,12 @@ function ftp_rawlist($connection, $directory)
 {
     $directory = str_replace("-A ", "", $directory);
 
-    if ($directory === '/') {
-        if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
-            throw new ErrorException('ftp_rawlist');
-        }
+    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
+        throw new ErrorException('ftp_rawlist');
+    }
 
-        if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
-            throw new ErrorException('does not contain the correct message');
-        }
+    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
+        throw new ErrorException('does not contain the correct message');
     }
 
     if (strpos($directory, 'recurse.manually') !== false) {
