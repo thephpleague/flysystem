@@ -1,3 +1,7 @@
+sudo: required
+services:
+  - docker
+
 language: php
 
 php:
@@ -26,6 +30,8 @@ install:
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 script:
+  - docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
+  - php wait_for_ftp_service.php
   - bin/phpunit --coverage-text --coverage-clover coverage.xml
   - bin/phpspec run
 
