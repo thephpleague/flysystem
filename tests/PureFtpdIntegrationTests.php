@@ -5,6 +5,9 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @runTestsInSeparateProcesses
+ */
 class PureFtpdIntegrationTests extends TestCase
 {
     /**
