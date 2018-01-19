@@ -2,7 +2,7 @@
 
 use League\Flysystem\Adapter\Ftpd;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Plugin\ListFiles;
+use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
 class PureFtpdIntegrationTests extends TestCase
@@ -13,16 +13,30 @@ class PureFtpdIntegrationTests extends TestCase
     protected $filesystem;
 
     /**
+     * @test
+     */
+    public function testInstantiable()
+    {
+        if ( ! defined('FTP_BINARY')) {
+            $this->markTestSkipped('The FTP_BINARY constant is not defined');
+        }
+    }
+
+    /**
      * @before
      */
     public function setup_filesystem()
     {
+        if ( ! defined('FTP_BINARY')) {
+            return;
+        }
         $adapter = new Ftpd(['host' => 'localhost', 'username' => 'bob', 'password' => 'test']);
         $this->filesystem = new Filesystem($adapter);
     }
 
     /**
      * @test
+     * @depends testInstantiable
      */
     public function writing_reading_deleting()
     {
@@ -34,6 +48,7 @@ class PureFtpdIntegrationTests extends TestCase
 
     /**
      * @test
+     * @depends testInstantiable
      */
     public function writing_in_a_directory_and_deleting_the_directory()
     {
@@ -50,14 +65,18 @@ class PureFtpdIntegrationTests extends TestCase
         $this->assertFalse($filesystem->has('deeply'));
     }
 
+    /**
+     * @test
+     * @depends testInstantiable
+     */
     public function listing_files_of_a_directory()
     {
         $filesystem = $this->filesystem;
         $filesystem->write('dirname/a.txt', 'contents');
         $filesystem->write('dirname/b.txt', 'contents');
         $filesystem->write('dirname/c.txt', 'contents');
-        $filesystem->addPlugin(new ListFiles());
-        $files = $filesystem->listFiles('dirname');
+        $filesystem->addPlugin(new ListPaths());
+        $files = $filesystem->listPaths('dirname');
         $expected = ['dirname/a.txt', 'dirname/b.txt', 'dirname/c.txt'];
         $filesystem->deleteDir('dirname');
         $this->assertEquals($expected, $files);
