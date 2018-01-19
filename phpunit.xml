@@ -14,6 +14,7 @@
     <testsuites>
         <testsuite name="flysystem/tests">
             <directory suffix=".php">./tests/</directory>
+            <exclude>./tests/PureFtpdIntegrationTests.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

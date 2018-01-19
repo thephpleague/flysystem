@@ -6,7 +6,7 @@ use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @runTestsInSeparateProcesses
+ * @group integration
  */
 class PureFtpdIntegrationTests extends TestCase
 {
@@ -33,8 +33,22 @@ class PureFtpdIntegrationTests extends TestCase
         if ( ! defined('FTP_BINARY')) {
             return;
         }
-        $adapter = new Ftpd(['host' => 'localhost', 'username' => 'bob', 'password' => 'test']);
+        $adapter = new Ftpd([
+            'host' => 'localhost',
+            'username' => 'bob',
+            'password' => 'test',
+//            'root' => '/home/ftpusers/bob/'
+        ]);
         $this->filesystem = new Filesystem($adapter);
+        $this->filesystem->addPlugin(new ListPaths());
+
+        foreach ($this->filesystem->listContents('/') as $item) {
+            if ($item['type'] == 'dir') {
+                $this->filesystem->deleteDir($item['path']);
+            } else {
+                $this->filesystem->delete($item['path']);
+            }
+        }
     }
 
     /**
@@ -78,7 +92,6 @@ class PureFtpdIntegrationTests extends TestCase
         $filesystem->write('dirname/a.txt', 'contents');
         $filesystem->write('dirname/b.txt', 'contents');
         $filesystem->write('dirname/c.txt', 'contents');
-        $filesystem->addPlugin(new ListPaths());
         $files = $filesystem->listPaths('dirname');
         $expected = ['dirname/a.txt', 'dirname/b.txt', 'dirname/c.txt'];
         $filesystem->deleteDir('dirname');
