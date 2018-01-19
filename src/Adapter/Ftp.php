@@ -311,14 +311,14 @@ class Ftp extends AbstractFtpAdapter
     public function deleteDir($dirname)
     {
         $connection = $this->getConnection();
-        $contents = array_reverse($this->listDirectoryContents($dirname));
+        $contents = array_reverse($this->listDirectoryContents($dirname, false));
 
         foreach ($contents as $object) {
             if ($object['type'] === 'file') {
                 if ( ! ftp_delete($connection, $object['path'])) {
                     return false;
                 }
-            } elseif ( ! ftp_rmdir($connection, $object['path'])) {
+            } elseif ( ! $this->deleteDir($object['path'])) {
                 return false;
             }
         }

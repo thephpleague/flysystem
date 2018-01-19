@@ -253,6 +253,21 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
+    if (strpos($directory, 'some.nested/rmdir.fail') !== false || strpos($directory, 'somewhere/cgi-bin') !== false) {
+        return [
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+        ];
+    }
+
+    if (strpos($directory, 'some.nested') !== false) {
+        return ['drwxr-xr-x   1 ftp      ftp           409 Aug 19 09:01 rmdir.fail'];
+    }
+
+    if (strpos($directory, 'somewhere/folder') !== false) {
+        return ['-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt'];
+    }
+
     return [
         'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
         'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
