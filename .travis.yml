@@ -29,10 +29,12 @@ install:
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require phpunit/phpunit:^6.0 --prefer-dist --update-with-dependencies; fi
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
-script:
+before_script:
   - docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
   - php wait_for_ftp_service.php
   - docker exec -it ftpd_server sh -c "(echo test; echo test) | pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob"
+
+script:
   - bin/phpunit --coverage-text --coverage-clover coverage.xml
   - bin/phpunit tests/PureFtpdIntegrationTests.php
   - bin/phpspec run
