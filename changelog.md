@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.41 - 2018-01-27
+
+* Fixed FTP manual recursion.
+* Various code style fixes.
+
 ## 1.0.41 - 2017-08-06
 
 ### Fixed
