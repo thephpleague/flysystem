@@ -1,6 +1,6 @@
 <?php
 
-use League\Flysystem\Adapter\Ftpd;
+use League\Flysystem\Adapter\Ftp;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
@@ -33,11 +33,11 @@ class PureFtpdIntegrationTests extends TestCase
         if ( ! defined('FTP_BINARY')) {
             return;
         }
-        $adapter = new Ftpd([
+        $adapter = new Ftp([
             'host' => 'localhost',
             'username' => 'bob',
             'password' => 'test',
-//            'root' => '/home/ftpusers/bob/'
+            'recurseManually' => true,
         ]);
         $this->filesystem = new Filesystem($adapter);
         $this->filesystem->addPlugin(new ListPaths());
@@ -90,10 +90,10 @@ class PureFtpdIntegrationTests extends TestCase
     {
         $filesystem = $this->filesystem;
         $filesystem->write('dirname/a.txt', 'contents');
-        $filesystem->write('dirname/b.txt', 'contents');
+        $filesystem->write('dirname/b/b.txt', 'contents');
         $filesystem->write('dirname/c.txt', 'contents');
-        $files = $filesystem->listPaths('dirname');
-        $expected = ['dirname/a.txt', 'dirname/b.txt', 'dirname/c.txt'];
+        $files = $filesystem->listPaths('', true);
+        $expected = ['dirname', 'dirname/a.txt', 'dirname/b', 'dirname/b/b.txt', 'dirname/c.txt'];
         $filesystem->deleteDir('dirname');
         $this->assertEquals($expected, $files);
     }
