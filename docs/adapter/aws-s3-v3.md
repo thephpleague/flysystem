@@ -29,6 +29,8 @@ $client = S3Client::factory([
 ]);
 
 $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
+
+$filesystem = new Filesystem($adapter);
 ~~~
 
 The required IAM permissions are:
