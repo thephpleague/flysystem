@@ -32,4 +32,4 @@ install:
 
 test_script:
   - cd c:\projects\thephpleague\flysystem
-  - bin\phpunit.bat --verbose
+  - bin\phpunit.bat --verbose --exclude-group=integration

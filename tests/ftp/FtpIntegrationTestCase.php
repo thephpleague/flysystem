@@ -1,14 +1,11 @@
 <?php
 
-use League\Flysystem\Adapter\Ftp;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @group integration
- */
-class PureFtpdIntegrationTests extends TestCase
+abstract class FtpIntegrationTestCase extends TestCase
 {
     /**
      * @var Filesystem
@@ -26,6 +23,11 @@ class PureFtpdIntegrationTests extends TestCase
     }
 
     /**
+     * @return AdapterInterface
+     */
+    abstract protected function setup_adapter();
+
+    /**
      * @before
      */
     public function setup_filesystem()
@@ -33,16 +35,14 @@ class PureFtpdIntegrationTests extends TestCase
         if ( ! defined('FTP_BINARY')) {
             return;
         }
-        $adapter = new Ftp([
-            'host' => 'localhost',
-            'username' => 'bob',
-            'password' => 'test',
-            'recurseManually' => true,
-        ]);
+        $adapter = $this->setup_adapter();
         $this->filesystem = new Filesystem($adapter);
         $this->filesystem->addPlugin(new ListPaths());
 
-        foreach ($this->filesystem->listContents('/') as $item) {
+        foreach ($this->filesystem->listContents('', true) as $item) {
+            if ($item['path'] == '') {
+                continue;
+            }
             if ($item['type'] == 'dir') {
                 $this->filesystem->deleteDir($item['path']);
             } else {

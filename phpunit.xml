@@ -13,8 +13,8 @@
 >
     <testsuites>
         <testsuite name="flysystem/tests">
-            <directory suffix=".php">./tests/</directory>
-            <exclude>./tests/PureFtpdIntegrationTests.php</exclude>
+            <directory suffix="Test.php">./tests/</directory>
+            <directory suffix="Tests.php">./tests/</directory>
         </testsuite>
     </testsuites>
     <filter>
