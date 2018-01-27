@@ -507,7 +507,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function listDirectoryContentsRecursive($directory)
     {
-        $listing = $this->normalizeListing($this->ftpRawlist('-aln', $directory) ?: []);
+        $listing = $this->normalizeListing($this->ftpRawlist('-aln', $directory) ?: [], $directory);
         $output = [];
 
         foreach ($listing as $directory) {

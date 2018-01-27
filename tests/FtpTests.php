@@ -145,6 +145,12 @@ function ftp_rawlist($connection, $directory)
         throw new ErrorException('does not contain the correct message');
     }
 
+    if (strpos($directory, 'recurse.manually/recurse.folder') !== false) {
+        return [
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+    }
+
     if (strpos($directory, 'recurse.manually') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 recurse.folder',
@@ -152,9 +158,7 @@ function ftp_rawlist($connection, $directory)
     }
 
     if (strpos($directory, 'recurse.folder') !== false) {
-        return [
-            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
-        ];
+        return false;
     }
 
     if (strpos($directory, 'fail.rawlist') !== false) {
@@ -412,6 +416,8 @@ class FtpTests extends TestCase
         $adapter->setRecurseManually(true);
         $result = $adapter->listContents('recurse.manually', true);
         $this->assertCount(2, $result);
+        $this->assertEquals('recurse.manually/recurse.folder', $result[0]['path']);
+        $this->assertEquals('recurse.manually/recurse.folder/file1.txt', $result[1]['path']);
     }
 
     /**
