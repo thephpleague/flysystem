@@ -154,6 +154,8 @@ class MimeType
             'rtf'   => 'text/rtf',
             'xml'   => 'application/xml',
             'xsl'   => 'application/xml',
+            'dmn'   => 'application/xml',
+            'bpmn'  => 'application/xml',
             'mpeg'  => 'video/mpeg',
             'mpg'   => 'video/mpeg',
             'mpe'   => 'video/mpeg',
