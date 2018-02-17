@@ -27,6 +27,7 @@ before_install:
 install:
   - if [[ "${TRAVIS_PHP_VERSION}" == "5.5" ]]; then composer require phpunit/phpunit:^4.8.36 phpspec/phpspec:^2 --prefer-dist --update-with-dependencies; fi
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require phpunit/phpunit:^6.0 --prefer-dist --update-with-dependencies; fi
+  - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then composer require --dev phpstan/phpstan:^0.9.2 --prefer-dist --update-with-dependencies; fi
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 before_script:
@@ -38,6 +39,7 @@ script:
   - bin/phpunit tests/ftp/FtpIntegrationTests.php tests/ftp/FtpManualRecursionIntegrationTests.php tests/ftp/FtpdIntegrationTests.php tests/ftp/FtpdManualRecursionIntegrationTests.php
   - bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
   - bin/phpspec run
+  - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then bin/phpstan analyse -l 3 src; fi
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
