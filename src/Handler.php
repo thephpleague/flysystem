@@ -4,6 +4,13 @@ namespace League\Flysystem;
 
 use BadMethodCallException;
 
+/**
+ * @method array getWithMetadata(array $metadata)
+ * @method bool  forceCopy(string $newpath)
+ * @method bool  forceRename(string $newpath)
+ * @method array listFiles(boolean $recursive = false)
+ * @method array listPaths(boolean $recursive = false)
+ */
 abstract class Handler
 {
     /**
