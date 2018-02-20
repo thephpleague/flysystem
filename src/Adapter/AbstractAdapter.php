@@ -68,4 +68,14 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         return substr($path, strlen($this->getPathPrefix()));
     }
+
+    /**
+     * Can adapter overwrite files
+     *
+     * @return bool
+     */
+    public function canOverwriteFiles()
+    {
+        return false;
+    }
 }

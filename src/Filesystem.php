@@ -94,8 +94,9 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
+        $canOverwrite = $this->adapter->canOverwriteFiles() || $this->getAdapter() instanceof CanOverwriteFiles;
 
-        if ( ! $this->getAdapter() instanceof CanOverwriteFiles && $this->has($path)) {
+        if ( ! $canOverwrite && $this->has($path)) {
             return (bool) $this->getAdapter()->update($path, $contents, $config);
         }
 
@@ -114,8 +115,9 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $config = $this->prepareConfig($config);
         Util::rewindStream($resource);
+        $canOverwrite = $this->adapter->canOverwriteFiles() || $this->getAdapter() instanceof CanOverwriteFiles;
 
-        if ( ! $this->getAdapter() instanceof CanOverwriteFiles &&$this->has($path)) {
+        if ( ! $canOverwrite && $this->has($path)) {
             return (bool) $this->getAdapter()->updateStream($path, $resource, $config);
         }
 
