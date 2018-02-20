@@ -507,4 +507,14 @@ class Local extends AbstractAdapter
             throw UnreadableFileException::forFileInfo($file);
         }
     }
+
+    /**
+     * Can adapter overwrite files
+     *
+     * @return bool
+     */
+    public function canOverwriteFiles()
+    {
+        return true;
+    }
 }

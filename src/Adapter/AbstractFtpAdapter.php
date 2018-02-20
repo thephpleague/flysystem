@@ -625,4 +625,14 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @return bool
      */
     abstract public function isConnected();
+
+    /**
+     * Can adapter overwrite files
+     *
+     * @return bool
+     */
+    public function canOverwriteFiles()
+    {
+        return true;
+    }
 }

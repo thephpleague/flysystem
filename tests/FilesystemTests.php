@@ -1,5 +1,6 @@
 <?php
 
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Util;
@@ -13,7 +14,7 @@ class FilesystemTests extends TestCase
     use \PHPUnitHacks;
 
     /**
-     * @var ObjectProphecy
+     * @var ObjectProphecy|AdapterInterface
      */
     protected $prophecy;
 
@@ -118,6 +119,7 @@ class FilesystemTests extends TestCase
         $contents = 'contents';
         $this->prophecy->has($path)->willReturn(false);
         $this->prophecy->write($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->prophecy->canOverwriteFiles()->willReturn(false);
         $this->assertTrue($this->filesystem->put($path, $contents));
     }
 
@@ -127,6 +129,7 @@ class FilesystemTests extends TestCase
         $stream = tmpfile();
         $this->prophecy->has($path)->willReturn(false);
         $this->prophecy->writeStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->prophecy->canOverwriteFiles()->willReturn(false);
         $this->assertTrue($this->filesystem->putStream($path, $stream));
         fclose($stream);
     }
@@ -137,6 +140,7 @@ class FilesystemTests extends TestCase
         $contents = 'contents';
         $this->prophecy->has($path)->willReturn(true);
         $this->prophecy->update($path, $contents, $this->config)->willReturn(compact('path', 'contents'));
+        $this->prophecy->canOverwriteFiles()->willReturn(false);
         $this->assertTrue($this->filesystem->put($path, $contents));
     }
 
@@ -146,6 +150,7 @@ class FilesystemTests extends TestCase
         $stream = tmpfile();
         $this->prophecy->has($path)->willReturn(true);
         $this->prophecy->updateStream($path, $stream, $this->config)->willReturn(compact('path'));
+        $this->prophecy->canOverwriteFiles()->willReturn(false);
         $this->assertTrue($this->filesystem->putStream($path, $stream));
         fclose($stream);
     }

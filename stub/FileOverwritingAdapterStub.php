@@ -114,4 +114,9 @@ class FileOverwritingAdapterStub implements AdapterInterface, CanOverwriteFiles
     {
 
     }
+
+    public function canOverwriteFiles()
+    {
+
+    }
 }
