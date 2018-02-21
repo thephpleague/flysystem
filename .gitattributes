@@ -1,6 +1,7 @@
 * text=auto
 
 /build export-ignore
+/docs export-ignore
 /spec export-ignore
 /stub export-ignore
 /tests export-ignore
@@ -15,3 +16,4 @@
 /changelog.md export-ignore
 /appveyor.yml export-ignore
 /README.md export-ignore
+/wait_for_ftp_service.php export-ignore
