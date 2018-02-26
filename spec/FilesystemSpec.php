@@ -2,11 +2,15 @@
 
 namespace spec\League\Flysystem;
 
+use League\Flysystem\AdapterInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
 class FilesystemSpec extends ObjectBehavior
 {
+    /**
+     * @var AdapterInterface
+     */
     protected $adapter;
     protected $cache;
 
@@ -116,6 +120,7 @@ class FilesystemSpec extends ObjectBehavior
             'path' => 'file',
             'contents' => 'contents',
         ]);
+        $this->adapter->canOverwriteFiles()->willReturn(false);
         $this->put('file', 'contents')->shouldReturn(true);
     }
 
@@ -126,6 +131,7 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
+        $this->adapter->canOverwriteFiles()->willReturn(false);
         $this->putStream('file', $stream)->shouldReturn(true);
         fclose($stream);
     }
@@ -137,6 +143,7 @@ class FilesystemSpec extends ObjectBehavior
             'path' => 'file',
             'contents' => 'contents',
         ]);
+        $this->adapter->canOverwriteFiles()->willReturn(false);
         $this->put('file', 'contents')->shouldReturn(true);
     }
 
@@ -147,6 +154,7 @@ class FilesystemSpec extends ObjectBehavior
         $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
+        $this->adapter->canOverwriteFiles()->willReturn(false);
         $this->putStream('file', $stream)->shouldReturn(true);
         fclose($stream);
     }
