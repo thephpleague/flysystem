@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.43 - 2018-03-01
+
+* Remove /docs from composer artifact.
+
 ## 1.0.42 - 2018-01-27
 
 * Fixed FTP manual recursion.
