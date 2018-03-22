@@ -69,7 +69,7 @@ interface ReadInterface
     public function getMimetype($path);
 
     /**
-     * Get the timestamp of a file.
+     * Get the last modified time of a file as a timestamp.
      *
      * @param string $path
      *
