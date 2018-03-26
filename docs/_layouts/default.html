@@ -22,20 +22,11 @@
     {% else %}
         <link rel="apple-touch-icon-precomposed" href="//theme.thephpleague.com/img/apple-touch-icon-precomposed.png">
     {% endif %}
-    <link rel="stylesheet" href="//theme.thephpleague.com/css/all.css">
+    <link rel="stylesheet" href="//theme.thephpleague.com/css/all.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
     <!--<base href="//flysystem.thephpleague.com{{ page.permalink }}">-->
 </head>
 <body>
-
-<section class="all_packages">
-    <a href="//thephpleague.com/">
-        <img src="//theme.thephpleague.com/img/loep_logo.png" width="195" height="200" alt="The League of Extraordinary Packages">
-    </a>
-    <h2>Our Packages:</h2>
-    <ul>
-        <!-- Loaded via JavaScript -->
-    </ul>
-</section>
 
 <header>
     <a class="logo" href="/">
@@ -47,9 +38,9 @@
         <span class="name">{{ site.data.project.title }}</span>
         <span class="tagline">{{ site.data.project.tagline }}</span>
     </a>
-    <a href="//thephpleague.com/" class="league">
-        Presented by The League of Extraordinary Packages
-    </a>
+    <!--<a href="//thephpleague.com/" class="league">-->
+        <!--Presented by The League of Extraordinary Packages-->
+    <!--</a>-->
 </header>
 
 <input type="checkbox" id="menu">
@@ -96,6 +87,15 @@
         ga('create','{{  site.data.project.google_analytics_tracking_id }}');ga('send','pageview');
     </script>
 {% endif %}
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+    apiKey: '439460ae4715ee79780b36ea5647db26',
+    indexName: 'eventsauce',
+    inputSelector: '#global-search',
+    debug: {% if site.data.dev.dev_mode %}true{% else %}false{% endif %}
+});
+</script>
 
 </body>
 </html>
