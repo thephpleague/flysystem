@@ -1,28 +1,36 @@
 ---
 layout: default
-permalink: /core-concepts/
-title: Core Concepts
+permalink: /usage-instructions/
+redirect_from: /core-concepts/
+title: Usage Instructions
 ---
 
-# Core concepts
+# Usage Instructions
 
-In order to better understand how and why Flysystem works
-the way it does, several concepts require some explanation.
+It's good to understand why Flysystem works the way that it does. There are
+some restrictions Flysystem upholds in order to benefit users in the long run.
+These restrictions are necessary to achieve the goals. 
 
 ## Overview
 
-* [Focus/Goal](#focus)
+* [Focus/Goal](#focus-and-goals)
 * [Adapters](#adapters)
 * [Relative Paths](#relative-paths)
 * [Files first](#files-first)
 
-## Focus
+## Focus and Goals
 
-Flysystem's focus is to provide a standardized interface to working
-with filesystems. We've searched for common ground across various
-filesystems and implemented that in a cross-filesystem-compatible way.
-This also means that we often don't support filesystem specific things.
-This limitation is by design.
+Flysystem's goal is to provide a standardized file storage interface.
+After extensive research a common ground was determined which various
+types of filesystems could work with. This common ground was converted
+into an interface, the `AdapterInterface`. The most important goal for
+Flysystem is portability.
+
+In order to achieve portability behaviour across filesystems is normalized.
+In some cases this mean's we'll go the extra mile to ensure polyfills are
+provided to provide a common API, in other cases it means features that
+are very specific to a filesystem are not supported. These limitation are
+put in place by design.
 
 ## Adapters
 
