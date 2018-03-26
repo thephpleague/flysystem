@@ -1,0 +1,5 @@
+@media screen and (max-width: 549px) {
+    header {
+        padding: 15px 10px 25px;
+    }
+}
