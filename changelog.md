@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+* The `Handler` types are now deprecated and will be removed in 2.0.0
+* The `FilesystemInterface::get` method is now deprecated and will be removed in 2.0.0
+
 ## 1.0.43 - 2018-03-01
 
 * Remove /docs from composer artifact.
