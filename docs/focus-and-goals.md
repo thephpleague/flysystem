@@ -1,11 +1,11 @@
 ---
 layout: default
-permalink: /usage-instructions/
+permalink: /focus-and-goals/
 redirect_from: /core-concepts/
-title: Usage Instructions
+title: Focus and Goals
 ---
 
-# Usage Instructions
+# Focus and Goals
 
 It's good to understand why Flysystem works the way that it does. There are
 some restrictions Flysystem upholds in order to benefit users in the long run.
@@ -13,12 +13,12 @@ These restrictions are necessary to achieve the goals.
 
 ## Overview
 
-* [Focus/Goal](#focus-and-goals)
+* [Vision](#vision)
 * [Adapters](#adapters)
 * [Relative Paths](#relative-paths)
 * [Files first](#files-first)
 
-## Focus and Goals
+## Vision
 
 Flysystem's goal is to provide a standardized file storage interface.
 After extensive research a common ground was determined which various

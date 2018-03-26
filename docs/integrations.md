@@ -14,7 +14,7 @@ Want to get started quickly? Check out some of these bridging packages:
 * [CakePHP integration](https://github.com/WyriHaximus/FlyPie)
 * [Silex integration](https://github.com/WyriHaximus/SliFly)
 * [Yii 2 integration](https://github.com/creocoder/yii2-flysystem)
-* [Backup manager](https://github.com/heybigname/backup-manager)
+* [Backup manager](https://github.com/backup-manager/backup-manager)
 
 ### Other integrations
 

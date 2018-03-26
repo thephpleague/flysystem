@@ -2,9 +2,14 @@ Getting Started:
     Introduction: '/'
     Installation: '/installation/'
     Sponsors: '/sponsors/'
-    Usage Instructions: '/usage-instructions/'
-    Integrations: '/integrations/'
+
+Usage:
+    Focus and Goals: '/focus-and-goals/'
     The API: '/api/'
+    Integrations: '/integrations/'
+
+
+Advanced Usage:
     Mount Manager: '/mount-manager/'
     Caching: '/caching/'
     Recipes: '/recipes/'
