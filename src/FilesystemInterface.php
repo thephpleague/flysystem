@@ -258,6 +258,8 @@ interface FilesystemInterface
     /**
      * Get a file/directory handler.
      *
+     * @deprecated
+     *
      * @param string  $path    The path to the file.
      * @param Handler $handler An optional existing handler to populate.
      *
