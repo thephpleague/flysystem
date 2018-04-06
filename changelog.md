@@ -1,7 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.0.44 - 2018-04-06
 
+* Added missing file presence checks on `Filesystem::setVisibility` and `Filesystem::getSize`.
 * The `Handler` types are now deprecated and will be removed in 2.0.0
 * The `FilesystemInterface::get` method is now deprecated and will be removed in 2.0.0
 
