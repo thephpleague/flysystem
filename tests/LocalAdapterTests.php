@@ -3,6 +3,8 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use League\Flysystem\FileNotFoundException;
+use League\Flysystem\Filesystem;
 use PHPUnit\Framework\TestCase;
 
 function fopen($result, $mode)
@@ -98,9 +100,9 @@ class LocalAdapterTests extends TestCase
 
     public function testRelativeRootsAreSupportes()
     {
-        (new Local(__DIR__.'/files'))->write('file.txt', 'contents', new Config());
+        (new Local(__DIR__ . '/files'))->write('file.txt', 'contents', new Config());
 
-        $adapter = new Local(__DIR__.'/files/../files');
+        $adapter = new Local(__DIR__ . '/files/../files');
         $this->assertCount(1, $adapter->listContents());
     }
 
