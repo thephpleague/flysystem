@@ -14,6 +14,7 @@ use League\Flysystem\Util;
 use LogicException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use RuntimeException;
 use SplFileInfo;
 
 class Local extends AbstractAdapter
@@ -490,15 +491,28 @@ class Local extends AbstractAdapter
      */
     protected function mapFileInfo(SplFileInfo $file)
     {
-        $normalized = [
-            'type' => $file->getType(),
-            'path' => $this->getFilePath($file),
-        ];
+        $normalized = [];
 
-        $normalized['timestamp'] = $file->getMTime();
+        try {
+            $normalized['type'] = $file->getType();
+        } catch (RuntimeException $e) {
+        }
 
-        if ($normalized['type'] === 'file') {
-            $normalized['size'] = $file->getSize();
+        try {
+            $normalized['path'] = $this->getFilePath($file);
+        } catch (RuntimeException $e) {
+        }
+
+        try {
+            $normalized['timestamp'] = $file->getMTime();
+        } catch (RuntimeException $e) {
+        }
+
+        try {
+            if (array_key_exists('type', $normalized) && $normalized['type'] === 'file') {
+                $normalized['size'] = $file->getSize();
+            }
+        } catch (RuntimeException $e) {
         }
 
         return $normalized;
