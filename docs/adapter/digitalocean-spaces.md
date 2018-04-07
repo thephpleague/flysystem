@@ -35,3 +35,4 @@ $client = new S3Client([
 $adapter = new AwsS3Adapter($client, 'your-bucket-name');
 
 $filesystem = new Filesystem($adapter);
+~~~
