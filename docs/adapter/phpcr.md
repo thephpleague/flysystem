@@ -26,11 +26,12 @@ Bootstrap your PHPCR implementation. If you chose jackalope-doctrine-dbal with s
 this will look like this for example:
 
 ~~~php
-use League\Flysystem\Filesystem;
-use League\Flysystem\Phpcr\PhpcrAdapter;
-use Jackalope\RepositoryFactoryDoctrineDBAL;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
+use Jackalope\RepositoryFactoryDoctrineDBAL;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Phpcr\PhpcrAdapter;
+use PHPCR\SimpleCredentials;
 
 $connection = DriverManager::getConnection([
     'driver' => 'pdo_sqlite',
