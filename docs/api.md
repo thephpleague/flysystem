@@ -150,7 +150,7 @@ Example:
 
 ~~~ php
 foreach ($contents as $object) {
-    echo $object['basename'].' is located at'.$object['path'].' and is a '.$object['type'];
+    echo $object['basename'].' is located at '.$object['path'].' and is a '.$object['type'];
 }
 ~~~
 
