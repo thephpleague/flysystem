@@ -1470,6 +1470,13 @@ css-selector-tokenizer@^0.7.0:
     fastparse "^1.1.1"
     regexpu-core "^1.0.0"
 
+css-tree@1.0.0-alpha25:
+  version "1.0.0-alpha25"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha25.tgz#1bbfabfbf6eeef4f01d9108ff2edd0be2fe35597"
+  dependencies:
+    mdn-data "^1.0.0"
+    source-map "^0.5.3"
+
 cssesc@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/cssesc/-/cssesc-0.1.0.tgz#c814903e45623371a0477b40109aaafbeeaddbb4"
@@ -1517,6 +1524,12 @@ csso@~2.3.1:
   dependencies:
     clap "^1.0.9"
     source-map "^0.5.3"
+
+csso@~3.3.0:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-3.3.1.tgz#e069a8f52adcf53685a8a7374256ccbc22c6ce3e"
+  dependencies:
+    css-tree "1.0.0-alpha25"
 
 cyclist@~0.2.2:
   version "0.2.2"
@@ -3138,6 +3151,10 @@ md5.js@^1.3.4:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+mdn-data@^1.0.0:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.1.2.tgz#ceaa6a831b4de494352af984d301e3a8f2cad6e5"
+
 mem-fs-editor@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/mem-fs-editor/-/mem-fs-editor-3.0.2.tgz#dd0a6eaf2bb8a6b37740067aa549eb530105af9f"
@@ -3784,6 +3801,13 @@ postcss-convert-values@^2.3.4:
   dependencies:
     postcss "^5.0.11"
     postcss-value-parser "^3.1.2"
+
+postcss-csso@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/postcss-csso/-/postcss-csso-3.0.0.tgz#7473e72f1ec9a098545e36cc93658153704d6881"
+  dependencies:
+    csso "~3.3.0"
+    postcss "^6.0.0"
 
 postcss-discard-comments@^2.0.4:
   version "2.0.4"
