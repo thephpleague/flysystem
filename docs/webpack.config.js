@@ -12,7 +12,7 @@ class TailwindExtractor {
 
 let plugins = [
     new ExtractTextPlugin('styles.css'),
-    // new OptimizeCssAssetsPlugin(),
+    new OptimizeCssAssetsPlugin(),
 ];
 
 let isProd = process.env.NODE_ENV === 'production';
