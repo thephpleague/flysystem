@@ -1,3 +1,5 @@
 _site
-Gemfile
+.jekyll-metadata
+node_modules
+yarn-error.log
 Gemfile.lock

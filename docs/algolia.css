@@ -1,0 +1,26 @@
+.algolia-autocomplete {
+    width: 100% !important
+}
+
+@media (max-width: 768px) {
+    .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        min-width: 0 !important;
+        margin-left: 16px !important;
+        right: -3rem !important;
+    }
+    .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu:before {
+        right: 58px;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--content {
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--content:before {
+        display: none !important;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
+        display: none !important;
+    }
+}

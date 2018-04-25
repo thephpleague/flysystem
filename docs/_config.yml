@@ -1,3 +1,10 @@
 plugins:
   - jekyll-sitemap
   - jekyll-redirect-from
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+      published_at: "2018-03-11"
+      updated_at: "2018-03-11"

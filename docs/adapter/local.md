@@ -1,24 +1,21 @@
 ---
 layout: default
-permalink: /adapter/local/
+permalink: /docs/adapter/local/
+redirect_from: /adapter/local/
 title: Local Adapter
 ---
 
-# Local Adapter
-
-## Installation
-
-Comes with the main Flysystem package.
+This adapter ships with Flysystem by default.
 
 ## Usage
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
 
 $adapter = new Local(__DIR__.'/path/to/root');
 $filesystem = new Filesystem($adapter);
-~~~
+```
 
 ## Locks
 
@@ -26,9 +23,9 @@ By default this adapter uses a lock during writes
 and updates. This behaviour can be altered using the
 second constructor argument.
 
-~~~ php
+```php
 $adapter = new Local(__DIR__.'/path/to/too', 0);
-~~~
+```
 
 ## Links [added in 1.0.8]
 
@@ -38,25 +35,40 @@ Flysystem. By default, when links are encountered an
 exception is thrown. This behaviour can be altered
 using the third constructor argument.
 
-~~~ php
+```php
 // Skip links
-$adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::SKIP_LINKS);
+$adapter = new Local(
+    __DIR__.'/path/to/too',
+    LOCK_EX,
+    Local::SKIP_LINKS
+);
 
 // Throw exceptions (default)
-$adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::DISALLOW_LINKS);
-~~~
+$adapter = new Local(
+    __DIR__.'/path/to/too',
+    LOCK_EX,
+    Local::DISALLOW_LINKS
+);
+```
 
-## File and directory permission settings [added in 1.0.14]
+## File and directory permission settings
 
-~~~ php
-$adapter = new Local(__DIR__.'/path/to/too', LOCK_EX, Local::DISALLOW_LINKS, [
-    'file' => [
-        'public' => 0744,
-        'private' => 0700,
-    ],
-    'dir' => [
-        'public' => 0755,
-        'private' => 0700,
+Since **1.0.14** you can set default file and directory permissions:
+
+```php
+$adapter = new Local(
+    __DIR__.'/path/to/too',
+    LOCK_EX,
+    Local::DISALLOW_LINKS,
+    [
+        'file' => [
+            'public' => 0744,
+            'private' => 0700,
+        ],
+        'dir' => [
+            'public' => 0755,
+            'private' => 0700,
+        ]
     ]
-]);
-~~~
+);
+```

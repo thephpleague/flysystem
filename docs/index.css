@@ -1,0 +1,132 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700|Open+Sans:400,400i,600');
+@import "tailwindcss/preflight";
+@import "github.css";
+@import "algolia.css";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+hr {
+    @apply border-b border-t border-indigo-lighter mt-10 mb-8 opacity-75 w-1/2 mx-auto;
+    border-bottom-color: #fff;
+}
+
+a {
+    text-decoration: none;
+    @apply text-indigo-dark;
+}
+
+html {
+    @apply font-body font-normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+:focus {
+    outline: none;
+}
+
+h1, h2, h3, h4, h5 {
+    @apply font-heading leading-tight text-indigo-darkest;
+}
+
+.focus\:placeholder-none:focus::placeholder {
+    opacity: 0;
+}
+
+p {
+    @apply mb-4;
+}
+
+article table {
+    @apply text-left p-4 bg-white mb-4 shadow-md -mx-4;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+article table {
+    @apply mb-6 p-0;
+    width: calc(100% + 2rem);
+    /*white-space: nowrap;*/
+    overflow: auto;
+}
+
+@screen md {
+    article table {
+        display: table;
+        width: 100%;
+        @apply -mx-0;
+    }
+}
+
+div.highlighter-rouge + table {
+    @apply -mt-4 border-t-4 border-indigo-dark;
+}
+
+article table td {
+    vertical-align: top;
+    @apply border-t border-indigo-lighter;
+}
+
+article table th, article table td {
+    @apply px-4 py-2;
+}
+
+article table th {
+    @apply bg-indigo text-white font-bold;
+}
+
+div.highlighter-rouge + table th {
+    @apply text-indigo bg-white;
+}
+
+.menu-closed\:shown {
+    @apply hidden;
+}
+
+.menu-closed .menu-closed\:shown {
+    @apply inline;
+}
+
+.menu-closed .menu-closed\:hidden {
+    @apply hidden;
+}
+
+#carbonads {
+    position: relative;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, .5);
+    background: white;
+    max-width: 340px;
+    @apply text-base leading-normal text-xs-sm text-grey-darkest p-2 mb-4 bg-grey-light rounded shadow-inner inline-block;
+}
+
+#carbonads > span {
+    display: block;
+}
+
+.carbon-text {
+    @apply pl-2 pb-4 leading-normal text-white;
+}
+
+#carbonads a {
+    color: inherit;
+}
+
+.carbon-wrap {
+    display: flex;
+    align-items: start;
+}
+
+.carbon-img {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.carbon-img img {
+    display: block;
+}
+
+.carbon-poweredby {
+    position: absolute;
+    left: calc(130px + 1rem);
+    bottom: 0;
+    @apply opacity-75 pb-2;
+}

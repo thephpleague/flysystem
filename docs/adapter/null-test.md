@@ -1,10 +1,9 @@
 ---
 layout: default
-permalink: /adapter/null-test/
+permalink: /docs/adapter/null-test/
+redirect_from: /adapter/null-test/
 title: Null Adapter
 ---
-
-# Null Adapter
 
 ## Installation
 
@@ -14,7 +13,7 @@ Comes with the main Flysystem package.
 
 Acts like `/dev/null`
 
-~~~ php
+```php
 $adapter = new League\Flysystem\Adapter\NullAdapter;
 $filesystem = new League\Flysystem\Filesystem($adapter);
-~~~
+```

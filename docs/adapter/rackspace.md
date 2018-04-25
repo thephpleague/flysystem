@@ -1,20 +1,19 @@
 ---
 layout: default
-permalink: /adapter/rackspace/
+permalink: /docs/adapter/rackspace/
+redirect_from: /adapter/rackspace/
 title: Rackspace Adapter
 ---
 
-# Rackspace Adapter
-
 ## Installation
 
-~~~ bash
+```bash
 composer require league/flysystem-rackspace
-~~~
+```
 
 ## Usage
 
-~~~ php
+```php
 use OpenCloud\OpenStack;
 use OpenCloud\Rackspace;
 use League\Flysystem\Filesystem;
@@ -29,4 +28,4 @@ $store = $client->objectStoreService('cloudFiles', 'LON');
 $container = $store->getContainer('flysystem');
 
 $filesystem = new Filesystem(new RackspaceAdapter($container, 'optional/path/prefix'));
-~~~
+```

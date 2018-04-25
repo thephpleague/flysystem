@@ -1,20 +1,19 @@
 ---
 layout: default
-permalink: /adapter/azure/
+permalink: /docs/adapter/azure/
+redirect_from: /adapter/azure/
 title: Azure Blob Storage
 ---
 
-# Azure Blob Storage
-
 ## Installation
 
-~~~ bash
+```bash
 composer require league/flysystem-azure
-~~~
+```
 
 ## Usage
 
-~~~ php
+```php
 use MicrosoftAzure\Storage\Common\ServicesBuilder;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Azure\AzureAdapter;
@@ -28,4 +27,4 @@ $endpoint = sprintf(
 $blobRestProxy = ServicesBuilder::getInstance()->createBlobService($endpoint);
 
 $filesystem = new Filesystem(new AzureAdapter($blobRestProxy, 'my-container'));
-~~~
+```

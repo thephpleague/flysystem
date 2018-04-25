@@ -1,19 +1,17 @@
 ---
 layout: default
-permalink: /caching/
+permalink: /docs/advanced/caching/
 title: Caching
 ---
-
-# Caching
 
 File system I/O is slow, so Flysystem uses cached file system meta-data to boost performance. When your application needs to scale you can also choose to use a (shared) persistent caching solution for this.
 Or enable a per request caching (recommended).
 
 ## Installing the adapter cache decorator
 
-~~~bash
+```bash
 composer require league/flysystem-cached-adapter
-~~~
+```
 
 This package supplies an Adapter decorator which acts as a caching proxy.
 
@@ -25,7 +23,7 @@ The easiest way to boost the performance of Flysystem is to add Memory caching.
 This type of caching will cache everything in the lifetime of the current process (cli-job or http-request).
 Setting it up is easy:
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -42,7 +40,7 @@ $adapter = new CachedAdapter($localAdapter, $cacheStore);
 
 // And use that to create the file system
 $filesystem = new Filesystem($adapter);
-~~~
+```
 
 You can now use the file system as you would have before, but caching will be done for you on the fly.
 
@@ -52,7 +50,7 @@ The following examples demonstrate how you can setup persistent meta-data cachin
 
 ## Predis Caching Setup
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -65,11 +63,11 @@ $filesystem = new Filesystem($adapter);
 $client = new Predis\Client;
 $adapter = new CachedAdapter(new Adapter(__DIR__.'/path/to/root'), new PredisStore($client));
 $filesystem = new Filesystem($adapter);
-~~~
+```
 
 ## Memcached Caching Setup
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -84,11 +82,11 @@ $adapter = new CachedAdapter(
 );
 $filesystem = new Filesystem($adapter);
 // Storage Key and expire time are optional
-~~~
+```
 
 ## Adapter Caching Setup
 
-~~~ php
+```php
 use Dropbox\Client;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Dropbox;
@@ -103,11 +101,11 @@ $local = new Local('path');
 $cache = new Adapter($local, 'file', 300);
 $adapter = new CachedAdapter($dropbox, $cache);
 $filesystem = new Filesystem($adapter);
-~~~
+```
 
 ## Stash Caching Setup
 
-~~~ php
+```php
 use Stash\Pool;
 use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
@@ -121,6 +119,6 @@ $cache = new StashStore($pool, 'storageKey', 300);
 
 $adapter = new CachedAdapter(new Adapter(__DIR__.'/path/to/root'), $cache);
 $filesystem = new Filesystem($adapter);
-~~~
+```
 
 For list of drivers and configuration options check their [documentation](http://www.stashphp.com/Drivers.html).

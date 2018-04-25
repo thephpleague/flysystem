@@ -1,18 +1,15 @@
 ---
 layout: default
-permalink: /adapter/ftp/
+permalink: /docs/adapter/ftp/
+redirect_from: /adapter/ftp/
 title: FTP Adapter
 ---
 
-# FTP Adapter
-
-## Installation
-
-Comes with the main Flysystem package.
+This adapter ships with Flysystem by default.
 
 ## Usage
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Ftp as Adapter;
 
@@ -28,4 +25,4 @@ $filesystem = new Filesystem(new Adapter([
     'ssl' => true,
     'timeout' => 30,
 ]));
-~~~
+```

@@ -1,24 +1,44 @@
 ---
 layout: default
-permalink: /sponsors/
-title: Sponsors
+title: Development Sponsorship
+permalink: /docs/sponsors/
+redirect_from: /sponsors/
 ---
 
-# Sponsors
+In order to free up time to keep everything up-to-date financial help is greatly appreciated.
 
-Development efforts are supported by the sponsors. I'm very grateful for their donations, please check them out! 
+<a href="https://www.patreon.com/bePatron?u=8623643"><img src="/img/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
 
-<a href="https://www.patreon.com/bePatron?u=8623643"><img src="/logo/become_a_patron_button.png" alt="Become a Patron!" title="Become a Patron!"/></a>
+# Gold Sponsors
 
-## Gold Sponsors
+<div class="flex my-6">
+    <a target="_blank" href="https://laravel.com" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
+        <img src="/img/laravel.svg" class="w-full" alt="Laravel.com"/>
+        <span style="background-color: #FB503B" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Laravel.com</span>
+    </a>
+    <!--<a target="_blank" href="https://azure.microsoft.com/" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
+        <img src="/img/azure.svg" class="max-w-full m-6 sm:m-8" alt="Microsoft Azure"/>
+        <span style="background-color: #00a1f1;" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Microsoft Azure</span>
+    </a>-->
+    <a target="_blank" href="https://patreon.com/frankdejonge" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
+        <img src="/img/question.svg" class="max-w-full m-6 sm:m-8 opacity-50" alt="Become a sponsor"/>
+        <span class="text-center text-xl hidden sm:block py-4 bg-indigo-light text-white bg-grey-lightest">Your company?</span>
+    </a>
+</div>
 
+## Silver Sponsors
 
-<h3><a href="https://laravel.com/"><img src="/logo/laravel.svg" alt="Laravel.com" height="250px" /><br/>Laravel.com</a></h3>
+<div class="flex my-6">
+    <a target="_blank" href="https://patreon.com/frankdejonge" class="flex-no-grow w-1/4 bg-white rounded shadow-md mr-4 overflow-hidden">
+        <img src="/img/question.svg" class="max-w-full m-6 opacity-50" alt="Become a sponsor"/>
+        <span class="text-center text-md hidden sm:block py-3 bg-indigo-light text-white bg-grey-lightest">Your company?</span>
+    </a>
+</div>
 
-### Silver Sponsors
+## Bronze Sponsors
 
-None
-
-### Bronze Sponsors
-
-None
+<div class="flex my-6">
+    <a target="_blank" href="https://patreon.com/frankdejonge" class="flex-no-grow w-1/4 bg-white rounded shadow-md mr-4 overflow-hidden">
+        <img src="/img/question.svg" class="max-w-full m-6 opacity-50" alt="Become a sponsor"/>
+    </a>
+</div>

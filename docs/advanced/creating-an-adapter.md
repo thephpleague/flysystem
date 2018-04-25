@@ -1,10 +1,8 @@
 ---
 layout: default
-permalink: /creating-an-adapter/
+permalink: /docs/advanced/creating-an-adapter/
 title: Creating an adapter
 ---
-
-# Creating an adapter
 
 If you want to address a file system, and there's no
 adapter available, you'll need to create your own.

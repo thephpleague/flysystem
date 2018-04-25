@@ -3,100 +3,93 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% if page.url == '/' %}
-        <title>{{ site.data.project.title }} - {{ site.data.project.tagline }}</title>
-    {% else %}
-        <title>{{ page.title }} - {{ site.data.project.title }}</title>
-    {% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <title>{{ page.title }} - {{ site.data.project.title }}</title>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Varela+Round" rel="stylesheet"/>
     {% if site.data.project.description %}
-        <meta name="description" content="{{ site.data.project.description }}">
+    <meta name="description" content="{{ site.data.project.description }}">
     {% endif %}
-    {% if site.data.images.favicon %}
-        <link rel="icon" type="image/x-icon" href="{{ site.data.images.favicon }}" />
-    {% else %}
-        <link rel="icon" type="image/x-icon" href="//theme.thephpleague.com/img/favicon.ico" />
-    {% endif %}
-    {% if site.data.images.apple_touch %}
-        <link rel="apple-touch-icon-precomposed" href="{{ site.data.images.apple_touch }}">
-    {% else %}
-        <link rel="apple-touch-icon-precomposed" href="//theme.thephpleague.com/img/apple-touch-icon-precomposed.png">
-    {% endif %}
-    <link rel="stylesheet" href="//theme.thephpleague.com/css/all.css" />
-    <link rel="stylesheet" href="/static/styles.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
-    <!--<base href="//flysystem.thephpleague.com{{ page.permalink }}">-->
-</head>
-<body>
-
-<header>
-    <a class="logo" href="/">
-        {% if site.data.images.logo %}
-            <span class="icon">
-                <img src="{{ site.data.images.logo }}" width="50" height="40" alt="{{ site.data.project.title }} - {{ site.data.project.tagline }}">
-            </span>
-        {% endif %}
-        <span class="name">{{ site.data.project.title }}</span>
-        <span class="tagline">{{ site.data.project.tagline }}</span>
-    </a>
-    <!--<a href="//thephpleague.com/" class="league">-->
-        <!--Presented by The League of Extraordinary Packages-->
-    <!--</a>-->
-</header>
-
-<input type="checkbox" id="menu">
-<label for="menu" onclick>
-    <div class="closed">&#9776; Menu</div>
-    <div class="open">&#9776; Hide Menu</div>
-</label>
-
-<main>
-    <menu>
-        {% for section in site.data.menu %}
-            <h2>{{ section[0] }}</h2>
-            <ul>
-                {% for link in section[1] %}
-                    <li {% if page.url == link[1] %}class="selected"{% endif %}>
-                        <a href="{{ link[1] }}">{{ link[0] }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
-    </menu>
-    <article>
-        {{ content }}
-    </article>
-</main>
-
-<footer>
-    <span>&copy; Copyright <a href="https://thephpleague.com">The League of Extraordinary Packages</a>.</span>
-    <span>Flysystem is developed by <a href="https://frankdejonge.nl">Frank de Jonge</a>.</span>
-    <span>Site design by <a href="https://reinink.ca">Jonathan Reinink</a>.</span>
-</footer>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script src="//theme.thephpleague.com/js/scripts.js"></script>
-<script src="//theme.thephpleague.com/js/prism.js"></script>
-
-{% if site.data.project.google_analytics_tracking_id %}
+    {% unless site.data.dev.dev_mode %}
+    {% if site.data.project.google_analytics_tracking_id %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{  site.data.project.google_analytics_tracking_id }}"></script>
     <script>
-        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-        function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='//www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-        ga('create','{{  site.data.project.google_analytics_tracking_id }}');ga('send','pageview');
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{  site.data.project.google_analytics_tracking_id }}');
     </script>
-{% endif %}
+    {% endif %}
+    {% endunless %}
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />-->
+    <link rel="stylesheet" href="/dist/styles.css"/>
+</head>
+<body class="min-h-screen text-base text-indigo-body-text min-w-full pt-12 leading-normal bg-indigo-lightest">
+<!--{% include size-helper.html %}-->
+<div class="pb-1 fixed z-10 pin-t w-screen bg-white border-indigo-lighter border-b">
+    <div class="max-w-2xl mx-auto px-4 py-2">
+        <div class="flex items-center flex-no-shrink pt-1">
+            <a href="/" class="flex items-center h-10">
+                <img class="h-10 w-10 mr-3" width="30" height="30" src="/img/flysystem.svg"/>
+                <span class="pr-2 font-normal overflow-hidden font-heading text-3xl text-indigo-darkest hidden sm:block">
+                    Flysystem
+                    <sup class="text-xs relative text-indigo" style="top: -20px;">{{ site.data.project.version }}</sup>
+                </span>
+            </a>
+            <div class="flex-grow"></div>
+            <!--<div class="flex-no-shrink flex-no-grow h-10 px-4 relative">-->
+                <!--<input id="global-search" class="focus:outline-0 h-10 py-2 pl-8 pr-2 text-indigo-darker rounded bg-indigo-lightest focus:border-indigo-light focus:bg-white focus:placeholder-none max-w-xs w-full appearance-none" type="text" placeholder="Search the docs" />-->
+                <!--<span class="pointer-events-none absolute pin-y pin-l pl-6 flex items-center">-->
+                    <!--<svg class="fill-current pointer-events-none text-indigo-light w-4 h-4 border-transparent border" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>-->
+                <!--</span>-->
+            <!--</div>-->
+            <a href="#" id="menu-toggle" class="block md:hidden h-8 w-8 border p-1 border-transparent text-grey hover:text-grey menu-closed">
+                <svg class="menu-closed:shown fill-current h-full w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
+                </svg>
+                <svg class="menu-closed:hidden fill-current h-full w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                    <path d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</div>
+<main class="mx-auto max-w-2xl px-4 py-2">
+    <div class="flex flex-grow">
+        <nav role="navigation" id="navigation" class="md:w-4/14 w-full lg:relative hidden md:block font-heading pt-2">
+            <menu class="pl-0 mt-0">
+                {% for section in site.data.menu %}
+                <h2 class="tracking-wide text-xs leading-loose tracking-wide text-indigo-light uppercase">{{ section[0] }}</h2>
+                <ul class="list-reset mb-6 block pr-6">
+                    {% for link in section[1] %}
+                    <li class="block">
+                        <a class="leading-loose block w-full rounded text-md {% if page.url == link[1] %}text-white bg-indigo pl-2 -ml-2{% else %}text-indigo-darkest{% endif %}"
+                           href="{{ link[1] }}">{{ link[0] }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </menu>
+        </nav>
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
-<script type="text/javascript"> docsearch({
-    apiKey: '439460ae4715ee79780b36ea5647db26',
-    indexName: 'eventsauce',
-    inputSelector: '#global-search',
-    debug: {% if site.data.dev.dev_mode %}true{% else %}false{% endif %}
-});
-</script>
-
+        <article id="article" role="main" class="max-w-full md:block md:w-10/14">
+            {% unless page.hide_title %}
+            <h1 class="mb-4">{% if page.alternate_title %}{{ page.alternate_title }}{% else %}{{ page.title }}{% endif %}</h1>
+            <!--<p class="text-xs text-indigo-dark rounded rounded-t-none mb-4 text-shadow inline-block">-->
+                <!--{% if page.published_at != page.updated_at %}Last updated at {{ page.updated_at | date_to_long_string }} | {% endif %}Published at {{ page.published_at | date_to_long_string }}-->
+            <!--</p>-->
+            {% endunless %}
+            {{ content }}
+        </article>
+    </div>
+</main>
+<script type="text/javascript" src="/dist/main.js"></script>
+<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>-->
+<!--<script type="text/javascript"> docsearch({-->
+    <!--apiKey: 'be7daf2d7afded0acb0589a0e304a423',-->
+    <!--indexName: 'filesystem_thephpleague',-->
+    <!--inputSelector: '#global-search',-->
+    <!--debug: {% if site.data.dev.dev_mode %}true{% else %}false{% endif %}-->
+<!--});-->
+<!--</script>-->
 </body>
 </html>

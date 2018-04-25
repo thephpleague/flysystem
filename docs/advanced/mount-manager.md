@@ -1,10 +1,8 @@
 ---
 layout: default
-permalink: /mount-manager/
+permalink: /docs/advanced/mount-manager/
 title: Mount Manager
 ---
-
-# Mount Manager
 
 Flysystem comes with a wrapper class to easily work with multiple file system instances
 from a single object. The `League\Flysystem\MountManager` is an easy to use container allowing
@@ -12,7 +10,7 @@ you to simplify more complex cross file system interactions.
 
 Setting up a Mount Manager is easy:
 
-~~~ php
+```php
 $ftp = new League\Flysystem\Filesystem($ftpAdapter);
 $s3 = new League\Flysystem\Filesystem($s3Adapter);
 $local = new League\Flysystem\Filesystem($localAdapter);
@@ -25,21 +23,21 @@ $manager = new League\Flysystem\MountManager([
 
 // Or mount them later
 $manager->mountFilesystem('local', $local);
-~~~
+```
 
 Now we do all the file operations we'd normally do on a `Flysystem\Filesystem` instance.
 
-~~~ php
+```php
 // Read from FTP
 $contents = $manager->read('ftp://some/file.txt');
 
 // And write to local
 $manager->write('local://put/it/here.txt', $contents);
-~~~
+```
 
 This makes it easy to code up simple sync strategies.
 
-~~~ php
+```php
 $contents = $manager->listContents('local://uploads', true);
 
 foreach ($contents as $entry) {
@@ -55,7 +53,7 @@ foreach ($contents as $entry) {
         $manager->put('storage://'.$entry['path'], $manager->read('local://'.$entry['path']));
     }
 }
-~~~
+```
 
 ## Specialized calls
 
@@ -65,9 +63,9 @@ The copy method provided by the Mount Manager takes the origin of the file into 
 When it detects the source and destination are located on a different file systems it'll
 use a streamed upload instead, transparently.
 
-~~~ php
+```php
 $mountManager->copy('local://some/file.ext', 'backup://storage/location.ext');
-~~~
+```
 
 ### Move
 
@@ -75,6 +73,6 @@ The `move` call is the multi-file system counterpart to `rename`. Where rename m
 the same file system, the `move` call provides the same conceptual behavior, but then on two
 different file systems.
 
-~~~ php
+```php
 $mountManager->move('local://some/upload.jpeg', 'cdn://users/1/profile-picture.jpeg');
-~~~
+```

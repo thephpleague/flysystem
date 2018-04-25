@@ -1,10 +1,9 @@
 ---
 layout: default
-permalink: /adapter/phpcr/
+permalink: /docs/adapter/phpcr/
+redirect_from: /adapter/phpcr/
 title: PHPCR Adapter
 ---
-
-# PHPCR Adapter
 
 This adapter works with any [PHPCR](http://phpcr.github.io) implementation.
 Choose the one that fits your needs and add it to your project, or composer
@@ -16,21 +15,22 @@ for more on choosing your implementation.
 
 Assuming you go with jackalope-doctrine-dbal, do:
 
-~~~bash
+```bash
 composer require jackalope/jackalope-doctrine-dbal league/flysystem-phpcr
-~~~
+```
 
 ## Usage
 
 Bootstrap your PHPCR implementation. If you chose jackalope-doctrine-dbal with sqlite, 
 this will look like this for example:
 
-~~~php
-use League\Flysystem\Filesystem;
-use League\Flysystem\Phpcr\PhpcrAdapter;
-use Jackalope\RepositoryFactoryDoctrineDBAL;
+```php
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
+use Jackalope\RepositoryFactoryDoctrineDBAL;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Phpcr\PhpcrAdapter;
+use PHPCR\SimpleCredentials;
 
 $connection = DriverManager::getConnection([
     'driver' => 'pdo_sqlite',
@@ -45,4 +45,4 @@ $session = $repository->login(new SimpleCredentials('', ''));
 // this part looks the same regardless of your phpcr implementation.
 $root = '/flysystem_tests';
 $filesystem = new Filesystem(new PhpcrAdapter($session, $root));
-~~~
+```

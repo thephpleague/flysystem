@@ -1,20 +1,19 @@
 ---
 layout: default
-permalink: /adapter/sftp/
+permalink: /docs/adapter/sftp/
+redirect_from: /adapter/sftp/
 title: SFTP Adapter
 ---
 
-# SFTP Adapter
-
 ## Installation
 
-~~~ bash
+```bash
 composer require league/flysystem-sftp
-~~~
+```
 
 ## Usage
 
-~~~ php
+```php
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
 
@@ -27,4 +26,4 @@ $filesystem = new Filesystem(new SftpAdapter([
     'root' => '/path/to/root',
     'timeout' => 10,
 ]));
-~~~
+```
