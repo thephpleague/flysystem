@@ -24,7 +24,6 @@ composer require jackalope/jackalope-doctrine-dbal league/flysystem-phpcr
 Bootstrap your PHPCR implementation. If you chose jackalope-doctrine-dbal with sqlite, 
 this will look like this for example:
 
-<<<<<<< HEAD
 ```php
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\DriverManager;
