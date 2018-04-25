@@ -467,4 +467,15 @@ class LocalAdapterTests extends TestCase
         $root = __DIR__ . '/files/fail.plz';
         new Local($root);
     }
+
+    public function testWriteWithSpecificTimestampInConfig()
+    {
+        $timestamp = strtotime('today midnight');
+        $this->adapter->write('dummy.txt', '1234', new Config(['timestamp' => $timestamp]));
+        $result = $this->adapter->getTimestamp('dummy.txt');
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('timestamp', $result);
+        $this->assertInternalType('int', $result['timestamp']);
+        $this->assertEquals($timestamp, $result['timestamp']);
+    }
 }
