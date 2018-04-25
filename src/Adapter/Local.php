@@ -137,8 +137,19 @@ class Local extends AbstractAdapter
             $result['visibility'] = $visibility;
             $this->setVisibility($path, $visibility);
         }
+        if ($timestamp = $config->get('timestamp')) {
+            $result['timestamp'] = $timestamp;
+            $this->setTimestamp($path, $timestamp);
+        }
 
         return $result;
+    }
+
+    private function setTimestamp($path, $timestamp)
+    {
+        $location = $this->applyPathPrefix($path);
+
+        return touch($location, $timestamp);
     }
 
     /**
@@ -167,6 +178,10 @@ class Local extends AbstractAdapter
         if ($visibility = $config->get('visibility')) {
             $this->setVisibility($path, $visibility);
             $result['visibility'] = $visibility;
+        }
+        if ($timestamp = $config->get('timestamp')) {
+            $result['timestamp'] = $timestamp;
+            $this->setTimestamp($path, $timestamp);
         }
 
         return $result;
@@ -209,6 +224,10 @@ class Local extends AbstractAdapter
 
         if ($mimetype = Util::guessMimeType($path, $contents)) {
             $result['mimetype'] = $mimetype;
+        }
+        if ($timestamp = $config->get('timestamp')) {
+            $result['timestamp'] = $timestamp;
+            $this->setTimestamp($path, $timestamp);
         }
 
         return $result;
