@@ -32,7 +32,7 @@ use League\Flysystem\Plugin\PluginNotFoundException;
  * @method array listPaths($directory = '', $recursive = false)
  * @method array getWithMetadata($path, array $metadata)
  * @method string|false getMimetype($path)
- * @method string|false getTimestamp($path)
+ * @method int|false getTimestamp($path)
  * @method string|false getVisibility($path)
  * @method int|false getSize($path);
  * @method bool setVisibility($path, $visibility)
