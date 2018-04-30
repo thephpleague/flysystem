@@ -32,7 +32,7 @@ Now that you've got your adapter setup you can use it to create the filesystem:
 
 use League\Flysystem\Filesystem;
 
-$adapter = new Filesystem($adapter);
+$filesystem = new Filesystem($adapter);
 ```
 
 ## Global Configuration
