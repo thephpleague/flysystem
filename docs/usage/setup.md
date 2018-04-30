@@ -45,7 +45,7 @@ options can be provided in global configuration through the `Filesystem`.
 
 use League\Flysystem\Filesystem;
 
-$adapter = new Filesystem($adapter, ['visibility' => 'public']);
+$filesystem = new Filesystem($adapter, ['visibility' => 'public']);
 ```
 
 The global available configuration options are:
