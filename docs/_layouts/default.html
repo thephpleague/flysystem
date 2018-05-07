@@ -21,17 +21,17 @@
     {% endif %}
     {% endunless %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
-    <link rel="stylesheet" href="/dist/styles.css"/>
+    <link rel="stylesheet" href="/dist/styles.css?v=1.0"/>
     <base href="https://flysystem.thephpleague.com/" />
 </head>
 <body class="min-h-screen text-base text-indigo-body-text min-w-full pt-12 leading-normal bg-indigo-lightest">
-<!--{% include size-helper.html %}-->
+{% include size-helper.html %}
 <div class="pb-1 fixed z-10 pin-t w-screen bg-white border-indigo-lighter border-b">
     <div class="max-w-2xl mx-auto px-4 py-2">
         <div class="flex items-center flex-no-shrink pt-1">
             <a href="/" class="flex items-center h-10">
                 <img class="h-10 w-10 mr-3" width="30" height="30" src="/img/flysystem.svg"/>
-                <span class="pr-2 font-normal overflow-hidden font-heading text-3xl text-indigo-darkest">
+                <span class="pr-2 font-normal overflow-hidden font-heading text-3xl text-indigo-darkest -sm:hidden">
                     Flysystem
                     <sup class="text-xs relative text-indigo" style="top: -20px;">{{ site.data.project.version }}</sup>
                 </span>
