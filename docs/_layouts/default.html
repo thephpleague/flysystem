@@ -20,7 +20,7 @@
     </script>
     {% endif %}
     {% endunless %}
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
     <link rel="stylesheet" href="/dist/styles.css"/>
     <base href="https://flysystem.thephpleague.com/" />
 </head>
@@ -37,12 +37,12 @@
                 </span>
             </a>
             <div class="flex-grow"></div>
-            <!--<div class="flex-no-shrink flex-no-grow h-10 px-4 relative">-->
-                <!--<input id="global-search" class="focus:outline-0 h-10 py-2 pl-8 pr-2 text-indigo-darker rounded bg-indigo-lightest focus:border-indigo-light focus:bg-white focus:placeholder-none max-w-xs w-full appearance-none" type="text" placeholder="Search the docs" />-->
-                <!--<span class="pointer-events-none absolute pin-y pin-l pl-6 flex items-center">-->
-                    <!--<svg class="fill-current pointer-events-none text-indigo-light w-4 h-4 border-transparent border" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>-->
-                <!--</span>-->
-            <!--</div>-->
+            <div class="flex-no-shrink flex-no-grow h-10 px-4 relative">
+                <input id="global-search" class="focus:outline-0 h-10 py-2 pl-8 pr-2 text-indigo-darker rounded bg-indigo-lightest focus:border-indigo-light focus:bg-white focus:placeholder-none max-w-xs w-full appearance-none" type="text" placeholder="Search the docs" />
+                <span class="pointer-events-none absolute pin-y pin-l pl-6 flex items-center">
+                    <svg class="fill-current pointer-events-none text-indigo-light w-4 h-4 border-transparent border" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/></svg>
+                </span>
+            </div>
             <a href="#" id="menu-toggle" class="block md:hidden h-8 w-8 border p-1 border-transparent text-grey hover:text-grey menu-closed">
                 <svg class="menu-closed:shown fill-current h-full w-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                     <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/>
@@ -87,13 +87,13 @@
 
 </footer>
 <script type="text/javascript" src="/dist/main.js"></script>
-<!--<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>-->
-<!--<script type="text/javascript"> docsearch({-->
-    <!--apiKey: 'be7daf2d7afded0acb0589a0e304a423',-->
-    <!--indexName: 'filesystem_thephpleague',-->
-    <!--inputSelector: '#global-search',-->
-    <!--debug: {% if site.data.dev.dev_mode %}true{% else %}false{% endif %}-->
-<!--});-->
-<!--</script>-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+    apiKey: 'be7daf2d7afded0acb0589a0e304a423',
+    indexName: 'filesystem_thephpleague',
+    inputSelector: '#global-search',
+    debug: {% if site.data.dev.dev_mode %}true{% else %}false{% endif %}
+});
+</script>
 </body>
 </html>
