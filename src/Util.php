@@ -26,7 +26,7 @@ class Util
 
         $pathinfo += pathinfo($pathinfo['basename']);
 
-        return $pathinfo;
+        return $pathinfo + ['dirname' => ''];
     }
 
     /**
