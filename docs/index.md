@@ -38,3 +38,17 @@ of your code.
 </div>
 
 View all the <a href="/docs/sponsors/">sponsors</a>.
+
+## Getting Started
+
+* **[Architecture](/docs/architecture/)**: Flysystem's internal architecture
+* **[Setup/Bootstrap](/docs/usage/setup/)**: Load Flysystem and set up your first adapter
+* **[Flysystem API](/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
+
+### Commonly-Used Adapters
+
+* **[AWS S3](/docs/adapter/aws-s3/)**
+* **[Digital Ocean Spaces](/docs/adapter/digitalocean-spaces/)**
+* **[Local](/docs/adapter/local/)**
+* **[Memory](/docs/adapter/memory/)**
+* **[Creating An Adapter](/docs/advanced/creating-an-adapter/)**
