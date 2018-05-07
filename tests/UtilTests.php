@@ -230,7 +230,7 @@ class UtilTests extends TestCase
      */
     public function testPathinfo($path)
     {
-        $expected = compact('path') + pathinfo($path);
+        $expected = compact('path') + pathinfo($path) + ['dirname' => ''];
 
         if (isset($expected['dirname'])) {
             $expected['dirname'] = Util::normalizeDirname($expected['dirname']);
