@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class FileTests extends TestCase
 {
-    use \PHPUnitHacks;
-
     /** @var Filesystem */
     protected $filesystem;
 

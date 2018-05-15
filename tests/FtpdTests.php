@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class FtpdTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     protected $options = [
         'host' => 'example.org',

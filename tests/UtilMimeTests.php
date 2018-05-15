@@ -19,7 +19,6 @@ function class_exists($class_name, $autoload = true)
 
 class UtilMimeTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     public function testNoFinfoFallback()
     {

@@ -5,8 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class ForcedCopyPluginTests extends TestCase
 {
-    use \PHPUnitHacks;
-
     protected $filesystem;
     protected $plugin;
 

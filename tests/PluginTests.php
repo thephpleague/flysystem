@@ -57,7 +57,6 @@ class AuthorizePlugin implements PluginInterface
 
 class PluginTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     protected $filesystem;
 

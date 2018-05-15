@@ -27,7 +27,6 @@ namespace League\Flysystem
 
     class FailTests extends TestCase
     {
-        use \PHPUnitHacks;
 
         public function testFails()
         {

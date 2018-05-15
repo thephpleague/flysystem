@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class EmptyDirPluginTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     public function testPlugin()
     {

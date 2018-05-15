@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 
 class HandlerTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     public function testFileRead()
     {

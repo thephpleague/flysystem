@@ -14,12 +14,11 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9"
+        "php": ">=7.1.3",
+        "phpunit/phpunit": "^7.1"
     },
     "require-dev": {
-        "ext-fileinfo": "*",
-        "phpspec/phpspec": "^3.4",
-        "phpunit/phpunit": "^5.7"
+        "ext-fileinfo": "*"
     },
     "autoload": {
         "psr-4": {
@@ -29,10 +28,7 @@
     "autoload-dev": {
         "psr-4": {
             "League\\Flysystem\\Stub\\": "stub/"
-        },
-        "files": [
-          "tests/PHPUnitHacks.php"
-        ]
+        }
     },
     "suggest": {
         "ext-fileinfo": "Required for MimeType",

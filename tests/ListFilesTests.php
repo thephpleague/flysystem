@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class ListFilesTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     private $filesystem;
     private $actualFilesystem;

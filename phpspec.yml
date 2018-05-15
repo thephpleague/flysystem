@@ -1,6 +1,0 @@
----
-suites:
-  event_suite:
-    namespace: League\Flysystem
-    psr4_prefix: League\Flysystem
-formatter.name: pretty

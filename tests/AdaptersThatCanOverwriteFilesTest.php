@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class AdaptersThatCanOverwriteFilesTest extends TestCase
 {
-    use \PHPUnitHacks;
 
     /**
      * @test

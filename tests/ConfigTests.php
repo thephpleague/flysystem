@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     public function testGet()
     {

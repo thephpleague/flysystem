@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class FilesystemTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     /**
      * @var ObjectProphecy

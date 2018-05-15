@@ -52,7 +52,6 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
 class LocalAdapterTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     /**
      * @var Local

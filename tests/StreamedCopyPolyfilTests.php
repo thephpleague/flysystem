@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedCopyPolyfilTests extends TestCase
 {
-    use \PHPUnitHacks;
 
     public function testReadFail()
     {
