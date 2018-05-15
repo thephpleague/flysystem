@@ -28,7 +28,6 @@ before_script:
 script:
   - bin/phpunit tests/ftp/FtpIntegrationTests.php tests/ftp/FtpManualRecursionIntegrationTests.php tests/ftp/FtpdIntegrationTests.php tests/ftp/FtpdManualRecursionIntegrationTests.php
   - bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
-  - bin/phpstan analyse -l 3 src
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
