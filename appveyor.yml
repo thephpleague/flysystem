@@ -14,7 +14,7 @@ init:
 install:
   - IF EXIST c:\php (SET PHP=0) ELSE (mkdir c:\php)
   - cd c:\php
-  - IF %PHP%==1 appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-7.1.3-nts-Win32-VC14-x86.zip -FileName php.zip
+  - IF %PHP%==1 appveyor DownloadFile https://windows.php.net/downloads/releases/archives/php-7.1.2-Win32-VC14-x86.zip -FileName php.zip
   - IF %PHP%==1 7z x php.zip -y >nul
   - IF %PHP%==1 del /Q *.zip
   - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
