@@ -7,6 +7,9 @@ use League\Flysystem\FilesystemInterface;
 use League\Flysystem\PluginInterface;
 use LogicException;
 
+/**
+ * @internal
+ */
 trait PluggableTrait
 {
     /**
