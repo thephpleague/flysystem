@@ -1,6 +1,7 @@
 ---
 layout: default
 permalink: /docs/advanced/mount-manager/
+redirect_from: /mount-manager/
 title: Mount Manager
 ---
 

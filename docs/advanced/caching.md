@@ -1,6 +1,7 @@
 ---
 layout: default
 permalink: /docs/advanced/caching/
+redirect_from: /caching/
 title: Caching
 ---
 

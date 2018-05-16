@@ -1,6 +1,7 @@
 ---
 layout: default
 permalink: /docs/advanced/provided-plugins/
+redirect_from: /provided-plugins/
 title: Provided Plugins
 ---
 

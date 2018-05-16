@@ -1,6 +1,7 @@
 ---
 layout: default
 permalink: /docs/advanced/creating-an-adapter/
+redirect_from: /creating-an-adapter/
 title: Creating an adapter
 ---
 

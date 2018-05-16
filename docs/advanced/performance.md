@@ -1,6 +1,7 @@
 ---
 layout: default
 permalink: /docs/advanced/performance/
+redirect_from: /performance/
 title: Performance
 ---
 
