@@ -459,6 +459,17 @@ class LocalAdapterTests extends TestCase
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $adapter->getMimetype('test.xlsx')['mimetype']);
     }
 
+    public function testDeleteFileShouldReturnTrue(){
+        $root = __DIR__ . '/files/';
+        $original = $root . 'delete.txt';
+        file_put_contents($original, 'something');
+        $this->assertTrue($this->adapter->delete('delete.txt'));
+    }
+
+    public function testDeleteMissingFileShouldReturnFalse(){
+        $this->assertFalse($this->adapter->delete('missing.txt'));
+    }
+
     /**
      * @expectedException \League\Flysystem\Exception
      */
