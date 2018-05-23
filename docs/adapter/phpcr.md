@@ -40,7 +40,10 @@ $factory = new RepositoryFactoryDoctrineDBAL();
 $repository = $factory->getRepository([
     'jackalope.doctrine_dbal_connection' => $connection,
 ]);
-$session = $repository->login(new SimpleCredentials('', ''));
+$session = $repository->login(new SimpleCredentials('username', 'password'));
+
+//Or when no credentials are required
+$session = $repository->login();
 
 // this part looks the same regardless of your phpcr implementation.
 $root = '/flysystem_tests';
