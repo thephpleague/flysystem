@@ -61,4 +61,4 @@ $config = ['timestamp' => filemtime($path)]; //Use the time when the content of 
 $filesystem->write($path, $content, $config);
 ```
 
-This can be usefull when the file timestamp needs to be preserved when copying a file structure to PHPCR.
+This can be useful when the file timestamp needs to be preserved when copying a file structure to PHPCR.
