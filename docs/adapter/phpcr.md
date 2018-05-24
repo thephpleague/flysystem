@@ -51,7 +51,7 @@ $filesystem = new Filesystem(new PhpcrAdapter($session, $root));
 ```
 
 ### Indicate specific modification timestamp when writing content
-By default PHPCR will use the "current" timestamp as the "last modified" timestamp of an entry when writing content. A specific timestamp can be provided by using the configuration array:
+By default PHPCR will use the current system time as the "last modified" timestamp of an entry when writing content. A specific timestamp can be provided by using the configuration array:
 
 ```php
 $path = '/path/to/file.ext';
