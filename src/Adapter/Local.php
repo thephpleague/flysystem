@@ -178,7 +178,12 @@ class Local extends AbstractAdapter
     public function readStream($path)
     {
         $location = $this->applyPathPrefix($path);
-        $stream = fopen($location, 'rb');
+        // Suppress warnings and handle them.
+        $stream = @fopen($location, 'rb');
+
+        if ($stream === false) {
+            return false;
+        }
 
         return ['type' => 'file', 'path' => $path, 'stream' => $stream];
     }
@@ -220,7 +225,8 @@ class Local extends AbstractAdapter
     public function read($path)
     {
         $location = $this->applyPathPrefix($path);
-        $contents = file_get_contents($location);
+        // Suppress warnings and handle them.
+        $contents = @file_get_contents($location);
 
         if ($contents === false) {
             return false;
