@@ -110,6 +110,10 @@ function ftp_pwd($connection)
 
 function ftp_raw($connection, $command)
 {
+    if ($connection === 'utf8.fail') {
+        return [0 => '421 Service not available, closing control connection'];
+    }
+
 	if ($command === 'OPTS UTF8 ON') {
         return [0 => '200 UTF8 set to on'];
     }
@@ -760,6 +764,27 @@ class FtpTests extends TestCase
         $adapter = new Ftp($this->options + ['systemType' => 'windows']);
         $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
         $this->assertEquals('file1.txt', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testItSetUtf8Mode()
+    {
+        $adapter = new Ftp($this->options + ['utf8' => true]);
+        $adapter->setUtf8(true);
+        $this->assertNull($adapter->connect());
+    }
+
+    /**
+     * @depends testInstantiable
+     * @expectedException \RuntimeException
+     */
+    public function testItThrowsAnExceptionWhenItCouldNotSetUtf8ModeForConnection()
+    {
+        $adapter = new Ftp(['host' => 'utf8.fail', 'utf8' => true]);
+        $adapter->setUtf8(true);
+        $adapter->connect();
     }
 
     /**
