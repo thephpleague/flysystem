@@ -195,6 +195,7 @@ class MountManager
      *
      * @throws InvalidArgumentException
      * @throws FilesystemNotFoundException
+     * @throws FileExistsException
      *
      * @return bool
      */
