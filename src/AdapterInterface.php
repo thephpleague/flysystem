@@ -115,4 +115,11 @@ interface AdapterInterface extends ReadInterface
      * @return array|false file meta data
      */
     public function setVisibility($path, $visibility);
+
+    /**
+     * Can adapter overwrite files
+     *
+     * @return bool
+     */
+    public function canOverwriteFiles();
 }

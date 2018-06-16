@@ -141,4 +141,14 @@ class NullAdapter extends AbstractAdapter
     {
         return false;
     }
+
+    /**
+     * Can adapter overwrite files
+     *
+     * @return bool
+     */
+    public function canOverwriteFiles()
+    {
+        return true;
+    }
 }
