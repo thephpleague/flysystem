@@ -49,3 +49,16 @@ $session = $repository->login();
 $root = '/flysystem_tests';
 $filesystem = new Filesystem(new PhpcrAdapter($session, $root));
 ```
+
+### Indicate specific modification timestamp when writing content
+By default PHPCR will use the current system time as the "last modified" timestamp of an entry when writing content. A specific timestamp can be provided by using the configuration array:
+
+```php
+$path = '/path/to/file.ext';
+$content = file_get_contents($path);
+$config = ['timestamp' => filemtime($path)]; //Use the time when the content of the file was last changed.
+
+$filesystem->write($path, $content, $config);
+```
+
+This can be useful when the file timestamp needs to be preserved when copying a file structure to PHPCR.
