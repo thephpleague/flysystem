@@ -8,23 +8,20 @@ title: Azure Blob Storage
 ## Installation
 
 ```bash
-composer require league/flysystem-azure
+composer require league/flysystem-azure-blob-storage
 ```
 
 ## Usage
 
 ```php
-use MicrosoftAzure\Storage\Common\ServicesBuilder;
+use League\Flysystem\AzureBlobStorage\AzureBlobStorageAdapter;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Azure\AzureAdapter;
+use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
-$endpoint = sprintf(
-    'DefaultEndpointsProtocol=https;AccountName=%s;AccountKey=%s',
-    'account-name',
-    'api-key'
-);
+include __DIR__.'/vendor/autoload.php';
 
-$blobRestProxy = ServicesBuilder::getInstance()->createBlobService($endpoint);
-
-$filesystem = new Filesystem(new AzureAdapter($blobRestProxy, 'my-container'));
+$client = BlobRestProxy::createBlobService('DefaultEndpointsProtocol=https;AccountName={YOUR_ACCOUNT_NAME};AccountKey={YOUR_ACCOUNT_KEY};');
+$adapter = new AzureBlobStorageAdapter($client, 'container_name');
+$filesystem = new Filesystem($adapter);
+var_dump($filesystem->listContents());
 ```
