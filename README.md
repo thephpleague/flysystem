@@ -62,7 +62,7 @@ Want to get started quickly? Check out some of these integrations:
 ### Officially Supported
 * Amazon Web Services - S3 V2: https://github.com/thephpleague/flysystem-aws-s3-v2
 * Amazon Web Services - S3 V3: https://github.com/thephpleague/flysystem-aws-s3-v3
-* Azure Blob Storage: https://github.com/thephpleague/flysystem-azure
+* Azure Blob Storage: https://github.com/thephpleague/flysystem-azure-blob-storage
 * Memory: https://github.com/thephpleague/flysystem-memory
 * PHPCR: https://github.com/thephpleague/flysystem-phpcr
 * Rackspace Cloud Files: https://github.com/thephpleague/flysystem-rackspace
