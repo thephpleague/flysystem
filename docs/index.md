@@ -48,6 +48,7 @@ View all the <a href="/docs/sponsors/">sponsors</a>.
 ### Commonly-Used Adapters
 
 * **[AWS S3](/docs/adapter/aws-s3/)**
+* **[Azure](/docs/adapter/azure/)**
 * **[Digital Ocean Spaces](/docs/adapter/digitalocean-spaces/)**
 * **[Local](/docs/adapter/local/)**
 * **[Memory](/docs/adapter/memory/)**
