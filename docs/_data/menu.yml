@@ -8,6 +8,7 @@ Usage:
     Filesystem API: '/docs/usage/filesystem-api/'
 
 Guides:
+    Laravel Usage: '/docs/guides/laravel-usage/'
     Deterministic Code: '/docs/guides/deterministic-programming/'
     Handling Uploads: '/docs/guides/uploads/'
 
