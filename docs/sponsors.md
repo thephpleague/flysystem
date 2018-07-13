@@ -17,8 +17,8 @@ In order to free up time to keep everything up-to-date financial help is greatly
         <span style="background-color: #FB503B" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Laravel.com</span>
     </a>
     <a target="_blank" href="https://azure.microsoft.com/free/?utm_source=flysystem&utm_medium=banner&utm_campaign=flysystem_sponsorship" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
-        <img src="/img/azure.svg" class="max-w-full m-6 sm:m-8" alt="Microsoft Azure"/>
-        <span style="background-color: #00a1f1;" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Microsoft Azure</span>
+        <img src="/img/azure.svg" class="max-w-full m-6 sm:m-8" alt="Azure.com"/>
+        <span style="background-color: #00a1f1;" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Azure.com</span>
     </a>
     <a target="_blank" href="https://patreon.com/frankdejonge" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
         <img src="/img/question.svg" class="max-w-full m-6 sm:m-8 opacity-50" alt="Become a sponsor"/>
