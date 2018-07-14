@@ -9,7 +9,7 @@ div.highlighter-rouge {
 }
 
 div.highlighter-rouge > div {
-    @apply overflow-x-scroll w-full;
+    @apply overflow-auto w-full;
 }
 
 @screen md {
