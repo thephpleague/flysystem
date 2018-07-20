@@ -70,10 +70,10 @@ param         | description              | type
 $exists = $filesystem->has($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$exists`     | wether the file exists   | `bool`
+param         | description               | type
+------------- | ------------------------- | -----------
+`$path`       | location of a file        | `string`
+`$exists`     | whether the file exists   | `bool`
 
 > This only has consistent behaviour for files, not directories. Directories
 > are less important in Flysystem, they're created implicitly and often ignored because
