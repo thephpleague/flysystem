@@ -19,7 +19,7 @@
     "require-dev": {
         "ext-fileinfo": "*",
         "phpspec/phpspec": "^3.4",
-        "phpunit/phpunit": "^5.7"
+        "phpunit/phpunit": "^5.7.10"
     },
     "autoload": {
         "psr-4": {

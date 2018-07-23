@@ -1,0 +1,56 @@
+build: false
+
+platform:
+  - x64
+
+clone_folder: c:\projects\project-code
+
+cache:
+  - c:\ProgramData\chocolatey\bin -> .appveyor.yml
+  - c:\ProgramData\chocolatey\lib -> .appveyor.yml
+  - c:\ProgramData\ComposerSetup -> .appveyor.yml
+  - c:\tools\php -> .appveyor.yml
+
+environment:
+  global:
+    COMPOSER_NO_INTERACTION: 1
+    ANSICON: 121x90 (121x90) # Console colors
+
+  matrix:
+    - PHP_VERSION: 5.6
+      COMPOSER_OPTS: --prefer-lowest
+
+    - PHP_VERSION: 5.6
+      COMPOSER_OPTS:
+
+    - PHP_VERSION: 7.2
+      COMPOSER_OPTS: --prefer-lowest
+
+    - PHP_VERSION: 7.2
+      COMPOSER_OPTS:
+
+init:
+  - ps: $env:PATH = 'c:\tools\php;c:\ProgramData\ComposerSetup\bin;' + $env:PATH
+
+install:
+  - ps: Set-Service wuauserv -StartupType Manual # Chocolatey will try to install Windows updates when installing PHP.
+  - ps: appveyor-retry cinst --no-progress --params '""/InstallDir:c:\tools\php""' -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:PHP_VERSION | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+
+  - cd c:\tools\php
+  - copy php.ini-production php.ini /Y
+  - echo date.timezone="UTC" >> php.ini
+  - echo extension_dir=ext >> php.ini
+  - echo extension=php_openssl.dll >> php.ini # Needed to install Composer
+  - echo extension=php_mbstring.dll >> php.ini # Needed for PHPunit
+  - echo extension=php_fileinfo.dll >> php.ini
+
+  - appveyor-retry cinst --no-progress -y composer
+
+  - cd c:\projects\project-code
+  - appveyor-retry composer self-update
+  - appveyor-retry composer update --no-interaction --no-progress --no-suggest --optimize-autoloader --prefer-stable --prefer-dist %COMPOSER_OPTS%
+
+test_script:
+  - cd c:\projects\project-code
+  - bin\phpunit --verbose --exclude-group=integration
+  - bin/phpspec run
