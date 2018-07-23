@@ -41,6 +41,7 @@ install:
   - echo date.timezone="UTC" >> php.ini
   - echo extension_dir=ext >> php.ini
   - echo extension=php_openssl.dll >> php.ini # Needed to install Composer
+  - echo extension=php_mbstring.dll >> php.ini # Needed for PHPunit
   - echo extension=php_fileinfo.dll >> php.ini
 
   - appveyor-retry cinst --no-progress -y composer
