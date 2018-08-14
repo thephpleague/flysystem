@@ -68,4 +68,4 @@ not a conventional thing to do it certainly has a lot of benefits.
 File listings are just a select statement:  `SELECT * FROM files WHERE path LIKE '/prefix/%'`.
 Listings can easily be sorted. File existence checks are in expensive.
 File migrations become really easy, even when your path generation
-strategy changes. Metadata can be stores alongside your path.
+strategy changes. Metadata can be stored alongside your path.
