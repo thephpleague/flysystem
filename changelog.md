@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.46 - 2018-08-22
+
+* Return failure when copying a stream does not work instead of relying only on fclose.
+
 ## 1.0.45 - 2018-05-07
 
 * Fixed a regression in path-derived metadata fetching.
