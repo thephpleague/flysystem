@@ -12,7 +12,7 @@ problematic.
 
 ## Filesystems are slow.
 
-In general, filesystem interaction is slow. Every operation operation that
+In general, filesystem interaction is slow. Every operation that
 hits the disc in one way or another is slow. While some operations absolutely
 require filesystem interaction, there's a number of cases where filesystem
 operations can be prevented in order to eliminate the associated penalties.
@@ -66,6 +66,6 @@ you can store all the paths in a persistent database. While this is
 not a conventional thing to do it certainly has a lot of benefits.
 
 File listings are just a select statement:  `SELECT * FROM files WHERE path LIKE '/prefix/%'`.
-Listings can easily be sorted. File existence checks are in expensive.
+Listings can easily be sorted. File existence checks are inexpensive.
 File migrations become really easy, even when your path generation
 strategy changes. Metadata can be stored alongside your path.

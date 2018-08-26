@@ -60,7 +60,7 @@ foreach ($contents as $entry) {
 ### Copy
 
 The copy method provided by the Mount Manager takes the origin of the file into account.
-When it detects the source and destination are located on a different file systems it'll
+When it detects the source and destination are located on different file systems it'll
 use a streamed upload instead, transparently.
 
 ```php
@@ -70,7 +70,7 @@ $mountManager->copy('local://some/file.ext', 'backup://storage/location.ext');
 ### Move
 
 The `move` call is the multi-file system counterpart to `rename`. Where rename must be used on
-the same file system, the `move` call provides the same conceptual behavior, but then on two
+the same file system, the `move` call provides the same conceptual behavior, but on two
 different file systems.
 
 ```php

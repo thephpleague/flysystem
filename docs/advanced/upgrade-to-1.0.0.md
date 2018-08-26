@@ -52,7 +52,7 @@ $filesystem = new Filesystem($decoratedAdapter);
 
 ## Helper Methods
 
-In order to clean up the Filsystem class, some helper functions have been moved to plugins.
+In order to clean up the Filesystem class, some helper functions have been moved to plugins.
 
 * ListWith
 * ListPaths

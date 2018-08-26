@@ -150,7 +150,7 @@ param         | description              | type
 
 ## Get Timestamps
 
-This function the last updated timestamp.
+This function returns the last updated timestamp.
 
 ```php
 $response = $filesystem->getTimestamp($path);
