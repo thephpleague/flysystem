@@ -8,12 +8,12 @@ The `Handler` type and associated calls will be removed in version 2.0.
 
 ### Upgrade path
 
-You should either create your own implementation for handling OOP usage,
+You should create your own implementation for handling OOP usage,
 but it's recommended to move away from using an OOP-style wrapper entirely.
 
 The reason for this is that it's too easy for implementation details (for
 your application this is Flysystem) to leak into the application. The most
-important part for Flysystem is that it improved portability and creates a
+important part for Flysystem is that it improves portability and creates a
 solid boundary between your application core and the infrastructure you use.
-The OOP-style handling breaks this principle, therefor I want to stop
+The OOP-style handling breaks this principle, therefore I want to stop
 promoting it. 

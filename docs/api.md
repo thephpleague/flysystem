@@ -182,7 +182,7 @@ foreach ($listing as $object) {
 }
 ~~~
 
-__Get file into with explicit metadata__
+__Get file info with explicit metadata__
 
 ~~~ php
 $info = $filesystem->getWithMetadata('path/to/file.txt', ['timestamp', 'mimetype']);

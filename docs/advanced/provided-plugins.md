@@ -31,7 +31,7 @@ foreach ($listing as $object) {
 }
 ```
 
-## Get file into with explicit metadata.
+## Get file info with explicit metadata.
 
 This requires the `League\Flysystem\Plugin\GetWithMetadata` plugin.
 

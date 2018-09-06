@@ -30,4 +30,4 @@ timestamp   | modified time            | `integer`
 In order to make the most out of every (expensive) filesystem call adapters
 return as much information as they can when/if available. This makes it possible
 for caching mechanisms to store this information so subsequent calls can be
-returned from cache without the need for additional filesystems calls.
+returned from cache without the need for additional filesystem calls.
