@@ -14,10 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9"
+        "php": ">=5.5.9",
+        "ext-fileinfo": "*"
     },
     "require-dev": {
-        "ext-fileinfo": "*",
         "phpspec/phpspec": "^3.4",
         "phpunit/phpunit": "^5.7.10"
     },
