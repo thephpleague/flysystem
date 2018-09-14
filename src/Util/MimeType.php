@@ -28,7 +28,7 @@ class MimeType
         'pdf'   => 'application/pdf',
         'ai'    => 'application/pdf',
         'eps'   => 'application/postscript',
-        'ebup'  => 'application/epub+zip',
+        'epub'  => 'application/epub+zip',
         'ps'    => 'application/postscript',
         'smi'   => 'application/smil',
         'smil'  => 'application/smil',
