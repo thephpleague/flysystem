@@ -29,6 +29,13 @@ class UtilMimeTests extends TestCase
         $passthru = true;
     }
 
+    public function testRetrievingAllMimetypes()
+    {
+        $map = MimeType::getExtensionToMimeTypeMap();
+        $this->assertInternalType('array', $map);
+        $this->assertEquals('application/epub+zip', $map['epub']);
+    }
+
     public function testNoExtension()
     {
         $this->assertEquals('text/plain', MimeType::detectByFileExtension('dir/file'));
