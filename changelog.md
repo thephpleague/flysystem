@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.47 - 2018-09-14
+
+* Specify mimetype for .epub files
+
 ## 1.0.46 - 2018-08-22
 
 * Return failure when copying a stream does not work instead of relying only on fclose.
