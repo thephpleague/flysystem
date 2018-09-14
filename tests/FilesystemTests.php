@@ -460,7 +460,18 @@ class FilesystemTests extends TestCase
 
     public function testInvalidPluginCall()
     {
-        $this->expectException('BadMethodCallException');
+        $this->expectException(BadMethodCallException::class);
         $this->filesystem->invalidCall();
+    }
+
+    public function testHasPublicUrl()
+    {
+        $this->assertFalse($this->filesystem->hasPublicUrl('valid'));
+    }
+
+    public function testGetPublicUrlException()
+    {
+        $this->expectException(LogicException::class);
+        $this->assertFalse($this->filesystem->getPublicUrl('valid'));
     }
 }

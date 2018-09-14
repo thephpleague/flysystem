@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use League\Flysystem\Adapter\CanOverwriteFiles;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Util\ContentListingFormatter;
+use LogicException;
 
 /**
  * @method array getWithMetadata(string $path, array $metadata)
@@ -15,7 +16,7 @@ use League\Flysystem\Util\ContentListingFormatter;
  * @method array listPaths(string $path = '', boolean $recursive = false)
  * @method array listWith(array $keys = [], $directory = '', $recursive = false)
  */
-class Filesystem implements FilesystemInterface
+class Filesystem implements FilesystemInterface, PublicUrlInterface
 {
     use PluggableTrait;
     use ConfigAwareTrait;
@@ -403,5 +404,19 @@ class Filesystem implements FilesystemInterface
         if ($this->config->get('disable_asserts', false) === false && $this->has($path)) {
             throw new FileExistsException($path);
         }
+    }
+
+    public function hasPublicUrl($path)
+    {
+        return $this->adapter instanceof PublicUrlInterface
+            && $this->adapter->hasPublicUrl($path);
+    }
+
+    public function getPublicUrl($path)
+    {
+        if (!$this->adapter instanceof PublicUrlInterface) {
+            throw new LogicException(get_class($this->adapter) . ' does not support public URLs. Path: ' . $path);
+        }
+        return $this->adapter->getPublicUrl($path);
     }
 }

@@ -68,22 +68,35 @@ class Local extends AbstractAdapter
      * @param int    $writeFlags
      * @param int    $linkHandling
      * @param array  $permissions
+     * @param \Closure $hasPublicUrl A closure with the following signature: function(string $path): bool
+     * @param \Closure $getPublicUrl A closure with the following signature: function(string $path): string
      *
      * @throws LogicException
+     * @throws Exception
      */
-    public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
-    {
+    public function __construct(
+        $root,
+        $writeFlags = LOCK_EX,
+        $linkHandling = self::DISALLOW_LINKS,
+        array $permissions = [],
+        \Closure $hasPublicUrl = null,
+        \Closure $getPublicUrl = null
+    ) {
         $root = is_link($root) ? realpath($root) : $root;
         $this->permissionMap = array_replace_recursive(static::$permissions, $permissions);
         $this->ensureDirectory($root);
 
-        if ( ! is_dir($root) || ! is_readable($root)) {
+        if ( ! is_readable($root)) {
             throw new LogicException('The root path ' . $root . ' is not readable.');
         }
 
         $this->setPathPrefix($root);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
+
+        $this->hasPublicUrlClosure = $hasPublicUrl;
+        $this->getPublicUrlClosure = $getPublicUrl;
+
     }
 
     /**
