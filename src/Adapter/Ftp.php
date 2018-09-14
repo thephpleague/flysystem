@@ -53,6 +53,8 @@ class Ftp extends AbstractFtpAdapter
         'ignorePassiveAddress',
         'recurseManually',
         'utf8',
+        'getPublicUrlClosure',
+        'hasPublicUrlClosure'
     ];
 
     /**

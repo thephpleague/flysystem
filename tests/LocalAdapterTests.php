@@ -478,4 +478,32 @@ class LocalAdapterTests extends TestCase
         $root = __DIR__ . '/files/fail.plz';
         new Local($root);
     }
+
+    public function testHasPublicUrl()
+    {
+        $hasClosure = function() { return true; };
+        $getClosure = function($path) { return 'http://mycdn.fictional/' . $path; };
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::DISALLOW_LINKS, [], $hasClosure, $getClosure);
+        $this->assertTrue($adapter->hasPublicUrl('test'));
+        $this->assertEquals($getClosure('test'), $adapter->getPublicUrl('test'));
+    }
+
+    public function testHasWithoutGetPublicUrl()
+    {
+        $hasClosure = function() { return true; };
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::DISALLOW_LINKS, [], $hasClosure);
+        // Since we didn't provide a closure for getting the public URL no path can have a public URL.
+        $this->assertFalse($adapter->hasPublicUrl('test'));
+
+        $this->expectException(\LogicException::class);
+        $adapter->getPublicUrl('test');
+    }
+
+    public function testGetWithoutHasPublicUrl()
+    {
+        $getClosure = function($path) { return 'http://mycdn.fictional/' . $path; };
+        $adapter = new Local(__DIR__ . '/files/', LOCK_EX, Local::DISALLOW_LINKS, [], null, $getClosure);
+        $this->assertTrue($adapter->hasPublicUrl('test'));
+        $this->assertEquals($getClosure('test'), $adapter->getPublicUrl('test'));
+    }
 }

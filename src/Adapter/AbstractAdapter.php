@@ -2,10 +2,13 @@
 
 namespace League\Flysystem\Adapter;
 
+use League\Flysystem\Adapter\Polyfill\PublicUrlClosureTrait;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\PublicUrlInterface;
 
-abstract class AbstractAdapter implements AdapterInterface
+abstract class AbstractAdapter implements AdapterInterface, PublicUrlInterface
 {
+    use PublicUrlClosureTrait;
     /**
      * @var string|null path prefix
      */

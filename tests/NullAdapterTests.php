@@ -100,4 +100,17 @@ class NullAdapterTest extends TestCase
         $adapter = new NullAdapter();
         $this->assertInternalType('array', $adapter->createDir('one', new Config(['visibility' => 'public'])));
     }
+
+    public function testHasPublicUrl()
+    {
+        $adapter = new NullAdapter();
+        $this->assertFalse($adapter->hasPublicUrl('test'));
+    }
+
+    public function testGetPublicUrlException()
+    {
+        $adapter = new NullAdapter();
+        $this->expectException(LogicException::class);
+        $adapter->getPublicUrl('test');
+    }
 }

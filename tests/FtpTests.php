@@ -414,6 +414,24 @@ class FtpTests extends TestCase
     /**
      * @depends testInstantiable
      */
+    public function testPublicUrls()
+    {
+        $options = $this->options;
+        $options['getPublicUrlClosure'] = $getClosure = function($path) { return 'https://ftp.public/' . $path; };
+
+        $adapter = new Ftp($options);
+        $this->assertTrue($adapter->hasPublicUrl('SomePath'));
+        $this->assertEquals($getClosure('SomePath'), $adapter->getPublicUrl('SomePath'));
+
+        $adapter = new Ftp($this->options);
+        $this->assertFalse($adapter->hasPublicUrl('SomePath'));
+        $this->expectException(\LogicException::class);
+        $adapter->getPublicUrl('SomePath');
+
+    }
+    /**
+     * @depends testInstantiable
+     */
     public function testManualRecursion()
     {
         $adapter = new Ftp($this->options);
