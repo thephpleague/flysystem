@@ -10,7 +10,7 @@ use ErrorException;
  */
 class MimeType
 {
-    private static $extensionToMimeTypeMap = [
+    protected static $extensionToMimeTypeMap = [
         'hqx'   => 'application/mac-binhex40',
         'cpt'   => 'application/mac-compactpro',
         'csv'   => 'text/x-comma-separated-values',
