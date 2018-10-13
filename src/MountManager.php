@@ -43,7 +43,7 @@ use League\Flysystem\Plugin\PluginNotFoundException;
  * @method void assertAbsent($path)
  * @method Filesystem addPlugin(PluginInterface $plugin)
  */
-class MountManager
+class MountManager implements FilesystemInterface
 {
     use PluggableTrait;
 
