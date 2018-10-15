@@ -3,7 +3,6 @@
 namespace League\Flysystem;
 
 use InvalidArgumentException;
-use League\Flysystem\FilesystemNotFoundException;
 use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Plugin\PluginNotFoundException;
 
@@ -164,7 +163,7 @@ class MountManager implements FilesystemInterface
     {
         list($prefix, $arguments) = $this->filterPrefix($arguments);
 
-        return $this->invokePluginOnFilesystem($method, $arguments, $prefix);
+        return $this->invokePlugin($method, $arguments, $prefix);
     }
 
     /**
@@ -216,7 +215,7 @@ class MountManager implements FilesystemInterface
         list($prefix, $directory) = $this->getPrefixAndPath($directory);
         $arguments = [$keys, $directory, $recursive];
 
-        return $this->invokePluginOnFilesystem('listWith', $arguments, $prefix);
+        return $this->invokePlugin('listWith', $arguments, $prefix);
     }
 
     /**
@@ -254,32 +253,6 @@ class MountManager implements FilesystemInterface
         }
 
         return false;
-    }
-
-    /**
-     * Invoke a plugin on a filesystem mounted on a given prefix.
-     *
-     * @param string $method
-     * @param array  $arguments
-     * @param string $prefix
-     *
-     * @throws FilesystemNotFoundException
-     *
-     * @return mixed
-     */
-    public function invokePluginOnFilesystem($method, $arguments, $prefix)
-    {
-        $filesystem = $this->getFilesystem($prefix);
-
-        try {
-            return $this->invokePlugin($method, $arguments, $filesystem);
-        } catch (PluginNotFoundException $e) {
-            // Let it pass, it's ok, don't panic.
-        }
-
-        $callback = [$filesystem, $method];
-
-        return call_user_func_array($callback, $arguments);
     }
 
     /**
