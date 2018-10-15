@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.48 - 2018-10-15
+
+* The MountManager now implements the FilesystemInterface.
+
 ## 1.0.47 - 2018-09-14
 
 * Specify mimetype for .epub files
