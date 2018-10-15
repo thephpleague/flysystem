@@ -62,18 +62,6 @@ class MountManagerTests extends TestCase
         $manager->filterPrefix($arguments);
     }
 
-    public function testCallForwarder()
-    {
-        $manager = new MountManager();
-        $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->expects($this->once())
-            ->method('__call')
-            ->with('aMethodCall', ['file.ext'])
-            ->willReturn('a result');
-        $manager->mountFilesystem('prot', $mock);
-        $this->assertEquals($manager->aMethodCall('prot://file.ext'), 'a result');
-    }
-
     public function testCopyBetweenFilesystems()
     {
         $manager = new MountManager();
@@ -191,7 +179,12 @@ class MountManagerTests extends TestCase
 
     public function provideMountSchemas()
     {
-        return [['with.dot'], ['with-dash'], ['with+plus'], ['with:colon']];
+        return [
+            ['with.dot'],
+            ['with-dash'],
+            ['with+plus'],
+            ['with:colon']
+        ];
     }
 
     /**
@@ -201,9 +194,9 @@ class MountManagerTests extends TestCase
     {
         $manager = new MountManager();
         $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->method('__call')->with('aMethodCall', ['file.ext'])->willReturn('a result');
+        $mock->method('read')->with('file.ext')->willReturn('a result');
         $manager->mountFilesystem($schema, $mock);
-        $this->assertEquals($manager->aMethodCall($schema . '://file.ext'), 'a result');
+        $this->assertEquals($manager->read($schema . '://file.ext'), 'a result');
     }
 
     /**
