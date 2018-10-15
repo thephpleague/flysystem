@@ -1,6 +1,9 @@
 <?php
 
+use League\Flysystem\AdapterInterface;
+use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
+use League\Flysystem\Stub\FilesystemSpy;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
@@ -57,18 +60,6 @@ class MountManagerTests extends TestCase
         $this->expectException($exception);
         $manager = new MountManager();
         $manager->filterPrefix($arguments);
-    }
-
-    public function testCallForwarder()
-    {
-        $manager = new MountManager();
-        $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->expects($this->once())
-            ->method('__call')
-            ->with('aMethodCall', ['file.ext'])
-            ->willReturn('a result');
-        $manager->mountFilesystem('prot', $mock);
-        $this->assertEquals($manager->aMethodCall('prot://file.ext'), 'a result');
     }
 
     public function testCopyBetweenFilesystems()
@@ -188,7 +179,12 @@ class MountManagerTests extends TestCase
 
     public function provideMountSchemas()
     {
-        return [['with.dot'], ['with-dash'], ['with+plus'], ['with:colon']];
+        return [
+            ['with.dot'],
+            ['with-dash'],
+            ['with+plus'],
+            ['with:colon']
+        ];
     }
 
     /**
@@ -198,8 +194,52 @@ class MountManagerTests extends TestCase
     {
         $manager = new MountManager();
         $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->method('__call')->with('aMethodCall', ['file.ext'])->willReturn('a result');
+        $mock->method('read')->with('file.ext')->willReturn('a result');
         $manager->mountFilesystem($schema, $mock);
-        $this->assertEquals($manager->aMethodCall($schema . '://file.ext'), 'a result');
+        $this->assertEquals($manager->read($schema . '://file.ext'), 'a result');
+    }
+
+    /**
+     * @dataProvider methodForwardingProvider
+     */
+    public function testMethodForwarding($method, array $arguments)
+    {
+        $mountManager = new MountManager();
+        $filesystem = new FilesystemSpy();
+        $mountManager->mountFilesystem('local', $filesystem);
+        $expectedCall = FilesystemSpy::class . '::' . $method;
+        $callingArguments = $arguments;
+        $callingArguments[0] = "local://{$callingArguments[0]}";
+        call_user_func_array([$mountManager, $method], $callingArguments);
+
+        $this->assertEquals([$expectedCall, $arguments], $filesystem->lastCall);
+    }
+
+    public function methodForwardingProvider()
+    {
+
+        return [
+            ['write', ['path.txt', 'contents', []]],
+            ['writeStream', ['path.txt', 'contents', []]],
+            ['update', ['path.txt', 'contents', []]],
+            ['updateStream', ['path.txt', 'contents', []]],
+            ['put', ['path.txt', 'contents', []]],
+            ['putStream', ['path.txt', 'contents', []]],
+            ['read', ['path.txt']],
+            ['readStream', ['path.txt']],
+            ['readAndDelete', ['path.txt']],
+            ['get', ['path.txt']],
+            ['has', ['path.txt']],
+            ['getMetadata', ['path.txt']],
+            ['getMimetype', ['path.txt']],
+            ['getTimestamp', ['path.txt']],
+            ['getSize', ['path.txt']],
+            ['delete', ['path.txt']],
+            ['deleteDir', ['dirname']],
+            ['createDir', ['dirname']],
+            ['rename', ['name', 'other-name']],
+            ['setVisibility', ['name', AdapterInterface::VISIBILITY_PUBLIC]],
+            ['getVisibility', ['name']],
+        ];
     }
 }
