@@ -19,7 +19,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 
 $filesystem = new Filesystem(new SftpAdapter([
     'host' => 'example.com',
-    'port' => 21,
+    'port' => 22,
     'username' => 'username',
     'password' => 'password',
     'privateKey' => 'path/to/or/contents/of/privatekey',
