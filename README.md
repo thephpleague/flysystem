@@ -84,6 +84,7 @@ Want to get started quickly? Check out some of these integrations:
 * Gaufrette: https://github.com/jenkoian/flysystem-gaufrette
 * Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
+* Google Drive V2 (using regular paths): https://github.com/masbug/flysystem-google-drive-ext
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
