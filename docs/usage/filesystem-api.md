@@ -23,6 +23,20 @@ param         | description              | type
 
 ---
 
+## Write Files using a stream
+
+```php
+$response = $filesystem->writeStream($path, $resource);
+```
+
+param         | description              | type
+------------- | ------------------------ | -----------
+`$path`       | location of a file       | `string`
+`$resource`   | file stream              | `resource`
+`$response`   | success boolean          | `bool`
+
+---
+
 ## Update Files
 
 ```php
@@ -33,6 +47,20 @@ param         | description              | type
 ------------- | ------------------------ | -----------
 `$path`       | location of a file       | `string`
 `$contents`   | file contents            | `string`
+`$response`   | success boolean          | `bool`
+
+---
+
+## Update Files using a stream
+
+```php
+$response = $filesystem->updateStream($path, $contents);
+```
+
+param         | description              | type
+------------- | ------------------------ | -----------
+`$path`       | location of a file       | `string`
+`$resource`   | file stream              | `resource`
 `$response`   | success boolean          | `bool`
 
 ---
@@ -51,6 +79,20 @@ param         | description              | type
 
 ---
 
+## Write or Update Files using a stream
+
+```php
+$response = $filesystem->putStream($path, $resource);
+```
+
+param         | description              | type
+------------- | ------------------------ | -----------
+`$path`       | location of a file       | `string`
+`$resource`   | file stream              | `resource`
+`$response`   | success boolean          | `bool`
+
+---
+
 ## Read Files
 
 ```php
@@ -61,6 +103,19 @@ param         | description              | type
 ------------- | ------------------------ | -----------
 `$path`       | location of a file       | `string`
 `$contents`   | file contents            | `string`
+
+---
+
+## Read Files as a stream
+
+```php
+$contents = $filesystem->readStream($path);
+```
+
+param         | description              | type
+------------- | ------------------------ | -----------
+`$path`       | location of a file       | `string`
+`$resource`   | file stream              | `string`
 
 ---
 
