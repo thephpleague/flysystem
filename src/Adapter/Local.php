@@ -105,7 +105,8 @@ class Local extends AbstractAdapter
             umask($umask);
             clearstatcache();
             if ( ! is_dir($root)) {
-                throw new Exception(sprintf('Impossible to create the root directory "%s". ' . $mkdirErrorArray['message'], $root));
+                $errorMessage = isset($mkdirErrorArray['message']) ? $mkdirErrorArray['message'] : '';
+                throw new Exception(sprintf('Impossible to create the root directory "%s". %s' , $root, $errorMessage));
             }
         }
     }
