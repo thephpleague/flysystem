@@ -102,13 +102,13 @@ class Local extends AbstractAdapter
             $umask = umask(0);
 
             if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
-                $mkdirErrorArray = error_get_last();
+                $mkdirError = error_get_last();
             }
 
             umask($umask);
 
             if ( ! is_dir($root)) {
-                $errorMessage = isset($mkdirErrorArray['message']) ? $mkdirErrorArray['message'] : '';
+                $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
                 throw new Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
             }
         }
