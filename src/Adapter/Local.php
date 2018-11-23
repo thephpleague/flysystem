@@ -33,13 +33,13 @@ class Local extends AbstractAdapter
      */
     protected static $permissions = [
         'file' => [
-            'public' => 0644,
+            'public'  => 0644,
             'private' => 0600,
         ],
-        'dir' => [
-            'public' => 0755,
+        'dir'  => [
+            'public'  => 0755,
             'private' => 0700,
-        ]
+        ],
     ];
 
     /**
@@ -56,6 +56,7 @@ class Local extends AbstractAdapter
      * @var int
      */
     protected $writeFlags;
+
     /**
      * @var int
      */
@@ -99,13 +100,16 @@ class Local extends AbstractAdapter
     {
         if ( ! is_dir($root)) {
             $umask = umask(0);
-            if( ! @mkdir($root, $this->permissionMap['dir']['public'], true)){
+
+            if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
                 $mkdirErrorArray = error_get_last();
             }
+
             umask($umask);
+
             if ( ! is_dir($root)) {
                 $errorMessage = isset($mkdirErrorArray['message']) ? $mkdirErrorArray['message'] : '';
-                throw new Exception(sprintf('Impossible to create the root directory "%s". %s' , $root, $errorMessage));
+                throw new Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
             }
         }
     }
