@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.49 - 2018-11-24
+
+* It's my birthday today.
+* Error message for directory creation in the Local adapter has a better description with more context.
+
 ## 1.0.48 - 2018-10-15
 
 * The MountManager now implements the FilesystemInterface.
