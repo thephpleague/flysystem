@@ -54,7 +54,7 @@ param         | description              | type
 ## Update Files using a stream
 
 ```php
-$response = $filesystem->updateStream($path, $contents);
+$response = $filesystem->updateStream($path, $resource);
 ```
 
 param         | description              | type
@@ -109,13 +109,13 @@ param         | description              | type
 ## Read Files as a stream
 
 ```php
-$contents = $filesystem->readStream($path);
+$resource = $filesystem->readStream($path);
 ```
 
 param         | description              | type
 ------------- | ------------------------ | -----------
 `$path`       | location of a file       | `string`
-`$resource`   | file stream              | `string`
+`$resource`   | file stream              | `resource`
 
 ---
 
