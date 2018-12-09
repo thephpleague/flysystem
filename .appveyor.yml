@@ -29,6 +29,12 @@ environment:
     - PHP_VERSION: 7.2
       COMPOSER_OPTS:
 
+    - PHP_VERSION: 7.3
+      COMPOSER_OPTS: --prefer-lowest
+
+    - PHP_VERSION: 7.3
+      COMPOSER_OPTS:
+
 init:
   - ps: $env:PATH = 'c:\tools\php;c:\ProgramData\ComposerSetup\bin;' + $env:PATH
 
