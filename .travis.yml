@@ -33,7 +33,7 @@ before_script:
   - docker exec -it ftpd_server sh -c "(echo test; echo test) | pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob"
 
 script:
-  - bin/phpunit tests/ftp/FtpIntegrationTests.php tests/ftp/FtpManualRecursionIntegrationTests.php tests/ftp/FtpdIntegrationTests.php tests/ftp/FtpdManualRecursionIntegrationTests.php
+  - bin/phpunit tests/ftp/*Tests.php
   - bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
   - bin/phpspec run
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.2" ]]; then bin/phpstan analyse -l 3 src; fi

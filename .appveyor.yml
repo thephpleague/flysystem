@@ -47,7 +47,6 @@ install:
   - appveyor-retry cinst --no-progress -y composer
 
   - cd c:\projects\project-code
-  - appveyor-retry composer self-update
   - appveyor-retry composer update --no-interaction --no-progress --no-suggest --optimize-autoloader --prefer-stable --prefer-dist %COMPOSER_OPTS%
 
 test_script:
