@@ -1,4 +1,3 @@
-sudo: required
 services:
   - docker
 
@@ -15,8 +14,6 @@ php:
 matrix:
   allow_failures:
   - php: 5.5
-
-sudo: false
 
 env:
   - COMPOSER_OPTS=""
