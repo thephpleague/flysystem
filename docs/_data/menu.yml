@@ -17,6 +17,7 @@ Adapters:
     Azure: '/docs/adapter/azure/'
     AWS S3: '/docs/adapter/aws-s3/'
     DigitalOcean Spaces: '/docs/adapter/digitalocean-spaces/'
+    Scaleway Object Storage: '/docs/adapter/scaleway-object-storage/'
     Dropbox: '/docs/adapter/dropbox/'
     FTP: '/docs/adapter/ftp/'
     Memory: '/docs/adapter/memory/'
