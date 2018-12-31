@@ -7,7 +7,7 @@ permalink: /docs/architecture/
 
 Flysystem uses the  **adapter pattern**. This pattern is especially
 useful for mediating API incompatibilities, so it's a perfect fit
-for our use-case. The `FilesystemInterface` represents the the outside
+for our use-case. The `FilesystemInterface` represents the outside
 boundary, it defines how you should interact and integrate with
 Flysystem. This is very important because the default implementation,
 the `Filesystem` class, plays an important role in handling responses
