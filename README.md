@@ -46,6 +46,7 @@ Want to get started quickly? Check out some of these integrations:
 * Drupal: https://www.drupal.org/project/flysystem
 * elFinder: https://github.com/barryvdh/elfinder-flysystem-driver
 * Laravel integration: https://github.com/GrahamCampbell/Laravel-Flysystem
+* Nette integration: https://github.com/contributte/flysystem
 * Silex integration: https://github.com/WyriHaximus/SliFly
 * Symfony integration: https://github.com/1up-lab/OneupFlysystemBundle
 * Yii 2 integration: https://github.com/creocoder/yii2-flysystem
