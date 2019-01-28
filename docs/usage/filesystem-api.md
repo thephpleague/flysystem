@@ -240,7 +240,7 @@ $response = $filesystem->createDir($path);
 param         | description               | type
 ------------- | ------------------------- | -----------
 `$path`       | location of a file        | `string`
-`$response`   | size of a file            | `integer`
+`$response`   | success boolean           | `boolean`
 
 Directories are also made implicitly when writing to a deeper path.
 In general creating a directory is __not__ required in order to write
