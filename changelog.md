@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.50 - 2019-02-01
+
+* Added option `'case_sensitive'` (default `true`) for cases like Dropbox which are not.
+* Concurrency issue fixed with cache clear.
+
 ## 1.0.49 - 2018-11-24
 
 * It's my birthday today.
