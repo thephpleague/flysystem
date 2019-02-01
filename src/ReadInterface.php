@@ -2,6 +2,8 @@
 
 namespace League\Flysystem;
 
+use Generator;
+
 interface ReadInterface
 {
     /**
@@ -37,7 +39,7 @@ interface ReadInterface
      * @param string $directory
      * @param bool   $recursive
      *
-     * @return array
+     * @return Generator|array
      */
     public function listContents($directory = '', $recursive = false);
 

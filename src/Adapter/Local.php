@@ -269,7 +269,6 @@ class Local extends AbstractAdapter
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $result = [];
         $location = $this->applyPathPrefix($directory);
 
         if ( ! is_dir($location)) {
@@ -285,10 +284,12 @@ class Local extends AbstractAdapter
                 continue;
             }
 
-            $result[] = $this->normalizeFileInfo($file);
-        }
+            $result = $this->normalizeFileInfo($file);
 
-        return array_filter($result);
+            if ($result) {
+                yield $result;
+            }
+        }
     }
 
     /**
