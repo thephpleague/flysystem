@@ -13,7 +13,9 @@ $filesystem->writeStream(
     'uploads/'.$_FILES[$uploadname]['name'],
     $stream
 );
-fclose($stream);
+if (is_resource($stream)) {
+    fclose($stream);
+}
 ```
 
 ## Laravel 5 - DI
