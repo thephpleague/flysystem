@@ -76,6 +76,7 @@ Want to get started quickly? Check out some of these integrations:
 * Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
 * Azure File Storage: https://github.com/academe/flysystem-azure-file-storage
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
+* Chroot (filesystem from subfolder): https://github.com/fisharebest/flysystem-chroot-adapter
 * ClamAV Scanner Adapter: https://github.com/mgriego/flysystem-clamav
 * Citrix ShareFile: https://github.com/kapersoft/flysystem-sharefile
 * Cloudinary: https://github.com/enl/flysystem-cloudinary
