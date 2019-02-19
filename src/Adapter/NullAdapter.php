@@ -113,6 +113,14 @@ class NullAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
+    public function getThumbnailLink($path)
+    {
+        return false;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getVisibility($path)
     {
         return false;

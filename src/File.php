@@ -164,6 +164,15 @@ class File extends Handler
     }
 
     /**
+     * Get the file's ThumbnailLink.
+     *
+     * @return string|false The visibility (public|private) or false on failure.
+     */
+    public function getThumbnailLink()
+    {
+        return $this->filesystem->getThumbnailLink($this->path);
+    }
+    /**
      * Get the file's visibility.
      *
      * @return string|false The visibility (public|private) or false on failure.

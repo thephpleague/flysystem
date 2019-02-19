@@ -303,7 +303,20 @@ class Filesystem implements FilesystemInterface
 
         return $object['timestamp'];
     }
+    /**
+     * @inheritdoc
+     */
+    public function getThumbnailLink($path)
+    {
+        $path = Util::normalizePath($path);
+        $this->assertPresent($path);
 
+        if (( ! $object = $this->getAdapter()->getThumbnailLink($path)) || ! array_key_exists('thumbnailLink', $object)) {
+            return false;
+        }
+
+        return $object['thumbnailLink'];
+    }
     /**
      * @inheritdoc
      */
