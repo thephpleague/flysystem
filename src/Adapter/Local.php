@@ -101,7 +101,8 @@ class Local extends AbstractAdapter
         if ( ! is_dir($root)) {
             $umask = umask(0);
 
-            if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
+            if ( ! @
+                ($root, $this->permissionMap['dir']['public'], true)) {
                 $mkdirError = error_get_last();
             }
 
@@ -365,6 +366,8 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
+     * @throws \ErrorException
      */
     public function createDir($dirname, Config $config)
     {
