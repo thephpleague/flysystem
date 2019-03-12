@@ -20,6 +20,7 @@ Adapters:
     Scaleway Object Storage: '/docs/adapter/scaleway-object-storage/'
     Dropbox: '/docs/adapter/dropbox/'
     FTP: '/docs/adapter/ftp/'
+    Google Cloud Storage: '/docs/adapter/google-cloud-storage/'
     Memory: '/docs/adapter/memory/'
     Null / Test: '/docs/adapter/null-test/'
     Rackspace: '/docs/adapter/rackspace/'
