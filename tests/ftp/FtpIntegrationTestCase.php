@@ -63,6 +63,19 @@ abstract class FtpIntegrationTestCase extends TestCase
         $this->assertTrue($filesystem->delete('path.txt'));
     }
 
+
+
+    /**
+     * @test
+     * @depends testInstantiable
+     */
+    public function creating_a_directory()
+    {
+        $this->filesystem->createDir('.dirname/directory');
+        $metadata = $this->filesystem->getMetadata('.dirname/directory');
+        self::assertEquals('dir', $metadata['type']);
+    }
+
     /**
      * @test
      * @depends testInstantiable
