@@ -74,6 +74,7 @@ abstract class FtpIntegrationTestCase extends TestCase
         $this->filesystem->createDir('dirname/directory');
         $metadata = $this->filesystem->getMetadata('dirname/directory');
         self::assertEquals('dir', $metadata['type']);
+        $this->filesystem->deleteDir('dirname');
     }
 
     /**
