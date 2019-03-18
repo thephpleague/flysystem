@@ -21,7 +21,7 @@ use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Filesystem;
 
-$client = S3Client::factory([
+$client = new S3Client([
     'credentials' => [
         'key'    => 'your-key',
         'secret' => 'your-secret',
@@ -75,7 +75,7 @@ $adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
 If you're using a storage service which implements the S3 protocols, you can set the `base_url` configuration option when constructing the client.
 
 ```php
-$client = S3Client::factory([
+$client = new S3Client([
     'base_url' => 'http://some.other.endpoint',
     // ... other settings
 ]);
