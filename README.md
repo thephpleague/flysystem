@@ -93,6 +93,7 @@ Want to get started quickly? Check out some of these integrations:
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
 * SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
+* PDO Database (optimised for use with large files when using the streams): https://github.com/phlib/flysystem-pdo
 * PDO Database: https://github.com/IntegralSoftware/flysystem-pdo-adapter
 
 ## Caching (https://github.com/thephpleague/flysystem-cached-adapter)
