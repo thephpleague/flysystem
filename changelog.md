@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.51 - 2019-03-20
+
+* [Ftp::listContents] Added support to return 'timestamp' attribute. Note that accuracy is limited
+  due to limitations in the 'LIST' command.
+
 ## 1.0.50 - 2019-02-01
 
 * Added option `'case_sensitive'` (default `true`) for cases like Dropbox which are not.

@@ -389,6 +389,18 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     /**
      * Normalize a Unix file entry.
      *
+     * Given $item contains:
+     *    '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt'
+     *
+     * This function will return:
+     * [
+     *   'type' => 'file',
+     *   'path' => 'file1.txt',
+     *   'visibility' => 'public',
+     *   'size' => 409,
+     *   'timestamp' => 1566205260
+     * ]
+     *
      * @param string $item
      * @param string $base
      *
@@ -402,7 +414,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
             throw new RuntimeException("Metadata can't be parsed from item '$item' , not enough parts.");
         }
 
-        list($permissions, /* $number */, /* $owner */, /* $group */, $size, /* $month */, /* $day */, /* $time*/, $name) = explode(' ', $item, 9);
+        list($permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $timeOrYear, $name) = explode(' ', $item, 9);
         $type = $this->detectType($permissions);
         $path = $base === '' ? $name : $base . $this->separator . $name;
 
@@ -414,7 +426,38 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
         $size = (int) $size;
 
-        return compact('type', 'path', 'visibility', 'size');
+        $timestamp = $this->normalizeUnixTimestamp($month, $day, $timeOrYear);
+
+        return compact('type', 'path', 'visibility', 'size', 'timestamp');
+    }
+
+    /**
+     * Only accurate to the minute (current year), or to the day
+     *
+     * Inadequacies in timestamp accuracy are due to limitations of the FTP 'LIST' command
+     *
+     * Note: The 'MLSD' command is a machine-readable replacement for 'LIST'
+     * but many FTP servers do not support it :(
+     *
+     * @param $month
+     * @param $day
+     * @param $timeOrYear
+     * @return int
+     */
+    protected function normalizeUnixTimestamp($month, $day, $timeOrYear) {
+        if (is_numeric($timeOrYear)) {
+            $year = $timeOrYear;
+            $hour = '00';
+            $minute = '00';
+            $seconds = '00';
+        }
+        else {
+            $year = date('Y');
+            list($hour, $minute) = explode(':', $timeOrYear);
+            $seconds = '00';
+        }
+        $dateTime = DateTime::createFromFormat('Y-M-j-G:i:s', "{$year}-{$month}-{$day}-{$hour}:{$minute}:{$seconds}");
+        return $dateTime->getTimestamp();
     }
 
     /**

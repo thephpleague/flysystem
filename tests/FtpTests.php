@@ -605,7 +605,6 @@ class FtpTests extends TestCase
         $adapter = new Ftp($this->options);
 
         $listing = $adapter->listContents('lastfiledir');
-
         $last_modified_file = reset($listing);
         foreach ($listing as $file) {
             $file_time = $adapter->getTimestamp($file['path'])['timestamp'];
@@ -634,14 +633,119 @@ class FtpTests extends TestCase
     /**
      * @depends testInstantiable
      */
-    public function testListingDoNotIncludeTimestamp()
+    public function testListingNotEmpty()
     {
         $adapter = new Ftp($this->options);
 
         $listing = $adapter->listContents('');
 
         $this->assertNotEmpty($listing);
-        $this->assertArrayNotHasKey('timestamp', $listing);
+    }
+
+    public function expectedUnixListings() {
+        return [
+            [
+                /*$directory=*/ '',
+                /*$recursive=*/ false,
+                /*'expectedListing'=>*/ [
+                    [
+                        'type' => 'dir',
+                        'path' => 'cgi-bin',
+                    ],
+                    [
+                        'type' => 'dir',
+                        'path' => 'folder',
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'index.html',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1350086400,
+                    ],
+                    // TODO: Should this entry be here? (recursive=false)... is it a bug?
+                    [
+                        'type' => 'file',
+                        'path' => 'somewhere/folder/dummy.txt',
+                        'visibility' => 'public',
+                        'size' => 0,
+                        'timestamp' => 1574603940,
+                    ],
+                ]
+            ],
+            [
+                /*$directory=*/ '',
+                /*$recursive=*/ true,
+                /*'expectedListing'=>*/ [
+                    [
+                        'type' => 'dir',
+                        'path' => 'cgi-bin',
+                    ],
+                    [
+                        'type' => 'dir',
+                        'path' => 'folder',
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'index.html',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1350086400,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'somewhere/folder/dummy.txt',
+                        'visibility' => 'public',
+                        'size' => 0,
+                        'timestamp' => 1574603940,
+                    ],
+                ]
+            ],
+            [
+                /*$directory=*/ 'lastfiledir',
+                /*$recursive=*/ true,
+                /*'expectedListing'=>*/ [
+                [
+                    'type' => 'file',
+                    'path' => 'lastfiledir/file1.txt',
+                    'visibility' => 'public',
+                    'size' => 409,
+                    'timestamp' => 1566205260,
+                ],
+                [
+                    'type' => 'file',
+                    'path' => 'lastfiledir/file2.txt',
+                    'visibility' => 'public',
+                    'size' => 409,
+                    'timestamp' => 1565773260,
+                ],
+                [
+                    'type' => 'file',
+                    'path' => 'lastfiledir/file3.txt',
+                    'visibility' => 'public',
+                    'size' => 409,
+                    'timestamp' => 1549447560,
+                ],
+                [
+                    'type' => 'file',
+                    'path' => 'lastfiledir/file4.txt',
+                    'visibility' => 'public',
+                    'size' => 409,
+                    'timestamp' => 1395273600,
+                ],
+            ]
+            ]
+        ];
+    }
+
+    /**
+     * @depends testInstantiable
+     * @dataProvider expectedUnixListings
+     */
+    public function testListingFromUnixFormat($directory, $recursive, $expectedListing) {
+        $adapter = new Ftp($this->options);
+        $listing = $adapter->listContents($directory, $recursive);
+        $this->assertEquals($listing, $expectedListing);
     }
 
     /**
