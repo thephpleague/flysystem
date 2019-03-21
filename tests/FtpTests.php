@@ -787,6 +787,17 @@ class FtpTests extends TestCase
         $adapter->connect();
     }
 
+    public function testItCanCreateDirectoriesOnRename()
+    {
+	    $adapter = new Ftp($this->options);
+
+	    // can create missing directories for a given file path
+	    $this->assertTrue($adapter->rename('file1.txt', 'new/path/to/file1.txt'));
+
+	    // can create missing directories for a given directory path
+	    $this->assertTrue($adapter->rename('lastfiledir', 'new/path/to/lastfiledir'));
+    }
+
     /**
      * @param $adapter
      */

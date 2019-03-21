@@ -294,6 +294,22 @@ class Ftp extends AbstractFtpAdapter
      */
     public function rename($path, $newpath)
     {
+	    $metadata = $this->getMetadata($path);
+	    $config = new Config();
+
+	    $sourceIsDir = !empty($metadata['type']) && $metadata['type'] == 'dir';
+	    if ($sourceIsDir)
+	    {
+	    	$this->createDir($newpath, $config);
+	    }
+	    else
+	    {
+	    	$parts = explode('/', $newpath);
+	    	array_pop($parts);
+
+	    	$this->createDir(implode('/', $parts), $config);
+	    }
+
         return ftp_rename($this->getConnection(), $path, $newpath);
     }
 
