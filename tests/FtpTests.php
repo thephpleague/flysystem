@@ -647,6 +647,7 @@ class FtpTests extends TestCase
             [
                 /*$directory=*/ '',
                 /*$recursive=*/ false,
+                /*$enableTimestamps=*/ true,
                 /*'expectedListing'=>*/ [
                     [
                         'type' => 'dir',
@@ -676,6 +677,7 @@ class FtpTests extends TestCase
             [
                 /*$directory=*/ '',
                 /*$recursive=*/ true,
+                /*$enableTimestamps=*/ true,
                 /*'expectedListing'=>*/ [
                     [
                         'type' => 'dir',
@@ -704,36 +706,68 @@ class FtpTests extends TestCase
             [
                 /*$directory=*/ 'lastfiledir',
                 /*$recursive=*/ true,
+                /*$enableTimestamps=*/ true,
                 /*'expectedListing'=>*/ [
-                [
-                    'type' => 'file',
-                    'path' => 'lastfiledir/file1.txt',
-                    'visibility' => 'public',
-                    'size' => 409,
-                    'timestamp' => 1566205260,
-                ],
-                [
-                    'type' => 'file',
-                    'path' => 'lastfiledir/file2.txt',
-                    'visibility' => 'public',
-                    'size' => 409,
-                    'timestamp' => 1565773260,
-                ],
-                [
-                    'type' => 'file',
-                    'path' => 'lastfiledir/file3.txt',
-                    'visibility' => 'public',
-                    'size' => 409,
-                    'timestamp' => 1549447560,
-                ],
-                [
-                    'type' => 'file',
-                    'path' => 'lastfiledir/file4.txt',
-                    'visibility' => 'public',
-                    'size' => 409,
-                    'timestamp' => 1395273600,
-                ],
-            ]
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file1.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1566205260,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file2.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1565773260,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file3.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1549447560,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file4.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                        'timestamp' => 1395273600,
+                    ],
+                ]
+            ],
+            [
+                /*$directory=*/ 'lastfiledir',
+                /*$recursive=*/ true,
+                /*$enableTimestamps=*/ false,
+                /*'expectedListing'=>*/ [
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file1.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file2.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file3.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                    ],
+                    [
+                        'type' => 'file',
+                        'path' => 'lastfiledir/file4.txt',
+                        'visibility' => 'public',
+                        'size' => 409,
+                    ],
+                ]
             ]
         ];
     }
@@ -742,8 +776,8 @@ class FtpTests extends TestCase
      * @depends testInstantiable
      * @dataProvider expectedUnixListings
      */
-    public function testListingFromUnixFormat($directory, $recursive, $expectedListing) {
-        $adapter = new Ftp($this->options);
+    public function testListingFromUnixFormat($directory, $recursive, $enableTimestamps, $expectedListing) {
+        $adapter = new Ftp($this->options += ['enableTimestampsOnUnixListings' => $enableTimestamps]);
         $listing = $adapter->listContents($directory, $recursive);
         $this->assertEquals($listing, $expectedListing);
     }

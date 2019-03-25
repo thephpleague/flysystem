@@ -77,6 +77,13 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     protected $safeStorage;
 
     /**
+     * True to enable timestamps for FTP servers that return unix-style listings
+     *
+     * @var bool
+     */
+    protected $enableTimestampsOnUnixListings = false;
+
+    /**
      * Constructor.
      *
      * @param array $config
@@ -310,6 +317,18 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
     }
 
     /**
+     * True to enable timestamps for FTP servers that return unix-style listings
+     *
+     * @param bool $bool
+     * @return $this
+     */
+    public function setEnableTimestampsOnUnixListings($bool = false) {
+        $this->enableTimestampsOnUnixListings = $bool;
+
+        return $this;
+    }
+
+    /**
      * @inheritdoc
      */
     public function listContents($directory = '', $recursive = false)
@@ -426,9 +445,12 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
         $size = (int) $size;
 
-        $timestamp = $this->normalizeUnixTimestamp($month, $day, $timeOrYear);
-
-        return compact('type', 'path', 'visibility', 'size', 'timestamp');
+        $result = compact('type', 'path', 'visibility', 'size');
+        if ($this->enableTimestampsOnUnixListings) {
+            $timestamp = $this->normalizeUnixTimestamp($month, $day, $timeOrYear);
+            $result += compact('timestamp');
+        }
+        return $result;
     }
 
     /**
