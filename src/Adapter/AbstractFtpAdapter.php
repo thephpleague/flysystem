@@ -461,9 +461,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * Note: The 'MLSD' command is a machine-readable replacement for 'LIST'
      * but many FTP servers do not support it :(
      *
-     * @param $month
-     * @param $day
-     * @param $timeOrYear
+     * @param string $month e.g. 'Aug'
+     * @param string $day e.g. '19'
+     * @param string $timeOrYear e.g. '09:01' OR '2015'
      * @return int
      */
     protected function normalizeUnixTimestamp($month, $day, $timeOrYear) {
