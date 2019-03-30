@@ -664,7 +664,6 @@ class FtpTests extends TestCase
                         'size' => 409,
                         'timestamp' => 1350086400,
                     ],
-                    // TODO: Should this entry be here? (recursive=false)... is it a bug?
                     [
                         'type' => 'file',
                         'path' => 'somewhere/folder/dummy.txt',
