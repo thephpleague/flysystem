@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.51 - 2019-03-20
+## 1.0.51 - 2019-03-30
 
 * [Ftp::listContents] Added support to return 'timestamp' attribute. Note that accuracy is limited
   due to limitations in the 'LIST' command.
