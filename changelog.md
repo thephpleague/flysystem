@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.52 - PENDING RELEASE
+
+* Prevent warnings for `file_get_contents` calls without `has` calls.
+
 ## 1.0.51 - 2019-03-30
 
 * [Ftp::listContents] Added support to return 'timestamp' attribute. Note that accuracy is limited
