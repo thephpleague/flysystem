@@ -179,7 +179,7 @@ param         | description              | type
 ## Copy Files
 
 ```php
-$response $filesystem->copy($from, $to);
+$response = $filesystem->copy($from, $to);
 ```
 
 param         | description              | type
