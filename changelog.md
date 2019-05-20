@@ -1,7 +1,8 @@
 # Changelog
 
-## 1.0.52 - PENDING RELEASE
+## 1.0.52 - 2019-05-20
 
+* Correcting mimetype for CSV files according to latest RFC (https://tools.ietf.org/html/rfc7111).
 * Prevent warnings for `file_get_contents` calls without `has` calls.
 
 ## 1.0.51 - 2019-03-30
