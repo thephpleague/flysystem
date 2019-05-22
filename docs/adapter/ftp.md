@@ -24,5 +24,6 @@ $filesystem = new Filesystem(new Adapter([
     'passive' => true,
     'ssl' => true,
     'timeout' => 30,
+    'ignorePassiveAddress' => false,
 ]));
 ```
