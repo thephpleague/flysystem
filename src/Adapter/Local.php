@@ -207,7 +207,7 @@ class Local extends AbstractAdapter
 
         $result = compact('type', 'path', 'size', 'contents');
 
-        if ($mimetype = Util::guessMimeType($path, $contents)) {
+        if ($mimetype = $config->get('mimetype') ?: Util::guessMimeType($path, $contents)) {
             $result['mimetype'] = $mimetype;
         }
 
