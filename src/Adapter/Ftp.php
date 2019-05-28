@@ -249,7 +249,7 @@ class Ftp extends AbstractFtpAdapter
         }
 
         $result['contents'] = $contents;
-        $result['mimetype'] = Util::guessMimeType($path, $contents);
+        $result['mimetype'] = $config->get('mimetype') ?: Util::guessMimeType($path, $contents);
 
         return $result;
     }
