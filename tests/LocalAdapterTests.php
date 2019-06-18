@@ -92,9 +92,9 @@ class LocalAdapterTests extends TestCase
             $this->markTestSkipped('Windows does not support this.');
         }
 
-        (new Local(__DIR__.'/files'))->write('file.txt', 'contents', new Config());
+        (new Local(__DIR__ . '/files'))->write('file.txt', 'contents', new Config());
 
-        $adapter = new Local('file://'.__DIR__.'/files');
+        $adapter = new Local('file://' . __DIR__ . '/files');
         $this->assertCount(1, $adapter->listContents());
     }
 
@@ -191,7 +191,7 @@ class LocalAdapterTests extends TestCase
     public function testNullPrefix()
     {
         $this->adapter->setPathPrefix('');
-        $path = 'some'.DIRECTORY_SEPARATOR.'path.ext';
+        $path = 'some' . DIRECTORY_SEPARATOR . 'path.ext';
         $this->assertEquals($path, $this->adapter->applyPathPrefix($path));
         $this->assertEquals($path, $this->adapter->removePathPrefix($path));
     }
@@ -388,7 +388,7 @@ class LocalAdapterTests extends TestCase
         }
 
         $target = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR;
-        $link = __DIR__ . DIRECTORY_SEPARATOR .'link_to_files';
+        $link = __DIR__ . DIRECTORY_SEPARATOR . 'link_to_files';
         symlink($target, $link);
 
         $adapter = new Local($link);
@@ -459,14 +459,16 @@ class LocalAdapterTests extends TestCase
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $adapter->getMimetype('test.xlsx')['mimetype']);
     }
 
-    public function testDeleteFileShouldReturnTrue(){
+    public function testDeleteFileShouldReturnTrue()
+    {
         $root = __DIR__ . '/files/';
         $original = $root . 'delete.txt';
         file_put_contents($original, 'something');
         $this->assertTrue($this->adapter->delete('delete.txt'));
     }
 
-    public function testDeleteMissingFileShouldReturnFalse(){
+    public function testDeleteMissingFileShouldReturnFalse()
+    {
         $this->assertFalse($this->adapter->delete('missing.txt'));
     }
 

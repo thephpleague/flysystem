@@ -26,7 +26,8 @@ class StreamedCopyStub
     }
 
     /**
-     * @param  string   $path
+     * @param string $path
+     *
      * @return resource
      */
     public function readStream($path)
@@ -35,9 +36,10 @@ class StreamedCopyStub
     }
 
     /**
-     * @param  string   $path
-     * @param  resource $resource
-     * @param  Config   $config
+     * @param string   $path
+     * @param resource $resource
+     * @param Config   $config
+     *
      * @return resource
      */
     public function writeStream($path, $resource, Config $config)
