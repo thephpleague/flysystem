@@ -297,6 +297,8 @@ class Local extends AbstractAdapter
     public function getMetadata($path)
     {
         $location = $this->applyPathPrefix($path);
+        clearstatcache($location);
+        filesize()
         $info = new SplFileInfo($location);
 
         return $this->normalizeFileInfo($info);
