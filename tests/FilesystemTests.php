@@ -4,10 +4,10 @@ use League\Flysystem\Config;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Util;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Argument\Token\TypeToken;
 use Prophecy\Prophecy\ObjectProphecy;
-use PHPUnit\Framework\TestCase;
 
 class FilesystemTests extends TestCase
 {
