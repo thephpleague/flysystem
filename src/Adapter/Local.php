@@ -298,7 +298,6 @@ class Local extends AbstractAdapter
     {
         $location = $this->applyPathPrefix($path);
         clearstatcache($location);
-        filesize()
         $info = new SplFileInfo($location);
 
         return $this->normalizeFileInfo($info);
