@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.53 - 2019-06-18
+
+* Clear stat cache before getting file metadata.
+
 ## 1.0.52 - 2019-05-20
 
 * Correcting mimetype for CSV files according to latest RFC (https://tools.ietf.org/html/rfc7111).
