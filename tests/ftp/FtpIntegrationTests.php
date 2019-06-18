@@ -16,9 +16,9 @@ class FtpIntegrationTests extends FtpIntegrationTestCase
     protected function setup_adapter()
     {
         return new Ftp([
-            'host'            => 'localhost',
-            'username'        => 'bob',
-            'password'        => 'test',
+            'host' => 'localhost',
+            'username' => 'bob',
+            'password' => 'test',
             'recurseManually' => false,
         ]);
     }

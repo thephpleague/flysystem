@@ -114,7 +114,7 @@ function ftp_raw($connection, $command)
         return [0 => '421 Service not available, closing control connection'];
     }
 
-	if ($command === 'OPTS UTF8 ON') {
+    if ($command === 'OPTS UTF8 ON') {
         return [0 => '200 UTF8 set to on'];
     }
 
@@ -642,7 +642,8 @@ class FtpTests extends TestCase
         $this->assertNotEmpty($listing);
     }
 
-    public function expectedUnixListings() {
+    public function expectedUnixListings()
+    {
         return [
             [
                 /*$directory=*/ '',
@@ -775,7 +776,8 @@ class FtpTests extends TestCase
      * @depends testInstantiable
      * @dataProvider expectedUnixListings
      */
-    public function testListingFromUnixFormat($directory, $recursive, $enableTimestamps, $expectedListing) {
+    public function testListingFromUnixFormat($directory, $recursive, $enableTimestamps, $expectedListing)
+    {
         $adapter = new Ftp($this->options += ['enableTimestampsOnUnixListings' => $enableTimestamps]);
         $listing = $adapter->listContents($directory, $recursive);
         $this->assertEquals($listing, $expectedListing);

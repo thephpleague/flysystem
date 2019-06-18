@@ -217,7 +217,6 @@ class MountManagerTests extends TestCase
 
     public function methodForwardingProvider()
     {
-
         return [
             ['write', ['path.txt', 'contents', []]],
             ['writeStream', ['path.txt', 'contents', []]],
