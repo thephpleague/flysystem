@@ -116,4 +116,3 @@ $adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
     'StorageClass'  =>  'REDUCED_REDUNDANCY',
 ]);
 ```
-

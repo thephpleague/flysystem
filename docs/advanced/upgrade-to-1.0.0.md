@@ -59,5 +59,3 @@ In order to clean up the Filesystem class, some helper functions have been moved
 * ListFiles
 * GetWithMetadata
 * EmptyDir (new)
-
-
