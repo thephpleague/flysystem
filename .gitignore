@@ -1,7 +1,8 @@
-vendor
+.php_cs.cache
 bin
+composer.lock
 coverage
 coverage.xml
-composer.lock
+phpstan.phar
 tests/files
-.php_cs.cache
+vendor
