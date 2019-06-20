@@ -24,7 +24,7 @@ before_install:
 
 install:
   - if [[ "${TRAVIS_PHP_VERSION}" == "5.5" ]]; then composer require phpunit/phpunit:^4.8.36 phpspec/phpspec:^2 --prefer-dist --update-with-dependencies; fi
-  - php -r "exit(PHP_VERSION_ID >= 70100 ? 0 : 1);" && composer require --dev phpstan/phpstan:^0.11.8 --prefer-dist --update-with-dependencies || echo "Skipping PHPStan"
+  - php -r 'exit(PHP_VERSION_ID >= 70100 ? 0 : 1);' && composer require --dev phpstan/phpstan:^0.11.8 --prefer-dist --update-with-dependencies || echo 'Skipping PHPStan'
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 before_script:
@@ -38,7 +38,7 @@ script:
   - bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
   - bin/phpspec run
   - ./php-cs-fixer fix --dry-run
-  - php -r "exit(PHP_VERSION_ID >= 70100 ? 0 : 1);" && bin/phpstan analyse -l 5 src || echo "Skipping PHPStan"
+  - php -r 'exit(PHP_VERSION_ID >= 70100 ? 0 : 1);' && bin/phpstan analyse -l 5 src || echo 'Skipping PHPStan'
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
