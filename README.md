@@ -40,7 +40,7 @@ composer require league/flysystem
 
 Want to get started quickly? Check out some of these integrations:
 
-* Backup manager: https://github.com/heybigname/backup-manager
+* Backup manager: https://github.com/backup-manager/backup-manager
 * CakePHP integration: https://github.com/WyriHaximus/FlyPie
 * Cilex integration: https://github.com/WyriHaximus/cli-fly
 * Drupal: https://www.drupal.org/project/flysystem
