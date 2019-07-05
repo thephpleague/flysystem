@@ -2,11 +2,11 @@
 
 namespace League\Flysystem\Plugin;
 
-class ListFiles extends ListContentsPlugin
+class ListDirectories extends ListContentsPlugin
 {
     protected function getType()
     {
-        return 'file';
+        return 'dir';
     }
 
     /**
@@ -16,6 +16,6 @@ class ListFiles extends ListContentsPlugin
      */
     public function getMethod()
     {
-        return 'listFiles';
+        return 'listDirectories';
     }
 }
