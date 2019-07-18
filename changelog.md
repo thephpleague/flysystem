@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.54 - 2019-08-11
+
+* Fixed metadata fetching of the existing directory in Ftpd.
+
 ## 1.0.53 - 2019-06-18
 
 * Clear stat cache before getting file metadata.
