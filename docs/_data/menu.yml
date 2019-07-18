@@ -10,6 +10,7 @@ Usage:
 Guides:
     Laravel Usage: '/docs/guides/laravel-usage/'
     Symfony Usage: '/docs/guides/symfony-usage/'
+    Nette Usage: '/docs/guides/nette-usage/'
     Deterministic Code: '/docs/guides/deterministic-programming/'
     Handling Uploads: '/docs/guides/uploads/'
 
