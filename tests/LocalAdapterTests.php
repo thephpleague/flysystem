@@ -540,7 +540,7 @@ class LocalAdapterTests extends TestCase
 
     public function testMimetypeFallbackOnExtension()
     {
-        $this->adapter->write('test.xlsx', '', new Config);
+        $this->adapter->write('test.xlsx', '', new Config());
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $this->adapter->getMimetype('test.xlsx')['mimetype']);
     }
 
