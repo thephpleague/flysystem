@@ -381,14 +381,14 @@ class LocalAdapterTests extends TestCase
             $this->markTestSkipped("Visibility not supported on Windows.");
 		
 		$umask = umask(0);
-        mkdir($this->root.'subdir', 0777);
+        mkdir($this->root.'subdir', 0750);
         umask($umask);
 		
         $output = $this->adapter->getVisibility('subdir');
 		
-        $this->assertNotEquals('private', $output['visibility']);  // private is 0700 not 0777
-        $this->assertNotEquals('public', $output['visibility']);  // public is 0755 not 0777
-        $this->assertEquals('0777', $output['visibility']);
+        $this->assertNotEquals('private', $output['visibility']);  // private is 0700 not 0750
+        $this->assertNotEquals('public', $output['visibility']);  // public is 0755 not 0750
+        $this->assertEquals('0750', $output['visibility']);
     }
 	
     public function testCustomizedVisibility()
@@ -396,23 +396,19 @@ class LocalAdapterTests extends TestCase
         if (IS_WINDOWS)
             $this->markTestSkipped("Visibility not supported on Windows.");
         
+		// override a permission mapping
         $permissions = [
-            'file' => [
-                'public' => 0644,
-                'private' => 0660,  // private to me and the gang
-            ],
             'dir' => [
-                'public' => 0755,
                 'private' => 0770,  // private to me and the gang
             ],
         ];
         
-        $customizedAdapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
+        $adapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
 		
-        $customizedAdapter->createDir('private-dir', new Config());
-        $customizedAdapter->setVisibility('private-dir', 'private');
+        $adapter->createDir('private-dir', new Config());
+        $adapter->setVisibility('private-dir', 'private');
 		
-        $output = $customizedAdapter->getVisibility('private-dir');
+        $output = $adapter->getVisibility('private-dir');
         
 		$this->assertEquals('private', $output['visibility']);
 		$this->assertEquals('0770', substr(sprintf('%o', fileperms($this->root.'private-dir')), -4));
@@ -423,27 +419,21 @@ class LocalAdapterTests extends TestCase
         if (IS_WINDOWS)
             $this->markTestSkipped("Visibility not supported on Windows.");
         
+		// add a permission mapping
         $permissions = [
-            'file' => [
-				'yolo' => 0666,
-                'public' => 0644,
-                'private' => 0600,
-            ],
             'dir' => [
 				'yolo' => 0777,
-                'public' => 0755,
-                'private' => 0700,
             ],
         ];
         
-        $customizedAdapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
+        $adapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
         
-        $customizedAdapter->createDir('yolo-dir', new Config());
-        $customizedAdapter->setVisibility('yolo-dir', 'yolo');
+        $adapter->createDir('yolo-dir', new Config());
+        $adapter->setVisibility('yolo-dir', 'yolo');
         
 		$location = $this->root.'yolo-dir';
 		
-        $output = $customizedAdapter->getVisibility('yolo-dir');
+        $output = $adapter->getVisibility('yolo-dir');
         $this->assertEquals('yolo', $output['visibility']);
 		$this->assertEquals('0777', substr(sprintf('%o', fileperms($location)), -4));
     }
@@ -465,12 +455,12 @@ class LocalAdapterTests extends TestCase
             ],
         ];
         
-        $customizedAdapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
+        $adapter = new Local($this->root, LOCK_EX, Local::DISALLOW_LINKS, $permissions);
         
-        $customizedAdapter->createDir('sticky-dir', new Config());
-        $customizedAdapter->setVisibility('sticky-dir', 'sticky');
+        $adapter->createDir('sticky-dir', new Config());
+        $adapter->setVisibility('sticky-dir', 'sticky');
         
-        $output = $customizedAdapter->getVisibility('sticky-dir');
+        $output = $adapter->getVisibility('sticky-dir');
         $this->assertEquals('sticky', $output['visibility']);
 		$this->assertEquals('1777', substr(sprintf('%o', fileperms($this->root.'sticky-dir')), -4));
     }
