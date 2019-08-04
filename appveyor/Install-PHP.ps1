@@ -1,4 +1,3 @@
-# From https://raw.githubusercontent.com/ChadSikorra/ps-install-php/master/Install-PHP.ps1
 Param(
   [string]$Version,
   [switch]$Highest,
