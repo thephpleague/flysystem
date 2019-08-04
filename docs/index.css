@@ -3,9 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/*@import "./github.css";*/
-@import "./algolia.css";
-
 p img {
     display: inline;
 }

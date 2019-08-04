@@ -9,8 +9,6 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg?style=flat-square)](https://packagist.org/packages/league/flysystem)
 [![Build status](https://img.shields.io/appveyor/ci/frankdejonge/flysystem/master.svg?style=flat-square&logo=appveyor)](https://ci.appveyor.com/project/frankdejonge/flysystem/branch/master)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af/big.png)](https://insight.sensiolabs.com/projects/9820f1af-2fd0-4ab6-b42a-03e0c821e0af)
-
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
 [![Become a Patron](https://flysystem.thephpleague.com/logo/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=8623643)
