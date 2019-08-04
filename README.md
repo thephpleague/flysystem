@@ -11,8 +11,6 @@
 
 Flysystem is a filesystem abstraction which allows you to easily swap out a local filesystem for a remote one.
 
-[![Become a Patron](https://flysystem.thephpleague.com/logo/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=8623643)
-
 ## Goals
 
 * Have a generic API for handling common tasks across multiple file storage engines.
