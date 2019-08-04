@@ -1,8 +1,11 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
-const glob = require('glob-all');
+const glob = require("glob-all");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const path = require('path');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const isProduction = process.env.NODE_ENV === 'production';
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 class TailwindExtractor {
     static extract(content) {
@@ -11,8 +14,15 @@ class TailwindExtractor {
 }
 
 let plugins = [
-    new ExtractTextPlugin('styles.css'),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+        filename: isProduction ? 'styles.[hash].css' : 'styles.css'
+    }),
     new OptimizeCssAssetsPlugin(),
+    new ManifestPlugin({
+        fileName: '../_data/manifest.yml',
+        publicPath: '/dist/',
+    }),
 ];
 
 let isProd = process.env.NODE_ENV === 'production';
@@ -30,24 +40,30 @@ if (isProd) {
 }
 
 module.exports = {
-    entry: './index.js',
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    entry: {
+        docs: './index.js'
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js',
+        filename: isProduction ? '[name].[hash].js' : '[name].js',
     },
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        { loader: 'css-loader', options: { importLoaders: 1 } },
-                        'postcss-loader'
-                    ]
-                })
+                use: [
+                    {
+                        loader: MiniCssExtractPlugin.loader,
+                        options: {
+                            hmr: process.env.NODE_ENV === 'development',
+                        },
+                    },
+                    'css-loader',
+                    'postcss-loader',
+                ]
             }
         ]
     },
-    plugins: plugins,
+    plugins: plugins
 };
