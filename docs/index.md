@@ -24,19 +24,6 @@ rewrites.
 Using Flysystem can eliminate vendor-lock in, reduce technical debt, and improve the testability
 of your code.
 
-## Gold Sponsor(s)
-
-<div class="flex my-6 max-w-sm">
-    <a target="_blank" href="https://laravel.com" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
-        <img src="/img/laravel.svg" class="w-full" alt="Laravel.com"/>
-    </a>
-    <a target="_blank" href="https://azure.microsoft.com/free/?utm_source=flysystem&utm_medium=banner&utm_campaign=flysystem_sponsorship" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
-        <img src="/img/azure.svg" class="max-w-full m-6" alt="Microsoft Azure"/>
-    </a>
-</div>
-
-View all the <a href="/docs/sponsors/">sponsors</a>.
-
 ## Getting Started
 
 * **[Architecture](/docs/architecture/)**: Flysystem's internal architecture

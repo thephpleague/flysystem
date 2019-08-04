@@ -14,17 +14,6 @@ document
     .querySelectorAll('.highlighter-copy')
     .forEach(btn => btn.addEventListener('click', () => copyElementText(btn.previousSibling)));
 
-let firstSubHeading = document.querySelector('#article h2:first-of-type');
-
-if (firstSubHeading) {
-    let carbon = document.createElement('script');
-    carbon.setAttribute('async', true);
-    carbon.setAttribute('type', 'text/javascript');
-    carbon.setAttribute('src', '//cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=flysystemthephpleaguecom');
-    carbon.setAttribute('id', '_carbonads_js');
-    firstSubHeading.before(carbon);
-}
-
 let menuBtn = document.getElementById('menu-toggle');
 let navigation = document.getElementById('navigation');
 let article = document.getElementById('article');
