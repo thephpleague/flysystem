@@ -40,7 +40,7 @@ init:
 
 install:
   - ps: Set-Service wuauserv -StartupType Manual # Chocolatey will try to install Windows updates when installing PHP.
-  - ps: .\Install-PHP.ps1 -Version $Env:PHP_VERSION -Highest -Arch x64 -Extensions mbstring,openssl,fileinfo
+  - ps: .\appveyor\Install-PHP.ps1 -Version $Env:PHP_VERSION -Highest -Arch x64 -Extensions mbstring,openssl,fileinfo
   - appveyor-retry cinst --no-progress -y composer
   - cd c:\projects\project-code
   - appveyor-retry composer update --no-interaction --no-progress --no-suggest --optimize-autoloader --prefer-stable --prefer-dist %COMPOSER_OPTS%
