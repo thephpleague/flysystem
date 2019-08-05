@@ -16,7 +16,7 @@ composer require royvoetman/flysystem-gitlab-storage
 $client = new Client('personal-access-token', 'project-id', 'branch', 'base-url');
    
 // Create the Adapter that implentents Flysystems AdapterInterface
-$adapter = new GitlabAdapter($this->getClientInstance());
+$adapter = new GitlabAdapter($client);
 
 // Create FileSystem
 $filesystem = new Filesystem($adapter);
