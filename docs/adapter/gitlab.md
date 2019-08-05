@@ -1,8 +1,8 @@
 ---
 layout: default
-permalink: /docs/adapter/gitlab-storage/
-redirect_from: /adapter/gitlab-storage/
-title: Gitlab Storage Adapter
+permalink: /docs/adapter/gitlab/
+redirect_from: /adapter/gitlab/
+title: Gitlab Adapter
 ---
 
 ## Installation
@@ -42,7 +42,4 @@ Every project in Gitlab has its own Project ID. It can be found at to top of the
 ### Base URL
 This will be the URL where you host your gitlab server (e.g. https://gitlab.com)
 
-## Usage
-Google Cloud Storage requires Service Account Credentials, which can be generated in the [Cloud Console](https://console.cloud.google.com/apis/credentials). Read more in [the official documentation](https://cloud.google.com/docs/authentication/production).
-
-See the [project README](https://github.com/RoyVoetman/Flysystem-Gitlab-storage) for additional usage examples.
+> See the [project README](https://github.com/RoyVoetman/Flysystem-Gitlab-storage) for additional usage examples.
