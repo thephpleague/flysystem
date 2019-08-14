@@ -42,7 +42,7 @@ if (isProd) {
 module.exports = {
     mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
     entry: {
-        docs: './index.js'
+        docs: './assets/index.js'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
