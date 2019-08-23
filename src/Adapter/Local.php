@@ -374,10 +374,11 @@ class Local extends AbstractAdapter
         $visibility = $config->get('visibility', 'public');
         $return = ['path' => $dirname, 'type' => 'dir'];
 
-        if ( ! is_dir($location)
-            || false === @mkdir($location, $this->permissionMap['dir'][$visibility], true)
-                || false == is_dir($location)) {
-            $return = false;
+        if ( ! is_dir($location)) {
+            if (false === @mkdir($location, $this->permissionMap['dir'][$visibility], true)
+                || false === is_dir($location)) {
+                $return = false;
+            }
         }
 
         umask($umask);
