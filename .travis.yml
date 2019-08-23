@@ -33,9 +33,9 @@ before_script:
   - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
 
 script:
-  - bin/phpunit tests/ftp/*Tests.php
-  - bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
-  - bin/phpspec run
+  - vendor/bin/phpunit tests/ftp/*Tests.php
+  - vendor/bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
+  - vendor/bin/phpspec run
   - ./php-cs-fixer fix --dry-run
   - composer phpstan
 
