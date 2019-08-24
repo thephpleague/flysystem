@@ -1,13 +1,13 @@
 # Changelog
 
-## 1.0.53 - 2019-06-18
-
-* Clear stat cache before getting file metadata.
-
-## 1.0.53 - 2019-08-23
+## 1.0.54 - 2019-08-23
 
 * Fixed directory creation race condition
 * Prevent mime-type lookup when known in config
+
+## 1.0.53 - 2019-06-18
+
+* Clear stat cache before getting file metadata.
 
 ## 1.0.52 - 2019-05-20
 
