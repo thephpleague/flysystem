@@ -343,9 +343,14 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         clearstatcache(false, $location);
         $permissions = octdec(substr(sprintf('%o', fileperms($location)), -4));
-        $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
-
-        return compact('path', 'visibility');
+        $type  = is_dir($location) ? 'dir' : 'file';
+		
+		foreach ($this->permissionMap[$type] as $visibility => $visibilityPermissions)
+			if ($visibilityPermissions == $permissions)
+				return compact('path', 'visibility');
+		
+		$visibility = substr(sprintf('%o', fileperms($location)), -4);
+		return compact('path', 'visibility');
     }
 
     /**
