@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.54 - 2019-08-24
+
+* Fixed metadata fetching of the existing directory in Ftpd.
+
 ## 1.0.54 - 2019-08-23
 
 * Fixed directory creation race condition
