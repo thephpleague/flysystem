@@ -5,7 +5,6 @@ namespace League\Flysystem\Adapter;
 use DirectoryIterator;
 use FilesystemIterator;
 use finfo as Finfo;
-use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use League\Flysystem\Exception;
 use League\Flysystem\NotSupportedException;
@@ -343,7 +342,15 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         clearstatcache(false, $location);
         $permissions = octdec(substr(sprintf('%o', fileperms($location)), -4));
-        $visibility = $permissions & 0044 ? AdapterInterface::VISIBILITY_PUBLIC : AdapterInterface::VISIBILITY_PRIVATE;
+        $type = is_dir($location) ? 'dir' : 'file';
+
+        foreach ($this->permissionMap[$type] as $visibility => $visibilityPermissions) {
+            if ($visibilityPermissions == $permissions) {
+                return compact('path', 'visibility');
+            }
+        }
+
+        $visibility = substr(sprintf('%o', fileperms($location)), -4);
 
         return compact('path', 'visibility');
     }
