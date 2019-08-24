@@ -88,15 +88,19 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if ($directory === 'not.found') {
-        return false;
-    }
-
-    if ($directory === 'windows.not.found') {
-        return false;
-    }
-
-    if (in_array($directory, ['rawlist-total-0.txt', 'file1.txt', 'file2.txt', 'file3.txt', 'file4.txt', 'dir1', 'file1.with-total-line.txt', 'file1.with-invalid-line.txt'])) {
+    if (in_array($directory, [
+        'not.found',
+        'windows.not.found',
+        'syno.not.found',
+        'rawlist-total-0.txt',
+        'file1.txt',
+        'file2.txt',
+        'file3.txt',
+        'file4.txt',
+        'dir1',
+        'file1.with-total-line.txt',
+        'file1.with-invalid-line.txt',
+    ], true)) {
         return false;
     }
 

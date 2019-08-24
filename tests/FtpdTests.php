@@ -41,6 +41,26 @@ class FtpdTests extends TestCase
     /**
      * @depends testInstantiable
      */
+    public function testGetExistingDirMetadata()
+    {
+        $adapter = new Ftpd($this->options);
+        $dirMetadata = $adapter->getMetadata('spaced.files');
+        $this->assertSame(['type' => 'dir', 'path' => 'spaced.files'], $dirMetadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetMissingDirMetadata()
+    {
+        $adapter = new Ftpd($this->options);
+        $dirMetadata = $adapter->getMetadata('syno.not.found');
+        $this->assertFalse($dirMetadata);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
     public function testRawlistFail()
     {
         $adapter = new Ftpd($this->options);
