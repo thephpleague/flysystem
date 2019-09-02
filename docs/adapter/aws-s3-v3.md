@@ -101,7 +101,7 @@ $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix')
 $filesystem = new Filesystem($adapter);
 ``` 
 
-For further details on the default credentials provider, see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
+For further details see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
 
 ---
 
