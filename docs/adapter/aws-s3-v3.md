@@ -101,6 +101,8 @@ $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix')
 $filesystem = new Filesystem($adapter);
 ``` 
 
+The default credential provider will attempt to load credentials from sources such as environment variables, configuration files and then from the instance profile, such as EC2 metadata. 
+
 For further details see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
 
 ---
