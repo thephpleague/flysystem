@@ -83,7 +83,7 @@ $client = new S3Client([
 
 ### Default credential provider usage
 
-If an IAM role is assigned to your EC2 instances, it is not necessary to specifically set environment or config based key and secret credentials. The default credential provider can simply be used by omitting `credentials` when creating an S3 client.
+If an IAM role is assigned to your EC2 instances, it is not necessary to specifically set environment or config based key and secret credentials. The default credential provider can be used by omitting `credentials` when creating an S3 client.
 
 ```php
 use Aws\S3\S3Client;
