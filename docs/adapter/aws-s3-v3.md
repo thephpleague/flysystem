@@ -81,6 +81,28 @@ $client = new S3Client([
 ]);
 ```
 
+### Default credential provider usage
+
+If an IAM role is assigned to your EC2 instances then it is not necessary to set environment or config based key and secret credentials. Alternatively, the default credential provider can be used by omitting the `credentials` array when creating an S3 client.
+
+```php
+use Aws\S3\S3Client;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Filesystem;
+
+// Credentals omitted. Default credential provider will be used
+$client = new S3Client([
+    'region' => 'your-region',
+    'version' => 'latest|version',
+]);
+
+$adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
+
+$filesystem = new Filesystem($adapter);
+``` 
+
+For further details on the default credentials provider, see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
+
 ---
 
 ## 🚨 Aws S3 Adapter - SDK V2 (LEGACY ADAPTER)
