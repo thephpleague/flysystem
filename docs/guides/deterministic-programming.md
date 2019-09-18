@@ -13,7 +13,7 @@ problematic.
 ## Filesystems are slow.
 
 In general, filesystem interaction is slow. Every operation that
-hits the disc in one way or another is slow. While some operations absolutely
+hits the disk in one way or another is slow. While some operations absolutely
 require filesystem interaction, there's a number of cases where filesystem
 operations can be prevented in order to eliminate the associated penalties.
 
