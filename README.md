@@ -88,6 +88,7 @@ Want to get started quickly? Check out some of these integrations:
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 * QiNiu OSS Storage: https://github.com/l396635210/flysystem-qiniu
+* RAID: https://github.com/PHPGuus/flysystem-raid
 * Redis (through Predis): https://github.com/danhunsaker/flysystem-redis
 * Selectel Cloud Storage: https://github.com/ArgentCrusade/flysystem-selectel
 * SinaAppEngine Storage: https://github.com/litp/flysystem-sae-storage
