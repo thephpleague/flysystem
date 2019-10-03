@@ -51,7 +51,7 @@ The required IAM permissions are:
                 "s3:PutObject",
                 "s3:PutObjectAcl",
                 "s3:ReplicateObject",
-                "s3:DeleteObject"                
+                "s3:DeleteObject"
             ],
             "Resource": [
                 "arn:aws:s3:::your-bucket-name",
@@ -76,7 +76,7 @@ If you're using a storage service which implements the S3 protocols, you can set
 
 ```php
 $client = new S3Client([
-    'base_url' => 'http://some.other.endpoint',
+    'endpoint' => 'http://some.other.endpoint',
     // ... other settings
 ]);
 ```
@@ -99,9 +99,9 @@ $client = new S3Client([
 $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
 
 $filesystem = new Filesystem($adapter);
-``` 
+```
 
-The default credential provider will attempt to load credentials from sources such as environment variables, configuration files and then from the instance profile, such as EC2 metadata. 
+The default credential provider will attempt to load credentials from sources such as environment variables, configuration files and then from the instance profile, such as EC2 metadata.
 
 For further details see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
 
