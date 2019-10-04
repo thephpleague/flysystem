@@ -8,9 +8,9 @@ title: Handling Uploads
 ## Plain PHP Upload
 
 ```php
-$stream = fopen($_FILES[$uploadname]['tmp_name'], 'r+');
+$stream = fopen($_FILES[$uploadName]['tmp_name'], 'r+');
 $filesystem->writeStream(
-    'uploads/'.$_FILES[$uploadname]['name'],
+    'uploads/'.$_FILES[$uploadName]['name'],
     $stream
 );
 if (is_resource($stream)) {
@@ -51,7 +51,7 @@ class UploadController extends Controller
 ```php
 /** @var Symfony\Component\HttpFoundation\Request $request */
 /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-$file = $request->files->get($uploadname);
+$file = $request->files->get($uploadName);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
@@ -63,7 +63,7 @@ if ($file->isValid()) {
 ## Laravel 4/5 - Static-Access Proxy
 
 ```php
-$file = Request::file($uploadname);
+$file = Request::file($uploadName);
 
 if ($file->isValid()) {
     $stream = fopen($file->getRealPath(), 'r+');
@@ -86,7 +86,7 @@ class FileController extends Controller
 {
     public function actionUpload()
     {
-        $file = UploadedFile::getInstanceByName($uploadname);
+        $file = UploadedFile::getInstanceByName($uploadName);
         
         if ($file->error === UPLOAD_ERR_OK) {
             $stream = fopen($file->tempName, 'r+');

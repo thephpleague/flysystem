@@ -111,11 +111,11 @@ use League\Flysystem\Adapter\Local as Adapter;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\Storage\Stash as StashStore;
 
+// You can optionally pass a driver (recommended, default: in-memory driver)
 $pool = new Pool();
-// you can optionally pass a driver (recommended, default: in-memory driver)
 
+// Storage key and expire time are optional
 $cache = new StashStore($pool, 'storageKey', 300);
-// Storage Key and expire time are optional
 
 $adapter = new CachedAdapter(new Adapter(__DIR__.'/path/to/root'), $cache);
 $filesystem = new Filesystem($adapter);

@@ -275,8 +275,7 @@ $filesystem->write($path, $contents, [
     'visibility' => AdapterInterface::VISIBILITY_PRIVATE
 ]);
 
-// or simply
-
+// Or simply
 $filesystem->write($path, $contents, ['visibility' => 'private']);
 ```
 
