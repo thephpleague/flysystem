@@ -62,7 +62,7 @@ The required IAM permissions are:
 }
 ```
 
-To enable [reduced redunancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
+To enable [reduced redundancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
 
 ```php
 $adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
@@ -107,7 +107,7 @@ For further details see https://docs.aws.amazon.com/sdk-for-php/v3/developer-gui
 
 ---
 
-## 🚨 Aws S3 Adapter - SDK V2 (LEGACY ADAPTER)
+## 🚨 AWS S3 Adapter - SDK V2 (LEGACY ADAPTER)
 
 ## Installation
 
@@ -133,10 +133,10 @@ $adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix');
 $filesystem = new Filesystem($adapter);
 ```
 
-To enable [reduced redunancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
+To enable [reduced redundancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
 
 ```php
 $adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
-    'StorageClass'  =>  'REDUCED_REDUNDANCY',
+    'StorageClass' => 'REDUCED_REDUNDANCY',
 ]);
 ```

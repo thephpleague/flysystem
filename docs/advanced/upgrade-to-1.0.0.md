@@ -10,7 +10,7 @@ day usage, some parts require a different boostrapping.
 ## Relocated Adapters
 
 In order to have better dependency management, and to remove some of the
-version contstraints, some of the adapters have been moved out of the main
+version constraints, some of the adapters have been moved out of the main
 repository. These adapters are:
 
 * [AwsS3: AWS SDK Adapter](/docs/adapter/aws-s3/)

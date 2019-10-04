@@ -34,7 +34,7 @@ of your code.
 
 * **[AWS S3](/docs/adapter/aws-s3/)**
 * **[Azure](/docs/adapter/azure/)**
-* **[Digital Ocean Spaces](/docs/adapter/digitalocean-spaces/)**
+* **[DigitalOcean Spaces](/docs/adapter/digitalocean-spaces/)**
 * **[Local](/docs/adapter/local/)**
 * **[Memory](/docs/adapter/memory/)**
 * **[Creating An Adapter](/docs/advanced/creating-an-adapter/)**

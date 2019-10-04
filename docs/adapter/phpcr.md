@@ -42,10 +42,10 @@ $repository = $factory->getRepository([
 ]);
 $session = $repository->login(new SimpleCredentials('username', 'password'));
 
-//Or when no credentials are required
+// Or when no credentials are required
 $session = $repository->login();
 
-// this part looks the same regardless of your phpcr implementation.
+// This part looks the same regardless of your phpcr implementation.
 $root = '/flysystem_tests';
 $filesystem = new Filesystem(new PhpcrAdapter($session, $root));
 ```
@@ -56,7 +56,7 @@ By default PHPCR will use the current system time as the "last modified" timesta
 ```php
 $path = '/path/to/file.ext';
 $content = file_get_contents($path);
-$config = ['timestamp' => filemtime($path)]; //Use the time when the content of the file was last changed.
+$config = ['timestamp' => filemtime($path)]; // Use the time when the content of the file was last changed.
 
 $filesystem->write($path, $content, $config);
 ```

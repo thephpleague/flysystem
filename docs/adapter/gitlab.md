@@ -2,7 +2,7 @@
 layout: default
 permalink: /docs/adapter/gitlab/
 redirect_from: /adapter/gitlab/
-title: Gitlab Adapter
+title: GitLab Adapter
 ---
 
 ## Installation
@@ -12,34 +12,34 @@ composer require royvoetman/flysystem-gitlab-storage
 
 ## Usage
 ```php
-// Create a Gitlab Client to talk with the API
+// Create a GitLab Client to talk with the API
 $client = new Client('personal-access-token', 'project-id', 'branch', 'base-url');
    
-// Create the Adapter that implentents Flysystems AdapterInterface
+// Create the Adapter that implements Flysystems AdapterInterface
 $adapter = new GitlabAdapter($client);
 
 // Create FileSystem
 $filesystem = new Filesystem($adapter);
 
-// write a file
+// Write a file
 $filesystem->write('path/to/file.txt', 'contents');
 
-// update a file
+// Update a file
 $filesystem->update('path/to/file.txt', 'new contents');
 
-// read a file
+// Read a file
 $contents = $filesystem->read('path/to/file.txt');
 ```
 
 ### Access token (required for private projects)
-Gitlab supports server side API authentication with Personal Access tokens
+GitLab supports server side API authentication with Personal Access tokens.
 
-For more information on how to create your own Personal Access token: [Gitlab Docs](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
+For more information on how to create your own Personal Access token: [GitLab Docs](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
 
 ### Project ID
 Every project in Gitlab has its own Project ID. It can be found at to top of the frontpage of your repository. [See](https://stackoverflow.com/questions/39559689/where-do-i-find-the-project-id-for-the-gitlab-api#answer-53126068)
 
 ### Base URL
-This will be the URL where you host your gitlab server (e.g. https://gitlab.com)
+This will be the URL where you host your GitLab server (e.g. https://gitlab.com).
 
 > See the [project README](https://github.com/RoyVoetman/Flysystem-Gitlab-storage) for additional usage examples.
