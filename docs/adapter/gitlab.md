@@ -37,7 +37,7 @@ GitLab supports server side API authentication with Personal Access tokens.
 For more information on how to create your own Personal Access token: [GitLab Docs](https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html)
 
 ### Project ID
-Every project in Gitlab has its own Project ID. It can be found at to top of the frontpage of your repository. [See](https://stackoverflow.com/questions/39559689/where-do-i-find-the-project-id-for-the-gitlab-api#answer-53126068)
+Every project in GitLab has its own Project ID. It can be found at to top of the frontpage of your repository. [See](https://stackoverflow.com/questions/39559689/where-do-i-find-the-project-id-for-the-gitlab-api#answer-53126068)
 
 ### Base URL
 This will be the URL where you host your GitLab server (e.g. https://gitlab.com).
