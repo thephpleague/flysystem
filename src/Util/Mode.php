@@ -17,7 +17,7 @@ class Mode
             return $modeString;
         }
 
-        // this takes care of '755', '0755', '1755', '01755' 
+        // this takes care of '755', '0755', '1755', '01755'
         if (is_numeric($modeString)) {
             return octdec($modeString);
         }
@@ -31,8 +31,7 @@ class Mode
         $special = 0;
 
         // let's go through the string char by char
-        for ($i = 0; $i < strlen($modeString); $i++)
-        {
+        for ($i = 0; $i < strlen($modeString); $i++) {
             // for each iteration we shift the mode by one bit
             // thus putting a 0 at the end
             $mode = $mode << 1;
