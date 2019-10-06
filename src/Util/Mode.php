@@ -13,18 +13,20 @@ class Mode
     public static function mode($modeString)
     {
         // we don't process it if it's not a string
-        if (!is_string($modeString))
+        if (!is_string($modeString)) {
             return $modeString;
+        }
 
         // this takes care of '755', '0755', '1755', '01755' 
-        if (is_numeric($modeString))
+        if (is_numeric($modeString)) {
             return octdec($modeString);
+        }
 
         // this point is reached in case of something like 'drwSrwxr-T'
-        
+
         // here we'll store the three usual octets for start
         $mode = 0;
-        
+
         // this will hold the first octet; we'll merge it in $mode at the end
         $special = 0;
 
@@ -37,8 +39,9 @@ class Mode
 
             // we must also shift the special bits once every three chars
             // works for both drwxrwxrwt and rwxrwxrwt
-            if (0 == $i % 3)
+            if (0 == $i % 3) {
                 $special = $special << 1;
+            }
 
             $char = $modeString[$i];
 
@@ -48,8 +51,9 @@ class Mode
                 $special |= 1;
 
             // these letters are the only that don't set the corresponding bit in mode
-            if (in_array($char, ['-', 'S', 'T', 'd']))
+            if (in_array($char, ['-', 'S', 'T', 'd'])) {
                 continue;
+            }
 
             // if we reached this, set the bit on
             $mode |= 1;
