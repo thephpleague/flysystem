@@ -28,20 +28,6 @@ class Local extends AbstractAdapter
     const DISALLOW_LINKS = 0002;
 
     /**
-     * @var array
-     */
-    protected static $permissions = [
-        'file' => [
-            'public' => Util::mode('0644'),
-            'private' => Util::mode('0600'),
-        ],
-        'dir' => [
-            'public' => Util::mode('0755'),
-            'private' => Util::mode('0700'),
-        ],
-    ];
-
-    /**
      * @var string
      */
     protected $pathSeparator = DIRECTORY_SEPARATOR;
@@ -73,8 +59,19 @@ class Local extends AbstractAdapter
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
+        $defaultPermissions = [
+            'file' => [
+                'public' => Util\Mode::mode('0644'),
+                'private' => Util\Mode::mode('0600'),
+            ],
+            'dir' => [
+                'public' => Util\Mode::mode('0755'),
+                'private' => Util\Mode::mode('0700'),
+            ],
+        ];
+        
         $root = is_link($root) ? realpath($root) : $root;
-        $this->permissionMap = array_replace_recursive(static::$permissions, $permissions);
+        $this->permissionMap = array_replace_recursive($defaultPermissions, $permissions);
         $this->ensureDirectory($root);
 
         if ( ! is_dir($root) || ! is_readable($root)) {
