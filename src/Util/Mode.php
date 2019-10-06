@@ -47,8 +47,9 @@ class Mode
 
             // the special bit is set on these letters taking the place of execution bit
             // their order is fixed so it's enough to check if we got any of those
-            if (in_array($char, ['S', 's', 'T', 't']))
+            if (in_array($char, ['S', 's', 'T', 't'])) {
                 $special |= 1;
+            }
 
             // these letters are the only that don't set the corresponding bit in mode
             if (in_array($char, ['-', 'S', 'T', 'd'])) {
