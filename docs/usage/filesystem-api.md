@@ -12,84 +12,90 @@ when you want to _use_ Flysystem in your application.
 ## Write Files
 
 ```php
-$response = $filesystem->write($path, $contents);
+$response = $filesystem->write($path, $contents [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$contents`   | file contents            | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$contents`   | file contents                                 | `string`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
 ## Write Files using a stream
 
 ```php
-$response = $filesystem->writeStream($path, $resource);
+$response = $filesystem->writeStream($path, $resource [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$resource`   | file stream              | `resource`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$resource`   | file stream                                   | `resource`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
 ## Update Files
 
 ```php
-$response = $filesystem->update($path, $contents);
+$response = $filesystem->update($path, $contents [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$contents`   | file contents            | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$contents`   | file contents                                 | `string`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
 ## Update Files using a stream
 
 ```php
-$response = $filesystem->updateStream($path, $resource);
+$response = $filesystem->updateStream($path, $resource [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$resource`   | file stream              | `resource`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$resource`   | file stream                                   | `resource`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
 ## Write or Update Files
 
 ```php
-$response = $filesystem->put($path, $contents);
+$response = $filesystem->put($path, $contents [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$contents`   | file contents            | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$config`     | An optional configuration array               | `array`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
 ## Write or Update Files using a stream
 
 ```php
-$response = $filesystem->putStream($path, $resource);
+$response = $filesystem->putStream($path, $resource [, $config]);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$resource`   | file stream              | `resource`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$resource`   | file stream                                   | `resource`
+`$config`     | An optional configuration array               | `array`
+`$response`   | success boolean                               | `bool`
 
 ---
 
@@ -99,10 +105,10 @@ param         | description              | type
 $contents = $filesystem->read($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$contents`   | file contents            | `string`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$contents`   | file contents or false on failure             | `string|false`
 
 ---
 
@@ -112,10 +118,10 @@ param         | description              | type
 $resource = $filesystem->readStream($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$resource`   | file stream              | `resource`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$resource`   | file stream or false on failure               | `resource|false`
 
 ---
 
@@ -125,10 +131,10 @@ param         | description              | type
 $exists = $filesystem->has($path);
 ```
 
-param         | description               | type
-------------- | ------------------------- | -----------
-`$path`       | location of a file        | `string`
-`$exists`     | whether the file exists   | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$exists`     | whether the file exists                       | `bool`
 
 > This only has consistent behaviour for files, not directories. Directories
 > are less important in Flysystem, they're created implicitly and often ignored because
@@ -142,10 +148,10 @@ param         | description               | type
 $response = $filesystem->delete($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | success boolean                               | `bool`
 
 ---
 
@@ -155,10 +161,10 @@ param         | description              | type
 $contents = $filesystem->readAndDelete($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$contents`   | file contents            | `string`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$contents`   | file contents or false on failure`            | `string|false`
 
 ---
 
@@ -168,11 +174,11 @@ param         | description              | type
 $response = $filesystem->rename($from, $to);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$from`       | location of a file       | `string`
-`$to`         | new location             | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$from`       | location of a file                            | `string`
+`$to`         | new location                                  | `string`
+`$response`   | success boolean                               | `bool`
 
 ---
 
@@ -182,11 +188,11 @@ param         | description              | type
 $response = $filesystem->copy($from, $to);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$from`       | location of a file       | `string`
-`$to`         | new location             | `string`
-`$response`   | success boolean          | `bool`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$from`       | location of a file                            | `string`
+`$to`         | new location                                  | `string`
+`$response`   | success boolean                               | `bool`
 
 ---
 
@@ -196,10 +202,10 @@ param         | description              | type
 $response = $filesystem->getMimetype($path);
 ```
 
-param         | description              | type
-------------- | ------------------------ | -----------
-`$path`       | location of a file       | `string`
-`$response`   | mime-type                | `string`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | mime-type or false on failure                 | `string|false`
 
 ---
 
@@ -211,10 +217,10 @@ This function returns the last updated timestamp.
 $response = $filesystem->getTimestamp($path);
 ```
 
-param         | description               | type
-------------- | ------------------------- | -----------
-`$path`       | location of a file        | `string`
-`$response`   | timestamp of modification | `integer`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | timestamp of modification or false on failure | `integer|false`
 
 ---
 
@@ -224,10 +230,10 @@ param         | description               | type
 $response = $filesystem->getSize($path);
 ```
 
-param         | description               | type
-------------- | ------------------------- | -----------
-`$path`       | location of a file        | `string`
-`$response`   | size of a file            | `integer`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | size of a file or false on failure            | `integer|false`
 
 ---
 
@@ -237,10 +243,10 @@ param         | description               | type
 $response = $filesystem->createDir($path);
 ```
 
-param         | description               | type
-------------- | ------------------------- | -----------
-`$path`       | location of a file        | `string`
-`$response`   | success boolean           | `boolean`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | success boolean                               | `boolean`
 
 Directories are also made implicitly when writing to a deeper path.
 In general creating a directory is __not__ required in order to write
@@ -256,10 +262,10 @@ Deleting directories is always done recursively.
 $response = $filesystem->deleteDir($path);
 ```
 
-param         | description               | type
-------------- | ------------------------- | -----------
-`$path`       | location of a file        | `string`
-`$response`   | success boolean           | `boolean`
+param         | description                                   | type
+------------- | --------------------------------------------- | -----------
+`$path`       | location of a file                            | `string`
+`$response`   | success boolean                               | `boolean`
 
 
 ---
