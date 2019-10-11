@@ -1,4 +1,5 @@
 <?php
+
 namespace League\Flysystem\Util;
 
 class Mode
