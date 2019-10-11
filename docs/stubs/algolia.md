@@ -5,7 +5,7 @@ permalink: /stubs/algolia/
 sitemap: false
 ---
 
-This file contains a html/css skeleton to prevent css overrides to
+This file contains a `html/css` skeleton to prevent css overrides to
 be purged by webpack.
 
 <div class="algolia-autocomplete algolia-autocomplete-right algolia-autocomplete-left">
