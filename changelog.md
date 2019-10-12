@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.56 - 2019-10-12
+
+* Improved packagist artifact
+* Added missing mime-type.
+
 ## 1.0.55 - 2019-08-24
 
 * Fixed metadata fetching of the existing directory in Ftpd.
