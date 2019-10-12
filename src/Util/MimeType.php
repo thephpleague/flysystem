@@ -118,6 +118,7 @@ class MimeType
         'doc' => 'application/msword',
         'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'docm' => 'application/vnd.ms-word.template.macroEnabled.12',
+        'dotm' => 'application/vnd.ms-word.template.macroEnabled.12',
         'dot' => 'application/msword',
         'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
