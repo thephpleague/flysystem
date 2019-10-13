@@ -10,7 +10,7 @@ Laravel, <a href="https://laravel.com/docs/5.6/filesystem">check out the documen
 
 <div class="flex my-6">
     <a target="_blank" href="https://laravel.com" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
-        <img src="../img/laravel.svg" class="w-full" alt="Laravel.com"/>
+        <img src="/img/laravel.svg" class="w-full" alt="Laravel.com"/>
         <span style="background-color: #FB503B" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Laravel.com</span>
     </a>
 </div>
