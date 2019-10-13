@@ -1,8 +1,11 @@
 <?php
 
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\AdapterInterface;
+use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
+use League\Flysystem\Plugin\ListWith;
 use League\Flysystem\Stub\FilesystemSpy;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -97,11 +100,9 @@ class MountManagerTests extends TestCase
         $this->assertTrue($status);
     }
 
-    public function testMoveBetweenFilesystems()
+    public function testMoveBetweenFilesystemsCanFail()
     {
-        $manager = $this->getMockBuilder('League\Flysystem\MountManager')
-            ->setMethods(['copy', 'delete'])
-            ->getMock();
+        $manager = new MountManager();
         $fs1 = $this->prophesize('League\Flysystem\FilesystemInterface');
         $fs2 = $this->prophesize('League\Flysystem\FilesystemInterface');
         $manager->mountFilesystem('fs1', $fs1->reveal());
@@ -111,14 +112,25 @@ class MountManagerTests extends TestCase
         $buffer = tmpfile();
         $fs1->readStream($filename)->willReturn($buffer);
         $fs2->writeStream($filename, $buffer, [])->willReturn(false);
-        $code = $manager->move("fs1://{$filename}", "fs2://{$filename}");
-        $this->assertFalse($code);
+        $result = $manager->move("fs1://{$filename}", "fs2://{$filename}");
+        $this->assertFalse($result);
+    }
 
-        $manager->method('copy')->with("fs1://{$filename}", "fs2://{$filename}", [])->willReturn(true);
-        $manager->method('delete')->with("fs1://{$filename}")->willReturn(true);
-        $code = $manager->move("fs1://{$filename}", "fs2://{$filename}");
+    public function testMoveBetweenFilesystemsCanSucceed()
+    {
+        $manager = new MountManager();
+        $fs1 = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $fs2 = $this->prophesize('League\Flysystem\FilesystemInterface');
+        $manager->mountFilesystem('fs1', $fs1->reveal());
+        $manager->mountFilesystem('fs2', $fs2->reveal());
 
-        $this->assertTrue($code);
+        $filename = 'test.txt';
+        $buffer = tmpfile();
+        $fs1->readStream($filename)->willReturn($buffer);
+        $fs2->writeStream($filename, $buffer, [])->willReturn(true);
+        $fs1->delete($filename)->willReturn(true);
+        $result = $manager->move("fs1://{$filename}", "fs2://{$filename}");
+        $this->assertTrue($result);
     }
 
     public function testMoveSameFilesystems()
@@ -171,11 +183,14 @@ class MountManagerTests extends TestCase
     public function testListWith()
     {
         $manager = new MountManager();
-        $response = ['path' => 'file.ext', 'timestamp' => time()];
-        $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->method('__call')->with('listWith', [['timestamp'], 'file.ext', false])->willReturn($response);
-        $manager->mountFilesystem('prot', $mock);
-        $this->assertEquals($response, $manager->listWith(['timestamp'], 'prot://file.ext', false));
+        $fs = new Filesystem(new Local(__DIR__.'/files'));
+        $fs->deleteDir('dirname');
+        $fs->addPlugin(new ListWith());
+        $fs->write('dirname/file.txt', 'contents');
+        $listing = $fs->listWith(['timestamp'], 'dirname', false);
+        $manager->mountFilesystem('prot', $fs);
+        $this->assertEquals($listing, $manager->listWith(['timestamp'], 'prot://dirname', false));
+        $fs->deleteDir('dirname');
     }
 
     public function provideMountSchemas()
