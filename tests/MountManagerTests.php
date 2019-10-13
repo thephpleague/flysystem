@@ -209,9 +209,9 @@ class MountManagerTests extends TestCase
     public function testMountSchemaTypes($schema)
     {
         $manager = new MountManager();
-        $mock = $this->getMockBuilder('League\Flysystem\Filesystem')->disableOriginalConstructor()->getMock();
-        $mock->method('read')->with('file.ext')->willReturn('a result');
-        $manager->mountFilesystem($schema, $mock);
+        $mock = $this->prophesize(FilesystemInterface::class);
+        $mock->read('file.ext')->willReturn('a result');
+        $manager->mountFilesystem($schema, $mock->reveal());
         $this->assertEquals($manager->read($schema . '://file.ext'), 'a result');
     }
 
