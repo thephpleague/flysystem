@@ -183,7 +183,7 @@ class MountManagerTests extends TestCase
     public function testListWith()
     {
         $manager = new MountManager();
-        $fs = new Filesystem(new Local(__DIR__.'/files'));
+        $fs = new Filesystem(new Local(__DIR__ . '/files'));
         $fs->deleteDir('dirname');
         $fs->addPlugin(new ListWith());
         $fs->write('dirname/file.txt', 'contents');
