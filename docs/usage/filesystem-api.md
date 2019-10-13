@@ -164,7 +164,7 @@ $contents = $filesystem->readAndDelete($path);
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
 `$path`       | location of a file                            | `string`
-`$contents`   | file contents or false on failure`            | `string|false`
+`$contents`   | file contents or false on failure             | `string|false`
 
 ---
 
