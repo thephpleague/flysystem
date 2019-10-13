@@ -1,6 +1,9 @@
 <?php
 
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 
@@ -26,7 +29,7 @@ class FlysystemStreamTests extends TestCase
      */
     public function testWriteStreamFail()
     {
-        $filesystem = new Filesystem($this->createMock('League\Flysystem\AdapterInterface'));
+        $filesystem = new Filesystem(new Local(__DIR__));
         $filesystem->writeStream('file.txt', 'not a resource');
     }
 
@@ -51,7 +54,7 @@ class FlysystemStreamTests extends TestCase
      */
     public function testUpdateStreamFail()
     {
-        $filesystem = new Filesystem($this->createMock('League\Flysystem\AdapterInterface'));
+        $filesystem = new Filesystem(new Local(__DIR__));
         $filesystem->updateStream('file.txt', 'not a resource');
     }
 

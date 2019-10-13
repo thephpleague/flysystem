@@ -18,7 +18,7 @@ class MountManagerTests extends TestCase
 
     public function testConstructorInjection()
     {
-        $mock = $this->createMock('League\Flysystem\FilesystemInterface');
+        $mock = $this->prophesize(FilesystemInterface::class)->reveal();
         $manager = new MountManager([
             'prefix' => $mock,
         ]);
@@ -30,8 +30,9 @@ class MountManagerTests extends TestCase
      */
     public function testInvalidPrefix()
     {
+        $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $manager = new MountManager();
-        $manager->mountFilesystem(false, $this->createMock('League\Flysystem\FilesystemInterface'));
+        $manager->mountFilesystem(false, $filesystem);
     }
 
     /**
