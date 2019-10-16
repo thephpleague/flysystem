@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.57 - 2019-10-16
+
+* Added more missing mime-types.
+
 ## 1.0.56 - 2019-10-12
 
 * Improved packagist artifact
