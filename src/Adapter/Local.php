@@ -69,7 +69,7 @@ class Local extends AbstractAdapter
                 'private' => Util\Mode::mode('0700'),
             ],
         ];
-        
+
         $root = is_link($root) ? realpath($root) : $root;
         $this->permissionMap = array_replace_recursive($defaultPermissions, $permissions);
         $this->ensureDirectory($root);
