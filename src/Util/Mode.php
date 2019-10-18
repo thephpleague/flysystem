@@ -5,7 +5,7 @@ namespace League\Flysystem\Util;
 class Mode
 {
     /**
-     * Converts mode from string representation to decimal if necessary
+     * Converts mode from string representation to decimal if necessary.
      *
      * @param mixed $modeString
      *
@@ -14,7 +14,7 @@ class Mode
     public static function mode($modeString)
     {
         // we don't process it if it's not a string
-        if (!is_string($modeString)) {
+        if ( ! is_string($modeString)) {
             return $modeString;
         }
 
