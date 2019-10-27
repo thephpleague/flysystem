@@ -50,6 +50,8 @@ $filesystem = new Filesystem($adapter, ['visibility' => 'public']);
 
 The global available configuration options are:
 
-option        | description              | type
-------------- | ------------------------ | -----------
-`visibility`  | default visibility       | `string`
+option | description | type
+--- | --- | ---
+`visibility` | default visibility | `string`
+`disable_asserts` | disable extra calls to assert whether or not a file exists, see [Performance](/docs/advanced/performance/) | `bool`
+`case_sensitive` | whether or not the adapter's file system is case sensitive, e.g. [Dropbox](/docs/adapter/dropbox/) is case insensitive | `bool`
