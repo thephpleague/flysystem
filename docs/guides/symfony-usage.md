@@ -13,6 +13,6 @@ For more information on how to use Flysystem within Symfony,
 <div class="flex my-6">
     <a target="_blank" href="https://github.com/thephpleague/flysystem-bundle" class="flex-no-grow w-1/3 bg-white rounded shadow-md mr-4 overflow-hidden">
         <img src="/img/symfony.svg" class="w-full" alt="Flysystem Symfony bundle"/>
-        <span style="background-color: #1a171b" class="text-center text-xl hidden sm:block py-4 bg-indigo-dark text-white bg-grey-lightest">Symfony bundle</span>
+        <span style="background-color: #1a171b" class="text-center text-xl hidden sm:block py-4 text-white ">Symfony bundle</span>
     </a>
 </div>
