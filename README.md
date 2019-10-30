@@ -16,7 +16,7 @@ Flysystem is a filesystem abstraction which allows you to easily swap out a loca
 * Have consistent output which you can rely on.
 * Integrate well with other packages/frameworks.
 * Be cacheable.
-* Emulate directories in systems that don't support them, like AwsS3.
+* Emulate directories in systems that don't support them, like AWS S3.
 * Support third party plugins.
 * Make it easy to test your filesystem interactions.
 * Support streams for big file handling.
