@@ -9,6 +9,7 @@ Usage:
 Guides:
     Laravel Usage: '/docs/guides/laravel-usage/'
     Symfony Usage: '/docs/guides/symfony-usage/'
+    SilverStripe Usage: '/docs/guides/silverstripe-usage'
     Nette Usage: '/docs/guides/nette-usage/'
     Deterministic Code: '/docs/guides/deterministic-programming/'
     Handling Uploads: '/docs/guides/uploads/'
