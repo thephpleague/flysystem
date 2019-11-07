@@ -77,7 +77,17 @@ class Local extends AbstractAdapter
         $this->permissionMap = array_replace_recursive(static::$permissions, $permissions);
         $this->ensureDirectory($root);
 
-        if ( ! is_dir($root) || ! is_readable($root)) {
+        // If UNC path...
+        if (substr($root, 0, 2) === str_repeat($this->pathSeparator, 2)) {
+
+            $readable = file_exists($root);
+
+        } else {
+
+            $readable = is_readable($root);
+        }
+
+        if ( ! is_dir($root) || $readable === false) {
             throw new LogicException('The root path ' . $root . ' is not readable.');
         }
 
