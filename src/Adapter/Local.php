@@ -131,6 +131,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
      * @throws Exception
      */
     public function write($path, $contents, Config $config)
@@ -155,6 +156,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
      * @throws Exception
      */
     public function writeStream($path, $resource, Config $config)
@@ -191,6 +193,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     *
      * @throws Exception
      */
     public function updateStream($path, $resource, Config $config)
