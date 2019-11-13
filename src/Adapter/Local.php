@@ -70,6 +70,7 @@ class Local extends AbstractAdapter
      * @param array  $permissions
      *
      * @throws LogicException
+     * @throws Exception
      */
     public function __construct($root, $writeFlags = LOCK_EX, $linkHandling = self::DISALLOW_LINKS, array $permissions = [])
     {
@@ -97,21 +98,25 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if ( ! is_dir($root)) {
-            $umask = umask(0);
+        clearstatcache(false, $root);
 
-            if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
-                $mkdirError = error_get_last();
-            }
-
-            umask($umask);
-            clearstatcache(false, $root);
-
-            if ( ! is_dir($root)) {
-                $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
-                throw new Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
-            }
+        if (is_dir($root)) {
+            return;
         }
+
+        if (@mkdir($root, $this->permissionMap['dir']['public'], true)
+            && @chmod($root, $this->permissionMap['dir']['public'])
+        ) {
+            return;
+        }
+
+        $error = error_get_last();
+
+        throw new Exception(sprintf(
+            'Impossible to create the root directory "%s". %s',
+            $root,
+            null === $error ? '' : $error['message']
+        ));
     }
 
     /**
@@ -126,6 +131,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function write($path, $contents, Config $config)
     {
@@ -149,6 +155,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function writeStream($path, $resource, Config $config)
     {
@@ -184,6 +191,7 @@ class Local extends AbstractAdapter
 
     /**
      * @inheritdoc
+     * @throws Exception
      */
     public function updateStream($path, $resource, Config $config)
     {
@@ -377,18 +385,20 @@ class Local extends AbstractAdapter
     public function createDir($dirname, Config $config)
     {
         $location = $this->applyPathPrefix($dirname);
-        $umask = umask(0);
         $visibility = $config->get('visibility', 'public');
         $return = ['path' => $dirname, 'type' => 'dir'];
 
-        if ( ! is_dir($location)) {
-            if (false === @mkdir($location, $this->permissionMap['dir'][$visibility], true)
-                || false === is_dir($location)) {
-                $return = false;
-            }
+        clearstatcache(false, $location);
+
+        if (is_dir($location)) {
+            return $return;
         }
 
-        umask($umask);
+        if ( ! @mkdir($location, $this->permissionMap['dir'][$visibility], true)
+            || ! @chmod($location, $this->permissionMap['dir'][$visibility])
+        ) {
+            return false;
+        }
 
         return $return;
     }
