@@ -566,7 +566,7 @@ class Ftp extends AbstractFtpAdapter
         return ftp_rawlist($connection, $options . ' ' . $path);
     }
 
-    public function getRawExecResponseCode($command)
+    protected function getRawExecResponseCode($command)
     {
         $response = ftp_raw($this->connection, trim($command));
 
