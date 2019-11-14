@@ -531,12 +531,8 @@ class Ftp extends AbstractFtpAdapter
     public function isConnected()
     {
         try {
-            return is_resource($this->connection) && ftp_rawlist($this->connection, $this->getRoot()) !== false;
+            return is_resource($this->connection) && ftp_exec($this->connection, 'NOOP');
         } catch (ErrorException $e) {
-            if (strpos($e->getMessage(), 'ftp_rawlist') === false) {
-                throw $e;
-            }
-
             return false;
         }
     }
