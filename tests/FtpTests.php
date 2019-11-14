@@ -124,7 +124,7 @@ function ftp_raw($connection, $command)
 
     if ($command === 'NOOP') {
         if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
-            return [0 => "500 Internal error"];
+            return [0 => '500 Internal error'];
         }
         return [0 => '200 Zzz...'];
     }
