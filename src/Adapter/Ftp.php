@@ -572,7 +572,7 @@ class Ftp extends AbstractFtpAdapter
 
         return (int)preg_replace(
             '/\D/',
-            null,
+            '',
             implode(' ', $response)
         );
     }
