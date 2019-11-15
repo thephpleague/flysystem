@@ -25,7 +25,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function has($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -39,7 +39,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function read($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -53,7 +53,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function readStream($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -66,7 +66,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function listContents($directory = '', $recursive = false)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -80,7 +80,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function getMetadata($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -94,7 +94,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function getSize($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -108,7 +108,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function getMimetype($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -122,7 +122,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function getTimestamp($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -136,7 +136,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function getVisibility($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -152,7 +152,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function write($path, $contents, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -169,7 +169,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function writeStream($path, $resource, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -185,7 +185,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function update($path, $contents, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -202,7 +202,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function updateStream($path, $resource, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -218,7 +218,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function rename($path, $newpath)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -234,7 +234,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function copy($path, $newpath)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -248,7 +248,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function delete($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -262,7 +262,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function deleteDir($dirname)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -275,7 +275,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function createDir($dirname, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -290,7 +290,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function setVisibility($path, $visibility)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -304,7 +304,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function put($path, $contents, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -320,7 +320,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function putStream($path, $resource, array $config = [])
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -334,7 +334,7 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function readAndDelete($path)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 
     /**
@@ -349,6 +349,6 @@ class FilesystemSpy implements FilesystemInterface
      */
     public function get($path, Handler $handler = null)
     {
-        $this->lastCall = [__METHOD__, func_get_args()];
+        $this->lastCall = [__METHOD__, \func_get_args()];
     }
 }

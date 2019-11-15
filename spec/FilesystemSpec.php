@@ -50,14 +50,14 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_allow_stream_writes()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(false);
         $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
 
         $this->writeStream('file', $stream)->shouldReturn(true);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_throw_an_exception_when_the_input_is_not_a_resource_during_writeStream()
@@ -81,11 +81,11 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_return_false_when_writing_a_stream_to_a_existing_file()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(false);
         $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
         $this->writeStream('file', $stream)->shouldEqual(false);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_forward_updates()
@@ -100,13 +100,13 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_forward_stream_updates()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(true);
         $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->updateStream('file', $stream);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_write_when_putting_a_new_file()
@@ -121,13 +121,13 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_write_when_putting_a_new_file_using_stream()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(false);
         $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->putStream('file', $stream)->shouldReturn(true);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_update_when_putting_a_new_file()
@@ -142,13 +142,13 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_update_when_putting_a_new_file_using_stream()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(true);
         $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn($cache = [
             'path' => 'file',
         ]);
         $this->putStream('file', $stream)->shouldReturn(true);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_return_false_when_write_fails()
@@ -160,11 +160,11 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_return_false_when_stream_write_fails()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(false);
         $this->adapter->writeStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
         $this->writeStream('file', $stream)->shouldReturn(false);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_return_false_when_update_fails()
@@ -176,11 +176,11 @@ class FilesystemSpec extends ObjectBehavior
 
     public function it_should_return_false_when_stream_update_fails()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $this->adapter->has('file')->willReturn(true);
         $this->adapter->updateStream('file', $stream, Argument::type('League\Flysystem\Config'))->willReturn(false);
         $this->updateStream('file', $stream)->shouldReturn(false);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function it_should_forward_delete_calls()

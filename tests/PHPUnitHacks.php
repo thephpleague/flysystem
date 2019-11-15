@@ -7,7 +7,7 @@ trait PHPUnitHacks
      */
     public function expectException($exception)
     {
-        if (is_callable('parent::expectException')) {
+        if (\is_callable('parent::expectException')) {
             return parent::expectException($exception);
         }
 

@@ -16,15 +16,15 @@ class Util
      */
     public static function pathinfo($path)
     {
-        $pathinfo = compact('path');
+        $pathinfo = \compact('path');
 
-        if ('' !== $dirname = dirname($path)) {
+        if ('' !== $dirname = \dirname($path)) {
             $pathinfo['dirname'] = static::normalizeDirname($dirname);
         }
 
         $pathinfo['basename'] = static::basename($path);
 
-        $pathinfo += pathinfo($pathinfo['basename']);
+        $pathinfo += \pathinfo($pathinfo['basename']);
 
         return $pathinfo + ['dirname' => ''];
     }
@@ -50,7 +50,7 @@ class Util
      */
     public static function dirname($path)
     {
-        return static::normalizeDirname(dirname($path));
+        return static::normalizeDirname(\dirname($path));
     }
 
     /**
@@ -101,12 +101,12 @@ class Util
      */
     public static function normalizeRelativePath($path)
     {
-        $path = str_replace('\\', '/', $path);
+        $path = \str_replace('\\', '/', $path);
         $path = static::removeFunkyWhiteSpace($path);
 
         $parts = [];
 
-        foreach (explode('/', $path) as $part) {
+        foreach (\explode('/', $path) as $part) {
             switch ($part) {
                 case '':
                 case '.':
@@ -118,7 +118,7 @@ class Util
                         'Path is outside of the defined root, path: [' . $path . ']'
                     );
                 }
-                array_pop($parts);
+                \array_pop($parts);
                 break;
 
             default:
@@ -127,7 +127,7 @@ class Util
             }
         }
 
-        return implode('/', $parts);
+        return \implode('/', $parts);
     }
 
     /**
@@ -141,8 +141,8 @@ class Util
     {
         // We do this check in a loop, since removing invalid unicode characters
         // can lead to new characters being created.
-        while (preg_match('#\p{C}+|^\./#u', $path)) {
-            $path = preg_replace('#\p{C}+|^\./#u', '', $path);
+        while (\preg_match('#\p{C}+|^\./#u', $path)) {
+            $path = \preg_replace('#\p{C}+|^\./#u', '', $path);
         }
 
         return $path;
@@ -158,7 +158,7 @@ class Util
      */
     public static function normalizePrefix($prefix, $separator)
     {
-        return rtrim($prefix, $separator) . $separator;
+        return \rtrim($prefix, $separator) . $separator;
     }
 
     /**
@@ -170,7 +170,7 @@ class Util
      */
     public static function contentSize($contents)
     {
-        return defined('MB_OVERLOAD_STRING') ? mb_strlen($contents, '8bit') : strlen($contents);
+        return \defined('MB_OVERLOAD_STRING') ? \mb_strlen($contents, '8bit') : \strlen($contents);
     }
 
     /**
@@ -185,7 +185,7 @@ class Util
     {
         $mimeType = MimeType::detectByContent($content);
 
-        if ( ! (empty($mimeType) || in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm']))) {
+        if ( ! (empty($mimeType) || \in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm']))) {
             return $mimeType;
         }
 
@@ -208,7 +208,7 @@ class Util
             list($directories, $listedDirectories) = static::emulateObjectDirectories($object, $directories, $listedDirectories);
         }
 
-        $directories = array_diff(array_unique($directories), array_unique($listedDirectories));
+        $directories = \array_diff(\array_unique($directories), \array_unique($listedDirectories));
 
         foreach ($directories as $directory) {
             $listing[] = static::pathinfo($directory) + ['type' => 'dir'];
@@ -236,7 +236,7 @@ class Util
             return $config;
         }
 
-        if (is_array($config)) {
+        if (\is_array($config)) {
             return new Config($config);
         }
 
@@ -250,14 +250,14 @@ class Util
      */
     public static function rewindStream($resource)
     {
-        if (ftell($resource) !== 0 && static::isSeekableStream($resource)) {
-            rewind($resource);
+        if (\ftell($resource) !== 0 && static::isSeekableStream($resource)) {
+            \rewind($resource);
         }
     }
 
     public static function isSeekableStream($resource)
     {
-        $metadata = stream_get_meta_data($resource);
+        $metadata = \stream_get_meta_data($resource);
 
         return $metadata['seekable'];
     }
@@ -271,7 +271,7 @@ class Util
      */
     public static function getStreamSize($resource)
     {
-        $stat = fstat($resource);
+        $stat = \fstat($resource);
 
         return $stat['size'];
     }
@@ -297,7 +297,7 @@ class Util
 
         $parent = $object['dirname'];
 
-        while ( ! empty($parent) && ! in_array($parent, $directories)) {
+        while ( ! empty($parent) && ! \in_array($parent, $directories)) {
             $directories[] = $parent;
             $parent = static::dirname($parent);
         }
@@ -322,9 +322,9 @@ class Util
     {
         $separators = DIRECTORY_SEPARATOR === '/' ? '/' : '\/';
 
-        $path = rtrim($path, $separators);
+        $path = \rtrim($path, $separators);
 
-        $basename = preg_replace('#.*?([^' . preg_quote($separators, '#') . ']+$)#', '$1', $path);
+        $basename = \preg_replace('#.*?([^' . \preg_quote($separators, '#') . ']+$)#', '$1', $path);
 
         if (DIRECTORY_SEPARATOR === '/') {
             return $basename;
@@ -334,13 +334,13 @@ class Util
         // coverage is not reported.
 
         // Handle relative paths with drive letters. c:file.txt.
-        while (preg_match('#^[a-zA-Z]{1}:[^\\\/]#', $basename)) {
-            $basename = substr($basename, 2);
+        while (\preg_match('#^[a-zA-Z]{1}:[^\\\/]#', $basename)) {
+            $basename = \substr($basename, 2);
         }
 
         // Remove colon for standalone drive letter names.
-        if (preg_match('#^[a-zA-Z]{1}:$#', $basename)) {
-            $basename = rtrim($basename, ':');
+        if (\preg_match('#^[a-zA-Z]{1}:$#', $basename)) {
+            $basename = \rtrim($basename, ':');
         }
 
         return $basename;

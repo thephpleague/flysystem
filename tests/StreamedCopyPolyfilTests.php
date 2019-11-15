@@ -18,24 +18,24 @@ class StreamedCopyPolyfilTests extends TestCase
 
     public function testWriteFail()
     {
-        $stream = tmpfile();
-        $readResponse = compact('stream');
+        $stream = \tmpfile();
+        $readResponse = \compact('stream');
         $copy = new StreamedCopyStub($readResponse, false);
 
         $this->assertFalse($copy->copy('from', 'to'));
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function testSuccess()
     {
-        $stream = tmpfile();
-        $readResponse = compact('stream');
+        $stream = \tmpfile();
+        $readResponse = \compact('stream');
         $copy = new StreamedCopyStub($readResponse, $readResponse);
 
         $this->assertTrue($copy->copy('from', 'to'));
 
-        if (is_resource($stream)) {
-            fclose($stream);
+        if (\is_resource($stream)) {
+            \fclose($stream);
         }
     }
 }

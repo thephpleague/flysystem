@@ -15,7 +15,7 @@ class ContentListingFormatterTest extends TestCase
     public function formatting_a_listing($root, $recurse, $caseSensitive, array $listing, array $expected)
     {
         $formatted = (new ContentListingFormatter($root, $recurse, $caseSensitive))->formatListing($listing);
-        $expected = array_map([$this, 'addPathInfo'], $expected);
+        $expected = \array_map([$this, 'addPathInfo'], $expected);
 
         $this->assertEquals($expected, $formatted);
     }

@@ -33,7 +33,7 @@ abstract class AbstractAdapter implements AdapterInterface
             return;
         }
 
-        $this->pathPrefix = rtrim($prefix, '\\/') . $this->pathSeparator;
+        $this->pathPrefix = \rtrim($prefix, '\\/') . $this->pathSeparator;
     }
 
     /**
@@ -55,7 +55,7 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function applyPathPrefix($path)
     {
-        return $this->getPathPrefix() . ltrim($path, '\\/');
+        return $this->getPathPrefix() . \ltrim($path, '\\/');
     }
 
     /**
@@ -67,6 +67,6 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function removePathPrefix($path)
     {
-        return substr($path, strlen($this->getPathPrefix()));
+        return \substr($path, \strlen($this->getPathPrefix()));
     }
 }

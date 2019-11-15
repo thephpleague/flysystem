@@ -13,10 +13,10 @@ function ftp_systype($connection)
         'dont.reconnect.me',
     ];
 
-    if (is_string($connection) && array_key_exists($connection, $connections)) {
+    if (\is_string($connection) && \array_key_exists($connection, $connections)) {
         $connections[$connection]++;
 
-        if (strpos($connection, 'dont') !== false || $connections[$connection] < 2) {
+        if (\strpos($connection, 'dont') !== false || $connections[$connection] < 2) {
             return false;
         }
     }
@@ -31,7 +31,7 @@ function ftp_ssl_connect($host)
     }
 
     if ($host === 'disconnect.check') {
-        return tmpfile();
+        return \tmpfile();
     }
 
     return $host;
@@ -39,17 +39,17 @@ function ftp_ssl_connect($host)
 
 function ftp_delete($conn, $path)
 {
-    return ! strpos($path, 'rm.fail.txt');
+    return ! \strpos($path, 'rm.fail.txt');
 }
 
 function ftp_rmdir($connection, $dirname)
 {
-    return strpos($dirname, 'rmdir.fail') === false;
+    return \strpos($dirname, 'rmdir.fail') === false;
 }
 
 function ftp_connect($host)
 {
-    return ftp_ssl_connect($host);
+    return \ftp_ssl_connect($host);
 }
 
 function ftp_pasv($connection)
@@ -64,8 +64,8 @@ function ftp_rename()
 
 function ftp_close($connection)
 {
-    if (is_resource($connection)) {
-        return fclose($connection);
+    if (\is_resource($connection)) {
+        return \fclose($connection);
     }
 
     return true;
@@ -74,7 +74,7 @@ function ftp_close($connection)
 function ftp_login($connection)
 {
     if ($connection === 'login.fail') {
-        trigger_error('FTP login failed!!', E_WARNING);
+        \trigger_error('FTP login failed!!', E_WARNING);
 
         return false;
     }
@@ -88,7 +88,7 @@ function ftp_chdir($connection, $directory)
         return false;
     }
 
-    if (in_array($directory, [
+    if (\in_array($directory, [
         'not.found',
         'windows.not.found',
         'syno.not.found',
@@ -130,7 +130,7 @@ function ftp_raw($connection, $command)
         return [0 => '211- status of syno.unknowndir:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
 
-    if (strpos($command, 'unknowndir') !== false) {
+    if (\strpos($command, 'unknowndir') !== false) {
         return false;
     }
 
@@ -143,33 +143,33 @@ function ftp_raw($connection, $command)
 
 function ftp_rawlist($connection, $directory)
 {
-    $directory = str_replace("-A ", "", $directory);
+    $directory = \str_replace("-A ", "", $directory);
 
-    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
+    if (\getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
         throw new ErrorException('ftp_rawlist');
     }
 
-    if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
+    if (\getenv('FTP_CLOSE_THROW') === 'DISCONNECT_RETHROW') {
         throw new ErrorException('does not contain the correct message');
     }
 
-    if (strpos($directory, 'recurse.manually/recurse.folder') !== false) {
+    if (\strpos($directory, 'recurse.manually/recurse.folder') !== false) {
         return [
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
     }
 
-    if (strpos($directory, 'recurse.manually') !== false) {
+    if (\strpos($directory, 'recurse.manually') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 recurse.folder',
         ];
     }
 
-    if (strpos($directory, 'recurse.folder') !== false) {
+    if (\strpos($directory, 'recurse.folder') !== false) {
         return false;
     }
 
-    if (strpos($directory, 'fail.rawlist') !== false) {
+    if (\strpos($directory, 'fail.rawlist') !== false) {
         return false;
     }
 
@@ -181,7 +181,7 @@ function ftp_rawlist($connection, $directory)
         return ["File not found"];
     }
 
-    if (strpos($directory, 'file1.txt') !== false) {
+    if (\strpos($directory, 'file1.txt') !== false) {
         return [
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
@@ -193,31 +193,31 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
-    if (strpos($directory, 'file2.txt') !== false) {
+    if (\strpos($directory, 'file2.txt') !== false) {
         return [
             '05-23-15  12:09PM                  684 file2.txt',
         ];
     }
 
-    if (strpos($directory, 'file3.txt') !== false) {
+    if (\strpos($directory, 'file3.txt') !== false) {
         return [
             '06-09-2016  12:09PM                  684 file3.txt',
         ];
     }
 
-    if (strpos($directory, 'file4.txt') !== false) {
+    if (\strpos($directory, 'file4.txt') !== false) {
         return [
             '2016-05-23  12:09PM                  684 file4.txt',
         ];
     }
 
-    if (strpos($directory, 'dir1') !== false) {
+    if (\strpos($directory, 'dir1') !== false) {
         return [
             '2015-05-23  12:09       <DIR>          dir1',
         ];
     }
 
-    if (strpos($directory, 'rmdir.nested.fail') !== false) {
+    if (\strpos($directory, 'rmdir.nested.fail') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
             'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
@@ -225,7 +225,7 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
-    if (strpos($directory, 'lastfiledir') !== false) {
+    if (\strpos($directory, 'lastfiledir') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Feb  6  2012 .',
             'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
@@ -236,7 +236,7 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
-    if (strpos($directory, 'spaced.files') !== false) {
+    if (\strpos($directory, 'spaced.files') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Feb  6  2012 .',
             'drwxr-xr-x   4 ftp      ftp          4096 Feb  6 13:58 ..',
@@ -245,38 +245,38 @@ function ftp_rawlist($connection, $directory)
         ];
     }
 
-    if (strpos($directory, 'file1.with-total-line.txt') !== false) {
+    if (\strpos($directory, 'file1.with-total-line.txt') !== false) {
         return [
             'total 1',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
     }
 
-    if (strpos($directory, 'rawlist-total-0.txt') !== false) {
+    if (\strpos($directory, 'rawlist-total-0.txt') !== false) {
         return [
             'total 0',
         ];
     }
 
-    if (strpos($directory, 'file1.with-invalid-line.txt') !== false) {
+    if (\strpos($directory, 'file1.with-invalid-line.txt') !== false) {
         return [
             'invalid line',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
         ];
     }
 
-    if (strpos($directory, 'some.nested/rmdir.fail') !== false || strpos($directory, 'somewhere/cgi-bin') !== false) {
+    if (\strpos($directory, 'some.nested/rmdir.fail') !== false || \strpos($directory, 'somewhere/cgi-bin') !== false) {
         return [
             'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
             'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
         ];
     }
 
-    if (strpos($directory, 'some.nested') !== false) {
+    if (\strpos($directory, 'some.nested') !== false) {
         return ['drwxr-xr-x   1 ftp      ftp           409 Aug 19 09:01 rmdir.fail'];
     }
 
-    if (strpos($directory, 'somewhere/folder') !== false) {
+    if (\strpos($directory, 'somewhere/folder') !== false) {
         return ['-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt'];
     }
 
@@ -328,22 +328,22 @@ function ftp_mdtm($connection, $path)
 
 function ftp_mkdir($connection, $dirname)
 {
-    return strpos($dirname, 'mkdir.fail') === false;
+    return \strpos($dirname, 'mkdir.fail') === false;
 }
 
 function ftp_fput($connection, $path)
 {
-    return strpos($path, 'write.fail') === false;
+    return \strpos($path, 'write.fail') === false;
 }
 
 function ftp_fget($connection, $resource, $path)
 {
-    if (strpos($path, 'not.found') !== false) {
+    if (\strpos($path, 'not.found') !== false) {
         return false;
     }
 
     \fwrite($resource, 'contents');
-    rewind($resource);
+    \rewind($resource);
 
     return true;
 }
@@ -355,12 +355,12 @@ function ftp_nlist($connection, $directory)
 
 function ftp_chmod($connection, $mode, $path)
 {
-    return strpos($path, 'chmod.fail') === false;
+    return \strpos($path, 'chmod.fail') === false;
 }
 
 function ftp_set_option($connection, $option, $value)
 {
-    putenv('USE_PASSV_ADDREESS' . $option . '=' . ($value ? 'YES' : 'NO'));
+    \putenv('USE_PASSV_ADDREESS' . $option . '=' . ($value ? 'YES' : 'NO'));
 
     return true;
 }
@@ -385,12 +385,12 @@ class FtpTests extends TestCase
 
     public function setUp()
     {
-        putenv('FTP_CLOSE_THROW=nope');
+        \putenv('FTP_CLOSE_THROW=nope');
     }
 
     public function testInstantiable()
     {
-        if ( ! defined('FTP_BINARY')) {
+        if ( ! \defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
 
@@ -410,8 +410,8 @@ class FtpTests extends TestCase
         $this->assertEquals('text/plain', $result['mimetype']);
         $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config()));
         $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
+        $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', \tmpfile(), new Config(['visibility' => 'public'])));
+        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', \tmpfile(), new Config()));
         $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
     }
 
@@ -433,7 +433,7 @@ class FtpTests extends TestCase
      */
     public function testDisconnect()
     {
-        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter = new Ftp(\array_merge($this->options, ['host' => 'disconnect.check']));
         $adapter->connect();
         $this->assertTrue($adapter->isConnected());
         $adapter->disconnect();
@@ -445,10 +445,10 @@ class FtpTests extends TestCase
      */
     public function testIsConnectedTimeoutPassthu()
     {
-        putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
+        \putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
 
         $this->expectException('ErrorException');
-        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter = new Ftp(\array_merge($this->options, ['host' => 'disconnect.check']));
         $adapter->connect();
         $adapter->isConnected();
     }
@@ -458,9 +458,9 @@ class FtpTests extends TestCase
      */
     public function testIsConnectedTimeout()
     {
-        putenv('FTP_CLOSE_THROW=DISCONNECT_CATCH');
+        \putenv('FTP_CLOSE_THROW=DISCONNECT_CATCH');
 
-        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
+        $adapter = new Ftp(\array_merge($this->options, ['host' => 'disconnect.check']));
         $adapter->connect();
         $this->assertFalse($adapter->isConnected());
     }
@@ -470,14 +470,14 @@ class FtpTests extends TestCase
      */
     public function testIgnorePassiveAddress()
     {
-        if ( ! defined('FTP_USEPASVADDRESS')) {
-            define('FTP_USEPASVADDRESS', 2);
+        if ( ! \defined('FTP_USEPASVADDRESS')) {
+            \define('FTP_USEPASVADDRESS', 2);
         }
 
-        $this->assertFalse(getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
-        $adapter = new Ftp(array_merge($this->options, ['ignorePassiveAddress' => true]));
+        $this->assertFalse(\getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
+        $adapter = new Ftp(\array_merge($this->options, ['ignorePassiveAddress' => true]));
         $adapter->connect();
-        $this->assertEquals('NO', getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
+        $this->assertEquals('NO', \getenv('USE_PASSV_ADDREESS' . FTP_USEPASVADDRESS));
     }
 
     /**
@@ -595,7 +595,7 @@ class FtpTests extends TestCase
         $this->assertFalse($adapter->getMimetype('windows.not.found'));
         $this->assertFalse($adapter->getTimestamp('windows.not.found'));
         $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', \tmpfile(), new Config()));
         $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
     }
@@ -609,7 +609,7 @@ class FtpTests extends TestCase
         $adapter = new Ftp($this->options);
 
         $listing = $adapter->listContents('lastfiledir');
-        $last_modified_file = reset($listing);
+        $last_modified_file = \reset($listing);
         foreach ($listing as $file) {
             $file_time = $adapter->getTimestamp($file['path'])['timestamp'];
             $last_file_time = $adapter->getTimestamp($last_modified_file['path'])['timestamp'];
@@ -629,7 +629,7 @@ class FtpTests extends TestCase
     {
         $adapter = new Ftp($this->options);
         $listing = $adapter->listContents('spaced.files');
-        $file = array_pop($listing);
+        $file = \array_pop($listing);
 
         $this->assertEquals('spaced.files/ file1.txt', $file['path']);
     }
@@ -956,7 +956,7 @@ class FtpTests extends TestCase
         $this->assertFalse($adapter->getMimetype('not.found'));
         $this->assertFalse($adapter->getTimestamp('not.found'));
         $this->assertFalse($adapter->write('write.fail', 'contents', new Config()));
-        $this->assertFalse($adapter->writeStream('write.fail', tmpfile(), new Config()));
+        $this->assertFalse($adapter->writeStream('write.fail', \tmpfile(), new Config()));
         $this->assertFalse($adapter->update('write.fail', 'contents', new Config()));
         $this->assertFalse($adapter->setVisibility('chmod.fail', 'private'));
     }

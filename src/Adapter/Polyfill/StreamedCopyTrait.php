@@ -18,14 +18,14 @@ trait StreamedCopyTrait
     {
         $response = $this->readStream($path);
 
-        if ($response === false || ! is_resource($response['stream'])) {
+        if ($response === false || ! \is_resource($response['stream'])) {
             return false;
         }
 
         $result = $this->writeStream($newpath, $response['stream'], new Config());
 
-        if ($result !== false && is_resource($response['stream'])) {
-            fclose($response['stream']);
+        if ($result !== false && \is_resource($response['stream'])) {
+            \fclose($response['stream']);
         }
 
         return $result !== false;

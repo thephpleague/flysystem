@@ -22,9 +22,9 @@ trait StreamedReadingTrait
             return false;
         }
 
-        $stream = fopen('php://temp', 'w+b');
-        fwrite($stream, $data['contents']);
-        rewind($stream);
+        $stream = \fopen('php://temp', 'w+b');
+        \fwrite($stream, $data['contents']);
+        \rewind($stream);
         $data['stream'] = $stream;
         unset($data['contents']);
 

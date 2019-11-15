@@ -138,7 +138,7 @@ class UtilTests extends TestCase
             ['/some/file.css', '.event { background: #000; } ', 'text/css'],
             ['/some/file.css', 'body { background: #000; } ', 'text/css'],
             ['/some/file.txt', 'body { background: #000; } ', 'text/plain'],
-            ['/1x1', base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif'],
+            ['/1x1', \base64_decode('R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs='), 'image/gif'],
         ];
     }
 
@@ -153,21 +153,21 @@ class UtilTests extends TestCase
 
     public function testStreamSize()
     {
-        $stream = tmpfile();
-        fwrite($stream, 'aaa');
+        $stream = \tmpfile();
+        \fwrite($stream, 'aaa');
         $size = Util::getStreamSize($stream);
         $this->assertEquals(3, $size);
-        fclose($stream);
+        \fclose($stream);
     }
 
     public function testRewindStream()
     {
-        $stream = tmpfile();
-        fwrite($stream, 'something');
-        $this->assertNotEquals(0, ftell($stream));
+        $stream = \tmpfile();
+        \fwrite($stream, 'something');
+        $this->assertNotEquals(0, \ftell($stream));
         Util::rewindStream($stream);
-        $this->assertEquals(0, ftell($stream));
-        fclose($stream);
+        $this->assertEquals(0, \ftell($stream));
+        \fclose($stream);
     }
 
     public function testNormalizePrefix()
@@ -230,7 +230,7 @@ class UtilTests extends TestCase
      */
     public function testPathinfo($path)
     {
-        $expected = compact('path') + pathinfo($path) + ['dirname' => ''];
+        $expected = \compact('path') + \pathinfo($path) + ['dirname' => ''];
 
         if (isset($expected['dirname'])) {
             $expected['dirname'] = Util::normalizeDirname($expected['dirname']);

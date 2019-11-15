@@ -25,8 +25,8 @@ trait PluggableTrait
      */
     public function addPlugin(PluginInterface $plugin)
     {
-        if ( ! method_exists($plugin, 'handle')) {
-            throw new LogicException(get_class($plugin) . ' does not have a handle method.');
+        if ( ! \method_exists($plugin, 'handle')) {
+            throw new LogicException(\get_class($plugin) . ' does not have a handle method.');
         }
 
         $this->plugins[$plugin->getMethod()] = $plugin;
@@ -69,7 +69,7 @@ trait PluggableTrait
         $plugin->setFilesystem($filesystem);
         $callback = [$plugin, 'handle'];
 
-        return call_user_func_array($callback, $arguments);
+        return \call_user_func_array($callback, $arguments);
     }
 
     /**
@@ -89,7 +89,7 @@ trait PluggableTrait
         } catch (PluginNotFoundException $e) {
             throw new BadMethodCallException(
                 'Call to undefined method '
-                . get_class($this)
+                . \get_class($this)
                 . '::' . $method
             );
         }

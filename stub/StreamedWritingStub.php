@@ -11,11 +11,11 @@ class StreamedWritingStub
 
     public function write($path, $contents, Config $config)
     {
-        return compact('path', 'contents');
+        return \compact('path', 'contents');
     }
 
     public function update($path, $contents, Config $config)
     {
-        return compact('path', 'contents');
+        return \compact('path', 'contents');
     }
 }

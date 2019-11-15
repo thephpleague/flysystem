@@ -54,7 +54,7 @@ class Filesystem implements FilesystemInterface
     {
         $path = Util::normalizePath($path);
 
-        return strlen($path) === 0 ? false : (bool) $this->getAdapter()->has($path);
+        return \strlen($path) === 0 ? false : (bool) $this->getAdapter()->has($path);
     }
 
     /**
@@ -74,7 +74,7 @@ class Filesystem implements FilesystemInterface
      */
     public function writeStream($path, $resource, array $config = [])
     {
-        if ( ! is_resource($resource)) {
+        if ( ! \is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
@@ -107,7 +107,7 @@ class Filesystem implements FilesystemInterface
      */
     public function putStream($path, $resource, array $config = [])
     {
-        if ( ! is_resource($resource)) {
+        if ( ! \is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
@@ -158,7 +158,7 @@ class Filesystem implements FilesystemInterface
      */
     public function updateStream($path, $resource, array $config = [])
     {
-        if ( ! is_resource($resource)) {
+        if ( ! \is_resource($resource)) {
             throw new InvalidArgumentException(__METHOD__ . ' expects argument #2 to be a valid resource.');
         }
 
@@ -282,7 +282,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (( ! $object = $this->getAdapter()->getMimetype($path)) || ! array_key_exists('mimetype', $object)) {
+        if (( ! $object = $this->getAdapter()->getMimetype($path)) || ! \array_key_exists('mimetype', $object)) {
             return false;
         }
 
@@ -297,7 +297,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (( ! $object = $this->getAdapter()->getTimestamp($path)) || ! array_key_exists('timestamp', $object)) {
+        if (( ! $object = $this->getAdapter()->getTimestamp($path)) || ! \array_key_exists('timestamp', $object)) {
             return false;
         }
 
@@ -312,7 +312,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (( ! $object = $this->getAdapter()->getVisibility($path)) || ! array_key_exists('visibility', $object)) {
+        if (( ! $object = $this->getAdapter()->getVisibility($path)) || ! \array_key_exists('visibility', $object)) {
             return false;
         }
 
@@ -327,7 +327,7 @@ class Filesystem implements FilesystemInterface
         $path = Util::normalizePath($path);
         $this->assertPresent($path);
 
-        if (( ! $object = $this->getAdapter()->getSize($path)) || ! array_key_exists('size', $object)) {
+        if (( ! $object = $this->getAdapter()->getSize($path)) || ! \array_key_exists('size', $object)) {
             return false;
         }
 

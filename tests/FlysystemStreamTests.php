@@ -13,7 +13,7 @@ class FlysystemStreamTests extends TestCase
 
     public function testWriteStream()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
         $adapter->has('file.txt')->willReturn(false)->shouldBeCalled();
         $adapter->writeStream('file.txt', $stream, Argument::type('League\Flysystem\Config'))
@@ -35,7 +35,7 @@ class FlysystemStreamTests extends TestCase
 
     public function testUpdateStream()
     {
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
         $adapter->has('file.txt')->willReturn(true)->shouldBeCalled();
 
@@ -62,13 +62,13 @@ class FlysystemStreamTests extends TestCase
     {
         $adapter = $this->prophesize('League\Flysystem\AdapterInterface');
         $adapter->has(Argument::type('string'))->willReturn(true)->shouldBeCalled();
-        $stream = tmpfile();
+        $stream = \tmpfile();
         $adapter->readStream('file.txt')->willReturn(['stream' => $stream])->shouldBeCalled();
         $adapter->readStream('other.txt')->willReturn(false)->shouldBeCalled();
         $filesystem = new Filesystem($adapter->reveal());
         $this->assertInternalType('resource', $filesystem->readStream('file.txt'));
         $this->assertFalse($filesystem->readStream('other.txt'));
-        fclose($stream);
+        \fclose($stream);
         $this->assertFalse($filesystem->readStream('other.txt'));
     }
 }

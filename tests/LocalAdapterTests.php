@@ -7,31 +7,31 @@ use PHPUnit\Framework\TestCase;
 
 function fopen($result, $mode)
 {
-    if (substr($result, -5) === 'false') {
+    if (\substr($result, -5) === 'false') {
         return false;
     }
 
-    if (substr($result, -10) === 'fail.close') {
+    if (\substr($result, -10) === 'fail.close') {
         return \fopen('data://text/plain,fail.close', $mode);
     }
 
-    return call_user_func_array('fopen', func_get_args());
+    return \call_user_func_array('fopen', \func_get_args());
 }
 
 function fclose($result)
 {
-    if (is_resource($result) && stream_get_contents($result) === 'fail.close') {
+    if (\is_resource($result) && \stream_get_contents($result) === 'fail.close') {
         \fclose($result);
 
         return false;
     }
 
-    return call_user_func_array('fclose', func_get_args());
+    return \call_user_func_array('fclose', \func_get_args());
 }
 
 function chmod($filename, $mode)
 {
-    if (strpos($filename, 'chmod.fail') !== false) {
+    if (\strpos($filename, 'chmod.fail') !== false) {
         return false;
     }
 
@@ -40,11 +40,11 @@ function chmod($filename, $mode)
 
 function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 {
-    if (strpos($pathname, 'fail.plz') !== false) {
+    if (\strpos($pathname, 'fail.plz') !== false) {
         return false;
     }
 
-    return call_user_func_array('mkdir', func_get_args());
+    return \call_user_func_array('mkdir', \func_get_args());
 }
 
 
@@ -77,9 +77,9 @@ class LocalAdapterTests extends TestCase
                 continue;
             }
             if ($file->isDir()) {
-                rmdir($file->getRealPath());
+                \rmdir($file->getRealPath());
             } else {
-                unlink($file->getPathname());
+                \unlink($file->getPathname());
             }
         }
     }
@@ -127,18 +127,18 @@ class LocalAdapterTests extends TestCase
         $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('stream', $result);
         $this->assertInternalType('resource', $result['stream']);
-        fclose($result['stream']);
+        \fclose($result['stream']);
         $adapter->delete('file.txt');
     }
 
     public function testWriteStream()
     {
         $adapter = $this->adapter;
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
-        rewind($temp);
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
+        \rewind($temp);
         $adapter->writeStream('dir/file.txt', $temp, new Config(['visibility' => 'public']));
-        fclose($temp);
+        \fclose($temp);
         $this->assertTrue($adapter->has('dir/file.txt'));
         $result = $adapter->read('dir/file.txt');
         $this->assertEquals('dummy', $result['contents']);
@@ -155,10 +155,10 @@ class LocalAdapterTests extends TestCase
     {
         $adapter = $this->adapter;
         $adapter->write('file.txt', 'initial', new Config());
-        $temp = tmpfile();
-        fwrite($temp, 'dummy');
+        $temp = \tmpfile();
+        \fwrite($temp, 'dummy');
         $adapter->updateStream('file.txt', $temp, new Config());
-        fclose($temp);
+        \fclose($temp);
         $this->assertTrue($adapter->has('file.txt'));
         $adapter->delete('file.txt');
     }
@@ -166,7 +166,7 @@ class LocalAdapterTests extends TestCase
     public function testCreateZeroDir()
     {
         $this->adapter->createDir('0', new Config());
-        $this->assertTrue(is_dir($this->adapter->applyPathPrefix('0')));
+        $this->assertTrue(\is_dir($this->adapter->applyPathPrefix('0')));
         $this->adapter->deleteDir('0');
     }
 
@@ -182,8 +182,8 @@ class LocalAdapterTests extends TestCase
 
     public function testFailingStreamCalls()
     {
-        $this->assertFalse($this->adapter->writeStream('false', tmpfile(), new Config()));
-        $this->assertFalse($this->adapter->writeStream('fail.close', tmpfile(), new Config()));
+        $this->assertFalse($this->adapter->writeStream('false', \tmpfile(), new Config()));
+        $this->assertFalse($this->adapter->writeStream('fail.close', \tmpfile(), new Config()));
     }
 
     public function testNullPrefix()
@@ -213,14 +213,14 @@ class LocalAdapterTests extends TestCase
 
     public function testGetPathPrefix()
     {
-        $this->assertEquals(realpath($this->root), realpath($this->adapter->getPathPrefix()));
+        $this->assertEquals(\realpath($this->root), \realpath($this->adapter->getPathPrefix()));
     }
 
     public function testRenameToNonExistsingDirectory()
     {
         $this->adapter->write('file.txt', 'contents', new Config());
-        $dirname = uniqid();
-        $this->assertFalse(is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
+        $dirname = \uniqid();
+        $this->assertFalse(\is_dir($this->root . DIRECTORY_SEPARATOR . $dirname));
         $this->assertTrue($this->adapter->rename('file.txt', $dirname . '/file.txt'));
     }
 
@@ -232,11 +232,11 @@ class LocalAdapterTests extends TestCase
 
         try {
             $root = $this->root . 'not-writable';
-            mkdir($root, 0000, true);
+            \mkdir($root, 0000, true);
             $this->expectException('LogicException');
             new Local($root);
         } catch (\Exception $e) {
-            rmdir($root);
+            \rmdir($root);
             throw $e;
         }
     }
@@ -301,10 +301,10 @@ class LocalAdapterTests extends TestCase
     public function testDeleteDir()
     {
         $this->adapter->write('nested/dir/path.txt', 'contents', new Config());
-        $this->assertTrue(is_dir(__DIR__ . '/files/nested/dir'));
+        $this->assertTrue(\is_dir(__DIR__ . '/files/nested/dir'));
         $this->adapter->deleteDir('nested');
         $this->assertFalse($this->adapter->has('nested/dir/path.txt'));
-        $this->assertFalse(is_dir(__DIR__ . '/files/nested/dir'));
+        $this->assertFalse(\is_dir(__DIR__ . '/files/nested/dir'));
     }
 
     public function testVisibilityPublicFile()
@@ -320,7 +320,7 @@ class LocalAdapterTests extends TestCase
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
 
-        $this->assertEquals("0644", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
+        $this->assertEquals("0644", \substr(\sprintf('%o', \fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPublicDir()
@@ -349,7 +349,7 @@ class LocalAdapterTests extends TestCase
         $this->assertInternalType('array', $output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
-        $this->assertEquals("0600", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
+        $this->assertEquals("0600", \substr(\sprintf('%o', \fileperms($this->root . 'path.txt')), -4));
     }
 
     public function testVisibilityPrivateDir()
@@ -379,9 +379,9 @@ class LocalAdapterTests extends TestCase
             $this->markTestSkipped("Visibility not supported on Windows.");
         }
 
-        $umask = umask(0);
-        mkdir($this->root . 'subdir', 0750);
-        umask($umask);
+        $umask = \umask(0);
+        \mkdir($this->root . 'subdir', 0750);
+        \umask($umask);
 
         $output = $this->adapter->getVisibility('subdir');
 
@@ -411,7 +411,7 @@ class LocalAdapterTests extends TestCase
         $output = $adapter->getVisibility('private-dir');
 
         $this->assertEquals('private', $output['visibility']);
-        $this->assertEquals('0770', substr(sprintf('%o', fileperms($this->root . 'private-dir')), -4));
+        $this->assertEquals('0770', \substr(\sprintf('%o', \fileperms($this->root . 'private-dir')), -4));
     }
 
     public function testCustomVisibility()
@@ -436,7 +436,7 @@ class LocalAdapterTests extends TestCase
 
         $output = $adapter->getVisibility('yolo-dir');
         $this->assertEquals('yolo', $output['visibility']);
-        $this->assertEquals('0777', substr(sprintf('%o', fileperms($location)), -4));
+        $this->assertEquals('0777', \substr(\sprintf('%o', \fileperms($location)), -4));
     }
 
     public function testFirstVisibilityOctet()
@@ -464,7 +464,7 @@ class LocalAdapterTests extends TestCase
 
         $output = $adapter->getVisibility('sticky-dir');
         $this->assertEquals('sticky', $output['visibility']);
-        $this->assertEquals('1777', substr(sprintf('%o', fileperms($this->root . 'sticky-dir')), -4));
+        $this->assertEquals('1777', \substr(\sprintf('%o', \fileperms($this->root . 'sticky-dir')), -4));
     }
 
     public function testApplyPathPrefix()
@@ -481,11 +481,11 @@ class LocalAdapterTests extends TestCase
 
         $target = $this->root;
         $link = __DIR__ . DIRECTORY_SEPARATOR . 'link_to_files';
-        symlink($target, $link);
+        \symlink($target, $link);
 
         $adapter = new Local($link);
         $this->assertEquals($target, $adapter->getPathPrefix());
-        unlink($link);
+        \unlink($link);
     }
 
     /**
@@ -495,8 +495,8 @@ class LocalAdapterTests extends TestCase
     {
         $original = $this->root . 'original.txt';
         $link = $this->root . 'link.txt';
-        file_put_contents($original, 'something');
-        symlink($original, $link);
+        \file_put_contents($original, 'something');
+        \symlink($original, $link);
         $this->adapter->listContents();
     }
 
@@ -504,8 +504,8 @@ class LocalAdapterTests extends TestCase
     {
         $original = $this->root . 'original.txt';
         $link = $this->root . 'link.txt';
-        file_put_contents($original, 'something');
-        symlink($original, $link);
+        \file_put_contents($original, 'something');
+        \symlink($original, $link);
         $adapter = new Local($this->root, LOCK_EX, Local::SKIP_LINKS);
         $result = $adapter->listContents();
         $this->assertCount(1, $result);
@@ -513,16 +513,16 @@ class LocalAdapterTests extends TestCase
 
     public function testLinksAreDeletedDuringDeleteDir()
     {
-        mkdir($this->root . 'subdir', 0777, true);
+        \mkdir($this->root . 'subdir', 0777, true);
         $original = $this->root . 'original.txt';
         $link = $this->root . 'subdir/link.txt';
-        file_put_contents($original, 'something');
-        symlink($original, $link);
+        \file_put_contents($original, 'something');
+        \symlink($original, $link);
         $adapter = new Local($this->root, LOCK_EX, Local::SKIP_LINKS);
 
-        $this->assertTrue(is_link($link));
+        $this->assertTrue(\is_link($link));
         $adapter->deleteDir('subdir');
-        $this->assertFalse(is_link($link));
+        $this->assertFalse(\is_link($link));
     }
 
     public function testUnreadableFilesCauseAnError()
@@ -549,7 +549,7 @@ class LocalAdapterTests extends TestCase
     public function testDeleteFileShouldReturnTrue()
     {
         $original = $this->root . 'delete.txt';
-        file_put_contents($original, 'something');
+        \file_put_contents($original, 'something');
         $this->assertTrue($this->adapter->delete('delete.txt'));
     }
 

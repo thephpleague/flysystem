@@ -17,7 +17,7 @@ abstract class FtpIntegrationTestCase extends TestCase
      */
     public function testInstantiable()
     {
-        if ( ! defined('FTP_BINARY')) {
+        if ( ! \defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
     }
@@ -32,7 +32,7 @@ abstract class FtpIntegrationTestCase extends TestCase
      */
     public function setup_filesystem()
     {
-        if ( ! defined('FTP_BINARY')) {
+        if ( ! \defined('FTP_BINARY')) {
             return;
         }
         $adapter = $this->setup_adapter();

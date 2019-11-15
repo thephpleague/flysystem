@@ -28,10 +28,10 @@ class AdaptersThatCanOverwriteFilesTest extends TestCase
     public function overwriting_files_with_putStream()
     {
         $filesystem = new Filesystem($adapter = new FileOverwritingAdapterStub());
-        $stream = tmpfile();
-        fwrite($stream, 'stream contents');
+        $stream = \tmpfile();
+        \fwrite($stream, 'stream contents');
         $filesystem->putStream('path.txt', $stream);
-        fclose($stream);
+        \fclose($stream);
 
         $this->assertEquals('path.txt', $adapter->writtenPath);
         $this->assertEquals('stream contents', $adapter->writtenContents);

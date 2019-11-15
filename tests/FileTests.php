@@ -13,7 +13,7 @@ class FileTests extends TestCase
 
     public function setup()
     {
-        clearstatcache();
+        \clearstatcache();
         $fs = new Adapter\Local(__DIR__ . '/');
         $fs->deleteDir('files');
         $fs->createDir('files', new Config());
@@ -69,8 +69,8 @@ class FileTests extends TestCase
     {
         $file = new File();
         $this->filesystem->get('files/new.txt', $file);
-        $resource = tmpfile();
-        fwrite($resource, 'stream contents');
+        $resource = \tmpfile();
+        \fwrite($resource, 'stream contents');
         $file->writeStream($resource);
         $this->assertEquals('stream contents', $file->read());
     }
@@ -85,10 +85,10 @@ class FileTests extends TestCase
     public function testUpdateStream()
     {
         $file = $this->getFile();
-        $resource = tmpfile();
-        fwrite($resource, 'stream contents');
+        $resource = \tmpfile();
+        \fwrite($resource, 'stream contents');
         $file->updateStream($resource);
-        fclose($resource);
+        \fclose($resource);
         $this->assertEquals('stream contents', $file->read());
     }
 
@@ -107,17 +107,17 @@ class FileTests extends TestCase
         $file = new File();
         $this->filesystem->get('files/new.txt', $file);
 
-        $resource = tmpfile();
-        fwrite($resource, 'stream contents');
+        $resource = \tmpfile();
+        \fwrite($resource, 'stream contents');
         $file->putStream($resource);
-        fclose($resource);
+        \fclose($resource);
 
         $this->assertEquals('stream contents', $file->read());
 
-        $resource = tmpfile();
-        fwrite($resource, 'updated stream contents');
+        $resource = \tmpfile();
+        \fwrite($resource, 'updated stream contents');
         $file->putStream($resource);
-        fclose($resource);
+        \fclose($resource);
 
         $this->assertEquals('updated stream contents', $file->read());
     }

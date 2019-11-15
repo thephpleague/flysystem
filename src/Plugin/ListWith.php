@@ -29,8 +29,8 @@ class ListWith extends AbstractPlugin
 
         foreach ($contents as $index => $object) {
             if ($object['type'] === 'file') {
-                $missingKeys = array_diff($keys, array_keys($object));
-                $contents[$index] = array_reduce($missingKeys, [$this, 'getMetadataByName'], $object);
+                $missingKeys = \array_diff($keys, \array_keys($object));
+                $contents[$index] = \array_reduce($missingKeys, [$this, 'getMetadataByName'], $object);
             }
         }
 
@@ -47,9 +47,9 @@ class ListWith extends AbstractPlugin
      */
     protected function getMetadataByName(array $object, $key)
     {
-        $method = 'get' . ucfirst($key);
+        $method = 'get' . \ucfirst($key);
 
-        if ( ! method_exists($this->filesystem, $method)) {
+        if ( ! \method_exists($this->filesystem, $method)) {
             throw new \InvalidArgumentException('Could not get meta-data for key: ' . $key);
         }
 

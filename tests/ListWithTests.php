@@ -23,7 +23,7 @@ class ListWithTests extends TestCase
         $this->assertEquals('listWith', $plugin->getMethod());
         $listing = $plugin->handle(['mimetype'], '', true);
         $this->assertContainsOnly('array', $listing, true);
-        $first = reset($listing);
+        $first = \reset($listing);
         $this->assertArrayHasKey('mimetype', $first);
     }
 

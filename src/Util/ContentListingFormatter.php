@@ -30,7 +30,7 @@ class ContentListingFormatter
      */
     public function __construct($directory, $recursive, $caseSensitive = true)
     {
-        $this->directory = rtrim($directory, '/');
+        $this->directory = \rtrim($directory, '/');
         $this->recursive = $recursive;
         $this->caseSensitive = $caseSensitive;
     }
@@ -44,9 +44,9 @@ class ContentListingFormatter
      */
     public function formatListing(array $listing)
     {
-        $listing = array_filter(array_map([$this, 'addPathInfo'], $listing), [$this, 'isEntryOutOfScope']);
+        $listing = \array_filter(\array_map([$this, 'addPathInfo'], $listing), [$this, 'isEntryOutOfScope']);
 
-        return $this->sortListing(array_values($listing));
+        return $this->sortListing(\array_values($listing));
     }
 
     private function addPathInfo(array $entry)
@@ -88,8 +88,8 @@ class ContentListingFormatter
         }
 
         return $this->caseSensitive
-            ? strpos($entry['path'], $this->directory . '/') === 0
-            : stripos($entry['path'], $this->directory . '/') === 0;
+            ? \strpos($entry['path'], $this->directory . '/') === 0
+            : \stripos($entry['path'], $this->directory . '/') === 0;
     }
 
     /**
@@ -103,7 +103,7 @@ class ContentListingFormatter
     {
         return $this->caseSensitive
             ? $entry['dirname'] === $this->directory
-            : strcasecmp($this->directory, $entry['dirname']) === 0;
+            : \strcasecmp($this->directory, $entry['dirname']) === 0;
     }
 
     /**
@@ -113,8 +113,8 @@ class ContentListingFormatter
      */
     private function sortListing(array $listing)
     {
-        usort($listing, function ($a, $b) {
-            return strcasecmp($a['path'], $b['path']);
+        \usort($listing, function ($a, $b) {
+            return \strcasecmp($a['path'], $b['path']);
         });
 
         return $listing;

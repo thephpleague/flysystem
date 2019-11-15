@@ -36,10 +36,10 @@ class GetWithMetadata extends AbstractPlugin
             return false;
         }
 
-        $keys = array_diff($metadata, array_keys($object));
+        $keys = \array_diff($metadata, \array_keys($object));
 
         foreach ($keys as $key) {
-            if ( ! method_exists($this->filesystem, $method = 'get' . ucfirst($key))) {
+            if ( ! \method_exists($this->filesystem, $method = 'get' . \ucfirst($key))) {
                 throw new InvalidArgumentException('Could not fetch metadata: ' . $key);
             }
 

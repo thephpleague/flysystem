@@ -34,7 +34,7 @@ class Config
      */
     public function get($key, $default = null)
     {
-        if ( ! array_key_exists($key, $this->settings)) {
+        if ( ! \array_key_exists($key, $this->settings)) {
             return $this->getDefault($key, $default);
         }
 
@@ -50,7 +50,7 @@ class Config
      */
     public function has($key)
     {
-        if (array_key_exists($key, $this->settings)) {
+        if (\array_key_exists($key, $this->settings)) {
             return true;
         }
 

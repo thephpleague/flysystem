@@ -16,7 +16,7 @@ final class SafeStorage
 
     public function __construct()
     {
-        $this->hash = spl_object_hash($this);
+        $this->hash = \spl_object_hash($this);
         static::$safeStorage[$this->hash] = [];
     }
 
@@ -27,7 +27,7 @@ final class SafeStorage
 
     public function retrieveSafely($key)
     {
-        if (array_key_exists($key, static::$safeStorage[$this->hash])) {
+        if (\array_key_exists($key, static::$safeStorage[$this->hash])) {
             return static::$safeStorage[$this->hash][$key];
         }
     }

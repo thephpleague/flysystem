@@ -92,7 +92,7 @@ class NullAdapterTest extends TestCase
     public function testArrayResult($method)
     {
         $adapter = new NullAdapter();
-        $this->assertInternalType('array', $adapter->{$method}('one', tmpfile(), new Config(['visibility' => 'public'])));
+        $this->assertInternalType('array', $adapter->{$method}('one', \tmpfile(), new Config(['visibility' => 'public'])));
     }
 
     public function testArrayResultForCreateDir()

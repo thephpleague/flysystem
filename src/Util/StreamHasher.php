@@ -26,11 +26,11 @@ class StreamHasher
      */
     public function hash($resource)
     {
-        rewind($resource);
-        $context = hash_init($this->algo);
-        hash_update_stream($context, $resource);
-        fclose($resource);
+        \rewind($resource);
+        $context = \hash_init($this->algo);
+        \hash_update_stream($context, $resource);
+        \fclose($resource);
 
-        return hash_final($context);
+        return \hash_final($context);
     }
 }

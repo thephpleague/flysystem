@@ -75,7 +75,7 @@ class MountManagerTests extends TestCase
         $manager->mountFilesystem('fs2', $fs2->reveal());
 
         $filename = 'test1.txt';
-        $buffer = tmpfile();
+        $buffer = \tmpfile();
         $fs1->readStream($filename)->willReturn($buffer)->shouldBeCalledTimes(1);
         $fs2->writeStream($filename, $buffer, [])->willReturn(true)->shouldBeCalledTimes(1);
         $response = $manager->copy("fs1://{$filename}", "fs2://{$filename}");
@@ -109,7 +109,7 @@ class MountManagerTests extends TestCase
         $manager->mountFilesystem('fs2', $fs2->reveal());
 
         $filename = 'test.txt';
-        $buffer = tmpfile();
+        $buffer = \tmpfile();
         $fs1->readStream($filename)->willReturn($buffer);
         $fs2->writeStream($filename, $buffer, [])->willReturn(false);
         $result = $manager->move("fs1://{$filename}", "fs2://{$filename}");
@@ -125,7 +125,7 @@ class MountManagerTests extends TestCase
         $manager->mountFilesystem('fs2', $fs2->reveal());
 
         $filename = 'test.txt';
-        $buffer = tmpfile();
+        $buffer = \tmpfile();
         $fs1->readStream($filename)->willReturn($buffer);
         $fs2->writeStream($filename, $buffer, [])->willReturn(true);
         $fs1->delete($filename)->willReturn(true);
@@ -226,7 +226,7 @@ class MountManagerTests extends TestCase
         $expectedCall = FilesystemSpy::class . '::' . $method;
         $callingArguments = $arguments;
         $callingArguments[0] = "local://{$callingArguments[0]}";
-        call_user_func_array([$mountManager, $method], $callingArguments);
+        \call_user_func_array([$mountManager, $method], $callingArguments);
 
         $this->assertEquals([$expectedCall, $arguments], $filesystem->lastCall);
     }

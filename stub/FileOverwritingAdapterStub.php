@@ -25,7 +25,7 @@ class FileOverwritingAdapterStub implements AdapterInterface, CanOverwriteFiles
     public function writeStream($path, $resource, Config $config)
     {
         $this->writtenPath = $path;
-        $this->writtenContents = stream_get_contents($resource);
+        $this->writtenContents = \stream_get_contents($resource);
 
         return true;
     }

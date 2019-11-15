@@ -14,8 +14,8 @@ class StreamedReadingTraitTests extends TestCase
         $stub = new StreamedReadingStub();
         $result = $stub->readStream($input = 'true.ext');
         $this->assertInternalType('resource', $result['stream']);
-        $this->assertEquals($input, stream_get_contents($result['stream']));
-        fclose($result['stream']);
+        $this->assertEquals($input, \stream_get_contents($result['stream']));
+        \fclose($result['stream']);
     }
 
     public function testStreamReadFail()

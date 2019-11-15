@@ -196,7 +196,7 @@ class MimeType
      */
     public static function detectByContent($content)
     {
-        if ( ! class_exists('finfo') || ! is_string($content)) {
+        if ( ! \class_exists('finfo') || ! \is_string($content)) {
             return null;
         }
         try {
@@ -230,7 +230,7 @@ class MimeType
      */
     public static function detectByFilename($filename)
     {
-        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $extension = \strtolower(\pathinfo($filename, PATHINFO_EXTENSION));
 
         return empty($extension) ? 'text/plain' : static::detectByFileExtension($extension);
     }
