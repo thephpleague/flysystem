@@ -125,7 +125,7 @@ param         | description                                   | type
 
 ---
 
-## Check if a file exists
+## Check if a file or directory exists
 
 ```php
 $exists = $filesystem->has($path);
@@ -133,8 +133,8 @@ $exists = $filesystem->has($path);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$exists`     | whether the file exists                       | `bool`
+`$path`       | location of a file/directory                  | `string`
+`$exists`     | whether it exists                             | `bool`
 
 > This only has consistent behaviour for files, not directories. Directories
 > are less important in Flysystem, they're created implicitly and often ignored because
@@ -142,7 +142,7 @@ param         | description                                   | type
 
 ---
 
-## Delete Files
+## Delete Files or Directories
 
 ```php
 $response = $filesystem->delete($path);
@@ -150,7 +150,7 @@ $response = $filesystem->delete($path);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
+`$path`       | location of a file/directory                  | `string`
 `$response`   | success boolean                               | `bool`
 
 ---
@@ -168,7 +168,7 @@ param         | description                                   | type
 
 ---
 
-## Rename Files
+## Rename Files or Directories
 
 ```php
 $response = $filesystem->rename($from, $to);
@@ -176,13 +176,13 @@ $response = $filesystem->rename($from, $to);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$from`       | location of a file                            | `string`
+`$from`       | location of a file/directory                  | `string`
 `$to`         | new location                                  | `string`
 `$response`   | success boolean                               | `bool`
 
 ---
 
-## Copy Files
+## Copy Files or Directories
 
 ```php
 $response = $filesystem->copy($from, $to);
@@ -190,7 +190,7 @@ $response = $filesystem->copy($from, $to);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$from`       | location of a file                            | `string`
+`$from`       | location of a file/directory                  | `string`
 `$to`         | new location                                  | `string`
 `$response`   | success boolean                               | `bool`
 
