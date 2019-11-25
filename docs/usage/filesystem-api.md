@@ -78,7 +78,7 @@ $response = $filesystem->put($path, $contents [, $config]);
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
 `$path`       | location of a file                            | `string`
-`$config`     | An optional configuration array               | `array`
+`$contents`   | file contents                                 | `string`
 `$config`     | An optional configuration array               | `array`
 `$response`   | success boolean                               | `bool`
 
