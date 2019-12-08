@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.58 - 2019-12-08
+
+* Release lock on directories before removing them because issue with vagrant mounting.
+
 ## 1.0.57 - 2019-10-16
 
 * Added more missing mime-types.
