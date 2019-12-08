@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.60 - 2019-12-08
+
+* Fixed a PHP 7.4 issue where an array key was accessed for a non-array variable (#1105)
+
 ## 1.0.59 - 2019-12-08
 
 * Ensure emulating directories respects a directory named "0".
