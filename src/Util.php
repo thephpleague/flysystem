@@ -291,7 +291,7 @@ class Util
             $listedDirectories[] = $object['path'];
         }
 
-        if (!isset($object['dirname']) || trim($object['dirname']) === '') {
+        if ( ! isset($object['dirname']) || trim($object['dirname']) === '') {
             return [$directories, $listedDirectories];
         }
 
