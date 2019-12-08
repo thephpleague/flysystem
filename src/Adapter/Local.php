@@ -286,8 +286,8 @@ class Local extends AbstractAdapter
 
             $result[] = $this->normalizeFileInfo($file);
         }
-        
-        $iterator = null;
+
+        unset($iterator);
 
         return array_filter($result);
     }
@@ -413,8 +413,8 @@ class Local extends AbstractAdapter
             $this->guardAgainstUnreadableFileInfo($file);
             $this->deleteFileInfoObject($file);
         }
-        
-        $contents = null;
+
+        unset($contents);
 
         return rmdir($location);
     }
