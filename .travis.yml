@@ -46,15 +46,15 @@ matrix:
       env: COMPOSER_OPTS="--prefer-lowest"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS=""
+      env: COMPOSER_OPTS="--ignore-platform-reqs"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
   allow_failures:
     - php: nightly
-      env: COMPOSER_OPTS=""
+      env: COMPOSER_OPTS="--ignore-platform-reqs"
     - php: nightly
-      env: COMPOSER_OPTS="--prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
 
 before_install:
   - mkdir tests/files
