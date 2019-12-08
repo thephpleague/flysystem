@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.61 - 2019-12-08
+
+* Fixed an array access issue for PHP 7.4 (#1106)
+
 ## 1.0.60 - 2019-12-08
 
 * Fixed a PHP 7.4 issue where an array key was accessed for a non-array variable (#1105)
