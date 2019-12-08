@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.59 - 2019-12-08
+
+* Ensure emulating directories respects a directory named "0".
+
 ## 1.0.58 - 2019-12-08
 
 * Release lock on directories before removing them because issue with vagrant mounting.
