@@ -4,26 +4,57 @@ matrix:
   include:
     - php: 5.5
       dist: trusty
+      env: COMPOSER_OPTS=""
+    - php: 5.5
+      dist: trusty
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 5.6
       dist: xenial
+      env: COMPOSER_OPTS=""
+    - php: 5.6
+      dist: xenial
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 7.0
       dist: xenial
+      env: COMPOSER_OPTS=""
+    - php: 7.0
+      dist: xenial
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 7.1
       dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.1
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 7.2
       dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.2
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 7.3
       dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.3
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: 7.4
       dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.4
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
     - php: nightly
       dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: nightly
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
   allow_failures:
     - php: nightly
-
-env:
-  - COMPOSER_OPTS=""
-  - COMPOSER_OPTS="--prefer-lowest"
+      env: COMPOSER_OPTS=""
+    - php: nightly
+      env: COMPOSER_OPTS="--prefer-lowest"
 
 before_install:
   - mkdir tests/files
