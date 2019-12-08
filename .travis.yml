@@ -18,10 +18,8 @@ matrix:
       dist: bionic
     - php: nightly
       dist: bionic
-
-matrix:
   allow_failures:
-  - php: nightly
+    - php: nightly
 
 env:
   - COMPOSER_OPTS=""
