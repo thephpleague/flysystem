@@ -4,30 +4,27 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use function array_merge;
+
 class Config
 {
     /**
      * @var array
      */
-    private $values;
+    private $options;
 
-    public function __construct(array $values = [])
+    public function __construct(array $options = [])
     {
-        $this->values = $values;
+        $this->options = $options;
     }
 
     public function get(string $property, $default = null)
     {
-        return $this->values[$property] ?? $default;
+        return $this->options[$property] ?? $default;
     }
 
-    public static function merge(Config ...$configs): Config
+    public function withOption(array $options): Config
     {
-        $values = [];
-        foreach ($configs as $config) {
-            $values[] = $config->values;
-        }
-
-        return new static(array_merge([], ...$values));
+        return new static(array_merge($this->options, $options));
     }
 }

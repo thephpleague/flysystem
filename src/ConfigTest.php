@@ -23,6 +23,7 @@ class ConfigTest extends TestCase
     public function a_config_object_returns_a_default_value()
     {
         $config = new Config();
+
         $this->assertNull($config->get('option'));
         $this->assertEquals('default', $config->get('option', 'default'));
     }
@@ -30,14 +31,13 @@ class ConfigTest extends TestCase
     /**
      * @test
      */
-    public function config_objects_can_be_merged()
+    public function extending_a_config_with_options()
     {
-        $c1 = new Config(['option' => 'value', 'first' => 1]);
-        $c2 = new Config(['option' => 'overwritten', 'second' => 2]);
-        $merged = Config::merge($c1, $c2);
+        $config = new Config(['option' => 'value', 'first' => 1]);
+        $extended = $config->withOption(['option' => 'overwritten', 'second' => 2]);
 
-        $this->assertEquals('overwritten', $merged->get('option'));
-        $this->assertEquals(1, $merged->get('first'));
-        $this->assertEquals(2, $merged->get('second'));
+        $this->assertEquals('overwritten', $extended->get('option'));
+        $this->assertEquals(1, $extended->get('first'));
+        $this->assertEquals(2, $extended->get('second'));
     }
 }
