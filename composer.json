@@ -1,0 +1,24 @@
+{
+    "name": "flysystem/filesystem",
+    "description": "flysystem/filesystem",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\": "src"
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "ext-fileinfo": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frenky.net"
+        }
+    ]
+}
