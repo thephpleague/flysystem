@@ -32,6 +32,8 @@ interface FilesystemAdapter
 
     public function createDirectory(string $location, Config $config): void;
 
+    public function setVisibility(string $location, string $visibility): void;
+
     public function listContents(string $location): Generator;
 
     public function rename(string $source, string $destination): void;

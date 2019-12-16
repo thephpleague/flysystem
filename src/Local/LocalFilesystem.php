@@ -8,8 +8,10 @@ use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
-use RuntimeException;
 
 use function array_replace_recursive;
 use function clearstatcache;
@@ -17,7 +19,6 @@ use function dirname;
 use function error_get_last;
 use function file_exists;
 use function is_dir;
-use function sprintf;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -66,6 +67,11 @@ class LocalFilesystem implements FilesystemAdapter
      */
     private $linkHandling;
 
+    /**
+     * @var string
+     */
+    private $directoryVisibility;
+
     public function __construct(
         string $location,
         int $writeFlags = LOCK_EX,
@@ -78,16 +84,30 @@ class LocalFilesystem implements FilesystemAdapter
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
         $this->ensureDirectoryExists($location, $directoryVisibility);
+        $this->directoryVisibility = $directoryVisibility;
     }
 
     public function write(string $location, string $contents, Config $config): void
     {
-        $location = $this->pathPrefixer->prefixPath($location);
-        $this->ensureDirectoryExists(dirname($location));
+        $prefixedLocation = $this->pathPrefixer->prefixPath($location);
+        $this->ensureDirectoryExists(
+            dirname($prefixedLocation),
+            (string) $config->get('directory_visibility', $this->directoryVisibility)
+        );
+        error_clear_last();
+
+        if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
+            throw UnableToWriteFile::toLocation($location, error_get_last()['message'] ?? '');
+        }
     }
 
     public function writeStream(string $location, $contents, Config $config): void
     {
+        $location = $this->pathPrefixer->prefixPath($location);
+        $this->ensureDirectoryExists(
+            dirname($location),
+            (string) $config->get('directory_visibility', $this->directoryVisibility)
+        );
     }
 
     public function update(string $location, string $contents, Config $config): void
@@ -138,9 +158,7 @@ class LocalFilesystem implements FilesystemAdapter
             clearstatcache(false, $dirname);
             if ( ! is_dir($dirname)) {
                 $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
-                throw new RuntimeException(
-                    sprintf('Impossible to create the root directory "%s". %s', $dirname, $errorMessage)
-                );
+                throw UnableToCreateDirectory::atLocation($dirname, $errorMessage);
             }
         }
     }
@@ -154,5 +172,15 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function createDirectory(string $location, Config $config): void
     {
+    }
+
+    public function setVisibility(string $location, string $visibility): void
+    {
+        $location = $this->pathPrefixer->prefixPath($location);
+        $type = is_dir($location) ? 'dir' : 'file';
+
+        if ( ! chmod($location, $this->permissions[$type][$visibility])) {
+            throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location));
+        }
     }
 }
