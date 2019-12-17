@@ -16,9 +16,12 @@ use League\Flysystem\Visibility;
 use function chmod;
 use function clearstatcache;
 use function dirname;
+use function error_clear_last;
 use function error_get_last;
 use function file_exists;
 use function is_dir;
+
+use function stream_copy_to_stream;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -94,11 +97,17 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function writeStream(string $location, $contents, Config $config): void
     {
-        $location = $this->pathPrefixer->prefixPath($location);
+        $path = $this->pathPrefixer->prefixPath($location);
         $this->ensureDirectoryExists(
-            dirname($location),
+            dirname($path),
             $this->resolveDirectoryVisibility($config->get('directory_visibility'))
         );
+
+        $stream = fopen($path, 'w+b');
+
+        if ( ! ($stream && stream_copy_to_stream($contents, $stream) && fclose($stream))) {
+            throw UnableToWriteFile::toLocation($path);
+        }
 
         if ($visibility = $config->get('visibility')) {
             $this->setVisibility($location, (string) $visibility);
@@ -176,8 +185,10 @@ class LocalFilesystem implements FilesystemAdapter
             ? $this->visibility->forDirectory($visibility)
             : $this->visibility->forFile($visibility);
 
-        if ( ! chmod($location, $visibility)) {
-            throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location));
+        error_clear_last();
+        if ( ! @chmod($location, $visibility)) {
+            $extraMessage = error_get_last()['message'] ?? '';
+            throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location), $extraMessage);
         }
     }
 

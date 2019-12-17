@@ -15,9 +15,9 @@ class UnableToSetVisibility extends RuntimeException implements FilesystemOperat
      */
     private $location;
 
-    public static function atLocation(string $filename)
+    public static function atLocation(string $filename, string $extraMessage = '')
     {
-        $message = "'Unable to set visibility for file {$filename}.";
+        $message = "'Unable to set visibility for file {$filename}. $extraMessage";
         $e = new static(rtrim($message));
         $e->location = $filename;
 

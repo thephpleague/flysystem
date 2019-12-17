@@ -10,9 +10,9 @@ class UnableToWriteFile extends RuntimeException implements FilesystemOperationF
 {
     private $location = '';
 
-    public static function toLocation(string $location, string $message)
+    public static function toLocation(string $location, string $extraMessage = '')
     {
-        $e = new static("Unable to write to location: {$location}. {$message}");
+        $e = new static(rtrim("Unable to write to location: {$location}. {$extraMessage}"));
         $e->location;
 
         return $e;
