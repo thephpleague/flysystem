@@ -10,7 +10,14 @@ use League\Flysystem\UnableToWriteFile;
 use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
+use function fileperms;
 use function is_dir;
+use function octdec;
+use function sprintf;
+use function substr;
+use function var_dump;
+
+use const LOCK_EX;
 
 class LocalFilesystemTest extends TestCase
 {
@@ -73,6 +80,22 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileExists(static::ROOT . '/file.txt');
         $contents = file_get_contents(static::ROOT . '/file.txt');
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function writing_a_file_with_visibility()
+    {
+        $adapter = new LocalFilesystem(static::ROOT, ['file' => ['public' => 0644]]);
+        $adapter->write('/file.txt', 'contents', new Config(['visibility' => 'private']));
+        $this->assertFileExists(static::ROOT . '/file.txt');
+        $contents = file_get_contents(static::ROOT . '/file.txt');
+        $this->assertEquals('contents', $contents);
+
+        clearstatcache(false, static::ROOT . '/file.txt');
+        $permissions = fileperms(static::ROOT . '/file.txt') & 0777;
+        $this->assertEquals(0600, $permissions);
     }
 
     /**

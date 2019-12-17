@@ -10,10 +10,13 @@ final class Visibility
 {
     public const PUBLIC = 'public';
     public const PRIVATE = 'private';
+    public const UNKNOWN = 'unknown';
 
-    public static function exists(string $input): bool
+    public static function exists(string $visibility): bool
     {
-        return $input === self::PUBLIC || $input === self::PRIVATE;
+        return $visibility === self::PUBLIC
+            || $visibility === self::PRIVATE
+            || $visibility === self::UNKNOWN;
     }
 
     public static function guardAgainstInvalidVisibility(string $input)

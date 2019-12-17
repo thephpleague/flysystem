@@ -34,6 +34,8 @@ interface FilesystemAdapter
 
     public function setVisibility(string $location, string $visibility): void;
 
+    public function getVisibility(string $location, string $visibility): string;
+
     public function listContents(string $location): Generator;
 
     public function rename(string $source, string $destination): void;

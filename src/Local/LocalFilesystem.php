@@ -14,6 +14,7 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
 use function array_replace_recursive;
+use function chmod;
 use function clearstatcache;
 use function dirname;
 use function error_get_last;
@@ -74,9 +75,9 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function __construct(
         string $location,
+        array $permissions = [],
         int $writeFlags = LOCK_EX,
         int $linkHandling = self::DISALLOW_LINKS,
-        array $permissions = [],
         string $directoryVisibility = Visibility::PUBLIC
     ) {
         $this->pathPrefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
@@ -99,6 +100,10 @@ class LocalFilesystem implements FilesystemAdapter
         if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
             throw UnableToWriteFile::toLocation($location, error_get_last()['message'] ?? '');
         }
+
+        if ($visibility = $config->get('visibility')) {
+            $this->setVisibility($location, (string) $visibility);
+        }
     }
 
     public function writeStream(string $location, $contents, Config $config): void
@@ -108,6 +113,10 @@ class LocalFilesystem implements FilesystemAdapter
             dirname($location),
             (string) $config->get('directory_visibility', $this->directoryVisibility)
         );
+
+        if ($visibility = $config->get('visibility')) {
+            $this->setVisibility($location, (string) $visibility);
+        }
     }
 
     public function update(string $location, string $contents, Config $config): void
@@ -179,8 +188,12 @@ class LocalFilesystem implements FilesystemAdapter
         $location = $this->pathPrefixer->prefixPath($location);
         $type = is_dir($location) ? 'dir' : 'file';
 
-        if ( ! chmod($location, $this->permissions[$type][$visibility])) {
+        if ( ! (chmod($location, $this->permissions[$type][$visibility]))) {
             throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location));
         }
+    }
+
+    public function getVisibility(string $location, string $visibility): string
+    {
     }
 }

@@ -16,6 +16,7 @@ class VisibilityTest extends TestCase
     {
         $this->assertTrue(Visibility::exists('public'));
         $this->assertTrue(Visibility::exists('private'));
+        $this->assertTrue(Visibility::exists('unknown'));
         $this->assertFalse(Visibility::exists('something-else'));
     }
 
