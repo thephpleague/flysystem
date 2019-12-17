@@ -32,9 +32,6 @@ matrix:
     - php: nightly
       env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
 
-before_install:
-  - mkdir tests/files
-
 install:
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
