@@ -1,0 +1,52 @@
+language: php
+
+matrix:
+  include:
+    - php: 7.2
+      dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.2
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
+    - php: 7.3
+      dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.3
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
+    - php: 7.4
+      dist: bionic
+      env: COMPOSER_OPTS=""
+    - php: 7.4
+      dist: bionic
+      env: COMPOSER_OPTS="--prefer-lowest"
+    - php: nightly
+      dist: bionic
+      env: COMPOSER_OPTS="--ignore-platform-reqs"
+    - php: nightly
+      dist: bionic
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+  allow_failures:
+    - php: nightly
+      env: COMPOSER_OPTS="--ignore-platform-reqs"
+    - php: nightly
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+
+before_install:
+  - mkdir tests/files
+
+install:
+  - travis_retry composer update --prefer-dist $COMPOSER_OPTS
+
+#before_script:
+#  - docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
+#  - php wait_for_ftp_service.php
+#  - docker exec -it ftpd_server sh -c "(echo test; echo test) | pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob"
+#  - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
+
+script:
+  - vendor/bin/phpunit --coverage-text
+
+#after_script:
+#  - wget https://scrutinizer-ci.com/ocular.phar
+#  - php ocular.phar code-coverage:upload --format=php-clover coverage.xml

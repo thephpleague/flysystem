@@ -13,7 +13,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
-use function array_replace_recursive;
 use function chmod;
 use function clearstatcache;
 use function dirname;
@@ -34,29 +33,11 @@ class LocalFilesystem implements FilesystemAdapter
      * @var int
      */
     public const DISALLOW_LINKS = 0002;
-    /**
-     * @var array
-     */
-    protected const PERMISSIONS = [
-        'file' => [
-            Visibility::PUBLIC  => 0644,
-            Visibility::PRIVATE => 0600,
-        ],
-        'dir'  => [
-            Visibility::PUBLIC  => 0755,
-            Visibility::PRIVATE => 0700,
-        ],
-    ];
 
     /**
      * @var PathPrefixer
      */
     private $pathPrefixer;
-
-    /**
-     * @var array
-     */
-    private $permissions = [];
 
     /**
      * @var int
@@ -73,18 +54,23 @@ class LocalFilesystem implements FilesystemAdapter
      */
     private $directoryVisibility;
 
+    /**
+     * @var LocalVisibilityInterpreting
+     */
+    private $visibility;
+
     public function __construct(
         string $location,
-        array $permissions = [],
+        LocalVisibilityInterpreting $visibilityHandler = null,
         int $writeFlags = LOCK_EX,
         int $linkHandling = self::DISALLOW_LINKS,
         string $directoryVisibility = Visibility::PUBLIC
     ) {
         $this->pathPrefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
-        $this->permissions = array_replace_recursive(static::PERMISSIONS, $permissions);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
-        $this->ensureDirectoryExists($location, $directoryVisibility);
+        $this->visibility = $visibilityHandler ?: new PublicAndPrivateVisibilityInterpreting();
+        $this->ensureDirectoryExists($location, $this->visibility->defaultForDirectories());
         $this->directoryVisibility = $directoryVisibility;
     }
 
@@ -93,7 +79,7 @@ class LocalFilesystem implements FilesystemAdapter
         $prefixedLocation = $this->pathPrefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($prefixedLocation),
-            (string) $config->get('directory_visibility', $this->directoryVisibility)
+            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
         );
         error_clear_last();
 
@@ -111,7 +97,7 @@ class LocalFilesystem implements FilesystemAdapter
         $location = $this->pathPrefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($location),
-            (string) $config->get('directory_visibility', $this->directoryVisibility)
+            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
         );
 
         if ($visibility = $config->get('visibility')) {
@@ -158,10 +144,10 @@ class LocalFilesystem implements FilesystemAdapter
     {
     }
 
-    protected function ensureDirectoryExists(string $dirname, string $visibility)
+    protected function ensureDirectoryExists(string $dirname, int $visibility)
     {
         if ( ! is_dir($dirname)) {
-            if ( ! @mkdir($dirname, $this->permissions['dir'][$visibility], true)) {
+            if ( ! @mkdir($dirname, $visibility, true)) {
                 $mkdirError = error_get_last();
             }
             clearstatcache(false, $dirname);
@@ -183,17 +169,26 @@ class LocalFilesystem implements FilesystemAdapter
     {
     }
 
-    public function setVisibility(string $location, string $visibility): void
+    public function setVisibility(string $location, $visibility): void
     {
         $location = $this->pathPrefixer->prefixPath($location);
-        $type = is_dir($location) ? 'dir' : 'file';
+        $visibility = is_dir($location)
+            ? $this->visibility->forDirectory($visibility)
+            : $this->visibility->forFile($visibility);
 
-        if ( ! (chmod($location, $this->permissions[$type][$visibility]))) {
+        if ( ! chmod($location, $visibility)) {
             throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location));
         }
     }
 
     public function getVisibility(string $location, string $visibility): string
     {
+    }
+
+    private function resolveDirectoryVisibility($visibility)
+    {
+        return $visibility === null ? $this->visibility->defaultForDirectories() : $this->visibility->forDirectory(
+            $visibility
+        );
     }
 }
