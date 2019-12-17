@@ -7,7 +7,10 @@ namespace League\Flysystem;
 interface FilesystemOperationFailed extends FlysystemException
 {
     public const OPERATION_WRITE = 'WRITE';
+    public const OPERATION_UPDATE = 'UPDATE';
     public const OPERATION_CREATE_DIRECTORY = 'CREATE_DIRECTORY';
+    public const OPERATION_DELETE = 'DELETE';
+    public const OPERATION_DELETE_DIRECTORY = 'DELETE_DIRECTORY';
 
     public function operationType(): string;
 }

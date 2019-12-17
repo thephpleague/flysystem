@@ -6,11 +6,13 @@ namespace League\Flysystem\Local;
 
 use League\Flysystem\Config;
 use League\Flysystem\UnableToCreateDirectory;
-use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
+use function file_put_contents;
 use function fileperms;
 use function fwrite;
 use function is_dir;
@@ -125,10 +127,44 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function setting_visibility()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('/file.txt', 'contents', new Config());
+        $adapter->setVisibility('/file.txt', Visibility::PUBLIC);
+        $this->assertFileHasPermissions(static::ROOT . '/file.txt', 0644);
+        $adapter->setVisibility('/file.txt', Visibility::PRIVATE);
+        $this->assertFileHasPermissions(static::ROOT . '/file.txt', 0600);
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_set_visibility()
+    {
+        $this->expectException(UnableToSetVisibility::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->setVisibility('/file.txt', Visibility::PUBLIC);
+    }
+
+    /**
+     * @test
+     */
     public function not_being_able_to_write_a_file()
     {
-        $this->expectException(UnableToWriteFile::class);
+        $this->expectException(UnableToDeleteFile::class);
         (new LocalFilesystem('/'))->write('/cannot-create-a-file-here', 'contents', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_file()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        file_put_contents(static::ROOT . '/file.txt', 'contents');
+        $adapter->delete('/file.txt');
+        $this->assertFileNotExists(static::ROOT . '/file.txt');
     }
 
     private function streamWithContents(string $contents)

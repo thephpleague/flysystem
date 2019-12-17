@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use FilesystemIterator;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
-use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\Visibility;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+use SplFileInfo;
 
 use function chmod;
 use function clearstatcache;
@@ -20,8 +27,9 @@ use function error_clear_last;
 use function error_get_last;
 use function file_exists;
 use function is_dir;
-
+use function rmdir;
 use function stream_copy_to_stream;
+use function unlink;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -40,7 +48,7 @@ class LocalFilesystem implements FilesystemAdapter
     /**
      * @var PathPrefixer
      */
-    private $pathPrefixer;
+    private $prefixer;
 
     /**
      * @var int
@@ -69,7 +77,7 @@ class LocalFilesystem implements FilesystemAdapter
         int $linkHandling = self::DISALLOW_LINKS,
         string $directoryVisibility = Visibility::PUBLIC
     ) {
-        $this->pathPrefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
+        $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
         $this->visibility = $visibilityHandler ?: new PublicAndPrivateVisibilityInterpreting();
@@ -79,7 +87,7 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function write(string $location, string $contents, Config $config): void
     {
-        $prefixedLocation = $this->pathPrefixer->prefixPath($location);
+        $prefixedLocation = $this->prefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($prefixedLocation),
             $this->resolveDirectoryVisibility($config->get('directory_visibility'))
@@ -87,7 +95,7 @@ class LocalFilesystem implements FilesystemAdapter
         error_clear_last();
 
         if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
-            throw UnableToWriteFile::toLocation($location, error_get_last()['message'] ?? '');
+            throw UnableToDeleteFile::atLocation($location, error_get_last()['message'] ?? '');
         }
 
         if ($visibility = $config->get('visibility')) {
@@ -97,7 +105,7 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function writeStream(string $location, $contents, Config $config): void
     {
-        $path = $this->pathPrefixer->prefixPath($location);
+        $path = $this->prefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($path),
             $this->resolveDirectoryVisibility($config->get('directory_visibility'))
@@ -106,7 +114,7 @@ class LocalFilesystem implements FilesystemAdapter
         $stream = fopen($path, 'w+b');
 
         if ( ! ($stream && stream_copy_to_stream($contents, $stream) && fclose($stream))) {
-            throw UnableToWriteFile::toLocation($path);
+            throw UnableToDeleteFile::atLocation($path);
         }
 
         if ($visibility = $config->get('visibility')) {
@@ -116,18 +124,95 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function update(string $location, string $contents, Config $config): void
     {
+        try {
+            $this->write($location, $contents, $config);
+        } catch (UnableToDeleteFile $exception) {
+            throw new UnableToUpdateFile($location, $exception->reason());
+        }
     }
 
     public function updateStream(string $location, $contents, Config $config): void
     {
+        try {
+            $this->writeStream($location, $contents, $config);
+        } catch (UnableToDeleteFile $exception) {
+            throw new UnableToUpdateFile($location, $exception->reason());
+        }
     }
 
-    public function delete(string $location): void
+    public function delete(string $path): void
     {
+        $location = $this->prefixer->prefixPath($path);
+
+        if ( ! file_exists($location)) {
+            return;
+        }
+
+        error_clear_last();
+
+        if ( ! @unlink($location)) {
+            throw UnableToDeleteFile::atLocation($location, error_get_last()['message'] ?? '');
+        }
     }
 
     public function deleteDirectory(string $prefix): void
     {
+        $location = $this->prefixer->prefixPath($prefix);
+
+        if ( ! is_dir($location)) {
+            return;
+        }
+
+        $contents = $this->getRecursiveDirectoryIterator($location, RecursiveIteratorIterator::CHILD_FIRST);
+
+        /** @var SplFileInfo $file */
+        foreach ($contents as $file) {
+            $this->guardAgainstUnreadableFileInfo($file);
+            $this->deleteFileInfoObject($file);
+        }
+
+        unset($contents);
+
+        if ( ! @rmdir($location)) {
+            throw UnableToDeleteDirectory::atLocation($prefix, error_get_last()['message'] ?? '');
+        }
+    }
+
+    private function getRecursiveDirectoryIterator(
+        string $path,
+        int $mode = RecursiveIteratorIterator::SELF_FIRST
+    ): RecursiveIteratorIterator {
+        return new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), $mode
+        );
+    }
+
+    protected function guardAgainstUnreadableFileInfo(SplFileInfo $file)
+    {
+        if ( ! $file->isReadable()) {
+            throw UnreadableFileEncountered::atLocation($this->usablePathForFileInfo($file));
+        }
+    }
+
+    private function usablePathForFileInfo(SplFileInfo $fileInfo): string
+    {
+        return $fileInfo->getType() === 'link'
+            ? $fileInfo->getPathname()
+            : $fileInfo->getRealPath();
+    }
+
+    protected function deleteFileInfoObject(SplFileInfo $file): void
+    {
+        switch ($file->getType()) {
+            case 'dir':
+                rmdir($file->getRealPath());
+                break;
+            case 'link':
+                unlink($file->getPathname());
+                break;
+            default:
+                unlink($file->getRealPath());
+        }
     }
 
     public function listContents(string $location): Generator
@@ -169,7 +254,7 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function fileExists(string $location): bool
     {
-        $location = $this->pathPrefixer->prefixPath($location);
+        $location = $this->prefixer->prefixPath($location);
 
         return file_exists($location);
     }
@@ -180,15 +265,15 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function setVisibility(string $location, $visibility): void
     {
-        $location = $this->pathPrefixer->prefixPath($location);
-        $visibility = is_dir($location)
-            ? $this->visibility->forDirectory($visibility)
-            : $this->visibility->forFile($visibility);
+        $location = $this->prefixer->prefixPath($location);
+        $visibility = is_dir($location) ? $this->visibility->forDirectory($visibility) : $this->visibility->forFile(
+            $visibility
+        );
 
         error_clear_last();
         if ( ! @chmod($location, $visibility)) {
             $extraMessage = error_get_last()['message'] ?? '';
-            throw UnableToSetVisibility::atLocation($this->pathPrefixer->stripPrefix($location), $extraMessage);
+            throw UnableToSetVisibility::atLocation($this->prefixer->stripPrefix($location), $extraMessage);
         }
     }
 

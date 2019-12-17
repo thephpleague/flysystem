@@ -8,35 +8,31 @@ use Generator;
 
 interface FilesystemAdapter
 {
-    public function fileExists(string $location): bool;
+    public function fileExists(string $path): bool;
 
-    public function write(string $location, string $contents, Config $config): void;
+    public function write(string $path, string $contents, Config $config): void;
 
-    public function writeStream(string $location, $contents, Config $config): void;
+    public function writeStream(string $path, $contents, Config $config): void;
 
-    public function update(string $location, string $contents, Config $config): void;
+    public function update(string $path, string $contents, Config $config): void;
 
-    public function updateStream(string $location, $contents, Config $config): void;
+    public function updateStream(string $path, $contents, Config $config): void;
 
-    public function read(string $location): string;
+    public function read(string $path): string;
 
-    /**
-     * @param string $location
-     * @return resource
-     */
-    public function readStream(string $location);
+    public function readStream(string $path);
 
-    public function delete(string $location): void;
+    public function delete(string $path): void;
 
-    public function deleteDirectory(string $location): void;
+    public function deleteDirectory(string $path): void;
 
-    public function createDirectory(string $location, Config $config): void;
+    public function createDirectory(string $path, Config $config): void;
 
-    public function setVisibility(string $location, string $visibility): void;
+    public function setVisibility(string $path, string $visibility): void;
 
-    public function getVisibility(string $location, string $visibility): string;
+    public function getVisibility(string $path, string $visibility): string;
 
-    public function listContents(string $location): Generator;
+    public function listContents(string $path): Generator;
 
     public function rename(string $source, string $destination): void;
 
