@@ -18,7 +18,6 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-
 use SplFileInfo;
 
 use function chmod;
@@ -197,9 +196,7 @@ class LocalFilesystem implements FilesystemAdapter
 
     private function usablePathForFileInfo(SplFileInfo $fileInfo): string
     {
-        return $fileInfo->getType() === 'link'
-            ? $fileInfo->getPathname()
-            : $fileInfo->getRealPath();
+        return $fileInfo->getType() === 'link' ? $fileInfo->getPathname() : $fileInfo->getRealPath();
     }
 
     protected function deleteFileInfoObject(SplFileInfo $file): void
