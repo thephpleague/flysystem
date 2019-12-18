@@ -8,6 +8,7 @@ use League\Flysystem\Config;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
@@ -150,9 +151,9 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_write_a_file()
+    public function failing_to_write_a_file()
     {
-        $this->expectException(UnableToDeleteFile::class);
+        $this->expectException(UnableToWriteFile::class);
         (new LocalFilesystem('/'))->write('/cannot-create-a-file-here', 'contents', new Config());
     }
 

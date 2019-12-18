@@ -14,6 +14,7 @@ use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -95,7 +96,7 @@ class LocalFilesystem implements FilesystemAdapter
         error_clear_last();
 
         if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
-            throw UnableToDeleteFile::atLocation($location, error_get_last()['message'] ?? '');
+            throw UnableToWriteFile::atLocation($location, error_get_last()['message'] ?? '');
         }
 
         if ($visibility = $config->get('visibility')) {
@@ -114,7 +115,7 @@ class LocalFilesystem implements FilesystemAdapter
         $stream = fopen($path, 'w+b');
 
         if ( ! ($stream && stream_copy_to_stream($contents, $stream) && fclose($stream))) {
-            throw UnableToDeleteFile::atLocation($path);
+            throw UnableToWriteFile::atLocation($path);
         }
 
         if ($visibility = $config->get('visibility')) {
@@ -126,8 +127,8 @@ class LocalFilesystem implements FilesystemAdapter
     {
         try {
             $this->write($location, $contents, $config);
-        } catch (UnableToDeleteFile $exception) {
-            throw new UnableToUpdateFile($location, $exception->reason());
+        } catch (UnableToWriteFile $exception) {
+            throw UnableToUpdateFile::atLocation($location, $exception->reason());
         }
     }
 
@@ -135,8 +136,8 @@ class LocalFilesystem implements FilesystemAdapter
     {
         try {
             $this->writeStream($location, $contents, $config);
-        } catch (UnableToDeleteFile $exception) {
-            throw new UnableToUpdateFile($location, $exception->reason());
+        } catch (UnableToWriteFile $exception) {
+            throw UnableToUpdateFile::atLocation($location, $exception->reason());
         }
     }
 

@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-class UnableToUpdateFile extends RuntimeException implements FilesystemOperationFailed
+class UnableToWriteFile extends RuntimeException implements FilesystemOperationFailed
 {
     private $location = '';
 
@@ -17,7 +17,7 @@ class UnableToUpdateFile extends RuntimeException implements FilesystemOperation
 
     public static function atLocation(string $location, string $reason = '')
     {
-        $e = new static(rtrim("Unable to update file at location: {$location}. {$reason}"));
+        $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"));
         $e->location;
         $e->reason = $reason;
 
@@ -26,7 +26,7 @@ class UnableToUpdateFile extends RuntimeException implements FilesystemOperation
 
     public function operationType(): string
     {
-        return FilesystemOperationFailed::OPERATION_UPDATE;
+        return FilesystemOperationFailed::OPERATION_WRITE;
     }
 
     public function reason(): string
