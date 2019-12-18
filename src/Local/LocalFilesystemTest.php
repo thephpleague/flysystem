@@ -86,6 +86,19 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function updating_a_file()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('/file.txt', 'contents', new Config());
+        $adapter->update('/file.txt', 'new contents', new Config());
+        $this->assertFileExists(static::ROOT . '/file.txt');
+        $contents = file_get_contents(static::ROOT . '/file.txt');
+        $this->assertEquals('new contents', $contents);
+    }
+
+    /**
+     * @test
+     */
     public function writing_a_file_with_a_stream()
     {
         $adapter = new LocalFilesystem(static::ROOT);
@@ -96,6 +109,22 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileExists(static::ROOT . '/file.txt');
         $contents = file_get_contents(static::ROOT . '/file.txt');
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function updating_a_file_with_a_stream()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('/file.txt', 'contents', new Config());
+        $stream = $this->streamWithContents('new contents');
+        $adapter->updateStream('/file.txt', $stream, new Config());
+        fclose($stream);
+
+        $this->assertFileExists(static::ROOT . '/file.txt');
+        $contents = file_get_contents(static::ROOT . '/file.txt');
+        $this->assertEquals('new contents', $contents);
     }
 
     /**
