@@ -8,6 +8,7 @@ use League\Flysystem\Config;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
@@ -160,12 +161,35 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function failing_to_update_a_file()
+    {
+        $this->expectException(UnableToUpdateFile::class);
+        (new LocalFilesystem('/'))->update('/cannot-create-a-file-here', 'contents', new Config());
+    }
+
+    /**
+     * @test
+     */
     public function failing_to_write_a_file_using_a_stream()
     {
         $this->expectException(UnableToWriteFile::class);
         try {
             $stream = $this->streamWithContents('something');
             (new LocalFilesystem('/'))->writeStream('/cannot-create-a-file-here', 'contents', new Config());
+        } finally {
+            fclose($stream);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_update_a_file_using_a_stream()
+    {
+        $this->expectException(UnableToUpdateFile::class);
+        try {
+            $stream = $this->streamWithContents('something');
+            (new LocalFilesystem('/'))->updateStream('/cannot-create-a-file-here', 'contents', new Config());
         } finally {
             fclose($stream);
         }
