@@ -160,6 +160,20 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function failing_to_write_a_file_using_a_stream()
+    {
+        $this->expectException(UnableToWriteFile::class);
+        try {
+            $stream = $this->streamWithContents('something');
+            (new LocalFilesystem('/'))->writeStream('/cannot-create-a-file-here', 'contents', new Config());
+        } finally {
+            fclose($stream);
+        }
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_file()
     {
         $adapter = new LocalFilesystem(static::ROOT);

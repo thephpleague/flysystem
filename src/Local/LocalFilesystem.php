@@ -111,10 +111,12 @@ class LocalFilesystem implements FilesystemAdapter
             $this->resolveDirectoryVisibility($config->get('directory_visibility'))
         );
 
-        $stream = fopen($path, 'w+b');
+        error_clear_last();
+        $stream = @fopen($path, 'w+b');
 
         if ( ! ($stream && stream_copy_to_stream($contents, $stream) && fclose($stream))) {
-            throw UnableToWriteFile::atLocation($path);
+            $reason = error_get_last()['message'] ?? '';
+            throw UnableToWriteFile::atLocation($path, $reason);
         }
 
         if ($visibility = $config->get('visibility')) {
