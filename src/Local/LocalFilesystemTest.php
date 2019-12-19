@@ -17,6 +17,7 @@ use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
 use function fwrite;
+use function getenv;
 use function is_dir;
 use function rewind;
 
@@ -250,8 +251,8 @@ class LocalFilesystemTest extends TestCase
      */
     public function deleting_a_file_that_cannot_be_deleted()
     {
-        if (posix_getuid() === 0) {
-            $this->markTestSkipped('This test should not be ran as root.');
+        if (posix_getuid() === 0 || getenv('FLYSYSTEM_TEST_DELETE_FAILURE') !== 'yes') {
+            $this->markTestSkipped('Skipping this out of precaution.');
         }
 
         $this->expectException(UnableToDeleteFile::class);
