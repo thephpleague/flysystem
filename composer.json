@@ -12,7 +12,8 @@
         "ext-fileinfo": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "ext-posix": "*"
     },
     "license": "MIT",
     "authors": [

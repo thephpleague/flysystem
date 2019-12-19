@@ -238,6 +238,30 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function deleting_a_file_that_does_not_exist()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->delete('/file.txt');
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_file_that_cannot_be_deleted()
+    {
+        if (posix_getuid() === 0) {
+            $this->markTestSkipped('This test should not be ran as root.');
+        }
+
+        $this->expectException(UnableToDeleteFile::class);
+        $adapter = new LocalFilesystem('/');
+        $adapter->delete('/etc/hosts');
+    }
+
+    /**
+     * @test
+     */
     public function checking_if_a_file_exists()
     {
         $adapter = new LocalFilesystem(static::ROOT);
