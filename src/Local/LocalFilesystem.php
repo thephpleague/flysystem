@@ -27,9 +27,11 @@ use function error_clear_last;
 use function error_get_last;
 use function file_exists;
 use function is_dir;
+use function is_file;
 use function rmdir;
 use function stream_copy_to_stream;
 use function unlink;
+use function var_dump;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -256,7 +258,7 @@ class LocalFilesystem implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($location);
 
-        return file_exists($location);
+        return is_file($location);
     }
 
     public function createDirectory(string $location, Config $config): void
@@ -277,7 +279,7 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    public function getVisibility(string $location, string $visibility): string
+    public function getVisibility(string $location): string
     {
     }
 
@@ -286,5 +288,17 @@ class LocalFilesystem implements FilesystemAdapter
         return $visibility === null ? $this->visibility->defaultForDirectories() : $this->visibility->forDirectory(
             $visibility
         );
+    }
+
+    public function getMimeType(string $path): string
+    {
+    }
+
+    public function getModifiedTimestamp(string $path): int
+    {
+    }
+
+    public function getFileSize(string $path): int
+    {
     }
 }

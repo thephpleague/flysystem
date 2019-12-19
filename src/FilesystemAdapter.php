@@ -30,7 +30,10 @@ interface FilesystemAdapter
 
     public function setVisibility(string $path, string $visibility): void;
 
-    public function getVisibility(string $path, string $visibility): string;
+    public function getVisibility(string $path): string;
+    public function getMimeType(string $path): string;
+    public function getModifiedTimestamp(string $path): int;
+    public function getFileSize(string $path): int;
 
     public function listContents(string $path): Generator;
 

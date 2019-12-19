@@ -235,6 +235,27 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileNotExists(static::ROOT . '/file.txt');
     }
 
+    /**
+     * @test
+     */
+    public function checking_if_a_file_exists()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        file_put_contents(static::ROOT . '/file.txt', 'contents');
+
+        $this->assertTrue($adapter->fileExists('/file.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function checking_if_a_file_exists_that_does_not_exsist()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+
+        $this->assertFalse($adapter->fileExists('/file.txt'));
+    }
+
     private function streamWithContents(string $contents)
     {
         $stream = fopen('php://temp', 'w+b');
