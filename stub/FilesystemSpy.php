@@ -3,6 +3,7 @@
 namespace League\Flysystem\Stub;
 
 use InvalidArgumentException;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\FilesystemInterface;
@@ -350,5 +351,9 @@ class FilesystemSpy implements FilesystemInterface
     public function get($path, Handler $handler = null)
     {
         $this->lastCall = [__METHOD__, func_get_args()];
+    }
+
+    public function getAdapter()
+    {
     }
 }

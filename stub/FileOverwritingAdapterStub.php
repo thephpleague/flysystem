@@ -97,4 +97,20 @@ class FileOverwritingAdapterStub implements AdapterInterface, CanOverwriteFiles
     public function getVisibility($path)
     {
     }
+
+    public function setPathPrefix($prefix)
+    {
+    }
+
+    public function getPathPrefix()
+    {
+    }
+
+    public function applyPathPrefix($path)
+    {
+    }
+
+    public function removePathPrefix($path)
+    {
+    }
 }
