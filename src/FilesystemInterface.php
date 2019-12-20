@@ -281,4 +281,11 @@ interface FilesystemInterface
      * @return $this
      */
     public function addPlugin(PluginInterface $plugin);
+
+    /**
+     * Get the Adapter.
+     *
+     * @return AdapterInterface adapter
+     */
+    public function getAdapter();
 }

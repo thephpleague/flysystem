@@ -115,4 +115,38 @@ interface AdapterInterface extends ReadInterface
      * @return array|false file meta data
      */
     public function setVisibility($path, $visibility);
+
+    /**
+     * Set the path prefix.
+     *
+     * @param string $prefix
+     *
+     * @return void
+     */
+    public function setPathPrefix($prefix);
+
+    /**
+     * Get the path prefix.
+     *
+     * @return string|null path prefix or null if pathPrefix is empty
+     */
+    public function getPathPrefix();
+
+    /**
+     * Prefix a path.
+     *
+     * @param string $path
+     *
+     * @return string prefixed path
+     */
+    public function applyPathPrefix($path);
+
+    /**
+     * Remove a path prefix.
+     *
+     * @param string $path
+     *
+     * @return string path without the prefix
+     */
+    public function removePathPrefix($path);
 }
