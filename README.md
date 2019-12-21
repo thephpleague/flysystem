@@ -70,6 +70,7 @@ Want to get started quickly? Check out some of these integrations:
 
 ### Community Supported
 * AliYun OSS Storage: https://github.com/xxtime/flysystem-aliyun-oss
+* AliYun OSS Storage: https://github.com/kaysonwu/flysystem-aliyun-oss
 * Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
 * Azure File Storage: https://github.com/academe/flysystem-azure-file-storage
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
