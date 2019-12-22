@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use DirectoryIterator;
 use FilesystemIterator;
 use Generator;
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
@@ -29,9 +33,12 @@ use function error_get_last;
 use function file_exists;
 use function is_dir;
 use function is_file;
+use function rename;
 use function rmdir;
 use function stream_copy_to_stream;
 use function unlink;
+
+use function var_dump;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -167,7 +174,7 @@ class LocalFilesystem implements FilesystemAdapter
             return;
         }
 
-        $contents = $this->getRecursiveDirectoryIterator($location, RecursiveIteratorIterator::CHILD_FIRST);
+        $contents = $this->listDirectoryRecursively($location, RecursiveIteratorIterator::CHILD_FIRST);
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
@@ -182,11 +189,11 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    private function getRecursiveDirectoryIterator(
+    private function listDirectoryRecursively(
         string $path,
         int $mode = RecursiveIteratorIterator::SELF_FIRST
-    ): RecursiveIteratorIterator {
-        return new RecursiveIteratorIterator(
+    ): Generator {
+        yield from new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), $mode
         );
     }
@@ -213,15 +220,48 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    public function listContents(string $location): Generator
+    public function listContents(string $path, bool $recursive): Generator
     {
+        $location = $this->prefixer->prefixPath($path);
+
+        if ( ! is_dir($location)) {
+            return;
+        }
+
+        /** @var SplFileInfo[] $iterator */
+        $iterator = $recursive ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
+
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isLink() && $this->linkHandling & self::DISALLOW_LINKS) {
+                continue;
+            }
+
+            $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
+
+            yield $fileInfo->isDir() ? new DirectoryAttributes($path) : new FileAttributes(
+                $path,
+                $fileInfo->getSize(),
+                null,
+                $fileInfo->getMTime()
+            );
+        }
     }
 
-    public function move(string $source, string $destination): void
+    public function move(string $source, string $destination, Config $config): void
     {
+        $sourcePath = $this->prefixer->prefixPath($source);
+        $destinationPath = $this->prefixer->prefixPath($destination);
+        $this->ensureDirectoryExists(
+            dirname($destinationPath),
+            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+        );
+
+        if ( ! rename($sourcePath, $destinationPath)) {
+            throw UnableToMoveFile::fromLocationTo($sourcePath, $destinationPath);
+        }
     }
 
-    public function copy(string $source, string $destination): void
+    public function copy(string $source, string $destination, Config $config): void
     {
     }
 
@@ -296,5 +336,18 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function fileSize(string $path): int
     {
+    }
+
+    private function listDirectory(string $location): Generator
+    {
+        $iterator = new DirectoryIterator($location);
+
+        foreach ($iterator as $item) {
+            if ($item->isDot()) {
+                continue;
+            }
+
+            yield $item;
+        }
     }
 }

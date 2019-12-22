@@ -19,6 +19,7 @@ use function fileperms;
 use function fwrite;
 use function getenv;
 use function is_dir;
+use function iterator_to_array;
 use function rewind;
 
 class LocalFilesystemTest extends TestCase
@@ -279,6 +280,19 @@ class LocalFilesystemTest extends TestCase
         $adapter = new LocalFilesystem(static::ROOT);
 
         $this->assertFalse($adapter->fileExists('/file.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function listing_contents()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('directory/filename.txt', 'content', new Config());
+        $adapter->write('filename.txt', 'content' , new Config());
+        $contents = iterator_to_array($adapter->listContents('/', false));
+
+        $this->assertCount(2, $contents);
     }
 
     private function streamWithContents(string $contents)

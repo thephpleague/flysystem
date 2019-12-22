@@ -11,6 +11,7 @@ interface FilesystemOperationFailed extends FilesystemError
     public const OPERATION_CREATE_DIRECTORY = 'CREATE_DIRECTORY';
     public const OPERATION_DELETE = 'DELETE';
     public const OPERATION_DELETE_DIRECTORY = 'DELETE_DIRECTORY';
+    public const OPERATION_MOVE = 'MOVE';
 
     public function operationType(): string;
 }

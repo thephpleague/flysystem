@@ -35,9 +35,9 @@ interface FilesystemAdapter
     public function lastModified(string $path): int;
     public function fileSize(string $path): int;
 
-    public function listContents(string $path): Generator;
+    public function listContents(string $path, bool $recursive): Generator;
 
-    public function move(string $source, string $destination): void;
+    public function move(string $source, string $destination, Config $config): void;
 
-    public function copy(string $source, string $destination): void;
+    public function copy(string $source, string $destination, Config $config): void;
 }
