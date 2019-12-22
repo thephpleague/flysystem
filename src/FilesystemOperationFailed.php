@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-interface FilesystemOperationFailed extends FlysystemException
+interface FilesystemOperationFailed extends FilesystemError
 {
     public const OPERATION_WRITE = 'WRITE';
     public const OPERATION_UPDATE = 'UPDATE';

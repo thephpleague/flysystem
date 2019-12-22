@@ -15,6 +15,7 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UnreadableFileEncountered;
 use League\Flysystem\Visibility;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -31,7 +32,6 @@ use function is_file;
 use function rmdir;
 use function stream_copy_to_stream;
 use function unlink;
-use function var_dump;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -194,13 +194,9 @@ class LocalFilesystem implements FilesystemAdapter
     protected function guardAgainstUnreadableFileInfo(SplFileInfo $file)
     {
         if ( ! $file->isReadable()) {
-            throw UnreadableFileEncountered::atLocation($this->usablePathForFileInfo($file));
+            $location = $file->getType() === 'link' ? $file->getPathname() : $file->getRealPath();
+            throw UnreadableFileEncountered::atLocation($location);
         }
-    }
-
-    private function usablePathForFileInfo(SplFileInfo $fileInfo): string
-    {
-        return $fileInfo->getType() === 'link' ? $fileInfo->getPathname() : $fileInfo->getRealPath();
     }
 
     protected function deleteFileInfoObject(SplFileInfo $file): void

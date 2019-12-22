@@ -10,7 +10,7 @@ use function gettype;
 use function is_scalar;
 use function var_export;
 
-class InvalidVisibilityProvided extends InvalidArgumentException implements FlysystemException
+class InvalidVisibilityProvided extends InvalidArgumentException implements FilesystemError
 {
     public static function withVisibility($visibility, string $expectedMessage)
     {

@@ -6,6 +6,6 @@ namespace League\Flysystem;
 
 use Throwable;
 
-interface FlysystemException extends Throwable
+interface FilesystemError extends Throwable
 {
 }
