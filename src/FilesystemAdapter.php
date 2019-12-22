@@ -30,14 +30,14 @@ interface FilesystemAdapter
 
     public function setVisibility(string $path, string $visibility): void;
 
-    public function getVisibility(string $path): string;
-    public function getMimeType(string $path): string;
-    public function getModifiedTimestamp(string $path): int;
-    public function getFileSize(string $path): int;
+    public function visibility(string $path): string;
+    public function mimeType(string $path): string;
+    public function lastModified(string $path): int;
+    public function fileSize(string $path): int;
 
     public function listContents(string $path): Generator;
 
-    public function rename(string $source, string $destination): void;
+    public function move(string $source, string $destination): void;
 
     public function copy(string $source, string $destination): void;
 }

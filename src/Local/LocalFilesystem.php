@@ -221,7 +221,7 @@ class LocalFilesystem implements FilesystemAdapter
     {
     }
 
-    public function rename(string $source, string $destination): void
+    public function move(string $source, string $destination): void
     {
     }
 
@@ -279,7 +279,7 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    public function getVisibility(string $location): string
+    public function visibility(string $location): string
     {
     }
 
@@ -290,15 +290,15 @@ class LocalFilesystem implements FilesystemAdapter
         );
     }
 
-    public function getMimeType(string $path): string
+    public function mimeType(string $path): string
     {
     }
 
-    public function getModifiedTimestamp(string $path): int
+    public function lastModified(string $path): int
     {
     }
 
-    public function getFileSize(string $path): int
+    public function fileSize(string $path): int
     {
     }
 }
