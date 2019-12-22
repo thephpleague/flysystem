@@ -11,9 +11,15 @@ class DirectoryAttributes implements StorageAttributes
      */
     private $path;
 
-    public function __construct(string $path)
+    /**
+     * @var string|null
+     */
+    private $visibility;
+
+    public function __construct(string $path, ?string $visibility = null)
     {
         $this->path = $path;
+        $this->visibility = $visibility;
     }
 
     public function path(): string
@@ -24,5 +30,10 @@ class DirectoryAttributes implements StorageAttributes
     public function type(): string
     {
         return StorageAttributes::TYPE_DIRECTORY;
+    }
+
+    public function visibility(): ?string
+    {
+        return $this->visibility;
     }
 }

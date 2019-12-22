@@ -12,4 +12,6 @@ interface StorageAttributes
     public function path(): string;
 
     public function type(): string;
+
+    public function visibility(): ?string;
 }
