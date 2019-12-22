@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\Local;
 
 use League\Flysystem\Config;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
@@ -293,6 +294,32 @@ class LocalFilesystemTest extends TestCase
         $contents = iterator_to_array($adapter->listContents('/', false));
 
         $this->assertCount(2, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_contents_recursively()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('directory/filename.txt', 'content', new Config());
+        $adapter->write('filename.txt', 'content' , new Config());
+        $contents = iterator_to_array($adapter->listContents('/', true));
+
+        $this->assertCount(3, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_a_non_existing_directory()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $contents = iterator_to_array($adapter->listContents('/directory/', false));
+
+        $this->assertCount(0, $contents);
     }
 
     private function streamWithContents(string $contents)

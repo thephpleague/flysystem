@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace League\Flysystem;
+
+use RuntimeException;
+
+class SymbolicLinkEncountered extends RuntimeException implements FilesystemError
+{
+    /**
+     * @var string
+     */
+    private $location;
+
+    public function location(): string
+    {
+        return $this->location;
+    }
+
+    public static function atLocation(string $pathName)
+    {
+        $e = new static("Unsupported symbolic link encountered at location $pathName");
+        $e->location = $pathName;
+
+        return $e;
+    }
+}

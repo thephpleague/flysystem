@@ -12,6 +12,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
@@ -37,8 +38,6 @@ use function rename;
 use function rmdir;
 use function stream_copy_to_stream;
 use function unlink;
-
-use function var_dump;
 
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
@@ -232,17 +231,17 @@ class LocalFilesystem implements FilesystemAdapter
         $iterator = $recursive ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
 
         foreach ($iterator as $fileInfo) {
-            if ($fileInfo->isLink() && $this->linkHandling & self::DISALLOW_LINKS) {
-                continue;
+            if ($fileInfo->isLink()) {
+                if ($this->linkHandling & self::DISALLOW_LINKS) {
+                    continue;
+                }
+                throw SymbolicLinkEncountered::atLocation($fileInfo->getPathname());
             }
 
             $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
 
             yield $fileInfo->isDir() ? new DirectoryAttributes($path) : new FileAttributes(
-                $path,
-                $fileInfo->getSize(),
-                null,
-                $fileInfo->getMTime()
+                $path, $fileInfo->getSize(), null, $fileInfo->getMTime()
             );
         }
     }
