@@ -289,8 +289,14 @@ class LocalFilesystem implements FilesystemAdapter
     public function createDirectory(string $path, Config $config): void
     {
         $location = $this->prefixer->prefixPath($path);
-        $visibility = $config->get('visibility', $config->get('directory_visibilty'));
+        $visibility = $config->get('visibility', $config->get('directory_visibility'));
         $permissions = $this->resolveDirectoryVisibility($visibility);
+
+        if (is_dir($location)) {
+            $this->setPermissions($location, $permissions);
+            return;
+        }
+
         error_clear_last();
 
         if ( ! @mkdir($location, $permissions, true)) {
@@ -305,11 +311,7 @@ class LocalFilesystem implements FilesystemAdapter
             $visibility
         );
 
-        error_clear_last();
-        if ( ! @chmod($location, $visibility)) {
-            $extraMessage = error_get_last()['message'] ?? '';
-            throw UnableToSetVisibility::atLocation($this->prefixer->stripPrefix($location), $extraMessage);
-        }
+        $this->setPermissions($location, $visibility);
     }
 
     public function visibility(string $location): string
@@ -345,6 +347,15 @@ class LocalFilesystem implements FilesystemAdapter
             }
 
             yield $item;
+        }
+    }
+
+    private function setPermissions(string $location, int $visibility): void
+    {
+        error_clear_last();
+        if ( ! @chmod($location, $visibility)) {
+            $extraMessage = error_get_last()['message'] ?? '';
+            throw UnableToSetVisibility::atLocation($this->prefixer->stripPrefix($location), $extraMessage);
         }
     }
 }

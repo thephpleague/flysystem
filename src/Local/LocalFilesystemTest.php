@@ -429,6 +429,28 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileHasPermissions(static::ROOT . '/also_private', 0700);
     }
 
+    /**
+     * @test
+     */
+    public function not_being_able_to_create_a_directory()
+    {
+        $this->expectException(UnableToCreateDirectory::class);
+        $adapter = new LocalFilesystem('/');
+        $adapter->createDirectory('/something/', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function creating_a_directory_is_idempotent()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->createDirectory('/something/', new Config(['visibility' => 'private']));
+        $this->assertFileHasPermissions(static::ROOT . '/something', 0700);
+        $adapter->createDirectory('/something/', new Config(['visibility' => 'public']));
+        $this->assertFileHasPermissions(static::ROOT . '/something', 0755);
+    }
+
     private function streamWithContents(string $contents)
     {
         $stream = fopen('php://temp', 'w+b');
