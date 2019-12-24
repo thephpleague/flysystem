@@ -20,7 +20,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
-use League\Flysystem\UnreadableFileEncountered;
 use League\Flysystem\Visibility;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -34,8 +33,8 @@ use function error_get_last;
 use function file_exists;
 use function is_dir;
 use function is_file;
+use function mkdir;
 use function rename;
-use function rmdir;
 use function stream_copy_to_stream;
 use function unlink;
 
@@ -177,8 +176,9 @@ class LocalFilesystem implements FilesystemAdapter
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
-            $this->guardAgainstUnreadableFileInfo($file);
-            $this->deleteFileInfoObject($file);
+            if ( ! $this->deleteFileInfoObject($file)) {
+                throw UnableToDeleteDirectory::atLocation($prefix, "Unable to delete file at " . $file->getPathname());
+            }
         }
 
         unset($contents);
@@ -197,25 +197,15 @@ class LocalFilesystem implements FilesystemAdapter
         );
     }
 
-    protected function guardAgainstUnreadableFileInfo(SplFileInfo $file)
-    {
-        if ( ! $file->isReadable()) {
-            $location = $file->getType() === 'link' ? $file->getPathname() : $file->getRealPath();
-            throw UnreadableFileEncountered::atLocation($location);
-        }
-    }
-
-    protected function deleteFileInfoObject(SplFileInfo $file): void
+    protected function deleteFileInfoObject(SplFileInfo $file): bool
     {
         switch ($file->getType()) {
             case 'dir':
-                rmdir($file->getRealPath());
-                break;
+                return @rmdir($file->getRealPath());
             case 'link':
-                unlink($file->getPathname());
-                break;
+                return @unlink($file->getPathname());
             default:
-                unlink($file->getRealPath());
+                return @unlink($file->getRealPath());
         }
     }
 
@@ -232,7 +222,7 @@ class LocalFilesystem implements FilesystemAdapter
 
         foreach ($iterator as $fileInfo) {
             if ($fileInfo->isLink()) {
-                if ($this->linkHandling & self::DISALLOW_LINKS) {
+                if ($this->linkHandling & self::SKIP_LINKS) {
                     continue;
                 }
                 throw SymbolicLinkEncountered::atLocation($fileInfo->getPathname());
@@ -296,8 +286,16 @@ class LocalFilesystem implements FilesystemAdapter
         return is_file($location);
     }
 
-    public function createDirectory(string $location, Config $config): void
+    public function createDirectory(string $path, Config $config): void
     {
+        $location = $this->prefixer->prefixPath($path);
+        $visibility = $config->get('visibility', $config->get('directory_visibilty'));
+        $permissions = $this->resolveDirectoryVisibility($visibility);
+        error_clear_last();
+
+        if ( ! @mkdir($location, $permissions, true)) {
+            throw UnableToCreateDirectory::atLocation($path, error_get_last()['message'] ?? '');
+        }
     }
 
     public function setVisibility(string $location, $visibility): void

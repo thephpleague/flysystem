@@ -38,7 +38,7 @@ class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpret
         int $filePublic = 0644,
         int $filePrivate = 0600,
         int $directoryPublic = 0755,
-        int $directoryPrivate = 0744,
+        int $directoryPrivate = 0700,
         string $defaultForDirectories = Visibility::PRIVATE
     ) {
         $this->filePublic = $filePublic;

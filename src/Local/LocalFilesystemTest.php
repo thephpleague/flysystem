@@ -6,7 +6,9 @@ namespace League\Flysystem\Local;
 
 use League\Flysystem\Config;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
@@ -14,14 +16,21 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
+use function array_shift;
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
 use function fwrite;
 use function getenv;
 use function is_dir;
+use function is_string;
 use function iterator_to_array;
+use function mkdir;
 use function rewind;
+use function substr;
+use function symlink;
+
+use const LOCK_EX;
 
 class LocalFilesystemTest extends TestCase
 {
@@ -29,11 +38,13 @@ class LocalFilesystemTest extends TestCase
 
     protected function setUp(): void
     {
+        reset_function_mocks();
         $this->deleteDirectory(static::ROOT);
     }
 
     protected function tearDown(): void
     {
+        reset_function_mocks();
         $this->deleteDirectory(static::ROOT);
     }
 
@@ -150,8 +161,7 @@ class LocalFilesystemTest extends TestCase
     public function writing_a_file_with_visibility()
     {
         $adapter = new LocalFilesystem(
-            static::ROOT,
-            new PublicAndPrivateVisibilityInterpreting()
+            static::ROOT, new PublicAndPrivateVisibilityInterpreting()
         );
         $adapter->write('/file.txt', 'contents', new Config(['visibility' => 'private']));
         $this->assertFileContains(static::ROOT . '/file.txt', 'contents');
@@ -253,10 +263,7 @@ class LocalFilesystemTest extends TestCase
      */
     public function deleting_a_file_that_cannot_be_deleted()
     {
-        if (posix_getuid() === 0 || getenv('FLYSYSTEM_TEST_DELETE_FAILURE') !== 'yes') {
-            $this->markTestSkipped('Skipping this out of precaution.');
-        }
-
+        $this->maybeSkipDangerousTests();
         $this->expectException(UnableToDeleteFile::class);
         $adapter = new LocalFilesystem('/');
         $adapter->delete('/etc/hosts');
@@ -290,7 +297,7 @@ class LocalFilesystemTest extends TestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
-        $adapter->write('filename.txt', 'content' , new Config());
+        $adapter->write('filename.txt', 'content', new Config());
         $contents = iterator_to_array($adapter->listContents('/', false));
 
         $this->assertCount(2, $contents);
@@ -304,7 +311,7 @@ class LocalFilesystemTest extends TestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
-        $adapter->write('filename.txt', 'content' , new Config());
+        $adapter->write('filename.txt', 'content', new Config());
         $contents = iterator_to_array($adapter->listContents('/', true));
 
         $this->assertCount(3, $contents);
@@ -320,6 +327,106 @@ class LocalFilesystemTest extends TestCase
         $contents = iterator_to_array($adapter->listContents('/directory/', false));
 
         $this->assertCount(0, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_directory_contents_with_link_skipping()
+    {
+        $adapter = new LocalFilesystem(static::ROOT, null, LOCK_EX, LocalFilesystem::SKIP_LINKS);
+        file_put_contents(static::ROOT . '/file.txt', 'content');
+        symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
+
+        $contents = iterator_to_array($adapter->listContents('/', true));
+
+        $this->assertCount(1, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_directory_contents_with_disallowing_links()
+    {
+        $this->expectException(SymbolicLinkEncountered::class);
+        $adapter = new LocalFilesystem(static::ROOT, null, LOCK_EX, LocalFilesystem::DISALLOW_LINKS);
+        file_put_contents(static::ROOT . '/file.txt', 'content');
+        symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
+
+        $adapter->listContents('/', true)->next();
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_directory()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        mkdir(static::ROOT . '/directory/subdir/', 0744, true);
+        $this->assertDirectoryExists(static::ROOT . '/directory/subdir/');
+        file_put_contents(static::ROOT . '/directory/subdir/file.txt', 'content');
+        symlink(static::ROOT . '/directory/subdir/file.txt', static::ROOT . '/directory/subdir/link.txt');
+        $adapter->deleteDirectory('directory/subdir');
+        $this->assertDirectoryNotExists(static::ROOT . '/directory/subdir/');
+        $adapter->deleteDirectory('directory');
+        $this->assertDirectoryNotExists(static::ROOT . '/directory/');
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_non_existing_directory()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->deleteDirectory('/non-existing-directory/');
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_delete_a_directory()
+    {
+        $this->expectException(UnableToDeleteDirectory::class);
+
+        mock_function('rmdir', false);
+
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->createDirectory('/etc/', new Config());
+        $adapter->deleteDirectory('/etc/');
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_delete_a_sub_directory()
+    {
+        $this->expectException(UnableToDeleteDirectory::class);
+
+        mock_function('rmdir', false);
+
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->createDirectory('/etc/subdirectory/', new Config());
+        $adapter->deleteDirectory('/etc/');
+    }
+
+    /**
+     * @test
+     */
+    public function creating_a_directory()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->createDirectory('public', new Config(['visibility' => 'public']));
+        $this->assertDirectoryExists(static::ROOT . '/public');
+        $this->assertFileHasPermissions(static::ROOT . '/public', 0755);
+
+        $adapter->createDirectory('private', new Config(['visibility' => 'private']));
+        $this->assertDirectoryExists(static::ROOT . '/private');
+        $this->assertFileHasPermissions(static::ROOT . '/private', 0700);
+
+        $adapter->createDirectory('also_private', new Config(['directory_visibility' => 'private']));
+        $this->assertDirectoryExists(static::ROOT . '/also_private');
+        $this->assertFileHasPermissions(static::ROOT . '/also_private', 0700);
     }
 
     private function streamWithContents(string $contents)
@@ -351,5 +458,14 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileExists($file);
         $contents = file_get_contents($file);
         $this->assertEquals($expectedContents, $contents);
+    }
+
+    private function maybeSkipDangerousTests(): void
+    {
+        if (posix_getuid() === 0 || getenv('FLYSYSTEM_TEST_DANGEROUS_THINGS') !== 'yes') {
+            $this->markTestSkipped(
+                'Skipping this out of precaution. Use FLYSYSTEM_TEST_DANGEROUS_THINGS=yes to test them'
+            );
+        }
     }
 }
