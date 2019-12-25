@@ -10,6 +10,7 @@ use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
@@ -449,6 +450,28 @@ class LocalFilesystemTest extends TestCase
         $this->assertFileHasPermissions(static::ROOT . '/something', 0700);
         $adapter->createDirectory('/something/', new Config(['visibility' => 'public']));
         $this->assertFileHasPermissions(static::ROOT . '/something', 0755);
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_visibility()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('public.txt', 'contents', new Config(['visibility' => 'public']));
+        $this->assertEquals('public', $adapter->visibility('public.txt'));
+        $adapter->write('private.txt', 'contents', new Config(['visibility' => 'private']));
+        $this->assertEquals('private', $adapter->visibility('private.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_retrieve_visibility()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->visibility('something.txt');
     }
 
     private function streamWithContents(string $contents)

@@ -17,6 +17,7 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
@@ -314,8 +315,20 @@ class LocalFilesystem implements FilesystemAdapter
         $this->setPermissions($location, $visibility);
     }
 
-    public function visibility(string $location): string
+    public function visibility(string $path): string
     {
+        $location = $this->prefixer->prefixPath($path);
+        clearstatcache(false, $location);
+        error_clear_last();
+        $fileperms = @fileperms($location);
+
+        if ($fileperms === false) {
+            throw UnableToRetrieveMetadata::visibility($path, error_get_last()['message'] ?? '');
+        }
+
+        $permissions = $fileperms & 0777;
+
+        return $this->visibility->inverseForFile($permissions);
     }
 
     private function resolveDirectoryVisibility($visibility)
