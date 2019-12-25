@@ -480,10 +480,10 @@ class LocalFilesystemTest extends TestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
-        $this->assertFileExists(static::ROOT.'/first.txt');
+        $this->assertFileExists(static::ROOT . '/first.txt');
         $adapter->move('first.txt', 'second.txt', new Config());
-        $this->assertFileExists(static::ROOT.'/second.txt');
-        $this->assertFileNotExists(static::ROOT.'/first.txt');
+        $this->assertFileExists(static::ROOT . '/second.txt');
+        $this->assertFileNotExists(static::ROOT . '/first.txt');
     }
 
     /**
@@ -504,8 +504,8 @@ class LocalFilesystemTest extends TestCase
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
         $adapter->copy('first.txt', 'second.txt', new Config());
-        $this->assertFileExists(static::ROOT.'/second.txt');
-        $this->assertFileExists(static::ROOT.'/first.txt');
+        $this->assertFileExists(static::ROOT . '/second.txt');
+        $this->assertFileExists(static::ROOT . '/first.txt');
     }
 
     /**
@@ -516,6 +516,63 @@ class LocalFilesystemTest extends TestCase
         $this->expectException(UnableToCopyFile::class);
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->copy('first.txt', 'second.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function getting_mimetype()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write(
+            'flysystem.svg',
+            file_get_contents(__DIR__ . '/../../test_files/flysystem.svg'),
+            new Config()
+        );
+        $this->assertEquals('image/svg', $adapter->mimeType('flysystem.svg'));
+    }
+
+    /**
+     * @test
+     */
+    public function getting_last_modified()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('first.txt', 'contents', new Config());
+        mock_function('filemtime', $now = time());
+        $lastModified = $adapter->lastModified('first.txt');
+        $this->assertEquals($now, $lastModified);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_get_last_modified()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->lastModified('first.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function getting_file_size()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('first.txt', 'contents', new Config());
+        $fileSize = $adapter->fileSize('first.txt');
+        $this->assertEquals(8, $fileSize);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_get_file_size()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->fileSize('first.txt');
     }
 
     /* //////////////////////

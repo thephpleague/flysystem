@@ -6,6 +6,7 @@ namespace League\Flysystem\Local;
 
 use DirectoryIterator;
 use FilesystemIterator;
+use finfo;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -41,6 +42,7 @@ use function stream_copy_to_stream;
 use function unlink;
 
 use const DIRECTORY_SEPARATOR;
+use const FILEINFO_MIME_TYPE;
 use const LOCK_EX;
 
 class LocalFilesystem implements FilesystemAdapter
@@ -351,14 +353,34 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function mimeType(string $path): string
     {
+        clearstatcache(false, $this->prefixer->prefixPath($path));
+        return (new finfo(FILEINFO_MIME_TYPE))->file($this->prefixer->prefixPath($path));
     }
 
     public function lastModified(string $path): int
     {
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+        $lastModified = @filemtime($location);
+
+        if ($lastModified === false) {
+            throw UnableToRetrieveMetadata::lastModified($path, error_get_last()['message'] ?? '');
+        }
+
+        return $lastModified;
     }
 
     public function fileSize(string $path): int
     {
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+        $lastModified = @filesize($location);
+
+        if ($lastModified === false) {
+            throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
+        }
+
+        return $lastModified;
     }
 
     private function listDirectory(string $location): Generator
