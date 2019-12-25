@@ -114,5 +114,9 @@ class Filesystem
 
     public function copy(string $source, string $destination): void
     {
+        $this->adapter->copy(
+            $this->pathNormalizer->normalizePath($source),
+            $this->pathNormalizer->normalizePath($destination)
+        );
     }
 }
