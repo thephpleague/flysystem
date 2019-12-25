@@ -285,8 +285,17 @@ class LocalFilesystem implements FilesystemAdapter
     /**
      * @inheritDoc
      */
-    public function readStream(string $location)
+    public function readStream(string $path)
     {
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+        $contents = @fopen($location, 'rb');
+
+        if ($contents === false) {
+            throw UnableToReadFile::atLocation($path, error_get_last()['message'] ?? '');
+        }
+
+        return $contents;
     }
 
     protected function ensureDirectoryExists(string $dirname, int $visibility)

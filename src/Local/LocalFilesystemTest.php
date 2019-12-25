@@ -597,6 +597,30 @@ class LocalFilesystemTest extends TestCase
         $adapter->read('path.txt');
     }
 
+    /**
+     * @test
+     */
+    public function reading_a_stream()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('path.txt', 'contents', new Config());
+        $contents = $adapter->readStream('path.txt');
+        $this->assertIsResource($contents);
+        $fileContents = stream_get_contents($contents);
+        fclose($contents);
+        $this->assertEquals('contents', $fileContents);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_stream_read_a_file()
+    {
+        $this->expectException(UnableToReadFile::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->readStream('path.txt');
+    }
+
     /* //////////////////////
     // These are the utils //
     ////////////////////// */
