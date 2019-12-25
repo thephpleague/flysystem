@@ -14,6 +14,7 @@ interface FilesystemOperationFailed extends FilesystemError
     public const OPERATION_MOVE = 'MOVE';
     public const OPERATION_GET_VISIBILITY = 'GET_VISIBILITY';
     public const OPERATION_COPY = 'COPY';
+    public const OPERATION_READ = 'READ';
 
     public function operationType(): string;
 }

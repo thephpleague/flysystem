@@ -19,6 +19,7 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
@@ -268,8 +269,17 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    public function read(string $location): string
+    public function read(string $path): string
     {
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+        $contents = @file_get_contents($location);
+
+        if ($contents === false) {
+            throw UnableToReadFile::atLocation($path, error_get_last()['message'] ?? '');
+        }
+
+        return $contents;
     }
 
     /**
@@ -308,6 +318,7 @@ class LocalFilesystem implements FilesystemAdapter
 
         if (is_dir($location)) {
             $this->setPermissions($location, $permissions);
+
             return;
         }
 
@@ -354,6 +365,7 @@ class LocalFilesystem implements FilesystemAdapter
     public function mimeType(string $path): string
     {
         clearstatcache(false, $this->prefixer->prefixPath($path));
+
         return (new finfo(FILEINFO_MIME_TYPE))->file($this->prefixer->prefixPath($path));
     }
 

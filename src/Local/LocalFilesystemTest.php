@@ -12,6 +12,7 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
@@ -573,6 +574,27 @@ class LocalFilesystemTest extends TestCase
         $this->expectException(UnableToRetrieveMetadata::class);
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->fileSize('first.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function reading_a_file()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('path.txt', 'contents', new Config());
+        $contents = $adapter->read('path.txt');
+        $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_read_a_file()
+    {
+        $this->expectException(UnableToReadFile::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->read('path.txt');
     }
 
     /* //////////////////////
