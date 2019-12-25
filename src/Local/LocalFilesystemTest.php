@@ -17,18 +17,15 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
-use function array_shift;
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
 use function fwrite;
 use function getenv;
 use function is_dir;
-use function is_string;
 use function iterator_to_array;
 use function mkdir;
 use function rewind;
-use function substr;
 use function symlink;
 
 use const LOCK_EX;
@@ -40,16 +37,16 @@ class LocalFilesystemTest extends TestCase
     protected function setUp(): void
     {
         reset_function_mocks();
-        $this->deleteDirectory(static::ROOT);
+        static::deleteDirectory(static::ROOT);
     }
 
     protected function tearDown(): void
     {
         reset_function_mocks();
-        $this->deleteDirectory(static::ROOT);
+        static::deleteDirectory(static::ROOT);
     }
 
-    private function deleteDirectory(string $dir)
+    private static function deleteDirectory(string $dir)
     {
         if ( ! is_dir($dir)) {
             return;
@@ -60,7 +57,7 @@ class LocalFilesystemTest extends TestCase
                 continue;
             }
             if (is_dir("$dir/$file")) {
-                $this->deleteDirectory("$dir/$file");
+                static::deleteDirectory("$dir/$file");
             } else {
                 unlink("$dir/$file");
             }
