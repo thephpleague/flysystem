@@ -7,9 +7,11 @@ namespace League\Flysystem\Local;
 use League\Flysystem\Config;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\SymbolicLinkEncountered;
+use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
@@ -470,6 +472,55 @@ class LocalFilesystemTest extends TestCase
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->visibility('something.txt');
     }
+
+    /**
+     * @test
+     */
+    public function moving_a_file()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('first.txt', 'contents', new Config());
+        $this->assertFileExists(static::ROOT.'/first.txt');
+        $adapter->move('first.txt', 'second.txt', new Config());
+        $this->assertFileExists(static::ROOT.'/second.txt');
+        $this->assertFileNotExists(static::ROOT.'/first.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_move_a_file()
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->move('first.txt', 'second.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('first.txt', 'contents', new Config());
+        $adapter->copy('first.txt', 'second.txt', new Config());
+        $this->assertFileExists(static::ROOT.'/second.txt');
+        $this->assertFileExists(static::ROOT.'/first.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_copy_a_file()
+    {
+        $this->expectException(UnableToCopyFile::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->copy('first.txt', 'second.txt', new Config());
+    }
+
+    /* //////////////////////
+    // These are the utils //
+    ////////////////////// */
 
     private function streamWithContents(string $contents)
     {

@@ -13,6 +13,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\SymbolicLinkEncountered;
+use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
@@ -246,13 +247,23 @@ class LocalFilesystem implements FilesystemAdapter
             $this->resolveDirectoryVisibility($config->get('directory_visibility'))
         );
 
-        if ( ! rename($sourcePath, $destinationPath)) {
+        if ( ! @rename($sourcePath, $destinationPath)) {
             throw UnableToMoveFile::fromLocationTo($sourcePath, $destinationPath);
         }
     }
 
     public function copy(string $source, string $destination, Config $config): void
     {
+        $sourcePath = $this->prefixer->prefixPath($source);
+        $destinationPath = $this->prefixer->prefixPath($destination);
+        $this->ensureDirectoryExists(
+            dirname($destinationPath),
+            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+        );
+
+        if ( ! @copy($sourcePath, $destinationPath)) {
+            throw UnableToCopyFile::fromLocationTo($sourcePath, $destinationPath);
+        }
     }
 
     public function read(string $location): string

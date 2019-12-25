@@ -23,7 +23,7 @@ class Config
         return $this->options[$property] ?? $default;
     }
 
-    public function withOption(array $options): Config
+    public function extend(array $options): Config
     {
         return new static(array_merge($this->options, $options));
     }

@@ -34,7 +34,7 @@ class ConfigTest extends TestCase
     public function extending_a_config_with_options()
     {
         $config = new Config(['option' => 'value', 'first' => 1]);
-        $extended = $config->withOption(['option' => 'overwritten', 'second' => 2]);
+        $extended = $config->extend(['option' => 'overwritten', 'second' => 2]);
 
         $this->assertEquals('overwritten', $extended->get('option'));
         $this->assertEquals(1, $extended->get('first'));

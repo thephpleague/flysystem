@@ -31,6 +31,7 @@ class Filesystem
 
     public function write(string $location, string $contents, array $config): void
     {
+        $this->adapter->write($location, $contents, $this->config->extend($config));
     }
 
     public function writeStream(string $location, $contents, array $config): void
