@@ -38,7 +38,7 @@ class Filesystem
         return $this->adapter->fileExists($this->pathNormalizer->normalizePath($location));
     }
 
-    public function write(string $location, string $contents, array $config): void
+    public function write(string $location, string $contents, array $config = []): void
     {
         $this->adapter->write(
             $this->pathNormalizer->normalizePath($location),
@@ -47,8 +47,10 @@ class Filesystem
         );
     }
 
-    public function writeStream(string $location, $contents, array $config): void
+    public function writeStream(string $location, $contents, array $config = []): void
     {
+        $this->assertIsResource($contents);
+        $this->rewindStream($contents);
         $this->adapter->writeStream(
             $this->pathNormalizer->normalizePath($location),
             $contents,
@@ -56,7 +58,7 @@ class Filesystem
         );
     }
 
-    public function update(string $location, string $contents, array $config): void
+    public function update(string $location, string $contents, array $config = []): void
     {
         $this->adapter->update(
             $this->pathNormalizer->normalizePath($location),
@@ -65,8 +67,10 @@ class Filesystem
         );
     }
 
-    public function updateStream(string $location, $contents, array $config): void
+    public function updateStream(string $location, $contents, array $config = []): void
     {
+        $this->assertIsResource($contents);
+        $this->rewindStream($contents);
         $this->adapter->updateStream(
             $this->pathNormalizer->normalizePath($location),
             $contents,
@@ -94,7 +98,7 @@ class Filesystem
         $this->adapter->deleteDirectory($this->pathNormalizer->normalizePath($location));
     }
 
-    public function createDirectory(string $location, array $config): void
+    public function createDirectory(string $location, array $config = []): void
     {
         $this->adapter->createDirectory($this->pathNormalizer->normalizePath($location));
     }
@@ -118,5 +122,46 @@ class Filesystem
             $this->pathNormalizer->normalizePath($source),
             $this->pathNormalizer->normalizePath($destination)
         );
+    }
+
+    public function lastModified(string $path): int
+    {
+        return $this->adapter->lastModified($path);
+    }
+
+    public function fileSize(string $path): int
+    {
+        return $this->adapter->fileSize($path);
+    }
+
+    public function mimeType(string $path): string
+    {
+        return $this->adapter->mimeType($path);
+    }
+
+    public function setVisibility(string $path, string $visibility): void
+    {
+        $this->adapter->setVisibility($path, $visibility);
+    }
+
+    public function visibility(string $path): string
+    {
+        return $this->adapter->visibility($path);
+    }
+
+    private function assertIsResource($contents): void
+    {
+        if ( ! is_resource($contents)) {
+            throw new InvalidArgumentException(
+                "Invalid stream provided, expected resoure, received " . gettype($contents)
+            );
+        }
+    }
+
+    private function rewindStream($resource): void
+    {
+        if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {
+            rewind($resource);
+        }
     }
 }
