@@ -28,3 +28,13 @@ namespace League\Flysystem\Local {
         return return_mocked_value('filesize');
     }
 }
+
+namespace League\Flysystem\InMemory {
+    function time() {
+        if ( ! is_mocked('time')) {
+            return \time();
+        }
+
+        return return_mocked_value('time');
+    }
+}
