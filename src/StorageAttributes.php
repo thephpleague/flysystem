@@ -6,8 +6,8 @@ namespace League\Flysystem;
 
 interface StorageAttributes
 {
-    const TYPE_FILE = 'FILE';
-    const TYPE_DIRECTORY = 'DIRECTORY';
+    public const TYPE_FILE = 'file';
+    public const TYPE_DIRECTORY = 'dir';
 
     public function path(): string;
 
