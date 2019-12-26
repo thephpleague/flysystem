@@ -117,7 +117,7 @@ class LocalFilesystemTest extends TestCase
     public function writing_a_file_with_a_stream()
     {
         $adapter = new LocalFilesystem(static::ROOT);
-        $stream = $this->streamWithContents('contents');
+        $stream = stream_with_contents('contents');
         $adapter->writeStream('/file.txt', $stream, new Config());
         fclose($stream);
 
@@ -133,7 +133,7 @@ class LocalFilesystemTest extends TestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('/file.txt', 'contents', new Config());
-        $stream = $this->streamWithContents('new contents');
+        $stream = stream_with_contents('new contents');
         $adapter->updateStream('/file.txt', $stream, new Config());
         fclose($stream);
 
@@ -148,7 +148,7 @@ class LocalFilesystemTest extends TestCase
     public function writing_a_file_with_a_stream_and_visibility()
     {
         $adapter = new LocalFilesystem(static::ROOT);
-        $stream = $this->streamWithContents('something');
+        $stream = stream_with_contents('something');
         $adapter->writeStream('/file.txt', $stream, new Config(['visibility' => Visibility::PRIVATE]));
         fclose($stream);
 
@@ -217,7 +217,7 @@ class LocalFilesystemTest extends TestCase
     {
         $this->expectException(UnableToWriteFile::class);
         try {
-            $stream = $this->streamWithContents('something');
+            $stream = stream_with_contents('something');
             (new LocalFilesystem('/'))->writeStream('/cannot-create-a-file-here', 'contents', new Config());
         } finally {
             fclose($stream);
@@ -231,7 +231,7 @@ class LocalFilesystemTest extends TestCase
     {
         $this->expectException(UnableToUpdateFile::class);
         try {
-            $stream = $this->streamWithContents('something');
+            $stream = stream_with_contents('something');
             (new LocalFilesystem('/'))->updateStream('/cannot-create-a-file-here', 'contents', new Config());
         } finally {
             fclose($stream);
@@ -634,15 +634,6 @@ class LocalFilesystemTest extends TestCase
     /* //////////////////////
     // These are the utils //
     ////////////////////// */
-
-    private function streamWithContents(string $contents)
-    {
-        $stream = fopen('php://temp', 'w+b');
-        fwrite($stream, $contents);
-        rewind($stream);
-
-        return $stream;
-    }
 
     /**
      * @param string $file

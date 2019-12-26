@@ -26,3 +26,12 @@ function is_mocked(string $name)
 {
     return ($_ENV['__FM:FUNC_IS_MOCKED:' . $name] ?? 'no') === 'yes';
 }
+
+function stream_with_contents(string $contents)
+{
+    $stream = fopen('php://temp', 'w+b');
+    fwrite($stream, $contents);
+    rewind($stream);
+
+    return $stream;
+}
