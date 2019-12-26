@@ -48,6 +48,15 @@ class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOpe
         return $e;
     }
 
+    public static function mimeType(string $location, string $extraMessage)
+    {
+        $e = new static("Unable to retrieve the mimetype for file at location: $location. {$extraMessage}");
+        $e->location = $location;
+        $e->metadataType = self::TYPE_VISIBILITY;
+
+        return $e;
+    }
+
     public function location(): string
     {
         return $this->location;

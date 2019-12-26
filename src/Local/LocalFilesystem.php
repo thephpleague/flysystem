@@ -373,9 +373,16 @@ class LocalFilesystem implements FilesystemAdapter
 
     public function mimeType(string $path): string
     {
-        clearstatcache(false, $this->prefixer->prefixPath($path));
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = @$finfo->file($location);
 
-        return (new finfo(FILEINFO_MIME_TYPE))->file($this->prefixer->prefixPath($path));
+        if ($mimeType === false) {
+            throw UnableToRetrieveMetadata::mimeType($path, error_get_last()['message'] ?? '');
+        }
+
+        return $mimeType;
     }
 
     public function lastModified(string $path): int

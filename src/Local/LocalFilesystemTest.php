@@ -536,6 +536,16 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function not_being_able_to_get_mimetype()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->mimeType('flysystem.svg');
+    }
+
+    /**
+     * @test
+     */
     public function getting_last_modified()
     {
         $adapter = new LocalFilesystem(static::ROOT);
