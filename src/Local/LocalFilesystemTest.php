@@ -376,6 +376,18 @@ class LocalFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function deleting_directories_with_other_directories_in_it()
+    {
+        $adapter = new LocalFilesystem(static::ROOT);
+        $adapter->write('a/b/c/d/e.txt', 'contents', new Config());
+        $adapter->deleteDirectory('a/b');
+        $this->assertDirectoryExists(static::ROOT.'/a');
+        $this->assertDirectoryNotExists(static::ROOT.'/a/b');
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_non_existing_directory()
     {
         $adapter = new LocalFilesystem(static::ROOT);
