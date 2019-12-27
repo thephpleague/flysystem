@@ -107,6 +107,15 @@ class InMemoryFilesystemTest extends TestCase
     /**
      * @test
      */
+    public function creating_a_directory_does_nothing()
+    {
+        $this->adapter->createDirectory('something', new Config());
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     */
     public function updating_and_reading_a_file()
     {
         $this->adapter->update(self::PATH, 'contents', new Config());
