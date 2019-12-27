@@ -75,7 +75,7 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function deleteDirectory(string $prefix): void
     {
-        $prefix = trim($prefix, '/') . '/';
+        $prefix = rtrim($prefix, '/') . '/';
 
         foreach (array_keys($this->files) as $path) {
             if (strpos($path, $prefix) === 0) {
