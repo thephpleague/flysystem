@@ -104,6 +104,24 @@ class InMemoryFilesystemTest extends TestCase
         $this->assertFalse($this->adapter->fileExists('path.txt'));
     }
 
+
+
+    /**
+     * @test
+     */
+    public function deleting_a_directory()
+    {
+        $this->adapter->write('a/path.txt', 'contents', new Config());
+        $this->adapter->write('a/b/path.txt', 'contents', new Config());
+        $this->adapter->write('a/b/c/path.txt', 'contents', new Config());
+        $this->assertTrue($this->adapter->fileExists('a/b/path.txt'));
+        $this->assertTrue($this->adapter->fileExists('a/b/c/path.txt'));
+        $this->adapter->deleteDirectory('a/b');
+        $this->assertTrue($this->adapter->fileExists('a/path.txt'));
+        $this->assertFalse($this->adapter->fileExists('a/b/path.txt'));
+        $this->assertFalse($this->adapter->fileExists('a/b/c/path.txt'));
+    }
+
     /**
      * @test
      */
