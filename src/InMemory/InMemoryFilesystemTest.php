@@ -6,6 +6,8 @@ namespace League\Flysystem\InMemory;
 
 use League\Flysystem\Config;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
@@ -44,6 +46,62 @@ class InMemoryFilesystemTest extends TestCase
         $this->adapter->setVisibility(self::PATH, Visibility::PUBLIC);
         $contents = $this->adapter->visibility(self::PATH);
         $this->assertEquals(Visibility::PUBLIC, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function setting_visibility_on_a_non_existing_file()
+    {
+        $this->expectException(UnableToSetVisibility::class);
+        $this->adapter->setVisibility('path.txt', Visibility::PRIVATE);
+    }
+
+    /**
+     * @test
+     */
+    public function getting_visibility_on_a_non_existing_file()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $this->adapter->visibility('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function getting_mimetype_on_a_non_existing_file()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $this->adapter->mimeType('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function getting_last_modified_on_a_non_existing_file()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $this->adapter->lastModified('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function getting_file_size_on_a_non_existing_file()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+        $this->adapter->fileSize('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_file()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->assertTrue($this->adapter->fileExists('path.txt'));
+        $this->adapter->delete('path.txt');
+        $this->assertFalse($this->adapter->fileExists('path.txt'));
     }
 
     /**
