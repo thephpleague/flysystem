@@ -193,12 +193,10 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    private function listDirectoryRecursively(
-        string $path,
-        int $mode = RecursiveIteratorIterator::SELF_FIRST
-    ): Generator {
+    private function listDirectoryRecursively(string $path): Generator
+    {
         yield from new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), $mode
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST
         );
     }
 
