@@ -9,6 +9,8 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
@@ -22,12 +24,13 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        return array_key_exists($path, $this->files);
+        return array_key_exists($this->preparePath($path), $this->files);
     }
 
     public function write(string $path, string $contents, Config $config): void
     {
-        $file = $this->files[$path] = $this->files[$path] ?? new InMemoryFile($path);
+        $path = $this->preparePath($path);
+        $file = $this->files[$path] = $this->files[$path] ?? new InMemoryFile();
         $file->updateContents($contents);
 
         if ($visibility = $config->get('visibility')) {
@@ -52,6 +55,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function read(string $path): string
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToReadFile::atLocation($path, 'file does not exist');
         }
@@ -61,6 +66,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function readStream(string $path)
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToReadFile::atLocation($path, 'file does not exist');
         }
@@ -70,11 +77,12 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function delete(string $path): void
     {
-        unset($this->files[$path]);
+        unset($this->files[$this->preparePath($path)]);
     }
 
     public function deleteDirectory(string $prefix): void
     {
+        $prefix = $this->preparePath($prefix);
         $prefix = rtrim($prefix, '/') . '/';
 
         foreach (array_keys($this->files) as $path) {
@@ -91,6 +99,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function setVisibility(string $path, string $visibility): void
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToSetVisibility::atLocation($path, 'file does not exist');
         }
@@ -100,6 +110,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function visibility(string $path): string
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::visibility($path, 'file does not exist');
         }
@@ -109,6 +121,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function mimeType(string $path): string
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::mimeType($path, 'file does not exist');
         }
@@ -118,6 +132,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function lastModified(string $path): int
     {
+        $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::lastModified($path, 'file does not exist');
         }
@@ -127,6 +143,7 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function fileSize(string $path): int
     {
+        $path = $this->preparePath($path);
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::fileSize($path, 'file does not exist');
         }
@@ -136,7 +153,7 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function listContents(string $prefix, bool $recursive): Generator
     {
-        $prefix = rtrim($prefix, '/') . '/';
+        $prefix = $this->preparePath($prefix);
         $prefixLength = strlen($prefix);
         $listedDirectories = [];
 
@@ -149,16 +166,21 @@ class InMemoryFilesystem implements FilesystemAdapter
                     $parts = explode('/', $dirname);
                     $dirPath = '';
 
-                    foreach ($parts as $part) {
+                    foreach ($parts as $index => $part) {
+                        if ($recursive === false && $index >= 1) {
+                            break;
+                        }
+
                         $dirPath .= $part.'/';
 
                         if ( ! in_array($dirPath, $listedDirectories)) {
-                            yield new DirectoryAttributes($dirPath);
+                            $listedDirectories[] = $dirPath;
+                            yield new DirectoryAttributes('/' . $dirPath);
                         }
                     }
                 }
 
-                if ($recursive) {
+                if ($recursive === true || strpos($subPath, '/') === false) {
                     yield new FileAttributes($path);
                 }
             }
@@ -167,9 +189,31 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function move(string $source, string $destination, Config $config): void
     {
+        $source = $this->preparePath($source);
+        $destination = $this->preparePath($destination);
+
+        if ( ! $this->fileExists($source) || $this->fileExists($destination)) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination);
+        }
+
+        $this->files[$destination] = $this->files[$source];
+        unset($this->files[$source]);
     }
 
     public function copy(string $source, string $destination, Config $config): void
     {
+        $source = $this->preparePath($source);
+        $destination = $this->preparePath($destination);
+
+        if ( ! $this->fileExists($source) || $this->fileExists($destination)) {
+            throw UnableToCopyFile::fromLocationTo($source, $destination);
+        }
+
+        $this->files[$destination] = clone $this->files[$source];
+    }
+
+    private function preparePath(string $path): string
+    {
+        return '/' . ltrim($path, '/');
     }
 }

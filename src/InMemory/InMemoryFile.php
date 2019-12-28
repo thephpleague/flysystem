@@ -30,9 +30,8 @@ class InMemoryFile
      */
     private $visibility;
 
-    public function __construct(string $path)
+    public function __construct()
     {
-        $this->path = $path;
         $this->lastModified = time();
     }
 

@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace League\Flysystem\InMemory;
 
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
@@ -191,6 +195,97 @@ class InMemoryFilesystemTest extends TestCase
     {
         $this->expectException(UnableToReadFile::class);
         $this->adapter->readStream('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function listing_all_files()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->write('a/path.txt', 'contents', new Config());
+        $this->adapter->write('a/b/path.txt', 'contents', new Config());;
+        $listing = iterator_to_array($this->adapter->listContents('/', true));
+        $this->assertCount(5, $listing);
+        $this->assertContainsEquals(new FileAttributes('/path.txt'), $listing);
+        $this->assertContainsEquals(new FileAttributes('/a/path.txt'), $listing);
+        $this->assertContainsEquals(new FileAttributes('/a/b/path.txt'), $listing);
+        $this->assertContainsEquals(new DirectoryAttributes('/a/'), $listing);
+        $this->assertContainsEquals(new DirectoryAttributes('/a/b/'), $listing);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_non_recursive()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->write('a/path.txt', 'contents', new Config());
+        $this->adapter->write('a/b/path.txt', 'contents', new Config());
+        $listing = iterator_to_array($this->adapter->listContents('/', false));
+        $this->assertCount(2, $listing);
+    }
+
+    /**
+     * @test
+     */
+    public function moving_a_file_successfully()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->move('path.txt', 'new-path.txt', new Config());
+        $this->assertFalse($this->adapter->fileExists('path.txt'));
+        $this->assertTrue($this->adapter->fileExists('new-path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function moving_a_file_with_collision()
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->write('new-path.txt', 'contents', new Config());
+        $this->adapter->move('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function trying_to_move_a_non_existing_file()
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $this->adapter->move('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_successfully()
+    {
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
+        $this->assertTrue($this->adapter->fileExists('path.txt'));
+        $this->assertTrue($this->adapter->fileExists('new-path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function trying_to_copy_a_non_existing_file()
+    {
+        $this->expectException(UnableToCopyFile::class);
+        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_with_collision()
+    {
+        $this->expectException(UnableToCopyFile::class);
+        $this->adapter->write('path.txt', 'contents', new Config());
+        $this->adapter->write('new-path.txt', 'contents', new Config());
+        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
     }
 
     /**
