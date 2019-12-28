@@ -10,4 +10,7 @@
 ## Reporting a Vulnerability
 
 When you've encountered a security vulnerability, please disclose it securely.
-You can email your findings to info@frankdejonge.nl.
+
+The security process is described at: 
+[https://flysystem.thephpleague.com/docs/security/](https://flysystem.thephpleague.com/docs/security/)
+

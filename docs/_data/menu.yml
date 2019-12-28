@@ -1,6 +1,7 @@
 Flysystem:
     Introduction: '/docs/'
     Architecture: '/docs/architecture/'
+    Security Policy: '/docs/security/'
 
 Usage:
     Setup / Bootstrap: '/docs/usage/setup/'
