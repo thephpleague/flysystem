@@ -14,7 +14,7 @@ class InvalidVisibilityProvided extends InvalidArgumentException implements File
 {
     public static function withVisibility($visibility, string $expectedMessage)
     {
-        $provided = is_scalar($visibility) ? var_export($visibility) : "parameter of type " . gettype($visibility);
+        $provided = is_scalar($visibility) ? var_export($visibility, true) : "parameter of type " . gettype($visibility);
         $message = "Invalid visibility provided. Expected {$expectedMessage}, received {$provided}";
 
         throw new static($message);

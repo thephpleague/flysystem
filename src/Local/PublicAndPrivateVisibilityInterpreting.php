@@ -79,7 +79,13 @@ class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpret
 
     public function inverseForDirectory($visibility): string
     {
-        $this->guardAgainstInvalidInput($visibility);
+        if ($visibility === $this->directoryPublic) {
+            return Visibility::PUBLIC;
+        } elseif ($visibility === $this->directoryPrivate) {
+            return Visibility::PRIVATE;
+        }
+
+        return Visibility::PUBLIC; // default
     }
 
     public function defaultForDirectories(): int
