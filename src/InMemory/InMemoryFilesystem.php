@@ -97,7 +97,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         // ignored
     }
 
-    public function setVisibility(string $path, string $visibility): void
+    public function setVisibility(string $path, $visibility): void
     {
         $path = $this->preparePath($path);
 

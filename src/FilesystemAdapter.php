@@ -28,7 +28,7 @@ interface FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void;
 
-    public function setVisibility(string $path, string $visibility): void;
+    public function setVisibility(string $path, $visibility): void;
 
     public function visibility(string $path): string;
     public function mimeType(string $path): string;

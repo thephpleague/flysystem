@@ -345,14 +345,14 @@ class LocalFilesystem implements FilesystemAdapter
         }
     }
 
-    public function setVisibility(string $location, $visibility): void
+    public function setVisibility(string $path, $visibility): void
     {
-        $location = $this->prefixer->prefixPath($location);
-        $visibility = is_dir($location) ? $this->visibility->forDirectory($visibility) : $this->visibility->forFile(
+        $path = $this->prefixer->prefixPath($path);
+        $visibility = is_dir($path) ? $this->visibility->forDirectory($visibility) : $this->visibility->forFile(
             $visibility
         );
 
-        $this->setPermissions($location, $visibility);
+        $this->setPermissions($path, $visibility);
     }
 
     public function visibility(string $path): string
