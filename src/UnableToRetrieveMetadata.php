@@ -67,8 +67,8 @@ class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOpe
         return $this->metadataType;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
-        return FilesystemOperationFailed::OPERATION_GET_VISIBILITY;
+        return FilesystemOperationFailed::OPERATION_RETRIEVE_METADATA;
     }
 }

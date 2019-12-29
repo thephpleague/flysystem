@@ -276,7 +276,7 @@ class LocalFilesystem implements FilesystemAdapter
         $contents = @file_get_contents($location);
 
         if ($contents === false) {
-            throw UnableToReadFile::atLocation($path, error_get_last()['message'] ?? '');
+            throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
         }
 
         return $contents;
@@ -292,7 +292,7 @@ class LocalFilesystem implements FilesystemAdapter
         $contents = @fopen($location, 'rb');
 
         if ($contents === false) {
-            throw UnableToReadFile::atLocation($path, error_get_last()['message'] ?? '');
+            throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
         }
 
         return $contents;
@@ -300,15 +300,22 @@ class LocalFilesystem implements FilesystemAdapter
 
     protected function ensureDirectoryExists(string $dirname, int $visibility)
     {
+        if (is_dir($dirname)) {
+            return;
+        }
+
+        error_clear_last();
+
+        if ( ! @mkdir($dirname, $visibility, true)) {
+            $mkdirError = error_get_last();
+        }
+
+        clearstatcache(false, $dirname);
+
         if ( ! is_dir($dirname)) {
-            if ( ! @mkdir($dirname, $visibility, true)) {
-                $mkdirError = error_get_last();
-            }
-            clearstatcache(false, $dirname);
-            if ( ! is_dir($dirname)) {
-                $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
-                throw UnableToCreateDirectory::atLocation($dirname, $errorMessage);
-            }
+            $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
+
+            throw UnableToCreateDirectory::atLocation($dirname, $errorMessage);
         }
     }
 

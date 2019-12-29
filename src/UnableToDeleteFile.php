@@ -18,13 +18,13 @@ class UnableToDeleteFile extends RuntimeException implements FilesystemOperation
     public static function atLocation(string $location, string $reason = '')
     {
         $e = new static(rtrim("Unable to delete file located at: {$location}. {$reason}"));
-        $e->location;
+        $e->location = $location;
         $e->reason = $reason;
 
         return $e;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_DELETE;
     }

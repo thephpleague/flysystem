@@ -37,7 +37,7 @@ class UnableToCopyFile extends RuntimeException implements FilesystemOperationFa
         return $e;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_COPY;
     }

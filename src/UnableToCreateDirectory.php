@@ -22,7 +22,7 @@ class UnableToCreateDirectory extends RuntimeException implements FilesystemOper
         return $e;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_CREATE_DIRECTORY;
     }

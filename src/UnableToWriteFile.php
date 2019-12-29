@@ -18,13 +18,13 @@ class UnableToWriteFile extends RuntimeException implements FilesystemOperationF
     public static function atLocation(string $location, string $reason = '')
     {
         $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"));
-        $e->location;
+        $e->location = $location;
         $e->reason = $reason;
 
         return $e;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_WRITE;
     }

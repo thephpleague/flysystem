@@ -15,16 +15,16 @@ class UnableToReadFile extends RuntimeException implements FilesystemOperationFa
      */
     private $reason;
 
-    public static function atLocation(string $location, string $reason = '')
+    public static function fromLocation(string $location, string $reason = '')
     {
         $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"));
-        $e->location;
+        $e->location = $location;
         $e->reason = $reason;
 
         return $e;
     }
 
-    public function operationType(): string
+    public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_READ;
     }

@@ -58,7 +58,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         $path = $this->preparePath($path);
 
         if (array_key_exists($path, $this->files) === false) {
-            throw UnableToReadFile::atLocation($path, 'file does not exist');
+            throw UnableToReadFile::fromLocation($path, 'file does not exist');
         }
 
         return $this->files[$path]->read();
@@ -69,7 +69,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         $path = $this->preparePath($path);
 
         if (array_key_exists($path, $this->files) === false) {
-            throw UnableToReadFile::atLocation($path, 'file does not exist');
+            throw UnableToReadFile::fromLocation($path, 'file does not exist');
         }
 
         return $this->files[$path]->readStream();
