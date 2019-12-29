@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.62 - 2019-12-29
+
+* (#1119) Made `Util::getStreamSize` account for `fstat` failure.
+
 ## 1.0.61 - 2019-12-08
 
 * Fixed an array access issue for PHP 7.4 (#1106)
