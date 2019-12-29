@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-use LogicException;
-
 class WhitespacePathNormalizer implements PathNormalizer
 {
     public function normalizePath(string $path): string
@@ -46,9 +44,7 @@ class WhitespacePathNormalizer implements PathNormalizer
 
                 case '..':
                     if (empty($parts)) {
-                        throw new LogicException(
-                            'Path is outside of the defined root, path: [' . $path . ']'
-                        );
+                        throw PathTraversalDetected::forPath($path);
                     }
                     array_pop($parts);
                     break;
