@@ -170,6 +170,13 @@ class UtilTests extends TestCase
         fclose($stream);
     }
 
+    public function testStreamSizeForUrl()
+    {
+        $stream = \fopen('https://flysystem.thephpleague.com/img/flysystem.svg', 'r');
+        $this->assertNull(Util::getStreamSize($stream));
+        fclose($stream);
+    }
+
     public function testRewindStream()
     {
         $stream = tmpfile();
