@@ -13,11 +13,6 @@ class InMemoryFile
     /**
      * @var string
      */
-    private $path;
-
-    /**
-     * @var string
-     */
     private $contents;
 
     /**
@@ -32,7 +27,6 @@ class InMemoryFile
 
     public function __construct()
     {
-        $this->lastModified = time();
     }
 
     public function updateContents(string $contents): void

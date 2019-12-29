@@ -293,7 +293,7 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function checking_for_metadata()
     {
-        mock_function('time', 1234, 1234);
+        mock_function('time', 1234);
         $this->adapter->write(
             self::PATH,
             file_get_contents(__DIR__.'/../../test_files/flysystem.svg'),
