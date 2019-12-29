@@ -267,14 +267,14 @@ class Util
      *
      * @param resource $resource
      *
-     * @return int stream size
+     * @return int|null stream size
      */
     public static function getStreamSize($resource)
     {
         $stat = fstat($resource);
 
         if ( ! is_array($stat) || ! isset($stat['size'])) {
-            throw new RuntimeException('Cannot stat resource. Remote files are not supported.');
+            return null;
         }
 
         return $stat['size'];
