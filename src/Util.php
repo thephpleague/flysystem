@@ -273,6 +273,10 @@ class Util
     {
         $stat = fstat($resource);
 
+        if ( ! is_array($stat) || ! isset($stat['size'])) {
+            throw new RuntimeException('Cannot stat resource. Remote files are not supported.');
+        }
+
         return $stat['size'];
     }
 
