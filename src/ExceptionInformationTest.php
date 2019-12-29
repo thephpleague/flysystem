@@ -144,4 +144,14 @@ class ExceptionInformationTest extends TestCase
         $this->assertEquals('the-location', $exception->location());
         $this->assertStringContainsString('the-location', $exception->getMessage());
     }
+
+    /**
+     * @test
+     */
+    public function path_traversal_exception_information()
+    {
+        $exception = PathTraversalDetected::forPath('../path.txt');
+        $this->assertEquals('../path.txt', $exception->path());
+        $this->assertStringContainsString('../path.txt', $exception->getMessage());
+    }
 }
