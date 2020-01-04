@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\Adapter;
 
+use DateTime;
 use ErrorException;
 use League\Flysystem\Config;
 use PHPUnit\Framework\TestCase;
@@ -674,7 +675,7 @@ class FtpTests extends TestCase
                         'path' => 'somewhere/folder/dummy.txt',
                         'visibility' => 'public',
                         'size' => 0,
-                        'timestamp' => 1574603940,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Nov 24 13:59')->getTimestamp(),
                     ],
                 ]
             ],
@@ -703,7 +704,7 @@ class FtpTests extends TestCase
                         'path' => 'somewhere/folder/dummy.txt',
                         'visibility' => 'public',
                         'size' => 0,
-                        'timestamp' => 1574603940,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Nov 24 13:59')->getTimestamp(),
                     ],
                 ]
             ],
@@ -717,21 +718,21 @@ class FtpTests extends TestCase
                         'path' => 'lastfiledir/file1.txt',
                         'visibility' => 'public',
                         'size' => 409,
-                        'timestamp' => 1566205260,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Aug 19 09:01')->getTimestamp(),
                     ],
                     [
                         'type' => 'file',
                         'path' => 'lastfiledir/file2.txt',
                         'visibility' => 'public',
                         'size' => 409,
-                        'timestamp' => 1565773260,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Aug 14 09:01')->getTimestamp(),
                     ],
                     [
                         'type' => 'file',
                         'path' => 'lastfiledir/file3.txt',
                         'visibility' => 'public',
                         'size' => 409,
-                        'timestamp' => 1549447560,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Feb 6 10:06')->getTimestamp(),
                     ],
                     [
                         'type' => 'file',
