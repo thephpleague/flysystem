@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.63 - 2020-01-04
+
+* Introduces base exception marker and custom runtime exceptions for error cases.
+
 ## 1.0.62 - 2019-12-29
 
 * (#1119) Made `Util::getStreamSize` account for `fstat` failure.
