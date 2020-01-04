@@ -2,6 +2,8 @@
 
 namespace League\Flysystem;
 
-interface FlysystemException
+use Throwable;
+
+interface FlysystemException extends Throwable
 {
 }
