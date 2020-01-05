@@ -8,14 +8,14 @@ use League\Flysystem\InvalidVisibilityProvided;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
-class PublicAndPrivateVisibilityInterpretingTest extends TestCase
+class PortableVisibilityConverterTest extends TestCase
 {
     /**
      * @test
      */
     public function determining_visibility_for_a_file()
     {
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0644, $interpreter->forFile(Visibility::PUBLIC));
         $this->assertEquals(0600, $interpreter->forFile(Visibility::PRIVATE));
     }
@@ -26,7 +26,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
     public function determining_an_incorrect_visibility_for_a_file()
     {
         $this->expectException(InvalidVisibilityProvided::class);
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $interpreter->forFile('incorrect');
     }
     /**
@@ -34,7 +34,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
      */
     public function determining_visibility_for_a_directory()
     {
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0755, $interpreter->forDirectory(Visibility::PUBLIC));
         $this->assertEquals(0700, $interpreter->forDirectory(Visibility::PRIVATE));
     }
@@ -45,7 +45,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
     public function determining_an_incorrect_visibility_for_a_directory()
     {
         $this->expectException(InvalidVisibilityProvided::class);
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $interpreter->forDirectory('incorrect');
     }
 
@@ -54,7 +54,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
      */
     public function inversing_for_a_file()
     {
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0644));
         $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForFile(0600));
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0404));
@@ -65,7 +65,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
      */
     public function inversing_for_a_directory()
     {
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0755));
         $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForDirectory(0700));
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0404));
@@ -76,10 +76,10 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
      */
     public function determining_default_for_directories()
     {
-        $interpreter = new PublicAndPrivateVisibilityInterpreting();
+        $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0700, $interpreter->defaultForDirectories());
 
-        $interpreter = new PublicAndPrivateVisibilityInterpreting(0644, 0600, 0755, 0700, Visibility::PUBLIC);
+        $interpreter = new PortableVisibilityConverter(0644, 0600, 0755, 0700, Visibility::PUBLIC);
         $this->assertEquals(0755, $interpreter->defaultForDirectories());
     }
 
@@ -88,7 +88,7 @@ class PublicAndPrivateVisibilityInterpretingTest extends TestCase
      */
     public function creating_from_array()
     {
-        $interpreter = PublicAndPrivateVisibilityInterpreting::fromArray([
+        $interpreter = PortableVisibilityConverter::fromArray([
             'file' => [
                 'public' => 0640,
                 'private' => 0604,

@@ -100,7 +100,10 @@ class Filesystem
 
     public function createDirectory(string $location, array $config = []): void
     {
-        $this->adapter->createDirectory($this->pathNormalizer->normalizePath($location));
+        $this->adapter->createDirectory(
+            $this->pathNormalizer->normalizePath($location),
+            $this->config->extend($config)
+        );
     }
 
     public function listContents(string $location): Generator
@@ -108,19 +111,21 @@ class Filesystem
         yield from $this->listContents($location);
     }
 
-    public function move(string $source, string $destination): void
+    public function move(string $source, string $destination, array $config = []): void
     {
         $this->adapter->move(
             $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination)
+            $this->pathNormalizer->normalizePath($destination),
+            $this->config->extend($config)
         );
     }
 
-    public function copy(string $source, string $destination): void
+    public function copy(string $source, string $destination, array $config = []): void
     {
         $this->adapter->copy(
             $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination)
+            $this->pathNormalizer->normalizePath($destination),
+            $this->config->extend($config)
         );
     }
 
@@ -153,7 +158,7 @@ class Filesystem
     {
         if ( ! is_resource($contents)) {
             throw new InvalidArgumentException(
-                "Invalid stream provided, expected resoure, received " . gettype($contents)
+                "Invalid stream provided, expected resource, received " . gettype($contents)
             );
         }
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-interface LocalVisibilityInterpreting
+interface VisibilityConverter
 {
     public function forFile($visibility): int;
     public function forDirectory($visibility): int;

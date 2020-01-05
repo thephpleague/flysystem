@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use RuntimeException;
+use Throwable;
 
 class UnableToReadFile extends RuntimeException implements FilesystemOperationFailed
 {
@@ -15,9 +16,9 @@ class UnableToReadFile extends RuntimeException implements FilesystemOperationFa
      */
     private $reason;
 
-    public static function fromLocation(string $location, string $reason = '')
+    public static function fromLocation(string $location, string $reason = '', Throwable $previous = null)
     {
-        $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"));
+        $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"), 0, $previous);
         $e->location = $location;
         $e->reason = $reason;
 

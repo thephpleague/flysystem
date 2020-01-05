@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace League\Flysystem\Local;
 
 use League\Flysystem\InvalidVisibilityProvided;
+use League\Flysystem\PortableVisibilityGuard;
 use League\Flysystem\Visibility;
 
-class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpreting
+class PortableVisibilityConverter implements VisibilityConverter
 {
     /**
      * @var int
@@ -50,7 +51,7 @@ class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpret
 
     public function forFile($visibility): int
     {
-        $this->guardAgainstInvalidInput($visibility);
+        PortableVisibilityGuard::guardAgainstInvalidInput($visibility);
 
         return $visibility === Visibility::PUBLIC
             ? $this->filePublic
@@ -59,7 +60,7 @@ class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpret
 
     public function forDirectory($visibility): int
     {
-        $this->guardAgainstInvalidInput($visibility);
+        PortableVisibilityGuard::guardAgainstInvalidInput($visibility);
 
         return $visibility === Visibility::PUBLIC
             ? $this->directoryPublic
@@ -93,18 +94,7 @@ class PublicAndPrivateVisibilityInterpreting implements LocalVisibilityInterpret
         return $this->defaultForDirectories === Visibility::PUBLIC ? $this->directoryPublic : $this->directoryPrivate;
     }
 
-    private function guardAgainstInvalidInput($visibility)
-    {
-        if ($visibility !== Visibility::PUBLIC && $visibility !== Visibility::PRIVATE) {
-            $className = Visibility::class;
-            throw InvalidVisibilityProvided::withVisibility(
-                $visibility,
-                "either {$className}::PUBLIC or {$className}::PRIVATE"
-            );
-        }
-    }
-
-    public static function fromArray(array $permissionMap, string $defaultForDirectories = Visibility::PRIVATE): PublicAndPrivateVisibilityInterpreting
+    public static function fromArray(array $permissionMap, string $defaultForDirectories = Visibility::PRIVATE): PortableVisibilityConverter
     {
         return new static(
             $permissionMap['file']['public'] ?? 0644,

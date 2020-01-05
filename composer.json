@@ -10,7 +10,8 @@
     "require": {
         "php": "^7.2",
         "ext-fileinfo": "*",
-        "ext-posix": "*"
+        "ext-posix": "*",
+        "aws/aws-sdk-php": "^3.0.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5"

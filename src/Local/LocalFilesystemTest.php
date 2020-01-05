@@ -162,7 +162,7 @@ class LocalFilesystemTest extends TestCase
     public function writing_a_file_with_visibility()
     {
         $adapter = new LocalFilesystem(
-            static::ROOT, new PublicAndPrivateVisibilityInterpreting()
+            static::ROOT, new PortableVisibilityConverter()
         );
         $adapter->write('/file.txt', 'contents', new Config(['visibility' => 'private']));
         $this->assertFileContains(static::ROOT . '/file.txt', 'contents');
