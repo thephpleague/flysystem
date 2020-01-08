@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use RuntimeException;
+use Throwable;
 
 class UnableToCopyFile extends RuntimeException implements FilesystemOperationFailed
 {
@@ -28,9 +29,9 @@ class UnableToCopyFile extends RuntimeException implements FilesystemOperationFa
         return $this->destination;
     }
 
-    public static function fromLocationTo(string $sourcePath, string $destinationPath)
+    public static function fromLocationTo(string $sourcePath, string $destinationPath, Throwable $previous = null)
     {
-        $e = new static("Unable to move file from $sourcePath to $destinationPath");
+        $e = new static("Unable to move file from $sourcePath to $destinationPath", 0 , $previous);
         $e->source = $sourcePath;
         $e->destination = $destinationPath;
 

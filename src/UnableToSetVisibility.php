@@ -6,6 +6,8 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
+use Throwable;
+
 use function rtrim;
 
 class UnableToSetVisibility extends RuntimeException implements FilesystemOperationFailed
@@ -25,10 +27,10 @@ class UnableToSetVisibility extends RuntimeException implements FilesystemOperat
         return $this->reason;
     }
 
-    public static function atLocation(string $filename, string $extraMessage = '')
+    public static function atLocation(string $filename, string $extraMessage = '', Throwable $previous = null): self
     {
         $message = "'Unable to set visibility for file {$filename}. $extraMessage";
-        $e = new static(rtrim($message));
+        $e = new static(rtrim($message), 0, $previous);
         $e->reason = $extraMessage;
         $e->location = $filename;
 

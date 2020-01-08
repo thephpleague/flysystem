@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
-use Aws\Result;
-use Aws\S3\Exception\S3Exception;
-use Aws\S3\S3Client;
+use Aws\S3\S3ClientInterface;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use Psr\Http\Message\StreamInterface;
+use Throwable;
 
 class AwsS3V3Filesystem implements FilesystemAdapter
 {
@@ -46,7 +49,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     ];
 
     /**
-     * @var S3Client
+     * @var S3ClientInterface
      */
     private $client;
 
@@ -66,7 +69,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     private $visibility;
 
     public function __construct(
-        S3Client $client,
+        S3ClientInterface $client,
         string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null
@@ -88,9 +91,9 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     }
 
     /**
-     * @param string $path
+     * @param string          $path
      * @param string|resource $body
-     * @param Config $config
+     * @param Config          $config
      */
     private function upload(string $path, $body, Config $config): void
     {
@@ -98,7 +101,10 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         $acl = $this->determineAcl($config);
         $options = $this->createOptionsFromConfig($config);
 
-        if ($body !== '' && ! array_key_exists('ContentType', $options) && $contentType = MimeType::detectMimeType($key, $body)) {
+        if ($body !== '' && ! array_key_exists('ContentType', $options) && $contentType = MimeType::detectMimeType(
+                $key,
+                $body
+            )) {
             $options['ContentType'] = $contentType;
         }
 
@@ -116,7 +122,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     {
         $options = [];
 
-        foreach(static::AVAILABLE_OPTIONS as $option) {
+        foreach (static::AVAILABLE_OPTIONS as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ($value !== '__NOT_SET__') {
@@ -158,10 +164,14 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     public function delete(string $path): void
     {
-        $this->client->deleteObject([
-            'Bucket' => $this->bucket,
-            'Key' => $this->prefixer->prefixPath($path),
-        ]);
+        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $command = $this->client->getCommand('deleteObject', $arguments);
+
+        try {
+            $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToDeleteFile::atLocation($path, '', $exception);
+        }
     }
 
     public function deleteDirectory(string $path): void
@@ -178,20 +188,30 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     public function setVisibility(string $path, $visibility): void
     {
-        $this->client->putObjectAcl([
+        $arguments = [
             'Bucket' => $this->bucket,
             'Key'    => $this->prefixer->prefixPath($path),
             'ACL'    => $this->visibility->visibilityToAcl($visibility),
-        ]);
+        ];
+        $command = $this->client->getCommand('putObjectAcl', $arguments);
+
+        try {
+            $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToSetVisibility::atLocation($path, '', $exception);
+        }
     }
 
     public function visibility(string $path): string
     {
-        /** @var Result $result */
-        $result = $this->client->getObjectAcl([
-            'Bucket' => $this->bucket,
-            'Key'    => $this->prefixer->prefixPath($path),
-        ]);
+        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $command = $this->client->getCommand('getObjectAcl', $arguments);
+
+        try {
+            $result = $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
+        }
 
         return $this->visibility->aclToVisibility((array) $result->get('Grants'));
     }
@@ -218,20 +238,38 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     public function copy(string $source, string $destination, Config $config): void
     {
+        try {
+            $visibility = $this->visibility($source);
+        } catch (Throwable $exception) {
+            throw UnableToCopyFile::fromLocationTo(
+                $source,
+                $destination,
+                $exception
+            );
+        }
+        $arguments = [
+            'ACL'        => $this->visibility->visibilityToAcl($visibility),
+            'Bucket'     => $this->bucket,
+            'Key'        => $this->prefixer->prefixPath($destination),
+            'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
+        ];
+        $command = $this->client->getCommand('copyObject', $arguments);
+
+        try {
+            $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
+        }
     }
 
     private function readObject(string $path): StreamInterface
     {
-        try {
-            $result = $this->client->getObject(
-                [
-                    'Bucket' => $this->bucket,
-                    'Key'    => $this->prefixer->prefixPath($path)
-                ]
-            );
+        $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $command = $this->client->getCommand('getObject', $options);
 
-            return $result->get('Body');
-        } catch (S3Exception $exception) {
+        try {
+            return $this->client->execute($command)->get('Body');
+        } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }
     }

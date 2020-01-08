@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use RuntimeException;
+use Throwable;
 
 class UnableToDeleteFile extends RuntimeException implements FilesystemOperationFailed
 {
@@ -15,9 +16,9 @@ class UnableToDeleteFile extends RuntimeException implements FilesystemOperation
      */
     private $reason;
 
-    public static function atLocation(string $location, string $reason = '')
+    public static function atLocation(string $location, string $reason = '', Throwable $previous = null)
     {
-        $e = new static(rtrim("Unable to delete file located at: {$location}. {$reason}"));
+        $e = new static(rtrim("Unable to delete file located at: {$location}. {$reason}"), 0, $previous);
         $e->location = $location;
         $e->reason = $reason;
 
