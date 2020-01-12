@@ -30,13 +30,13 @@ interface FilesystemAdapter
 
     public function setVisibility(string $path, $visibility): void;
 
-    public function visibility(string $path): string;
+    public function visibility(string $path): FileAttributes;
 
-    public function mimeType(string $path): string;
+    public function mimeType(string $path): FileAttributes;
 
-    public function lastModified(string $path): int;
+    public function lastModified(string $path): FileAttributes;
 
-    public function fileSize(string $path): int;
+    public function fileSize(string $path): FileAttributes;
 
     public function listContents(string $path, bool $recursive): Generator;
 

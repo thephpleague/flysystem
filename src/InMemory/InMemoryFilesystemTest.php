@@ -45,11 +45,11 @@ class InMemoryFilesystemTest extends TestCase
     public function setting_visibility()
     {
         $this->adapter->write(self::PATH, 'contents', new Config(['visibility' => Visibility::PRIVATE]));
-        $contents = $this->adapter->visibility(self::PATH);
-        $this->assertEquals(Visibility::PRIVATE, $contents);
+        $attrs = $this->adapter->visibility(self::PATH);
+        $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
         $this->adapter->setVisibility(self::PATH, Visibility::PUBLIC);
-        $contents = $this->adapter->visibility(self::PATH);
-        $this->assertEquals(Visibility::PUBLIC, $contents);
+        $attrs = $this->adapter->visibility(self::PATH);
+        $this->assertEquals(Visibility::PUBLIC, $attrs->visibility());
     }
 
     /**
@@ -301,8 +301,8 @@ class InMemoryFilesystemTest extends TestCase
         );
 
         $this->assertTrue($this->adapter->fileExists(self::PATH));
-        $this->assertEquals(753, $this->adapter->fileSize(self::PATH));
-        $this->assertEquals(1234, $this->adapter->lastModified(self::PATH));
-        $this->assertEquals('image/svg', $this->adapter->mimeType(self::PATH));
+        $this->assertEquals(753, $this->adapter->fileSize(self::PATH)->fileSize());
+        $this->assertEquals(1234, $this->adapter->lastModified(self::PATH)->lastModified());
+        $this->assertEquals('image/svg', $this->adapter->mimeType(self::PATH)->mimeType());
     }
 }

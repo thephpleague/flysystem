@@ -6,6 +6,13 @@ namespace League\Flysystem;
 
 class DirectoryAttributes implements StorageAttributes
 {
+    use ProxyArrayAccessToProperties;
+
+    /**
+     * @var string
+     */
+    private $type = StorageAttributes::TYPE_DIRECTORY;
+
     /**
      * @var string
      */
@@ -35,5 +42,25 @@ class DirectoryAttributes implements StorageAttributes
     public function visibility(): ?string
     {
         return $this->visibility;
+    }
+
+    public static function fromArray(array $attributes): StorageAttributes
+    {
+        return new static(
+            $attributes['path'],
+            $attributes['visibility'] ?? null
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'type' => $this->type,
+            'path' => $this->path,
+            'visibility' => $this->visibility,
+        ];
     }
 }

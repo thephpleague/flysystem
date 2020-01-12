@@ -355,7 +355,7 @@ class LocalFilesystem implements FilesystemAdapter
         $this->setPermissions($path, $visibility);
     }
 
-    public function visibility(string $path): string
+    public function visibility(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
         clearstatcache(false, $location);
@@ -367,8 +367,9 @@ class LocalFilesystem implements FilesystemAdapter
         }
 
         $permissions = $fileperms & 0777;
+        $visibility = $this->visibility->inverseForFile($permissions);
 
-        return $this->visibility->inverseForFile($permissions);
+        return new FileAttributes($path, null, $visibility);
     }
 
     private function resolveDirectoryVisibility($visibility)
@@ -378,7 +379,7 @@ class LocalFilesystem implements FilesystemAdapter
         );
     }
 
-    public function mimeType(string $path): string
+    public function mimeType(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
@@ -389,10 +390,10 @@ class LocalFilesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::mimeType($path, error_get_last()['message'] ?? '');
         }
 
-        return $mimeType;
+        return new FileAttributes($path, null, null, null, $mimeType);
     }
 
-    public function lastModified(string $path): int
+    public function lastModified(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
@@ -402,20 +403,20 @@ class LocalFilesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::lastModified($path, error_get_last()['message'] ?? '');
         }
 
-        return $lastModified;
+        return new FileAttributes($path, null, null, $lastModified);
     }
 
-    public function fileSize(string $path): int
+    public function fileSize(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
-        $lastModified = @filesize($location);
+        $fileSize = @filesize($location);
 
-        if ($lastModified === false) {
+        if ($fileSize === false) {
             throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
         }
 
-        return $lastModified;
+        return new FileAttributes($path, $fileSize);
     }
 
     private function listDirectory(string $location): Generator

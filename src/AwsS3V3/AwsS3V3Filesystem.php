@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
+use Aws\Api\DateTimeResult;
 use Aws\S3\S3ClientInterface;
 use Generator;
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToReadFile;
@@ -46,6 +50,12 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         'StorageClass',
         'Tagging',
         'WebsiteRedirectLocation',
+    ];
+    private const EXTRA_METADATA_FIELDS = [
+        'Metadata',
+        'StorageClass',
+        'ETag',
+        'VersionId',
     ];
 
     /**
@@ -202,7 +212,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         }
     }
 
-    public function visibility(string $path): string
+    public function visibility(string $path): \League\Flysystem\FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
         $command = $this->client->getCommand('getObjectAcl', $arguments);
@@ -216,20 +226,92 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         return $this->visibility->aclToVisibility((array) $result->get('Grants'));
     }
 
-    public function mimeType(string $path): string
+    private function headObject($path)
+    {
+        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $command = $this->client->getCommand('headObject', $arguments);
+        $result = $this->client->execute($command);
+
+        return $this->mapS3ObjectMetadata($result->toArray(), $path);
+    }
+
+    private function mapS3ObjectMetadata(array $metadata, $path = null): StorageAttributes
+    {
+        if ($path === null) {
+            $path = $this->prefixer->stripPrefix($metadata['Key'] ?? $metadata['Prefix']);
+        }
+
+        if (substr($path, -1) === '/') {
+            return new DirectoryAttributes($path);
+        }
+
+        $mimetype = $metadata['ContentType'] ?? null;
+        $fileSize = $metadata['ContentLength'] ?? $metadata['Size'] ?? null;
+        $lastModified = null;
+        $dateTime = $metadata['LastModified'] ?? null;
+
+        if ($dateTime instanceof DateTimeResult) {
+            $lastModified = $dateTime->getTimestamp();
+        }
+
+        return new FileAttributes(
+            $path, (int) $fileSize, null, $lastModified, $mimetype, $this->extractExtraMetadata($metadata)
+        );
+    }
+
+    private function extractExtraMetadata(array $metadata): array
+    {
+        $extracted = [];
+
+        foreach (static::EXTRA_METADATA_FIELDS as $field) {
+            if (isset($metadata[$field]) && $metadata[$field] !== '') {
+                $extracted[$field] = $metadata[$field];
+            }
+        }
+
+        return $extracted;
+    }
+
+    public function mimeType(string $path): \League\Flysystem\FileAttributes
+    {
+        /** @var FileAttributes $storageAttributes */
+        $storageAttributes = $this->headObject($path);
+
+        return $storageAttributes->mimeType();
+    }
+
+    public function lastModified(string $path): \League\Flysystem\FileAttributes
     {
     }
 
-    public function lastModified(string $path): int
-    {
-    }
-
-    public function fileSize(string $path): int
+    public function fileSize(string $path): \League\Flysystem\FileAttributes
     {
     }
 
     public function listContents(string $path, bool $recursive): Generator
     {
+        $prefix = $this->prefixer->prefixPath($path);
+        $options = ['Bucket' => $this->bucket, 'Prefix' => ltrim($prefix, '/')];
+
+        if ($recursive === false) {
+            $options['Delimiter'] = '/';
+        }
+
+        $listing = $this->retrievePaginatedListing($options);
+
+        foreach ($listing as $item) {
+            yield $this->mapS3ObjectMetadata($item);
+        }
+    }
+
+    private function retrievePaginatedListing(array $options): Generator
+    {
+        $resultPaginator = $this->client->getPaginator('ListObjects', $options);
+
+        foreach ($resultPaginator as $result) {
+            yield from ($result->get('Contents') ?: []);
+            yield from ($result->get('CommonPrefixes') ?: []);
+        }
     }
 
     public function move(string $source, string $destination, Config $config): void

@@ -108,7 +108,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         $this->files[$path]->setVisibility($visibility);
     }
 
-    public function visibility(string $path): string
+    public function visibility(string $path): FileAttributes
     {
         $path = $this->preparePath($path);
 
@@ -116,10 +116,10 @@ class InMemoryFilesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::visibility($path, 'file does not exist');
         }
 
-        return $this->files[$path]->visibility();
+        return new FileAttributes($path, null, $this->files[$path]->visibility());
     }
 
-    public function mimeType(string $path): string
+    public function mimeType(string $path): FileAttributes
     {
         $path = $this->preparePath($path);
 
@@ -127,10 +127,10 @@ class InMemoryFilesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::mimeType($path, 'file does not exist');
         }
 
-        return $this->files[$path]->mimeType();
+        return new FileAttributes($path, null, null, null, $this->files[$path]->mimeType());
     }
 
-    public function lastModified(string $path): int
+    public function lastModified(string $path): FileAttributes
     {
         $path = $this->preparePath($path);
 
@@ -138,17 +138,17 @@ class InMemoryFilesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::lastModified($path, 'file does not exist');
         }
 
-        return $this->files[$path]->lastModified();
+        return new FileAttributes($path, null, null, $this->files[$path]->lastModified());
     }
 
-    public function fileSize(string $path): int
+    public function fileSize(string $path): FileAttributes
     {
         $path = $this->preparePath($path);
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::fileSize($path, 'file does not exist');
         }
 
-        return $this->files[$path]->fileSize();
+        return new FileAttributes($path, $this->files[$path]->fileSize());
     }
 
     public function listContents(string $prefix, bool $recursive): Generator

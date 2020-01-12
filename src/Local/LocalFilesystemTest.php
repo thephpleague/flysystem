@@ -471,9 +471,9 @@ class LocalFilesystemTest extends TestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('public.txt', 'contents', new Config(['visibility' => 'public']));
-        $this->assertEquals('public', $adapter->visibility('public.txt'));
+        $this->assertEquals('public', $adapter->visibility('public.txt')->visibility());
         $adapter->write('private.txt', 'contents', new Config(['visibility' => 'private']));
-        $this->assertEquals('private', $adapter->visibility('private.txt'));
+        $this->assertEquals('private', $adapter->visibility('private.txt')->visibility());
     }
 
     /**
@@ -542,7 +542,7 @@ class LocalFilesystemTest extends TestCase
             file_get_contents(__DIR__ . '/../../test_files/flysystem.svg'),
             new Config()
         );
-        $this->assertEquals('image/svg', $adapter->mimeType('flysystem.svg'));
+        $this->assertEquals('image/svg', $adapter->mimeType('flysystem.svg')->mimeType());
     }
 
     /**
@@ -563,7 +563,7 @@ class LocalFilesystemTest extends TestCase
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
         mock_function('filemtime', $now = time());
-        $lastModified = $adapter->lastModified('first.txt');
+        $lastModified = $adapter->lastModified('first.txt')->lastModified();
         $this->assertEquals($now, $lastModified);
     }
 
@@ -585,7 +585,7 @@ class LocalFilesystemTest extends TestCase
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
         $fileSize = $adapter->fileSize('first.txt');
-        $this->assertEquals(8, $fileSize);
+        $this->assertEquals(8, $fileSize->fileSize());
     }
 
     /**

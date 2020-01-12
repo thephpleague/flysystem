@@ -6,6 +6,10 @@ namespace League\Flysystem;
 
 class FileAttributes implements StorageAttributes
 {
+    use ProxyArrayAccessToProperties;
+
+    private $type = StorageAttributes::TYPE_FILE;
+
     /**
      * @var string
      */
@@ -31,23 +35,30 @@ class FileAttributes implements StorageAttributes
      */
     private $mimeType;
 
+    /**
+     * @var array
+     */
+    private $extraMetadata;
+
     public function __construct(
         string $path,
         ?int $fileSize = null,
         ?string $visibility = null,
         ?int $lastModified = null,
-        ?string $mimeType = null
+        ?string $mimeType = null,
+        array $extraMetadata = []
     ) {
         $this->path = $path;
         $this->fileSize = $fileSize;
         $this->visibility = $visibility;
         $this->lastModified = $lastModified;
         $this->mimeType = $mimeType;
+        $this->extraMetadata = $extraMetadata;
     }
 
     public function type(): string
     {
-        return StorageAttributes::TYPE_FILE;
+        return $this->type;
     }
 
     public function path(): string
@@ -73,5 +84,38 @@ class FileAttributes implements StorageAttributes
     public function mimeType(): ?string
     {
         return $this->mimeType;
+    }
+
+    public function extraMetadata(): array
+    {
+        return $this->extraMetadata;
+    }
+
+    public static function fromArray(array $attributes): StorageAttributes
+    {
+        return new static(
+            $attributes['path'],
+            $attributes['file_size'] ?? null,
+            $attributes['visibility'] ?? null,
+            $attributes['last_modified'] ?? null,
+            $attributes['mime_type'] ?? null,
+            $attributes['extra_metadata'] ?? []
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'type' => self::TYPE_FILE,
+            'path' => $this->path,
+            'file_size' => $this->fileSize,
+            'visibility' => $this->visibility,
+            'last_modified' => $this->lastModified,
+            'mime_type' => $this->mimeType,
+            'extra_metadata' => $this->extraMetadata,
+        ];
     }
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-use Generator;
-
 class Filesystem
 {
     /**
@@ -106,9 +104,9 @@ class Filesystem
         );
     }
 
-    public function listContents(string $location): Generator
+    public function listContents(string $location, bool $recursive = false): DirectoryListing
     {
-        yield from $this->listContents($location);
+        return new DirectoryListing($this->adapter->listContents($location, $recursive));
     }
 
     public function move(string $source, string $destination, array $config = []): void
