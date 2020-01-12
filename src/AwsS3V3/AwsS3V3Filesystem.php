@@ -110,12 +110,10 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         $key = $this->prefixer->prefixPath($path);
         $acl = $this->determineAcl($config);
         $options = $this->createOptionsFromConfig($config);
+        $shouldDetermineMimetype = $body !== '' && ! array_key_exists('ContentType', $options);
 
-        if ($body !== '' && ! array_key_exists('ContentType', $options) && $contentType = MimeType::detectMimeType(
-                $key,
-                $body
-            )) {
-            $options['ContentType'] = $contentType;
+        if ($shouldDetermineMimetype && $mimeType = MimeType::detectMimeType($key, $body)) {
+            $options['ContentType'] = $mimeType;
         }
 
         $this->client->upload($this->bucket, $key, $body, $acl, $options);
