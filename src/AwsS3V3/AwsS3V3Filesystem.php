@@ -212,7 +212,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         }
     }
 
-    public function visibility(string $path): \League\Flysystem\FileAttributes
+    public function visibility(string $path): FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
         $command = $this->client->getCommand('getObjectAcl', $arguments);
@@ -223,16 +223,29 @@ class AwsS3V3Filesystem implements FilesystemAdapter
             throw UnableToRetrieveMetadata::visibility($path, '', $exception);
         }
 
-        return $this->visibility->aclToVisibility((array) $result->get('Grants'));
+        $visibility = $this->visibility->aclToVisibility((array) $result->get('Grants'));
+
+        return new FileAttributes($path, null, $visibility);
     }
 
-    private function headObject($path)
+    private function fetchFileMetadata(string $path, string $type): FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
         $command = $this->client->getCommand('headObject', $arguments);
-        $result = $this->client->execute($command);
 
-        return $this->mapS3ObjectMetadata($result->toArray(), $path);
+        try {
+            $result = $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::create($path, '', $type, $exception);
+        }
+
+        $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
+
+        if ( ! $attributes instanceof FileAttributes) {
+            throw UnableToRetrieveMetadata::create($path, '', $type);
+        }
+
+        return $attributes;
     }
 
     private function mapS3ObjectMetadata(array $metadata, $path = null): StorageAttributes
@@ -272,20 +285,19 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         return $extracted;
     }
 
-    public function mimeType(string $path): \League\Flysystem\FileAttributes
+    public function mimeType(string $path): FileAttributes
     {
-        /** @var FileAttributes $storageAttributes */
-        $storageAttributes = $this->headObject($path);
-
-        return $storageAttributes->mimeType();
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_MIME_TYPE);
     }
 
-    public function lastModified(string $path): \League\Flysystem\FileAttributes
+    public function lastModified(string $path): FileAttributes
     {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED);
     }
 
-    public function fileSize(string $path): \League\Flysystem\FileAttributes
+    public function fileSize(string $path): FileAttributes
     {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
     }
 
     public function listContents(string $path, bool $recursive): Generator
@@ -321,7 +333,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            $visibility = $this->visibility($source);
+            $visibility = $this->visibility($source)->visibility();
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo(
                 $source,

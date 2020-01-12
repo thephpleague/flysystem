@@ -9,9 +9,6 @@ use Throwable;
 
 class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOperationFailed
 {
-    public const TYPE_VISIBILITY = 'VISIBILITY';
-    public const TYPE_LAST_MODIFIED = 'LAST_MODIFIED';
-
     /**
      * @var string
      */
@@ -24,36 +21,29 @@ class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOpe
 
     public static function lastModified(string $location, string $extraMessage, Throwable $previous = null): self
     {
-        $e = new static("Unable to retrieve visibility for file at location: $location. {$extraMessage}", 0, $previous);
-        $e->location = $location;
-        $e->metadataType = self::TYPE_LAST_MODIFIED;
-
-        return $e;
+        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_LAST_MODIFIED, $previous);
     }
 
     public static function visibility(string $location, string $extraMessage, Throwable $previous = null): self
     {
-        $e = new static("Unable to retrieve visibility for file at location: $location. {$extraMessage}", 0, $previous);
-        $e->location = $location;
-        $e->metadataType = self::TYPE_VISIBILITY;
-
-        return $e;
+        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_VISIBILITY, $previous);
     }
 
     public static function fileSize(string $location, string $extraMessage, Throwable $previous = null): self
     {
-        $e = new static("Unable to retrieve the size for file at location: $location. {$extraMessage}", 0, $previous);
-        $e->location = $location;
-        $e->metadataType = self::TYPE_VISIBILITY;
-
-        return $e;
+        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_FILE_SIZE, $previous);
     }
 
     public static function mimeType(string $location, string $extraMessage, Throwable $previous = null): self
     {
-        $e = new static("Unable to retrieve the mimetype for file at location: $location. {$extraMessage}", 0, $previous);
+        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_MIME_TYPE, $previous);
+    }
+
+    public static function create(string $location, string $extraMessage, string $type, Throwable $previous = null): self
+    {
+        $e = new static("Unable to retrieve the $type for file at location: $location. {$extraMessage}", 0, $previous);
         $e->location = $location;
-        $e->metadataType = self::TYPE_VISIBILITY;
+        $e->metadataType = $type;
 
         return $e;
     }

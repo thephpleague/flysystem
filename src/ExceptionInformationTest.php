@@ -84,7 +84,7 @@ class ExceptionInformationTest extends TestCase
     {
         $exception = UnableToRetrieveMetadata::visibility('from', 'some message');
         $this->assertEquals('from', $exception->location());
-        $this->assertEquals(UnableToRetrieveMetadata::TYPE_VISIBILITY, $exception->metadataType());
+        $this->assertEquals(FileAttributes::ATTRIBUTE_VISIBILITY, $exception->metadataType());
         $this->assertStringContainsString('some message', $exception->getMessage());
         $this->assertEquals(FilesystemOperationFailed::OPERATION_RETRIEVE_METADATA, $exception->operation());
     }

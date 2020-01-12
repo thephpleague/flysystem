@@ -129,17 +129,17 @@ class Filesystem
 
     public function lastModified(string $path): int
     {
-        return $this->adapter->lastModified($path);
+        return $this->adapter->lastModified($path)->lastModified();
     }
 
     public function fileSize(string $path): int
     {
-        return $this->adapter->fileSize($path);
+        return $this->adapter->fileSize($path)->fileSize();
     }
 
     public function mimeType(string $path): string
     {
-        return $this->adapter->mimeType($path);
+        return $this->adapter->mimeType($path)->mimeType();
     }
 
     public function setVisibility(string $path, string $visibility): void
@@ -149,7 +149,7 @@ class Filesystem
 
     public function visibility(string $path): string
     {
-        return $this->adapter->visibility($path);
+        return $this->adapter->visibility($path)->visibility();
     }
 
     private function assertIsResource($contents): void
