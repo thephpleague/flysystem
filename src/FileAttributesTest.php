@@ -18,6 +18,8 @@ class FileAttributesTest extends TestCase
     public function exposing_some_values()
     {
         $attrs = new FileAttributes('path.txt');
+        $this->assertFalse($attrs->isDir());
+        $this->assertTrue($attrs->isFile());
         $this->assertEquals('path.txt', $attrs->path());
         $this->assertEquals(StorageAttributes::TYPE_FILE, $attrs->type());
         $this->assertNull($attrs->visibility());

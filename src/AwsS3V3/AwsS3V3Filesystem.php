@@ -185,7 +185,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function deleteDirectory(string $path): void
     {
         $prefix = $this->prefixer->prefixPath($path);
-        $prefix = rtrim($prefix, '/') . '/';
+        $prefix = ltrim(rtrim($prefix, '/') . '/', '/');
         $this->client->deleteMatchingObjects($this->bucket, $prefix);
     }
 

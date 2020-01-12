@@ -99,6 +99,16 @@ class FileAttributes implements StorageAttributes
         return $this->extraMetadata;
     }
 
+    public function isFile(): bool
+    {
+        return true;
+    }
+
+    public function isDir(): bool
+    {
+        return false;
+    }
+
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new static(

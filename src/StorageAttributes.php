@@ -19,4 +19,8 @@ interface StorageAttributes extends JsonSerializable, ArrayAccess
     public function visibility(): ?string;
 
     public static function fromArray(array $attributes): StorageAttributes;
+
+    public function isFile(): bool;
+
+    public function isDir(): bool;
 }

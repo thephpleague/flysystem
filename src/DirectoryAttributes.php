@@ -44,6 +44,16 @@ class DirectoryAttributes implements StorageAttributes
         return $this->visibility;
     }
 
+    public function isFile(): bool
+    {
+        return false;
+    }
+
+    public function isDir(): bool
+    {
+        return true;
+    }
+
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new static(
