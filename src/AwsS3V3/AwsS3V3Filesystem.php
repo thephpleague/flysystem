@@ -116,7 +116,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
             $options['ContentType'] = $mimeType;
         }
 
-        $this->client->upload($this->bucket, $key, $body, $acl, $options);
+        $this->client->upload($this->bucket, $key, $body, $acl, ['params' => $options]);
     }
 
     private function determineAcl(Config $config): string

@@ -14,6 +14,13 @@ class AwsS3V3FilesystemTest extends TestCase
 {
     private $shouldCleanUp = false;
 
+    private static $adapterPrefix = 'test-prefix';
+
+    public static function setUpBeforeClass(): void
+    {
+        static::$adapterPrefix = bin2hex(random_bytes(10));
+    }
+
     protected function tearDown(): void
     {
         if ( ! $this->shouldCleanUp) {
@@ -54,7 +61,7 @@ class AwsS3V3FilesystemTest extends TestCase
     {
         $client = $this->s3Client();
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
-        $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: '';
+        $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
 
         return new AwsS3V3Filesystem($client, $bucket, $prefix);
     }
@@ -68,6 +75,17 @@ class AwsS3V3FilesystemTest extends TestCase
         $adapter->write('some/path.txt', 'contents', new Config());
         $contents = $adapter->read('some/path.txt');
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function writing_with_a_specific_mime_type()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'contents', new Config(['ContentType' => 'text/special']));
+        $mimeType = $adapter->mimeType('some/path.txt')->mimeType();
+        $this->assertEquals('text/special', $mimeType);
     }
 
     /**
