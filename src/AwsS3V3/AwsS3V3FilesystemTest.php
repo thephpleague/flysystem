@@ -18,7 +18,7 @@ class AwsS3V3FilesystemTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        static::$adapterPrefix = bin2hex(random_bytes(10));
+        static::$adapterPrefix = 'travis-ci/'. bin2hex(random_bytes(10));
     }
 
     protected function tearDown(): void
