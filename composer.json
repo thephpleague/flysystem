@@ -7,6 +7,9 @@
             "League\\Flysystem\\": "src"
         }
     },
+    "conflict": {
+        "guzzle/guzzle": "<=5.3.3"
+    },
     "require": {
         "php": "^7.2",
         "ext-fileinfo": "*",
