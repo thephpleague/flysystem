@@ -319,8 +319,8 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         $resultPaginator = $this->client->getPaginator('ListObjects', $options);
 
         foreach ($resultPaginator as $result) {
-            yield from ($result->get('Contents') ?: []);
             yield from ($result->get('CommonPrefixes') ?: []);
+            yield from ($result->get('Contents') ?: []);
         }
     }
 

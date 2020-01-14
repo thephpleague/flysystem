@@ -7,6 +7,8 @@ namespace League\Flysystem\AwsS3V3;
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
 use PHPUnit\Framework\TestCase;
 
@@ -83,9 +85,9 @@ class AwsS3V3FilesystemTest extends TestCase
     public function writing_with_a_specific_mime_type()
     {
         $adapter = $this->adapter();
-        $adapter->write('some/path.txt', 'contents', new Config(['ContentType' => 'text/special']));
+        $adapter->write('some/path.txt', 'contents', new Config(['ContentType' => 'text/plain+special']));
         $mimeType = $adapter->mimeType('some/path.txt')->mimeType();
-        $this->assertEquals('text/special', $mimeType);
+        $this->assertEquals('text/plain+special', $mimeType);
     }
 
     /**
@@ -97,5 +99,47 @@ class AwsS3V3FilesystemTest extends TestCase
         $this->assertFalse($adapter->fileExists('some/path.txt'));
         $adapter->write('some/path.txt', 'contents', new Config());
         $this->assertTrue($adapter->fileExists('some/path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function listing_contents_shallow()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('0_something/here.txt', 'contents', new Config());
+        $adapter->write('1_here.txt', 'contents', new Config());
+        $contents = iterator_to_array($adapter->listContents('', false));
+
+        $this->assertCount(2, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+        /** @var DirectoryAttributes $directory */
+        $directory = $contents[0];
+        $this->assertInstanceOf(DirectoryAttributes::class, $directory);
+        $this->assertEquals('0_something/', $directory->path());
+        /** @var FileAttributes $directory */
+        $file = $contents[1];
+        $this->assertInstanceOf(FileAttributes::class, $file);
+        $this->assertEquals('1_here.txt', $file->path());
+    }
+
+    /**
+     * @test
+     */
+    public function listing_contents_recursive()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('something/0/here.txt', 'contents', new Config());
+        $adapter->write('something/1/also/here.txt', 'contents', new Config());
+        $contents = iterator_to_array($adapter->listContents('', true));
+
+        $this->assertCount(2, $contents);
+        $this->assertContainsOnlyInstancesOf(FileAttributes::class, $contents);
+        /** @var FileAttributes $file */
+        $file = $contents[0];
+        $this->assertEquals('something/0/here.txt', $file->path());
+        /** @var FileAttributes $file */
+        $file = $contents[1];
+        $this->assertEquals('something/1/also/here.txt', $file->path());
     }
 }
