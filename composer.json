@@ -8,7 +8,7 @@
         }
     },
     "conflict": {
-        "guzzle/guzzle": "<=5.3.3"
+        "guzzlehttp/ringphp": "<1.1.1"
     },
     "require": {
         "php": "^7.2",
