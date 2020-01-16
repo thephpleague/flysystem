@@ -96,8 +96,11 @@ class AwsS3V3FilesystemTest extends TestCase
     public function checking_if_files_exist()
     {
         $adapter = $this->adapter();
+
         $this->assertFalse($adapter->fileExists('some/path.txt'));
+
         $adapter->write('some/path.txt', 'contents', new Config());
+
         $this->assertTrue($adapter->fileExists('some/path.txt'));
     }
 
@@ -109,6 +112,7 @@ class AwsS3V3FilesystemTest extends TestCase
         $adapter = $this->adapter();
         $adapter->write('0_something/here.txt', 'contents', new Config());
         $adapter->write('1_here.txt', 'contents', new Config());
+
         $contents = iterator_to_array($adapter->listContents('', false));
 
         $this->assertCount(2, $contents);
@@ -131,6 +135,7 @@ class AwsS3V3FilesystemTest extends TestCase
         $adapter = $this->adapter();
         $adapter->write('something/0/here.txt', 'contents', new Config());
         $adapter->write('something/1/also/here.txt', 'contents', new Config());
+
         $contents = iterator_to_array($adapter->listContents('', true));
 
         $this->assertCount(2, $contents);
