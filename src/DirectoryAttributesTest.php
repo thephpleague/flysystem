@@ -14,10 +14,13 @@ class DirectoryAttributesTest extends TestCase
     public function exposing_some_values()
     {
         $attrs = new DirectoryAttributes('some/path');
+        $this->assertTrue($attrs->isDir());
+        $this->assertFalse($attrs->isFile());
         $this->assertEquals(StorageAttributes::TYPE_DIRECTORY, $attrs->type());
         $this->assertEquals('some/path', $attrs->path());
         $this->assertNull($attrs->visibility());
     }
+
     /**
      * @test
      */
@@ -25,5 +28,16 @@ class DirectoryAttributesTest extends TestCase
     {
         $attrs = new DirectoryAttributes('some/path', Visibility::PRIVATE);
         $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
+    }
+
+    /**
+     * @test
+     */
+    public function serialization_capabilities()
+    {
+        $attrs = new DirectoryAttributes('some/path');
+        $payload = $attrs->jsonSerialize();
+        $attrsFromPayload = DirectoryAttributes::fromArray($payload);
+        $this->assertEquals($attrs, $attrsFromPayload);
     }
 }
