@@ -4,12 +4,18 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
+use Aws\Command;
+use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
 class AwsS3V3FilesystemTest extends TestCase
@@ -17,6 +23,11 @@ class AwsS3V3FilesystemTest extends TestCase
     private $shouldCleanUp = false;
 
     private static $adapterPrefix = 'test-prefix';
+
+    /**
+     * @var S3ClientInterface
+     */
+    private $s3Client;
 
     public static function setUpBeforeClass(): void
     {
@@ -44,6 +55,10 @@ class AwsS3V3FilesystemTest extends TestCase
 
     private function s3Client(): S3ClientInterface
     {
+        if ($this->s3Client instanceof S3ClientInterface) {
+            return $this->s3Client;
+        }
+
         $key = getenv('FLYSYSTEM_AWS_S3_KEY');
         $secret = getenv('FLYSYSTEM_AWS_S3_SECRET');
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
@@ -56,16 +71,21 @@ class AwsS3V3FilesystemTest extends TestCase
         $this->shouldCleanUp = true;
         $options = ['version' => 'latest', 'credentials' => compact('key', 'secret'), 'region' => $region];
 
-        return new S3Client($options);
+        return $this->s3Client = new S3Client($options);
     }
 
-    private function adapter(): AwsS3V3Filesystem
+    private function adapter(S3ClientInterface $client = null): AwsS3V3Filesystem
     {
-        $client = $this->s3Client();
+        $client = $client ?: $this->s3Client();
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
         $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
 
         return new AwsS3V3Filesystem($client, $bucket, $prefix);
+    }
+
+    private function stubS3Client(): StubS3Client
+    {
+        return new StubS3Client($this->s3Client());
     }
 
     /**
@@ -77,6 +97,38 @@ class AwsS3V3FilesystemTest extends TestCase
         $adapter->write('some/path.txt', 'contents', new Config());
         $contents = $adapter->read('some/path.txt');
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function reading_a_file_that_does_not_exist()
+    {
+        $this->expectException(UnableToReadFile::class);
+        $this->adapter()->read('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function setting_visibility()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'contents', new Config(['visibility' => Visibility::PUBLIC]));
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
+        $adapter->setVisibility('some/path.txt', Visibility::PRIVATE);
+        $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('some/path.txt')->visibility());
+        $adapter->setVisibility('some/path.txt', Visibility::PUBLIC);
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
+    }
+
+    /**
+     * @test
+     */
+    public function setting_visibility_on_a_file_that_does_not_exist()
+    {
+        $this->expectException(UnableToSetVisibility::class);
+        $this->adapter()->setVisibility('path.txt', Visibility::PRIVATE);
     }
 
     /**
@@ -146,5 +198,61 @@ class AwsS3V3FilesystemTest extends TestCase
         /** @var FileAttributes $file */
         $file = $contents[1];
         $this->assertEquals('something/1/also/here.txt', $file->path());
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('source.txt', 'contents to be copied', new Config(['visibility' => Visibility::PUBLIC]));
+
+        $adapter->copy('source.txt', 'destination.txt', new Config());
+
+        $this->assertTrue($adapter->fileExists('source.txt'));
+        $this->assertTrue($adapter->fileExists('destination.txt'));
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
+        $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function moving_a_file()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('source.txt', 'contents to be copied', new Config(['visibility' => Visibility::PUBLIC]));
+        $adapter->move('source.txt', 'destination.txt', new Config());
+        $this->assertFalse($adapter->fileExists('source.txt'));
+        $this->assertTrue($adapter->fileExists('destination.txt'));
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
+        $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function moving_a_file_that_does_not_exist()
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $adapter = $this->adapter();
+        $adapter->move('source.txt', 'destination.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_delete_while_moving()
+    {
+        $this->expectException(UnableToMoveFile::class);
+
+        $client = $this->stubS3Client();
+        $adapter = $this->adapter($client);
+        $adapter->write('source.txt', 'contents to be copied', new Config());
+        $exception = new S3Exception('CopyObject', new Command('CopyObject'));
+        $client->throwExceptionWhenExecutingCommand('CopyObject', $exception);
+
+        $adapter->move('source.txt', 'destination.txt', new Config());
     }
 }
