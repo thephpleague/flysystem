@@ -6,18 +6,13 @@ namespace League\Flysystem\AwsS3V3;
 
 use Aws\Command;
 use Aws\CommandInterface;
-use Aws\HandlerList;
-use Aws\ResultInterface;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3ClientInterface;
-use GuzzleHttp\Promise\PromiseInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\UriInterface;
 
 /**
  * @codeCoverageIgnore
  */
-class StubS3Client implements S3ClientInterface
+class S3ClientStub implements S3ClientInterface
 {
     /**
      * @var S3ClientInterface

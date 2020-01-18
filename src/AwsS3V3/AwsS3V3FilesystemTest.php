@@ -85,9 +85,9 @@ class AwsS3V3FilesystemTest extends TestCase
         return new AwsS3V3Filesystem($client, $bucket, $prefix);
     }
 
-    private function stubS3Client(): StubS3Client
+    private function stubS3Client(): S3ClientStub
     {
-        return new StubS3Client($this->s3Client());
+        return new S3ClientStub($this->s3Client());
     }
 
     /**
