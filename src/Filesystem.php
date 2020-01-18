@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-class Filesystem
+class Filesystem implements FilesystemReadWriter
 {
     /**
      * @var FilesystemAdapter
