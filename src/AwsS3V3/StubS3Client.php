@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
+use Aws\Command;
 use Aws\CommandInterface;
 use Aws\HandlerList;
 use Aws\ResultInterface;
@@ -54,9 +55,9 @@ class StubS3Client implements S3ClientInterface
         return $this->actualClient->execute($command);
     }
 
-    public function throwExceptionWhenExecutingCommand(string $string, S3Exception $exception): void
+    public function throwExceptionWhenExecutingCommand(string $commandName): void
     {
-        $this->stagedExceptions[$string] = $exception;
+        $this->stagedExceptions[$commandName] = new S3Exception($commandName, new Command($commandName));
     }
 
     public function executeAsync(CommandInterface $command)

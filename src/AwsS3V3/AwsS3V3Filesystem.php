@@ -175,7 +175,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function delete(string $path): void
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('deleteObject', $arguments);
+        $command = $this->client->getCommand('DeleteObject', $arguments);
 
         try {
             $this->client->execute($command);
@@ -203,7 +203,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
             'Key'    => $this->prefixer->prefixPath($path),
             'ACL'    => $this->visibility->visibilityToAcl($visibility),
         ];
-        $command = $this->client->getCommand('putObjectAcl', $arguments);
+        $command = $this->client->getCommand('PutObjectAcl', $arguments);
 
         try {
             $this->client->execute($command);
@@ -215,7 +215,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function visibility(string $path): FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('getObjectAcl', $arguments);
+        $command = $this->client->getCommand('GetObjectAcl', $arguments);
 
         try {
             $result = $this->client->execute($command);
@@ -231,7 +231,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     private function fetchFileMetadata(string $path, string $type): FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('headObject', $arguments);
+        $command = $this->client->getCommand('HeadObject', $arguments);
 
         try {
             $result = $this->client->execute($command);
@@ -353,7 +353,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
             'Key'        => $this->prefixer->prefixPath($destination),
             'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
         ];
-        $command = $this->client->getCommand('copyObject', $arguments);
+        $command = $this->client->getCommand('CopyObject', $arguments);
 
         try {
             $this->client->execute($command);
@@ -365,7 +365,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     private function readObject(string $path): StreamInterface
     {
         $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('getObject', $options);
+        $command = $this->client->getCommand('GetObject', $options);
 
         try {
             return $this->client->execute($command)->get('Body');

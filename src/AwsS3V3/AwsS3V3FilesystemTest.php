@@ -12,8 +12,10 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
@@ -95,7 +97,58 @@ class AwsS3V3FilesystemTest extends TestCase
     {
         $adapter = $this->adapter();
         $adapter->write('some/path.txt', 'contents', new Config());
+
         $contents = $adapter->read('some/path.txt');
+
+        $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function updating_and_reading()
+    {
+        $adapter = $this->adapter();
+
+        $adapter->update('some/path.txt', 'contents', new Config());
+
+        $contents = $adapter->read('some/path.txt');
+        $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function writing_and_reading_with_streams()
+    {
+        $writeStream = stream_with_contents('contents');
+        $adapter = $this->adapter();
+
+        $adapter->writeStream('path.txt', $writeStream, new Config());
+        fclose($writeStream);
+        $readStream = $adapter->readStream('path.txt');
+
+        $this->assertIsResource($readStream);
+        $contents = stream_get_contents($readStream);
+        fclose($readStream);
+        $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function updating_and_reading_with_streams()
+    {
+        $writeStream = stream_with_contents('contents');
+        $adapter = $this->adapter();
+
+        $adapter->updateStream('path.txt', $writeStream, new Config());
+        fclose($writeStream);
+        $readStream = $adapter->readStream('path.txt');
+
+        $this->assertIsResource($readStream);
+        $contents = stream_get_contents($readStream);
+        fclose($readStream);
         $this->assertEquals('contents', $contents);
     }
 
@@ -154,6 +207,64 @@ class AwsS3V3FilesystemTest extends TestCase
         $adapter->write('some/path.txt', 'contents', new Config());
 
         $this->assertTrue($adapter->fileExists('some/path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_last_modified()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        $attributes = $adapter->lastModified('path.txt');
+
+        $this->assertInstanceOf(FileAttributes::class, $attributes);
+        $this->assertIsInt($attributes->lastModified());
+        $this->assertTrue($attributes->lastModified() > time() - 30);
+        $this->assertTrue($attributes->lastModified() < time() + 30);
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_file_size()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        $attributes = $adapter->fileSize('path.txt');
+
+        $this->assertInstanceOf(FileAttributes::class, $attributes);
+        $this->assertEquals(8, $attributes->fileSize());
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_file_size_of_a_directory()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $adapter = $this->adapter();
+        $adapter->createDirectory('path', new Config());
+
+        $adapter->fileSize('path/');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_fetch_last_modified()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $client = $this->stubS3Client();
+        $client->throwExceptionWhenExecutingCommand('HeadObject');
+        $adapter = $this->adapter($client);
+        $adapter->createDirectory('path', new Config());
+
+        $adapter->lastModified('path');
     }
 
     /**
@@ -250,9 +361,64 @@ class AwsS3V3FilesystemTest extends TestCase
         $client = $this->stubS3Client();
         $adapter = $this->adapter($client);
         $adapter->write('source.txt', 'contents to be copied', new Config());
-        $exception = new S3Exception('CopyObject', new Command('CopyObject'));
-        $client->throwExceptionWhenExecutingCommand('CopyObject', $exception);
+        $client->throwExceptionWhenExecutingCommand('CopyObject');
 
         $adapter->move('source.txt', 'destination.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_file()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        $adapter->delete('path.txt');
+
+        $this->assertFalse($adapter->fileExists('path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function trying_to_delete_a_non_existing_file()
+    {
+        $adapter = $this->adapter();
+
+        $adapter->delete('path.txt');
+
+        $this->assertFalse($adapter->fileExists('path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_delete_a_file()
+    {
+        $this->expectException(UnableToDeleteFile::class);
+
+        $client = $this->stubS3Client();
+        $client->throwExceptionWhenExecutingCommand('DeleteObject');
+        $adapter = $this->adapter($client);
+
+        $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function creating_a_directory()
+    {
+        $adapter = $this->adapter();
+
+        $adapter->createDirectory('path', new Config());
+
+        $contents = iterator_to_array($adapter->listContents('', false));
+        $this->assertCount(1, $contents);
+        /** @var DirectoryAttributes $directory */
+        $directory = $contents[0];
+        $this->assertInstanceOf(DirectoryAttributes::class, $directory);
+        $this->assertEquals('path/', $directory->path());
     }
 }
