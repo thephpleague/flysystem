@@ -50,6 +50,16 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function trying_to_write_with_an_invalid_stream_arguments()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->filesystem->writeStream('path.txt', false);
+    }
+
+    /**
+     * @test
+     */
     public function writing_and_reading_a_stream()
     {
         $writeStream = stream_with_contents('contents');
