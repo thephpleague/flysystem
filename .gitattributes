@@ -2,7 +2,6 @@
 
 /build export-ignore
 /.github export-ignore
-/docs export-ignore
 /spec export-ignore
 /stub export-ignore
 /tests export-ignore
