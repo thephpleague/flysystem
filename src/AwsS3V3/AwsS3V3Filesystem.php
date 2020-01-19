@@ -123,7 +123,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     private function determineAcl(Config $config): string
     {
-        $visibility = (string) $config->get('visibility', Visibility::PRIVATE);
+        $visibility = (string) $config->get(Config::OPTION_VISIBILITY, Visibility::PRIVATE);
 
         return $this->visibility->visibilityToAcl($visibility);
     }

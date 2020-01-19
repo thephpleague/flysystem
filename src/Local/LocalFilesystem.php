@@ -112,7 +112,7 @@ class LocalFilesystem implements FilesystemAdapter
             throw UnableToWriteFile::atLocation($location, error_get_last()['message'] ?? '');
         }
 
-        if ($visibility = $config->get('visibility')) {
+        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
             $this->setVisibility($location, (string) $visibility);
         }
     }
@@ -133,7 +133,7 @@ class LocalFilesystem implements FilesystemAdapter
             throw UnableToWriteFile::atLocation($path, $reason);
         }
 
-        if ($visibility = $config->get('visibility')) {
+        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
             $this->setVisibility($location, (string) $visibility);
         }
     }
@@ -331,7 +331,7 @@ class LocalFilesystem implements FilesystemAdapter
     public function createDirectory(string $path, Config $config): void
     {
         $location = $this->prefixer->prefixPath($path);
-        $visibility = $config->get('visibility', $config->get('directory_visibility'));
+        $visibility = $config->get(Config::OPTION_VISIBILITY, $config->get(Config::OPTION_DIRECTORY_VISIBILITY));
         $permissions = $this->resolveDirectoryVisibility($visibility);
 
         if (is_dir($location)) {

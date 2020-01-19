@@ -167,7 +167,7 @@ class AwsS3V3FilesystemTest extends TestCase
     public function setting_visibility()
     {
         $adapter = $this->adapter();
-        $adapter->write('some/path.txt', 'contents', new Config(['visibility' => Visibility::PUBLIC]));
+        $adapter->write('some/path.txt', 'contents', new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC]));
         $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
         $adapter->setVisibility('some/path.txt', Visibility::PRIVATE);
         $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('some/path.txt')->visibility());
@@ -317,7 +317,7 @@ class AwsS3V3FilesystemTest extends TestCase
     public function copying_a_file()
     {
         $adapter = $this->adapter();
-        $adapter->write('source.txt', 'contents to be copied', new Config(['visibility' => Visibility::PUBLIC]));
+        $adapter->write('source.txt', 'contents to be copied', new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC]));
 
         $adapter->copy('source.txt', 'destination.txt', new Config());
 
@@ -333,7 +333,7 @@ class AwsS3V3FilesystemTest extends TestCase
     public function moving_a_file()
     {
         $adapter = $this->adapter();
-        $adapter->write('source.txt', 'contents to be copied', new Config(['visibility' => Visibility::PUBLIC]));
+        $adapter->write('source.txt', 'contents to be copied', new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC]));
         $adapter->move('source.txt', 'destination.txt', new Config());
         $this->assertFalse($adapter->fileExists('source.txt'));
         $this->assertTrue($adapter->fileExists('destination.txt'));

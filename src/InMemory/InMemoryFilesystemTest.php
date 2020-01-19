@@ -44,7 +44,7 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function setting_visibility()
     {
-        $this->adapter->write(self::PATH, 'contents', new Config(['visibility' => Visibility::PRIVATE]));
+        $this->adapter->write(self::PATH, 'contents', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
         $attrs = $this->adapter->visibility(self::PATH);
         $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
         $this->adapter->setVisibility(self::PATH, Visibility::PUBLIC);

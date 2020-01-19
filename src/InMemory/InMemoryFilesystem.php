@@ -33,7 +33,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         $file = $this->files[$path] = $this->files[$path] ?? new InMemoryFile();
         $file->updateContents($contents);
 
-        if ($visibility = $config->get('visibility')) {
+        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
             $file->setVisibility($visibility);
         }
     }

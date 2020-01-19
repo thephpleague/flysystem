@@ -13,7 +13,7 @@ class UnableToCreateDirectory extends RuntimeException implements FilesystemOper
      */
     private $location;
 
-    public static function atLocation(string $dirname, string $errorMessage)
+    public static function atLocation(string $dirname, string $errorMessage = '')
     {
         $message = "'Unable to create a directory at {$dirname}. ${errorMessage}";
         $e = new static(rtrim($message));
