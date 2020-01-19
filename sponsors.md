@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Sponsors
-permalink: /docs/sponsors/
+permalink: /v1/docs/sponsors/
 redirect_from: /sponsors/
 ---
 

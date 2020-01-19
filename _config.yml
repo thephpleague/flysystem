@@ -14,4 +14,5 @@ exclude:
   - "*.config.js"
   - "package*.json"
   - assets
+  - .idea
   - node_modules
