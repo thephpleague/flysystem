@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace League\Flysystem\Local;
+namespace League\Flysystem\UnixVisibility;
 
 use League\Flysystem\InvalidVisibilityProvided;
 use League\Flysystem\Visibility;

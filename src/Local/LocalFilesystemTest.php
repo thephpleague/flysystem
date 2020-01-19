@@ -17,18 +17,17 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
-use function fwrite;
 use function getenv;
 use function is_dir;
 use function iterator_to_array;
 use function mkdir;
-use function rewind;
 use function symlink;
 
 use const LOCK_EX;
