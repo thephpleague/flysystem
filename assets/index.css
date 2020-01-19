@@ -1,0 +1,249 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,700|Open+Sans:400,400i,600');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+p img {
+    display: inline;
+}
+
+hr {
+    @apply border-b border-t border-indigo-lighter mt-10 mb-8 opacity-75 w-1/2 mx-auto;
+    border-bottom-color: #fff;
+}
+
+a {
+    text-decoration: none;
+    @apply text-indigo-dark;
+}
+
+html {
+    @apply font-body font-normal;
+    -webkit-font-smoothing: antialiased;
+}
+
+:focus {
+    outline: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @apply font-heading font-bold leading-tight text-indigo-darkest;
+}
+
+h1 {
+    @apply text-4xl;
+}
+
+h2 {
+    @apply mb-2 mt-6 text-2xl;
+}
+
+article ul {
+    @apply list-disc pl-6;
+}
+
+.focus\:placeholder-none:focus::placeholder {
+    opacity: 0;
+}
+
+p, ul {
+    @apply mb-4;
+}
+
+article table {
+    @apply text-left p-4 bg-white mb-4 shadow-md -mx-4;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+article table {
+    @apply mb-6 p-0;
+    width: calc(100% + 2rem);
+    /*white-space: nowrap;*/
+    overflow: auto;
+}
+
+@screen md {
+    article table {
+        display: table;
+        width: 100%;
+        @apply -mx-0;
+    }
+}
+
+div.highlighter-rouge + table {
+    @apply -mt-4 border-t-4 border-indigo-dark;
+}
+
+article table td {
+    vertical-align: top;
+    @apply border-t border-indigo-lighter;
+}
+
+article table th, article table td {
+    @apply px-4 py-2;
+}
+
+article table th {
+    @apply bg-indigo text-white font-bold;
+}
+
+div.highlighter-rouge + table th {
+    @apply text-indigo bg-white;
+}
+
+.menu-closed\:shown {
+    @apply hidden;
+}
+
+.menu-closed .menu-closed\:shown {
+    @apply inline;
+}
+
+.menu-closed .menu-closed\:hidden {
+    @apply hidden;
+}
+
+/**
+ * GITHUB START
+ */
+
+/*
+ * GitHub style for Pygments syntax highlighter, for use with Jekyll
+ * Courtesy of GitHub.com
+ */
+
+div.highlighter-rouge {
+    font-family: Courier, monospace;
+    @apply bg-white  px-4 py-2 -mx-4 mb-4 shadow  block;
+}
+
+div.highlighter-rouge > div {
+    @apply overflow-auto w-full;
+}
+
+@screen md {
+    div.highlighter-rouge {
+        @apply -mx-0;
+    }
+}
+
+code.highlighter-rouge {
+    font-family: Courier, monospace;
+    text-shadow: 1px 1px 0px #fff, -1px 1px 0px #fff;
+    @apply text-lg;
+}
+
+@screen md {
+    .highlighter-rouge {
+        @apply -mx-0;
+    }
+}
+
+div.highlighter-rouge.language-bash {
+    @apply bg-indigo-dark text-white shadow-inner-md;
+    text-shadow: 1px 1px 2px #253461, -1px 1px 2px #253461;
+}
+
+.highlight .c { color: #999988; font-style: italic; }
+.highlight .err { color: #a61717; background-color: #e3d2d2; }
+.highlight .k { font-weight: bold; }
+.highlight .o { font-weight: bold; }
+.highlight .cm { color: #999988; font-style: italic; }
+.highlight .cp { color: #999999; font-weight: bold; }
+.highlight .c1 { color: #999988; font-style: italic; }
+.highlight .cs { color: #999999; font-weight: bold; font-style: italic; }
+.highlight .gd { color: #000000; background-color: #ffdddd; }
+.highlight .gd .x { color: #000000; background-color: #ffaaaa; }
+.highlight .ge { font-style: italic; }
+.highlight .gr { color: #aa0000; }
+.highlight .gh { color: #999999; }
+.highlight .gi { color: #000000; background-color: #ddffdd; }
+.highlight .gi .x { color: #000000; background-color: #aaffaa; }
+.highlight .go { color: #888888; }
+.highlight .gp { color: #555555; }
+.highlight .gs { font-weight: bold; }
+.highlight .gu { color: #800080; font-weight: bold; }
+.highlight .gt { color: #aa0000; }
+.highlight .kc { font-weight: bold; }
+.highlight .kd { font-weight: bold; }
+.highlight .kn { font-weight: bold; }
+.highlight .kp { font-weight: bold; }
+.highlight .kr { font-weight: bold; }
+.highlight .kt { color: #445588; font-weight: bold; }
+.highlight .m { color: #009999; }
+.highlight .s { color: #dd1144; }
+.highlight .n { color: #333333; }
+.highlight .na { color: teal; }
+.highlight .nb { color: #0086b3; }
+.highlight .nc { color: #445588; font-weight: bold; }
+.highlight .no { color: teal; }
+.highlight .ni { color: purple; }
+.highlight .ne { color: #990000; font-weight: bold; }
+.highlight .nf { color: #990000; font-weight: bold; }
+.highlight .nn { color: #555555; }
+.highlight .nt { color: navy; }
+.highlight .nv { color: teal; }
+.highlight .ow { font-weight: bold; }
+.highlight .w { color: #bbbbbb; }
+.highlight .mf { color: #009999; }
+.highlight .mh { color: #009999; }
+.highlight .mi { color: #009999; }
+.highlight .mo { color: #009999; }
+.highlight .sb { color: #dd1144; }
+.highlight .sc { color: #dd1144; }
+.highlight .sd { color: #dd1144; }
+.highlight .s2 { color: #dd1144; }
+.highlight .se { color: #dd1144; }
+.highlight .sh { color: #dd1144; }
+.highlight .si { color: #dd1144; }
+.highlight .sx { color: #dd1144; }
+.highlight .sr { color: #009926; }
+.highlight .s1 { color: #dd1144; }
+.highlight .ss { color: #990073; }
+.highlight .bp { color: #999999; }
+.highlight .vc { color: teal; }
+.highlight .vg { color: teal; }
+.highlight .vi { color: teal; }
+.highlight .il { color: #009999; }
+.highlight .gc { color: #999; background-color: #EAF2F5; }
+
+
+/**
+ * GITHUB END
+ */
+
+/**
+ * ALGOLIA START
+ */
+
+.algolia-autocomplete {
+    width: 100% !important
+}
+
+@media (max-width: 768px) {
+    .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        min-width: 0 !important;
+        margin-left: 16px !important;
+        right: -3rem !important;
+    }
+    .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu:before {
+        right: 58px;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--content {
+        width: 100% !important;
+        padding-left: 0 !important;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--content:before {
+        display: none !important;
+    }
+    .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
+        display: none !important;
+    }
+}
+
+/**
+ * ALGOLIA END
+ */

@@ -1,0 +1,28 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=webpack.config.js",
+        "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=webpack.config.js",
+        "prod": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=webpack.config.js"
+    },
+    "devDependencies": {
+        "autoprefixer": "^9.7.4",
+        "clean-webpack-plugin": "^3.0.0",
+        "color": "^3.1.2",
+        "cross-env": "^5.2.1",
+        "css-loader": "^3.4.2",
+        "glob-all": "^3.1.0",
+        "mini-css-extract-plugin": "^0.7.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "postcss": "^7.0.26",
+        "postcss-import": "^12.0.1",
+        "postcss-loader": "^3.0.0",
+        "purgecss-webpack-plugin": "^1.6.0",
+        "style-loader": "^0.23.1",
+        "tailwindcss": "^1.1.4",
+        "webpack": "^4.41.5",
+        "webpack-cli": "^3.3.10",
+        "webpack-manifest-plugin": "^2.2.0"
+    },
+    "dependencies": {}
+}

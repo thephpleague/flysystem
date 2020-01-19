@@ -1,0 +1,6 @@
+_site
+.jekyll-metadata
+node_modules
+yarn-error.log
+Gemfile.lock
+package-lock.json
