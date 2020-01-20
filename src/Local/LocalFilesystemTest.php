@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace League\Flysystem\Local;
 
 use League\Flysystem\Config;
+use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemAdapterTestCase;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCopyFile;
@@ -19,7 +21,6 @@ use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
-use PHPUnit\Framework\TestCase;
 
 use function file_get_contents;
 use function file_put_contents;
@@ -32,7 +33,7 @@ use function symlink;
 
 use const LOCK_EX;
 
-class LocalFilesystemTest extends TestCase
+class LocalFilesystemTest extends FilesystemAdapterTestCase
 {
     private const ROOT = __DIR__ . '/test-root';
 
@@ -160,24 +161,9 @@ class LocalFilesystemTest extends TestCase
      */
     public function writing_a_file_with_visibility()
     {
-        $adapter = new LocalFilesystem(
-            static::ROOT, new PortableVisibilityConverter()
-        );
+        $adapter = new LocalFilesystem(static::ROOT, new PortableVisibilityConverter());
         $adapter->write('/file.txt', 'contents', new Config(['visibility' => 'private']));
         $this->assertFileContains(static::ROOT . '/file.txt', 'contents');
-        $this->assertFileHasPermissions(static::ROOT . '/file.txt', 0600);
-    }
-
-    /**
-     * @test
-     */
-    public function setting_visibility()
-    {
-        $adapter = new LocalFilesystem(static::ROOT);
-        $adapter->write('/file.txt', 'contents', new Config());
-        $adapter->setVisibility('/file.txt', Visibility::PUBLIC);
-        $this->assertFileHasPermissions(static::ROOT . '/file.txt', 0644);
-        $adapter->setVisibility('/file.txt', Visibility::PRIVATE);
         $this->assertFileHasPermissions(static::ROOT . '/file.txt', 0600);
     }
 
@@ -675,5 +661,10 @@ class LocalFilesystemTest extends TestCase
                 'Skipping this out of precaution. Use FLYSYSTEM_TEST_DANGEROUS_THINGS=yes to test them'
             );
         }
+    }
+
+    protected function createFilesystemAdapter(): FilesystemAdapter
+    {
+        return new LocalFilesystem(static::ROOT);
     }
 }

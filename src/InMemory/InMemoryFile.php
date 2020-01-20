@@ -25,10 +25,6 @@ class InMemoryFile
      */
     private $visibility;
 
-    public function __construct()
-    {
-    }
-
     public function updateContents(string $contents): void
     {
         $this->contents = $contents;

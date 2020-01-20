@@ -255,7 +255,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         }
 
         if (substr($path, -1) === '/') {
-            return new DirectoryAttributes($path);
+            return new DirectoryAttributes(rtrim($path, '/'));
         }
 
         $mimetype = $metadata['ContentType'] ?? null;
@@ -303,7 +303,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function listContents(string $path, bool $recursive): Generator
     {
         $prefix = $this->prefixer->prefixPath($path);
-        $options = ['Bucket' => $this->bucket, 'Prefix' => ltrim($prefix, '/')];
+        $options = ['Bucket' => $this->bucket, 'Prefix' => trim($prefix, '/') . '/'];
 
         if ($recursive === false) {
             $options['Delimiter'] = '/';

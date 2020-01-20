@@ -17,6 +17,8 @@ use League\Flysystem\UnableToSetVisibility;
 
 class InMemoryFilesystem implements FilesystemAdapter
 {
+    const DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST = '______DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST';
+
     /**
      * @var InMemoryFile[]
      */
@@ -94,7 +96,8 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        // ignored
+        $filePath = rtrim($path, '/') . '/' . self::DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST;
+        $this->write($filePath, '', $config);
     }
 
     public function setVisibility(string $path, $visibility): void
@@ -153,7 +156,7 @@ class InMemoryFilesystem implements FilesystemAdapter
 
     public function listContents(string $prefix, bool $recursive): Generator
     {
-        $prefix = $this->preparePath($prefix);
+        $prefix = rtrim($this->preparePath($prefix), '/') . '/';
         $prefixLength = strlen($prefix);
         $listedDirectories = [];
 
@@ -175,13 +178,18 @@ class InMemoryFilesystem implements FilesystemAdapter
 
                         if ( ! in_array($dirPath, $listedDirectories)) {
                             $listedDirectories[] = $dirPath;
-                            yield new DirectoryAttributes('/' . $dirPath);
+                            yield new DirectoryAttributes(trim($prefix . $dirPath, '/'));
                         }
                     }
                 }
 
+                $dummyFilename = self::DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST;
+                if (substr($path, 0, strlen($dummyFilename)) === $dummyFilename) {
+                    continue;
+                }
+
                 if ($recursive === true || strpos($subPath, '/') === false) {
-                    yield new FileAttributes($path);
+                    yield new FileAttributes(ltrim($path, '/'));
                 }
             }
         }

@@ -7,58 +7,37 @@ namespace League\Flysystem\InMemory;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
+use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemAdapterTestCase;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
-use PHPUnit\Framework\TestCase;
 
-class InMemoryFilesystemTest extends TestCase
+class InMemoryFilesystemTest extends FilesystemAdapterTestCase
 {
     const PATH = 'path.txt';
 
     /**
-     * @var InMemoryFilesystem
+     * @before
      */
-    private $adapter;
-
-    protected function setUp(): void
+    public function resetFunctionMocks(): void
     {
-        $this->adapter = new InMemoryFilesystem();
+        reset_function_mocks();
     }
+
 
     /**
      * @test
      */
     public function writing_and_reading_a_file()
     {
-        $this->adapter->write(self::PATH, 'contents', new Config());
-        $contents = $this->adapter->read(self::PATH);
+        $adapter = $this->adapter();
+        $adapter->write(self::PATH, 'contents', new Config());
+        $contents = $adapter->read(self::PATH);
         $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
-    public function setting_visibility()
-    {
-        $this->adapter->write(self::PATH, 'contents', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
-        $attrs = $this->adapter->visibility(self::PATH);
-        $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
-        $this->adapter->setVisibility(self::PATH, Visibility::PUBLIC);
-        $attrs = $this->adapter->visibility(self::PATH);
-        $this->assertEquals(Visibility::PUBLIC, $attrs->visibility());
-    }
-
-    /**
-     * @test
-     */
-    public function setting_visibility_on_a_non_existing_file()
-    {
-        $this->expectException(UnableToSetVisibility::class);
-        $this->adapter->setVisibility('path.txt', Visibility::PRIVATE);
     }
 
     /**
@@ -67,7 +46,7 @@ class InMemoryFilesystemTest extends TestCase
     public function getting_visibility_on_a_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);
-        $this->adapter->visibility('path.txt');
+        $this->adapter()->visibility('path.txt');
     }
 
     /**
@@ -76,7 +55,7 @@ class InMemoryFilesystemTest extends TestCase
     public function getting_mimetype_on_a_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);
-        $this->adapter->mimeType('path.txt');
+        $this->adapter()->mimeType('path.txt');
     }
 
     /**
@@ -85,7 +64,7 @@ class InMemoryFilesystemTest extends TestCase
     public function getting_last_modified_on_a_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);
-        $this->adapter->lastModified('path.txt');
+        $this->adapter()->lastModified('path.txt');
     }
 
     /**
@@ -94,7 +73,7 @@ class InMemoryFilesystemTest extends TestCase
     public function getting_file_size_on_a_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);
-        $this->adapter->fileSize('path.txt');
+        $this->adapter()->fileSize('path.txt');
     }
 
     /**
@@ -102,10 +81,10 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function deleting_a_file()
     {
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->assertTrue($this->adapter->fileExists('path.txt'));
-        $this->adapter->delete('path.txt');
-        $this->assertFalse($this->adapter->fileExists('path.txt'));
+        $this->adapter()->write('path.txt', 'contents', new Config());
+        $this->assertTrue($this->adapter()->fileExists('path.txt'));
+        $this->adapter()->delete('path.txt');
+        $this->assertFalse($this->adapter()->fileExists('path.txt'));
     }
 
 
@@ -115,15 +94,17 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function deleting_a_directory()
     {
-        $this->adapter->write('a/path.txt', 'contents', new Config());
-        $this->adapter->write('a/b/path.txt', 'contents', new Config());
-        $this->adapter->write('a/b/c/path.txt', 'contents', new Config());
-        $this->assertTrue($this->adapter->fileExists('a/b/path.txt'));
-        $this->assertTrue($this->adapter->fileExists('a/b/c/path.txt'));
-        $this->adapter->deleteDirectory('a/b');
-        $this->assertTrue($this->adapter->fileExists('a/path.txt'));
-        $this->assertFalse($this->adapter->fileExists('a/b/path.txt'));
-        $this->assertFalse($this->adapter->fileExists('a/b/c/path.txt'));
+        $adapter = $this->adapter();
+        $adapter->write('a/path.txt', 'contents', new Config());
+        $adapter->write('a/b/path.txt', 'contents', new Config());
+        $adapter->write('a/b/c/path.txt', 'contents', new Config());
+        $this->assertTrue($adapter->fileExists('a/b/path.txt'));
+        $this->assertTrue($adapter->fileExists('a/b/c/path.txt'));
+        $adapter->deleteDirectory('a/b');
+        $this->assertTrue($adapter->fileExists('a/path.txt'));
+        $this->assertFalse($adapter->fileExists('a/b/path.txt'));
+        $this->assertFalse($adapter->fileExists('a/b/c/path.txt'));
+//        var_dump(iterator_to_array($adapter->listContents('', false)));
     }
 
     /**
@@ -131,7 +112,7 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function creating_a_directory_does_nothing()
     {
-        $this->adapter->createDirectory('something', new Config());
+        $this->adapter()->createDirectory('something', new Config());
         $this->assertTrue(true);
     }
 
@@ -140,8 +121,8 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function updating_and_reading_a_file()
     {
-        $this->adapter->update(self::PATH, 'contents', new Config());
-        $contents = $this->adapter->read(self::PATH);
+        $this->adapter()->update(self::PATH, 'contents', new Config());
+        $contents = $this->adapter()->read(self::PATH);
         $this->assertEquals('contents', $contents);
     }
 
@@ -151,8 +132,8 @@ class InMemoryFilesystemTest extends TestCase
     public function writing_with_a_stream_and_reading_a_file()
     {
         $handle = stream_with_contents('contents');
-        $this->adapter->writeStream(self::PATH, $handle, new Config());
-        $contents = $this->adapter->read(self::PATH);
+        $this->adapter()->writeStream(self::PATH, $handle, new Config());
+        $contents = $this->adapter()->read(self::PATH);
         $this->assertEquals('contents', $contents);
     }
 
@@ -162,9 +143,9 @@ class InMemoryFilesystemTest extends TestCase
     public function updating_with_a_stream_and_reading_a_file()
     {
         $handle = stream_with_contents('contents');
-        $this->adapter->updateStream(self::PATH, $handle, new Config());
+        $this->adapter()->updateStream(self::PATH, $handle, new Config());
         fclose($handle);
-        $contents = $this->adapter->read(self::PATH);
+        $contents = $this->adapter()->read(self::PATH);
         $this->assertEquals('contents', $contents);
     }
 
@@ -173,8 +154,8 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function reading_a_stream()
     {
-        $this->adapter->write(self::PATH, 'contents', new Config());
-        $contents = $this->adapter->readStream(self::PATH);
+        $this->adapter()->write(self::PATH, 'contents', new Config());
+        $contents = $this->adapter()->readStream(self::PATH);
         $this->assertEquals('contents', stream_get_contents($contents));
         fclose($contents);
     }
@@ -185,7 +166,7 @@ class InMemoryFilesystemTest extends TestCase
     public function reading_a_non_existing_file()
     {
         $this->expectException(UnableToReadFile::class);
-        $this->adapter->read('path.txt');
+        $this->adapter()->read('path.txt');
     }
 
     /**
@@ -194,7 +175,7 @@ class InMemoryFilesystemTest extends TestCase
     public function stream_reading_a_non_existing_file()
     {
         $this->expectException(UnableToReadFile::class);
-        $this->adapter->readStream('path.txt');
+        $this->adapter()->readStream('path.txt');
     }
 
     /**
@@ -202,16 +183,17 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function listing_all_files()
     {
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->write('a/path.txt', 'contents', new Config());
-        $this->adapter->write('a/b/path.txt', 'contents', new Config());;
-        $listing = iterator_to_array($this->adapter->listContents('/', true));
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->write('a/path.txt', 'contents', new Config());
+        $adapter->write('a/b/path.txt', 'contents', new Config());;
+        $listing = iterator_to_array($adapter->listContents('/', true));
         $this->assertCount(5, $listing);
-        $this->assertContainsEquals(new FileAttributes('/path.txt'), $listing);
-        $this->assertContainsEquals(new FileAttributes('/a/path.txt'), $listing);
-        $this->assertContainsEquals(new FileAttributes('/a/b/path.txt'), $listing);
-        $this->assertContainsEquals(new DirectoryAttributes('/a/'), $listing);
-        $this->assertContainsEquals(new DirectoryAttributes('/a/b/'), $listing);
+        $this->assertContainsEquals(new FileAttributes('path.txt'), $listing);
+        $this->assertContainsEquals(new FileAttributes('a/path.txt'), $listing);
+        $this->assertContainsEquals(new FileAttributes('a/b/path.txt'), $listing);
+        $this->assertContainsEquals(new DirectoryAttributes('a'), $listing);
+        $this->assertContainsEquals(new DirectoryAttributes('a/b'), $listing);
     }
 
     /**
@@ -219,10 +201,11 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function listing_non_recursive()
     {
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->write('a/path.txt', 'contents', new Config());
-        $this->adapter->write('a/b/path.txt', 'contents', new Config());
-        $listing = iterator_to_array($this->adapter->listContents('/', false));
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->write('a/path.txt', 'contents', new Config());
+        $adapter->write('a/b/path.txt', 'contents', new Config());
+        $listing = iterator_to_array($adapter->listContents('/', false));
         $this->assertCount(2, $listing);
     }
 
@@ -231,10 +214,11 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function moving_a_file_successfully()
     {
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->move('path.txt', 'new-path.txt', new Config());
-        $this->assertFalse($this->adapter->fileExists('path.txt'));
-        $this->assertTrue($this->adapter->fileExists('new-path.txt'));
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->move('path.txt', 'new-path.txt', new Config());
+        $this->assertFalse($adapter->fileExists('path.txt'));
+        $this->assertTrue($adapter->fileExists('new-path.txt'));
     }
 
     /**
@@ -243,9 +227,10 @@ class InMemoryFilesystemTest extends TestCase
     public function moving_a_file_with_collision()
     {
         $this->expectException(UnableToMoveFile::class);
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->write('new-path.txt', 'contents', new Config());
-        $this->adapter->move('path.txt', 'new-path.txt', new Config());
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->write('new-path.txt', 'contents', new Config());
+        $adapter->move('path.txt', 'new-path.txt', new Config());
     }
 
     /**
@@ -254,7 +239,7 @@ class InMemoryFilesystemTest extends TestCase
     public function trying_to_move_a_non_existing_file()
     {
         $this->expectException(UnableToMoveFile::class);
-        $this->adapter->move('path.txt', 'new-path.txt', new Config());
+        $this->adapter()->move('path.txt', 'new-path.txt', new Config());
     }
 
     /**
@@ -262,10 +247,11 @@ class InMemoryFilesystemTest extends TestCase
      */
     public function copying_a_file_successfully()
     {
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
-        $this->assertTrue($this->adapter->fileExists('path.txt'));
-        $this->assertTrue($this->adapter->fileExists('new-path.txt'));
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->copy('path.txt', 'new-path.txt', new Config());
+        $this->assertTrue($adapter->fileExists('path.txt'));
+        $this->assertTrue($adapter->fileExists('new-path.txt'));
     }
 
     /**
@@ -274,7 +260,7 @@ class InMemoryFilesystemTest extends TestCase
     public function trying_to_copy_a_non_existing_file()
     {
         $this->expectException(UnableToCopyFile::class);
-        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
+        $this->adapter()->copy('path.txt', 'new-path.txt', new Config());
     }
 
     /**
@@ -283,9 +269,10 @@ class InMemoryFilesystemTest extends TestCase
     public function copying_a_file_with_collision()
     {
         $this->expectException(UnableToCopyFile::class);
-        $this->adapter->write('path.txt', 'contents', new Config());
-        $this->adapter->write('new-path.txt', 'contents', new Config());
-        $this->adapter->copy('path.txt', 'new-path.txt', new Config());
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->write('new-path.txt', 'contents', new Config());
+        $adapter->copy('path.txt', 'new-path.txt', new Config());
     }
 
     /**
@@ -294,15 +281,21 @@ class InMemoryFilesystemTest extends TestCase
     public function checking_for_metadata()
     {
         mock_function('time', 1234);
-        $this->adapter->write(
+        $adapter = $this->adapter();
+        $adapter->write(
             self::PATH,
             file_get_contents(__DIR__.'/../../test_files/flysystem.svg'),
             new Config()
         );
 
-        $this->assertTrue($this->adapter->fileExists(self::PATH));
-        $this->assertEquals(753, $this->adapter->fileSize(self::PATH)->fileSize());
-        $this->assertEquals(1234, $this->adapter->lastModified(self::PATH)->lastModified());
-        $this->assertEquals('image/svg', $this->adapter->mimeType(self::PATH)->mimeType());
+        $this->assertTrue($adapter->fileExists(self::PATH));
+        $this->assertEquals(753, $adapter->fileSize(self::PATH)->fileSize());
+        $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
+        $this->assertEquals('image/svg', $adapter->mimeType(self::PATH)->mimeType());
+    }
+
+    function createFilesystemAdapter(): FilesystemAdapter
+    {
+        return new InMemoryFilesystem();
     }
 }

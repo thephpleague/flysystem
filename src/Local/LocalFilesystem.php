@@ -412,13 +412,12 @@ class LocalFilesystem implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
-        $fileSize = @filesize($location);
 
-        if ($fileSize === false) {
-            throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
+        if (is_file($location) && ($fileSize = @filesize($location)) !== false) {
+            return new FileAttributes($path, $fileSize);
         }
 
-        return new FileAttributes($path, $fileSize);
+        throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
     }
 
     private function listDirectory(string $location): Generator
