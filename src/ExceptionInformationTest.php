@@ -104,18 +104,6 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function update_file_exception_information()
-    {
-        $exception = UnableToUpdateFile::atLocation('from', 'some message');
-        $this->assertEquals('from', $exception->location());
-        $this->assertEquals('some message', $exception->reason());
-        $this->assertStringContainsString('some message', $exception->getMessage());
-        $this->assertEquals(FilesystemOperationFailed::OPERATION_UPDATE, $exception->operation());
-    }
-
-    /**
-     * @test
-     */
     public function write_file_exception_information()
     {
         $exception = UnableToWriteFile::atLocation('from', 'some message');

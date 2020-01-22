@@ -148,16 +148,6 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
-    public function update(string $path, string $contents, Config $config): void
-    {
-        $this->upload($path, $contents, $config);
-    }
-
-    public function updateStream(string $path, $contents, Config $config): void
-    {
-        $this->upload($path, $contents, $config);
-    }
-
     public function read(string $path): string
     {
         $body = $this->readObject($path);

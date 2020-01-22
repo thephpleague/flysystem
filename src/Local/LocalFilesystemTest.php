@@ -17,7 +17,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
-use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
@@ -101,19 +100,6 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function updating_a_file()
-    {
-        $adapter = new LocalFilesystem(static::ROOT);
-        $adapter->write('/file.txt', 'contents', new Config());
-        $adapter->update('/file.txt', 'new contents', new Config());
-        $this->assertFileExists(static::ROOT . '/file.txt');
-        $contents = file_get_contents(static::ROOT . '/file.txt');
-        $this->assertEquals('new contents', $contents);
-    }
-
-    /**
-     * @test
-     */
     public function writing_a_file_with_a_stream()
     {
         $adapter = new LocalFilesystem(static::ROOT);
@@ -124,22 +110,6 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
         $this->assertFileExists(static::ROOT . '/file.txt');
         $contents = file_get_contents(static::ROOT . '/file.txt');
         $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
-    public function updating_a_file_with_a_stream()
-    {
-        $adapter = new LocalFilesystem(static::ROOT);
-        $adapter->write('/file.txt', 'contents', new Config());
-        $stream = stream_with_contents('new contents');
-        $adapter->updateStream('/file.txt', $stream, new Config());
-        fclose($stream);
-
-        $this->assertFileExists(static::ROOT . '/file.txt');
-        $contents = file_get_contents(static::ROOT . '/file.txt');
-        $this->assertEquals('new contents', $contents);
     }
 
     /**
@@ -189,35 +159,12 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_update_a_file()
-    {
-        $this->expectException(UnableToUpdateFile::class);
-        (new LocalFilesystem('/'))->update('/cannot-create-a-file-here', 'contents', new Config());
-    }
-
-    /**
-     * @test
-     */
     public function failing_to_write_a_file_using_a_stream()
     {
         $this->expectException(UnableToWriteFile::class);
         try {
             $stream = stream_with_contents('something');
             (new LocalFilesystem('/'))->writeStream('/cannot-create-a-file-here', 'contents', new Config());
-        } finally {
-            fclose($stream);
-        }
-    }
-
-    /**
-     * @test
-     */
-    public function failing_to_update_a_file_using_a_stream()
-    {
-        $this->expectException(UnableToUpdateFile::class);
-        try {
-            $stream = stream_with_contents('something');
-            (new LocalFilesystem('/'))->updateStream('/cannot-create-a-file-here', 'contents', new Config());
         } finally {
             fclose($stream);
         }
@@ -366,8 +313,8 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
         $adapter = new LocalFilesystem(static::ROOT);
         $adapter->write('a/b/c/d/e.txt', 'contents', new Config());
         $adapter->deleteDirectory('a/b');
-        $this->assertDirectoryExists(static::ROOT.'/a');
-        $this->assertDirectoryNotExists(static::ROOT.'/a/b');
+        $this->assertDirectoryExists(static::ROOT . '/a');
+        $this->assertDirectoryNotExists(static::ROOT . '/a/b');
     }
 
     /**

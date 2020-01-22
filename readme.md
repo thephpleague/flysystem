@@ -13,9 +13,6 @@ $resource = tmpfile();
 $filesystem->write('dir/path.txt', 'contents');
 $filesystem->writeStream('dir/path.txt', $resource);
 
-$filesystem->update('dir/path.txt', 'contents');
-$filesystem->updateStream('dir/path.txt', $resource);
-
 $filesystem->delete('dir/path.txt');
 
 $filesystem->createDirectory('dir');

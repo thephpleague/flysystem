@@ -237,19 +237,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function updating_and_reading()
-    {
-        $adapter = $this->adapter();
-
-        $adapter->update('some/path.txt', 'contents', new Config());
-
-        $contents = $adapter->read('some/path.txt');
-        $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
     public function writing_and_reading_with_streams()
     {
         $writeStream = stream_with_contents('contents');
@@ -356,24 +343,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $this->assertFalse($fileExistsBefore);
         $this->assertTrue($fileExistsAfter);
-    }
-
-    /**
-     * @test
-     */
-    public function updating_and_reading_with_streams()
-    {
-        $writeStream = stream_with_contents('contents');
-        $adapter = $this->adapter();
-
-        $adapter->updateStream('path.txt', $writeStream, new Config());
-        fclose($writeStream);
-        $readStream = $adapter->readStream('path.txt');
-
-        $this->assertIsResource($readStream);
-        $contents = stream_get_contents($readStream);
-        fclose($readStream);
-        $this->assertEquals('contents', $contents);
     }
 
     /**

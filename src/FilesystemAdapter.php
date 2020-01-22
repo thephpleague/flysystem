@@ -14,10 +14,6 @@ interface FilesystemAdapter
 
     public function writeStream(string $path, $contents, Config $config): void;
 
-    public function update(string $path, string $contents, Config $config): void;
-
-    public function updateStream(string $path, $contents, Config $config): void;
-
     public function read(string $path): string;
 
     public function readStream(string $path);

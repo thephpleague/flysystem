@@ -22,7 +22,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
-use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
@@ -135,24 +134,6 @@ class LocalFilesystem implements FilesystemAdapter
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
             $this->setVisibility($location, (string) $visibility);
-        }
-    }
-
-    public function update(string $location, string $contents, Config $config): void
-    {
-        try {
-            $this->write($location, $contents, $config);
-        } catch (UnableToWriteFile $exception) {
-            throw UnableToUpdateFile::atLocation($location, $exception->reason());
-        }
-    }
-
-    public function updateStream(string $location, $contents, Config $config): void
-    {
-        try {
-            $this->writeStream($location, $contents, $config);
-        } catch (UnableToWriteFile $exception) {
-            throw UnableToUpdateFile::atLocation($location, $exception->reason());
         }
     }
 

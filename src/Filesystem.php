@@ -56,26 +56,6 @@ class Filesystem implements FilesystemOperator
         );
     }
 
-    public function update(string $location, string $contents, array $config = []): void
-    {
-        $this->adapter->update(
-            $this->pathNormalizer->normalizePath($location),
-            $contents,
-            $this->config->extend($config)
-        );
-    }
-
-    public function updateStream(string $location, $contents, array $config = []): void
-    {
-        $this->assertIsResource($contents);
-        $this->rewindStream($contents);
-        $this->adapter->updateStream(
-            $this->pathNormalizer->normalizePath($location),
-            $contents,
-            $this->config->extend($config)
-        );
-    }
-
     public function read(string $location): string
     {
         return $this->adapter->read($this->pathNormalizer->normalizePath($location));

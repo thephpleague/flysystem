@@ -98,32 +98,10 @@ class InMemoryFilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function updating_and_reading_a_file()
-    {
-        $this->adapter()->update(self::PATH, 'contents', new Config());
-        $contents = $this->adapter()->read(self::PATH);
-        $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
     public function writing_with_a_stream_and_reading_a_file()
     {
         $handle = stream_with_contents('contents');
         $this->adapter()->writeStream(self::PATH, $handle, new Config());
-        $contents = $this->adapter()->read(self::PATH);
-        $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
-    public function updating_with_a_stream_and_reading_a_file()
-    {
-        $handle = stream_with_contents('contents');
-        $this->adapter()->updateStream(self::PATH, $handle, new Config());
-        fclose($handle);
         $contents = $this->adapter()->read(self::PATH);
         $this->assertEquals('contents', $contents);
     }

@@ -39,17 +39,6 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function updating_and_reading_files()
-    {
-        $this->filesystem->update('path.txt', 'contents');
-        $contents = $this->filesystem->read('path.txt');
-
-        $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
     public function trying_to_write_with_an_invalid_stream_arguments()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -65,24 +54,6 @@ class FilesystemTest extends TestCase
         $writeStream = stream_with_contents('contents');
 
         $this->filesystem->writeStream('path.txt', $writeStream);
-        $readStream = $this->filesystem->readStream('path.txt');
-
-        fclose($writeStream);
-
-        $this->assertIsResource($readStream);
-        $this->assertEquals('contents', stream_get_contents($readStream));
-
-        fclose($readStream);
-    }
-
-    /**
-     * @test
-     */
-    public function updating_and_reading_a_stream()
-    {
-        $writeStream = stream_with_contents('contents');
-
-        $this->filesystem->updateStream('path.txt', $writeStream);
         $readStream = $this->filesystem->readStream('path.txt');
 
         fclose($writeStream);

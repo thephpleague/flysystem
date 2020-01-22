@@ -17,16 +17,6 @@ interface FilesystemWriter
     public function writeStream(string $location, $contents, array $config = []): void;
 
     /**
-     * @throws UnableToUpdateFile
-     */
-    public function update(string $location, string $contents, array $config = []): void;
-
-    /**
-     * @throws UnableToUpdateFile
-     */
-    public function updateStream(string $location, $contents, array $config = []): void;
-
-    /**
      * @throws UnableToDeleteFile
      */
     public function delete(string $location): void;

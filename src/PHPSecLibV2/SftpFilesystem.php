@@ -18,7 +18,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
-use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
@@ -125,24 +124,6 @@ class SftpFilesystem implements FilesystemAdapter
             throw $exception;
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, '', $exception);
-        }
-    }
-
-    public function update(string $path, string $contents, Config $config): void
-    {
-        try {
-            $this->upload($path, $contents, $config);
-        } catch (Throwable $exception) {
-            throw UnableToUpdateFile::atLocation($path, '', $exception);
-        }
-    }
-
-    public function updateStream(string $path, $contents, Config $config): void
-    {
-        try {
-            $this->upload($path, $contents, $config);
-        } catch (Throwable $exception) {
-            throw UnableToUpdateFile::atLocation($path, '', $exception);
         }
     }
 

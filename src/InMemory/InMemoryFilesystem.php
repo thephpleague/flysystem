@@ -45,16 +45,6 @@ class InMemoryFilesystem implements FilesystemAdapter
         $this->write($path, stream_get_contents($contents), $config);
     }
 
-    public function update(string $path, string $contents, Config $config): void
-    {
-        $this->write($path, $contents, $config);
-    }
-
-    public function updateStream(string $path, $contents, Config $config): void
-    {
-        $this->write($path, stream_get_contents($contents), $config);
-    }
-
     public function read(string $path): string
     {
         $path = $this->preparePath($path);
