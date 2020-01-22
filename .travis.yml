@@ -47,7 +47,7 @@ install:
 #  - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
 
 script:
-  - FLYSYSTEM_TEST_DELETE_FAILURE=yes vendor/bin/phpunit --coverage-text
+  - FLYSYSTEM_TEST_DANGEROUS_THINGS=yes vendor/bin/phpunit --coverage-text
 
 #after_script:
 #  - wget https://scrutinizer-ci.com/ocular.phar
