@@ -184,7 +184,7 @@ class InMemoryFilesystem implements FilesystemAdapter
                 }
 
                 $dummyFilename = self::DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST;
-                if (substr($path, 0, strlen($dummyFilename)) === $dummyFilename) {
+                if (substr($path, -strlen($dummyFilename)) === $dummyFilename) {
                     continue;
                 }
 
@@ -213,7 +213,7 @@ class InMemoryFilesystem implements FilesystemAdapter
         $source = $this->preparePath($source);
         $destination = $this->preparePath($destination);
 
-        if ( ! $this->fileExists($source) || $this->fileExists($destination)) {
+        if ( ! $this->fileExists($source)) {
             throw UnableToCopyFile::fromLocationTo($source, $destination);
         }
 

@@ -13,6 +13,16 @@ class PortableVisibilityConverter implements VisibilityConverter
     private const PUBLIC_ACL = 'public-read';
     private const PRIVATE_ACL = 'private';
 
+    /**
+     * @var string
+     */
+    private $defaultForDirectories;
+
+    public function __construct(string $defaultForDirectories = Visibility::PUBLIC)
+    {
+        $this->defaultForDirectories = $defaultForDirectories;
+    }
+
     public function visibilityToAcl(string $visibility): string
     {
         if ($visibility === Visibility::PUBLIC) {
@@ -34,5 +44,10 @@ class PortableVisibilityConverter implements VisibilityConverter
         }
 
         return Visibility::PRIVATE;
+    }
+
+    public function defaultForDirectories(): string
+    {
+        return $this->defaultForDirectories;
     }
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PHPSecLibV2;
 
-use LogicException;
 use phpseclib\Net\SFTP;
 use Throwable;
+
+use const STDOUT;
 
 class SftpConnectionProvider implements ConnectionProvider
 {
@@ -55,14 +56,8 @@ class SftpConnectionProvider implements ConnectionProvider
      */
     private $hostFingerprint;
 
-    /**
-     * @var string
-     */
-    private $root;
-
     public function __construct(
         string $host,
-        string $root,
         string $username,
         string $password = null,
         int $port = 22,
@@ -72,7 +67,6 @@ class SftpConnectionProvider implements ConnectionProvider
         ConnectivityChecker $connectivityChecker = null
     ) {
         $this->host = $host;
-        $this->root = $root;
         $this->username = $username;
         $this->password = $password;
         $this->useAgent = $useAgent;
@@ -101,8 +95,6 @@ class SftpConnectionProvider implements ConnectionProvider
 
             throw UnableToConnectToSftpHost::atHostname($this->host);
         }
-
-        $connection->chdir($this->root);
 
         return $this->connection = $connection;
     }

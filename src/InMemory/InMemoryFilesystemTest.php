@@ -28,27 +28,6 @@ class InMemoryFilesystemTest extends FilesystemAdapterTestCase
         reset_function_mocks();
     }
 
-
-    /**
-     * @test
-     */
-    public function writing_and_reading_a_file()
-    {
-        $adapter = $this->adapter();
-        $adapter->write(self::PATH, 'contents', new Config());
-        $contents = $adapter->read(self::PATH);
-        $this->assertEquals('contents', $contents);
-    }
-
-    /**
-     * @test
-     */
-    public function getting_visibility_on_a_non_existing_file()
-    {
-        $this->expectException(UnableToRetrieveMetadata::class);
-        $this->adapter()->visibility('path.txt');
-    }
-
     /**
      * @test
      */
@@ -266,13 +245,13 @@ class InMemoryFilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file_with_collision()
+    public function not_listing_directory_placeholders()
     {
-        $this->expectException(UnableToCopyFile::class);
         $adapter = $this->adapter();
-        $adapter->write('path.txt', 'contents', new Config());
-        $adapter->write('new-path.txt', 'contents', new Config());
-        $adapter->copy('path.txt', 'new-path.txt', new Config());
+        $adapter->createDirectory('directory', new Config());
+
+        $contents = iterator_to_array($adapter->listContents('', true));
+        $this->assertCount(1, $contents);
     }
 
     /**

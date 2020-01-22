@@ -217,6 +217,16 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function fetching_visibility_of_non_existing_file()
+    {
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $this->adapter()->visibility('non-existing-file.txt');
+    }
+
+    /**
+     * @test
+     */
     public function fetching_mime_type_of_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);
@@ -397,6 +407,21 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $directory = $contents[0];
         $this->assertInstanceOf(DirectoryAttributes::class, $directory);
         $this->assertEquals('path', $directory->path());
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_with_collision()
+    {
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'new contents', new Config());
+        $adapter->write('new-path.txt', 'contents', new Config());
+
+        $adapter->copy('path.txt', 'new-path.txt', new Config());
+        $contents = $adapter->read('new-path.txt');
+
+        $this->assertEquals('new contents', $contents);
     }
 
     protected function assertFileExistsAtPath(string $path): void

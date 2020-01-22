@@ -30,4 +30,9 @@ class Config
     {
         return new static(array_merge($this->options, $options));
     }
+
+    public function withDefaults(array $defaults): Config
+    {
+        return new static($this->options + $defaults);
+    }
 }

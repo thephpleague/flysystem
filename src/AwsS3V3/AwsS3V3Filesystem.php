@@ -193,7 +193,9 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $this->upload(rtrim($path, '/') . '/', '', $config);
+        $this->upload(rtrim($path, '/') . '/', '', $config->withDefaults([
+            'visibility' => $this->visibility->defaultForDirectories(),
+       ]));
     }
 
     public function setVisibility(string $path, $visibility): void

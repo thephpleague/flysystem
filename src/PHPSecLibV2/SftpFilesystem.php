@@ -6,10 +6,18 @@ namespace League\Flysystem\PHPSecLibV2;
 
 use Generator;
 use League\Flysystem\Config;
+use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\MimeType;
+use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
+use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToUpdateFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
@@ -30,28 +38,40 @@ class SftpFilesystem implements FilesystemAdapter
      */
     private $visibilityConverter;
 
-    public function __construct(ConnectionProvider $connectionProvider, VisibilityConverter $visibilityConverter = null)
-    {
+    /**
+     * @var PathPrefixer
+     */
+    private $prefixer;
+
+    public function __construct(
+        ConnectionProvider $connectionProvider,
+        string $root,
+        VisibilityConverter $visibilityConverter = null
+    ) {
         $this->connectionProvider = $connectionProvider;
+        $this->prefixer = new PathPrefixer($root);
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
     }
 
     public function fileExists(string $path): bool
     {
-        return $this->connectionProvider->provideConnection()->is_file($path);
+        $location = $this->prefixer->prefixPath($path);
+
+        return $this->connectionProvider->provideConnection()->is_file($location);
     }
 
     private function upload(string $path, $contents, Config $config): void
     {
         $this->ensureParentDirectoryExists($path, $config);
         $connection = $this->connectionProvider->provideConnection();
+        $location = $this->prefixer->prefixPath($path);
 
-        if ( ! $connection->put($path, $contents, SFTP::SOURCE_STRING)) {
+        if ( ! $connection->put($location, $contents, SFTP::SOURCE_STRING)) {
             throw UnableToWriteFile::atLocation($path, 'not able to write the file');
         }
 
-        if ( ! ($visibility = $config->get(Config::OPTION_VISIBILITY))) {
-            return;
+        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
+            $this->setVisibility($path, $visibility);
         }
     }
 
@@ -59,7 +79,7 @@ class SftpFilesystem implements FilesystemAdapter
     {
         $parentDirectory = dirname($path);
 
-        if (empty($parentDirectory) || $parentDirectory === '') {
+        if (empty($parentDirectory) || $parentDirectory === '.') {
             return;
         }
 
@@ -68,17 +88,20 @@ class SftpFilesystem implements FilesystemAdapter
         $this->makeDirectory($parentDirectory, $visibility);
     }
 
-    private function makeDirectory(string $directory, string $visibility): void
+    private function makeDirectory(string $directory, ?string $visibility): void
     {
+        $location = $this->prefixer->prefixPath($directory);
         $connection = $this->connectionProvider->provideConnection();
 
-        if ($connection->is_dir($directory)) {
+        if ($connection->is_dir($location)) {
             return;
         }
 
-        $mode = $this->visibilityConverter->forDirectory($visibility);
+        $mode = $visibility ? $this->visibilityConverter->forDirectory(
+            $visibility
+        ) : $this->visibilityConverter->defaultForDirectories();
 
-        if ( ! $connection->mkdir($directory, $mode, true)) {
+        if ( ! $connection->mkdir($location, $mode, true)) {
             throw UnableToCreateDirectory::atLocation($directory);
         }
     }
@@ -87,6 +110,8 @@ class SftpFilesystem implements FilesystemAdapter
     {
         try {
             $this->upload($path, $contents, $config);
+        } catch (UnableToWriteFile $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, '', $exception);
         }
@@ -96,6 +121,8 @@ class SftpFilesystem implements FilesystemAdapter
     {
         try {
             $this->upload($path, $contents, $config);
+        } catch (UnableToWriteFile $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, '', $exception);
         }
@@ -121,8 +148,9 @@ class SftpFilesystem implements FilesystemAdapter
 
     public function read(string $path): string
     {
+        $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $contents = $connection->get($path);
+        $contents = $connection->get($location);
 
         if ( ! is_string($contents)) {
             throw UnableToReadFile::fromLocation($path);
@@ -133,10 +161,11 @@ class SftpFilesystem implements FilesystemAdapter
 
     public function readStream(string $path)
     {
+        $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
         $readStream = fopen('php://temp', 'w+');
 
-        if ( ! $connection->get($path, $readStream)) {
+        if ( ! $connection->get($location, $readStream)) {
             fclose($readStream);
             throw UnableToReadFile::fromLocation($path);
         }
@@ -148,45 +177,147 @@ class SftpFilesystem implements FilesystemAdapter
 
     public function delete(string $path): void
     {
+        $location = $this->prefixer->prefixPath($path);
+        $connection = $this->connectionProvider->provideConnection();
+        $connection->delete($location);
     }
 
     public function deleteDirectory(string $path): void
     {
+        $location = $this->prefixer->prefixPath($path);
+        $connection = $this->connectionProvider->provideConnection();
+        $connection->delete(rtrim($location, '/') . '/');
     }
 
     public function createDirectory(string $path, Config $config): void
     {
+        $this->makeDirectory($path, $config->get(Config::OPTION_VISIBILITY));
     }
 
     public function setVisibility(string $path, $visibility): void
     {
+        $location = $this->prefixer->prefixPath($path);
+        $connection = $this->connectionProvider->provideConnection();
+        $mode = $this->visibilityConverter->forFile($visibility);
+
+        if ( ! $connection->chmod($mode, $location, false)) {
+            throw UnableToSetVisibility::atLocation($path);
+        }
     }
 
-    public function visibility(string $path): FileAttributes
+    private function fetchFileMetadata(string $path, string $type): FileAttributes
     {
+        $location = $this->prefixer->prefixPath($path);
+        $connection = $this->connectionProvider->provideConnection();
+        $stat = $connection->stat($location);
+
+        if ( ! is_array($stat)) {
+            throw UnableToRetrieveMetadata::create($path, '', $type);
+        }
+
+        $attributes = $this->convertListingToAttributes($path, $stat);
+
+        if ( ! $attributes instanceof FileAttributes) {
+            throw UnableToRetrieveMetadata::create($path, 'path is not a file', $type);
+        }
+
+        return $attributes;
     }
 
     public function mimeType(string $path): FileAttributes
     {
+        try {
+            $contents = $this->read($path);
+            $mimetype = MimeType::detectMimeType($path, $contents);
+
+            return new FileAttributes($path, null, null, null, $mimetype);
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
+        }
     }
 
     public function lastModified(string $path): FileAttributes
     {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED);
     }
 
     public function fileSize(string $path): FileAttributes
     {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
+    }
+
+    public function visibility(string $path): FileAttributes
+    {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
     }
 
     public function listContents(string $path, bool $recursive): Generator
     {
+        $connection = $this->connectionProvider->provideConnection();
+        $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
+        $listing = $connection->rawlist($location, false);
+
+        foreach ($listing as $filename => $attributes) {
+            if ($filename === '.' || $filename === '..') {
+                continue;
+            }
+
+            // Ensure numeric keys are strings.
+            $filename = (string) $filename;
+            $itemPath = $this->prefixer->stripPrefix($location . ltrim($filename, '/'));
+            $attributes = $this->convertListingToAttributes($itemPath, $attributes);
+            yield $attributes;
+
+            if ($recursive && $attributes->isDir()) {
+                yield from $this->listContents($attributes->path(), true);
+            }
+        }
+    }
+
+    private function convertListingToAttributes(string $path, array $attributes): StorageAttributes
+    {
+        if ($attributes['type'] === NET_SFTP_TYPE_DIRECTORY) {
+            return new DirectoryAttributes(
+                ltrim($path, '/'), $this->visibilityConverter->inverseForDirectory($attributes['permissions'] & 0777)
+            );
+        }
+
+        return new FileAttributes(
+            $path,
+            $attributes['size'],
+            $this->visibilityConverter->inverseForFile($attributes['permissions'] & 0777),
+            $attributes['mtime']
+        );
     }
 
     public function move(string $source, string $destination, Config $config): void
     {
+        $sourceLocation = $this->prefixer->prefixPath($source);
+        $destinationLocation = $this->prefixer->prefixPath($destination);
+        $connection = $this->connectionProvider->provideConnection();
+
+        try {
+            $this->ensureParentDirectoryExists($destinationLocation, $config);
+        } catch (Throwable $exception) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
+        }
+
+        if ( ! $connection->rename($sourceLocation, $destinationLocation)) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination);
+        }
     }
 
     public function copy(string $source, string $destination, Config $config): void
     {
+        try {
+            $readStream = $this->readStream($source);
+            $visibility = $this->visibility($source)->visibility();
+            $this->writeStream($destination, $readStream, new Config(compact('visibility')));
+        } catch (Throwable $exception) {
+            if (isset($readStream) && is_resource($readStream)) {
+                @fclose($readStream);
+            }
+            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
+        }
     }
 }
