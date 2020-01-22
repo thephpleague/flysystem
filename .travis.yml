@@ -1,5 +1,8 @@
 language: php
 
+services:
+    - docker
+
 matrix:
   include:
     - php: 7.2
@@ -33,7 +36,9 @@ matrix:
       env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
 
 install:
+  - docker-compose -f test_files/docker-compose.yml up -d
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
+  - php test_files/wait_for_sftp.php
 
 #before_script:
 #  - docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
