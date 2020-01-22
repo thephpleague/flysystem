@@ -7,8 +7,6 @@ namespace League\Flysystem\PHPSecLibV2;
 use phpseclib\Net\SFTP;
 use Throwable;
 
-use const STDOUT;
-
 class SftpConnectionProvider implements ConnectionProvider
 {
     /**
@@ -88,7 +86,7 @@ class SftpConnectionProvider implements ConnectionProvider
             $connection->disconnect();
             $this->connection = null;
 
-            if ($tries < 5) {
+            if ($tries < 4) {
                 $tries++;
                 goto start;
             }
@@ -120,12 +118,7 @@ class SftpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        $publicKey = $connection->getServerPublicHostKey();
-
-        if ($publicKey === false) {
-            throw UnableToEstablishAuthenticityOfHost::becauseTheServerHasNoPublicHostKey($this->host);
-        }
-
+        $publicKey = $connection->getServerPublicHostKey() ?: 'no-public-key';
         $fingerprint = $this->getFingerprintFromPublicKey($publicKey);
 
         if (0 !== strcasecmp($this->hostFingerprint, $fingerprint)) {
@@ -133,9 +126,9 @@ class SftpConnectionProvider implements ConnectionProvider
         }
     }
 
-    private function getFingerprintFromPublicKey(string $publickey): string
+    private function getFingerprintFromPublicKey(string $publicKey): string
     {
-        $content = explode(' ', $publickey, 3);
+        $content = explode(' ', $publicKey, 3);
 
         return implode(':', str_split(md5(base64_decode($content[1])), 2));
     }
