@@ -40,12 +40,6 @@ install:
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
   - php test_files/wait_for_sftp.php
 
-#before_script:
-#  - docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
-#  - php wait_for_ftp_service.php
-#  - docker exec -it ftpd_server sh -c "(echo test; echo test) | pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob"
-#  - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
-
 script:
   - FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes vendor/bin/phpunit --coverage-text
 
