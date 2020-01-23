@@ -16,6 +16,10 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
 
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
+        if (getenv('FLYSYSTEM_TEST_SFTP') !== 'yes') {
+            $this->markTestSkipped('Opted out of testing SFTP');
+        }
+
         return new SftpFilesystem(
             $this->connectionProvider(),
             '/upload'
