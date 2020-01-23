@@ -370,6 +370,9 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $adapter->createDirectory('path', new Config());
 
+        // Creating a directory should be idempotent.
+        $adapter->createDirectory('path', new Config());
+
         $contents = iterator_to_array($adapter->listContents('', false));
         $this->assertCount(1, $contents);
         /** @var DirectoryAttributes $directory */
