@@ -148,6 +148,21 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->assertTrue($items[$directoryIndex]->isDir());
     }
 
+    /**
+     * @test
+     */
+    public function listing_contents_recursive()
+    {
+        $adapter = $this->adapter();
+        $adapter->createDirectory('path', new Config());
+        $adapter->write('path/file.txt', 'string', new Config());
+
+        $listing = $adapter->listContents('', true);
+        /** @var StorageAttributes[] $items */
+        $items = iterator_to_array($listing);
+        $this->assertCount(2, $items);
+    }
+
     protected function givenWeHaveAnExistingFile(string $path, string $contents, array $config = [])
     {
         $this->adapter()->write($path, $contents, new Config($config));

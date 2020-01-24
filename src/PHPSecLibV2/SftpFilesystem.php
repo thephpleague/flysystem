@@ -250,7 +250,9 @@ class SftpFilesystem implements FilesystemAdapter
             yield $attributes;
 
             if ($recursive && $attributes->isDir()) {
-                yield from $this->listContents($attributes->path(), true);
+                foreach ($this->listContents($attributes->path(), true) as $child) {
+                    yield $child;
+                }
             }
         }
     }
