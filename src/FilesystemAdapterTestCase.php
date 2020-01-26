@@ -8,6 +8,9 @@ use Generator;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 abstract class FilesystemAdapterTestCase extends TestCase
 {
     /**
