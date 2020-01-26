@@ -92,6 +92,18 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function creating_a_directory()
+    {
+        $this->filesystem->createDirectory('here');
+
+        $directoryAttrs = $this->filesystem->listContents('')->toArray()[0];
+        $this->assertInstanceOf(DirectoryAttributes::class, $directoryAttrs);
+        $this->assertEquals('here', $directoryAttrs->path());
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_directory()
     {
         $this->filesystem->write('dirname/a.txt', 'contents');
@@ -107,16 +119,6 @@ class FilesystemTest extends TestCase
         $this->assertFalse($this->filesystem->fileExists('dirname/a.txt'));
         $this->assertFalse($this->filesystem->fileExists('dirname/b.txt'));
         $this->assertFalse($this->filesystem->fileExists('dirname/c.txt'));
-    }
-
-    /**
-     * @test
-     */
-    public function creating_a_directory()
-    {
-        $this->filesystem->createDirectory('path/here');
-
-        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -183,7 +185,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function last_modified_getter()
+    public function fetching_last_modified()
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -192,5 +194,60 @@ class FilesystemTest extends TestCase
         $this->assertIsInt($lastModified);
         $this->assertTrue($lastModified > time() - 30);
         $this->assertTrue($lastModified < time() + 30);
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_mime_type()
+    {
+        $this->filesystem->write('path.txt', 'contents');
+
+        $mimeType = $this->filesystem->mimeType('path.txt');
+
+        $this->assertEquals('text/plain', $mimeType);
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_file_size()
+    {
+        $this->filesystem->write('path.txt', 'contents');
+
+        $fileSize = $this->filesystem->fileSize('path.txt');
+
+        $this->assertEquals(8, $fileSize);
+    }
+
+    /**
+     * @test
+     */
+    public function ensuring_streams_are_rewound_when_writing()
+    {
+        $writeStream = stream_with_contents('contents');
+        fseek($writeStream, 4);
+
+        $this->filesystem->writeStream('path.txt', $writeStream);
+        $contents = $this->filesystem->read('path.txt');
+
+        $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function setting_visibility()
+    {
+        $this->filesystem->write('path.txt', 'contents');
+
+        $this->filesystem->setVisibility('path.txt', Visibility::PUBLIC);
+        $publicVisibility = $this->filesystem->visibility('path.txt');
+
+        $this->filesystem->setVisibility('path.txt', Visibility::PRIVATE);
+        $privateVisibility = $this->filesystem->visibility('path.txt');
+
+        $this->assertEquals(Visibility::PUBLIC, $publicVisibility);
+        $this->assertEquals(Visibility::PRIVATE, $privateVisibility);
     }
 }
