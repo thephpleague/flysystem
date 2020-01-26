@@ -5,3 +5,4 @@
 test_files/ export-ignore
 **/*Test.php export-ignore
 **/*Stub.php export-ignore
+**/Stub*.php export-ignore

@@ -7,7 +7,9 @@ namespace League\Flysystem\PHPSecLibV2;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemAdapterTestCase;
+use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 
@@ -17,6 +19,11 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
      * @var SftpConnectionProvider
      */
     private $connectionProvider;
+
+    /**
+     * @var SFTPStub
+     */
+    private $connection;
 
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
@@ -28,6 +35,14 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
             $this->connectionProvider(),
             '/upload'
         );
+    }
+
+    /**
+     * @before
+     */
+    public function setupConnectionProvider(): void
+    {
+        $this->connection = $this->connectionProvider()->provideConnection();
     }
 
     /**
@@ -108,10 +123,78 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
         $this->assertEquals('image/svg', $mimeType->mimeType());
     }
 
+    /**
+     * @test
+     */
+    public function failing_to_chmod_when_writing()
+    {
+        $this->connection->failOnChmod('/upload/path.txt');
+        $adapter = $this->adapter();
+
+        $this->expectException(UnableToWriteFile::class);
+
+        $adapter->write('path.txt', 'contents', new Config(['visibility' => 'public']));
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_move_a_file_cause_the_parent_directory_cant_be_created()
+    {
+        $adapter = $this->adapterWithInvalidRoot();
+
+        $this->expectException(UnableToMoveFile::class);
+
+        $adapter->move('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_copy_a_file()
+    {
+        $adapter = $this->adapterWithInvalidRoot();
+
+        $this->expectException(UnableToCopyFile::class);
+
+        $adapter->copy('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_copy_a_file_because_writing_fails()
+    {
+        $this->connection->failOnPut('path.txt');
+        $adapter = $this->adapter();
+
+        $this->expectException(UnableToCopyFile::class);
+
+        $adapter->copy('path.txt', 'new-path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_chmod_when_writing_with_a_stream()
+    {
+        $writeStream = stream_with_contents('contents');
+        $this->connection->failOnChmod('/upload/path.txt');
+        $adapter = $this->adapter();
+
+        $this->expectException(UnableToWriteFile::class);
+
+        try {
+            $adapter->writeStream('path.txt', $writeStream, new Config(['visibility' => 'public']));
+        } finally {
+            @fclose($writeStream);
+        }
+    }
+
     private function connectionProvider(): ConnectionProvider
     {
-        if ( ! $this->connectionProvider instanceof SftpConnectionProvider) {
-            $this->connectionProvider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222);
+        if ( ! $this->connectionProvider instanceof ConnectionProvider) {
+            $this->connectionProvider = new StubSFTPConnectionProvider('localhost', 'foo', 'pass', 2222);
         }
 
         return $this->connectionProvider;
