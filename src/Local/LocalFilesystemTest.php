@@ -91,7 +91,9 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
     public function writing_a_file()
     {
         $adapter = new LocalFilesystem(static::ROOT);
+
         $adapter->write('/file.txt', 'contents', new Config());
+
         $this->assertFileExists(static::ROOT . '/file.txt');
         $contents = file_get_contents(static::ROOT . '/file.txt');
         $this->assertEquals('contents', $contents);
@@ -104,6 +106,7 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $stream = stream_with_contents('contents');
+
         $adapter->writeStream('/file.txt', $stream, new Config());
         fclose($stream);
 
@@ -119,6 +122,7 @@ class LocalFilesystemTest extends FilesystemAdapterTestCase
     {
         $adapter = new LocalFilesystem(static::ROOT);
         $stream = stream_with_contents('something');
+
         $adapter->writeStream('/file.txt', $stream, new Config(['visibility' => Visibility::PRIVATE]));
         fclose($stream);
 
