@@ -165,8 +165,9 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
      */
     public function failing_to_copy_a_file_because_writing_fails()
     {
-        $this->connection->failOnPut('path.txt');
+        $this->givenWeHaveAnExistingFile('path.txt', 'contents');
         $adapter = $this->adapter();
+        $this->connection->failOnPut('/upload/new-path.txt');
 
         $this->expectException(UnableToCopyFile::class);
 
