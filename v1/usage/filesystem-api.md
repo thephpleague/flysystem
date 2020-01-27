@@ -250,9 +250,12 @@ param         | description                                   | type
 `$path`       | location of a file                            | `string`
 `$response`   | success boolean                               | `boolean`
 
-Directories are also made implicitly when writing to a deeper path.
+If needed, directories are also made implicitly when writing to a deeper path.
 In general creating a directory is __not__ required in order to write
 to it.
+
+Some filesystems don't require directories at all, and for those filesystems (like
+AWS S3) _no directories are created when writing files_.
 
 ---
 
