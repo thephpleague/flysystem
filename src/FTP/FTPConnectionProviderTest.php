@@ -31,7 +31,7 @@ class FTPConnectionProviderTest extends TestCase
         $options = FTPConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
-            'uft8' => true,
+            'utf8' => true,
             'root' => '/home/foo/upload',
             'username' => 'foo',
             'password' => 'pass',

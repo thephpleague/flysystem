@@ -43,7 +43,7 @@ namespace League\Flysystem\Ftp {
     function ftp_raw(...$arguments)
     {
         if ( ! is_mocked('ftp_raw')) {
-            return \filesize(...$arguments);
+            return \ftp_raw(...$arguments);
         }
 
         return return_mocked_value('ftp_raw');
