@@ -159,7 +159,7 @@ class FTPConnectionOptions
         return $this->systemType;
     }
 
-    public function assiveAddressIgnored(): ?bool
+    public function passiveAddressIgnored(): ?bool
     {
         return $this->ignorePassiveAddress;
     }
