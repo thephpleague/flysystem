@@ -38,3 +38,14 @@ namespace League\Flysystem\InMemory {
         return return_mocked_value('time');
     }
 }
+
+namespace League\Flysystem\Ftp {
+    function ftp_raw(...$arguments)
+    {
+        if ( ! is_mocked('ftp_raw')) {
+            return \filesize(...$arguments);
+        }
+
+        return return_mocked_value('ftp_raw');
+    }
+}

@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-class UnableToCreateDirectory extends RuntimeException implements FilesystemOperationFailed
+final class UnableToCreateDirectory extends RuntimeException implements FilesystemOperationFailed
 {
     /**
      * @var string

@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOperationFailed
+final class UnableToRetrieveMetadata extends RuntimeException implements FilesystemOperationFailed
 {
     /**
      * @var string

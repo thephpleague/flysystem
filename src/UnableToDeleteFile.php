@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-class UnableToDeleteFile extends RuntimeException implements FilesystemOperationFailed
+final class UnableToDeleteFile extends RuntimeException implements FilesystemOperationFailed
 {
     private $location = '';
 

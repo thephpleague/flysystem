@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-class UnableToCopyFile extends RuntimeException implements FilesystemOperationFailed
+final class UnableToCopyFile extends RuntimeException implements FilesystemOperationFailed
 {
     /**
      * @var string

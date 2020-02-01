@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-class UnableToReadFile extends RuntimeException implements FilesystemOperationFailed
+final class UnableToReadFile extends RuntimeException implements FilesystemOperationFailed
 {
     private $location = '';
 

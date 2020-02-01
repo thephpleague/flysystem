@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-class UnableToDeleteDirectory extends RuntimeException implements FilesystemOperationFailed
+final class UnableToDeleteDirectory extends RuntimeException implements FilesystemOperationFailed
 {
     private $location = '';
 

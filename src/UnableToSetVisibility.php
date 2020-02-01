@@ -10,7 +10,7 @@ use Throwable;
 
 use function rtrim;
 
-class UnableToSetVisibility extends RuntimeException implements FilesystemOperationFailed
+final class UnableToSetVisibility extends RuntimeException implements FilesystemOperationFailed
 {
     /**
      * @var string

@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-class SymbolicLinkEncountered extends RuntimeException implements FilesystemError
+final class SymbolicLinkEncountered extends RuntimeException implements FilesystemError
 {
     /**
      * @var string

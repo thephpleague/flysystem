@@ -1,0 +1,190 @@
+<?php
+
+declare(strict_types=1);
+
+namespace League\Flysystem\FTP;
+
+use const FTP_BINARY;
+
+class FTPConnectionOptions
+{
+    /**
+     * @var string
+     */
+    private $host;
+
+    /**
+     * @var string
+     */
+    private $root;
+
+    /**
+     * @var string
+     */
+    private $username;
+
+    /**
+     * @var string
+     */
+    private $password;
+
+    /**
+     * @var int
+     */
+    private $port;
+
+    /**
+     * @var bool
+     */
+    private $ssl;
+
+    /**
+     * @var int
+     */
+    private $timeout;
+
+    /**
+     * @var bool
+     */
+    private $utf8;
+
+    /**
+     * @var bool
+     */
+    private $passive;
+
+    /**
+     * @var int
+     */
+    private $transferMode;
+
+    /**
+     * @var string|null
+     */
+    private $systemType;
+
+    /**
+     * @var bool|null
+     */
+    private $ignorePassiveAddress;
+
+    /**
+     * @var bool
+     */
+    private $enableTimestampsOnUnixListings;
+
+    public function __construct(
+        string $host,
+        string $root,
+        string $username,
+        string $password,
+        int $port = 21,
+        bool $ssl = false,
+        int $timeout = 90,
+        bool $utf8 = false,
+        bool $passive = true,
+        int $transferMode = FTP_BINARY,
+        ?string $systemType = null,
+        ?bool $ignorePassiveAddress = null,
+        bool $enableTimestampsOnUnixListings = false
+    )
+    {
+        $this->host = $host;
+        $this->root = $root;
+        $this->username = $username;
+        $this->password = $password;
+        $this->port = $port;
+        $this->ssl = $ssl;
+        $this->timeout = $timeout;
+        $this->utf8 = $utf8;
+        $this->passive = $passive;
+        $this->transferMode = $transferMode;
+        $this->systemType = $systemType;
+        $this->ignorePassiveAddress = $ignorePassiveAddress;
+        $this->enableTimestampsOnUnixListings = $enableTimestampsOnUnixListings;
+    }
+
+    public function host(): string
+    {
+        return $this->host;
+    }
+
+    public function root(): string
+    {
+        return $this->root;
+    }
+
+    public function username(): string
+    {
+        return $this->username;
+    }
+
+    public function password(): string
+    {
+        return $this->password;
+    }
+
+    public function port(): int
+    {
+        return $this->port;
+    }
+
+    public function ssl(): bool
+    {
+        return $this->ssl;
+    }
+
+    public function timeout(): int
+    {
+        return $this->timeout;
+    }
+
+    public function utf8(): bool
+    {
+        return $this->utf8;
+    }
+
+    public function passive(): bool
+    {
+        return $this->passive;
+    }
+
+    public function transferMode(): int
+    {
+        return $this->transferMode;
+    }
+
+    public function systemType(): ?string
+    {
+        return $this->systemType;
+    }
+
+    public function assiveAddressIgnored(): ?bool
+    {
+        return $this->ignorePassiveAddress;
+    }
+
+    public function timestampsOnUnixListingsEnabled(): bool
+    {
+        return $this->enableTimestampsOnUnixListings;
+    }
+
+    public static function fromArray(array $options): FTPConnectionOptions
+    {
+        return new static(
+            $options['host'] ?? 'invalid://host-not-set',
+            $options['root'] ?? 'invalid://root-not-set',
+            $options['username'] ?? 'invalid://username-not-set',
+            $options['password'] ?? 'invalid://password-not-set',
+            $options['port'] ?? 21,
+            $options['ssl'] ?? false,
+            $options['timeout'] ?? 90,
+            $options['utf8'] ?? false,
+            $options['passive'] ?? true,
+            $options['transferMode'] ?? FTP_BINARY,
+            $options['systemType'] ?? null,
+            $options['ignorePassiveAddress'] ?? null,
+            $options['enableTimestampsOnUnixListings'] ?? false
+        );
+    }
+}
