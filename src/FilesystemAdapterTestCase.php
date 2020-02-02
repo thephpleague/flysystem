@@ -36,6 +36,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function clearStorage(): void
     {
+        reset_function_mocks();
+
         try {
             $adapter = $this->adapter();
         } catch (Throwable $exception) {
@@ -180,7 +182,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         return $message . PHP_EOL;
     }
 
-    protected function givenWeHaveAnExistingFile(string $path, string $contents, array $config = [])
+    protected function givenWeHaveAnExistingFile(string $path, string $contents = 'contents', array $config = [])
     {
         $this->adapter()->write($path, $contents, new Config($config));
     }

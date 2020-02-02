@@ -583,7 +583,7 @@ class FTPFilesystem implements FilesystemAdapter
                 throw UnableToCreateDirectory::atLocation($dirPath, 'unable to create the directory');
             }
 
-            if ($mode !== false && @ftp_chmod($connection, $mode, $location)) {
+            if ($mode !== false && @ftp_chmod($connection, $mode, $location) === false) {
                 throw UnableToCreateDirectory::atLocation($dirPath, 'unable to chmod the directory');
             }
         }

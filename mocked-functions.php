@@ -66,4 +66,49 @@ namespace League\Flysystem\Ftp {
 
         return return_mocked_value('ftp_pasv');
     }
+
+    function ftp_fput(...$arguments)
+    {
+        if ( ! is_mocked('ftp_fput')) {
+            return \ftp_fput(...$arguments);
+        }
+
+        return return_mocked_value('ftp_fput');
+    }
+
+    function ftp_chmod(...$arguments)
+    {
+        if ( ! is_mocked('ftp_chmod')) {
+            return \ftp_chmod(...$arguments);
+        }
+
+        return return_mocked_value('ftp_chmod');
+    }
+
+    function ftp_mkdir(...$arguments)
+    {
+        if ( ! is_mocked('ftp_mkdir')) {
+            return \ftp_mkdir(...$arguments);
+        }
+
+        return return_mocked_value('ftp_mkdir');
+    }
+
+    function ftp_delete(...$arguments)
+    {
+        if ( ! is_mocked('ftp_delete')) {
+            return \ftp_delete(...$arguments);
+        }
+
+        return return_mocked_value('ftp_delete');
+    }
+
+    function ftp_rmdir(...$arguments)
+    {
+        if ( ! is_mocked('ftp_rmdir')) {
+            return \ftp_rmdir(...$arguments);
+        }
+
+        return return_mocked_value('ftp_rmdir');
+    }
 }
