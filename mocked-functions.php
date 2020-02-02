@@ -48,4 +48,22 @@ namespace League\Flysystem\Ftp {
 
         return return_mocked_value('ftp_raw');
     }
+
+    function ftp_set_option(...$arguments)
+    {
+        if ( ! is_mocked('ftp_set_option')) {
+            return \ftp_set_option(...$arguments);
+        }
+
+        return return_mocked_value('ftp_set_option');
+    }
+
+    function ftp_pasv(...$arguments)
+    {
+        if ( ! is_mocked('ftp_pasv')) {
+            return \ftp_pasv(...$arguments);
+        }
+
+        return return_mocked_value('ftp_pasv');
+    }
 }

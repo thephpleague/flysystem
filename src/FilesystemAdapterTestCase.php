@@ -8,6 +8,8 @@ use Generator;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
+use const PHP_EOL;
+
 /**
  * @codeCoverageIgnore
  */
@@ -47,7 +49,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         }
 
         /** @var StorageAttributes $item */
-        foreach ($adapter->listContents('/', false) as $item) {
+        foreach ($adapter->listContents('', false) as $item) {
             if ($item->isDir()) {
                 $adapter->deleteDirectory($item->path());
             } else {
@@ -163,7 +165,19 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $listing = $adapter->listContents('', true);
         /** @var StorageAttributes[] $items */
         $items = iterator_to_array($listing);
-        $this->assertCount(2, $items);
+        $this->assertCount(2, $items, $this->formatIncorrectListingCount($items));
+    }
+
+    protected function formatIncorrectListingCount(array $items): string
+    {
+        $message = "Incorrect number of items returned.\nThe listing contains:\n\n";
+
+        /** @var StorageAttributes $item */
+        foreach ($items as $item) {
+            $message .= "- {$item->path()}\n";
+        }
+
+        return $message . PHP_EOL;
     }
 
     protected function givenWeHaveAnExistingFile(string $path, string $contents, array $config = [])
@@ -192,10 +206,15 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('some/path.txt', 'contents', [Config::OPTION_VISIBILITY => Visibility::PUBLIC]);
+
         $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
+
         $adapter->setVisibility('some/path.txt', Visibility::PRIVATE);
+
         $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('some/path.txt')->visibility());
+
         $adapter->setVisibility('some/path.txt', Visibility::PUBLIC);
+
         $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
     }
 
@@ -311,8 +330,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
             new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
         );
         $adapter->move('source.txt', 'destination.txt', new Config());
-        $this->assertFalse($adapter->fileExists('source.txt'));
-        $this->assertTrue($adapter->fileExists('destination.txt'));
+        $this->assertFalse($adapter->fileExists('source.txt'), 'After moving a file should no longer exist in the original location.');
+        $this->assertTrue($adapter->fileExists('destination.txt', 'After moving, a file should be present at the new location.'));
         $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
         $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
     }
@@ -392,7 +411,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $adapter->createDirectory('path', new Config());
 
         $contents = iterator_to_array($adapter->listContents('', false));
-        $this->assertCount(1, $contents);
+        $this->assertCount(1, $contents, $this->formatIncorrectListingCount($contents));
         /** @var DirectoryAttributes $directory */
         $directory = $contents[0];
         $this->assertInstanceOf(DirectoryAttributes::class, $directory);

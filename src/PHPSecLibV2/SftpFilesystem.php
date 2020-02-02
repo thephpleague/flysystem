@@ -78,7 +78,7 @@ class SftpFilesystem implements FilesystemAdapter
     {
         $parentDirectory = dirname($path);
 
-        if (empty($parentDirectory) || $parentDirectory === '.') {
+        if ($parentDirectory === '' || $parentDirectory === '.') {
             return;
         }
 
@@ -193,13 +193,13 @@ class SftpFilesystem implements FilesystemAdapter
         $stat = $connection->stat($location);
 
         if ( ! is_array($stat)) {
-            throw UnableToRetrieveMetadata::create($path, '', $type);
+            throw UnableToRetrieveMetadata::create($path, $type);
         }
 
         $attributes = $this->convertListingToAttributes($path, $stat);
 
         if ( ! $attributes instanceof FileAttributes) {
-            throw UnableToRetrieveMetadata::create($path, 'path is not a file', $type);
+            throw UnableToRetrieveMetadata::create($path, $type, 'path is not a file');
         }
 
         return $attributes;
@@ -229,7 +229,7 @@ class SftpFilesystem implements FilesystemAdapter
 
     public function visibility(string $path): FileAttributes
     {
-        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
     public function listContents(string $path, bool $recursive): Generator

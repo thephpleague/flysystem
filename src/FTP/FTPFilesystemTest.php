@@ -11,6 +11,15 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 {
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
-        $this->markTestIncomplete('Needs to be implemented.');
+        $options = FTPConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'recurseManually' => true,
+            'root' => '/home/foo/upload/',
+            'username' => 'foo',
+            'password' => 'pass',
+        ]);
+
+        return new FTPFilesystem($options);
     }
 }

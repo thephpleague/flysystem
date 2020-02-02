@@ -16,7 +16,8 @@
         "ext-posix": "*",
         "ext-json": "*",
         "aws/aws-sdk-php": "^3.132.4",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0",
+        "ext-ftp": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5"

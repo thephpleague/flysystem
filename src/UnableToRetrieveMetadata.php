@@ -19,27 +19,27 @@ final class UnableToRetrieveMetadata extends RuntimeException implements Filesys
      */
     private $metadataType;
 
-    public static function lastModified(string $location, string $extraMessage, Throwable $previous = null): self
+    public static function lastModified(string $location, string $extraMessage = '', Throwable $previous = null): self
     {
-        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_LAST_MODIFIED, $previous);
+        return static::create($location, FileAttributes::ATTRIBUTE_LAST_MODIFIED, $extraMessage, $previous);
     }
 
-    public static function visibility(string $location, string $extraMessage, Throwable $previous = null): self
+    public static function visibility(string $location, string $extraMessage = '', Throwable $previous = null): self
     {
-        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_VISIBILITY, $previous);
+        return static::create($location, FileAttributes::ATTRIBUTE_VISIBILITY, $extraMessage, $previous);
     }
 
-    public static function fileSize(string $location, string $extraMessage, Throwable $previous = null): self
+    public static function fileSize(string $location, string $extraMessage = '', Throwable $previous = null): self
     {
-        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_FILE_SIZE, $previous);
+        return static::create($location, FileAttributes::ATTRIBUTE_FILE_SIZE, $extraMessage, $previous);
     }
 
-    public static function mimeType(string $location, string $extraMessage, Throwable $previous = null): self
+    public static function mimeType(string $location, string $extraMessage = '', Throwable $previous = null): self
     {
-        return static::create($location, $extraMessage, FileAttributes::ATTRIBUTE_MIME_TYPE, $previous);
+        return static::create($location, FileAttributes::ATTRIBUTE_MIME_TYPE, $extraMessage, $previous);
     }
 
-    public static function create(string $location, string $extraMessage, string $type, Throwable $previous = null): self
+    public static function create(string $location, string $type, string $extraMessage = '', Throwable $previous = null): self
     {
         $e = new static("Unable to retrieve the $type for file at location: $location. {$extraMessage}", 0, $previous);
         $e->location = $location;

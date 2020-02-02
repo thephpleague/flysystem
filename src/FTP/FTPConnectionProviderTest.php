@@ -32,6 +32,8 @@ class FTPConnectionProviderTest extends TestCase
             'host' => 'localhost',
             'port' => 2121,
             'utf8' => true,
+            'passive' => true,
+            'ignorePassiveAddress' => true,
             'root' => '/home/foo/upload',
             'username' => 'foo',
             'password' => 'pass',
@@ -60,6 +62,48 @@ class FTPConnectionProviderTest extends TestCase
         mock_function('ftp_raw', ['Error']);
 
         $this->expectException(UnableToEnableUtf8Mode::class);
+
+        $this->connectionProvider->createConnection($options);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_ignore_the_passive_address()
+    {
+        $options = FTPConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'ignorePassiveAddress' => true,
+            'root' => '/home/foo/upload',
+            'username' => 'foo',
+            'password' => 'pass',
+       ]);
+
+        mock_function('ftp_set_option', false);
+
+        $this->expectException(UnableToSetFtpOption::class);
+
+        $this->connectionProvider->createConnection($options);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_make_the_connection_passive()
+    {
+        $options = FTPConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'utf8' => true,
+            'root' => '/home/foo/upload',
+            'username' => 'foo',
+            'password' => 'pass',
+       ]);
+
+        mock_function('ftp_pasv', false);
+
+        $this->expectException(UnableToMakeConnectionPassive::class);
 
         $this->connectionProvider->createConnection($options);
     }

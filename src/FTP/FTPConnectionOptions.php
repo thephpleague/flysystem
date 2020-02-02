@@ -73,6 +73,11 @@ class FTPConnectionOptions
      */
     private $enableTimestampsOnUnixListings;
 
+    /**
+     * @var bool
+     */
+    private $recurseManually;
+
     public function __construct(
         string $host,
         string $root,
@@ -86,7 +91,8 @@ class FTPConnectionOptions
         int $transferMode = FTP_BINARY,
         ?string $systemType = null,
         ?bool $ignorePassiveAddress = null,
-        bool $enableTimestampsOnUnixListings = false
+        bool $enableTimestampsOnUnixListings = false,
+        bool $recurseManually = false
     )
     {
         $this->host = $host;
@@ -102,6 +108,7 @@ class FTPConnectionOptions
         $this->systemType = $systemType;
         $this->ignorePassiveAddress = $ignorePassiveAddress;
         $this->enableTimestampsOnUnixListings = $enableTimestampsOnUnixListings;
+        $this->recurseManually = $recurseManually;
     }
 
     public function host(): string
@@ -159,7 +166,7 @@ class FTPConnectionOptions
         return $this->systemType;
     }
 
-    public function passiveAddressIgnored(): ?bool
+    public function ignorePassiveAddress(): ?bool
     {
         return $this->ignorePassiveAddress;
     }
@@ -167,6 +174,11 @@ class FTPConnectionOptions
     public function timestampsOnUnixListingsEnabled(): bool
     {
         return $this->enableTimestampsOnUnixListings;
+    }
+
+    public function recurseManually(): bool
+    {
+        return $this->recurseManually;
     }
 
     public static function fromArray(array $options): FTPConnectionOptions
@@ -184,7 +196,8 @@ class FTPConnectionOptions
             $options['transferMode'] ?? FTP_BINARY,
             $options['systemType'] ?? null,
             $options['ignorePassiveAddress'] ?? null,
-            $options['enableTimestampsOnUnixListings'] ?? false
+            $options['enableTimestampsOnUnixListings'] ?? false,
+            $options['recurseManually'] ?? false
         );
     }
 }

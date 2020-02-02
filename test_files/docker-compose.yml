@@ -2,6 +2,7 @@
 version: "3"
 services:
   sftp:
+    restart: always
     image: atmoz/sftp
     volumes:
       - ./sftp/users.conf:/etc/sftp/users.conf
@@ -9,6 +10,7 @@ services:
       - "2222:22"
     command: foo:pass:::upload
   ftp:
+    restart: always
     image: delfer/alpine-ftp-server
     environment:
       USERS: 'foo|pass|/home/foo/upload'

@@ -228,13 +228,13 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         try {
             $result = $this->client->execute($command);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::create($path, '', $type, $exception);
+            throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
         }
 
         $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
 
         if ( ! $attributes instanceof FileAttributes) {
-            throw UnableToRetrieveMetadata::create($path, '', $type);
+            throw UnableToRetrieveMetadata::create($path, $type, '');
         }
 
         return $attributes;

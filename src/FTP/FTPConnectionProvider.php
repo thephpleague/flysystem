@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\FTP;
 
+use League\Flysystem\ConnectionRuntimeException;
+
+use const FTP_USEPASVADDRESS;
+
 class FTPConnectionProvider implements ConnectionProvider
 {
     /**
@@ -17,6 +21,8 @@ class FTPConnectionProvider implements ConnectionProvider
         try {
             $this->authenticate($options, $connection);
             $this->enableUtf8Mode($options, $connection);
+            $this->ignorePassiveAddress($options, $connection);
+            $this->makeConnectionPassive($options, $connection);
         } catch (FtpConnectionError $exception) {
             ftp_close($connection);
             throw $exception;
@@ -55,6 +61,28 @@ class FTPConnectionProvider implements ConnectionProvider
 
         if (substr($response[0] ?? '', 0, 3) !== '200') {
             throw new UnableToEnableUtf8Mode('Could not set UTF-8 mode for connection: ' . $options->host() . '::' . $options->port());
+        }
+    }
+
+    private function ignorePassiveAddress(FTPConnectionOptions $options, $connection)
+    {
+        $ignorePassiveAddress = $options->ignorePassiveAddress();
+
+        if ( ! is_bool($ignorePassiveAddress) || ! defined('FTP_USEPASVADDRESS')) {
+            return;
+        }
+
+        if ( ! ftp_set_option($connection, FTP_USEPASVADDRESS, ! $ignorePassiveAddress)) {
+            throw UnableToSetFtpOption::whileSettingOption('FTP_USEPASVADDRESS');
+        }
+    }
+
+    private function makeConnectionPassive(FTPConnectionOptions $options, $connection)
+    {
+        if ( ! ftp_pasv($connection, $options->passive())) {
+            throw new UnableToMakeConnectionPassive(
+                'Could not set passive mode for connection: ' . $options->host() . '::' . $options->port()
+            );
         }
     }
 }
