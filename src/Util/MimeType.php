@@ -157,7 +157,7 @@ class MimeType
         'webm' => 'video/webm',
         'aac' => 'audio/x-acc',
         'm4u' => 'application/vnd.mpegurl',
-        'm3u' => 'text/plain',
+        'm3u' => 'application/mpegurl',
         'xspf' => 'application/xspf+xml',
         'vlc' => 'application/videolan',
         'wmv' => 'video/x-ms-wmv',
