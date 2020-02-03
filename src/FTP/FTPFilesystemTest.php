@@ -8,13 +8,23 @@ use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemAdapterTestCase;
+use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
+/**
+ * @group ftp
+ */
 class FTPFilesystemTest extends FilesystemAdapterTestCase
 {
+    /**
+     * @var ConnectivityCheckerThatCanFail
+     */
+    private $connectivityChecker;
+
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
         $options = FTPConnectionOptions::fromArray([
@@ -27,7 +37,21 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
             'password' => 'pass',
         ]);
 
-        return new FTPFilesystem($options);
+        $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new RawListFTPConnectivityChecker());
+
+        return new FTPFilesystem($options, null, $this->connectivityChecker);
+    }
+
+    /**
+     * @test
+     */
+    public function reconnecting_after_failure()
+    {
+        $adapter = $this->adapter();
+        $this->connectivityChecker->failNextCall();
+
+        $contents = iterator_to_array($adapter->listContents('', false));
+        $this->assertIsArray($contents);
     }
 
     /**
@@ -66,8 +90,6 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
         }];
     }
 
-
-
     /**
      * @test
      * @dataProvider scenariosCausingDirectoryDeleteFailure
@@ -91,6 +113,46 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 
         yield "ftp_rmdir failure" => [function() {
             mock_function('ftp_rmdir', false);
+        }];
+    }
+
+    /**
+     * @test
+     * @dataProvider scenariosCausingCopyFailure
+     */
+    public function failing_to_copy(callable $scenario)
+    {
+        $adapter = $this->adapter();
+        $this->givenWeHaveAnExistingFile('path.txt');
+        $scenario();
+
+        $this->expectException(UnableToCopyFile::class);
+
+        $adapter->copy('path.txt', 'new/path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_move_because_creating_the_directory_fails()
+    {
+        $adapter = $this->adapter();
+        $this->givenWeHaveAnExistingFile('path.txt');
+        mock_function('ftp_mkdir', false);
+
+        $this->expectException(UnableToMoveFile::class);
+
+        $adapter->move('path.txt', 'new/path.txt', new Config());
+    }
+
+    public function scenariosCausingCopyFailure(): Generator
+    {
+        yield "failing to read" => [function() {
+            mock_function('ftp_fget', false);
+        }];
+
+        yield "failing to write" => [function() {
+            mock_function('ftp_fput', false);
         }];
     }
 

@@ -266,6 +266,18 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function fetching_the_mime_type_of_an_svg_file()
+    {
+        $this->givenWeHaveAnExistingFile('file.svg', file_get_contents(__DIR__.'/../test_files/flysystem.svg'));
+
+        $mimetype = $this->adapter()->mimeType('file.svg')->mimeType();
+
+        $this->assertEquals('image/svg', $mimetype);
+    }
+
+    /**
+     * @test
+     */
     public function fetching_mime_type_of_non_existing_file()
     {
         $this->expectException(UnableToRetrieveMetadata::class);

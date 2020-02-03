@@ -22,7 +22,7 @@ $connProvider = new FTPConnectionProvider();
 
 $connection = $connProvider->createConnection($options);
 
-var_dump(ftp_raw($connection, 'STAT /home/foo/upload/a/b/c/'));
+var_dump(ftp_raw($connection, 'NOOP'));
 
 ftp_close($connection);
 //$adapter = new FTPFilesystem($options);

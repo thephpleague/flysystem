@@ -8,6 +8,9 @@ use League\Flysystem\InvalidVisibilityProvided;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group unix-visibility
+ */
 class PortableVisibilityConverterTest extends TestCase
 {
     /**

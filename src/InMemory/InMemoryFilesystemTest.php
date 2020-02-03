@@ -13,9 +13,10 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
-use League\Flysystem\UnableToSetVisibility;
-use League\Flysystem\Visibility;
 
+/**
+ * @group in-memory
+ */
 class InMemoryFilesystemTest extends FilesystemAdapterTestCase
 {
     const PATH = 'path.txt';

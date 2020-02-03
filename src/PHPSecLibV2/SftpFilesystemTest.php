@@ -13,6 +13,9 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 
+/**
+ * @group sftp
+ */
 class SftpFilesystemTest extends FilesystemAdapterTestCase
 {
     /**

@@ -81,7 +81,7 @@ class FTPFilesystem implements FilesystemAdapter
     {
         $this->connectionOptions = $connectionOptions;
         $this->connectionProvider = $connectionProvider ?: new FTPConnectionProvider();
-        $this->connectivityChecker = $connectivityChecker ?: new RawListFTPConnectivityChecker();
+        $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->prefixer = new PathPrefixer($connectionOptions->root());
     }
@@ -513,7 +513,7 @@ class FTPFilesystem implements FilesystemAdapter
             $path = str_replace(' ', '\ ', $path);
         }
 
-        return ftp_rawlist($connection, $options . ' ' . $path, strpos($options, 'R') !== false) ?: [];
+        return ftp_rawlist($connection, $options . ' ' . $path) ?: [];
     }
 
     public function move(string $source, string $destination, Config $config): void

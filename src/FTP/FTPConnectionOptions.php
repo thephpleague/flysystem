@@ -196,7 +196,7 @@ class FTPConnectionOptions
             $options['transferMode'] ?? FTP_BINARY,
             $options['systemType'] ?? null,
             $options['ignorePassiveAddress'] ?? null,
-            $options['enableTimestampsOnUnixListings'] ?? false,
+            $options['timestampsOnUnixListingsEnabled'] ?? false,
             $options['recurseManually'] ?? false
         );
     }

@@ -32,6 +32,9 @@ use function symlink;
 
 use const LOCK_EX;
 
+/**
+ * @group local
+ */
 class LocalFilesystemTest extends FilesystemAdapterTestCase
 {
     private const ROOT = __DIR__ . '/test-root';

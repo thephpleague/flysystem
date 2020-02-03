@@ -111,4 +111,13 @@ namespace League\Flysystem\Ftp {
 
         return return_mocked_value('ftp_rmdir');
     }
+
+    function ftp_fget(...$arguments)
+    {
+        if ( ! is_mocked('ftp_fget')) {
+            return \ftp_fget(...$arguments);
+        }
+
+        return return_mocked_value('ftp_fget');
+    }
 }
