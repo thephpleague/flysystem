@@ -123,6 +123,13 @@ function ftp_raw($connection, $command)
         return [0 => '200 UTF8 set to on'];
     }
 
+    if ($command === 'NOOP') {
+        if (getenv('FTP_CLOSE_THROW') === 'DISCONNECT_CATCH') {
+            return [0 => '500 Internal error'];
+        }
+        return [0 => '200 Zzz...'];
+    }
+
     if ($command === 'STAT syno.not.found') {
         return [0 => '211- status of syno.not.found:', 1 => 'ftpd: assd: No such file or directory.' ,2 => '211 End of status'];
     }
@@ -439,19 +446,6 @@ class FtpTests extends TestCase
         $this->assertTrue($adapter->isConnected());
         $adapter->disconnect();
         $this->assertFalse($adapter->isConnected());
-    }
-
-    /**
-     * @depends testInstantiable
-     */
-    public function testIsConnectedTimeoutPassthu()
-    {
-        putenv('FTP_CLOSE_THROW=DISCONNECT_RETHROW');
-
-        $this->expectException('ErrorException');
-        $adapter = new Ftp(array_merge($this->options, ['host' => 'disconnect.check']));
-        $adapter->connect();
-        $adapter->isConnected();
     }
 
     /**
