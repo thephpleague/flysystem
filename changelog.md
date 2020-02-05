@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.64 - 2020-02-05
+
+* Improved performance of the connectivity check for FTP connections.
+
 ## 1.0.63 - 2020-01-04
 
 * Introduces base exception marker and custom runtime exceptions for error cases.
