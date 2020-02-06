@@ -502,8 +502,6 @@ class FTPFilesystem implements FilesystemAdapter
             $path = str_replace(' ', '\ ', $path);
         }
 
-        var_dump($options . ' ' . $path);
-
         return ftp_rawlist($connection, $options . ' ' . $path, stripos($options, 'R') !== false) ?: [];
     }
 

@@ -326,7 +326,6 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 
         $this->assertTrue($adapter->fileExists('some dirname/file name.txt'));
         $contents = iterator_to_array($adapter->listContents('', true));
-        var_dump($contents);
         $this->assertCount(2, $contents);
         $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
     }
