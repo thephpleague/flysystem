@@ -32,7 +32,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     }
 
     /**
-     * @before
+     * @after
      */
     public function clearStorage(): void
     {

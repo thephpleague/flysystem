@@ -6,6 +6,9 @@ namespace League\Flysystem\FTP;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group ftp
+ */
 class FTPConnectionProviderTest extends TestCase
 {
     /**
@@ -18,8 +21,15 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function setupConnectionProvider(): void
     {
-        reset_function_mocks();
         $this->connectionProvider = new FTPConnectionProvider();
+    }
+
+    /**
+     * @after
+     */
+    public function resetFunctionMocks(): void
+    {
+        reset_function_mocks();
     }
 
 

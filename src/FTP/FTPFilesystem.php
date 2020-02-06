@@ -24,7 +24,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
-use RuntimeException;
 use Throwable;
 
 class FTPFilesystem implements FilesystemAdapter
@@ -338,7 +337,6 @@ class FTPFilesystem implements FilesystemAdapter
     private function normalizeListing(array $listing, string $prefix = ''): Generator
     {
         $base = $prefix;
-        $listing = $this->removeDotDirectories($listing);
 
         foreach ($listing as $item) {
             if ($item === '' || preg_match('#.* \.(\.)?$|^total#', $item)) {
@@ -360,9 +358,9 @@ class FTPFilesystem implements FilesystemAdapter
 
         if ($systemType === self::SYSTEM_TYPE_UNIX) {
             return $this->normalizeUnixObject($item, $base);
-        } elseif ($systemType === self::SYSTEM_TYPE_WINDOWS) {
-            return $this->normalizeWindowsObject($item, $base);
         }
+
+        return $this->normalizeWindowsObject($item, $base);
     }
 
     private function detectSystemType($item): string
@@ -373,13 +371,14 @@ class FTPFilesystem implements FilesystemAdapter
     private function normalizeWindowsObject($item, $base): StorageAttributes
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 3);
+        $parts = explode(' ', $item, 4);
 
-        if (count(explode(' ', $item, 4)) !== 4) {
-            throw new RuntimeException("Metadata can't be parsed from item '$item' , not enough parts.");
+        if (count($parts) !== 4) {
+            throw new InvalidListResponseReceived("Metadata can't be parsed from item '$item' , not enough parts.");
         }
 
-        [$date, $time, $size, $name] = explode(' ', $item, 4);
-        $path = $this->prefixer->stripPrefix($base === '' ? $name : rtrim($base, '/') . '/' . $name);
+        [$date, $time, $size, $name] = $parts;
+        $path = $base === '' ? $name : rtrim($base, '/') . '/' . $name;
 
         if ($size === '<DIR>') {
             return new DirectoryAttributes($path);
@@ -397,12 +396,13 @@ class FTPFilesystem implements FilesystemAdapter
     private function normalizeUnixObject(string $item, string $base): StorageAttributes
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 7);
+        $parts = explode(' ', $item, 9);
 
-        if (count(explode(' ', $item, 9)) !== 9) {
-            throw new RuntimeException("Metadata can't be parsed from item '$item' , not enough parts.");
+        if (count($parts) !== 9) {
+            throw new InvalidListResponseReceived("Metadata can't be parsed from item '$item' , not enough parts.");
         }
 
-        [$permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $timeOrYear, $name] = explode(' ', $item, 9);
+        [$permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $timeOrYear, $name] = $parts;
         $isDirectory = $this->listingItemIsDirectory($permissions);
         $permissions = $this->normalizePermissions($permissions);
         $path = $base === '' ? $name : rtrim($base, '/') . '/' . $name;
@@ -445,12 +445,8 @@ class FTPFilesystem implements FilesystemAdapter
         return $dateTime->getTimestamp();
     }
 
-    private function normalizePermissions($permissions): int
+    private function normalizePermissions(string $permissions): int
     {
-        if (is_numeric($permissions)) {
-            return $permissions & 0777;
-        }
-
         // remove the type identifier
         $permissions = substr($permissions, 1);
 
@@ -470,15 +466,6 @@ class FTPFilesystem implements FilesystemAdapter
         return octdec(implode('', array_map($mapper, $parts)));
     }
 
-    private function removeDotDirectories(array $list): array
-    {
-        $filter = function ($line) {
-            return $line !== '' && ! preg_match('#.* \.(\.)?$|^total#', $line);
-        };
-
-        return array_filter($list, $filter);
-    }
-
     /**
      * @inheritdoc
      *
@@ -487,8 +474,9 @@ class FTPFilesystem implements FilesystemAdapter
     private function listDirectoryContentsRecursive(string $directory): Generator
     {
         $location = $this->prefixer->prefixPath($directory);
+        $listing = $this->ftpRawlist('-aln', $location);
         /** @var StorageAttributes[] $listing */
-        $listing = $this->normalizeListing($this->ftpRawlist('-aln', $location), $directory);
+        $listing = $this->normalizeListing($listing, $directory);
 
         foreach ($listing as $item) {
             yield $item;
@@ -507,13 +495,16 @@ class FTPFilesystem implements FilesystemAdapter
 
     private function ftpRawlist(string $options, string $path): array
     {
+        $path = rtrim($path, '/') . '/';
         $connection = $this->connection();
 
         if ($this->isPureFtpdServer()) {
             $path = str_replace(' ', '\ ', $path);
         }
 
-        return ftp_rawlist($connection, $options . ' ' . $path) ?: [];
+        var_dump($options . ' ' . $path);
+
+        return ftp_rawlist($connection, $options . ' ' . $path, stripos($options, 'R') !== false) ?: [];
     }
 
     public function move(string $source, string $destination, Config $config): void
@@ -577,10 +568,12 @@ class FTPFilesystem implements FilesystemAdapter
                 continue;
             }
 
+            error_clear_last();
             $result = @ftp_mkdir($connection, $location);
 
             if ($result === false) {
-                throw UnableToCreateDirectory::atLocation($dirPath, 'unable to create the directory');
+                $errorMessage = error_get_last()['message'] ?? 'unable to create the directory';
+                throw UnableToCreateDirectory::atLocation($dirPath, $errorMessage);
             }
 
             if ($mode !== false && @ftp_chmod($connection, $mode, $location) === false) {

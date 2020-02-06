@@ -6,8 +6,10 @@ namespace League\Flysystem\FTP;
 
 use Generator;
 use League\Flysystem\Config;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemAdapterTestCase;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
@@ -25,19 +27,26 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
      */
     private $connectivityChecker;
 
+    /**
+     * @after
+     */
+    public function resetFunctionMocks(): void
+    {
+        reset_function_mocks();
+    }
+
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
         $options = FTPConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'timestampsOnUnixListingsEnabled' => true,
-            'recurseManually' => true,
             'root' => '/home/foo/upload/',
             'username' => 'foo',
             'password' => 'pass',
         ]);
 
-        $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new RawListFTPConnectivityChecker());
+        $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
 
         return new FTPFilesystem($options, null, $this->connectivityChecker);
     }
@@ -168,5 +177,157 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToDeleteFile::class);
 
         $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function formatting_a_directory_listing_with_a_total_indicator()
+    {
+        $response = [
+            'total 1',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+        mock_function('ftp_rawlist', $response);
+
+        $adapter = $this->adapter();
+        $contents = iterator_to_array($adapter->listContents('/', false), false);
+
+        $this->assertCount(1, $contents);
+        $this->assertContainsOnlyInstancesOf(FileAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function receiving_a_windows_listing()
+    {
+        $response = [
+            '2015-05-23  12:09       <DIR>          dir1',
+            '05-23-15  12:09PM                  684 file2.txt',
+        ];
+        mock_function('ftp_rawlist', $response);
+
+        $adapter = $this->adapter();
+        $contents = iterator_to_array($adapter->listContents('/', false), false);
+
+        $this->assertCount(2, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function receiving_an_invalid_windows_listing()
+    {
+        $response = [
+            '05-23-15  12:09PM    file2.txt',
+        ];
+        mock_function('ftp_rawlist', $response);
+
+
+        $this->expectException(InvalidListResponseReceived::class);
+
+        $adapter = $this->adapter();
+        iterator_to_array($adapter->listContents('/', false), false);
+}
+
+    /**
+     * @test
+     */
+    public function getting_an_invalid_listing_response_for_unix_listings()
+    {
+        $response = [
+            'total 1',
+            '-rw-r--r--   1 ftp           409 Aug 19 09:01 file1.txt',
+        ];
+        mock_function('ftp_rawlist', $response);
+
+        $this->expectException(InvalidListResponseReceived::class);
+
+        $adapter = $this->adapter();
+        iterator_to_array($adapter->listContents('/', false), false);
+    }
+
+    /**
+     * @test
+     */
+    public function formatting_non_manual_recursive_listings()
+    {
+        $response = [
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
+            'drwxr-xr-x  16 ftp      ftp          4096 Sep  2 13:01 ..',
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 cgi-bin',
+            'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 folder',
+            '-rw-r--r--   1 ftp      ftp           409 Oct 13  2012 index.html',
+            '',
+            'somewhere/cgi-bin:',
+            'drwxr-xr-x   2 ftp      ftp          4096 Oct 13  2012 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+            '',
+            'somewhere/folder:',
+            'drwxr-xr-x   2 ftp      ftp          4096 Nov 24 13:59 .',
+            'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 ..',
+            '-rw-r--r--   1 ftp      ftp             0 Nov 24 13:59 dummy.txt',
+        ];
+
+        mock_function('ftp_rawlist', $response);
+
+        $options = FTPConnectionOptions::fromArray([
+           'host' => 'localhost',
+           'port' => 2121,
+           'timestampsOnUnixListingsEnabled' => true,
+           'recurseManually' => false,
+           'root' => '/home/foo/upload/',
+           'username' => 'foo',
+           'password' => 'pass',
+       ]);
+
+        $adapter = new FTPFilesystem($options);
+
+        $contents = iterator_to_array($adapter->listContents('somewhere', true), false);
+
+        $this->assertCount(4, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function listing_for_ftpd()
+    {
+        $options = FTPConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2122,
+            'passive' => true,
+            'timestampsOnUnixListingsEnabled' => true,
+            'recurseManually' => false,
+            'root' => '/',
+            'username' => 'foo',
+            'password' => 'pass',
+        ]);
+
+        $adapter = new FTPFilesystem($options);
+        $adapter->write('dir name/file.txt', 'contents', new Config());
+
+        $contents = iterator_to_array($adapter->listContents('dir name', true), false);
+
+        $this->assertCount(1, $contents);
+        $this->assertContainsOnlyInstancesOf(FileAttributes::class, $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function filenames_and_dirnames_with_spaces_are_supported()
+    {
+        $this->givenWeHaveAnExistingFile('some dirname/file name.txt');
+        $adapter = $this->adapter();
+
+        $this->assertTrue($adapter->fileExists('some dirname/file name.txt'));
+        $contents = iterator_to_array($adapter->listContents('', true));
+        var_dump($contents);
+        $this->assertCount(2, $contents);
+        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
     }
 }

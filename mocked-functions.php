@@ -120,4 +120,13 @@ namespace League\Flysystem\Ftp {
 
         return return_mocked_value('ftp_fget');
     }
+
+    function ftp_rawlist(...$arguments)
+    {
+        if ( ! is_mocked('ftp_rawlist')) {
+            return \ftp_rawlist(...$arguments);
+        }
+
+        return return_mocked_value('ftp_rawlist');
+    }
 }

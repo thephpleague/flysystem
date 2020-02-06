@@ -2,6 +2,11 @@
 
 declare(strict_types=1);
 
+$conn = ftp_connect('localhost', 2122);
+
+var_dump($conn);
+die();
+
 use League\Flysystem\Config;
 use League\Flysystem\FTP\FTPConnectionOptions;
 use League\Flysystem\FTP\FTPConnectionProvider;

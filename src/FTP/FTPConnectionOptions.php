@@ -197,7 +197,7 @@ class FTPConnectionOptions
             $options['systemType'] ?? null,
             $options['ignorePassiveAddress'] ?? null,
             $options['timestampsOnUnixListingsEnabled'] ?? false,
-            $options['recurseManually'] ?? false
+            $options['recurseManually'] ?? true
         );
     }
 }

@@ -6,6 +6,9 @@ namespace League\Flysystem\FTP;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group ftp
+ */
 class NoopCommandConnectivityCheckerTest extends TestCase
 {
     /**
