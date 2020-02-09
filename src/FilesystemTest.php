@@ -309,7 +309,7 @@ class FilesystemTest extends TestCase
             $filesystem->visibility('../path.txt');
         }];
         yield [function(FilesystemOperator $filesystem) {
-            $filesystem->setVisibility('../path.txt');
+            $filesystem->setVisibility('../path.txt', Visibility::PUBLIC);
         }];
         yield [function(FilesystemOperator $filesystem) {
             $filesystem->copy('../path.txt', 'path.txt');
