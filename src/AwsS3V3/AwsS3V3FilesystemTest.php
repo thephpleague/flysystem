@@ -78,7 +78,7 @@ class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_with_a_specific_mime_type()
+    public function writing_with_a_specific_mime_type(): void
     {
         $adapter = $this->adapter();
         $adapter->write('some/path.txt', 'contents', new Config(['ContentType' => 'text/plain+special']));
@@ -89,7 +89,7 @@ class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_contents_recursive()
+    public function listing_contents_recursive(): void
     {
         $adapter = $this->adapter();
         $adapter->write('something/0/here.txt', 'contents', new Config());
@@ -110,7 +110,7 @@ class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_delete_while_moving()
+    public function failing_to_delete_while_moving(): void
     {
         $this->expectException(UnableToMoveFile::class);
 
@@ -124,7 +124,7 @@ class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_delete_a_file()
+    public function failing_to_delete_a_file(): void
     {
         $this->expectException(UnableToDeleteFile::class);
 

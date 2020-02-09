@@ -20,7 +20,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private $username;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $password;
 
@@ -40,7 +40,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private $timeout;
 
     /**
-     * @var SFTP
+     * @var SFTP|null
      */
     private $connection;
 
@@ -50,7 +50,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private $connectivityChecker;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $hostFingerprint;
 

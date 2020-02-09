@@ -16,7 +16,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function determining_visibility_for_a_file()
+    public function determining_visibility_for_a_file(): void
     {
         $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0644, $interpreter->forFile(Visibility::PUBLIC));
@@ -26,7 +26,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function determining_an_incorrect_visibility_for_a_file()
+    public function determining_an_incorrect_visibility_for_a_file(): void
     {
         $this->expectException(InvalidVisibilityProvided::class);
         $interpreter = new PortableVisibilityConverter();
@@ -35,7 +35,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function determining_visibility_for_a_directory()
+    public function determining_visibility_for_a_directory(): void
     {
         $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0755, $interpreter->forDirectory(Visibility::PUBLIC));
@@ -45,7 +45,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function determining_an_incorrect_visibility_for_a_directory()
+    public function determining_an_incorrect_visibility_for_a_directory(): void
     {
         $this->expectException(InvalidVisibilityProvided::class);
         $interpreter = new PortableVisibilityConverter();
@@ -55,7 +55,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function inversing_for_a_file()
+    public function inversing_for_a_file(): void
     {
         $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0644));
@@ -66,7 +66,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function inversing_for_a_directory()
+    public function inversing_for_a_directory(): void
     {
         $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0755));
@@ -77,7 +77,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function determining_default_for_directories()
+    public function determining_default_for_directories(): void
     {
         $interpreter = new PortableVisibilityConverter();
         $this->assertEquals(0700, $interpreter->defaultForDirectories());
@@ -89,7 +89,7 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
-    public function creating_from_array()
+    public function creating_from_array(): void
     {
         $interpreter = PortableVisibilityConverter::fromArray([
             'file' => [

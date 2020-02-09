@@ -20,7 +20,7 @@ class PathTraversalDetected extends RuntimeException implements FilesystemError
 
     public static function forPath(string $path): PathTraversalDetected
     {
-        $e = new static("Path traversal detected: {$path}");
+        $e = new PathTraversalDetected("Path traversal detected: {$path}");
         $e->path = $path;
 
         return $e;

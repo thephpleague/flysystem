@@ -54,7 +54,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reconnecting_after_failure()
+    public function reconnecting_after_failure(): void
     {
         $adapter = $this->adapter();
         $this->connectivityChecker->failNextCall();
@@ -67,7 +67,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingWriteFailure
      */
-    public function failing_to_write_a_file(callable $scenario)
+    public function failing_to_write_a_file(callable $scenario): void
     {
         $scenario();
         $adapter = $this->adapter();
@@ -103,7 +103,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingDirectoryDeleteFailure
      */
-    public function scenarios_causing_directory_deletion_to_fail(callable $scenario)
+    public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
     {
         $scenario();
         $adapter = $this->adapter();
@@ -129,7 +129,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingCopyFailure
      */
-    public function failing_to_copy(callable $scenario)
+    public function failing_to_copy(callable $scenario): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt');
@@ -143,7 +143,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_move_because_creating_the_directory_fails()
+    public function failing_to_move_because_creating_the_directory_fails(): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt');
@@ -168,7 +168,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_delete_a_file()
+    public function failing_to_delete_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
         $adapter = $this->adapter();
@@ -182,7 +182,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function formatting_a_directory_listing_with_a_total_indicator()
+    public function formatting_a_directory_listing_with_a_total_indicator(): void
     {
         $response = [
             'total 1',
@@ -200,7 +200,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function receiving_a_windows_listing()
+    public function receiving_a_windows_listing(): void
     {
         $response = [
             '2015-05-23  12:09       <DIR>          dir1',
@@ -218,7 +218,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function receiving_an_invalid_windows_listing()
+    public function receiving_an_invalid_windows_listing(): void
     {
         $response = [
             '05-23-15  12:09PM    file2.txt',
@@ -235,7 +235,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_an_invalid_listing_response_for_unix_listings()
+    public function getting_an_invalid_listing_response_for_unix_listings(): void
     {
         $response = [
             'total 1',
@@ -252,7 +252,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function formatting_non_manual_recursive_listings()
+    public function formatting_non_manual_recursive_listings(): void
     {
         $response = [
             'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
@@ -294,7 +294,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_for_ftpd()
+    public function listing_for_ftpd(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -319,7 +319,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function filenames_and_dirnames_with_spaces_are_supported()
+    public function filenames_and_dirnames_with_spaces_are_supported(): void
     {
         $this->givenWeHaveAnExistingFile('some dirname/file name.txt');
         $adapter = $this->adapter();

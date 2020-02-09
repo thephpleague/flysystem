@@ -22,7 +22,7 @@ class WhitespacePathNormalizerTest extends TestCase
      * @test
      * @dataProvider  pathProvider
      */
-    public function path_normalizing(string $input, string $expected)
+    public function path_normalizing(string $input, string $expected): void
     {
         $result = $this->normalizer->normalizePath($input);
         $double = $this->normalizer->normalizePath($this->normalizer->normalizePath($input));
@@ -30,7 +30,10 @@ class WhitespacePathNormalizerTest extends TestCase
         $this->assertEquals($expected, $double);
     }
 
-    public function pathProvider()
+    /**
+     * @return array<array<string>>
+     */
+    public function pathProvider(): array
     {
         return [
             ['.', ''],
@@ -60,13 +63,16 @@ class WhitespacePathNormalizerTest extends TestCase
      * @test
      * @dataProvider invalidPathProvider
      */
-    public function guarding_against_path_traversal(string $input)
+    public function guarding_against_path_traversal(string $input): void
     {
         $this->expectException(PathTraversalDetected::class);
         $this->normalizer->normalizePath($input);
     }
 
-    public function invalidPathProvider()
+    /**
+     * @return array<array<string>>
+     */
+    public function invalidPathProvider(): array
     {
         return [
             ['something/../../../hehe'],

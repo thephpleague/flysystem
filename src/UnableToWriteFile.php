@@ -9,6 +9,9 @@ use Throwable;
 
 final class UnableToWriteFile extends RuntimeException implements FilesystemOperationFailed
 {
+    /**
+     * @var string
+     */
     private $location = '';
 
     /**
@@ -16,7 +19,7 @@ final class UnableToWriteFile extends RuntimeException implements FilesystemOper
      */
     private $reason;
 
-    public static function atLocation(string $location, string $reason = '', Throwable $previous = null)
+    public static function atLocation(string $location, string $reason = '', Throwable $previous = null): UnableToWriteFile
     {
         $e = new static(rtrim("Unable to write file at location: {$location}. {$reason}"), 0, $previous);
         $e->location = $location;

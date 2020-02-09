@@ -12,7 +12,7 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function giving_up_after_5_connection_failures()
+    public function giving_up_after_5_connection_failures(): void
     {
         $this->expectException(UnableToConnectToSftpHost::class);
         $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, null, new FixatedConnectivityChecker(5));
@@ -22,7 +22,7 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function trying_until_5_tries()
+    public function trying_until_5_tries(): void
     {
         $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, null, new FixatedConnectivityChecker(4));
         $connection = $provider->provideConnection();
@@ -35,7 +35,7 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function verifying_a_fingerprint()
+    public function verifying_a_fingerprint(): void
     {
         $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222);
         $connection = $provider->provideConnection();
@@ -51,7 +51,7 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function providing_an_invalid_fingerprint()
+    public function providing_an_invalid_fingerprint(): void
     {
         $this->expectException(UnableToEstablishAuthenticityOfHost::class);
         $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, 'invalid:fingerprint');
@@ -61,14 +61,14 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function providing_an_invalid_password()
+    public function providing_an_invalid_password(): void
     {
         $this->expectException(UnableToAuthenticate::class);
         $provider = new SftpConnectionProvider('localhost', 'foo', 'lol', 2222, false);
         $provider->provideConnection();
     }
 
-    private function computeFingerPrint(string $publicKey)
+    private function computeFingerPrint(string $publicKey): string
     {
         $content = explode(' ', $publicKey, 3);
 

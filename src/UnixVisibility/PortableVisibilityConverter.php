@@ -48,7 +48,7 @@ class PortableVisibilityConverter implements VisibilityConverter
         $this->defaultForDirectories = $defaultForDirectories;
     }
 
-    public function forFile($visibility): int
+    public function forFile(string $visibility): int
     {
         PortableVisibilityGuard::guardAgainstInvalidInput($visibility);
 
@@ -57,7 +57,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             : $this->filePrivate;
     }
 
-    public function forDirectory($visibility): int
+    public function forDirectory(string $visibility): int
     {
         PortableVisibilityGuard::guardAgainstInvalidInput($visibility);
 
@@ -66,7 +66,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             : $this->directoryPrivate;
     }
 
-    public function inverseForFile($visibility): string
+    public function inverseForFile(int $visibility): string
     {
         if ($visibility === $this->filePublic) {
             return Visibility::PUBLIC;
@@ -77,7 +77,7 @@ class PortableVisibilityConverter implements VisibilityConverter
         return Visibility::PUBLIC; // default
     }
 
-    public function inverseForDirectory($visibility): string
+    public function inverseForDirectory(int $visibility): string
     {
         if ($visibility === $this->directoryPublic) {
             return Visibility::PUBLIC;
@@ -93,9 +93,12 @@ class PortableVisibilityConverter implements VisibilityConverter
         return $this->defaultForDirectories === Visibility::PUBLIC ? $this->directoryPublic : $this->directoryPrivate;
     }
 
+    /**
+     * @param array<mixed>  $permissionMap
+     */
     public static function fromArray(array $permissionMap, string $defaultForDirectories = Visibility::PRIVATE): PortableVisibilityConverter
     {
-        return new static(
+        return new PortableVisibilityConverter(
             $permissionMap['file']['public'] ?? 0644,
             $permissionMap['file']['private'] ?? 0600,
             $permissionMap['dir']['public'] ?? 0755,

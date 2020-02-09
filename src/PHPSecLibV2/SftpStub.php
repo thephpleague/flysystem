@@ -11,14 +11,23 @@ use phpseclib\Net\SFTP;
  */
 class SftpStub extends SFTP
 {
+    /**
+     * @var array<string,bool>
+     */
     private $tripWires = [];
 
-    public function failOnChmod($filename): void
+    public function failOnChmod(string $filename): void
     {
         $key = $this->formatTripKey('chmod', $filename);
         $this->tripWires[$key] = true;
     }
 
+    /**
+     * @param int    $mode
+     * @param string $filename
+     * @param bool   $recursive
+     * @return bool|mixed
+     */
     function chmod($mode, $filename, $recursive = false)
     {
         $key = $this->formatTripKey('chmod', $filename);
@@ -33,12 +42,21 @@ class SftpStub extends SFTP
         return parent::chmod($mode, $filename, $recursive);
     }
 
-    public function failOnPut($filename): void
+    public function failOnPut(string $filename): void
     {
         $key = $this->formatTripKey('put', $filename);
         $this->tripWires[$key] = true;
     }
 
+    /**
+     * @param string          $remote_file
+     * @param resource|string $data
+     * @param int             $mode
+     * @param int             $start
+     * @param int             $local_start
+     * @param null            $progressCallback
+     * @return bool
+     */
     function put(
         $remote_file,
         $data,
@@ -57,6 +75,10 @@ class SftpStub extends SFTP
         return parent::put($remote_file, $data, $mode, $start, $local_start, $progressCallback);
     }
 
+    /**
+     * @param array<int,mixed> $arguments
+     * @return string
+     */
     private function formatTripKey(...$arguments): string
     {
         $key = '';
@@ -67,6 +89,4 @@ class SftpStub extends SFTP
 
         return $key;
     }
-
-
 }

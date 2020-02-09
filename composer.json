@@ -20,7 +20,8 @@
         "ext-ftp": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5"
+        "phpunit/phpunit": "^8.5",
+        "phpstan/phpstan": "^0.12.9"
     },
     "license": "MIT",
     "authors": [

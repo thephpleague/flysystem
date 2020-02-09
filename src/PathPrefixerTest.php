@@ -11,7 +11,7 @@ class PathPrefixerTest extends TestCase
     /**
      * @test
      */
-    public function path_prefixing_with_a_prefix()
+    public function path_prefixing_with_a_prefix(): void
     {
         $prefixer = new PathPrefixer('prefix');
         $prefixedPath = $prefixer->prefixPath('some/path.txt');
@@ -21,7 +21,7 @@ class PathPrefixerTest extends TestCase
     /**
      * @test
      */
-    public function path_stripping_with_a_prefix()
+    public function path_stripping_with_a_prefix(): void
     {
         $prefixer = new PathPrefixer('prefix');
         $strippedPath = $prefixer->stripPrefix('prefix/some/path.txt');
@@ -31,7 +31,7 @@ class PathPrefixerTest extends TestCase
     /**
      * @test
      */
-    public function path_stripping_is_reversable()
+    public function path_stripping_is_reversable(): void
     {
         $prefixer = new PathPrefixer('prefix');
         $strippedPath = $prefixer->stripPrefix('prefix/some/path.txt');

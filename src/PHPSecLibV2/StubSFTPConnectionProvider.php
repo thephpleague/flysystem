@@ -19,7 +19,7 @@ class StubSFTPConnectionProvider implements ConnectionProvider
     private $username;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $password;
 
