@@ -19,6 +19,7 @@ a {
 
 html {
     @apply font-body font-normal;
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
 }
 

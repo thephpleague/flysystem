@@ -1,10 +1,9 @@
 ---
 layout: default
-title: Filesystem abstraction for PHP
-permalink: /v1/docs/
+title: Filesystem Abstraction for PHP
+permalink: /v2/docs/
 redirect_from:
-    - /
-    - /docs/
+    - /v2/
 ---
 
 [![Author](https://img.shields.io/badge/author-@frankdejonge-blue.svg)](https://twitter.com/frankdejonge)
@@ -15,28 +14,25 @@ redirect_from:
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
 [![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
-![php 5.5.9+](https://img.shields.io/badge/php-min%205.5.9-red.svg)
+![php 7.2+](https://img.shields.io/badge/php-min%207.2-red.svg)
 
 ## About Flysystem
 
-Flysystem is a filesystem abstraction library for PHP. By providing a unified interface
-for many different filesystems you're able to swap out filesystems without application wide
-rewrites.
-
-Using Flysystem can eliminate vendor-lock in, reduce technical debt, and improve the testability
-of your code.
+Flysystem is a file storage library for PHP. It provides one interface to
+interact with many different types of filesystems. When you use Flysystem, you're
+not only protected from vendor lock-in, you'll also have a consistent experience
+for which ever storage is right for you. 
 
 ## Getting Started
 
-* **[Architecture](/v1/docs/architecture/)**: Flysystem's internal architecture
-* **[Setup/Bootstrap](/v1/docs/usage/setup/)**: Load Flysystem and set up your first adapter
-* **[Flysystem API](/v1/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
+* **[New in V2](/v2/docs/what-is-new/)**: What it new in Flysystem V2?
+* **[Architecture](/v2/docs/architecture/)**: Flysystem's internal architecture
+* **[Setup/Bootstrap](/v2/docs/usage/setup/)**: Load Flysystem and set up your first adapter
+* **[Flysystem API](/v2/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
 
 ### Commonly-Used Adapters
 
-* **[AWS S3](/v1/docs/adapter/aws-s3/)**
-* **[Azure](/v1/docs/adapter/azure/)**
-* **[DigitalOcean Spaces](/v1/docs/adapter/digitalocean-spaces/)**
-* **[Local](/v1/docs/adapter/local/)**
-* **[Memory](/v1/docs/adapter/memory/)**
-* **[Creating An Adapter](/v1/docs/advanced/creating-an-adapter/)**
+* **[AWS S3](/v2/docs/adapter/aws-s3/)**
+* **[Local](/v2/docs/adapter/local/)**
+* **[Memory](/v2/docs/adapter/memory/)**
+* **[Creating An Adapter](/v2/docs/advanced/creating-an-adapter/)**

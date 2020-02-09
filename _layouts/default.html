@@ -57,7 +57,12 @@
     <div class="flex flex-grow">
         <nav role="navigation" id="navigation" class="md:w-4/14 w-full lg:relative hidden md:block font-heading pt-2">
             <menu class="pl-0 mt-0">
-                {% for section in site.data.menu %}
+                {% if page.url contains "/v2/" %}
+                    {% assign menu = site.data.menu_v2 %}
+                {% else %}
+                    {% assign menu = site.data.menu_v1 %}
+                {% endif %}
+                {% for section in menu %}
                 <h2 class="tracking-wide mb-0 mt-0 text-xs leading-loose tracking-wide text-indigo-light uppercase">{{ section[0] }}</h2>
                 <ul class="list-reset mb-6 block pr-6">
                     {% for link in section[1] %}

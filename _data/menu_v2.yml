@@ -1,0 +1,21 @@
+Flysystem:
+    Introduction: '/v2/docs/'
+    New In V2: '/v2/docs/what-is-new/'
+    Architecture: '/v2/docs/architecture/'
+    API / Usage: '/v2/docs/api-and-usage/'
+    Security Policy: '/security/'
+
+Usage:
+    Setup / Bootstrap: '/v2/docs/usage/setup/'
+    Filesystem API: '/v2/docs/usage/filesystem-api/'
+
+Adapters:
+    Local: '/v2/docs/adapter/local/'
+    AWS S3: '/v2/docs/adapter/aws-s3/'
+    FTP: '/v2/docs/adapter/ftp/'
+    SFTP: '/v2/docs/adapter/sftp/'
+    InMemory: '/v2/docs/adapter/in-memory/'
+
+Advanced Usage:
+    Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
+    Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
