@@ -6,7 +6,7 @@ namespace League\Flysystem\FTP;
 
 use const FTP_BINARY;
 
-class FTPConnectionOptions
+class FtpConnectionOptions
 {
     /**
      * @var string
@@ -181,7 +181,7 @@ class FTPConnectionOptions
         return $this->recurseManually;
     }
 
-    public static function fromArray(array $options): FTPConnectionOptions
+    public static function fromArray(array $options): FtpConnectionOptions
     {
         return new static(
             $options['host'] ?? 'invalid://host-not-set',

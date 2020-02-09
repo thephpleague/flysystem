@@ -16,14 +16,14 @@ class NoopCommandConnectivityCheckerTest extends TestCase
      */
     public function detecting_a_good_connection()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
-           'port' => 2121,
+           'port' => 2122,
            'root' => '/home/foo/upload',
            'username' => 'foo',
            'password' => 'pass',
        ]);
-        $connection  = (new FTPConnectionProvider())->createConnection($options);
+        $connection  = (new FtpConnectionProvider())->createConnection($options);
         $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);
 
         $this->assertTrue($connected);
@@ -33,14 +33,14 @@ class NoopCommandConnectivityCheckerTest extends TestCase
      */
     public function detecting_a_closed_connection()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'port' => 2121,
            'root' => '/home/foo/upload',
            'username' => 'foo',
            'password' => 'pass',
        ]);
-        $connection  = (new FTPConnectionProvider())->createConnection($options);
+        $connection  = (new FtpConnectionProvider())->createConnection($options);
         ftp_close($connection);
 
         $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);

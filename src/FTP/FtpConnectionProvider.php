@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace League\Flysystem\FTP;
 
-use League\Flysystem\ConnectionRuntimeException;
-
 use const FTP_USEPASVADDRESS;
 
-class FTPConnectionProvider implements ConnectionProvider
+class FtpConnectionProvider implements ConnectionProvider
 {
     /**
      * @return resource
      * @throws FtpConnectionError
      */
-    public function createConnection(FTPConnectionOptions $options)
+    public function createConnection(FtpConnectionOptions $options)
     {
         $connection = $this->createConnectionResource($options->host(), $options->port(), $options->timeout(), $options->ssl());
 
@@ -44,14 +42,14 @@ class FTPConnectionProvider implements ConnectionProvider
         return $connection;
     }
 
-    private function authenticate(FTPConnectionOptions $options, $connection): void
+    private function authenticate(FtpConnectionOptions $options, $connection): void
     {
         if ( ! @ftp_login($connection, $options->username(), $options->password())) {
             throw new UnableToAuthenticate();
         }
     }
 
-    private function enableUtf8Mode(FTPConnectionOptions $options, $connection): void
+    private function enableUtf8Mode(FtpConnectionOptions $options, $connection): void
     {
         if ( ! $options->utf8()) {
             return;
@@ -64,7 +62,7 @@ class FTPConnectionProvider implements ConnectionProvider
         }
     }
 
-    private function ignorePassiveAddress(FTPConnectionOptions $options, $connection)
+    private function ignorePassiveAddress(FtpConnectionOptions $options, $connection)
     {
         $ignorePassiveAddress = $options->ignorePassiveAddress();
 
@@ -77,7 +75,7 @@ class FTPConnectionProvider implements ConnectionProvider
         }
     }
 
-    private function makeConnectionPassive(FTPConnectionOptions $options, $connection)
+    private function makeConnectionPassive(FtpConnectionOptions $options, $connection)
     {
         if ( ! ftp_pasv($connection, $options->passive())) {
             throw new UnableToMakeConnectionPassive(

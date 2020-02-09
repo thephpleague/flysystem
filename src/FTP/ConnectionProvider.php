@@ -9,5 +9,5 @@ interface ConnectionProvider
     /**
      * @return resource
      */
-    public function createConnection(FTPConnectionOptions $options);
+    public function createConnection(FtpConnectionOptions $options);
 }

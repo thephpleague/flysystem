@@ -11,7 +11,7 @@ class NoopCommandConnectivityChecker implements ConnectivityChecker
      */
     public function isConnected($connection): bool
     {
-        $response = @ftp_raw($connection, 'NOOP');
+        $response = is_resource($connection) ? @ftp_raw($connection, 'NOOP') : false;
         $responseCode = $response ? (int) preg_replace('/\D/', '', implode('', $response)) : false;
 
         return $responseCode === 200;

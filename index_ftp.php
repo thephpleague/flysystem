@@ -8,13 +8,13 @@ var_dump($conn);
 die();
 
 use League\Flysystem\Config;
-use League\Flysystem\FTP\FTPConnectionOptions;
-use League\Flysystem\FTP\FTPConnectionProvider;
-use League\Flysystem\FTP\FTPFilesystem;
+use League\Flysystem\FTP\FtpConnectionOptions;
+use League\Flysystem\FTP\FtpConnectionProvider;
+use League\Flysystem\FTP\FtpFilesystem;
 
 include __DIR__ . '/vendor/autoload.php';
 
-$options = FTPConnectionOptions::fromArray([
+$options = FtpConnectionOptions::fromArray([
     'host' => 'localhost',
     'port' => 2121,
     'recurseManually' => true,
@@ -23,7 +23,7 @@ $options = FTPConnectionOptions::fromArray([
     'password' => 'pass',
 ]);
 
-$connProvider = new FTPConnectionProvider();
+$connProvider = new FtpConnectionProvider();
 
 $connection = $connProvider->createConnection($options);
 

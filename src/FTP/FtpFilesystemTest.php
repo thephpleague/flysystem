@@ -20,7 +20,7 @@ use League\Flysystem\Visibility;
 /**
  * @group ftp
  */
-class FTPFilesystemTest extends FilesystemAdapterTestCase
+class FtpFilesystemTest extends FilesystemAdapterTestCase
 {
     /**
      * @var ConnectivityCheckerThatCanFail
@@ -37,7 +37,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'timestampsOnUnixListingsEnabled' => true,
@@ -48,7 +48,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 
         $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
 
-        return new FTPFilesystem($options, null, $this->connectivityChecker);
+        return new FtpFilesystem($options, null, $this->connectivityChecker);
     }
 
     /**
@@ -273,7 +273,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
 
         mock_function('ftp_rawlist', $response);
 
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'port' => 2121,
            'timestampsOnUnixListingsEnabled' => true,
@@ -283,7 +283,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
            'password' => 'pass',
        ]);
 
-        $adapter = new FTPFilesystem($options);
+        $adapter = new FtpFilesystem($options);
 
         $contents = iterator_to_array($adapter->listContents('somewhere', true), false);
 
@@ -296,7 +296,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
      */
     public function listing_for_ftpd()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2122,
             'passive' => true,
@@ -307,7 +307,7 @@ class FTPFilesystemTest extends FilesystemAdapterTestCase
             'password' => 'pass',
         ]);
 
-        $adapter = new FTPFilesystem($options);
+        $adapter = new FtpFilesystem($options);
         $adapter->write('dir name/file.txt', 'contents', new Config());
 
         $contents = iterator_to_array($adapter->listContents('dir name', true), false);

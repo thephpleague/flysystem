@@ -1,11 +1,11 @@
 <?php
 
-use League\Flysystem\FTP\FTPConnectionOptions;
-use League\Flysystem\FTP\FTPConnectionProvider;
+use League\Flysystem\FTP\FtpConnectionOptions;
+use League\Flysystem\FTP\FtpConnectionProvider;
 
 include __DIR__ . '/../vendor/autoload.php';
 
-$options = FTPConnectionOptions::fromArray([
+$options = FtpConnectionOptions::fromArray([
    'host' => 'localhost',
    'port' => (int) ($argv[1] ?? 2122),
    'root' => '/',
@@ -13,7 +13,7 @@ $options = FTPConnectionOptions::fromArray([
    'password' => 'pass',
 ]);
 
-$provider = new FTPConnectionProvider();
+$provider = new FtpConnectionProvider();
 $start = time();
 $connected = false;
 

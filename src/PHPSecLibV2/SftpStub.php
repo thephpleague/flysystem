@@ -9,7 +9,7 @@ use phpseclib\Net\SFTP;
 /**
  * @internal This is only used for testing purposes.
  */
-class SFTPStub extends SFTP
+class SftpStub extends SFTP
 {
     private $tripWires = [];
 

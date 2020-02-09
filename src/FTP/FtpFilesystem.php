@@ -26,18 +26,18 @@ use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
 use Throwable;
 
-class FTPFilesystem implements FilesystemAdapter
+class FtpFilesystem implements FilesystemAdapter
 {
     private const SYSTEM_TYPE_WINDOWS = 'windows';
     private const SYSTEM_TYPE_UNIX = 'unix';
 
     /**
-     * @var FTPConnectionOptions
+     * @var FtpConnectionOptions
      */
     private $connectionOptions;
 
     /**
-     * @var FTPConnectionProvider
+     * @var FtpConnectionProvider
      */
     private $connectionProvider;
 
@@ -72,14 +72,14 @@ class FTPFilesystem implements FilesystemAdapter
     private $systemType;
 
     public function __construct(
-        FTPConnectionOptions $connectionOptions,
-        FTPConnectionProvider $connectionProvider = null,
+        FtpConnectionOptions $connectionOptions,
+        FtpConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
         VisibilityConverter $visibilityConverter = null
     )
     {
         $this->connectionOptions = $connectionOptions;
-        $this->connectionProvider = $connectionProvider ?: new FTPConnectionProvider();
+        $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->prefixer = new PathPrefixer($connectionOptions->root());

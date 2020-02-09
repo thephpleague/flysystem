@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\FTP;
 
-class RawListFTPConnectivityChecker implements ConnectivityChecker
+class RawListFtpConnectivityChecker implements ConnectivityChecker
 {
     /**
      * @inheritDoc

@@ -9,10 +9,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * @group ftp
  */
-class FTPConnectionProviderTest extends TestCase
+class FtpConnectionProviderTest extends TestCase
 {
     /**
-     * @var FTPConnectionProvider
+     * @var FtpConnectionProvider
      */
     private $connectionProvider;
 
@@ -21,7 +21,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function setupConnectionProvider(): void
     {
-        $this->connectionProvider = new FTPConnectionProvider();
+        $this->connectionProvider = new FtpConnectionProvider();
     }
 
     /**
@@ -38,7 +38,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function connecting_successfully()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'utf8' => true,
@@ -60,7 +60,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_enable_uft8_mode()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'utf8' => true,
@@ -81,7 +81,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_ignore_the_passive_address()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'ignorePassiveAddress' => true,
@@ -102,7 +102,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_make_the_connection_passive()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
             'port' => 2121,
             'utf8' => true,
@@ -123,7 +123,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_connect()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'port' => 313131,
            'root' => '/home/foo/upload',
@@ -141,7 +141,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_connect_over_ssl()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'ssl' => true,
            'port' => 313131,
@@ -160,7 +160,7 @@ class FTPConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_authenticate()
     {
-        $options = FTPConnectionOptions::fromArray([
+        $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'port' => 2121,
            'root' => '/home/foo/upload',

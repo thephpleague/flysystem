@@ -24,7 +24,7 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
     private $connectionProvider;
 
     /**
-     * @var SFTPStub
+     * @var SftpStub
      */
     private $connection;
 
