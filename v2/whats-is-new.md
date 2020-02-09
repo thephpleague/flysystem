@@ -57,8 +57,8 @@ The same thing in V2 is simply:
 try {
     $filesystem->write('path.txt', 'contents');
     // it is ok!
-} catch (Throwable $exception) {
-    // it failed! (in a different way)
+} catch (FilesystemError $exception) {
+    // it failed!
 }
 ```
 
