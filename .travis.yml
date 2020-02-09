@@ -3,6 +3,10 @@ language: php
 services:
     - docker
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 matrix:
   include:
     - php: 7.2
@@ -43,7 +47,7 @@ install:
   - php test_files/wait_for_ftp.php 2122
 
 script:
-  - FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes vendor/bin/phpunit --coverage-text
+  - travis_retry FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes vendor/bin/phpunit --coverage-text
 
 #after_script:
 #  - wget https://scrutinizer-ci.com/ocular.phar
