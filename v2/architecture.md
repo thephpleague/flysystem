@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Architecture
-alternate_title: Architecture
 permalink: /v2/docs/architecture/
 ---
 
