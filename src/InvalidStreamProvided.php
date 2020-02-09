@@ -6,6 +6,6 @@ namespace League\Flysystem;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 
-class InvalidArgumentException extends BaseInvalidArgumentException implements FilesystemError
+class InvalidStreamProvided extends BaseInvalidArgumentException implements FilesystemError
 {
 }

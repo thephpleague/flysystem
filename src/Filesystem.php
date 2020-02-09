@@ -86,7 +86,9 @@ class Filesystem implements FilesystemOperator
 
     public function listContents(string $location, bool $recursive = false): DirectoryListing
     {
-        return new DirectoryListing($this->adapter->listContents($location, $recursive));
+        $path = $this->pathNormalizer->normalizePath($location);
+
+        return new DirectoryListing($this->adapter->listContents($path, $recursive));
     }
 
     public function move(string $source, string $destination, array $config = []): void
@@ -109,33 +111,33 @@ class Filesystem implements FilesystemOperator
 
     public function lastModified(string $path): int
     {
-        return $this->adapter->lastModified($path)->lastModified();
+        return $this->adapter->lastModified($this->pathNormalizer->normalizePath($path))->lastModified();
     }
 
     public function fileSize(string $path): int
     {
-        return $this->adapter->fileSize($path)->fileSize();
+        return $this->adapter->fileSize($this->pathNormalizer->normalizePath($path))->fileSize();
     }
 
     public function mimeType(string $path): string
     {
-        return $this->adapter->mimeType($path)->mimeType();
+        return $this->adapter->mimeType($this->pathNormalizer->normalizePath($path))->mimeType();
     }
 
     public function setVisibility(string $path, string $visibility): void
     {
-        $this->adapter->setVisibility($path, $visibility);
+        $this->adapter->setVisibility($this->pathNormalizer->normalizePath($path), $visibility);
     }
 
     public function visibility(string $path): string
     {
-        return $this->adapter->visibility($path)->visibility();
+        return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
     private function assertIsResource($contents): void
     {
         if ( ! is_resource($contents)) {
-            throw new InvalidArgumentException(
+            throw new InvalidStreamProvided(
                 "Invalid stream provided, expected resource, received " . gettype($contents)
             );
         }
