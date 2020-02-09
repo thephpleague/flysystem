@@ -20,6 +20,7 @@ interface FilesystemAdapter
     public function write(string $path, string $contents, Config $config): void;
 
     /**
+     * @param resource $contents
      * @throws UnableToWriteFile
      * @throws FilesystemError
      */
@@ -32,6 +33,7 @@ interface FilesystemAdapter
     public function read(string $path): string;
 
     /**
+     * @return resource
      * @throws UnableToReadFile
      * @throws FilesystemError
      */
@@ -56,6 +58,7 @@ interface FilesystemAdapter
     public function createDirectory(string $path, Config $config): void;
 
     /**
+     * @param mixed $visibility
      * @throws InvalidVisibilityProvided
      * @throws FilesystemError
      */

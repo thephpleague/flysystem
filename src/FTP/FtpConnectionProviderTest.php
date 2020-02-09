@@ -36,7 +36,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function connecting_successfully()
+    public function connecting_successfully(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -58,7 +58,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_enable_uft8_mode()
+    public function not_being_able_to_enable_uft8_mode(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -79,7 +79,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_ignore_the_passive_address()
+    public function not_being_able_to_ignore_the_passive_address(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -100,7 +100,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_make_the_connection_passive()
+    public function not_being_able_to_make_the_connection_passive(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -121,7 +121,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_connect()
+    public function not_being_able_to_connect(): void
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
@@ -139,7 +139,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_connect_over_ssl()
+    public function not_being_able_to_connect_over_ssl(): void
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
@@ -158,7 +158,7 @@ class FtpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function not_being_able_to_authenticate()
+    public function not_being_able_to_authenticate(): void
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',

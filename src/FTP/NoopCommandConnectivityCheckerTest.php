@@ -14,7 +14,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
     /**
      * @test
      */
-    public function detecting_a_good_connection()
+    public function detecting_a_good_connection(): void
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
@@ -31,7 +31,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
     /**
      * @test
      */
-    public function detecting_a_closed_connection()
+    public function detecting_a_closed_connection(): void
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',

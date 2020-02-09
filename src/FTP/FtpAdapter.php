@@ -47,9 +47,9 @@ class FtpAdapter implements FilesystemAdapter
     private $connectivityChecker;
 
     /**
-     * @var resource
+     * @var resource|false
      */
-    private $connection;
+    private $connection = false;
 
     /**
      * @var PathPrefixer
@@ -76,8 +76,7 @@ class FtpAdapter implements FilesystemAdapter
         FtpConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
         VisibilityConverter $visibilityConverter = null
-    )
-    {
+    ) {
         $this->connectionOptions = $connectionOptions;
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
@@ -91,12 +90,12 @@ class FtpAdapter implements FilesystemAdapter
     private function connection()
     {
         start:
-        if ( ! $this->connection) {
+        if ( ! is_resource($this->connection)) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
         }
 
         if ($this->connectivityChecker->isConnected($this->connection) === false) {
-            $this->connection = null;
+            $this->connection = false;
             goto start;
         }
 
@@ -253,6 +252,7 @@ class FtpAdapter implements FilesystemAdapter
     {
         $path = ltrim($path, '/');
         $dirname = dirname($path);
+        $attributes = null;
 
         if ($dirname === '.') {
             $dirname = '';
@@ -267,10 +267,12 @@ class FtpAdapter implements FilesystemAdapter
             }
         }
 
-        $found = isset($attributes);
-
-        if ( ! $found || ! $attributes instanceof FileAttributes) {
-            throw UnableToRetrieveMetadata::create($path, $type, 'expected file, ' . ($found ? 'directory found' : 'nothing found'));
+        if ( ! $attributes instanceof FileAttributes) {
+            throw UnableToRetrieveMetadata::create(
+                $path,
+                $type,
+                'expected file, ' . ($attributes instanceof DirectoryAttributes ? 'directory found' : 'nothing found')
+            );
         }
 
         return $attributes;
@@ -365,7 +367,10 @@ class FtpAdapter implements FilesystemAdapter
 
     private function detectSystemType($item): string
     {
-        return preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', $item) ? self::SYSTEM_TYPE_WINDOWS : self::SYSTEM_TYPE_UNIX;
+        return preg_match(
+            '/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/',
+            $item
+        ) ? self::SYSTEM_TYPE_WINDOWS : self::SYSTEM_TYPE_UNIX;
     }
 
     private function normalizeWindowsObject($item, $base): StorageAttributes

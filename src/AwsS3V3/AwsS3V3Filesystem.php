@@ -240,7 +240,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         return $attributes;
     }
 
-    private function mapS3ObjectMetadata(array $metadata, $path = null): StorageAttributes
+    private function mapS3ObjectMetadata(array $metadata, string $path = null): StorageAttributes
     {
         if ($path === null) {
             $path = $this->prefixer->stripPrefix($metadata['Key'] ?? $metadata['Prefix']);
@@ -331,6 +331,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
+            /** @var string $visibility */
             $visibility = $this->visibility($source)->visibility();
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo(

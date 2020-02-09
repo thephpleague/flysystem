@@ -13,9 +13,11 @@ class FileAttributes implements StorageAttributes
     public const ATTRIBUTE_LAST_MODIFIED = 'last_modified';
     public const ATTRIBUTE_MIME_TYPE = 'mime_type';
     public const ATTRIBUTE_EXTRA_METADATA = 'extra_metadata';
-
     use ProxyArrayAccessToProperties;
 
+    /**
+     * @var string
+     */
     private $type = StorageAttributes::TYPE_FILE;
 
     /**
@@ -111,7 +113,7 @@ class FileAttributes implements StorageAttributes
 
     public static function fromArray(array $attributes): StorageAttributes
     {
-        return new static(
+        return new FileAttributes(
             $attributes[self::ATTRIBUTE_PATH],
             $attributes[self::ATTRIBUTE_FILE_SIZE] ?? null,
             $attributes[self::ATTRIBUTE_VISIBILITY] ?? null,
@@ -127,12 +129,12 @@ class FileAttributes implements StorageAttributes
     public function jsonSerialize(): array
     {
         return [
-            self::ATTRIBUTE_TYPE => self::TYPE_FILE,
-            self::ATTRIBUTE_PATH => $this->path,
-            self::ATTRIBUTE_FILE_SIZE => $this->fileSize,
-            self::ATTRIBUTE_VISIBILITY => $this->visibility,
-            self::ATTRIBUTE_LAST_MODIFIED => $this->lastModified,
-            self::ATTRIBUTE_MIME_TYPE => $this->mimeType,
+            self::ATTRIBUTE_TYPE           => self::TYPE_FILE,
+            self::ATTRIBUTE_PATH           => $this->path,
+            self::ATTRIBUTE_FILE_SIZE      => $this->fileSize,
+            self::ATTRIBUTE_VISIBILITY     => $this->visibility,
+            self::ATTRIBUTE_LAST_MODIFIED  => $this->lastModified,
+            self::ATTRIBUTE_MIME_TYPE      => $this->mimeType,
             self::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
         ];
     }

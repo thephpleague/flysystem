@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use Generator;
 use PHPUnit\Framework\TestCase;
 
 use RuntimeException;
@@ -15,7 +16,7 @@ class FileAttributesTest extends TestCase
     /**
      * @test
      */
-    public function exposing_some_values()
+    public function exposing_some_values(): void
     {
         $attrs = new FileAttributes('path.txt');
         $this->assertFalse($attrs->isDir());
@@ -31,7 +32,7 @@ class FileAttributesTest extends TestCase
     /**
      * @test
      */
-    public function exposing_all_values()
+    public function exposing_all_values(): void
     {
         $attrs = new FileAttributes('path.txt', 1234, Visibility::PRIVATE, $now = time(), 'plain/text', ['key' => 'value']);
         $this->assertEquals('path.txt', $attrs->path());
@@ -46,7 +47,7 @@ class FileAttributesTest extends TestCase
     /**
      * @test
      */
-    public function implements_array_access()
+    public function implements_array_access(): void
     {
         $attrs = new FileAttributes('path.txt', 1234, Visibility::PRIVATE, $now = time(), 'plain/text', ['key' => 'value']);
         $this->assertEquals('path.txt', $attrs['path']);
@@ -62,7 +63,7 @@ class FileAttributesTest extends TestCase
     /**
      * @test
      */
-    public function properties_can_not_be_set()
+    public function properties_can_not_be_set(): void
     {
         $this->expectException(RuntimeException::class);
         $attrs = new FileAttributes('path.txt');
@@ -72,7 +73,7 @@ class FileAttributesTest extends TestCase
     /**
      * @test
      */
-    public function properties_can_not_be_unset()
+    public function properties_can_not_be_unset(): void
     {
         $this->expectException(RuntimeException::class);
         $attrs = new FileAttributes('path.txt');
@@ -83,14 +84,14 @@ class FileAttributesTest extends TestCase
      * @dataProvider data_provider_for_json_transformation
      * @test
      */
-    public function json_transformations(FileAttributes $attributes)
+    public function json_transformations(FileAttributes $attributes): void
     {
         $payload = $attributes->jsonSerialize();
         $newAttributes = FileAttributes::fromArray($payload);
         $this->assertEquals($attributes, $newAttributes);
     }
 
-    public function data_provider_for_json_transformation()
+    public function data_provider_for_json_transformation(): Generator
     {
         yield [new FileAttributes('path.txt', 1234, Visibility::PRIVATE, $now = time(), 'plain/text', ['key' => 'value'])];
         yield [new FileAttributes('another.txt')];

@@ -56,7 +56,7 @@ class DirectoryAttributes implements StorageAttributes
 
     public static function fromArray(array $attributes): StorageAttributes
     {
-        return new static(
+        return new DirectoryAttributes(
             $attributes['path'],
             $attributes['visibility'] ?? null
         );

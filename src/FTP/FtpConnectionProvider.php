@@ -14,7 +14,12 @@ class FtpConnectionProvider implements ConnectionProvider
      */
     public function createConnection(FtpConnectionOptions $options)
     {
-        $connection = $this->createConnectionResource($options->host(), $options->port(), $options->timeout(), $options->ssl());
+        $connection = $this->createConnectionResource(
+            $options->host(),
+            $options->port(),
+            $options->timeout(),
+            $options->ssl()
+        );
 
         try {
             $this->authenticate($options, $connection);
@@ -29,19 +34,23 @@ class FtpConnectionProvider implements ConnectionProvider
         return $connection;
     }
 
+    /**
+     * @return resource
+     */
     private function createConnectionResource(string $host, int $port, int $timeout, bool $ssl)
     {
-        $connection = $ssl
-            ? @ftp_ssl_connect($host, $port, $timeout)
-            : @ftp_connect($host, $port, $timeout);
+        $connection = $ssl ? @ftp_ssl_connect($host, $port, $timeout) : @ftp_connect($host, $port, $timeout);
 
-        if ($connection === false) {
+        if ( ! is_resource($connection)) {
             throw UnableToConnectToFtpHost::forHost($host, $port, $ssl);
         }
 
         return $connection;
     }
 
+    /**
+     * @param resource $connection
+     */
     private function authenticate(FtpConnectionOptions $options, $connection): void
     {
         if ( ! @ftp_login($connection, $options->username(), $options->password())) {
@@ -49,6 +58,9 @@ class FtpConnectionProvider implements ConnectionProvider
         }
     }
 
+    /**
+     * @param resource $connection
+     */
     private function enableUtf8Mode(FtpConnectionOptions $options, $connection): void
     {
         if ( ! $options->utf8()) {
@@ -58,11 +70,16 @@ class FtpConnectionProvider implements ConnectionProvider
         $response = ftp_raw($connection, "OPTS UTF8 ON");
 
         if (substr($response[0] ?? '', 0, 3) !== '200') {
-            throw new UnableToEnableUtf8Mode('Could not set UTF-8 mode for connection: ' . $options->host() . '::' . $options->port());
+            throw new UnableToEnableUtf8Mode(
+                'Could not set UTF-8 mode for connection: ' . $options->host() . '::' . $options->port()
+            );
         }
     }
 
-    private function ignorePassiveAddress(FtpConnectionOptions $options, $connection)
+    /**
+     * @param resource $connection
+     */
+    private function ignorePassiveAddress(FtpConnectionOptions $options, $connection): void
     {
         $ignorePassiveAddress = $options->ignorePassiveAddress();
 
@@ -75,7 +92,10 @@ class FtpConnectionProvider implements ConnectionProvider
         }
     }
 
-    private function makeConnectionPassive(FtpConnectionOptions $options, $connection)
+    /**
+     * @param resource $connection
+     */
+    private function makeConnectionPassive(FtpConnectionOptions $options, $connection): void
     {
         if ( ! ftp_pasv($connection, $options->passive())) {
             throw new UnableToMakeConnectionPassive(

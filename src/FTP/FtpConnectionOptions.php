@@ -183,7 +183,7 @@ class FtpConnectionOptions
 
     public static function fromArray(array $options): FtpConnectionOptions
     {
-        return new static(
+        return new FtpConnectionOptions(
             $options['host'] ?? 'invalid://host-not-set',
             $options['root'] ?? 'invalid://root-not-set',
             $options['username'] ?? 'invalid://username-not-set',

@@ -6,17 +6,15 @@ namespace League\Flysystem;
 
 use InvalidArgumentException;
 
-use function gettype;
-use function is_scalar;
 use function var_export;
 
 class InvalidVisibilityProvided extends InvalidArgumentException implements FilesystemError
 {
-    public static function withVisibility($visibility, string $expectedMessage)
+    public static function withVisibility(string $visibility, string $expectedMessage): InvalidVisibilityProvided
     {
-        $provided = is_scalar($visibility) ? var_export($visibility, true) : "parameter of type " . gettype($visibility);
+        $provided = var_export($visibility, true);
         $message = "Invalid visibility provided. Expected {$expectedMessage}, received {$provided}";
 
-        throw new static($message);
+        throw new InvalidVisibilityProvided($message);
     }
 }

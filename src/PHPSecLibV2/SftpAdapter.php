@@ -9,6 +9,7 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemError;
 use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
@@ -59,6 +60,12 @@ class SftpAdapter implements FilesystemAdapter
         return $this->connectionProvider->provideConnection()->is_file($location);
     }
 
+    /**
+     * @param string          $path
+     * @param string|resource $contents
+     * @param Config          $config
+     * @throws FilesystemError
+     */
     private function upload(string $path, $contents, Config $config): void
     {
         $this->ensureParentDirectoryExists($path, $config);
@@ -144,6 +151,7 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
+        /** @var resource $readStream */
         $readStream = fopen('php://temp', 'w+');
 
         if ( ! $connection->get($location, $readStream)) {

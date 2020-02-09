@@ -22,6 +22,7 @@ interface FilesystemReader
     public function read(string $location): string;
 
     /**
+     * @return resource
      * @throws UnableToReadFile
      * @throws FilesystemError
      */

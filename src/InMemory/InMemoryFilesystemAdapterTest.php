@@ -32,7 +32,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_mimetype_on_a_non_existing_file()
+    public function getting_mimetype_on_a_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $this->adapter()->mimeType('path.txt');
@@ -41,7 +41,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_last_modified_on_a_non_existing_file()
+    public function getting_last_modified_on_a_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $this->adapter()->lastModified('path.txt');
@@ -50,7 +50,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_file_size_on_a_non_existing_file()
+    public function getting_file_size_on_a_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $this->adapter()->fileSize('path.txt');
@@ -59,7 +59,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_file()
+    public function deleting_a_file(): void
     {
         $this->adapter()->write('path.txt', 'contents', new Config());
         $this->assertTrue($this->adapter()->fileExists('path.txt'));
@@ -72,7 +72,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_directory()
+    public function deleting_a_directory(): void
     {
         $adapter = $this->adapter();
         $adapter->write('a/path.txt', 'contents', new Config());
@@ -90,7 +90,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function creating_a_directory_does_nothing()
+    public function creating_a_directory_does_nothing(): void
     {
         $this->adapter()->createDirectory('something', new Config());
         $this->assertTrue(true);
@@ -99,7 +99,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_with_a_stream_and_reading_a_file()
+    public function writing_with_a_stream_and_reading_a_file(): void
     {
         $handle = stream_with_contents('contents');
         $this->adapter()->writeStream(self::PATH, $handle, new Config());
@@ -110,7 +110,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reading_a_stream()
+    public function reading_a_stream(): void
     {
         $this->adapter()->write(self::PATH, 'contents', new Config());
         $contents = $this->adapter()->readStream(self::PATH);
@@ -121,7 +121,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reading_a_non_existing_file()
+    public function reading_a_non_existing_file(): void
     {
         $this->expectException(UnableToReadFile::class);
         $this->adapter()->read('path.txt');
@@ -130,7 +130,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function stream_reading_a_non_existing_file()
+    public function stream_reading_a_non_existing_file(): void
     {
         $this->expectException(UnableToReadFile::class);
         $this->adapter()->readStream('path.txt');
@@ -139,7 +139,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_all_files()
+    public function listing_all_files(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
@@ -157,7 +157,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_non_recursive()
+    public function listing_non_recursive(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
@@ -170,7 +170,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file_successfully()
+    public function moving_a_file_successfully(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
@@ -182,7 +182,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file_with_collision()
+    public function moving_a_file_with_collision(): void
     {
         $this->expectException(UnableToMoveFile::class);
         $adapter = $this->adapter();
@@ -194,7 +194,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function trying_to_move_a_non_existing_file()
+    public function trying_to_move_a_non_existing_file(): void
     {
         $this->expectException(UnableToMoveFile::class);
         $this->adapter()->move('path.txt', 'new-path.txt', new Config());
@@ -203,7 +203,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file_successfully()
+    public function copying_a_file_successfully(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
@@ -215,7 +215,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function trying_to_copy_a_non_existing_file()
+    public function trying_to_copy_a_non_existing_file(): void
     {
         $this->expectException(UnableToCopyFile::class);
         $this->adapter()->copy('path.txt', 'new-path.txt', new Config());
@@ -224,7 +224,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_listing_directory_placeholders()
+    public function not_listing_directory_placeholders(): void
     {
         $adapter = $this->adapter();
         $adapter->createDirectory('directory', new Config());
@@ -236,13 +236,13 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function checking_for_metadata()
+    public function checking_for_metadata(): void
     {
         mock_function('time', 1234);
         $adapter = $this->adapter();
         $adapter->write(
             self::PATH,
-            file_get_contents(__DIR__.'/../../test_files/flysystem.svg'),
+            (string) file_get_contents(__DIR__.'/../../test_files/flysystem.svg'),
             new Config()
         );
 

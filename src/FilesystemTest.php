@@ -29,7 +29,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function writing_and_reading_files()
+    public function writing_and_reading_files(): void
     {
         $this->filesystem->write('path.txt', 'contents');
         $contents = $this->filesystem->read('path.txt');
@@ -40,7 +40,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function trying_to_write_with_an_invalid_stream_arguments()
+    public function trying_to_write_with_an_invalid_stream_arguments(): void
     {
         $this->expectException(InvalidStreamProvided::class);
 
@@ -50,7 +50,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function writing_and_reading_a_stream()
+    public function writing_and_reading_a_stream(): void
     {
         $writeStream = stream_with_contents('contents');
 
@@ -68,7 +68,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function checking_if_files_exist()
+    public function checking_if_files_exist(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -82,7 +82,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function deleting_a_file()
+    public function deleting_a_file(): void
     {
         $this->filesystem->write('path.txt', 'content');
         $this->filesystem->delete('path.txt');
@@ -93,7 +93,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function creating_a_directory()
+    public function creating_a_directory(): void
     {
         $this->filesystem->createDirectory('here');
 
@@ -105,7 +105,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function deleting_a_directory()
+    public function deleting_a_directory(): void
     {
         $this->filesystem->write('dirname/a.txt', 'contents');
         $this->filesystem->write('dirname/b.txt', 'contents');
@@ -125,7 +125,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function listing_directory_contents()
+    public function listing_directory_contents(): void
     {
         $this->filesystem->write('dirname/a.txt', 'contents');
         $this->filesystem->write('dirname/b.txt', 'contents');
@@ -144,7 +144,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function listing_directory_contents_recursive()
+    public function listing_directory_contents_recursive(): void
     {
         $this->filesystem->write('dirname/a.txt', 'contents');
         $this->filesystem->write('dirname/b.txt', 'contents');
@@ -160,7 +160,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function copying_files()
+    public function copying_files(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -173,7 +173,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function moving_files()
+    public function moving_files(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -186,7 +186,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function fetching_last_modified()
+    public function fetching_last_modified(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -200,7 +200,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function fetching_mime_type()
+    public function fetching_mime_type(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -212,7 +212,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function fetching_file_size()
+    public function fetching_file_size(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -224,7 +224,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function ensuring_streams_are_rewound_when_writing()
+    public function ensuring_streams_are_rewound_when_writing(): void
     {
         $writeStream = stream_with_contents('contents');
         fseek($writeStream, 4);
@@ -238,7 +238,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function setting_visibility()
+    public function setting_visibility(): void
     {
         $this->filesystem->write('path.txt', 'contents');
 
@@ -256,7 +256,7 @@ class FilesystemTest extends TestCase
      * @test
      * @dataProvider scenariosCausingPathTraversal
      */
-    public function protecting_against_path_traversals(callable $scenario)
+    public function protecting_against_path_traversals(callable $scenario): void
     {
         $this->expectException(PathTraversalDetected::class);
         $scenario($this->filesystem);

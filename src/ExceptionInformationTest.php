@@ -11,7 +11,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function copy_exception_information()
+    public function copy_exception_information(): void
     {
         $exception = UnableToCopyFile::fromLocationTo('from', 'to');
         $this->assertEquals('from', $exception->source());
@@ -22,7 +22,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function create_directory_exception_information()
+    public function create_directory_exception_information(): void
     {
         $exception = UnableToCreateDirectory::atLocation('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -33,7 +33,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function delete_directory_exception_information()
+    public function delete_directory_exception_information(): void
     {
         $exception = UnableToDeleteDirectory::atLocation('from', 'some message');
         $this->assertEquals('some message', $exception->reason());
@@ -45,7 +45,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function delete_file_exception_information()
+    public function delete_file_exception_information(): void
     {
         $exception = UnableToDeleteFile::atLocation('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -57,7 +57,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function move_file_exception_information()
+    public function move_file_exception_information(): void
     {
         $exception = UnableToMoveFile::fromLocationTo('from', 'to');
         $this->assertEquals('from', $exception->source());
@@ -68,7 +68,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function read_file_exception_information()
+    public function read_file_exception_information(): void
     {
         $exception = UnableToReadFile::fromLocation('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -80,7 +80,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function retrieve_visibility_exception_information()
+    public function retrieve_visibility_exception_information(): void
     {
         $exception = UnableToRetrieveMetadata::visibility('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -92,7 +92,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function set_visibility_exception_information()
+    public function set_visibility_exception_information(): void
     {
         $exception = UnableToSetVisibility::atLocation('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -104,7 +104,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function write_file_exception_information()
+    public function write_file_exception_information(): void
     {
         $exception = UnableToWriteFile::atLocation('from', 'some message');
         $this->assertEquals('from', $exception->location());
@@ -116,7 +116,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function unreadable_file_exception_information()
+    public function unreadable_file_exception_information(): void
     {
         $exception = UnreadableFileEncountered::atLocation('the-location');
         $this->assertEquals('the-location', $exception->location());
@@ -126,7 +126,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function symbolic_link_exception_information()
+    public function symbolic_link_exception_information(): void
     {
         $exception = SymbolicLinkEncountered::atLocation('the-location');
         $this->assertEquals('the-location', $exception->location());
@@ -136,7 +136,7 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
-    public function path_traversal_exception_information()
+    public function path_traversal_exception_information(): void
     {
         $exception = PathTraversalDetected::forPath('../path.txt');
         $this->assertEquals('../path.txt', $exception->path());

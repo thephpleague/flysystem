@@ -8,8 +8,8 @@ use RuntimeException;
 
 class UnableToSetFtpOption extends RuntimeException implements FtpConnectionError
 {
-    public static function whileSettingOption(string $option)
+    public static function whileSettingOption(string $option): UnableToSetFtpOption
     {
-        return new static("Unable to set FTP option $option.");
+        return new UnableToSetFtpOption("Unable to set FTP option $option.");
     }
 }

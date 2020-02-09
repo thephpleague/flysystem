@@ -51,13 +51,13 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         static::deleteDirectory(static::ROOT);
     }
 
-    private static function deleteDirectory(string $dir)
+    private static function deleteDirectory(string $dir): void
     {
         if ( ! is_dir($dir)) {
             return;
         }
 
-        foreach (scandir($dir) as $file) {
+        foreach ((array) scandir($dir) as $file) {
             if ('.' === $file || '..' === $file) {
                 continue;
             }
@@ -73,7 +73,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function creating_a_local_filesystem_creates_a_root_directory()
+    public function creating_a_local_filesystem_creates_a_root_directory(): void
     {
         new LocalFilesystemAdapter(static::ROOT);
         $this->assertDirectoryExists(static::ROOT);
@@ -82,7 +82,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_create_a_root_directory_results_in_an_exception()
+    public function not_being_able_to_create_a_root_directory_results_in_an_exception(): void
     {
         $this->expectException(UnableToCreateDirectory::class);
         new LocalFilesystemAdapter('/cannot-create/this-directory/');
@@ -91,7 +91,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_a_file()
+    public function writing_a_file(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
 
@@ -105,7 +105,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_a_file_with_a_stream()
+    public function writing_a_file_with_a_stream(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $stream = stream_with_contents('contents');
@@ -121,7 +121,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_a_file_with_a_stream_and_visibility()
+    public function writing_a_file_with_a_stream_and_visibility(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $stream = stream_with_contents('something');
@@ -136,7 +136,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function writing_a_file_with_visibility()
+    public function writing_a_file_with_visibility(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT, new PortableVisibilityConverter());
         $adapter->write('/file.txt', 'contents', new Config(['visibility' => 'private']));
@@ -147,7 +147,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_set_visibility()
+    public function failing_to_set_visibility(): void
     {
         $this->expectException(UnableToSetVisibility::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -157,7 +157,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_write_a_file()
+    public function failing_to_write_a_file(): void
     {
         $this->expectException(UnableToWriteFile::class);
         (new LocalFilesystemAdapter('/'))->write('/cannot-create-a-file-here', 'contents', new Config());
@@ -166,12 +166,12 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_write_a_file_using_a_stream()
+    public function failing_to_write_a_file_using_a_stream(): void
     {
         $this->expectException(UnableToWriteFile::class);
         try {
             $stream = stream_with_contents('something');
-            (new LocalFilesystemAdapter('/'))->writeStream('/cannot-create-a-file-here', 'contents', new Config());
+            (new LocalFilesystemAdapter('/'))->writeStream('/cannot-create-a-file-here', $stream, new Config());
         } finally {
             fclose($stream);
         }
@@ -180,7 +180,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_file()
+    public function deleting_a_file(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         file_put_contents(static::ROOT . '/file.txt', 'contents');
@@ -191,7 +191,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_file_that_does_not_exist()
+    public function deleting_a_file_that_does_not_exist(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->delete('/file.txt');
@@ -201,7 +201,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_file_that_cannot_be_deleted()
+    public function deleting_a_file_that_cannot_be_deleted(): void
     {
         $this->maybeSkipDangerousTests();
         $this->expectException(UnableToDeleteFile::class);
@@ -212,7 +212,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function checking_if_a_file_exists()
+    public function checking_if_a_file_exists(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         file_put_contents(static::ROOT . '/file.txt', 'contents');
@@ -223,7 +223,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function checking_if_a_file_exists_that_does_not_exsist()
+    public function checking_if_a_file_exists_that_does_not_exsist(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
 
@@ -233,7 +233,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_contents()
+    public function listing_contents(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
@@ -247,7 +247,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_contents_recursively()
+    public function listing_contents_recursively(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
@@ -261,7 +261,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_a_non_existing_directory()
+    public function listing_a_non_existing_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $contents = iterator_to_array($adapter->listContents('/directory/', false));
@@ -272,7 +272,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_directory_contents_with_link_skipping()
+    public function listing_directory_contents_with_link_skipping(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT, null, LOCK_EX, LocalFilesystemAdapter::SKIP_LINKS);
         file_put_contents(static::ROOT . '/file.txt', 'content');
@@ -286,7 +286,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_directory_contents_with_disallowing_links()
+    public function listing_directory_contents_with_disallowing_links(): void
     {
         $this->expectException(SymbolicLinkEncountered::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT, null, LOCK_EX, LocalFilesystemAdapter::DISALLOW_LINKS);
@@ -299,7 +299,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_directory()
+    public function deleting_a_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         mkdir(static::ROOT . '/directory/subdir/', 0744, true);
@@ -315,7 +315,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_directories_with_other_directories_in_it()
+    public function deleting_directories_with_other_directories_in_it(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('a/b/c/d/e.txt', 'contents', new Config());
@@ -327,7 +327,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function deleting_a_non_existing_directory()
+    public function deleting_a_non_existing_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->deleteDirectory('/non-existing-directory/');
@@ -337,7 +337,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_delete_a_directory()
+    public function not_being_able_to_delete_a_directory(): void
     {
         $this->expectException(UnableToDeleteDirectory::class);
 
@@ -351,7 +351,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_delete_a_sub_directory()
+    public function not_being_able_to_delete_a_sub_directory(): void
     {
         $this->expectException(UnableToDeleteDirectory::class);
 
@@ -365,7 +365,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function creating_a_directory()
+    public function creating_a_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->createDirectory('public', new Config(['visibility' => 'public']));
@@ -384,7 +384,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_create_a_directory()
+    public function not_being_able_to_create_a_directory(): void
     {
         $this->expectException(UnableToCreateDirectory::class);
         $adapter = new LocalFilesystemAdapter('/');
@@ -394,7 +394,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function creating_a_directory_is_idempotent()
+    public function creating_a_directory_is_idempotent(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->createDirectory('/something/', new Config(['visibility' => 'private']));
@@ -406,7 +406,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function retrieving_visibility()
+    public function retrieving_visibility(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('public.txt', 'contents', new Config(['visibility' => 'public']));
@@ -418,7 +418,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_retrieve_visibility()
+    public function not_being_able_to_retrieve_visibility(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -428,7 +428,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file()
+    public function moving_a_file(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
@@ -441,7 +441,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_move_a_file()
+    public function not_being_able_to_move_a_file(): void
     {
         $this->expectException(UnableToMoveFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -451,7 +451,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file()
+    public function copying_a_file(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
@@ -463,7 +463,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_copy_a_file()
+    public function not_being_able_to_copy_a_file(): void
     {
         $this->expectException(UnableToCopyFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -473,12 +473,12 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_mimetype()
+    public function getting_mimetype(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write(
             'flysystem.svg',
-            file_get_contents(__DIR__ . '/../../test_files/flysystem.svg'),
+            (string) file_get_contents(__DIR__ . '/../../test_files/flysystem.svg'),
             new Config()
         );
         $this->assertEquals('image/svg', $adapter->mimeType('flysystem.svg')->mimeType());
@@ -487,7 +487,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_get_mimetype()
+    public function not_being_able_to_get_mimetype(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -497,7 +497,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_last_modified()
+    public function getting_last_modified(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
@@ -509,7 +509,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_get_last_modified()
+    public function not_being_able_to_get_last_modified(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -519,7 +519,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_file_size()
+    public function getting_file_size(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('first.txt', 'contents', new Config());
@@ -530,7 +530,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_get_file_size()
+    public function not_being_able_to_get_file_size(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -540,7 +540,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reading_a_file()
+    public function reading_a_file(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('path.txt', 'contents', new Config());
@@ -551,7 +551,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_read_a_file()
+    public function not_being_able_to_read_a_file(): void
     {
         $this->expectException(UnableToReadFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
@@ -561,7 +561,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reading_a_stream()
+    public function reading_a_stream(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('path.txt', 'contents', new Config());
@@ -575,7 +575,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function not_being_able_to_stream_read_a_file()
+    public function not_being_able_to_stream_read_a_file(): void
     {
         $this->expectException(UnableToReadFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);

@@ -6,12 +6,9 @@ namespace League\Flysystem\FTP;
 
 class NoopCommandConnectivityChecker implements ConnectivityChecker
 {
-    /**
-     * @inheritDoc
-     */
     public function isConnected($connection): bool
     {
-        $response = is_resource($connection) ? @ftp_raw($connection, 'NOOP') : false;
+        $response = @ftp_raw($connection, 'NOOP');
         $responseCode = $response ? (int) preg_replace('/\D/', '', implode('', $response)) : false;
 
         return $responseCode === 200;

@@ -19,7 +19,7 @@ use League\Flysystem\UnableToWriteFile;
 class SftpAdapterTest extends FilesystemAdapterTestCase
 {
     /**
-     * @var SftpConnectionProvider
+     * @var ConnectionProvider
      */
     private $connectionProvider;
 
@@ -45,13 +45,15 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
      */
     public function setupConnectionProvider(): void
     {
-        $this->connection = $this->connectionProvider()->provideConnection();
+        /** @var SftpStub $connection */
+        $connection = $this->connectionProvider()->provideConnection();
+        $this->connection = $connection;
     }
 
     /**
      * @test
      */
-    public function failing_to_create_a_directory()
+    public function failing_to_create_a_directory(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -63,7 +65,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_write_a_file()
+    public function failing_to_write_a_file(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -75,7 +77,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_read_a_file()
+    public function failing_to_read_a_file(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -87,7 +89,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_read_a_file_as_a_stream()
+    public function failing_to_read_a_file_as_a_stream(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -99,7 +101,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_write_a_file_using_streams()
+    public function failing_to_write_a_file_using_streams(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
         $writeHandle = stream_with_contents('contents');
@@ -116,10 +118,10 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function detecting_mimetype()
+    public function detecting_mimetype(): void
     {
         $adapter = $this->adapter();
-        $adapter->write('file.svg', file_get_contents(__DIR__.'/../../test_files/flysystem.svg'), new Config());
+        $adapter->write('file.svg', (string) file_get_contents(__DIR__.'/../../test_files/flysystem.svg'), new Config());
 
         $mimeType = $adapter->mimeType('file.svg');
 
@@ -129,7 +131,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_chmod_when_writing()
+    public function failing_to_chmod_when_writing(): void
     {
         $this->connection->failOnChmod('/upload/path.txt');
         $adapter = $this->adapter();
@@ -142,7 +144,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_move_a_file_cause_the_parent_directory_cant_be_created()
+    public function failing_to_move_a_file_cause_the_parent_directory_cant_be_created(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -154,7 +156,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_copy_a_file()
+    public function failing_to_copy_a_file(): void
     {
         $adapter = $this->adapterWithInvalidRoot();
 
@@ -166,7 +168,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_copy_a_file_because_writing_fails()
+    public function failing_to_copy_a_file_because_writing_fails(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
         $adapter = $this->adapter();
@@ -180,7 +182,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_chmod_when_writing_with_a_stream()
+    public function failing_to_chmod_when_writing_with_a_stream(): void
     {
         $writeStream = stream_with_contents('contents');
         $this->connection->failOnChmod('/upload/path.txt');

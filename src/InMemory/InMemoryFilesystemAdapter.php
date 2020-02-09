@@ -42,7 +42,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
 
     public function writeStream(string $path, $contents, Config $config): void
     {
-        $this->write($path, stream_get_contents($contents), $config);
+        $this->write($path, (string) stream_get_contents($contents), $config);
     }
 
     public function read(string $path): string
@@ -164,7 +164,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                             break;
                         }
 
-                        $dirPath .= $part.'/';
+                        $dirPath .= $part . '/';
 
                         if ( ! in_array($dirPath, $listedDirectories)) {
                             $listedDirectories[] = $dirPath;

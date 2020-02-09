@@ -47,6 +47,7 @@ class Filesystem implements FilesystemOperator
 
     public function writeStream(string $location, $contents, array $config = []): void
     {
+        /** @var resource $contents */
         $this->assertIsResource($contents);
         $this->rewindStream($contents);
         $this->adapter->writeStream(
@@ -134,6 +135,9 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
+    /**
+     * @param mixed $contents
+     */
     private function assertIsResource($contents): void
     {
         if ( ! is_resource($contents)) {

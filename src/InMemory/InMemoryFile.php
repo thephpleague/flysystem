@@ -21,7 +21,7 @@ class InMemoryFile
     private $lastModified;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $visibility;
 
@@ -41,8 +41,12 @@ class InMemoryFile
         return $this->contents;
     }
 
+    /**
+     * @return resource
+     */
     public function readStream()
     {
+        /** @var resource $stream */
         $stream = fopen('php://temp', 'w+b');
         fwrite($stream, $this->contents);
         rewind($stream);
@@ -59,15 +63,15 @@ class InMemoryFile
 
     public function mimeType(): string
     {
-        return (new finfo(FILEINFO_MIME_TYPE))->buffer($this->contents);
+        return (string) (new finfo(FILEINFO_MIME_TYPE))->buffer($this->contents);
     }
 
-    public function setVisibility($visibility)
+    public function setVisibility(string $visibility): void
     {
         $this->visibility = $visibility;
     }
 
-    public function visibility()
+    public function visibility(): string
     {
         return $this->visibility;
     }

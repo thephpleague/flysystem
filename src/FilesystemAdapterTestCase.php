@@ -63,7 +63,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function writing_and_reading_with_string()
+    public function writing_and_reading_with_string(): void
     {
         $adapter = $this->adapter();
 
@@ -78,7 +78,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function writing_a_file_with_a_stream()
+    public function writing_a_file_with_a_stream(): void
     {
         $adapter = $this->adapter();
         $writeStream = stream_with_contents('contents');
@@ -92,7 +92,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function reading_a_file()
+    public function reading_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
@@ -104,7 +104,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function reading_a_file_with_a_stream()
+    public function reading_a_file_with_a_stream(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
@@ -119,7 +119,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function deleting_a_file()
+    public function deleting_a_file(): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
@@ -133,7 +133,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function listing_contents_shallow()
+    public function listing_contents_shallow(): void
     {
         $this->givenWeHaveAnExistingFile('some/0-path.txt', 'contents');
         $this->givenWeHaveAnExistingFile('some/1-nested/path.txt', 'contents');
@@ -158,7 +158,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function listing_contents_recursive()
+    public function listing_contents_recursive(): void
     {
         $adapter = $this->adapter();
         $adapter->createDirectory('path', new Config());
@@ -182,7 +182,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         return $message . PHP_EOL;
     }
 
-    protected function givenWeHaveAnExistingFile(string $path, string $contents = 'contents', array $config = [])
+    protected function givenWeHaveAnExistingFile(string $path, string $contents = 'contents', array $config = []): void
     {
         $this->adapter()->write($path, $contents, new Config($config));
     }
@@ -190,7 +190,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_file_size()
+    public function fetching_file_size(): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
@@ -204,7 +204,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function setting_visibility()
+    public function setting_visibility(): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('some/path.txt', 'contents', [Config::OPTION_VISIBILITY => Visibility::PUBLIC]);
@@ -223,7 +223,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_file_size_of_a_directory()
+    public function fetching_file_size_of_a_directory(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -236,7 +236,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_file_size_of_non_existing_file()
+    public function fetching_file_size_of_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -246,7 +246,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_last_modified_of_non_existing_file()
+    public function fetching_last_modified_of_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -256,7 +256,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_visibility_of_non_existing_file()
+    public function fetching_visibility_of_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -266,7 +266,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_the_mime_type_of_an_svg_file()
+    public function fetching_the_mime_type_of_an_svg_file(): void
     {
         $this->givenWeHaveAnExistingFile('file.svg', file_get_contents(__DIR__.'/../test_files/flysystem.svg'));
 
@@ -278,7 +278,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_mime_type_of_non_existing_file()
+    public function fetching_mime_type_of_non_existing_file(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -288,7 +288,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function writing_and_reading_with_streams()
+    public function writing_and_reading_with_streams(): void
     {
         $writeStream = stream_with_contents('contents');
         $adapter = $this->adapter();
@@ -306,7 +306,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function setting_visibility_on_a_file_that_does_not_exist()
+    public function setting_visibility_on_a_file_that_does_not_exist(): void
     {
         $this->expectException(UnableToSetVisibility::class);
         $this->adapter()->setVisibility('path.txt', Visibility::PRIVATE);
@@ -315,7 +315,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function copying_a_file()
+    public function copying_a_file(): void
     {
         $adapter = $this->adapter();
         $adapter->write(
@@ -335,7 +335,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function moving_a_file()
+    public function moving_a_file(): void
     {
         $adapter = $this->adapter();
         $adapter->write(
@@ -345,7 +345,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         );
         $adapter->move('source.txt', 'destination.txt', new Config());
         $this->assertFalse($adapter->fileExists('source.txt'), 'After moving a file should no longer exist in the original location.');
-        $this->assertTrue($adapter->fileExists('destination.txt', 'After moving, a file should be present at the new location.'));
+        $this->assertTrue($adapter->fileExists('destination.txt'), 'After moving, a file should be present at the new location.');
         $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
         $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
     }
@@ -353,7 +353,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function reading_a_file_that_does_not_exist()
+    public function reading_a_file_that_does_not_exist(): void
     {
         $this->expectException(UnableToReadFile::class);
         $this->adapter()->read('path.txt');
@@ -362,7 +362,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function moving_a_file_that_does_not_exist()
+    public function moving_a_file_that_does_not_exist(): void
     {
         $this->expectException(UnableToMoveFile::class);
         $this->adapter()->move('source.txt', 'destination.txt', new Config());
@@ -371,7 +371,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function trying_to_delete_a_non_existing_file()
+    public function trying_to_delete_a_non_existing_file(): void
     {
         $adapter = $this->adapter();
 
@@ -384,7 +384,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function checking_if_files_exist()
+    public function checking_if_files_exist(): void
     {
         $adapter = $this->adapter();
 
@@ -399,7 +399,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function fetching_last_modified()
+    public function fetching_last_modified(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
@@ -415,7 +415,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function creating_a_directory()
+    public function creating_a_directory(): void
     {
         $adapter = $this->adapter();
 
@@ -435,7 +435,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function copying_a_file_with_collision()
+    public function copying_a_file_with_collision(): void
     {
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'new contents', new Config());

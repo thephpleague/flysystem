@@ -102,7 +102,7 @@ class S3ClientStub implements S3ClientInterface
 
     public function waitUntil($name, array $args = [])
     {
-        return $this->actualClient->waitUntil($name, $args);
+        $this->actualClient->waitUntil($name, $args);
     }
 
     public function getWaiter($name, array $args = [])
@@ -130,9 +130,9 @@ class S3ClientStub implements S3ClientInterface
         return $this->actualClient->doesObjectExist($bucket, $key, $options);
     }
 
-    public function registerStreamWrapper()
+    public function registerStreamWrapper(): void
     {
-        return $this->actualClient->registerStreamWrapper();
+        $this->actualClient->registerStreamWrapper();
     }
 
     public function deleteMatchingObjects($bucket, $prefix = '', $regex = '', array $options = [])

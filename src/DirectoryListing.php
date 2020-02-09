@@ -20,7 +20,7 @@ class DirectoryListing implements IteratorAggregate
     }
 
     /**
-     * @return StorageAttributes[]
+     * @return Generator<StorageAttributes>
      */
     public function getIterator(): Generator
     {

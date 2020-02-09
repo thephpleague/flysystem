@@ -28,11 +28,11 @@ class Config
 
     public function extend(array $options): Config
     {
-        return new static(array_merge($this->options, $options));
+        return new Config(array_merge($this->options, $options));
     }
 
     public function withDefaults(array $defaults): Config
     {
-        return new static($this->options + $defaults);
+        return new Config($this->options + $defaults);
     }
 }

@@ -1,0 +1,10 @@
+parameters:
+    checkMissingIterableValueType: false
+    reportUnmatchedIgnoredErrors: false
+    checkGenericClassInNonGenericObjectType: false
+    autoload_files:
+        - test-functions.php
+    ignoreErrors:
+        - '#Comparison operation "<" between 0\|1 and 4 is always true\.#'
+        - '#Constant NET_SFTP_TYPE_DIRECTORY not found\.#'
+        - '#\$local_file of method phpseclib\\Net\\SFTP::get\(\) expects string, resource given#'

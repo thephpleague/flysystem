@@ -189,11 +189,11 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     {
         switch ($file->getType()) {
             case 'dir':
-                return @rmdir($file->getRealPath());
+                return @rmdir((string) $file->getRealPath());
             case 'link':
-                return @unlink($file->getPathname());
+                return @unlink((string) $file->getPathname());
             default:
-                return @unlink($file->getRealPath());
+                return @unlink((string) $file->getRealPath());
         }
     }
 
@@ -265,9 +265,6 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return $contents;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function readStream(string $path)
     {
         $location = $this->prefixer->prefixPath($path);
@@ -281,7 +278,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return $contents;
     }
 
-    protected function ensureDirectoryExists(string $dirname, int $visibility)
+    protected function ensureDirectoryExists(string $dirname, int $visibility): void
     {
         if (is_dir($dirname)) {
             return;
@@ -355,7 +352,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return new FileAttributes($path, null, $visibility);
     }
 
-    private function resolveDirectoryVisibility($visibility)
+    private function resolveDirectoryVisibility(?string $visibility): int
     {
         return $visibility === null ? $this->visibility->defaultForDirectories() : $this->visibility->forDirectory(
             $visibility
