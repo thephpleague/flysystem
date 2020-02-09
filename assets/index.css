@@ -76,6 +76,10 @@ div.highlighter-rouge + table {
     @apply -mt-4 border-t-4 border-indigo-dark;
 }
 
+h3 + div.highlighter-rouge {
+    @apply mt-4;
+}
+
 article table td {
     vertical-align: top;
     @apply border-t border-indigo-lighter;

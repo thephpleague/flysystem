@@ -9,6 +9,10 @@ means it does 80% of the things very well, for the special other 20%
 it's better not to use Flysystem. In this document you can see what
 those trade-offs are and why they are made.
 
+> Did you spot an inconsistency when using Flysystem? Create an issue
+> on the [flysystem repository](https://github.com/thephpleague/flysystem)
+> to discuss whether or not this was a missing design consideration.
+
 ## Directories are only created when needed
 
 In the world of cloud storage, directories are not required. In some
