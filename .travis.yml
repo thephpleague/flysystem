@@ -47,7 +47,7 @@ install:
   - php test_files/wait_for_ftp.php 2122
 
 script:
-  - travis_retry FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes vendor/bin/phpunit --coverage-text
+  - FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes travis_retry vendor/bin/phpunit --coverage-text
 
 #after_script:
 #  - wget https://scrutinizer-ci.com/ocular.phar
