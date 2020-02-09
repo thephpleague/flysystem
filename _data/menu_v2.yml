@@ -2,12 +2,11 @@ Flysystem:
     Introduction: '/v2/docs/'
     New In V2: '/v2/docs/what-is-new/'
     Architecture: '/v2/docs/architecture/'
-    API / Usage: '/v2/docs/api-and-usage/'
     Security Policy: '/security/'
 
 Usage:
-    Setup / Bootstrap: '/v2/docs/usage/setup/'
     Filesystem API: '/v2/docs/usage/filesystem-api/'
+    Error Handling: '/v2/docs/usage/error-handling/'
 
 Adapters:
     Local: '/v2/docs/adapter/local/'

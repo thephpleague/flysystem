@@ -12,15 +12,15 @@ For every type of operation there are exceptions:
 
 operation | exception
 --- | ---
-write/writeStream | `League\Flsystem\UnableToWriteFile`  
-read/readStream | `League\Flsystem\UnableToReadFile`
-delete | `League\Flsystem\UnableToDeleteFile`
-copy | `League\Flsystem\UnableToCopyFile`
-move | `League\Flsystem\UnableToMoveFile`
-setVisibility | `League\Flsystem\UnableToSetVisibility`
-createDirectory | `League\Flsystem\UnableToCreateDirectory`
-deleteDirectory | `League\Flsystem\UnableToDeleteDirectory`
-all metadata getters | `League\Flsystem\UnableToRetrieveMetadata`
+write/writeStream | `League\Flysystem\UnableToWriteFile`  
+read/readStream | `League\Flysystem\UnableToReadFile`
+delete | `League\Flysystem\UnableToDeleteFile`
+copy | `League\Flysystem\UnableToCopyFile`
+move | `League\Flysystem\UnableToMoveFile`
+setVisibility | `League\Flysystem\UnableToSetVisibility`
+createDirectory | `League\Flysystem\UnableToCreateDirectory`
+deleteDirectory | `League\Flysystem\UnableToDeleteDirectory`
+all metadata getters | `League\Flysystem\UnableToRetrieveMetadata`
 
 ## Generic error markers
 
