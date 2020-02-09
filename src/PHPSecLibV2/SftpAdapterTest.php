@@ -16,7 +16,7 @@ use League\Flysystem\UnableToWriteFile;
 /**
  * @group sftp
  */
-class SftpFilesystemTest extends FilesystemAdapterTestCase
+class SftpAdapterTest extends FilesystemAdapterTestCase
 {
     /**
      * @var SftpConnectionProvider
@@ -34,7 +34,7 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
             $this->markTestSkipped('Opted out of testing SFTP');
         }
 
-        return new SftpFilesystem(
+        return new SftpAdapter(
             $this->connectionProvider(),
             '/upload'
         );
@@ -205,12 +205,12 @@ class SftpFilesystemTest extends FilesystemAdapterTestCase
     }
 
     /**
-     * @return SftpFilesystem
+     * @return SftpAdapter
      */
-    private function adapterWithInvalidRoot(): SftpFilesystem
+    private function adapterWithInvalidRoot(): SftpAdapter
     {
         $provider = $this->connectionProvider();
-        $adapter = new SftpFilesystem($provider, '/invalid');
+        $adapter = new SftpAdapter($provider, '/invalid');
 
         return $adapter;
     }

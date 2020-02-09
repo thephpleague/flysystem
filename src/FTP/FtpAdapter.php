@@ -26,7 +26,7 @@ use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
 use Throwable;
 
-class FtpFilesystem implements FilesystemAdapter
+class FtpAdapter implements FilesystemAdapter
 {
     private const SYSTEM_TYPE_WINDOWS = 'windows';
     private const SYSTEM_TYPE_UNIX = 'unix';

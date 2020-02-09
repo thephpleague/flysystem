@@ -20,7 +20,7 @@ use League\Flysystem\Visibility;
 /**
  * @group ftp
  */
-class FtpFilesystemTest extends FilesystemAdapterTestCase
+class FtpAdapterTest extends FilesystemAdapterTestCase
 {
     /**
      * @var ConnectivityCheckerThatCanFail
@@ -48,7 +48,7 @@ class FtpFilesystemTest extends FilesystemAdapterTestCase
 
         $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
 
-        return new FtpFilesystem($options, null, $this->connectivityChecker);
+        return new FtpAdapter($options, null, $this->connectivityChecker);
     }
 
     /**
@@ -283,7 +283,7 @@ class FtpFilesystemTest extends FilesystemAdapterTestCase
            'password' => 'pass',
        ]);
 
-        $adapter = new FtpFilesystem($options);
+        $adapter = new FtpAdapter($options);
 
         $contents = iterator_to_array($adapter->listContents('somewhere', true), false);
 
@@ -307,7 +307,7 @@ class FtpFilesystemTest extends FilesystemAdapterTestCase
             'password' => 'pass',
         ]);
 
-        $adapter = new FtpFilesystem($options);
+        $adapter = new FtpAdapter($options);
         $adapter->write('dir name/file.txt', 'contents', new Config());
 
         $contents = iterator_to_array($adapter->listContents('dir name', true), false);

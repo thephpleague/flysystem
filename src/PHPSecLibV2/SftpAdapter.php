@@ -25,7 +25,7 @@ use League\Flysystem\Visibility;
 use phpseclib\Net\SFTP;
 use Throwable;
 
-class SftpFilesystem implements FilesystemAdapter
+class SftpAdapter implements FilesystemAdapter
 {
     /**
      * @var ConnectionProvider

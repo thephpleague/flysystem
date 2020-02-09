@@ -17,7 +17,7 @@ use League\Flysystem\UnableToRetrieveMetadata;
 /**
  * @group in-memory
  */
-class InMemoryFilesystemTest extends FilesystemAdapterTestCase
+class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
 {
     const PATH = 'path.txt';
 
@@ -254,6 +254,6 @@ class InMemoryFilesystemTest extends FilesystemAdapterTestCase
 
     function createFilesystemAdapter(): FilesystemAdapter
     {
-        return new InMemoryFilesystem();
+        return new InMemoryFilesystemAdapter();
     }
 }

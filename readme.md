@@ -4,9 +4,9 @@
 <?php
 
 use League\Flysystem\Filesystem;
-use League\Flysystem\Local\LocalFilesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 
-$adapter = new LocalFilesystem(__DIR__.'/somewhere/');
+$adapter = new LocalFilesystemAdapter(__DIR__.'/somewhere/');
 $filesystem = new Filesystem($adapter);
 $resource = tmpfile();
 

@@ -47,7 +47,7 @@ use const DIRECTORY_SEPARATOR;
 use const FILEINFO_MIME_TYPE;
 use const LOCK_EX;
 
-class LocalFilesystem implements FilesystemAdapter
+class LocalFilesystemAdapter implements FilesystemAdapter
 {
     /**
      * @var int

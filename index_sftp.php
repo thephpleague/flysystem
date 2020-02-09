@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 use League\Flysystem\Filesystem;
 use League\Flysystem\PHPSecLibV2\SftpConnectionProvider;
-use League\Flysystem\PHPSecLibV2\SftpFilesystem;
+use League\Flysystem\PHPSecLibV2\SftpAdapter;
 
 include __DIR__ . '/vendor/autoload.php';
 
-$filesystem = new Filesystem(new SftpFilesystem(
+$filesystem = new Filesystem(new SftpAdapter(
     new SftpConnectionProvider(
         'localhost',
         '/upload',

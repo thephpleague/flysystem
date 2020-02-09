@@ -10,7 +10,7 @@ die();
 use League\Flysystem\Config;
 use League\Flysystem\FTP\FtpConnectionOptions;
 use League\Flysystem\FTP\FtpConnectionProvider;
-use League\Flysystem\FTP\FtpFilesystem;
+use League\Flysystem\FTP\FtpAdapter;
 
 include __DIR__ . '/vendor/autoload.php';
 

@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use Generator;
 use IteratorAggregate;
-use League\Flysystem\InMemory\InMemoryFilesystem;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 class FilesystemTest extends TestCase
@@ -21,7 +21,7 @@ class FilesystemTest extends TestCase
      */
     public function setupFilesystem(): void
     {
-        $adapter = new InMemoryFilesystem();
+        $adapter = new InMemoryFilesystemAdapter();
         $filesystem = new Filesystem($adapter);
         $this->filesystem = $filesystem;
     }
