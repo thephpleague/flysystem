@@ -8,6 +8,7 @@ Flysystem:
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'
     Error Handling: '/v2/docs/usage/error-handling/'
+    Unix Visibility: '/v2/docs/usage/unix-visibility/'
 
 Adapters:
     Local: '/v2/docs/adapter/local/'
