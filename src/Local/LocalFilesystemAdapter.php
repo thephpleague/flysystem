@@ -74,11 +74,6 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     private $linkHandling;
 
     /**
-     * @var string
-     */
-    private $directoryVisibility;
-
-    /**
      * @var VisibilityConverter
      */
     private $visibility;
@@ -87,15 +82,13 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         string $location,
         VisibilityConverter $visibilityHandler = null,
         int $writeFlags = LOCK_EX,
-        int $linkHandling = self::DISALLOW_LINKS,
-        string $directoryVisibility = Visibility::PUBLIC
+        int $linkHandling = self::DISALLOW_LINKS
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
         $this->visibility = $visibilityHandler ?: new PortableVisibilityConverter();
         $this->ensureDirectoryExists($location, $this->visibility->defaultForDirectories());
-        $this->directoryVisibility = $directoryVisibility;
     }
 
     public function write(string $location, string $contents, Config $config): void
