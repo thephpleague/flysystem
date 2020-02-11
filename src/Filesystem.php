@@ -147,6 +147,9 @@ class Filesystem implements FilesystemOperator
         }
     }
 
+    /**
+     * @param resource $resource
+     */
     private function rewindStream($resource): void
     {
         if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {

@@ -48,7 +48,7 @@ install:
 
 script:
   - FLYSYSTEM_TEST_SFTP=yes FLYSYSTEM_TEST_DANGEROUS_THINGS=yes travis_retry vendor/bin/phpunit --coverage-text
-  - vendor/bin/phpstan analyse -l 5 src
+  - vendor/bin/phpstan analyse -l 6 src
 
 #after_script:
 #  - wget https://scrutinizer-ci.com/ocular.phar

@@ -11,7 +11,7 @@ class DirectoryAttributesTest extends TestCase
     /**
      * @test
      */
-    public function exposing_some_values()
+    public function exposing_some_values(): void
     {
         $attrs = new DirectoryAttributes('some/path');
         $this->assertTrue($attrs->isDir());
@@ -24,7 +24,7 @@ class DirectoryAttributesTest extends TestCase
     /**
      * @test
      */
-    public function exposing_visibility()
+    public function exposing_visibility(): void
     {
         $attrs = new DirectoryAttributes('some/path', Visibility::PRIVATE);
         $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
@@ -33,7 +33,7 @@ class DirectoryAttributesTest extends TestCase
     /**
      * @test
      */
-    public function serialization_capabilities()
+    public function serialization_capabilities(): void
     {
         $attrs = new DirectoryAttributes('some/path');
         $payload = $attrs->jsonSerialize();

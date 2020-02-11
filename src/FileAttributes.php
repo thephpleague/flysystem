@@ -123,9 +123,6 @@ class FileAttributes implements StorageAttributes
         );
     }
 
-    /**
-     * @inheritDoc
-     */
     public function jsonSerialize(): array
     {
         return [

@@ -21,6 +21,11 @@ class Config
         $this->options = $options;
     }
 
+    /**
+     * @param mixed $default
+     *
+     * @return mixed
+     */
     public function get(string $property, $default = null)
     {
         return $this->options[$property] ?? $default;

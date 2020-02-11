@@ -157,9 +157,10 @@ class AwsS3V3Filesystem implements FilesystemAdapter
 
     public function readStream(string $path)
     {
-        $body = $this->readObject($path);
+        /** @var resource $resource */
+        $resource = $this->readObject($path)->detach();
 
-        return $body->detach();
+        return $resource;
     }
 
     public function delete(string $path): void

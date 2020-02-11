@@ -195,6 +195,9 @@ class FtpAdapter implements FilesystemAdapter
         $this->deleteFile($path, $connection);
     }
 
+    /**
+     * @param resource $connection
+     */
     private function deleteFile(string $path, $connection): void
     {
         $location = $this->prefixer->prefixPath($path);
@@ -354,7 +357,7 @@ class FtpAdapter implements FilesystemAdapter
         }
     }
 
-    private function normalizeObject($item, $base): StorageAttributes
+    private function normalizeObject(string $item, string $base): StorageAttributes
     {
         $systemType = $this->systemType ?: $this->detectSystemType($item);
 
@@ -365,7 +368,7 @@ class FtpAdapter implements FilesystemAdapter
         return $this->normalizeWindowsObject($item, $base);
     }
 
-    private function detectSystemType($item): string
+    private function detectSystemType(string $item): string
     {
         return preg_match(
             '/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/',
@@ -373,7 +376,7 @@ class FtpAdapter implements FilesystemAdapter
         ) ? self::SYSTEM_TYPE_WINDOWS : self::SYSTEM_TYPE_UNIX;
     }
 
-    private function normalizeWindowsObject($item, $base): StorageAttributes
+    private function normalizeWindowsObject(string $item, string $base): StorageAttributes
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 3);
         $parts = explode(' ', $item, 4);
@@ -427,12 +430,12 @@ class FtpAdapter implements FilesystemAdapter
         return new FileAttributes($path, (int) $size, $visibility, $lastModified);
     }
 
-    private function listingItemIsDirectory($permissions): bool
+    private function listingItemIsDirectory(string $permissions): bool
     {
         return substr($permissions, 0, 1) === 'd';
     }
 
-    private function normalizeUnixTimestamp($month, $day, $timeOrYear): int
+    private function normalizeUnixTimestamp(string $month, string $day, string $timeOrYear): int
     {
         if (is_numeric($timeOrYear)) {
             $year = $timeOrYear;
@@ -541,7 +544,7 @@ class FtpAdapter implements FilesystemAdapter
         }
     }
 
-    private function ensureParentDirectoryExists(string $path, ?string $visibility)
+    private function ensureParentDirectoryExists(string $path, ?string $visibility): void
     {
         $dirname = dirname($path);
 

@@ -57,19 +57,18 @@ class DirectoryAttributes implements StorageAttributes
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new DirectoryAttributes(
-            $attributes['path'],
-            $attributes['visibility'] ?? null
+            $attributes['path'], $attributes['visibility'] ?? null
         );
     }
 
     /**
      * @inheritDoc
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
-            'type' => $this->type,
-            'path' => $this->path,
+            'type'       => $this->type,
+            'path'       => $this->path,
             'visibility' => $this->visibility,
         ];
     }
