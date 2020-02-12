@@ -6,7 +6,7 @@ namespace League\Flysystem\FTP;
 
 use RuntimeException;
 
-final class UnableToConnectToFtpHost extends RuntimeException implements FtpConnectionError
+final class UnableToConnectToFtpHost extends RuntimeException implements FtpConnectionException
 {
     public static function forHost(string $host, int $port, bool $ssl): UnableToConnectToFtpHost
     {

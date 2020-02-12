@@ -6,6 +6,6 @@ namespace League\Flysystem\FTP;
 
 use RuntimeException;
 
-class UnableToMakeConnectionPassive extends RuntimeException implements FtpConnectionError
+class UnableToMakeConnectionPassive extends RuntimeException implements FtpConnectionException
 {
 }

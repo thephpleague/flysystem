@@ -6,7 +6,7 @@ namespace League\Flysystem\FTP;
 
 use RuntimeException;
 
-class UnableToSetFtpOption extends RuntimeException implements FtpConnectionError
+class UnableToSetFtpOption extends RuntimeException implements FtpConnectionException
 {
     public static function whileSettingOption(string $option): UnableToSetFtpOption
     {

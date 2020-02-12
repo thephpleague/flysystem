@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-final class UnreadableFileEncountered extends RuntimeException implements FilesystemError
+final class UnreadableFileEncountered extends RuntimeException implements FilesystemException
 {
     /**
      * @var string

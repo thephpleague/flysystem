@@ -8,7 +8,7 @@ use InvalidArgumentException;
 
 use function var_export;
 
-class InvalidVisibilityProvided extends InvalidArgumentException implements FilesystemError
+class InvalidVisibilityProvided extends InvalidArgumentException implements FilesystemException
 {
     public static function withVisibility(string $visibility, string $expectedMessage): InvalidVisibilityProvided
     {

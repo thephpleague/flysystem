@@ -11,49 +11,49 @@ namespace League\Flysystem;
 interface FilesystemReader
 {
     /**
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function fileExists(string $location): bool;
 
     /**
      * @throws UnableToReadFile
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function read(string $location): string;
 
     /**
      * @return resource
      * @throws UnableToReadFile
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function readStream(string $location);
 
     /**
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function listContents(string $location, bool $recursive = false): DirectoryListing;
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function lastModified(string $path): int;
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function fileSize(string $path): int;
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function mimeType(string $path): string;
 
     /**
      * @throws UnableToRetrieveMetadata
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     public function visibility(string $path): string;
 }

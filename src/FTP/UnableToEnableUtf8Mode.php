@@ -6,6 +6,6 @@ namespace League\Flysystem\FTP;
 
 use RuntimeException;
 
-final class UnableToEnableUtf8Mode extends RuntimeException implements FtpConnectionError
+final class UnableToEnableUtf8Mode extends RuntimeException implements FtpConnectionException
 {
 }

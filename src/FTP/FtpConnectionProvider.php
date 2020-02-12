@@ -10,7 +10,7 @@ class FtpConnectionProvider implements ConnectionProvider
 {
     /**
      * @return resource
-     * @throws FtpConnectionError
+     * @throws FtpConnectionException
      */
     public function createConnection(FtpConnectionOptions $options)
     {
@@ -26,7 +26,7 @@ class FtpConnectionProvider implements ConnectionProvider
             $this->enableUtf8Mode($options, $connection);
             $this->ignorePassiveAddress($options, $connection);
             $this->makeConnectionPassive($options, $connection);
-        } catch (FtpConnectionError $exception) {
+        } catch (FtpConnectionException $exception) {
             ftp_close($connection);
             throw $exception;
         }

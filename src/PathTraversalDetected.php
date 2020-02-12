@@ -6,7 +6,7 @@ namespace League\Flysystem;
 
 use RuntimeException;
 
-class PathTraversalDetected extends RuntimeException implements FilesystemError
+class PathTraversalDetected extends RuntimeException implements FilesystemException
 {
     /**
      * @var string

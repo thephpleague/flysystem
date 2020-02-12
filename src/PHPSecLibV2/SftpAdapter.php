@@ -9,7 +9,7 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemError;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
@@ -64,7 +64,7 @@ class SftpAdapter implements FilesystemAdapter
      * @param string          $path
      * @param string|resource $contents
      * @param Config          $config
-     * @throws FilesystemError
+     * @throws FilesystemException
      */
     private function upload(string $path, $contents, Config $config): void
     {

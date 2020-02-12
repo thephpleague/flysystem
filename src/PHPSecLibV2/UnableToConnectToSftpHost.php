@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PHPSecLibV2;
 
-use League\Flysystem\FilesystemError;
+use League\Flysystem\FilesystemException;
 use RuntimeException;
 
-class UnableToConnectToSftpHost extends RuntimeException implements FilesystemError
+class UnableToConnectToSftpHost extends RuntimeException implements FilesystemException
 {
     public static function atHostname(string $host): UnableToConnectToSftpHost
     {

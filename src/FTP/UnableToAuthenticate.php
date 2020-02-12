@@ -6,7 +6,7 @@ namespace League\Flysystem\FTP;
 
 use RuntimeException;
 
-final class UnableToAuthenticate extends RuntimeException implements FtpConnectionError
+final class UnableToAuthenticate extends RuntimeException implements FtpConnectionException
 {
     public function __construct()
     {

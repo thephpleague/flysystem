@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PHPSecLibV2;
 
-use League\Flysystem\FilesystemError;
+use League\Flysystem\FilesystemException;
 use RuntimeException;
 
-class UnableToEstablishAuthenticityOfHost extends RuntimeException implements FilesystemError
+class UnableToEstablishAuthenticityOfHost extends RuntimeException implements FilesystemException
 {
     public static function becauseTheAuthenticityCantBeEstablished(string $host): UnableToEstablishAuthenticityOfHost
     {
