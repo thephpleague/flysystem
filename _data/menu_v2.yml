@@ -17,6 +17,6 @@ Adapters:
     SFTP: '/v2/docs/adapter/sftp/'
     InMemory: '/v2/docs/adapter/in-memory/'
 
-Advanced Usage:
-    Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
-    Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
+Advanced:
+  Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
+  Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
