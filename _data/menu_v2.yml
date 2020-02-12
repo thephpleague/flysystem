@@ -3,7 +3,7 @@ Flysystem:
     New In V2: '/v2/docs/what-is-new/'
     Architecture: '/v2/docs/architecture/'
     Design Considerations: '/v2/docs/design-considerations/'
-    Security Policy: '/security/'
+    Security Policy: '/v2/security/'
 
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'

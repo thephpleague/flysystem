@@ -7,7 +7,7 @@ permalink: /v2/docs/adapter/aws-s3-v3/
 Interacting with the local filesystem through Flysystem can be done
 by using the `League\Flysystem\AwsS3V3\AwsS3V3Adapter`.
 
-### Simple usage:
+## Simple usage:
 
 ```php
 /** @var Aws\S3\S3ClientInterface $client */
@@ -25,7 +25,7 @@ $adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
 
-### Advanced usage:
+## Advanced usage:
 
 ```php
 /** @var Aws\S3\S3ClientInterface $client */
@@ -49,7 +49,4 @@ $adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
 // The FilesystemOperator
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
-
-If you want to learn more about the permissions for local adapters,
-read the [docs about unix visibility](/v2/docs/usage/unix-visibility/) 
 

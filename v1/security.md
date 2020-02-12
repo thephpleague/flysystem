@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Security Policy
-permalink: /security/
+permalink: /v1/security/
 redirect_from:
     - /docs/security/
 ---

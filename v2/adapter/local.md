@@ -7,7 +7,7 @@ permalink: /v2/docs/adapter/local/
 Interacting with the local filesystem through Flysystem can be done
 by using the `League\Flysystem\Local\LocalFilesystemAdapter`.
 
-### Simple usage:
+## Simple usage:
 
 ```php
 // The internal adapter
@@ -20,7 +20,7 @@ $adapter = new League\Flysystem\Local\LocalFilesystem(
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
 
-### Advanced usage:
+## Advanced usage:
 
 ```php
 use League\Flysystem\Local\LocalFilesystem;
@@ -54,6 +54,8 @@ $adapter = new LocalFilesystem(
 // The FilesystemOperator
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
+
+### Visibility Converter
 
 If you want to learn more about the permissions for local adapters,
 read the [docs about unix visibility](/v2/docs/usage/unix-visibility/) 

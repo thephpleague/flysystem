@@ -71,7 +71,7 @@ for exception handling appeared. There was little consistency between the variou
 exceptions thrown in V1. For V2, the exceptions have been planned out carefully.
 
 For an in-depth overview of how it all works in V2, read about it in
-the [docs about error handling](/v2/docs/usage/error-handling/)
+the [docs about exception handling](/v2/docs/usage/exception-handling/).
 
 ## Plugins are removed
 
