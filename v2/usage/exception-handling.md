@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Error Handling
-permalink: /v2/docs/usage/error-handling/
+permalink: /v2/docs/usage/exception-handling/
 ---
 
 For every action operation in Flysystem, there's an exception telling you what
@@ -22,10 +22,10 @@ createDirectory | `League\Flysystem\UnableToCreateDirectory`
 deleteDirectory | `League\Flysystem\UnableToDeleteDirectory`
 all metadata getters | `League\Flysystem\UnableToRetrieveMetadata`
 
-## Generic error markers
+## Generic exception marker
 
 Each and every exception thrown in Flysystem is marked with the
-`League\Flysystem\FilesystemError` interface. While every exception
+`League\Flysystem\FilesystemException` interface. While every exception
 is uniquely named to describe what is actually going on, this marker
 allows you to catch all of them. This allows you to have a "best of
 both worlds" situation where catching exceptions can be as fine-grained
