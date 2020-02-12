@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Architecture
+title: Aws S3 (v3) Adapter
 permalink: /v2/docs/adapter/aws-s3-v3/
 ---
 

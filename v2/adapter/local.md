@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Architecture
+title: Local Filesystem Adapter
 permalink: /v2/docs/adapter/local/
 ---
 

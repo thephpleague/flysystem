@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Architecture
+title: In Memory Filesystem Adapter
 permalink: /v2/docs/adapter/in-memory/
 ---
 

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Architecture
+title: FTP Adapter
 permalink: /v2/docs/adapter/ftp/
 ---
 
