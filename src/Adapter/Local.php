@@ -410,11 +410,16 @@ class Local extends AbstractAdapter
 
         /** @var SplFileInfo $file */
         foreach ($contents as $file) {
+            $files[] = $file;
+        }
+    
+        /** @var SplFileInfo $file */
+        foreach ($files as $file) {
             $this->guardAgainstUnreadableFileInfo($file);
             $this->deleteFileInfoObject($file);
         }
-
-        unset($contents);
+        
+        unset($contents, $files);
 
         return rmdir($location);
     }
