@@ -14,6 +14,19 @@ For more information about the exception, read all about
 
 ## Writing files
 
+Writing files can be done in two ways. You can use the contents of a file as
+a `string` to write a file. In cases where you're writing large files, using
+a `resource` to write a file is better. A resource allows the contents of
+the file to be "streamed" to the new location, which has a very low memory
+footprint.
+
+When writing files, the directory you're writing to will be created
+automatically if and when that is required in the filesystem you're writing to.
+If your filesystem does not require directories to exist (like AWS S3), the
+directory is _not_ created. This is a performance consideration. Of course,
+you can always create the directory yourself by using the [createDirectory](#creating-a-directory)
+operation.
+
 ### FilesystemWriter::write
 
 ```php
@@ -51,6 +64,11 @@ param         | description                                   | type
 ## Reading files
 
 ### FilesystemReader::read
+
+Like writing a file, reading a file can be done in two ways. You can read the file
+contents in full as a `string`, or "stream" it by obtaining a `resource`. Using the
+`resource` allows you to stream the contents to a destination (local or to another
+filesystem) in order to keep memory usage low.
 
 ```php
 try {

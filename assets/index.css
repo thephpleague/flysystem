@@ -36,6 +36,10 @@ h1 {
 }
 
 h2 {
+    @apply mb-2 mt-6 text-3xl;
+}
+
+h3 {
     @apply mb-2 mt-6 text-2xl;
 }
 
