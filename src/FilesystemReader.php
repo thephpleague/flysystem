@@ -29,6 +29,7 @@ interface FilesystemReader
     public function readStream(string $location);
 
     /**
+     * @return DirectoryListing<StorageAttributes>
      * @throws FilesystemException
      */
     public function listContents(string $location, bool $recursive = false): DirectoryListing;

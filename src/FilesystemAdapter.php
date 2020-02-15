@@ -89,6 +89,7 @@ interface FilesystemAdapter
     public function fileSize(string $path): FileAttributes;
 
     /**
+     * @return Generator<StorageAttributes>
      * @throws FilesystemException
      */
     public function listContents(string $path, bool $recursive): Generator;
