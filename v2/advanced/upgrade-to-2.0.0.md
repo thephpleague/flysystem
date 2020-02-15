@@ -92,4 +92,9 @@ long as V1 is, breaking with past mistakes is needed sometimes.
 + $visibility = $filesystem->visibility($path);
 ```
 
+## Directory Listings
+
+Directory listings received a big overhaul. To read more about it check out the
+[documentation for directory listings](/v2/docs/usage/directory-listings/).
+
 
