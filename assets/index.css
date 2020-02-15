@@ -137,11 +137,16 @@ div.highlighter-rouge > div {
     }
 }
 
+code.highlighter-rouge .highlight {
+    @apply text-lg;
+}
+
 code.highlighter-rouge {
     font-family: Courier, monospace;
     text-shadow: 1px 1px 0px #fff, -1px 1px 0px #fff;
-    @apply text-lg;
 }
+
+
 
 @screen md {
     .highlighter-rouge {

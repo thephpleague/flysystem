@@ -7,6 +7,7 @@ Flysystem:
 
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'
+    Directory Listings: '/v2/docs/usage/directory-listings/'
     Exception Handling: '/v2/docs/usage/exception-handling/'
     Unix-Style Visibility: '/v2/docs/usage/unix-visibility/'
 

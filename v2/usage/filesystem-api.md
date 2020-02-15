@@ -139,6 +139,17 @@ param         | description                                   | type
 ```php
 try {
     $listing = $filesystem->listContents($path, $recursive);
+
+    /** @var \League\Flysystem\StorageAttributes $item */
+    foreach ($listing as $item) {
+        $path = $item->path();
+
+        if ($item instanceof \League\Flysystem\FileAttributes) {
+            // handle the file
+        } elseif ($item instanceof \League\Flysystem\DirectoryAttributes) {
+            // handle the directory
+        }
+    }
 } catch (FilesystemError $exception) {
     // handle the error
 }
