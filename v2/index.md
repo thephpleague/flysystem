@@ -27,8 +27,8 @@ for which ever storage is right for you.
 
 * **[New in V2](/v2/docs/what-is-new/)**: What it new in Flysystem V2?
 * **[Architecture](/v2/docs/architecture/)**: Flysystem's internal architecture
-* **[Setup/Bootstrap](/v2/docs/usage/setup/)**: Load Flysystem and set up your first adapter
 * **[Flysystem API](/v2/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
+* **[Upgrade to V2](/v2/docs/advanced/upgrade-to-2.0.0/)**: How to interact with your Flysystem instance
 
 ### Commonly-Used Adapters
 

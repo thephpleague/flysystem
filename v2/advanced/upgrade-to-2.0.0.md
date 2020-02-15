@@ -54,6 +54,15 @@ only way to be adapter agnostic, which is the main purpose of the library.
 + $filesystem->move($path);
 ```
 
+### No arbitrary abbreviations
+
+No need for beep-boop language (computer-speak).
+
+```diff
+- $filesystem->createDir($path);
++ $filesystem->createDirectory($path);
+```
+
 
 ### Metadata getters are renamed:
 
