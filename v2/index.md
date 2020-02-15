@@ -32,7 +32,8 @@ for which ever storage is right for you.
 
 ### Commonly-Used Adapters
 
-* **[AWS S3](/v2/docs/adapter/aws-s3/)**
+* **[AWS S3](/v2/docs/adapter/aws-s3-v3/)**
 * **[Local](/v2/docs/adapter/local/)**
-* **[Memory](/v2/docs/adapter/memory/)**
-* **[Creating An Adapter](/v2/docs/advanced/creating-an-adapter/)**
+* **[Memory](/v2/docs/adapter/in-memory/)**
+
+You can always [create an adapter](/v2/docs/advanced/creating-an-adapter/) yourself.

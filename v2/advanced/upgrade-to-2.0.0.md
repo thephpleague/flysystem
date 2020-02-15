@@ -10,6 +10,11 @@ needed. Some functionality needed to be standardized across in order to make beh
 predictable. This meant some functionality needed to be scoped down, some "accidental" features
 were removed.
 
+### Upgrade your dependencies
+
+Firstly you'll need to upgrade Flysystem itself. You can do this by requiring the `~2.0`
+instead of  `~1.0`. The same needs to be done for all the adapter too, in the same action.
+
 ## Removed functionality.
 
 ### Filesystem::getMetadata is removed
@@ -37,12 +42,18 @@ Plugin | Alternative
 
 ## Changes
 
-### Rename is now move, specific for fils.
+### Rename is now move, specific for files.
 
 When this method was introduced, the `rename` operation didn't move files to new parent
 directory. This behavior was added later. Renaming the operation `move` better reflects
 this behaviour. It's will now also enforce that it _only moves files_, this is the
 only way to be adapter agnostic, which is the main purpose of the library.
+
+```diff
+- $filesystem->rename($path); 
++ $filesystem->move($path);
+```
+
 
 ### Metadata getters are renamed:
 
