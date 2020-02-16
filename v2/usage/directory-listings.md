@@ -18,14 +18,26 @@ The directory listings use generators to provide an efficient delivery mechanism
 storage items within the filesystems. This comes with one caveat; listings are a "read-once"
 response. Unlike arrays, when a generator has yielded all if its response the items are gone.
 
-## Filtering listings
+## Filtering listing items
 
 You can filter directory listings using the `filter` method.
 
 ```php
 $allFiles = $filesystem->listContents('/some/path')
-    ->filter(function (StorageAttributes $attributes) { return $attributes->isFile(); });
+    ->filter(fn (StorageAttributes $attributes) => $attributes->isFile());
 ``` 
+
+## Mapping listing items
+
+You can transform directory listings using the `map` method.
+
+```php
+/** @var string[] $allPaths */
+$allPaths = $filesystem->listContents('/some/path')
+    ->filter(fn (StorageAttributes $attributes) => $attributes->isFile())
+    ->map(fn (StorageAttributes $attributes) => $attributes->path())
+    ->toArray();
+```
 
 # Storage attributes
 
