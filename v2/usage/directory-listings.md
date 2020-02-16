@@ -12,7 +12,7 @@ The _shallow_ listings will always provide you with every _file_ and _directory_
 listed path. The _deep_ listings **may** provide you with the directories, but will **always**
 return all the files contained in the path.
 
-## Backed by `Generator`s
+## Backed by generators
 
 The directory listings use generators to provide an efficient delivery mechanism for
 storage items within the filesystems. This comes with one caveat; listings are a "read-once"
