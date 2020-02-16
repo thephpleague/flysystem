@@ -195,17 +195,28 @@ class MimeType
     }
 
     /**
-     * @param string          $key
      * @param string|resource $body
-     * @return string|null
      */
-    public static function detectMimeType(string $key, $body): ?string
+    public static function detectMimeType(string $path, $body): ?string
     {
-        if (is_string($body) && $mimeType = static::detectByContent($body)) {
+        if ( ! is_string($body)) {
+            goto detect_by_extension;
+        }
+
+        $mimeType = static::detectByContent($body);
+
+        if ($mimeType !== null && ! in_array($mimeType, ['application/x-empty', 'text/plain', 'text/x-asm'])) {
             return $mimeType;
         }
 
-        $extension = strtolower(pathinfo($key, PATHINFO_EXTENSION));
+        detect_by_extension:
+
+        return self::detectMimeTypeByExtension($path);
+    }
+
+    public static function detectMimeTypeByExtension(string $path): ?string
+    {
+        $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
 
         return static::EXTENTIONS_TO_MIMETYPES[$extension] ?? null;
     }

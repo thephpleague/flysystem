@@ -7,17 +7,11 @@
             "League\\Flysystem\\": "src"
         }
     },
-    "conflict": {
-        "guzzlehttp/ringphp": "<1.1.1"
-    },
     "require": {
         "php": "^7.2",
         "ext-fileinfo": "*",
         "ext-posix": "*",
-        "ext-json": "*",
-        "aws/aws-sdk-php": "^3.132.4",
-        "phpseclib/phpseclib": "^2.0",
-        "ext-ftp": "*"
+        "ext-json": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",
@@ -27,7 +21,7 @@
     "authors": [
         {
             "name": "Frank de Jonge",
-            "email": "info@frenky.net"
+            "email": "info@frankdejonge.nl"
         }
     ]
 }

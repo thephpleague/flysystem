@@ -40,4 +40,17 @@ class ConfigTest extends TestCase
         $this->assertEquals(1, $extended->get('first'));
         $this->assertEquals(2, $extended->get('second'));
     }
+
+    /**
+     * @test
+     */
+    public function extending_with_defaults(): void
+    {
+        $config = new Config(['option' => 'set']);
+
+        $withDefaults = $config->withDefaults(['option' => 'default', 'other' => 'default']);
+
+        $this->assertEquals('set', $withDefaults->get('option'));
+        $this->assertEquals('default', $withDefaults->get('other'));
+    }
 }
