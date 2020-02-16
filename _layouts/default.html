@@ -79,9 +79,6 @@
         <article id="article" role="main" class="max-w-full md:block md:w-10/14">
             {% unless page.hide_title %}
             <h1 class="mb-4">{% if page.alternate_title %}{{ page.alternate_title }}{% else %}{{ page.title }}{% endif %}</h1>
-            <!--<p class="text-xs text-indigo-dark rounded rounded-t-none mb-4 text-shadow inline-block">-->
-                <!--{% if page.published_at != page.updated_at %}Last updated at {{ page.updated_at | date_to_long_string }} | {% endif %}Published at {{ page.published_at | date_to_long_string }}-->
-            <!--</p>-->
             {% endunless %}
             {{ content }}
         </article>

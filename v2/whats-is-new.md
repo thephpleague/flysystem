@@ -73,6 +73,14 @@ exceptions thrown in V1. For V2, the exceptions have been planned out carefully.
 For an in-depth overview of how it all works in V2, read about it in
 the [docs about exception handling](/v2/docs/usage/exception-handling/).
 
+## Better content listing developer experience
+
+Developer experience was top of mind when creating V2 of Flysystem. Well-known
+issues were tackled. One of these was the response for a `listContents` call.
+
+You can read more about it in the
+[docs about directory listings](/v2/docs/usage/directory-listings/).
+
 ## Plugins are removed
 
 In V1, plugins allowed you to extend the functionality of the filesystem. It used a
