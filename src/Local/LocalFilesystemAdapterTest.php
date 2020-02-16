@@ -25,7 +25,6 @@ use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
 use function getenv;
-use function is_dir;
 use function iterator_to_array;
 use function mkdir;
 use function symlink;
@@ -42,32 +41,13 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     protected function setUp(): void
     {
         reset_function_mocks();
-        static::deleteDirectory(static::ROOT);
+        delete_directory(static::ROOT);
     }
 
     protected function tearDown(): void
     {
         reset_function_mocks();
-        static::deleteDirectory(static::ROOT);
-    }
-
-    private static function deleteDirectory(string $dir): void
-    {
-        if ( ! is_dir($dir)) {
-            return;
-        }
-
-        foreach ((array) scandir($dir) as $file) {
-            if ('.' === $file || '..' === $file) {
-                continue;
-            }
-            if (is_dir("$dir/$file")) {
-                static::deleteDirectory("$dir/$file");
-            } else {
-                unlink("$dir/$file");
-            }
-        }
-        rmdir($dir);
+        delete_directory(static::ROOT);
     }
 
     /**

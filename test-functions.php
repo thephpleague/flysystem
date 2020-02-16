@@ -35,3 +35,22 @@ function stream_with_contents(string $contents)
 
     return $stream;
 }
+
+function delete_directory(string $dir): void
+{
+    if ( ! is_dir($dir)) {
+        return;
+    }
+
+    foreach ((array) scandir($dir) as $file) {
+        if ('.' === $file || '..' === $file) {
+            continue;
+        }
+        if (is_dir("$dir/$file")) {
+            delete_directory("$dir/$file");
+        } else {
+            unlink("$dir/$file");
+        }
+    }
+    rmdir($dir);
+}

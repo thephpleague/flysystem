@@ -6,11 +6,13 @@ namespace League\Flysystem;
 
 use Generator;
 use IteratorAggregate;
-use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 class FilesystemTest extends TestCase
 {
+    const ROOT = __DIR__ . '/../test_files/test-root';
+
     /**
      * @var Filesystem
      */
@@ -21,9 +23,17 @@ class FilesystemTest extends TestCase
      */
     public function setupFilesystem(): void
     {
-        $adapter = new InMemoryFilesystemAdapter();
+        $adapter = new LocalFilesystemAdapter(self::ROOT);
         $filesystem = new Filesystem($adapter);
         $this->filesystem = $filesystem;
+    }
+
+    /**
+     * @after
+     */
+    public function removeFiles(): void
+    {
+        delete_directory(static::ROOT);
     }
 
     /**
