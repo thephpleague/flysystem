@@ -39,7 +39,7 @@ $allPaths = $filesystem->listContents('/some/path')
     ->toArray();
 ```
 
-# Storage attributes
+## Storage attributes
 
 Directory listings contain storage attributes, objects that expose information about
 the items contained in a (part of a) filesystem.
