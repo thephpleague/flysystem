@@ -12,8 +12,8 @@ were removed.
 
 ### Upgrade your dependencies
 
-Firstly you'll need to upgrade Flysystem itself. You can do this by requiring `~2.0`
-instead of  `~1.0`. The same needs to be done for all the adapter too, in the same action.
+Firstly you'll need to upgrade Flysystem itself. You can do this by requiring `^2.0`
+instead of  `^1.0`. The same needs to be done for all the adapter too, in the same action.
 
 ## Removed functionality.
 
