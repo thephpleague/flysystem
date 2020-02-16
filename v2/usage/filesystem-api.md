@@ -283,6 +283,10 @@ param          | description                                   | type
 
 ## Moving and copying
 
+Moving and copying are both deterministic operations. This means they
+will always overwrite the target location, and parent directories are
+always created (if and when needed).
+
 ### FilesystemWriter::move
 
 ```php
