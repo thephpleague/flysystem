@@ -8,7 +8,7 @@ The Filesystem API is the most important interface Flysystem describes
 when you want to _use_ Flysystem in your application.
 
 For more information about the exception, read all about
-[error handling](/v2/docs/usage/error-handling/).
+[exception handling](/v2/docs/usage/exception-handling/).
 
 ---
 
