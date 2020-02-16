@@ -96,7 +96,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $prefixedLocation = $this->prefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($prefixedLocation),
-            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+            $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
         error_clear_last();
 

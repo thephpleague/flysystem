@@ -90,7 +90,7 @@ class SftpAdapter implements FilesystemAdapter
         }
 
         /** @var string $visibility */
-        $visibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY, Visibility::PRIVATE);
+        $visibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY);
         $this->makeDirectory($parentDirectory, $visibility);
     }
 
