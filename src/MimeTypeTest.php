@@ -36,7 +36,11 @@ class MimeTypeTest extends TestCase
      */
     public function testing_with_non_string_body(): void
     {
-        $mimeType = MimeType::detectMimeType('path.svg', null);
+        $handle = stream_with_contents('contents');
+        fclose($handle);
+
+        $mimeType = MimeType::detectMimeType('path.svg', $handle);
         $this->assertEquals('image/svg+xml', $mimeType);
+
     }
 }
