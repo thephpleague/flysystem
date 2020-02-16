@@ -85,11 +85,11 @@ class Filesystem implements FilesystemOperator
         );
     }
 
-    public function listContents(string $location, bool $recursive = false): DirectoryListing
+    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
         $path = $this->pathNormalizer->normalizePath($location);
 
-        return new DirectoryListing($this->adapter->listContents($path, $recursive));
+        return new DirectoryListing($this->adapter->listContents($path, $deep));
     }
 
     public function move(string $source, string $destination, array $config = []): void

@@ -92,7 +92,7 @@ interface FilesystemAdapter
      * @return Generator<StorageAttributes>
      * @throws FilesystemException
      */
-    public function listContents(string $path, bool $recursive): Generator;
+    public function listContents(string $path, bool $deep): Generator;
 
     /**
      * @throws UnableToMoveFile

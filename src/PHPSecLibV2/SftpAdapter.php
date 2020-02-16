@@ -240,7 +240,7 @@ class SftpAdapter implements FilesystemAdapter
         return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
-    public function listContents(string $path, bool $recursive): Generator
+    public function listContents(string $path, bool $deep): Generator
     {
         $connection = $this->connectionProvider->provideConnection();
         $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
@@ -257,7 +257,7 @@ class SftpAdapter implements FilesystemAdapter
             $attributes = $this->convertListingToAttributes($itemPath, $attributes);
             yield $attributes;
 
-            if ($recursive && $attributes->isDir()) {
+            if ($deep && $attributes->isDir()) {
                 foreach ($this->listContents($attributes->path(), true) as $child) {
                     yield $child;
                 }

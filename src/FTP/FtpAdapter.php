@@ -324,16 +324,16 @@ class FtpAdapter implements FilesystemAdapter
         return new FileAttributes($path, $fileSize);
     }
 
-    public function listContents(string $path, bool $recursive): Generator
+    public function listContents(string $path, bool $deep): Generator
     {
         $path = ltrim($path, '/');
         $path = $path === '' ? $path : trim($path, '/') . '/';
 
-        if ($recursive && $this->connectionOptions->recurseManually()) {
+        if ($deep && $this->connectionOptions->recurseManually()) {
             yield from $this->listDirectoryContentsRecursive($path);
         } else {
             $location = $this->prefixer->prefixPath($path);
-            $options = $recursive ? '-alnR' : '-aln';
+            $options = $deep ? '-alnR' : '-aln';
             $listing = $this->ftpRawlist($options, $location);
             yield from $this->normalizeListing($listing, $path);
         }

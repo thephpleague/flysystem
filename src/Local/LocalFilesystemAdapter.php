@@ -190,7 +190,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
     }
 
-    public function listContents(string $path, bool $recursive): Generator
+    public function listContents(string $path, bool $deep): Generator
     {
         $location = $this->prefixer->prefixPath($path);
 
@@ -199,7 +199,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
 
         /** @var SplFileInfo[] $iterator */
-        $iterator = $recursive ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
+        $iterator = $deep ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
 
         foreach ($iterator as $fileInfo) {
             if ($fileInfo->isLink()) {

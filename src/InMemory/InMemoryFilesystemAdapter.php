@@ -144,7 +144,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         return new FileAttributes($path, $this->files[$path]->fileSize());
     }
 
-    public function listContents(string $prefix, bool $recursive): Generator
+    public function listContents(string $prefix, bool $deep): Generator
     {
         $prefix = rtrim($this->preparePath($prefix), '/') . '/';
         $prefixLength = strlen($prefix);
@@ -160,7 +160,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                     $dirPath = '';
 
                     foreach ($parts as $index => $part) {
-                        if ($recursive === false && $index >= 1) {
+                        if ($deep === false && $index >= 1) {
                             break;
                         }
 
@@ -178,7 +178,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                     continue;
                 }
 
-                if ($recursive === true || strpos($subPath, '/') === false) {
+                if ($deep === true || strpos($subPath, '/') === false) {
                     yield new FileAttributes(ltrim($path, '/'));
                 }
             }

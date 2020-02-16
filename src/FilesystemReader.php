@@ -10,6 +10,9 @@ namespace League\Flysystem;
  */
 interface FilesystemReader
 {
+    public const LIST_SHALLOW = false;
+    public const LIST_DEEP = true;
+
     /**
      * @throws FilesystemException
      */
@@ -32,7 +35,7 @@ interface FilesystemReader
      * @return DirectoryListing<StorageAttributes>
      * @throws FilesystemException
      */
-    public function listContents(string $location, bool $recursive = false): DirectoryListing;
+    public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing;
 
     /**
      * @throws UnableToRetrieveMetadata
