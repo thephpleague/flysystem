@@ -2,6 +2,7 @@
 layout: default
 permalink: /v1/docs/adapter/aws-s3-v2/
 redirect_from:
+    - /v1/docs/adapter/aws-s3/
     - /docs/adapter/aws-s3/
     - /adapter/aws-s3/
     - /adapter/aws-s3-v2/
