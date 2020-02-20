@@ -83,7 +83,7 @@ Want to get started quickly? Check out some of these integrations:
 * Fallback: https://github.com/Litipk/flysystem-fallback-adapter
 * Gaufrette: https://github.com/jenkoian/flysystem-gaufrette
 * GitLab: https://github.com/RoyVoetman/Flysystem-Gitlab-storage
-* Github: https://github.com/Radiergummi/flysystem-github-storage
+* GitHub: https://github.com/Radiergummi/flysystem-github-storage
 * Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
 * Google Drive V2 (using regular paths): https://github.com/masbug/flysystem-google-drive-ext
