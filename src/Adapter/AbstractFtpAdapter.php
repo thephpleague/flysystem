@@ -643,7 +643,19 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
 
         while ( ! $this->isConnected() && $tries < 3) {
             $tries++;
-            $this->disconnect();
+
+            // when there was an unexpected connection loss (especially some
+            // SSL errors), disconnect will throw an ErrorException.
+            // But we try to reconnect here, so it's better to catch this error
+            // once and allow a retry nonetheless.
+            try {
+                $this->disconnect();
+            } catch (\ErrorException $e) {
+                if ($tries > 1) {
+                    throw $e;
+                }
+            }
+
             $this->connect();
         }
 
