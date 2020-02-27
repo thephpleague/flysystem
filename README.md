@@ -87,6 +87,7 @@ Want to get started quickly? Check out some of these integrations:
 * Google Cloud Storage: https://github.com/Superbalist/flysystem-google-storage
 * Google Drive: https://github.com/nao-pon/flysystem-google-drive
 * Google Drive V2 (using regular paths): https://github.com/masbug/flysystem-google-drive-ext
+* IBM Cloud Object Storage : https://github.com/tavux/flysystem-ibm-cos
 * OneDrive: https://github.com/jacekbarecki/flysystem-onedrive
 * OpenStack Swift: https://github.com/nimbusoftltd/flysystem-openstack-swift
 * QiNiu OSS Storage: https://github.com/l396635210/flysystem-qiniu
