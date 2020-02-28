@@ -40,9 +40,9 @@ install:
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 script:
-  - FLYSYSTEM_TEST_DANGEROUS_THINGS=yes travis_retry vendor/bin/phpunit --coverage-text
+  - FLYSYSTEM_TEST_DANGEROUS_THINGS=yes travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
   - vendor/bin/phpstan analyse -l 6 src
 
-#after_script:
-#  - wget https://scrutinizer-ci.com/ocular.phar
-#  - php ocular.phar code-coverage:upload --format=php-clover coverage.xml
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.xml
