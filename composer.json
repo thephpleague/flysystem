@@ -2,6 +2,8 @@
     "name": "flysystem/filesystem",
     "description": "flysystem/filesystem",
     "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "League\\Flysystem\\": "src"
@@ -11,7 +13,8 @@
         "php": "^7.2",
         "ext-fileinfo": "*",
         "ext-posix": "*",
-        "ext-json": "*"
+        "ext-json": "*",
+        "league/mime-type-detection": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5",
