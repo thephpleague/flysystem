@@ -25,7 +25,8 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
-use League\Flysystem\Visibility;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -78,17 +79,24 @@ class LocalFilesystemAdapter implements FilesystemAdapter
      */
     private $visibility;
 
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
     public function __construct(
         string $location,
-        VisibilityConverter $visibilityHandler = null,
+        VisibilityConverter $visibility = null,
         int $writeFlags = LOCK_EX,
-        int $linkHandling = self::DISALLOW_LINKS
+        int $linkHandling = self::DISALLOW_LINKS,
+        MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
-        $this->visibility = $visibilityHandler ?: new PortableVisibilityConverter();
+        $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->ensureDirectoryExists($location, $this->visibility->defaultForDirectories());
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     public function write(string $location, string $contents, Config $config): void
@@ -356,10 +364,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
-        $finfo = new finfo(FILEINFO_MIME_TYPE);
-        $mimeType = @$finfo->file($location);
+        $mimeType = $this->mimeTypeDetector->detectMimeTypeFromFile($location);
 
-        if ($mimeType === false) {
+        if ($mimeType === null) {
             throw UnableToRetrieveMetadata::mimeType($path, error_get_last()['message'] ?? '');
         }
 
