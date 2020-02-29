@@ -183,10 +183,12 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
      */
     public function deleting_a_file_that_cannot_be_deleted(): void
     {
-        $this->maybeSkipDangerousTests();
+        $this->givenWeHaveAnExistingFile('here.txt');
+        mock_function('unlink', false);
+
         $this->expectException(UnableToDeleteFile::class);
-        $adapter = new LocalFilesystemAdapter('/');
-        $adapter->delete('/etc/hosts');
+
+        $this->adapter()->delete('here.txt');
     }
 
     /**

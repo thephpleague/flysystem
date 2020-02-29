@@ -10,6 +10,15 @@ namespace League\Flysystem\Local {
         return return_mocked_value('rmdir');
     }
 
+    function unlink(...$arguments)
+    {
+        if ( ! is_mocked('unlink')) {
+            return \unlink(...$arguments);
+        }
+
+        return return_mocked_value('unlink');
+    }
+
     function filemtime(...$arguments)
     {
         if ( ! is_mocked('filemtime')) {

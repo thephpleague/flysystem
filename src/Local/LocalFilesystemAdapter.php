@@ -6,7 +6,6 @@ namespace League\Flysystem\Local;
 
 use DirectoryIterator;
 use FilesystemIterator;
-use finfo;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -42,10 +41,8 @@ use function is_file;
 use function mkdir;
 use function rename;
 use function stream_copy_to_stream;
-use function unlink;
 
 use const DIRECTORY_SEPARATOR;
-use const FILEINFO_MIME_TYPE;
 use const LOCK_EX;
 
 class LocalFilesystemAdapter implements FilesystemAdapter
