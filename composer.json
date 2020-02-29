@@ -1,6 +1,10 @@
 {
     "name": "league/flysystem",
     "description": "File storage abstraction for PHP",
+    "keywords": [
+        "filesystem", "filesystems", "files", "storage", "aws",
+        "s3", "ftp", "sftp", "webdav", "file", "cloud"
+    ],
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
