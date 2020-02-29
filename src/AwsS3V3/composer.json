@@ -14,6 +14,9 @@
         "league/flystem": "2.x-dev",
         "aws/aws-sdk-php": "^3.132.4"
     },
+    "conflict": {
+        "guzzlehttp/ringphp": "<1.1.1"
+    },
     "license": "MIT",
     "authors": [
         {
