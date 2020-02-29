@@ -590,15 +590,6 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertEquals($expectedContents, $contents);
     }
 
-    private function maybeSkipDangerousTests(): void
-    {
-        if (posix_getuid() === 0 || getenv('FLYSYSTEM_TEST_DANGEROUS_THINGS') !== 'yes') {
-            $this->markTestSkipped(
-                'Skipping this out of precaution. Use FLYSYSTEM_TEST_DANGEROUS_THINGS=yes to test them'
-            );
-        }
-    }
-
     protected function createFilesystemAdapter(): FilesystemAdapter
     {
         return new LocalFilesystemAdapter(static::ROOT);
