@@ -1,5 +1,8 @@
 language: php
 
+services:
+  - docker
+
 cache:
   directories:
     - $HOME/.composer/cache/files
@@ -37,10 +40,14 @@ matrix:
       env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
 
 install:
+  - docker-compose -f test_files/docker-compose.yml up -d
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
+  - php test_files/wait_for_sftp.php
+  - php test_files/wait_for_ftp.php 2121
+  - php test_files/wait_for_ftp.php 2122
 
 script:
-  - travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+  - FLYSYSTEM_TEST_SFTP=yes travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
   - vendor/bin/phpstan analyse -l 6 src
 
 after_script:

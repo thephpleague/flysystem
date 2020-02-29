@@ -12,7 +12,6 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
-use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
@@ -22,6 +21,8 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
 
@@ -80,16 +81,23 @@ class AwsS3V3Filesystem implements FilesystemAdapter
      */
     private $visibility;
 
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
     public function __construct(
         S3ClientInterface $client,
         string $bucket,
         string $prefix = '',
-        VisibilityConverter $visibility = null
+        VisibilityConverter $visibility = null,
+        MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
         $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     public function fileExists(string $path): bool
@@ -114,7 +122,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         $options = $this->createOptionsFromConfig($config);
         $shouldDetermineMimetype = $body !== '' && ! array_key_exists('ContentType', $options);
 
-        if ($shouldDetermineMimetype && $mimeType = MimeType::detectMimeType($key, $body)) {
+        if ($shouldDetermineMimetype && $mimeType = $this->mimeTypeDetector->detectMimeType($key, $body)) {
             $options['ContentType'] = $mimeType;
         }
 

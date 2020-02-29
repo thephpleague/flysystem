@@ -3,10 +3,6 @@
     <testsuites>
         <testsuite name="Flysystem">
             <directory suffix="Test.php">src/</directory>
-            <exclude>src/AwsS3V3/</exclude>
-            <exclude>src/FTP/</exclude>
-            <exclude>src/InMemory/</exclude>
-            <exclude>src/PHPSecLibV2/</exclude>
         </testsuite>
     </testsuites>
 
@@ -14,12 +10,7 @@
         <whitelist>
             <directory>src/</directory>
             <exclude>
-                <directory suffix=".php">src/AwsS3V3/</directory>
-                <directory suffix=".php">src/FTP/</directory>
-                <directory suffix=".php">src/InMemory/</directory>
-                <directory suffix=".php">src/PHPSecLibV2/</directory>
                 <directory suffix="Test.php">src/</directory>
-                <directory suffix="Fixture.php">src/</directory>
             </exclude>
         </whitelist>
     </filter>

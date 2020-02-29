@@ -24,6 +24,8 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
 class FtpAdapter implements FilesystemAdapter
@@ -71,17 +73,24 @@ class FtpAdapter implements FilesystemAdapter
      */
     private $systemType;
 
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
     public function __construct(
         FtpConnectionOptions $connectionOptions,
         FtpConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
-        VisibilityConverter $visibilityConverter = null
+        VisibilityConverter $visibilityConverter = null,
+        MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->connectionOptions = $connectionOptions;
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->prefixer = new PathPrefixer($connectionOptions->root());
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     /**
@@ -285,7 +294,7 @@ class FtpAdapter implements FilesystemAdapter
     {
         try {
             $contents = $this->read($path);
-            $mimetype = MimeType::detectMimeType($path, $contents);
+            $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
 
             return new FileAttributes($path, null, null, null, $mimetype);
         } catch (Throwable $exception) {

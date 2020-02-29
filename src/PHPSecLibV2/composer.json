@@ -1,0 +1,24 @@
+{
+    "name": "league/flysystem-sftp",
+    "description": "In-memory filesystem adapter for Flysystem.",
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\PHPSecLibV2\\": ""
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "league/flystem": "2.x-dev",
+        "phpseclib/phpseclib": "^2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}

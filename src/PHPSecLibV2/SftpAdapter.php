@@ -22,6 +22,8 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 use phpseclib\Net\SFTP;
 use Throwable;
 
@@ -42,14 +44,21 @@ class SftpAdapter implements FilesystemAdapter
      */
     private $prefixer;
 
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
     public function __construct(
         ConnectionProvider $connectionProvider,
         string $root,
-        VisibilityConverter $visibilityConverter = null
+        VisibilityConverter $visibilityConverter = null,
+        MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->connectionProvider = $connectionProvider;
         $this->prefixer = new PathPrefixer($root);
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     public function fileExists(string $path): bool
@@ -216,7 +225,7 @@ class SftpAdapter implements FilesystemAdapter
     {
         try {
             $contents = $this->read($path);
-            $mimetype = MimeType::detectMimeType($path, $contents);
+            $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
 
             return new FileAttributes($path, null, null, null, $mimetype);
         } catch (Throwable $exception) {

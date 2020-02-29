@@ -1,23 +1,17 @@
 {
-    "name": "league/flysystem",
-    "description": "File storage abstraction for PHP",
+    "name": "league/flysystem-aws-s3-v3",
+    "description": "AWS S3 filesystem adapter for Flysystem.",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "League\\Flysystem\\": "src"
+            "League\\Flysystem\\AwsS3V3\\": ""
         }
     },
     "require": {
         "php": "^7.2",
-        "ext-json": "*",
-        "league/mime-type-detection": "dev-master"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^8.5",
-        "phpstan/phpstan": "^0.12.9",
-        "phpseclib/phpseclib": "^2.0",
+        "league/flystem": "2.x-dev",
         "aws/aws-sdk-php": "^3.132.4"
     },
     "license": "MIT",
