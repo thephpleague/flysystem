@@ -4,6 +4,11 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     autoload_files:
         - test-functions.php
+    excludes_analyse:
+        - src/AwsS3V3
+        - src/FTP
+        - src/InMemory
+        - src/PHPSecLibV2
     ignoreErrors:
         - '#Method League\\Flysystem\\AwsS3V3\\S3ClientStub.*#'
         - '#Comparison operation "<" between 0\|1 and 4 is always true\.#'
