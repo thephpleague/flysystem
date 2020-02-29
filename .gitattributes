@@ -1,5 +1,8 @@
 * text=auto
 
+src/AwsS2V3 export-ignore
+src/FTP export-ignore
+src/PHPSecLibV2 export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
 test_files/ export-ignore

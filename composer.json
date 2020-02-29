@@ -1,6 +1,6 @@
 {
-    "name": "flysystem/filesystem",
-    "description": "flysystem/filesystem",
+    "name": "league/flysystem",
+    "description": "File storage abstraction for PHP",
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
