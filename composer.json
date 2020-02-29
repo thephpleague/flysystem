@@ -11,8 +11,6 @@
     },
     "require": {
         "php": "^7.2",
-        "ext-fileinfo": "*",
-        "ext-posix": "*",
         "ext-json": "*",
         "league/mime-type-detection": "dev-master"
     },
