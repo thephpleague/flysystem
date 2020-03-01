@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flystem": "2.x-dev",
+        "league/flysystem": "2.x-dev",
         "aws/aws-sdk-php": "^3.132.4"
     },
     "conflict": {
