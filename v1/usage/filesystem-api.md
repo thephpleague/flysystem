@@ -181,6 +181,7 @@ param         | description                                   | type
 `$from`       | location of a file                            | `string`
 `$to`         | new location                                  | `string`
 `$response`   | success boolean                               | `bool`
+
 ---
 
 > When used with the Local adapter, this will rename a directory as well. This
