@@ -1,9 +1,7 @@
 {
     "name": "league/flysystem-sftp",
     "description": "In-memory filesystem adapter for Flysystem.",
-    "type": "library",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "keywords": ["flysystem", "filesystem", "sftp", "files", "file"],
     "autoload": {
         "psr-4": {
             "League\\Flysystem\\PHPSecLibV2\\": ""
@@ -11,7 +9,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flysystem": "2.x-dev",
+        "league/flysystem": "2.0.0-alpha.1",
         "phpseclib/phpseclib": "^2.0"
     },
     "license": "MIT",

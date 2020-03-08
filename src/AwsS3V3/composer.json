@@ -1,10 +1,8 @@
 {
     "name": "league/flysystem-aws-s3-v3",
     "description": "AWS S3 filesystem adapter for Flysystem.",
-    "keywords": ["aws", "s3", "flysystem", "storage", "file", "files"],
+    "keywords": ["aws", "s3", "flysystem", "filesystem", "storage", "file", "files"],
     "type": "library",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "League\\Flysystem\\AwsS3V3\\": ""
@@ -12,7 +10,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flysystem": "2.x-dev",
+        "league/flysystem": "2.0.0-alpha.1",
         "aws/aws-sdk-php": "^3.132.4"
     },
     "conflict": {

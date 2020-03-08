@@ -1,6 +1,7 @@
 {
     "name": "league/flysystem-memory",
     "description": "In-memory filesystem adapter for Flysystem.",
+    "keywords": ["flysystem", "filesystem", "memory", "file", "files"],
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -11,7 +12,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flysystem": "2.x-dev"
+        "league/flysystem": "2.0.0-alpha.1"
     },
     "license": "MIT",
     "authors": [

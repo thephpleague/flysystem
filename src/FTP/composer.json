@@ -1,7 +1,7 @@
 {
     "name": "league/flysystem-ftp",
     "description": "FTP filesystem adapter for Flysystem.",
-    "type": "library",
+    "keywords": ["filesystem", "flysystem", "ftp", "ftpd", "files", "file"],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flysystem": "2.x-dev"
+        "league/flysystem": "2.0.0-alpha.1"
     },
     "license": "MIT",
     "authors": [
