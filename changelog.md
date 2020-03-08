@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.65 - 2020-03-08
+
+* Added missing webp mime-type entry.
+
 ## 1.0.64 - 2020-02-05
 
 * Improved performance of the connectivity check for FTP connections.
