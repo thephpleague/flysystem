@@ -184,7 +184,7 @@ param         | description                                   | type
 
 ---
 
-## Copy Files or Directories
+## Copy Files
 
 ```php
 $response = $filesystem->copy($from, $to);
