@@ -250,7 +250,30 @@ class Local extends AbstractAdapter
         $destination = $this->applyPathPrefix($newpath);
         $this->ensureDirectory(dirname($destination));
 
-        return copy($location, $destination);
+        if (is_dir($location)) {
+            $finalReturn = true;
+
+            $directoryIterator = $this->getRecursiveDirectoryIterator($location);
+            foreach ($directoryIterator as $item) {
+                $returnCheck = true;
+
+                $dest = $destination . DIRECTORY_SEPARATOR . $directoryIterator->getSubPathName();
+
+                if ($item->isDir()) {
+                    $this->ensureDirectory($dest);
+                } else {
+                    $returnCheck = copy($item, $dest);
+                }
+
+                if (!$returnCheck) {
+                    $finalReturn = $returnCheck;
+                }
+            }
+
+            return $finalReturn;
+        } else {
+            return copy($location, $destination);
+        }
     }
 
     /**
