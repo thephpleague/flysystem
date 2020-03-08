@@ -6,7 +6,6 @@ set -e
 if (( "$#" != 1 ))
 then
     echo "Tag has to be provided."
-
     exit 1
 fi
 
@@ -18,7 +17,6 @@ VERSION=$1
 if [[ "$RELEASE_BRANCH" != "$CURRENT_BRANCH" ]]
 then
     echo "Release branch ($RELEASE_BRANCH) does not match the current active branch ($CURRENT_BRANCH)."
-
     exit 1
 fi
 
@@ -26,7 +24,6 @@ fi
 if [[ ! -z "$(git status --porcelain)" ]]
 then
     echo "Your working directory is dirty. Did you forget to commit your changes?"
-
     exit 1
 fi
 
@@ -37,14 +34,13 @@ git fetch origin
 if [[ $(git rev-parse HEAD) != $(git rev-parse origin/$RELEASE_BRANCH) ]]
 then
     echo "Your branch is out of date with its upstream. Did you forget to pull or push any changes before releasing?"
-
     exit 1
 fi
 
-# Always prepend with "v"
-if [[ $VERSION != v*  ]]
+# Strip prepended "v", if present
+if [[ $VERSION == v* || $VERSION == V*  ]]
 then
-    VERSION="v$VERSION"
+    VERSION="${VERSION:1}"
 fi
 
 # Tag Core
@@ -52,7 +48,7 @@ git tag $VERSION
 git push origin --tags
 
 # Tag Components
-for REMOTE in memory sftp
+for REMOTE in memory sftp ftp aws-s3-v3
 do
     echo ""
     echo ""
