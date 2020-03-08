@@ -258,10 +258,9 @@ class Local extends AbstractAdapter
                 $returnCheck = true;
 
                 $dest = $destination . DIRECTORY_SEPARATOR . $directoryIterator->getSubPathName();
+                $this->ensureDirectory(dirname($dest));
 
-                if ($item->isDir()) {
-                    $this->ensureDirectory($dest);
-                } else {
+                if (!$item->isDir()) {
                     $returnCheck = copy($item, $dest);
                 }
 
