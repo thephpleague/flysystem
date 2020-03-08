@@ -9,10 +9,10 @@ about: Do you have a new feature in mind?
 
 |    Q        |   A
 |------------ | ------
-| New Feature | yes
+| New Feature | yes/no
 | BC Break    | yes/no
 
-#### Scenario
+#### Scenario / Use-case
 
 <!-- Provide an explain in which scenario the feature would be helpful. --> 
 

@@ -9,12 +9,12 @@ about: Did you encounter a bug?
 
 |    Q        |   A
 |------------ | ------
-| BC Break    | yes
+| BC Break    | yes/no
 | Version     | x.y.z
 
 #### Summary
 
-<!-- Provide a summary desciribing the problem you are experiencing. -->
+<!-- Provide a summary describing the problem you are experiencing. -->
 
 #### How to reproduce
 
