@@ -170,7 +170,7 @@ param         | description                                   | type
 
 ---
 
-## Rename Files or Directories
+## Rename Files
 
 ```php
 $response = $filesystem->rename($from, $to);
@@ -178,11 +178,13 @@ $response = $filesystem->rename($from, $to);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$from`       | location of a file/directory                  | `string`
+`$from`       | location of a file                            | `string`
 `$to`         | new location                                  | `string`
 `$response`   | success boolean                               | `bool`
-
 ---
+
+> When used with the Local adapter, this will rename a directory as well. This
+> behaviour will not be present in V2.
 
 ## Copy Files
 
