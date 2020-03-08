@@ -1,6 +1,7 @@
 {
     "name": "league/flysystem-aws-s3-v3",
     "description": "AWS S3 filesystem adapter for Flysystem.",
+    "keywords": ["aws", "s3", "flysystem", "storage", "file", "files"],
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
