@@ -192,7 +192,7 @@ $response = $filesystem->copy($from, $to);
 
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
-`$from`       | location of a file/directory                  | `string`
+`$from`       | location of a file                            | `string`
 `$to`         | new location                                  | `string`
 `$response`   | success boolean                               | `bool`
 
