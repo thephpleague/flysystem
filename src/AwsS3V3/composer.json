@@ -11,6 +11,7 @@
     "require": {
         "php": "^7.2",
         "league/flysystem": "2.0.0-alpha.1",
+        "league/mime-type-detection": "^1.0.0",
         "aws/aws-sdk-php": "^3.132.4"
     },
     "conflict": {

@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "league/flysystem": "2.0.0-alpha.1",
+        "league/mime-type-detection": "^1.0.0",
         "phpseclib/phpseclib": "^2.0"
     },
     "license": "MIT",
