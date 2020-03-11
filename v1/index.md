@@ -7,7 +7,7 @@ redirect_from:
     - /docs/
 ---
 
-[![Buy a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-green)](https://offset.earth/frankdejonge?gift-trees)
+[![Buy a tree](https://img.shields.io/badge/Buy%20me%20a%20tree-%F0%9F%8C%B3-green)](https://offset.earth/frankdejonge?gift-trees)
 [![Author](https://img.shields.io/badge/author-@frankdejonge-blue.svg)](https://twitter.com/frankdejonge)
 [![Source Code](https://img.shields.io/badge/source-thephpleague/flysystem-blue.svg)](https://github.com/thephpleague/flysystem)
 [![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg)](https://github.com/thephpleague/flysystem/releases)
