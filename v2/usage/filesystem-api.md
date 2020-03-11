@@ -56,7 +56,7 @@ try {
 param         | description                                   | type
 ------------- | --------------------------------------------- | -----------
 `$path`       | location of a file                            | `string`
-`$contents`   | file resource                                 | `resource`
+`$stream`     | file resource                                 | `resource`
 `$config`     | An optional configuration array               | `array` (optional)
 
 ---
