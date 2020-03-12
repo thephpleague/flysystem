@@ -4,6 +4,7 @@ Flysystem:
     Architecture: '/v2/docs/architecture/'
     Design Considerations: '/v2/docs/design-considerations/'
     Security Policy: '/v2/security/'
+    Version 1 Docs: '/v1/docs/'
 
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'
