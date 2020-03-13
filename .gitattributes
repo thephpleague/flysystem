@@ -16,6 +16,6 @@
 /phpstan.php export-ignore
 /phpunit.php export-ignore
 /phpunit.xml export-ignore
-/changelog.md export-ignore
+/CHANGELOG.md export-ignore
 /README.md export-ignore
 /wait_for_ftp_service.php export-ignore
