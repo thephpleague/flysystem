@@ -450,8 +450,6 @@
 
 - Path prefixing would done twice for rackspace when using streams for writes or updates.
 
----
-
 ## 0.5.6 - 2014-09-09
 
 ### Added
@@ -461,5 +459,3 @@
 ### Fixed
 
 - Dropbox path normalisation.
-
----
