@@ -4,16 +4,16 @@ title: FTP Adapter
 permalink: /v2/docs/adapter/ftp/
 ---
 
-Interacting with the local filesystem through Flysystem can be done
-by using the `League\Flysystem\Local\LocalFilesystemAdapter`.
+Interacting with an ftp filesystem through Flysystem can be done
+by using the `League\Flysystem\FTP\FtpAdapter`.
 
 ## Simple usage:
 
 ```php
 // The internal adapter
-$adapter = new League\Flysystem\Ftp\FtpAdapter(
+$adapter = new League\Flysystem\FTP\FtpAdapter(
     // Connection options
-    League\Flysystem\Ftp\FtpConnectionOptions::fromArray([
+    League\Flysystem\FTP\FtpConnectionOptions::fromArray([
         'host' => 'hostname', // required
         'root' => '/root/path/', // required
         'username' => 'username', // required
@@ -39,16 +39,16 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 
 ```php
 // The internal adapter
-$adapter = new League\Flysystem\Ftp\FtpAdapter(
+$adapter = new League\Flysystem\FTP\FtpAdapter(
     // Connection options
-    League\Flysystem\Ftp\FtpConnectionOptions::fromArray([
+    League\Flysystem\FTP\FtpConnectionOptions::fromArray([
         'host' => 'hostname', // required
         'root' => '/root/path/', // required
         'username' => 'username', // required
         'password' => 'password', // required
     ]),
-    new League\Flysystem\Ftp\FtpConnectionProvider(),
-    new League\Flysystem\Ftp\NoopCommandConnectivityChecker(),
+    new League\Flysystem\FTP\FtpConnectionProvider(),
+    new League\Flysystem\FTP\NoopCommandConnectivityChecker(),
     new League\Flysystem\UnixVisibility\PortableVisibilityConverter()
 );
 
@@ -58,25 +58,25 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 
 ### Connection provider
 
-The `League\Flysystem\Ftp\ConnectionProvider` allows you change how a connection
+The `League\Flysystem\FTP\ConnectionProvider` allows you change how a connection
 is setup. If you have particular needs, or if your FTP server is exotic, this allows
 you to modify this process.
 
 ### Connectivity Checker
 
-The `League\Flysystem\Ftp\ConnectivityChecker` allows you to change how
+The `League\Flysystem\FTP\ConnectivityChecker` allows you to change how
 a connection is determined to be _connected_. This is something that can vary between
 FTP flavours, so being able to change it, based in your needs, can be crucial.
 
-By default the `League\Flysystem\Ftp\NoopCommandConnectivityChecker` and
-`League\Flysystem\Ftp\RawListFtpConnectivityChecker` are shipped, which
+By default the `League\Flysystem\FTP\NoopCommandConnectivityChecker` and
+`League\Flysystem\FTP\RawListFtpConnectivityChecker` are shipped, which
 are the most common forms for these checks.
 
 ### Connection Failures
 
 All connection failures result in exceptions. The exceptions thrown have a name that
 corresponds with what happened. Every connection exception is marked with the
-`League\Flsysytem\Ftp\FtpConnectionException` interface, which is an extension of the
+`League\Flsysytem\FTP\FtpConnectionException` interface, which is an extension of the
 `League\Flsysytem\FilesystemException` interface.
 
 ### Visibility Converter
