@@ -144,7 +144,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter = $this->adapter();
         $adapter->write('path.txt', 'contents', new Config());
         $adapter->write('a/path.txt', 'contents', new Config());
-        $adapter->write('a/b/path.txt', 'contents', new Config());;
+        $adapter->write('a/b/path.txt', 'contents', new Config());
         $listing = iterator_to_array($adapter->listContents('/', true));
         $this->assertCount(5, $listing);
         $this->assertContainsEquals(new FileAttributes('path.txt'), $listing);

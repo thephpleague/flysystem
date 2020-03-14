@@ -195,7 +195,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
     }
 
-    public function listContents(string $path, bool $deep): Generator
+    public function listContents(string $path, bool $deep): iterable
     {
         $location = $this->prefixer->prefixPath($path);
 

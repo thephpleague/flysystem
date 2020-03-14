@@ -14,6 +14,9 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 
+/**
+ * @group aws
+ */
 class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
 {
     /**
