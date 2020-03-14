@@ -275,7 +275,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         file_put_contents(static::ROOT . '/file.txt', 'content');
         symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
 
-        $adapter->listContents('/', true)->next();
+        iterator_to_array($adapter->listContents('/', true));
     }
 
     /**
