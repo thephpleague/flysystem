@@ -6,6 +6,7 @@ namespace League\Flysystem;
 
 use Generator;
 use IteratorAggregate;
+use Traversable;
 
 /**
  * @template T
@@ -13,21 +14,21 @@ use IteratorAggregate;
 class DirectoryListing implements IteratorAggregate
 {
     /**
-     * @var Generator<T>
+     * @var iterable<T>
      */
     private $listing;
 
     /**
-     * @param Generator<T> $listing
+     * @param iterable<T> $listing
      */
-    public function __construct(Generator $listing)
+    public function __construct(iterable $listing)
     {
         $this->listing = $listing;
     }
 
     public function filter(callable $filter): DirectoryListing
     {
-        $generator = (static function (Generator $listing) use ($filter): Generator {
+        $generator = (static function (iterable $listing) use ($filter): Generator {
             foreach ($listing as $item) {
                 if ($filter($item)) {
                     yield $item;
@@ -40,7 +41,7 @@ class DirectoryListing implements IteratorAggregate
 
     public function map(callable $mapper): DirectoryListing
     {
-        $generator = (static function (Generator $listing) use ($mapper): Generator {
+        $generator = (static function (iterable $listing) use ($mapper): Generator {
             foreach ($listing as $item) {
                 yield $mapper($item);
             }
@@ -50,9 +51,9 @@ class DirectoryListing implements IteratorAggregate
     }
 
     /**
-     * @return Generator<T>
+     * @return iterable<T>
      */
-    public function getIterator(): Generator
+    public function getIterator(): iterable
     {
         return $this->listing;
     }
@@ -62,7 +63,9 @@ class DirectoryListing implements IteratorAggregate
      */
     public function toArray(): array
     {
-        return iterator_to_array($this->listing, false);
+        return $this->listing instanceof Traversable
+            ? iterator_to_array($this->listing, false)
+            : (array) $this->listing;
     }
 
 }

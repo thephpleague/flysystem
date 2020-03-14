@@ -333,7 +333,7 @@ class FtpAdapter implements FilesystemAdapter
         return new FileAttributes($path, $fileSize);
     }
 
-    public function listContents(string $path, bool $deep): Generator
+    public function listContents(string $path, bool $deep): iterable
     {
         $path = ltrim($path, '/');
         $path = $path === '' ? $path : trim($path, '/') . '/';

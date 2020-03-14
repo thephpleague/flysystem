@@ -300,7 +300,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
         return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
     }
 
-    public function listContents(string $path, bool $deep): Generator
+    public function listContents(string $path, bool $deep): iterable
     {
         $prefix = $this->prefixer->prefixPath($path);
         $options = ['Bucket' => $this->bucket, 'Prefix' => trim($prefix, '/') . '/'];

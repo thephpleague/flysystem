@@ -247,7 +247,7 @@ class SftpAdapter implements FilesystemAdapter
         return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
-    public function listContents(string $path, bool $deep): Generator
+    public function listContents(string $path, bool $deep): iterable
     {
         $connection = $this->connectionProvider->provideConnection();
         $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';

@@ -89,10 +89,12 @@ interface FilesystemAdapter
     public function fileSize(string $path): FileAttributes;
 
     /**
-     * @return Generator<StorageAttributes>
+     * @param string $path
+     * @param bool   $deep
+     * @return iterable<StorageAttributes>
      * @throws FilesystemException
      */
-    public function listContents(string $path, bool $deep): Generator;
+    public function listContents(string $path, bool $deep): iterable;
 
     /**
      * @throws UnableToMoveFile
