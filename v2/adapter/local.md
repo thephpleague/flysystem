@@ -11,7 +11,7 @@ by using the `League\Flysystem\Local\LocalFilesystemAdapter`.
 
 ```php
 // The internal adapter
-$adapter = new League\Flysystem\Local\LocalFilesystem(
+$adapter = new League\Flysystem\Local\LocalFilesystemAdapter(
     // Determine root directory
     __DIR__.'/root/directory/'
 );
@@ -23,11 +23,11 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 ## Advanced usage:
 
 ```php
-use League\Flysystem\Local\LocalFilesystem;
+use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 // The internal adapter
-$adapter = new LocalFilesystem(
+$adapter = new LocalFilesystemAdapter(
     // Determine the root directory
     __DIR__.'/root/directory/',
 
