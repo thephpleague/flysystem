@@ -63,6 +63,24 @@ No need for beep-boop language (computer-speak).
 + $filesystem->createDirectory($path);
 ```
 
+### Writes are now deterministic
+
+No more `update`, `updateStream`, `put`, and `putStream`. You can simply use `write` and `writeStream`.
+
+```diff
+- $filesystem->update($path, $contents);
++ $filesystem->write($path, $contents);
+
+- $filesystem->updateStream($path, $contents);
++ $filesystem->writeWrite($path, $contents);
+
+- $filesystem->put($path, $contents);
++ $filesystem->write($path, $contents);
+
+- $filesystem->putStream($path, $contents);
++ $filesystem->writeWrite($path, $contents);
+```
+
 
 ### Metadata getters are renamed:
 
