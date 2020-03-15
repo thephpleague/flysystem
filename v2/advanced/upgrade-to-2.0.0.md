@@ -19,7 +19,7 @@ instead of  `^1.0`. The same needs to be done for all the adapter too, in the sa
 
 ### Filesystem::getMetadata is removed
 
-The `getMetadata` method is removed, in favour of better metadata getter.
+The `getMetadata` method is removed, in favour of better metadata getters.
 
 ### Plugins are removed
 
