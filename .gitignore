@@ -1,4 +1,6 @@
 _site
+.bundle
+vendor
 .jekyll-metadata
 node_modules
 yarn-error.log
