@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.66 - 2020-03-17
+
+### Fixes
+
+* Warnings from FTP are now silenced, preventing exceptions.
+
 ## 1.0.65 - 2020-03-08
 
 - Added missing webp mime-type entry.
