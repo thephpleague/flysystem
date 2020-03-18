@@ -21,6 +21,8 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
 
+use Traversable;
+
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
@@ -219,7 +221,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
         $adapter->write('filename.txt', 'content', new Config());
-        $contents = iterator_to_array($adapter->listContents('/', false));
+        /** @var Traversable $contentListing */
+        $contentListing = $adapter->listContents('/', false);
+        $contents = iterator_to_array($contentListing);
 
         $this->assertCount(2, $contents);
         $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
@@ -233,7 +237,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('directory/filename.txt', 'content', new Config());
         $adapter->write('filename.txt', 'content', new Config());
-        $contents = iterator_to_array($adapter->listContents('/', true));
+        /** @var Traversable $contentListing */
+        $contentListing = $adapter->listContents('/', true);
+        $contents = iterator_to_array($contentListing);
 
         $this->assertCount(3, $contents);
         $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
@@ -245,7 +251,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function listing_a_non_existing_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
-        $contents = iterator_to_array($adapter->listContents('/directory/', false));
+        /** @var Traversable $contentListing */
+        $contentListing = $adapter->listContents('/directory/', false);
+        $contents = iterator_to_array($contentListing);
 
         $this->assertCount(0, $contents);
     }
@@ -259,7 +267,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         file_put_contents(static::ROOT . '/file.txt', 'content');
         symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
 
-        $contents = iterator_to_array($adapter->listContents('/', true));
+        /** @var Traversable $contentListing */
+        $contentListing = $adapter->listContents('/', true);
+        $contents = iterator_to_array($contentListing);
 
         $this->assertCount(1, $contents);
     }
@@ -274,7 +284,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         file_put_contents(static::ROOT . '/file.txt', 'content');
         symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
 
-        iterator_to_array($adapter->listContents('/', true));
+        /** @var Traversable $contentListing */
+        $contentListing = $adapter->listContents('/', true);
+        iterator_to_array($contentListing);
     }
 
     /**

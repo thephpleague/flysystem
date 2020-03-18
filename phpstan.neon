@@ -5,6 +5,7 @@ parameters:
     autoload_files:
         - src/AdapterTestUtilities/test-functions.php
     excludes_analyse:
+        - src/AdapterTestUtilities/
         - src/AwsS3V3
         - src/FTP
         - src/InMemory
