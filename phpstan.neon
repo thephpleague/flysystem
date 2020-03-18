@@ -3,7 +3,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
     autoload_files:
-        - test-functions.php
+        - src/AdapterTestUtilities/test-functions.php
     excludes_analyse:
         - src/AwsS3V3
         - src/FTP
