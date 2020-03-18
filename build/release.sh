@@ -48,7 +48,7 @@ git tag $VERSION
 git push origin --tags
 
 # Tag Components
-for REMOTE in memory sftp ftp aws-s3-v3
+for REMOTE in memory sftp ftp aws-s3-v3 adapter-test-utilities
 do
     echo ""
     echo ""
