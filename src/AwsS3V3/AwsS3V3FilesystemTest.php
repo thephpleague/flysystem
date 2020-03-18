@@ -6,10 +6,10 @@ namespace League\Flysystem\AwsS3V3;
 
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
+use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemAdapterTestCase;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;

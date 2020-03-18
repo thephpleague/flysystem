@@ -27,8 +27,10 @@ remote ftp git@github.com:thephpleague/flysystem-ftp.git
 remote sftp git@github.com:thephpleague/flysystem-sftp.git
 remote memory git@github.com:thephpleague/flysystem-memory.git
 remote aws-s3-v3 git@github.com:thephpleague/flysystem-aws-s3-v3.git
+remote adapter-test-utilities git@github.com:thephpleague/flysystem-adapter-test-utilities.git
 
 split 'src/FTP' ftp
 split 'src/PHPSecLibV2' sftp
 split 'src/InMemory' memory
 split 'src/AwsS3V3' aws-s3-v3
+split 'src/AdapterTestUtilities' adapter-test-utilities

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemAdapterTestCase;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCopyFile;
@@ -24,7 +24,6 @@ use League\Flysystem\Visibility;
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
-use function getenv;
 use function iterator_to_array;
 use function mkdir;
 use function symlink;

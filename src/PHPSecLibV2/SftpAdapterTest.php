@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PHPSecLibV2;
 
+use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemAdapterTestCase;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToMoveFile;
