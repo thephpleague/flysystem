@@ -9,7 +9,6 @@ src/PHPSecLibV2 export-ignore
 .gitignore export-ignore
 build/ export-ignore
 mocked-functions.php export-ignore
-test-functions.php export-ignore
 test_files/ export-ignore
 **/*Test.php export-ignore
 **/*Stub.php export-ignore
