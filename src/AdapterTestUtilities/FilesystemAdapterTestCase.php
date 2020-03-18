@@ -278,7 +278,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function fetching_the_mime_type_of_an_svg_file(): void
     {
-        $this->givenWeHaveAnExistingFile('file.svg', file_get_contents(__DIR__.'/../test_files/flysystem.svg'));
+        $this->givenWeHaveAnExistingFile('file.svg', file_get_contents(__DIR__.'/test_files/flysystem.svg'));
 
         $mimetype = $this->adapter()->mimeType('file.svg')->mimeType();
 

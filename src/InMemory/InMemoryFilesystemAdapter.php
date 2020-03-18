@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\InMemory;
 
-use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
