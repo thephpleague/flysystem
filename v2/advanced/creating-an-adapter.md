@@ -20,6 +20,20 @@ filesystems they are providing an interface to.
 Although this is more time-consuming to run, this gives the most _real_
 guarantees for the consumer of your package.
 
+There is a test package available that allows you to easily test your adapter:
+
+```bash
+composer require --dev league/flysystem-adapter-test-utilities
+```
+
+Once installed you can use the `League\Flysystem\AdapterTestUtilitiesFilesystemAdapterTestCase`
+class as your adapter test base-class. This will ensure you're covering a lot of
+test scenario's.
+
+The test scenario tests your adapter as a black box, this means it's designed to perform
+actual filesystem operations. All of the supported adapters perform actual interactions
+with the underlying filesystems to provide the most accurate guarantees. 
+
 ## Throwing exceptions
 
 In order to see which exceptions need to be thrown, checkout the
