@@ -72,13 +72,13 @@ No more `update`, `updateStream`, `put`, and `putStream`. You can simply use `wr
 + $filesystem->write($path, $contents);
 
 - $filesystem->updateStream($path, $contents);
-+ $filesystem->writeWrite($path, $contents);
++ $filesystem->writeStream($path, $contents);
 
 - $filesystem->put($path, $contents);
 + $filesystem->write($path, $contents);
 
 - $filesystem->putStream($path, $contents);
-+ $filesystem->writeWrite($path, $contents);
++ $filesystem->writeStream($path, $contents);
 ```
 
 
