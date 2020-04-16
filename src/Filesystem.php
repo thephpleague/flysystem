@@ -2,6 +2,7 @@
 
 namespace League\Flysystem;
 
+use BadMethodCallException;
 use InvalidArgumentException;
 use League\Flysystem\Adapter\CanOverwriteFiles;
 use League\Flysystem\Plugin\PluggableTrait;
@@ -17,7 +18,9 @@ use League\Flysystem\Util\ContentListingFormatter;
  */
 class Filesystem implements FilesystemInterface
 {
-    use PluggableTrait;
+    use PluggableTrait {
+        __call as pluggableCall;
+    }
     use ConfigAwareTrait;
 
     /**
@@ -403,6 +406,16 @@ class Filesystem implements FilesystemInterface
     {
         if ($this->config->get('disable_asserts', false) === false && $this->has($path)) {
             throw new FileExistsException($path);
+        }
+    }
+
+    public function __call($method, array $arguments)
+    {
+        try {
+            return $this->getAdapter()->$method($arguments);
+        }catch(BadMethodCallException $e)
+        {
+            return $this->pluggableCall($method, $arguments);
         }
     }
 }
