@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.67 - 2020-04-16
+
+### Fixes
+
+* Added mime-types for markdown (#1153)
+
 ## 1.0.66 - 2020-03-17
 
 ### Fixes
