@@ -11,7 +11,7 @@ Usage:
 Guides:
     Laravel Usage: '/v1/docs/guides/laravel-usage/'
     Symfony Usage: '/v1/docs/guides/symfony-usage/'
-    SilverStripe Usage: '/v1/docs/guides/silverstripe-usage/'
+    Silverstripe CMS Usage: '/v1/docs/guides/silverstripe-usage/'
     Nette Usage: '/v1/docs/guides/nette-usage/'
     Deterministic Code: '/v1/docs/guides/deterministic-programming/'
     Handling Uploads: '/v1/docs/guides/uploads/'
