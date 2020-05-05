@@ -4,7 +4,7 @@ title: Aws S3 (v3) Adapter
 permalink: /v2/docs/adapter/aws-s3-v3/
 ---
 
-Interacting with the local filesystem through Flysystem can be done
+Interacting with Aws S3 through Flysystem can be done
 by using the `League\Flysystem\AwsS3V3\AwsS3V3Adapter`.
 
 ## Simple usage:
