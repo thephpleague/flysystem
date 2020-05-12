@@ -230,6 +230,10 @@ class LocalAdapterTests extends TestCase
             $this->markTestSkipped("File permissions not supported on Windows.");
         }
 
+        if (posix_getuid() === 0) {
+            $this->markTestSkipped("Cannot make non-writable for the root user.");
+        }
+
         try {
             $root = $this->root . 'not-writable';
             mkdir($root, 0000, true);
