@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.68 - 2020-05-12
+
+### Fixes
+
+* Added mime-types for .ico files (#1163)
+
 ## 1.0.67 - 2020-04-16
 
 ### Fixes
