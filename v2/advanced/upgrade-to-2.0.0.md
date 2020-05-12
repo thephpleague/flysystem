@@ -95,7 +95,7 @@ long as V1 is, breaking with past mistakes is needed sometimes.
 
 // More explicit it's only for files, which is adapter agnostic.
 - $fileExists = $filesystem->has($path); 
-+ $fileExists = $filesystem->fileExist($path);
++ $fileExists = $filesystem->fileExists($path);
 
 // Correct casing.
 - $mimetype = $filesystem->getMimetype($path); 
