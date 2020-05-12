@@ -258,6 +258,10 @@ class UtilTests extends TestCase
 
     public function testPathinfoHandlesUtf8()
     {
+        if (setlocale(LC_ALL, 'C.UTF-8', 'C.utf8') === false) {
+            $this->markTestSkipped('testPathinfoHandlesUtf8 requires UTF-8.');
+        }
+
         $path = 'files/繁體中文字/test.txt';
         $expected = [
             'path' => 'files/繁體中文字/test.txt',
