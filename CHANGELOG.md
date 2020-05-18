@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.69 - 2020-05-12
+
+### Fixes
+
+* Corrected the docblock return type of `getTimestamp` and enforce it in the `Filesystem`.
+
 ## 1.0.68 - 2020-05-12
 
 ### Fixes
