@@ -97,19 +97,22 @@ class Local extends AbstractAdapter
      */
     protected function ensureDirectory($root)
     {
-        if ( ! is_dir($root)) {
-            $umask = umask(0);
+        // Handle recursion manually, because mkdir has race condition issues in recursive mode
+        foreach ($this->getSubPaths($root) as $path) {
+            if ( ! is_dir($path)) {
+                $umask = umask(0);
 
-            if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
-                $mkdirError = error_get_last();
-            }
+                if ( ! @mkdir($path, $this->permissionMap['dir']['public'])) {
+                    $mkdirError = error_get_last();
+                }
 
-            umask($umask);
-            clearstatcache(false, $root);
+                umask($umask);
+                clearstatcache(false, $path);
 
-            if ( ! is_dir($root)) {
-                $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
-                throw new Exception(sprintf('Impossible to create the root directory "%s". %s', $root, $errorMessage));
+                if ( ! is_dir($path)) {
+                    $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
+                    throw new Exception(sprintf('Impossible to create the root directory "%s". %s', $path, $errorMessage));
+                }
             }
         }
     }
@@ -383,10 +386,13 @@ class Local extends AbstractAdapter
         $visibility = $config->get('visibility', 'public');
         $return = ['path' => $dirname, 'type' => 'dir'];
 
-        if ( ! is_dir($location)) {
-            if (false === @mkdir($location, $this->permissionMap['dir'][$visibility], true)
-                || false === is_dir($location)) {
-                $return = false;
+        // Handle recursion manually, because mkdir has race condition issues in recursive mode
+        foreach ($this->getSubPaths($location) as $path) {
+            if ( ! is_dir($path)) {
+                if (false === @mkdir($path, $this->permissionMap['dir'][$visibility])
+                    || false === is_dir($path)) {
+                    $return = false;
+                }
             }
         }
 
@@ -528,5 +534,38 @@ class Local extends AbstractAdapter
         if ( ! $file->isReadable()) {
             throw UnreadableFileException::forFileInfo($file);
         }
+    }
+
+    /**
+     * Get an array of all the sub-paths leading to the given root directory
+     * E.g. /foo/bar/baz -> ['/foo', '/foo/bar', '/foo/bar/baz']
+     *      foo/bar/baz -> ['foo', 'foo/bar', 'foo/bar/baz']
+     *      C:\foo\bar\baz -> ['C:/foo', 'C:/foo/bar', 'C:/foo/bar/baz']
+     *
+     * @param string $root root directory path
+     *
+     * @return string[]
+     */
+    protected function getSubPaths($root)
+    {
+        // Split by directory delimiters, \ and /
+        $dirs = preg_split('/[\/\\\]/', $root, -1, PREG_SPLIT_NO_EMPTY);
+        if (empty($dirs)) {
+            return [$root];
+        }
+
+        // If we had an absolute path, start with /
+        $path = $root[0] === '/' ? '/' : '';
+
+        // Build the full path one directory at a time
+        $path .= array_shift($dirs);
+        $subPaths = [$path];
+
+        foreach ($dirs as $dir) {
+            $path = $path . '/' . $dir;
+            $subPaths[] = $path;
+        }
+
+        return $subPaths;
     }
 }
