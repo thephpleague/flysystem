@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\AwsS3V3;
 
 use Aws\Api\DateTimeResult;
+use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
 use Generator;
 use League\Flysystem\Config;
@@ -352,7 +353,7 @@ class AwsS3V3Filesystem implements FilesystemAdapter
             'ACL'        => $this->visibility->visibilityToAcl($visibility),
             'Bucket'     => $this->bucket,
             'Key'        => $this->prefixer->prefixPath($destination),
-            'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
+            'CopySource' => S3Client::encodeKey($this->bucket . '/' . $this->prefixer->prefixPath($source)),
         ];
         $command = $this->client->getCommand('CopyObject', $arguments);
 
