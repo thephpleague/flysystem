@@ -440,7 +440,13 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
         $path = $base === '' ? $name : $base . $this->separator . $name;
 
         if ($type === 'dir') {
-            return compact('type', 'path');
+            $result = compact('type', 'path');
+            if ($this->enableTimestampsOnUnixListings) {
+                $timestamp = $this->normalizeUnixTimestamp($month, $day, $timeOrYear);
+                $result += compact('timestamp');
+            }
+
+            return $result;
         }
 
         $permissions = $this->normalizePermissions($permissions);
