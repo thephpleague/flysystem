@@ -16,7 +16,7 @@ those trade-offs are and why they are made.
 ## Directories are only created when needed
 
 In the world of cloud storage, directories are not required. In some
-cases, they are event implemented as an afterthought. These filesystems
+cases, they are even implemented as an afterthought. These filesystems
 act more like key-value stores. This causes Flysystem to have to make
 a choice. Either every cloud storage will have to create directories,
 or directories do not _have to be created_ for any of them. Flysystem
