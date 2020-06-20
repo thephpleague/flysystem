@@ -653,10 +653,12 @@ class FtpTests extends TestCase
                     [
                         'type' => 'dir',
                         'path' => 'cgi-bin',
+                        'timestamp' => 1350086400,
                     ],
                     [
                         'type' => 'dir',
                         'path' => 'folder',
+                        'timestamp' => 1606226340,
                     ],
                     [
                         'type' => 'file',
@@ -682,10 +684,12 @@ class FtpTests extends TestCase
                     [
                         'type' => 'dir',
                         'path' => 'cgi-bin',
+                        'timestamp' => 1350086400,
                     ],
                     [
                         'type' => 'dir',
                         'path' => 'folder',
+                        'timestamp' => 1606226340,
                     ],
                     [
                         'type' => 'file',
