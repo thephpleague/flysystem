@@ -98,6 +98,7 @@ Want to get started quickly? Check out some of these integrations:
 * PDO Database (optimised for use with large files when using the streams): https://github.com/phlib/flysystem-pdo
 * PDO Database: https://github.com/IntegralSoftware/flysystem-pdo-adapter
 * SSH/Shell: https://github.com/oliwierptak/flysystem-ssh-shell
+* Tencent Cloud COS Storage: https://github.com/chunpat/flysystem-tencent-cos
 
 ## Caching (https://github.com/thephpleague/flysystem-cached-adapter)
 
