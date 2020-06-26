@@ -102,6 +102,22 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function writing_a_file_with_an_empty_stream(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT);
+        $stream = stream_with_contents('');
+
+        $adapter->writeStream('/file.txt', $stream, new Config());
+        fclose($stream);
+
+        $this->assertFileExists(static::ROOT . '/file.txt');
+        $contents = file_get_contents(static::ROOT . '/file.txt');
+        $this->assertEquals('', $contents);
+    }
+
+    /**
+     * @test
+     */
     public function writing_a_file_with_a_stream_and_visibility(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
