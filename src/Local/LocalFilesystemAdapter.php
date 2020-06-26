@@ -125,7 +125,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         error_clear_last();
         $stream = @fopen($path, 'w+b');
 
-        if ( ! ($stream && stream_copy_to_stream($contents, $stream) && fclose($stream))) {
+        if ( ! ($stream && false !== stream_copy_to_stream($contents, $stream) && fclose($stream))) {
             $reason = error_get_last()['message'] ?? '';
             throw UnableToWriteFile::atLocation($path, $reason);
         }
