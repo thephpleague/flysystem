@@ -2,7 +2,7 @@ parameters:
     checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
-    autoload_files:
+    scanFiles:
         - src/AdapterTestUtilities/test-functions.php
     excludes_analyse:
         - src/AdapterTestUtilities/
