@@ -1,5 +1,12 @@
 * text=auto
 
+phpstan.neon
+phpunit.php
+phpunit.xml.dist
+.travis.yml
+.scrutinizer.yml
+CHANGLOG.md
+README.md
 .github export-ignore
 src/AwsS3V3 export-ignore
 src/FTP export-ignore
