@@ -102,6 +102,23 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function writing_a_file_with_an_empty_stream(): void
+    {
+        $adapter = $this->adapter();
+        $writeStream = stream_with_contents('');
+
+        $adapter->writeStream('path.txt', $writeStream, new Config());
+        $fileExists = $adapter->fileExists('path.txt');
+
+        $this->assertTrue($fileExists);
+
+        $contents = $adapter->read('path.txt');
+        $this->assertEquals('', $contents);
+    }
+
+    /**
+     * @test
+     */
     public function reading_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
