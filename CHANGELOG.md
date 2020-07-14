@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.0-UNRELEASED
+
+## Fixes
+
+* Allow creation of files with empty streams.
+
 ## 2.0.0-alpha.3 2020-03-21
 
 ## Fixes
