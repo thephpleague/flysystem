@@ -27,7 +27,7 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
 
-class AwsS3V3Filesystem implements FilesystemAdapter
+class AwsS3V3Adapter implements FilesystemAdapter
 {
     /**
      * @var array

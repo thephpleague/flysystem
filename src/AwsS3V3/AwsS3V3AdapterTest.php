@@ -17,7 +17,7 @@ use League\Flysystem\UnableToMoveFile;
 /**
  * @group aws
  */
-class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
+class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 {
     /**
      * @var bool
@@ -150,6 +150,6 @@ class AwsS3V3FilesystemTest extends FilesystemAdapterTestCase
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
         $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
 
-        return new AwsS3V3Filesystem($this->stubS3Client, $bucket, $prefix);
+        return new AwsS3V3Adapter($this->stubS3Client, $bucket, $prefix);
     }
 }
