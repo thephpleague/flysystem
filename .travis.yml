@@ -29,15 +29,15 @@ matrix:
       env: COMPOSER_OPTS="--prefer-lowest"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes"
   allow_failures:
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes"
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes"
 
 install:
   - docker-compose -f test_files/docker-compose.yml up -d
@@ -45,6 +45,7 @@ install:
   - php test_files/wait_for_sftp.php
   - php test_files/wait_for_ftp.php 2121
   - php test_files/wait_for_ftp.php 2122
+  - if [[ "${UPGRADE_AWS_SDK}" == "yes" ]]; then composer require --dev --no-update aws/aws-sdk-php:^3.147.3; fi
 
 script:
   - FLYSYSTEM_TEST_SFTP=yes travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
