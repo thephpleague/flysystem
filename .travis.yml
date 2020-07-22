@@ -46,15 +46,15 @@ matrix:
       env: COMPOSER_OPTS="--prefer-lowest"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_PHPSPEC="yes"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_PHPSPEC="yes"
   allow_failures:
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_PHPSPEC="yes"
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_PHPSPEC="yes"
 
 before_install:
   - mkdir tests/files
@@ -70,6 +70,7 @@ before_script:
   - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
 
 script:
+  - if [[ "${UPGRADE_PHPSPEC}" == "yes" ]]; then composer require --dev --no-update phpspec/phpspec:^4.0 fi
   - vendor/bin/phpunit tests/ftp/*Tests.php
   - vendor/bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
   - vendor/bin/phpspec run
