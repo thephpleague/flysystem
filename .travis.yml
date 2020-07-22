@@ -70,7 +70,7 @@ before_script:
   - wget https://cs.symfony.com/download/php-cs-fixer-v2.phar -O php-cs-fixer && chmod +x php-cs-fixer
 
 script:
-  - if [[ "${UPGRADE_PHPSPEC}" == "yes" ]]; then composer require --dev --no-update phpspec/phpspec:^4.0; fi
+  - if [[ "${UPGRADE_PHPSPEC}" == "yes" ]]; then composer require --dev --no-update phpspec/phpspec:^6.1; fi
   - vendor/bin/phpunit tests/ftp/*Tests.php
   - vendor/bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
   - vendor/bin/phpspec run
