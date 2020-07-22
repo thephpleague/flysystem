@@ -2,6 +2,10 @@
 
 ## 2.0.0-UNRELEASED
 
+## Changes
+
+* Renamed AwsS3V3Filesystem to AwsS3V3Filesystem (in line with other adapter names).
+
 ## Fixes
 
 * Allow creation of files with empty streams.
