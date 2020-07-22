@@ -45,7 +45,7 @@ install:
   - php test_files/wait_for_sftp.php
   - php test_files/wait_for_ftp.php 2121
   - php test_files/wait_for_ftp.php 2122
-  - if [[ "${UPGRADE_AWS_SDK}" == "yes" ]]; then composer require --dev --no-update aws/aws-sdk-php:^3.147.3; fi
+  - if [[ "${UPGRADE_AWS_SDK}" == "yes" ]]; then composer require --dev aws/aws-sdk-php:^3.147.3; fi
 
 script:
   - FLYSYSTEM_TEST_SFTP=yes travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
