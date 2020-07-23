@@ -100,6 +100,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private function setupConnection(): SFTP
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
+        $connection->disableStatCache();
 
         try {
             $this->checkFingerprint($connection);
