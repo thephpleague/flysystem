@@ -15,7 +15,16 @@ class SftpConnectionProviderTest extends TestCase
     public function giving_up_after_5_connection_failures(): void
     {
         $this->expectException(UnableToConnectToSftpHost::class);
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, null, new FixatedConnectivityChecker(5));
+        $provider = new SftpConnectionProvider(
+            'localhost',
+            'foo',
+            'pass',
+            2222,
+            false,
+            10,
+            null,
+            new FixatedConnectivityChecker(5)
+        );
         $provider->provideConnection();
     }
 
@@ -24,7 +33,16 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function trying_until_5_tries(): void
     {
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, null, new FixatedConnectivityChecker(4));
+        $provider = new SftpConnectionProvider(
+            'localhost',
+            'foo',
+            'pass',
+            2222,
+            false,
+            10,
+            null,
+            new FixatedConnectivityChecker(4)
+        );
         $connection = $provider->provideConnection();
         $sameConnection = $provider->provideConnection();
 
@@ -37,7 +55,14 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function verifying_a_fingerprint(): void
     {
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222);
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+            ]
+        );
         $connection = $provider->provideConnection();
 
         $key = $connection->getServerPublicHostKey();

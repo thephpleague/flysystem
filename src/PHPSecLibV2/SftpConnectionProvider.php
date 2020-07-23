@@ -140,4 +140,18 @@ class SftpConnectionProvider implements ConnectionProvider
             throw new UnableToAuthenticate('Can\'t authenticate.');
         }
     }
+
+    public static function fromArray(array $options): SftpConnectionProvider
+    {
+        return new SftpConnectionProvider(
+            $options['host'],
+            $options['username'],
+            $options['password'] ?? null,
+            $options['port'] ?? 22,
+            $options['useAgent'] ?? false,
+            $options['timeout'] ?? 10,
+            $options['hostFingerprint'] ?? null,
+            $options['connectivityChecker'] ?? null
+        );
+    }
 }
