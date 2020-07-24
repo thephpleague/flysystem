@@ -4,7 +4,7 @@ use League\Flysystem\PHPSecLibV2\SftpConnectionProvider;
 
 include __DIR__ . '/../vendor/autoload.php';
 
-$connectionProvider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222);
+$connectionProvider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222);
 
 $start = time();
 $connected = false;
