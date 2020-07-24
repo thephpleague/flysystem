@@ -7,6 +7,10 @@ namespace League\Flysystem\PHPSecLibV2;
 use phpseclib\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group sftp
+ * @group sftp-connection
+ */
 class SftpConnectionProviderTest extends TestCase
 {
     /**
@@ -19,6 +23,8 @@ class SftpConnectionProviderTest extends TestCase
             'localhost',
             'foo',
             'pass',
+            null,
+            null,
             2222,
             false,
             10,
@@ -37,6 +43,8 @@ class SftpConnectionProviderTest extends TestCase
             'localhost',
             'foo',
             'pass',
+            null,
+            null,
             2222,
             false,
             10,
@@ -53,22 +61,51 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
-    public function verifying_a_fingerprint(): void
+    public function authenticating_with_a_private_key(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'bar',
+                'privateKey' => __DIR__.'/../../test_files/sftp/id_rsa',
+                'passphrase' => 'secret',
+                'port' => 2222,
+            ]
+        );
+
+        $connection = $provider->provideConnection();
+        $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     */
+    public function authenticating_with_a_private_key_and_falling_back_to_password(): void
     {
         $provider = SftpConnectionProvider::fromArray(
             [
                 'host' => 'localhost',
                 'username' => 'foo',
                 'password' => 'pass',
+                'privateKey' => __DIR__.'/../../test_files/sftp/id_rsa',
+                'passphrase' => 'secret',
                 'port' => 2222,
             ]
         );
-        $connection = $provider->provideConnection();
 
-        $key = $connection->getServerPublicHostKey();
+        $connection = $provider->provideConnection();
+        $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     */
+    public function verifying_a_fingerprint(): void
+    {
+        $key = file_get_contents(__DIR__.'/../../test_files/sftp/ssh_host_rsa_key.pub');
         $fingerPrint = $this->computeFingerPrint($key);
 
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, $fingerPrint);
+        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222, false, 10, $fingerPrint);
         $anotherConnection = $provider->provideConnection();
         $this->assertInstanceOf(SFTP::class, $anotherConnection);
     }
@@ -79,7 +116,7 @@ class SftpConnectionProviderTest extends TestCase
     public function providing_an_invalid_fingerprint(): void
     {
         $this->expectException(UnableToEstablishAuthenticityOfHost::class);
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', 2222, false, 10, 'invalid:fingerprint');
+        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222, false, 10, 'invalid:fingerprint');
         $provider->provideConnection();
     }
 
@@ -89,7 +126,7 @@ class SftpConnectionProviderTest extends TestCase
     public function providing_an_invalid_password(): void
     {
         $this->expectException(UnableToAuthenticate::class);
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'lol', 2222, false);
+        $provider = new SftpConnectionProvider('localhost', 'foo', 'lol', null, null, 2222, false);
         $provider->provideConnection();
     }
 

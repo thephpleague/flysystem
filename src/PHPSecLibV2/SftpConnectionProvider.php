@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PHPSecLibV2;
 
+use phpseclib\Crypt\RSA;
 use phpseclib\Net\SFTP;
 use Throwable;
 
@@ -54,10 +55,22 @@ class SftpConnectionProvider implements ConnectionProvider
      */
     private $hostFingerprint;
 
+    /**
+     * @var string|null
+     */
+    private $privateKey;
+
+    /**
+     * @var string|null
+     */
+    private $passphrase;
+
     public function __construct(
         string $host,
         string $username,
         string $password = null,
+        string $privateKey = null,
+        string $passphrase = null,
         int $port = 22,
         bool $useAgent = false,
         int $timeout = 10,
@@ -67,6 +80,8 @@ class SftpConnectionProvider implements ConnectionProvider
         $this->host = $host;
         $this->username = $username;
         $this->password = $password;
+        $this->privateKey = $privateKey;
+        $this->passphrase = $passphrase;
         $this->useAgent = $useAgent;
         $this->port = $port;
         $this->timeout = $timeout;
@@ -136,8 +151,10 @@ class SftpConnectionProvider implements ConnectionProvider
 
     private function authenticate(SFTP $connection): void
     {
-        if ( ! $connection->login($this->username, $this->password)) {
-            throw new UnableToAuthenticate('Can\'t authenticate.');
+        if ($this->privateKey !== null) {
+            $this->authenticateWithPrivateKey($connection);
+        } elseif ( ! $connection->login($this->username, $this->password)) {
+            throw UnableToAuthenticate::withPassword();
         }
     }
 
@@ -147,11 +164,47 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['host'],
             $options['username'],
             $options['password'] ?? null,
+            $options['privateKey'] ?? null,
+            $options['passphrase'] ?? null,
             $options['port'] ?? 22,
             $options['useAgent'] ?? false,
             $options['timeout'] ?? 10,
             $options['hostFingerprint'] ?? null,
             $options['connectivityChecker'] ?? null
         );
+    }
+
+    private function authenticateWithPrivateKey(SFTP $connection): void
+    {
+        $privateKey = $this->loadPrivateKey();
+
+        if ($connection->login($this->username, $privateKey)) {
+            return;
+        }
+
+        if ($this->password !== null && $connection->login($this->username, $this->password)) {
+            return;
+        }
+
+        throw UnableToAuthenticate::withPrivateKey();
+    }
+
+    private function loadPrivateKey(): RSA
+    {
+        if ("---" !== substr($this->privateKey, 0, 3) && is_file($this->privateKey)) {
+            $this->privateKey = file_get_contents($this->privateKey);
+        }
+
+        $key = new RSA();
+
+        if ($this->passphrase !== null) {
+            $key->setPassword($this->passphrase);
+        }
+
+        if ( ! $key->loadKey($this->privateKey)) {
+            throw new UnableToLoadPrivateKey();
+        }
+
+        return $key;
     }
 }

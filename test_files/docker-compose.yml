@@ -6,9 +6,11 @@ services:
     image: atmoz/sftp
     volumes:
       - ./sftp/users.conf:/etc/sftp/users.conf
+      - ./sftp/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+      - ./sftp/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+      - ./sftp/id_rsa.pub:/home/bar/.ssh/keys/id_rsa.pub
     ports:
       - "2222:22"
-    command: foo:pass:::upload
   ftp:
     restart: always
     image: delfer/alpine-ftp-server

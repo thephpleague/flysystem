@@ -9,4 +9,13 @@ use RuntimeException;
 
 class UnableToAuthenticate extends RuntimeException implements FilesystemException
 {
+    public static function withPassword(): UnableToAuthenticate
+    {
+        return new UnableToAuthenticate('Unable to authenticate using a password.');
+    }
+
+    public static function withPrivateKey(): UnableToAuthenticate
+    {
+        return new UnableToAuthenticate('Unable to authenticate using a private key.');
+    }
 }
