@@ -18,4 +18,9 @@ class UnableToAuthenticate extends RuntimeException implements FilesystemExcepti
     {
         return new UnableToAuthenticate('Unable to authenticate using a private key.');
     }
+
+    public static function withSshAgent(): UnableToAuthenticate
+    {
+        return new UnableToAuthenticate('Unable to authenticate using an SSH agent.');
+    }
 }

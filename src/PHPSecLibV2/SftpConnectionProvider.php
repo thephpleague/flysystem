@@ -6,6 +6,7 @@ namespace League\Flysystem\PHPSecLibV2;
 
 use phpseclib\Crypt\RSA;
 use phpseclib\Net\SFTP;
+use phpseclib\System\SSH\Agent;
 use Throwable;
 
 class SftpConnectionProvider implements ConnectionProvider
@@ -153,6 +154,8 @@ class SftpConnectionProvider implements ConnectionProvider
     {
         if ($this->privateKey !== null) {
             $this->authenticateWithPrivateKey($connection);
+        } elseif ($this->useAgent) {
+            $this->authenticateWithAgent($connection);
         } elseif ( ! $connection->login($this->username, $this->password)) {
             throw UnableToAuthenticate::withPassword();
         }
@@ -206,5 +209,14 @@ class SftpConnectionProvider implements ConnectionProvider
         }
 
         return $key;
+    }
+
+    private function authenticateWithAgent(SFTP $connection): void
+    {
+        $agent = new Agent();
+
+        if ( ! $connection->login($this->username, $agent)) {
+            throw UnableToAuthenticate::withSshAgent();
+        }
     }
 }

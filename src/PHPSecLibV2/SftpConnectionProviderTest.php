@@ -76,6 +76,43 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
+    public function authenticating_with_an_ssh_agent(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'bar',
+                'useAgent' => true,
+                'port' => 2222,
+            ]
+        );
+
+        $connection = $provider->provideConnection();
+        $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_authenticating_with_an_ssh_agent(): void
+    {
+        $this->expectException(UnableToAuthenticate::class);
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'useAgent' => true,
+                'port' => 2222,
+            ]
+        );
+
+        $provider->provideConnection();
+    }
+
+    /**
+     * @test
+     */
     public function authenticating_with_a_private_key_and_falling_back_to_password(): void
     {
         $provider = SftpConnectionProvider::fromArray(
