@@ -42,7 +42,7 @@ matrix:
 install:
   - docker-compose -f test_files/docker-compose.yml up -d
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
-  - ssh-add ./test_files/sftp/id_rsa
+  - eval `ssh-agent` && ssh-add ./test_files/sftp/id_rsa
   - php test_files/wait_for_sftp.php
   - php test_files/wait_for_ftp.php 2121
   - php test_files/wait_for_ftp.php 2122
