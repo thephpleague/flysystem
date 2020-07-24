@@ -19,18 +19,18 @@ class SftpConnectionProviderTest extends TestCase
     public function giving_up_after_5_connection_failures(): void
     {
         $this->expectException(UnableToConnectToSftpHost::class);
-        $provider = new SftpConnectionProvider(
-            'localhost',
-            'foo',
-            'pass',
-            null,
-            null,
-            2222,
-            false,
-            10,
-            null,
-            new FixatedConnectivityChecker(5)
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'timeout' => 10,
+                'connectivityChecker' => new FixatedConnectivityChecker(5)
+            ]
         );
+
         $provider->provideConnection();
     }
 
@@ -39,18 +39,14 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function trying_until_5_tries(): void
     {
-        $provider = new SftpConnectionProvider(
-            'localhost',
-            'foo',
-            'pass',
-            null,
-            null,
-            2222,
-            false,
-            10,
-            null,
-            new FixatedConnectivityChecker(4)
-        );
+        $provider = SftpConnectionProvider::fromArray([
+            'host' => 'localhost',
+            'username' => 'foo',
+            'password' => 'pass',
+            'port' => 2222,
+            'timeout' => 10,
+            'connectivityCheckout' => new FixatedConnectivityChecker(4)
+        ]);
         $connection = $provider->provideConnection();
         $sameConnection = $provider->provideConnection();
 
@@ -105,7 +101,16 @@ class SftpConnectionProviderTest extends TestCase
         $key = file_get_contents(__DIR__.'/../../test_files/sftp/ssh_host_rsa_key.pub');
         $fingerPrint = $this->computeFingerPrint($key);
 
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222, false, 10, $fingerPrint);
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'hostFingerprint' => $fingerPrint,
+            ]
+        );
+
         $anotherConnection = $provider->provideConnection();
         $this->assertInstanceOf(SFTP::class, $anotherConnection);
     }
@@ -116,7 +121,16 @@ class SftpConnectionProviderTest extends TestCase
     public function providing_an_invalid_fingerprint(): void
     {
         $this->expectException(UnableToEstablishAuthenticityOfHost::class);
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222, false, 10, 'invalid:fingerprint');
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'hostFingerprint' => 'invalid:fingerprint',
+            ]
+        );
         $provider->provideConnection();
     }
 
@@ -126,7 +140,14 @@ class SftpConnectionProviderTest extends TestCase
     public function providing_an_invalid_password(): void
     {
         $this->expectException(UnableToAuthenticate::class);
-        $provider = new SftpConnectionProvider('localhost', 'foo', 'lol', null, null, 2222, false);
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'lol',
+                'port' => 2222,
+            ]
+        );
         $provider->provideConnection();
     }
 

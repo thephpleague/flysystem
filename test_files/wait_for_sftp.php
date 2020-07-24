@@ -4,18 +4,25 @@ use League\Flysystem\PHPSecLibV2\SftpConnectionProvider;
 
 include __DIR__ . '/../vendor/autoload.php';
 
-$connectionProvider = new SftpConnectionProvider('localhost', 'foo', 'pass', null, null, 2222);
+$connectionProvider = SftpConnectionProvider::fromArray(
+    [
+        'host' => 'localhost',
+        'username' => 'foo',
+        'password' => 'pass',
+        'port' => 2222,
+    ]
+);
 
 $start = time();
 $connected = false;
 
-while(time() - $start < 15) {
+while (time() - $start < 15) {
     try {
         $connectionProvider->provideConnection();
         $connected = true;
         break;
     } catch (Throwable $exception) {
-        echo ($exception);
+        echo($exception);
         usleep(10000);
     }
 }
