@@ -1,7 +1,7 @@
 <?php
 
-use League\Flysystem\FTP\FtpConnectionOptions;
-use League\Flysystem\FTP\FtpConnectionProvider;
+use League\Flysystem\Ftp\FtpConnectionOptions;
+use League\Flysystem\Ftp\FtpConnectionProvider;
 
 include __DIR__ . '/../vendor/autoload.php';
 
