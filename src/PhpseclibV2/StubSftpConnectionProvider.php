@@ -6,7 +6,7 @@ namespace League\Flysystem\PhpseclibV2;
 
 use phpseclib\Net\SFTP;
 
-class StubSFTPConnectionProvider implements ConnectionProvider
+class StubSftpConnectionProvider implements ConnectionProvider
 {
     /**
      * @var string

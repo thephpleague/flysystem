@@ -200,7 +200,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     private function connectionProvider(): ConnectionProvider
     {
         if ( ! $this->connectionProvider instanceof ConnectionProvider) {
-            $this->connectionProvider = new StubSFTPConnectionProvider('localhost', 'foo', 'pass', 2222);
+            $this->connectionProvider = new StubSftpConnectionProvider('localhost', 'foo', 'pass', 2222);
         }
 
         return $this->connectionProvider;
