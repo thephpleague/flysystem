@@ -66,6 +66,11 @@ class SftpConnectionProvider implements ConnectionProvider
      */
     private $passphrase;
 
+    /**
+     * @var int
+     */
+    private $maxTries;
+
     public function __construct(
         string $host,
         string $username,
@@ -75,6 +80,7 @@ class SftpConnectionProvider implements ConnectionProvider
         int $port = 22,
         bool $useAgent = false,
         int $timeout = 10,
+        int $maxTries = 4,
         string $hostFingerprint = null,
         ConnectivityChecker $connectivityChecker = null
     ) {
@@ -88,21 +94,23 @@ class SftpConnectionProvider implements ConnectionProvider
         $this->timeout = $timeout;
         $this->hostFingerprint = $hostFingerprint;
         $this->connectivityChecker = $connectivityChecker ?: new SimpleConnectivityChecker();
+        $this->maxTries = $maxTries;
     }
 
     public function provideConnection(): SFTP
     {
         $tries = 0;
         start:
+
         $connection = $this->connection instanceof SFTP
             ? $this->connection
             : $this->setupConnection();
 
-        while( ! $this->connectivityChecker->isConnected($connection)) {
+        if( ! $this->connectivityChecker->isConnected($connection)) {
             $connection->disconnect();
             $this->connection = null;
 
-            if ($tries < 4) {
+            if ($tries < $this->maxTries) {
                 $tries++;
                 goto start;
             }
