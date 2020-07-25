@@ -180,6 +180,7 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['port'] ?? 22,
             $options['useAgent'] ?? false,
             $options['timeout'] ?? 10,
+            $options['maxTries'] ?? 4,
             $options['hostFingerprint'] ?? null,
             $options['connectivityChecker'] ?? null
         );
