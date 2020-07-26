@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.70 - 2020-07-26
+
+### Fixes
+
+* Local::update now also updates permissions.
+
 ## 1.0.69 - 2020-05-12
 
 ### Fixes
