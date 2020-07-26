@@ -84,6 +84,19 @@ class LocalAdapterTests extends TestCase
         }
     }
 
+    public function testUpdateSetsNewVisibility()
+    {
+        $this->adapter->write('file.txt', 'old contents', new Config(['visibility' => 'public']));
+        $this->assertEquals('old contents', $this->adapter->read('file.txt')['contents']);
+        $this->assertEquals('public', $this->adapter->getVisibility('file.txt')['visibility']);
+
+        $this->adapter->update('file.txt', 'new contents', new Config(['visibility' => 'private']));
+
+        $this->assertEquals('new contents', $this->adapter->read('file.txt')['contents']);
+        $this->assertEquals('private', $this->adapter->getVisibility('file.txt')['visibility']);
+    }
+
+
     public function testStreamWrappersAreSupported()
     {
         if (IS_WINDOWS) {
