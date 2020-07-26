@@ -146,6 +146,22 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function overwriting_a_file(): void
+    {
+        $this->givenWeHaveAnExistingFile('path.txt', 'contents', ['visibility' => Visibility::PUBLIC]);
+        $adapter = $this->adapter();
+
+        $adapter->write('path.txt', 'new contents', new Config(['visibility' => Visibility::PRIVATE]));
+
+        $contents = $adapter->read('path.txt');
+        $this->assertEquals('new contents', $contents);
+        $visibility = $adapter->visibility('path.txt')->visibility();
+        $this->assertEquals(Visibility::PRIVATE, $visibility);
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_file(): void
     {
         $adapter = $this->adapter();
