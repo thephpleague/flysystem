@@ -4,7 +4,7 @@
 
 ## Changes
 
-* Renamed AwsS3V3Filesystem to AwsS3V3Filesystem (in line with other adapter names).
+* Renamed AwsS3V3Filesystem to AwsS3V3Adapter (in line with other adapter names).
 * Renamed the PHPSecLibV2 package to PhpseclibV2, Renamed the FTP package to Ftp.
 * Public key and ss-agent authentication support for Sftp
 
