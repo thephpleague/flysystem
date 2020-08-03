@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 
 class UtilTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testEmulateDirectories()
     {

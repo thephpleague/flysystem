@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class StreamHasherTest extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testHasher()
     {

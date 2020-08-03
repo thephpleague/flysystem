@@ -376,7 +376,7 @@ function ftp_set_option($connection, $option, $value)
 
 class FtpTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     protected $options = [
         'host' => 'example.org',
@@ -392,7 +392,7 @@ class FtpTests extends TestCase
         'recurseManually' => false,
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         putenv('FTP_CLOSE_THROW=nope');
     }

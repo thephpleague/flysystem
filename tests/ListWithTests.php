@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListWithTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testHandle()
     {

@@ -12,11 +12,12 @@ use Prophecy\Argument;
 
 class MountManagerTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testInstantiable()
     {
-        new MountManager();
+        $instance = new MountManager();
+        $this->assertInstanceOf(MountManager::class, $instance);
     }
 
     public function testConstructorInjection()

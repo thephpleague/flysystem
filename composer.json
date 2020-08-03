@@ -21,12 +21,12 @@
         }
     ],
     "require": {
-        "php": ">=5.5.9",
+        "php": ">=7.2.5",
         "ext-fileinfo": "*"
     },
     "require-dev": {
-        "phpspec/phpspec": "^3.4 || ^4.0 || ^5.0 || ^6.0",
-        "phpunit/phpunit": "^5.7.26"
+        "phpspec/phpspec": "^6.2",
+        "phpunit/phpunit": "^8.5.8"
     },
     "autoload": {
         "psr-4": {

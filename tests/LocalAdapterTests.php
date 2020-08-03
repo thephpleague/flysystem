@@ -50,7 +50,7 @@ function mkdir($pathname, $mode = 0777, $recursive = false, $context = null)
 
 class LocalAdapterTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     /**
      * @var Local
@@ -59,13 +59,13 @@ class LocalAdapterTests extends TestCase
 
     protected $root;
 
-    public function setup()
+    public function setup(): void
     {
         $this->root = __DIR__ . '/files/';
         $this->adapter = new Local($this->root);
     }
 
-    public function teardown()
+    public function teardown(): void
     {
         $it = new \RecursiveDirectoryIterator($this->root, \RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new \RecursiveIteratorIterator(
