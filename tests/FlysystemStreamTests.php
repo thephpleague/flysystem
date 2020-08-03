@@ -9,7 +9,7 @@ use Prophecy\Argument;
 
 class FlysystemStreamTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testWriteStream()
     {

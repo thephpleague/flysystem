@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class NotSupportingVisivilityTests extends TestCase
 {
-    use \PHPUnitHacks;
+    // use \PHPUnitHacks;
 
     public function testGetVisibility()
     {
