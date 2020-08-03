@@ -26,6 +26,7 @@
     },
     "require-dev": {
         "phpspec/phpspec": "^6.2",
+        "phpspec/prophecy": "^1.11.1",
         "phpunit/phpunit": "^8.5.8"
     },
     "autoload": {
