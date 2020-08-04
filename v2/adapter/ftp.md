@@ -5,15 +5,15 @@ permalink: /v2/docs/adapter/ftp/
 ---
 
 Interacting with an ftp filesystem through Flysystem can be done
-by using the `League\Flysystem\FTP\FtpAdapter`.
+by using the `League\Flysystem\Ftp\FtpAdapter`.
 
 ## Simple usage:
 
 ```php
 // The internal adapter
-$adapter = new League\Flysystem\FTP\FtpAdapter(
+$adapter = new League\Flysystem\Ftp\FtpAdapter(
     // Connection options
-    League\Flysystem\FTP\FtpConnectionOptions::fromArray([
+    League\Flysystem\Ftp\FtpConnectionOptions::fromArray([
         'host' => 'hostname', // required
         'root' => '/root/path/', // required
         'username' => 'username', // required

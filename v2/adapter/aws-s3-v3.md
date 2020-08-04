@@ -5,7 +5,7 @@ permalink: /v2/docs/adapter/aws-s3-v3/
 ---
 
 Interacting with Aws S3 through Flysystem can be done
-by using the `League\Flysystem\AwsS3V3\AwsS3V3Filesystem`.
+by using the `League\Flysystem\AwsS3V3\AwsS3V3Adapter`.
 
 ## Simple usage:
 
@@ -14,7 +14,7 @@ by using the `League\Flysystem\AwsS3V3\AwsS3V3Filesystem`.
 $client = new Aws\S3\S3Client($options);
 
 // The internal adapter
-$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Filesystem(
+$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
     // S3Client
     $client,
     // Bucket name

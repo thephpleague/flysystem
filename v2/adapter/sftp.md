@@ -8,8 +8,8 @@ permalink: /v2/docs/adapter/sftp/
 
 ```php
 use League\Flysystem\Filesystem;
-use League\Flysystem\PHPSecLibV2\SftpConnectionProvider;
-use League\Flysystem\PHPSecLibV2\SftpAdapter;
+use League\Flysystem\PhpseclibV2\SftpConnectionProvider;
+use League\Flysystem\PhpseclibV2\SftpAdapter;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 
