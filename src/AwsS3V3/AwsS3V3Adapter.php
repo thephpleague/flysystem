@@ -87,23 +87,30 @@ class AwsS3V3Adapter implements FilesystemAdapter
      */
     private $mimeTypeDetector;
 
+    /**
+     * @var array
+     */
+    private $options;
+
     public function __construct(
         S3ClientInterface $client,
         string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        array $options = []
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
         $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->options = $options;
     }
 
     public function fileExists(string $path): bool
     {
-        return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path));
+        return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path), $this->options);
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -149,7 +156,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
             }
         }
 
-        return $options;
+        return $options + $this->options;
     }
 
     public function writeStream(string $path, $contents, Config $config): void
@@ -319,7 +326,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     private function retrievePaginatedListing(array $options): Generator
     {
-        $resultPaginator = $this->client->getPaginator('ListObjects', $options);
+        $resultPaginator = $this->client->getPaginator('ListObjects', $options + $this->options);
 
         foreach ($resultPaginator as $result) {
             yield from ($result->get('CommonPrefixes') ?: []);
@@ -349,13 +356,13 @@ class AwsS3V3Adapter implements FilesystemAdapter
                 $exception
             );
         }
-        $arguments = [
+        $options = [
             'ACL'        => $this->visibility->visibilityToAcl($visibility),
             'Bucket'     => $this->bucket,
             'Key'        => $this->prefixer->prefixPath($destination),
             'CopySource' => S3Client::encodeKey($this->bucket . '/' . $this->prefixer->prefixPath($source)),
         ];
-        $command = $this->client->getCommand('CopyObject', $arguments);
+        $command = $this->client->getCommand('CopyObject', $options + $this->options);
 
         try {
             $this->client->execute($command);
@@ -367,7 +374,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
     private function readObject(string $path): StreamInterface
     {
         $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('GetObject', $options);
+        $command = $this->client->getCommand('GetObject', $options + $this->options);
 
         try {
             return $this->client->execute($command)->get('Body');
