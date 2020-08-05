@@ -8,7 +8,7 @@ Background Info:
     New In V2: '/v2/docs/what-is-new/'
     Architecture: '/v2/docs/architecture/'
     Design Considerations: '/v2/docs/design-considerations/'
-    What is visibility?: '/v2/docs/visibility/'
+    Visibility and Permissions: '/v2/docs/visibility/'
 
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'
