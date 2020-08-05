@@ -81,6 +81,28 @@ issues were tackled. One of these was the response for a `listContents` call.
 You can read more about it in the
 [docs about directory listings](/v2/docs/usage/directory-listings/).
 
+## Custom mime-type detection
+
+In V1, looking up mime-types could give performance penalties. In V2, this
+components was extracted into its own package called `league/mime-type-detection`.
+This package allows you to control how a mime-type is resolved for a
+path + file contents combination. This package is shipped by default with
+Flysystem.
+
+## Customizable visibility conversion
+
+All adapter now provide their own interface to convert visibility
+input and configuration options to their implementation specific
+permissions. This gives you fine-grained control over your
+security settings.
+
+## Replaceable path normalizations
+
+In V1, the filesystem protected against path traversals and weird whitespace in
+paths. For V2, this was extracted into its own internal component, allowing you
+to replace this behavior entirely, or add your own special verification on top
+the traversal protection. 
+
 ## Plugins are removed
 
 In V1, plugins allowed you to extend the functionality of the filesystem. It used a

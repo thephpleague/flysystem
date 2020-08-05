@@ -8,7 +8,8 @@ permalink: /v2/docs/visibility/
 
 Flysystem provides a simplified approach to dealing with permissions, called visibility.
 Visibility, is a string based configuration option that allows you set permissions on
-files and directories.
+files and directories. The visibility conversion classes and interfaces give you
+fine-grained control over permissions for every adapter.
 
 ## Portable visibility
 
@@ -18,7 +19,7 @@ interpretation is aimed to be as similar in effect across all adapter. This can,
 however, not fit your needs. In this case you can implement your own visibility
 strategy.
 
-Unix-style visibility
+## Unix-style visibility
 
 For filesystems with a Unix-style visibility system, like on MacOS and Linux, these string
 values are translated to permissions like `0600` or `0744`. The

@@ -1,11 +1,14 @@
 Flysystem:
     Introduction: '/v2/docs/'
+    Getting Started: '/v2/docs/getting-started/'
+    Security Policy: '/v2/security/'
+    Version 1 Docs: '/v1/docs/'
+
+Background Info:
     New In V2: '/v2/docs/what-is-new/'
     Architecture: '/v2/docs/architecture/'
     Design Considerations: '/v2/docs/design-considerations/'
-    File and directory visibility: '/v2/docs/visibility/'
-    Security Policy: '/v2/security/'
-    Version 1 Docs: '/v1/docs/'
+    What is visibility?: '/v2/docs/visibility/'
 
 Usage:
     Filesystem API: '/v2/docs/usage/filesystem-api/'
@@ -21,5 +24,6 @@ Adapters:
     InMemory: '/v2/docs/adapter/in-memory/'
 
 Advanced:
+  Mime-type detection: '/v2/docs/advanced/mime-type-detection/'
   Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
   Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
