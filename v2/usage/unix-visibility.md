@@ -23,13 +23,13 @@ you to implement something that makes sense for your case.
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 $visibilityConverter = PortableVisibilityConverter::fromArray([
-        'file' => [
-            'public' => 0640,
-            'private' => 0604,
-        ],
-        'dir' => [
-            'public' => 0740,
-            'private' => 7604,
-        ],
-    ])
+    'file' => [
+        'public' => 0640,
+        'private' => 0604,
+    ],
+    'dir' => [
+        'public' => 0740,
+        'private' => 7604,
+    ],
+]);
 ```
