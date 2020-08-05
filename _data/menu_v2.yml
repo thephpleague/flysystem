@@ -3,6 +3,7 @@ Flysystem:
     New In V2: '/v2/docs/what-is-new/'
     Architecture: '/v2/docs/architecture/'
     Design Considerations: '/v2/docs/design-considerations/'
+    File and directory visibility: '/v2/docs/visibility/'
     Security Policy: '/v2/security/'
     Version 1 Docs: '/v1/docs/'
 
