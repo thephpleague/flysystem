@@ -405,7 +405,6 @@ class FtpAdapter implements FilesystemAdapter
         $format = strlen($date) === 8 ? 'm-d-yH:iA' : 'Y-m-dH:i';
         $dt = DateTime::createFromFormat($format, $date . $time);
         $lastModified = $dt ? $dt->getTimestamp() : (int) strtotime("$date $time");
-        $size = (int) $size;
 
         return new FileAttributes($path, (int) $size, null, $lastModified);
     }
