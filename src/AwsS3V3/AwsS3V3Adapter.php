@@ -312,7 +312,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         $prefix = trim($this->prefixer->prefixPath($path), '/');
         $prefix = empty($prefix) ? '' : $prefix . '/';
-        $options = ['Bucket' => $this->bucket, 'Prefix' => trim($prefix, '/') . '/'];
+        $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
 
         if ($deep === false) {
             $options['Delimiter'] = '/';
