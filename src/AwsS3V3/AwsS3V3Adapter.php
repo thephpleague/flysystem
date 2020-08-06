@@ -310,7 +310,8 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep): iterable
     {
-        $prefix = $this->prefixer->prefixPath($path);
+        $prefix = trim($this->prefixer->prefixPath($path), '/');
+        $prefix = empty($prefix) ? '' : $prefix . '/';
         $options = ['Bucket' => $this->bucket, 'Prefix' => trim($prefix, '/') . '/'];
 
         if ($deep === false) {
