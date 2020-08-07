@@ -336,7 +336,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->givenWeHaveAnExistingFile('path1.txt');
         $this->givenWeHaveAnExistingFile('path2.txt');
 
-        $contents = iterator_to_array($adapter->listContents('', true));
+        $contents = iterator_to_array($this->adapter()->listContents('', true));
 
         $this->assertCount(2, $contents);
     }
