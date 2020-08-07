@@ -331,6 +331,19 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function listing_a_toplevel_directory(): void
+    {
+        $this->givenWeHaveAnExistingFile('path1.txt');
+        $this->givenWeHaveAnExistingFile('path2.txt');
+
+        $contents = iterator_to_array($adapter->listContents('', true));
+
+        $this->assertCount(2, $contents);
+    }
+
+    /**
+     * @test
+     */
     public function writing_and_reading_with_streams(): void
     {
         $writeStream = stream_with_contents('contents');
