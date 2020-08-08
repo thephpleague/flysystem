@@ -12,7 +12,7 @@
     },
     "require": {
         "php": "^7.2",
-        "league/flysystem": "2.0.0-alpha.3"
+        "league/flysystem": "2.0.0-beta.2"
     },
     "license": "MIT",
     "authors": [
