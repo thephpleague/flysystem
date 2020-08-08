@@ -823,7 +823,7 @@ class FtpTests extends TestCase
      */
     public function testLoginFailSsl()
     {
-        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+        if (substr(PHP_VERSION, 0, 2) === '8.') {
             $this->markTestSkipped('PHP 8.0.0 does not accept non resource arguments.');
         }
 
