@@ -29,15 +29,15 @@ matrix:
       env: COMPOSER_OPTS="--prefer-lowest"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes" DISABLE_TRAVIS_RETRY="yes"
     - php: nightly
       dist: bionic
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes" DISABLE_TRAVIS_RETRY="yes"
   allow_failures:
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes"
+      env: COMPOSER_OPTS="--ignore-platform-reqs" UPGRADE_AWS_SDK="yes" DISABLE_TRAVIS_RETRY="yes"
     - php: nightly
-      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes"
+      env: COMPOSER_OPTS="--ignore-platform-reqs --prefer-lowest" UPGRADE_AWS_SDK="yes" DISABLE_TRAVIS_RETRY="yes"
 
 install:
   - docker-compose -f test_files/docker-compose.yml up -d
@@ -51,7 +51,9 @@ install:
   - if [[ "${UPGRADE_AWS_SDK}" == "yes" ]]; then composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3; fi
 
 script:
-  - FLYSYSTEM_TEST_SFTP=yes vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml
+  - FLYSYSTEM_TEST_SFTP=yes
+  - if [[ "${DISABLE_TRAVIS_RETRY}" == "yes" ]]; then vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml; fi
+  - if [[ "${DISABLE_TRAVIS_RETRY}" != "yes" ]]; then travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml; fi
   - vendor/bin/phpstan analyse -l 6 src
 
 after_script:
