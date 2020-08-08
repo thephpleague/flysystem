@@ -57,7 +57,7 @@ class MimeType
      */
     public static function detectByFileExtension($extension)
     {
-        return static::detector()->detectMimeTypeFromPath('artificial.' . $extension);
+        return static::detector()->detectMimeTypeFromPath('artificial.' . $extension) ?: 'plain/text';
     }
 
     /**
