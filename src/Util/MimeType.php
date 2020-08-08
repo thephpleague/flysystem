@@ -2,8 +2,6 @@
 
 namespace League\Flysystem\Util;
 
-use ErrorException;
-use finfo;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\GeneratedExtensionToMimeTypeMap;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -14,7 +12,7 @@ use League\MimeTypeDetection\MimeTypeDetector;
 class MimeType
 {
     protected static $extensionToMimeTypeMap = GeneratedExtensionToMimeTypeMap::MIME_TYPES_FOR_EXTENSIONS;
-    private static $detector;
+    protected static $detector;
 
     public static function useDetector(MimeTypeDetector $detector)
     {
