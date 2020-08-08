@@ -2,6 +2,7 @@
 
 namespace League\Flysystem;
 
+use LogicException;
 use PHPUnit\Framework\TestCase;
 
 class UtilTests extends TestCase
@@ -77,11 +78,9 @@ class UtilTests extends TestCase
         $this->assertInstanceOf('League\Flysystem\Config', Util::ensureConfig(new Config()));
     }
 
-    /**
-     * @expectedException  LogicException
-     */
     public function testInvalidValueEnsureConfig()
     {
+        $this->expectException(LogicException::class);
         Util::ensureConfig(false);
     }
 
@@ -97,11 +96,11 @@ class UtilTests extends TestCase
     }
 
     /**
-     * @expectedException  LogicException
      * @dataProvider       invalidPathProvider
      */
     public function testOutsideRootPath($path)
     {
+        $this->expectException(LogicException::class);
         Util::normalizePath($path);
     }
 

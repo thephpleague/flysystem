@@ -5,7 +5,10 @@ namespace League\Flysystem\Adapter;
 use DateTime;
 use ErrorException;
 use League\Flysystem\Config;
+use League\Flysystem\NotSupportedException;
+use LogicException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 function ftp_systype($connection)
 {
@@ -406,7 +409,7 @@ class FtpTests extends TestCase
         $adapter = new Ftp($this->options);
         $this->assertOptionsAreRetrievable($adapter);
         $listing = $adapter->listContents('', true);
-        $this->assertInternalType('array', $listing);
+        $this->assertIsArray($listing);
         $this->assertGetterFailuresReturnFalse($adapter);
         $this->assertTrue($adapter->rename('a', 'b'));
         $this->assertTrue($adapter->delete('a'));
@@ -418,10 +421,10 @@ class FtpTests extends TestCase
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
         $this->assertFalse($adapter->createDir('some.nested/mkdir.fail', new Config()));
-        $this->assertInternalType('array', $adapter->write('unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
-        $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+        $this->assertIsArray($adapter->write('unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
+        $this->assertIsArray($adapter->writeStream('unknowndir/file.txt', tmpfile(), new Config(['visibility' => 'public'])));
+        $this->assertIsArray($adapter->updateStream('unknowndir/file.txt', tmpfile(), new Config()));
+        $this->assertIsArray($adapter->getTimestamp('some/file.ext'));
     }
 
     /**
@@ -494,7 +497,7 @@ class FtpTests extends TestCase
     {
         $adapter = new Ftp($this->options);
         $metadata = $adapter->getMetadata('file1.txt');
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file1.txt', $metadata['path']);
     }
@@ -515,7 +518,7 @@ class FtpTests extends TestCase
     {
         $adapter = new Ftp($this->options);
         $metadata = $adapter->getMetadata('0');
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('0', $metadata['path']);
     }
@@ -537,7 +540,7 @@ class FtpTests extends TestCase
     {
         $adapter = new Ftp($this->options);
         $metadata = $adapter->getMetadata('file2.txt');
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file2.txt', $metadata['path']);
         $this->assertEquals(1432382940, $metadata['timestamp']);
@@ -545,7 +548,7 @@ class FtpTests extends TestCase
         $this->assertEquals(684, $metadata['size']);
 
         $metadata = $adapter->getMetadata('file3.txt');
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file3.txt', $metadata['path']);
         $this->assertEquals(1473163740, $metadata['timestamp']);
@@ -553,7 +556,7 @@ class FtpTests extends TestCase
         $this->assertEquals(684, $metadata['size']);
 
         $metadata = $adapter->getMetadata('file4.txt');
-        $this->assertInternalType('array', $metadata);
+        $this->assertIsArray($metadata);
         $this->assertEquals('file', $metadata['type']);
         $this->assertEquals('file4.txt', $metadata['path']);
         $this->assertEquals(1464005340, $metadata['timestamp']);
@@ -785,10 +788,10 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
      */
     public function testConnectFail()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'fail.me', 'ssl' => false, 'transferMode' => FTP_BINARY]);
         $adapter->connect();
     }
@@ -805,40 +808,40 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
      */
     public function testConnectFailSsl()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'fail.me', 'ssl' => true]);
         $adapter->connect();
     }
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
      */
     public function testLoginFailSsl()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'login.fail', 'ssl' => true]);
         $adapter->connect();
     }
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
      */
     public function testRootFailSsl()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'chdir.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
 
     /**
      * @depends testInstantiable
-     * @expectedException RuntimeException
      */
     public function testPassiveFailSsl()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'pasv.fail', 'ssl' => true, 'root' => 'somewhere']);
         $adapter->connect();
     }
@@ -866,20 +869,20 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException \League\Flysystem\NotSupportedException
      */
     public function testItThrowsAnExceptionWhenAnInvalidSystemTypeIsSet()
     {
+        $this->expectException(NotSupportedException::class);
         $adapter = new Ftp($this->options + ['systemType' => 'unknown']);
         $adapter->listContents();
     }
 
     /**
      * @depends testInstantiable
-     * @expectedException \RuntimeException
      */
     public function testItThrowsAnExceptionWhenAnInvalidUnixListingIsFound()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp($this->options + ['systemType' => 'unix']);
         $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
         $this->assertEquals('file1.txt', $metadata['path']);
@@ -896,10 +899,10 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException \RuntimeException
      */
     public function testItThrowsAnExceptionWhenAnInvalidWindowsListingIsFound()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp($this->options + ['systemType' => 'windows']);
         $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
         $this->assertEquals('file1.txt', $metadata['path']);
@@ -917,10 +920,10 @@ class FtpTests extends TestCase
 
     /**
      * @depends testInstantiable
-     * @expectedException \RuntimeException
      */
     public function testItThrowsAnExceptionWhenItCouldNotSetUtf8ModeForConnection()
     {
+        $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'utf8.fail', 'utf8' => true]);
         $adapter->setUtf8(true);
         $adapter->connect();

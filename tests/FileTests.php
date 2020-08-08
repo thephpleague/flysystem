@@ -54,7 +54,7 @@ class FileTests extends TestCase
     public function testReadSteam()
     {
         $file = $this->getFile();
-        $this->assertInternalType('resource', $file->readStream());
+        $this->assertIsResource($file->readStream());
     }
 
     public function testWrite()

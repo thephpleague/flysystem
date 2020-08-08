@@ -67,21 +67,17 @@ class PluginTests extends TestCase
         $this->filesystem = new Filesystem(new Local(__DIR__));
     }
 
-    /**
-     * @expectedException  \LogicException
-     */
     public function testPlugin()
     {
+        $this->expectException(LogicException::class);
         $this->filesystem->addPlugin(new MyPlugin());
         $this->assertEquals('result', $this->filesystem->beAwesome('result'));
         $this->filesystem->unknownPlugin();
     }
 
-    /**
-     * @expectedException  \LogicException
-     */
     public function testInvalidPlugin()
     {
+        $this->expectException(LogicException::class);
         $this->filesystem->addPlugin(new InvalidPlugin());
         $this->filesystem->beInvalid();
     }
@@ -97,11 +93,9 @@ class PluginTests extends TestCase
         $this->assertTrue($goodFile->authorize());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testBadMagicCall()
     {
+        $this->expectException(BadMethodCallException::class);
         $file = $this->filesystem->get('foo', new File());
         $file->nonExistentMethod();
     }

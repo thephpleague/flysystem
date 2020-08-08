@@ -3,7 +3,10 @@
 namespace League\Flysystem\Adapter;
 
 use League\Flysystem\Config;
+use League\Flysystem\Exception;
+use League\Flysystem\NotSupportedException;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 function fopen($result, $mode)
 {
@@ -137,9 +140,9 @@ class LocalAdapterTests extends TestCase
         $adapter = $this->adapter;
         $adapter->write('file.txt', 'contents', new Config());
         $result = $adapter->readStream('file.txt');
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('stream', $result);
-        $this->assertInternalType('resource', $result['stream']);
+        $this->assertIsResource($result['stream']);
         fclose($result['stream']);
         $adapter->delete('file.txt');
     }
@@ -278,7 +281,7 @@ class LocalAdapterTests extends TestCase
     {
         $this->adapter->write('dummy.txt', '1234', new Config());
         $result = $this->adapter->getSize('dummy.txt');
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(4, $result['size']);
     }
@@ -287,16 +290,16 @@ class LocalAdapterTests extends TestCase
     {
         $this->adapter->write('dummy.txt', '1234', new Config());
         $result = $this->adapter->getTimestamp('dummy.txt');
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('timestamp', $result);
-        $this->assertInternalType('int', $result['timestamp']);
+        $this->assertIsInt($result['timestamp']);
     }
 
     public function testGetMimetype()
     {
         $this->adapter->write('text.txt', 'contents', new Config());
         $result = $this->adapter->getMimetype('text.txt');
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('mimetype', $result);
         $this->assertEquals('text/plain', $result['mimetype']);
     }
@@ -310,7 +313,7 @@ class LocalAdapterTests extends TestCase
     {
         $this->adapter->createDir('test-dir', new Config());
         $output = $this->adapter->getVisibility('test-dir');
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
     }
@@ -333,7 +336,7 @@ class LocalAdapterTests extends TestCase
         $this->adapter->write('path.txt', 'contents', new Config());
         $this->adapter->setVisibility('path.txt', 'public');
         $output = $this->adapter->getVisibility('path.txt');
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
 
@@ -349,7 +352,7 @@ class LocalAdapterTests extends TestCase
         $this->adapter->createDir('public-dir', new Config());
         $this->adapter->setVisibility('public-dir', 'public');
         $output = $this->adapter->getVisibility('public-dir');
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('public', $output['visibility']);
     }
@@ -363,7 +366,7 @@ class LocalAdapterTests extends TestCase
         $this->adapter->write('path.txt', 'contents', new Config());
         $this->adapter->setVisibility('path.txt', 'private');
         $output = $this->adapter->getVisibility('path.txt');
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
         $this->assertEquals("0600", substr(sprintf('%o', fileperms($this->root . 'path.txt')), -4));
@@ -378,7 +381,7 @@ class LocalAdapterTests extends TestCase
         $this->adapter->createDir('private-dir', new Config());
         $this->adapter->setVisibility('private-dir', 'private');
         $output = $this->adapter->getVisibility('private-dir');
-        $this->assertInternalType('array', $output);
+        $this->assertIsArray($output);
         $this->assertArrayHasKey('visibility', $output);
         $this->assertEquals('private', $output['visibility']);
     }
@@ -505,11 +508,9 @@ class LocalAdapterTests extends TestCase
         unlink($link);
     }
 
-    /**
-     * @expectedException \League\Flysystem\NotSupportedException
-     */
     public function testLinkCausedUnsupportedException()
     {
+        $this->expectException(NotSupportedException::class);
         $original = $this->root . 'original.txt';
         $link = $this->root . 'link.txt';
         file_put_contents($original, 'something');
@@ -575,11 +576,9 @@ class LocalAdapterTests extends TestCase
         $this->assertFalse($this->adapter->delete('missing.txt'));
     }
 
-    /**
-     * @expectedException \League\Flysystem\Exception
-     */
     public function testRootDirectoryCreationProblemCausesAnError()
     {
+        $this->expectException(Exception::class);
         $root = $this->root . 'fail.plz';
         new Local($root);
     }

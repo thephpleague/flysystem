@@ -29,21 +29,17 @@ class MountManagerTests extends TestCase
         $this->assertEquals($mock, $manager->getFilesystem('prefix'));
     }
 
-    /**
-     * @expectedException  InvalidArgumentException
-     */
     public function testInvalidPrefix()
     {
+        $this->expectException(InvalidArgumentException::class);
         $filesystem = $this->prophesize(FilesystemInterface::class)->reveal();
         $manager = new MountManager();
         $manager->mountFilesystem(false, $filesystem);
     }
 
-    /**
-     * @expectedException  LogicException
-     */
     public function testUndefinedFilesystem()
     {
+        $this->expectException(LogicException::class);
         $manager = new MountManager();
         $manager->getFilesystem('prefix');
     }

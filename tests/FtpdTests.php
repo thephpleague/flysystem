@@ -30,12 +30,12 @@ class FtpdTests extends TestCase
 
         $adapter = new Ftpd($this->options);
         $listing = $adapter->listContents('', true);
-        $this->assertInternalType('array', $listing);
+        $this->assertIsArray($listing);
         $this->assertFalse($adapter->has('syno.not.found'));
         $result = $adapter->getMimetype('something.txt');
         $this->assertEquals('text/plain', $result['mimetype']);
-        $this->assertInternalType('array', $adapter->write('syno.unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
-        $this->assertInternalType('array', $adapter->getTimestamp('some/file.ext'));
+        $this->assertIsArray($adapter->write('syno.unknowndir/file.txt', 'contents', new Config(['visibility' => 'public'])));
+        $this->assertIsArray($adapter->getTimestamp('some/file.ext'));
     }
 
     /**

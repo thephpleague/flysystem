@@ -9,7 +9,7 @@ class UtilMimeTests extends TestCase
     public function testRetrievingAllMimetypes()
     {
         $map = MimeType::getExtensionToMimeTypeMap();
-        $this->assertInternalType('array', $map);
+        $this->assertIsArray($map);
         $this->assertEquals('application/epub+zip', $map['epub']);
     }
 
