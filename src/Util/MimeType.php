@@ -22,7 +22,7 @@ class MimeType
     /**
      * @return MimeTypeDetector
      */
-    private static function detector()
+    protected static function detector()
     {
         if ( ! static::$detector instanceof MimeTypeDetector) {
             static::$detector = new FinfoMimeTypeDetector();
