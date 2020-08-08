@@ -10,6 +10,8 @@ use LogicException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
+use const PHP_VERSION;
+
 function ftp_systype($connection)
 {
     static $connections = [
@@ -821,6 +823,10 @@ class FtpTests extends TestCase
      */
     public function testLoginFailSsl()
     {
+        if (version_compare(PHP_VERSION, '8.0.0', '>=')) {
+            $this->markTestSkipped('PHP 8.0.0 does not accept non resource arguments.');
+        }
+
         $this->expectException(RuntimeException::class);
         $adapter = new Ftp(['host' => 'login.fail', 'ssl' => true]);
         $adapter->connect();
