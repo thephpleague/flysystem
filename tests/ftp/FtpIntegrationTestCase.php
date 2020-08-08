@@ -20,6 +20,8 @@ abstract class FtpIntegrationTestCase extends TestCase
         if ( ! defined('FTP_BINARY')) {
             $this->markTestSkipped('The FTP_BINARY constant is not defined');
         }
+
+        $this->expectNotToPerformAssertions();
     }
 
     /**
