@@ -200,9 +200,6 @@ class MimeType
      */
     public static function detectByContent($content)
     {
-        if ( ! class_exists('finfo') || ! is_string($content)) {
-            return null;
-        }
         try {
             $finfo = new finfo(FILEINFO_MIME_TYPE);
 
