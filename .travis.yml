@@ -48,7 +48,6 @@ before_script:
 script:
   - vendor/bin/phpunit tests/ftp/*Tests.php
   - vendor/bin/phpunit --exclude-group integration --coverage-text --coverage-clover coverage.xml
-  - vendor/bin/phpspec run
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.3" ]]; then ./php-cs-fixer fix --dry-run; fi
   - if [[ "${TRAVIS_PHP_VERSION}" == "7.3" ]]; then composer phpstan; fi
 
