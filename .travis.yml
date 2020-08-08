@@ -36,7 +36,6 @@ before_install:
   - mkdir tests/files
 
 install:
-  - if [[ "${TRAVIS_PHP_VERSION}" == "5.5" ]]; then composer require phpunit/phpunit:^4.8.36 phpspec/phpspec:^2 --prefer-dist --update-with-dependencies; fi
   - travis_retry composer update --prefer-dist $COMPOSER_OPTS
 
 before_script:
