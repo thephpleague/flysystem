@@ -35,7 +35,7 @@ function constraint_has_conflict(string $mainConstraint, string $packageConstrai
     $packageUpperBound = $packageConstraint->getUpperBound()->getVersion();
 
 
-    if ( ! Comparator::compare($mainUpperBound, '==', $packageLowerBound)) {
+    if (Comparator::compare($mainUpperBound, '<=', $packageLowerBound)) {
         return true;
     }
 
