@@ -5,7 +5,7 @@ set -e
 php build/check-versions.php $1
 
 # Make sure the release tag is provided.
-if (( "$#" != 1 ))
+if (( "$#" != 1 && "$#" != 2 ))
 then
     echo "Tag has to be provided."
     exit 1
@@ -43,6 +43,12 @@ fi
 if [[ $VERSION == v* || $VERSION == V*  ]]
 then
     VERSION="${VERSION:1}"
+fi
+
+if [[ "$2" == "--dry-run" ]]
+then
+    echo "Dry run: aborting now."
+    exit 0
 fi
 
 # Tag Core
