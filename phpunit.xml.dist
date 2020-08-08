@@ -5,7 +5,9 @@
             <directory suffix="Test.php">src/</directory>
         </testsuite>
     </testsuites>
-
+    <php>
+        <env name="FLYSYSTEM_TEST_SFTP" value="yes" />
+    </php>
     <filter>
         <whitelist>
             <directory>src/</directory>
