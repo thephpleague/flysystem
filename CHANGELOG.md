@@ -1,6 +1,20 @@
 # Version 2.x Changelog
 
-## 2.0.0-UNRELEASED
+## 2.0.0-beta.2 2020-08-08
+
+## Fixes
+
+- Allow listing of top-level directory for AWS S3
+- Ensure the adapters can use the correct beta release.
+
+## 2.0.0-beta.1 2020-08-04
+
+## Changes
+
+- Small code optimizations
+- Add global options array to AwsS3V3Adapter like in V1
+
+## 2.0.0-alpha.4 - 2020-07-26
 
 ## Changes
 
