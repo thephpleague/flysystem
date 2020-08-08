@@ -4,15 +4,15 @@ set -e
 set -x
 
 
-if [ ! -f "./build/splitsh-lite" ]; then
-    bash build/install-split.sh
+if [ ! -f "./bin/splitsh-lite" ]; then
+    bash bin/install-split.sh
 fi
 
 CURRENT_BRANCH="2.x"
 
 function split()
 {
-    SHA1=`./build/splitsh-lite --prefix=$1 --origin=origin/$CURRENT_BRANCH`
+    SHA1=`./bin/splitsh-lite --prefix=$1 --origin=origin/$CURRENT_BRANCH`
     git push $2 "$SHA1:refs/heads/$CURRENT_BRANCH" -f
 }
 
