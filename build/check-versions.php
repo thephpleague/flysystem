@@ -2,6 +2,17 @@
 
 declare(strict_types=1);
 
+/**
+ * This script check for composer dependency incompatibilities:
+ *
+ *  - All required dependencies of the extracted packages MUST be
+ *    present in the main composer.json's require(-dev) section.
+ *  - Dependency constraints of extracted packages may not exclude
+ *    the constrains of the main package and visa versa.
+ *  - The provided target release argument must be satisfiable by
+ *    all of the extracted packages' core dependency constraint.
+ */
+
 use Composer\Semver\Comparator;
 use Composer\Semver\Semver;
 use Composer\Semver\VersionParser;
@@ -49,6 +60,8 @@ function constraint_has_conflict(string $mainConstraint, string $packageConstrai
 if ( ! isset($argv[1])) {
     panic('No base version provided');
 }
+
+write_line("🔎 Inspecting composer dependency incompatibilities.");
 
 $mainVersion = $argv[1];
 $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__.'/../'));
@@ -100,4 +113,6 @@ foreach ($otherComposers as $composerFile) {
         }
     }
 }
+
+write_line("✅ Composer dependencies are looking fine.");
 
