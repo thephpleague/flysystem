@@ -22,7 +22,8 @@
         "phpunit/phpunit": "^8.5",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
-        "aws/aws-sdk-php": "^3.132.4"
+        "aws/aws-sdk-php": "^3.132.4",
+        "composer/semver": "^3.0"
     },
     "conflict": {
         "guzzlehttp/ringphp": "<1.1.1"

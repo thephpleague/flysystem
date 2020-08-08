@@ -2,6 +2,8 @@
 
 set -e
 
+php build/check-versions.php $1
+
 # Make sure the release tag is provided.
 if (( "$#" != 1 ))
 then
