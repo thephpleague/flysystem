@@ -22,7 +22,8 @@
     ],
     "require": {
         "php": ">=7.2.5",
-        "ext-fileinfo": "*"
+        "ext-fileinfo": "*",
+        "league/mime-type-detection": "^1.3"
     },
     "require-dev": {
         "phpspec/phpspec": "^6.2",
