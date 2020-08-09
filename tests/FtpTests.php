@@ -889,8 +889,7 @@ class FtpTests extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $adapter = new Ftp($this->options + ['systemType' => 'unix']);
-        $metadata = $adapter->getMetadata('file1.with-invalid-line.txt');
-        $this->assertEquals('file1.txt', $metadata['path']);
+        $adapter->getMetadata('file1.with-invalid-line.txt');
     }
 
     /**
