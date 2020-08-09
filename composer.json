@@ -37,10 +37,7 @@
     "autoload-dev": {
         "psr-4": {
             "League\\Flysystem\\Stub\\": "stub/"
-        },
-        "files": [
-          "tests/PHPUnitHacks.php"
-        ]
+        }
     },
     "suggest": {
         "ext-fileinfo": "Required for MimeType",

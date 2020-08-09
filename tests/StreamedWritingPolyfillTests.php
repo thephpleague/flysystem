@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class StreamedWritingPolyfillTests extends TestCase
 {
-    // use \PHPUnitHacks;
 
     public function testWrite()
     {
