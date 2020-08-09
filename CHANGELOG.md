@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - 2020-08-09
+
+## Changes
+
+* Minimum PHP version is now 7.2.5
+* MimeType now uses league/mime-type-detection
+* Added (internal) League\Flysystem\Util\MimeType::useDetector to change mime-type resolving.
+
 ## 1.0.70 - 2020-07-26
 
 ### Fixes
