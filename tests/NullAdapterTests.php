@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class NullAdapterTest extends TestCase
 {
-    // use \PHPUnitHacks;
 
     /**
      * @return Filesystem

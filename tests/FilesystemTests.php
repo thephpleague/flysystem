@@ -11,7 +11,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 class FilesystemTests extends TestCase
 {
-    // use \PHPUnitHacks;
 
     /**
      * @var ObjectProphecy

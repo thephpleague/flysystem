@@ -12,7 +12,6 @@ use Prophecy\Argument;
 
 class MountManagerTests extends TestCase
 {
-    // use \PHPUnitHacks;
 
     public function testInstantiable()
     {
