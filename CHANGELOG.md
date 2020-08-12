@@ -1,8 +1,14 @@
 # Changelog
 
+## 1.1.1 - 2020-08-12
+
+### Fixes
+
+* Make sure MimeType::detectByFilename detection falls back to `text/plain`, like before.
+
 ## 1.1.0 - 2020-08-09
 
-## Changes
+### Changes
 
 * Minimum PHP version is now 7.2.5
 * MimeType now uses league/mime-type-detection
