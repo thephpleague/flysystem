@@ -67,7 +67,7 @@ class MimeType
      */
     public static function detectByFilename($filename)
     {
-        return static::detector()->detectMimeTypeFromPath($filename);
+        return static::detector()->detectMimeTypeFromPath($filename) ?: 'text/plain';
     }
 
     /**
