@@ -37,7 +37,7 @@ class MimeType
      *
      * @param mixed $content
      *
-     * @return string|null MIME Type or NULL if no mime type detected
+     * @return string MIME Type
      */
     public static function detectByContent($content)
     {
@@ -45,7 +45,7 @@ class MimeType
             return static::detector()->detectMimeTypeFromBuffer($content);
         }
 
-        return null;
+        return 'text/plain';
     }
 
     /**
@@ -53,7 +53,7 @@ class MimeType
      *
      * @param string $extension
      *
-     * @return string|null MIME Type or NULL if no extension detected
+     * @return string MIME Type
      */
     public static function detectByFileExtension($extension)
     {
@@ -63,7 +63,7 @@ class MimeType
     /**
      * @param string $filename
      *
-     * @return string|null MIME Type or NULL if no extension detected
+     * @return string MIME Type
      */
     public static function detectByFilename($filename)
     {
