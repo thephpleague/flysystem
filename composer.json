@@ -19,6 +19,7 @@
         "league/mime-type-detection": "^1.0.0"
     },
     "require-dev": {
+        "ext-fileinfo": "*",
         "phpunit/phpunit": "^8.5",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
