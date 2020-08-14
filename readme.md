@@ -38,4 +38,4 @@ If you discover any security related issues, please email info@frankdejonge.nl i
 
 ## Enjoy
 
-Oh and if you've come down this far, you might as well follow me on [twitter](https://twitter.com/frankdejonge).
+Oh, and if you've come down this far, you might as well follow me on [twitter](https://twitter.com/frankdejonge).
