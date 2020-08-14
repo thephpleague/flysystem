@@ -9,6 +9,7 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
@@ -145,13 +146,22 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter->write('path.txt', 'contents', new Config());
         $adapter->write('a/path.txt', 'contents', new Config());
         $adapter->write('a/b/path.txt', 'contents', new Config());
+        /** @var StorageAttributes[] $listing */
         $listing = iterator_to_array($adapter->listContents('/', true));
         $this->assertCount(5, $listing);
-        $this->assertContainsEquals(new FileAttributes('path.txt'), $listing);
-        $this->assertContainsEquals(new FileAttributes('a/path.txt'), $listing);
-        $this->assertContainsEquals(new FileAttributes('a/b/path.txt'), $listing);
-        $this->assertContainsEquals(new DirectoryAttributes('a'), $listing);
-        $this->assertContainsEquals(new DirectoryAttributes('a/b'), $listing);
+
+        $expected = [
+            'path.txt' => StorageAttributes::TYPE_FILE,
+            'a/path.txt' => StorageAttributes::TYPE_FILE,
+            'a/b/path.txt' => StorageAttributes::TYPE_FILE,
+            'a' => StorageAttributes::TYPE_DIRECTORY,
+            'a/b' => StorageAttributes::TYPE_DIRECTORY,
+        ];
+
+        foreach ($listing as $item) {
+            $this->assertArrayHasKey($item->path(), $expected);
+            $this->assertEquals($item->type(), $expected[$item->path()]);
+        }
     }
 
     /**

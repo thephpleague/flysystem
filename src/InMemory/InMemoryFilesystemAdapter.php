@@ -136,6 +136,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
     public function fileSize(string $path): FileAttributes
     {
         $path = $this->preparePath($path);
+
         if (array_key_exists($path, $this->files) === false) {
             throw UnableToRetrieveMetadata::fileSize($path, 'file does not exist');
         }
@@ -149,7 +150,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $prefixLength = strlen($prefix);
         $listedDirectories = [];
 
-        foreach (array_keys($this->files) as $path) {
+        foreach ($this->files as $path => $file) {
             if (substr($path, 0, $prefixLength) === $prefix) {
                 $subPath = substr($path, $prefixLength);
                 $dirname = dirname($subPath);
@@ -178,7 +179,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                 }
 
                 if ($deep === true || strpos($subPath, '/') === false) {
-                    yield new FileAttributes(ltrim($path, '/'));
+                    yield new FileAttributes(ltrim($path, '/'), $file->fileSize(), $file->visibility(), $file->lastModified(), $file->mimeType());
                 }
             }
         }

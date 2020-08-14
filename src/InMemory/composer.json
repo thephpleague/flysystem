@@ -12,6 +12,7 @@
     },
     "require": {
         "php": "^7.2",
+        "ext-fileinfo": "*",
         "league/flysystem": "^2.0.0-beta.1"
     },
     "license": "MIT",

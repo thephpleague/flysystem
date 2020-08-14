@@ -71,7 +71,7 @@ class InMemoryFile
         $this->visibility = $visibility;
     }
 
-    public function visibility(): string
+    public function visibility(): ?string
     {
         return $this->visibility;
     }
