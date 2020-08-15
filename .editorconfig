@@ -1,0 +1,12 @@
+[*]
+indent_style = space
+
+[*.yml]
+indent_size = 2
+
+[composer.json]
+indent_size = 4
+
+[*.php]
+end_of_line = lf
+insert_final_newline = true
