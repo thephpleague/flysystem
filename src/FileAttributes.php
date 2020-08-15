@@ -6,13 +6,6 @@ namespace League\Flysystem;
 
 class FileAttributes implements StorageAttributes
 {
-    public const ATTRIBUTE_PATH = 'path';
-    public const ATTRIBUTE_TYPE = 'type';
-    public const ATTRIBUTE_FILE_SIZE = 'file_size';
-    public const ATTRIBUTE_VISIBILITY = 'visibility';
-    public const ATTRIBUTE_LAST_MODIFIED = 'last_modified';
-    public const ATTRIBUTE_MIME_TYPE = 'mime_type';
-    public const ATTRIBUTE_EXTRA_METADATA = 'extra_metadata';
     use ProxyArrayAccessToProperties;
 
     /**
@@ -114,25 +107,25 @@ class FileAttributes implements StorageAttributes
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new FileAttributes(
-            $attributes[self::ATTRIBUTE_PATH],
-            $attributes[self::ATTRIBUTE_FILE_SIZE] ?? null,
-            $attributes[self::ATTRIBUTE_VISIBILITY] ?? null,
-            $attributes[self::ATTRIBUTE_LAST_MODIFIED] ?? null,
-            $attributes[self::ATTRIBUTE_MIME_TYPE] ?? null,
-            $attributes[self::ATTRIBUTE_EXTRA_METADATA] ?? []
+            $attributes[StorageAttributes::ATTRIBUTE_PATH],
+            $attributes[StorageAttributes::ATTRIBUTE_FILE_SIZE] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_VISIBILITY] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_LAST_MODIFIED] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_MIME_TYPE] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_EXTRA_METADATA] ?? []
         );
     }
 
     public function jsonSerialize(): array
     {
         return [
-            self::ATTRIBUTE_TYPE           => self::TYPE_FILE,
-            self::ATTRIBUTE_PATH           => $this->path,
-            self::ATTRIBUTE_FILE_SIZE      => $this->fileSize,
-            self::ATTRIBUTE_VISIBILITY     => $this->visibility,
-            self::ATTRIBUTE_LAST_MODIFIED  => $this->lastModified,
-            self::ATTRIBUTE_MIME_TYPE      => $this->mimeType,
-            self::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
+            StorageAttributes::ATTRIBUTE_TYPE           => self::TYPE_FILE,
+            StorageAttributes::ATTRIBUTE_PATH           => $this->path,
+            StorageAttributes::ATTRIBUTE_FILE_SIZE      => $this->fileSize,
+            StorageAttributes::ATTRIBUTE_VISIBILITY     => $this->visibility,
+            StorageAttributes::ATTRIBUTE_LAST_MODIFIED  => $this->lastModified,
+            StorageAttributes::ATTRIBUTE_MIME_TYPE      => $this->mimeType,
+            StorageAttributes::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
         ];
     }
 }

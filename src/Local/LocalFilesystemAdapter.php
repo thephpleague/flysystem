@@ -215,9 +215,13 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             }
 
             $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
+            $lastModified = $fileInfo->getMTime();
+            $isDirectory = $fileInfo->isDir();
+            $permissions = $fileInfo->getPerms();
+            $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
 
-            yield $fileInfo->isDir() ? new DirectoryAttributes($path) : new FileAttributes(
-                $path, $fileInfo->getSize(), null, $fileInfo->getMTime()
+            yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(
+                $path, $fileInfo->getSize(), $visibility, $lastModified
             );
         }
     }

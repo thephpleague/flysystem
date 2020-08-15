@@ -275,15 +275,12 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
         $mimetype = $metadata['ContentType'] ?? null;
         $fileSize = $metadata['ContentLength'] ?? $metadata['Size'] ?? null;
-        $lastModified = null;
+        $fileSize = $fileSize === null ? null : (int) $fileSize;
         $dateTime = $metadata['LastModified'] ?? null;
-
-        if ($dateTime instanceof DateTimeResult) {
-            $lastModified = $dateTime->getTimestamp();
-        }
+        $lastModified = $dateTime instanceof DateTimeResult ? $dateTime->getTimeStamp() : null;
 
         return new FileAttributes(
-            $path, (int) $fileSize, null, $lastModified, $mimetype, $this->extractExtraMetadata($metadata)
+            $path, $fileSize, null, $lastModified, $mimetype, $this->extractExtraMetadata($metadata)
         );
     }
 

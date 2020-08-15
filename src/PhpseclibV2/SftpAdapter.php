@@ -274,17 +274,22 @@ class SftpAdapter implements FilesystemAdapter
 
     private function convertListingToAttributes(string $path, array $attributes): StorageAttributes
     {
+        $permissions = $attributes['permissions'] & 0777;
+        $lastModified = $attributes['mtime'] ?? null;
+
         if ($attributes['type'] === NET_SFTP_TYPE_DIRECTORY) {
             return new DirectoryAttributes(
-                ltrim($path, '/'), $this->visibilityConverter->inverseForDirectory($attributes['permissions'] & 0777)
+                ltrim($path, '/'),
+                $this->visibilityConverter->inverseForDirectory($permissions),
+                $lastModified
             );
         }
 
         return new FileAttributes(
             $path,
             $attributes['size'],
-            $this->visibilityConverter->inverseForFile($attributes['permissions'] & 0777),
-            $attributes['mtime']
+            $this->visibilityConverter->inverseForFile($permissions),
+            $lastModified
         );
     }
 

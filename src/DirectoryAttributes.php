@@ -23,10 +23,16 @@ class DirectoryAttributes implements StorageAttributes
      */
     private $visibility;
 
-    public function __construct(string $path, ?string $visibility = null)
+    /**
+     * @var int|null
+     */
+    private $lastModified;
+
+    public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null)
     {
         $this->path = $path;
         $this->visibility = $visibility;
+        $this->lastModified = $lastModified;
     }
 
     public function path(): string
@@ -44,6 +50,11 @@ class DirectoryAttributes implements StorageAttributes
         return $this->visibility;
     }
 
+    public function lastModified(): ?int
+    {
+        return $this->lastModified;
+    }
+
     public function isFile(): bool
     {
         return false;
@@ -57,7 +68,9 @@ class DirectoryAttributes implements StorageAttributes
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new DirectoryAttributes(
-            $attributes['path'], $attributes['visibility'] ?? null
+            $attributes[StorageAttributes::ATTRIBUTE_PATH],
+            $attributes[StorageAttributes::ATTRIBUTE_VISIBILITY] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_LAST_MODIFIED] ?? null
         );
     }
 
@@ -67,9 +80,10 @@ class DirectoryAttributes implements StorageAttributes
     public function jsonSerialize(): array
     {
         return [
-            'type'       => $this->type,
-            'path'       => $this->path,
-            'visibility' => $this->visibility,
+            StorageAttributes::ATTRIBUTE_TYPE => $this->type,
+            StorageAttributes::ATTRIBUTE_PATH => $this->path,
+            StorageAttributes::ATTRIBUTE_VISIBILITY => $this->visibility,
+            StorageAttributes::ATTRIBUTE_LAST_MODIFIED => $this->lastModified,
         ];
     }
 }

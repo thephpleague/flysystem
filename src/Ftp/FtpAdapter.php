@@ -419,18 +419,19 @@ class FtpAdapter implements FilesystemAdapter
         $isDirectory = $this->listingItemIsDirectory($permissions);
         $permissions = $this->normalizePermissions($permissions);
         $path = $base === '' ? $name : rtrim($base, '/') . '/' . $name;
+        $lastModified = $this->connectionOptions->timestampsOnUnixListingsEnabled()
+            ? $this->normalizeUnixTimestamp($month, $day, $timeOrYear)
+            : null;
 
         if ($isDirectory) {
-            return new DirectoryAttributes($path, $this->visibilityConverter->inverseForDirectory($permissions));
+            return new DirectoryAttributes(
+                $path,
+                $this->visibilityConverter->inverseForDirectory($permissions),
+                $lastModified
+            );
         }
 
         $visibility = $this->visibilityConverter->inverseForFile($permissions);
-        $size = (int) $size;
-        $lastModified = null;
-
-        if ($this->connectionOptions->timestampsOnUnixListingsEnabled()) {
-            $lastModified = $this->normalizeUnixTimestamp($month, $day, $timeOrYear);
-        }
 
         return new FileAttributes($path, (int) $size, $visibility, $lastModified);
     }
