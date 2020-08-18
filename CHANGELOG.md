@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2 - 2020-08-18
+
+### Changes
+
+* Always resolve mime-types
+* Enable directory last_modified key for FTP unix listings
+
 ## 1.1.1 - 2020-08-12
 
 ### Fixes
