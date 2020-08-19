@@ -166,7 +166,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     public function read(string $path): string
     {
-        $body = $this->readObject($path);
+        $body = $this->readObject($path, false);
 
         return (string) $body->getContents();
     }
@@ -174,7 +174,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
     public function readStream(string $path)
     {
         /** @var resource $resource */
-        $resource = $this->readObject($path)->detach();
+        $resource = $this->readObject($path, true)->detach();
 
         return $resource;
     }
@@ -208,8 +208,8 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         $arguments = [
             'Bucket' => $this->bucket,
-            'Key'    => $this->prefixer->prefixPath($path),
-            'ACL'    => $this->visibility->visibilityToAcl($visibility),
+            'Key' => $this->prefixer->prefixPath($path),
+            'ACL' => $this->visibility->visibilityToAcl($visibility),
         ];
         $command = $this->client->getCommand('PutObjectAcl', $arguments);
 
@@ -358,9 +358,9 @@ class AwsS3V3Adapter implements FilesystemAdapter
             );
         }
         $options = [
-            'ACL'        => $this->visibility->visibilityToAcl($visibility),
-            'Bucket'     => $this->bucket,
-            'Key'        => $this->prefixer->prefixPath($destination),
+            'ACL' => $this->visibility->visibilityToAcl($visibility),
+            'Bucket' => $this->bucket,
+            'Key' => $this->prefixer->prefixPath($destination),
             'CopySource' => S3Client::encodeKey($this->bucket . '/' . $this->prefixer->prefixPath($source)),
         ];
         $command = $this->client->getCommand('CopyObject', $options + $this->options);
@@ -372,9 +372,10 @@ class AwsS3V3Adapter implements FilesystemAdapter
         }
     }
 
-    private function readObject(string $path): StreamInterface
+    private function readObject(string $path, bool $stream): StreamInterface
     {
         $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $stream && $options['@http']['stream'] = true;
         $command = $this->client->getCommand('GetObject', $options + $this->options);
 
         try {
