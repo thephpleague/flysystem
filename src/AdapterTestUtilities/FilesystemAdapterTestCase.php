@@ -116,7 +116,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     public function filenameProvider(): Generator
     {
         yield "a path with square brackets in filename 1" => ["some/file[name].txt"];
-//        yield "a path with square brackets in filename 2" => ["some/file[0].txt"];
+        yield "a path with square brackets in filename 2" => ["some/file[0].txt"];
 //        yield "a path with square brackets in filename 3" => ["some/file[10].txt"];
 //        yield "a path with square brackets in dirname 1" => ["some[name]/file.txt"];
 //        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
