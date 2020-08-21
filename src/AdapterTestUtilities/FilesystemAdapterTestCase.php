@@ -101,6 +101,36 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
     /**
      * @test
+     * @dataProvider filenameProvider
+     */
+    public function writing_and_reading_files_with_special_path(string $path): void
+    {
+        $adapter = $this->adapter();
+
+        $adapter->write($path, 'contents', new Config());
+        $contents = $adapter->read($path);
+
+        $this->assertEquals('contents', $contents);
+    }
+
+    public function filenameProvider(): Generator
+    {
+        yield "a path with square brackets in filename 1" => ["some/file[name].txt"];
+        yield "a path with square brackets in filename 2" => ["some/file[0].txt"];
+        yield "a path with square brackets in filename 3" => ["some/file[10].txt"];
+        yield "a path with square brackets in dirname 1" => ["some[name]/file.txt"];
+        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
+        yield "a path with square brackets in dirname 3" => ["some[10]/file.txt"];
+        yield "a path with curly brackets in filename 1" => ["some/file{name}.txt"];
+        yield "a path with curly brackets in filename 2" => ["some/file{0}.txt"];
+        yield "a path with curly brackets in filename 3" => ["some/file{10}.txt"];
+        yield "a path with curly brackets in dirname 1" => ["some{name}/filename.txt"];
+        yield "a path with curly brackets in dirname 2" => ["some{0}/filename.txt"];
+        yield "a path with curly brackets in dirname 3" => ["some{10}/filename.txt"];
+    }
+
+    /**
+     * @test
      */
     public function writing_a_file_with_an_empty_stream(): void
     {
