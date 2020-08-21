@@ -394,7 +394,9 @@ class Ftp extends AbstractFtpAdapter
             return ['type' => 'dir', 'path' => $path];
         }
 
-        $listing = $this->ftpRawlist('-A', str_replace('*', '\\*', $path));
+        $search = ['*', '[', '{', ']', '}'];
+        $replace = ['\\*', '\\[', '\\{', '\\]', '\\}'];
+        $listing = $this->ftpRawlist('-A', str_replace($search, $replace, $path));
 
         if (empty($listing) || in_array('total 0', $listing, true)) {
             return false;
