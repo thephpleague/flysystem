@@ -138,7 +138,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToDeleteFile::class);
 
         $adapter = $this->adapter();
-        $this->stubS3Client->throwExceptionWhenExecutingCommand('DeleteObject');
+        static::$stubS3Client->throwExceptionWhenExecutingCommand('DeleteObject');
 
         $adapter->delete('path.txt');
     }
