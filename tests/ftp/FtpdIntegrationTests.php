@@ -13,12 +13,13 @@ class FtpdIntegrationTests extends FtpIntegrationTestCase
     /**
      * @return AdapterInterface
      */
-    protected function setup_adapter()
+    protected static function setup_adapter()
     {
         return new Ftpd([
             'host' => 'localhost',
-            'username' => 'bob',
-            'password' => 'test',
+            'username' => 'foo',
+            'password' => 'pass',
+            'port' => 2122,
             'recurseManually' => false,
         ]);
     }

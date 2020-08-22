@@ -3,7 +3,7 @@
 $tries = 0;
 start:
 $tries++;
-$success = @ftp_connect("localhost", 21, 2);
+$success = @ftp_connect("localhost", 2122, 2);
 
 if ($success) {
     fwrite(STDOUT, "Connected successfully.\n");

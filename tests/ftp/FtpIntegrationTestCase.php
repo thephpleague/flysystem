@@ -2,11 +2,15 @@
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
-use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
 abstract class FtpIntegrationTestCase extends TestCase
 {
+    /**
+     * @var AdapterInterface
+     */
+    private static $adapter;
+
     /**
      * @var Filesystem
      */
@@ -27,7 +31,19 @@ abstract class FtpIntegrationTestCase extends TestCase
     /**
      * @return AdapterInterface
      */
-    abstract protected function setup_adapter();
+    abstract static protected function setup_adapter();
+
+    /**
+     * @beforeClass
+     */
+    public static function setupAdapter(): void
+    {
+        if ( ! defined('FTP_BINARY')) {
+            return;
+        }
+
+        static::$adapter = static::setup_adapter();
+    }
 
     /**
      * @before
@@ -37,11 +53,9 @@ abstract class FtpIntegrationTestCase extends TestCase
         if ( ! defined('FTP_BINARY')) {
             return;
         }
-        $adapter = $this->setup_adapter();
-        $this->filesystem = new Filesystem($adapter);
-        $this->filesystem->addPlugin(new ListPaths());
+        $this->filesystem = new Filesystem(static::$adapter);
 
-        foreach ($this->filesystem->listContents('', true) as $item) {
+        foreach ($this->filesystem->listContents('/', false) as $item) {
             if ($item['path'] == '') {
                 continue;
             }
@@ -71,12 +85,14 @@ abstract class FtpIntegrationTestCase extends TestCase
      */
     public function writing_and_reading_files_with_special_path(string $path): void
     {
+        $this->setup_filesystem();
         $filesystem = $this->filesystem;
 
         $filesystem->write($path, 'contents');
+        $filesystem->listContents('some');
         $contents = $filesystem->read($path);
 
-        $this->assertEquals('contents', $contents['contents']);
+        $this->assertEquals('contents', $contents);
     }
 
     public function filenameProvider(): Generator
@@ -85,8 +101,8 @@ abstract class FtpIntegrationTestCase extends TestCase
         yield "a path with square brackets in filename 2" => ["some/file[0].txt"];
         yield "a path with square brackets in filename 3" => ["some/file[10].txt"];
         yield "a path with square brackets in dirname 1" => ["some[name]/file.txt"];
-        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
         yield "a path with square brackets in dirname 3" => ["some[10]/file.txt"];
+        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
         yield "a path with curly brackets in filename 1" => ["some/file{name}.txt"];
         yield "a path with curly brackets in filename 2" => ["some/file{0}.txt"];
         yield "a path with curly brackets in filename 3" => ["some/file{10}.txt"];

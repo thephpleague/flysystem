@@ -1,0 +1,15 @@
+---
+version: "3"
+services:
+  ftpd:
+    container_name: ftpd
+    restart: always
+    environment:
+      PUBLICHOST: localhost
+      FTP_USER_NAME: foo
+      FTP_USER_PASS: pass
+      FTP_USER_HOME: /home/foo
+    image: stilliard/pure-ftpd
+    ports:
+      - "2122:21"
+      - "30000-30009:30000-30009"
