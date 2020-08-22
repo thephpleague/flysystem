@@ -37,6 +37,14 @@ $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix')
 $filesystem = new Filesystem($adapter);
 ```
 
+Since 1.0.28, by default all readStream calls will result in a streamed HTTP response. This
+makes it not possible to seek through the stream. You can disable streaming by using a constructor
+argument:
+
+```php
+$adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix', [], false /** disable streamed reads **/);
+```
+
 The required IAM permissions are:
 
 ```json
