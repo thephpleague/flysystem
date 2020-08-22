@@ -39,21 +39,21 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
     public function adapter(): FilesystemAdapter
     {
-        if ( ! self::$adapter instanceof FilesystemAdapter) {
-            self::$adapter = static::createFilesystemAdapter();
+        if ( ! static::$adapter instanceof FilesystemAdapter) {
+            static::$adapter = static::createFilesystemAdapter();
         }
 
-        return self::$adapter;
+        return static::$adapter;
     }
 
     public static function setUpBeforeClass(): void
     {
-        self::$adapter = null;
+        static::$adapter = null;
     }
 
     protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
     {
-        self::$adapter = $adapter;
+        static::$adapter = $adapter;
         $this->isUsingCustomAdapter = true;
 
         return $adapter;
@@ -99,7 +99,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         if ($this->isUsingCustomAdapter) {
             $this->isUsingCustomAdapter = false;
-            self::$adapter = null;
+            static::$adapter = null;
         }
     }
 
