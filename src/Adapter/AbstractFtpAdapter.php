@@ -697,4 +697,9 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      * @return bool
      */
     abstract public function isConnected();
+
+    protected function escapePath($path)
+    {
+        return str_replace(['*', '[', ']'], ['\\*', '\\[', '\\]'], $path);
+    }
 }

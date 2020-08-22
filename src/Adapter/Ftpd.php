@@ -18,7 +18,9 @@ class Ftpd extends Ftp
             return ['type' => 'dir', 'path' => $path];
         }
 
-        if ( ! ($object = ftp_raw($this->getConnection(), 'STAT ' . $path)) || count($object) < 3) {
+        $object = ftp_raw($this->getConnection(), 'STAT ' . $this->escapePath($path));
+
+        if ( ! $object || count($object) < 3) {
             return false;
         }
 
@@ -34,7 +36,7 @@ class Ftpd extends Ftp
      */
     protected function listDirectoryContents($directory, $recursive = true)
     {
-        $listing = ftp_rawlist($this->getConnection(), $directory, $recursive);
+        $listing = ftp_rawlist($this->getConnection(), $this->escapePath($directory), $recursive);
 
         if ($listing === false || ( ! empty($listing) && substr($listing[0], 0, 5) === "ftpd:")) {
             return [];

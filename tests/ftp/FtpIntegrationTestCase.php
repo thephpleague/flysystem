@@ -53,7 +53,7 @@ abstract class FtpIntegrationTestCase extends TestCase
         if ( ! defined('FTP_BINARY')) {
             return;
         }
-        $this->filesystem = new Filesystem(static::$adapter);
+        $this->filesystem = new Filesystem(static::$adapter, ['disable_asserts' => true]);
 
         foreach ($this->filesystem->listContents('/', false) as $item) {
             if ($item['path'] == '') {
