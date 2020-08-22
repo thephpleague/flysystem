@@ -160,6 +160,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
         yield "a path with curly brackets in dirname 1" => ["some{name}/filename.txt"];
         yield "a path with curly brackets in dirname 2" => ["some{0}/filename.txt"];
         yield "a path with curly brackets in dirname 3" => ["some{10}/filename.txt"];
+        yield "a path with space in dirname" => ["some dir/filename.txt"];
+        yield "a path with space in filename" => ["somedir/file name.txt"];
     }
 
     /**
@@ -313,17 +315,17 @@ abstract class FilesystemAdapterTestCase extends TestCase
     public function setting_visibility(): void
     {
         $adapter = $this->adapter();
-        $this->givenWeHaveAnExistingFile('some/path.txt', 'contents', [Config::OPTION_VISIBILITY => Visibility::PUBLIC]);
+        $this->givenWeHaveAnExistingFile('path.txt', 'contents', [Config::OPTION_VISIBILITY => Visibility::PUBLIC]);
 
-        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('path.txt')->visibility());
 
-        $adapter->setVisibility('some/path.txt', Visibility::PRIVATE);
+        $adapter->setVisibility('path.txt', Visibility::PRIVATE);
 
-        $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('some/path.txt')->visibility());
+        $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('path.txt')->visibility());
 
-        $adapter->setVisibility('some/path.txt', Visibility::PUBLIC);
+        $adapter->setVisibility('path.txt', Visibility::PUBLIC);
 
-        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('some/path.txt')->visibility());
+        $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('path.txt')->visibility());
     }
 
     /**

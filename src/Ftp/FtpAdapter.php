@@ -10,7 +10,6 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\MimeType;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
@@ -252,11 +251,12 @@ class FtpAdapter implements FilesystemAdapter
 
     public function setVisibility(string $path, $visibility): void
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = trim($this->prefixer->prefixPath($path), '/');
         $mode = $this->visibilityConverter->forFile($visibility);
 
         if ( ! @ftp_chmod($this->connection(), $mode, $location)) {
-            throw UnableToSetVisibility::atLocation($path);
+            $message = error_get_last()['message'];
+            throw UnableToSetVisibility::atLocation($path, $message);
         }
     }
 

@@ -32,3 +32,4 @@ services:
     ports:
       - "2122:21"
       - "30000-30009:30000-30009"
+    command: "/run.sh -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -P localhost"

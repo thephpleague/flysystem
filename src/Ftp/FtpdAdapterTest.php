@@ -6,15 +6,18 @@ namespace League\Flysystem\Ftp;
 
 use League\Flysystem\FilesystemAdapter;
 
-class FtpAdapterTest extends FtpAdapterTestCase
+/**
+ * @group ftp
+ */
+class FtpdAdapterTest extends FtpAdapterTestCase
 {
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
-           'port' => 2121,
+           'port' => 2122,
            'timestampsOnUnixListingsEnabled' => true,
-           'root' => '/home/foo/upload/',
+           'root' => '/',
            'username' => 'foo',
            'password' => 'pass',
        ]);
