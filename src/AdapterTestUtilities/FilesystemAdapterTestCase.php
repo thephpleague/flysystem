@@ -28,7 +28,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @var FilesystemAdapter
      */
-    private static $adapter;
+    protected static $adapter;
 
     /**
      * @var bool
