@@ -28,27 +28,27 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @var FilesystemAdapter
      */
-    private $adapter;
+    private static $adapter;
 
     /**
      * @var bool
      */
     private $isUsingCustomAdapter = false;
 
-    abstract protected function createFilesystemAdapter(): FilesystemAdapter;
+    abstract protected static function createFilesystemAdapter(): FilesystemAdapter;
 
     public function adapter(): FilesystemAdapter
     {
-        if ( ! $this->adapter instanceof FilesystemAdapter) {
-            $this->adapter = $this->createFilesystemAdapter();
+        if ( ! static::$adapter instanceof FilesystemAdapter) {
+            static::$adapter = $this->createFilesystemAdapter();
         }
 
-        return $this->adapter;
+        return static::$adapter;
     }
 
     protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
     {
-        $this->adapter = $adapter;
+        static::$adapter = $adapter;
         $this->isUsingCustomAdapter = true;
 
         return $adapter;
@@ -94,7 +94,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         if ($this->isUsingCustomAdapter) {
             $this->isUsingCustomAdapter = false;
-            $this->adapter = null;
+            static::$adapter = null;
         }
     }
 
@@ -145,16 +145,16 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         yield "a path with square brackets in filename 1" => ["some/file[name].txt"];
         yield "a path with square brackets in filename 2" => ["some/file[0].txt"];
-//        yield "a path with square brackets in filename 3" => ["some/file[10].txt"];
-//        yield "a path with square brackets in dirname 1" => ["some[name]/file.txt"];
-//        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
-//        yield "a path with square brackets in dirname 3" => ["some[10]/file.txt"];
-//        yield "a path with curly brackets in filename 1" => ["some/file{name}.txt"];
-//        yield "a path with curly brackets in filename 2" => ["some/file{0}.txt"];
-//        yield "a path with curly brackets in filename 3" => ["some/file{10}.txt"];
-//        yield "a path with curly brackets in dirname 1" => ["some{name}/filename.txt"];
-//        yield "a path with curly brackets in dirname 2" => ["some{0}/filename.txt"];
-//        yield "a path with curly brackets in dirname 3" => ["some{10}/filename.txt"];
+        yield "a path with square brackets in filename 3" => ["some/file[10].txt"];
+        yield "a path with square brackets in dirname 1" => ["some[name]/file.txt"];
+        yield "a path with square brackets in dirname 2" => ["some[0]/file.txt"];
+        yield "a path with square brackets in dirname 3" => ["some[10]/file.txt"];
+        yield "a path with curly brackets in filename 1" => ["some/file{name}.txt"];
+        yield "a path with curly brackets in filename 2" => ["some/file{0}.txt"];
+        yield "a path with curly brackets in filename 3" => ["some/file{10}.txt"];
+        yield "a path with curly brackets in dirname 1" => ["some{name}/filename.txt"];
+        yield "a path with curly brackets in dirname 2" => ["some{0}/filename.txt"];
+        yield "a path with curly brackets in dirname 3" => ["some{10}/filename.txt"];
     }
 
     /**

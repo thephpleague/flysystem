@@ -513,6 +513,7 @@ class FtpAdapter implements FilesystemAdapter
     {
         $path = rtrim($path, '/') . '/';
         $connection = $this->connection();
+        $path = $this->escapePath($path);
 
         if ($this->isPureFtpdServer()) {
             $path = str_replace(' ', '\ ', $path);
@@ -594,5 +595,10 @@ class FtpAdapter implements FilesystemAdapter
                 throw UnableToCreateDirectory::atLocation($dirPath, 'unable to chmod the directory');
             }
         }
+    }
+
+    private function escapePath(string $path): string
+    {
+        return str_replace(['*', '[', ']'], ['\\*', '\\[', '\\]'], $path);
     }
 }

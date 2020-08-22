@@ -262,7 +262,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertEquals('image/svg', $adapter->mimeType(self::PATH)->mimeType());
     }
 
-    function createFilesystemAdapter(): FilesystemAdapter
+    protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         return new InMemoryFilesystemAdapter();
     }

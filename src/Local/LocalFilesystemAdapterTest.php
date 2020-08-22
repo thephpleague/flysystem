@@ -601,7 +601,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertEquals($expectedContents, $contents);
     }
 
-    protected function createFilesystemAdapter(): FilesystemAdapter
+    protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         return new LocalFilesystemAdapter(static::ROOT);
     }

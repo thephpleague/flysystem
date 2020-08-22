@@ -25,7 +25,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @var ConnectivityCheckerThatCanFail
      */
-    private $connectivityChecker;
+    private static $connectivityChecker;
 
     /**
      * @after
@@ -35,7 +35,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
         reset_function_mocks();
     }
 
-    protected function createFilesystemAdapter(): FilesystemAdapter
+    protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -46,9 +46,9 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
             'password' => 'pass',
         ]);
 
-        $this->connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
+        static::$connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
 
-        return new FtpAdapter($options, null, $this->connectivityChecker);
+        return new FtpAdapter($options, null, static::$connectivityChecker);
     }
 
     /**
@@ -57,7 +57,7 @@ class FtpAdapterTest extends FilesystemAdapterTestCase
     public function reconnecting_after_failure(): void
     {
         $adapter = $this->adapter();
-        $this->connectivityChecker->failNextCall();
+        static::$connectivityChecker->failNextCall();
 
         $contents = iterator_to_array($adapter->listContents('', false));
         $this->assertIsArray($contents);

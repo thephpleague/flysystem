@@ -21,21 +21,17 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @var ConnectionProvider
      */
-    private $connectionProvider;
+    private static $connectionProvider;
 
     /**
      * @var SftpStub
      */
     private $connection;
 
-    protected function createFilesystemAdapter(): FilesystemAdapter
+    protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        if (getenv('FLYSYSTEM_TEST_SFTP') !== 'yes') {
-            $this->markTestSkipped('Opted out of testing SFTP');
-        }
-
         return new SftpAdapter(
-            $this->connectionProvider(),
+            static::connectionProvider(),
             '/upload'
         );
     }
@@ -46,7 +42,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     public function setupConnectionProvider(): void
     {
         /** @var SftpStub $connection */
-        $connection = $this->connectionProvider()->provideConnection();
+        $connection = static::connectionProvider()->provideConnection();
         $this->connection = $connection;
     }
 
@@ -197,13 +193,13 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
         }
     }
 
-    private function connectionProvider(): ConnectionProvider
+    private static function connectionProvider(): ConnectionProvider
     {
-        if ( ! $this->connectionProvider instanceof ConnectionProvider) {
-            $this->connectionProvider = new StubSftpConnectionProvider('localhost', 'foo', 'pass', 2222);
+        if ( ! static::$connectionProvider instanceof ConnectionProvider) {
+            static::$connectionProvider = new StubSftpConnectionProvider('localhost', 'foo', 'pass', 2222);
         }
 
-        return $this->connectionProvider;
+        return static::$connectionProvider;
     }
 
     /**
@@ -211,7 +207,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
      */
     private function adapterWithInvalidRoot(): SftpAdapter
     {
-        $provider = $this->connectionProvider();
+        $provider = static::connectionProvider();
         $adapter = new SftpAdapter($provider, '/invalid');
 
         return $adapter;

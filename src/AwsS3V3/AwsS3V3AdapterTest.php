@@ -33,12 +33,12 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @var S3ClientInterface|null
      */
-    private $s3Client;
+    private static $s3Client;
 
     /**
      * @var S3ClientStub
      */
-    private $stubS3Client;
+    private static $stubS3Client;
 
     public static function setUpBeforeClass(): void
     {
@@ -64,10 +64,10 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         }
     }
 
-    private function s3Client(): S3ClientInterface
+    private static function s3Client(): S3ClientInterface
     {
-        if ($this->s3Client instanceof S3ClientInterface) {
-            return $this->s3Client;
+        if (static::$s3Client instanceof S3ClientInterface) {
+            return static::$s3Client;
         }
 
         $key = getenv('FLYSYSTEM_AWS_S3_KEY');
@@ -76,13 +76,12 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $region = getenv('FLYSYSTEM_AWS_S3_REGION') ?: 'eu-central-1';
 
         if ( ! $key || ! $secret || ! $bucket) {
-            $this->markTestSkipped('No AWS credentials present for testing.');
+            self::markTestSkipped('No AWS credentials present for testing.');
         }
 
-        $this->shouldCleanUp = true;
         $options = ['version' => 'latest', 'credentials' => compact('key', 'secret'), 'region' => $region];
 
-        return $this->s3Client = new S3Client($options);
+        return static::$s3Client = new S3Client($options);
     }
 
     /**
@@ -126,7 +125,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
         $adapter = $this->adapter();
         $adapter->write('source.txt', 'contents to be copied', new Config());
-        $this->stubS3Client->throwExceptionWhenExecutingCommand('CopyObject');
+        static::$stubS3Client->throwExceptionWhenExecutingCommand('CopyObject');
 
         $adapter->move('source.txt', 'destination.txt', new Config());
     }
@@ -186,13 +185,13 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->assertTrue($metadata['seekable']);
     }
 
-    protected function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
+    protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
     {
-        $this->stubS3Client = new S3ClientStub($this->s3Client());
+        static::$stubS3Client = new S3ClientStub(static::s3Client());
         /** @var string $bucket */
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
         $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
 
-        return new AwsS3V3Adapter($this->stubS3Client, $bucket, $prefix, null, null, $options, $streaming);
+        return new AwsS3V3Adapter(static::$stubS3Client, $bucket, $prefix, null, null, $options, $streaming);
     }
 }
