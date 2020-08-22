@@ -513,10 +513,10 @@ class FtpAdapter implements FilesystemAdapter
     {
         $path = rtrim($path, '/') . '/';
         $connection = $this->connection();
-        $path = $this->escapePath($path);
 
         if ($this->isPureFtpdServer()) {
             $path = str_replace(' ', '\ ', $path);
+            $path = $this->escapePath($path);
         }
 
         return ftp_rawlist($connection, $options . ' ' . $path, stripos($options, 'R') !== false) ?: [];
