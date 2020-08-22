@@ -2,6 +2,7 @@
 
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Plugin\ListPaths;
 use PHPUnit\Framework\TestCase;
 
 abstract class FtpIntegrationTestCase extends TestCase
@@ -9,7 +10,7 @@ abstract class FtpIntegrationTestCase extends TestCase
     /**
      * @var AdapterInterface
      */
-    private static $adapter;
+    protected static $adapter;
 
     /**
      * @var Filesystem
@@ -152,7 +153,8 @@ abstract class FtpIntegrationTestCase extends TestCase
         $filesystem->write('dirname/a.txt', 'contents');
         $filesystem->write('dirname/b/b.txt', 'contents');
         $filesystem->write('dirname/c.txt', 'contents');
-        $files = $filesystem->listPaths('', true);
+        $files = $filesystem->listContents('', true);
+        $files = array_map(function($i) { return $i['path']; }, $files);
         $expected = ['dirname', 'dirname/a.txt', 'dirname/b', 'dirname/b/b.txt', 'dirname/c.txt'];
         $filesystem->deleteDir('dirname');
         $this->assertEquals($expected, $files);
