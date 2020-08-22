@@ -107,38 +107,3 @@ The default credential provider will attempt to load credentials from sources su
 
 For further details see https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials_provider.html#defaultprovider-provider
 
----
-
-## 🚨 AWS S3 Adapter - SDK V2 (LEGACY ADAPTER)
-
-## Installation
-
-```bash
-composer require league/flysystem-aws-s3-v2
-```
-
-## Usage
-
-```php
-use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v2\AwsS3Adapter;
-use League\Flysystem\Filesystem;
-
-$client = S3Client::factory([
-    'key'    => '[your key]',
-    'secret' => '[your secret]',
-    'region' => '[aws-region]',
-]);
-
-$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix');
-
-$filesystem = new Filesystem($adapter);
-```
-
-To enable [reduced redundancy storage](http://aws.amazon.com/s3/details/#RRS) set up your adapter like so:
-
-```php
-$adapter = new AwsS3Adapter($client, 'bucket-name', 'optional/path/prefix', [
-    'StorageClass' => 'REDUCED_REDUNDANCY',
-]);
-```
