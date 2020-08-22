@@ -46,6 +46,11 @@ abstract class FilesystemAdapterTestCase extends TestCase
         return self::$adapter;
     }
 
+    public static function setUpBeforeClass(): void
+    {
+        self::$adapter = null;
+    }
+
     protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
     {
         self::$adapter = $adapter;
