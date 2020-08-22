@@ -6,6 +6,7 @@ namespace League\Flysystem\AwsS3V3;
 
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
+use Generator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
@@ -143,13 +144,51 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $adapter->delete('path.txt');
     }
 
-    protected function createFilesystemAdapter(): FilesystemAdapter
+    /**
+     * @test
+     * @dataProvider casesWhereHttpStreamingInfluencesSeekability
+     */
+    public function streaming_reads_are_not_seekable_and_non_streaming_are(bool $streaming, bool $seekable): void
+    {
+        $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming));
+        $this->givenWeHaveAnExistingFile('path.txt');
+
+        $resource = $adapter->readStream('path.txt');
+        $metadata = stream_get_meta_data($resource);
+        fclose($resource);
+
+        $this->assertEquals($seekable, $metadata['seekable']);
+    }
+
+    public function casesWhereHttpStreamingInfluencesSeekability(): Generator
+    {
+        yield "not streaming reads have seekable stream" => [false, true];
+        yield "streaming reads have non-seekable stream" => [true, false];
+    }
+
+    /**
+     * @test
+     * @dataProvider casesWhereHttpStreamingInfluencesSeekability
+     */
+    public function configuring_http_streaming_via_options(bool $streaming): void
+    {
+        $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming, ['@http' => ['stream' => false]]));
+        $this->givenWeHaveAnExistingFile('path.txt');
+
+        $resource = $adapter->readStream('path.txt');
+        $metadata = stream_get_meta_data($resource);
+        fclose($resource);
+
+        $this->assertTrue($metadata['seekable']);
+    }
+
+    protected function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
     {
         $this->stubS3Client = new S3ClientStub($this->s3Client());
         /** @var string $bucket */
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
         $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
 
-        return new AwsS3V3Adapter($this->stubS3Client, $bucket, $prefix);
+        return new AwsS3V3Adapter($this->stubS3Client, $bucket, $prefix, null, null, $options, $streaming);
     }
 }

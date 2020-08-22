@@ -30,6 +30,11 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     private $adapter;
 
+    /**
+     * @var bool
+     */
+    private $isUsingCustomAdapter = false;
+
     abstract protected function createFilesystemAdapter(): FilesystemAdapter;
 
     public function adapter(): FilesystemAdapter
@@ -41,9 +46,23 @@ abstract class FilesystemAdapterTestCase extends TestCase
         return $this->adapter;
     }
 
+    protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
+    {
+        $this->adapter = $adapter;
+        $this->isUsingCustomAdapter = true;
+
+        return $adapter;
+    }
+
     /**
      * @after
      */
+    public function cleanupAdapter(): void
+    {
+        $this->clearStorage();
+        $this->clearCustomAdapter();
+    }
+
     public function clearStorage(): void
     {
         reset_function_mocks();
@@ -67,6 +86,15 @@ abstract class FilesystemAdapterTestCase extends TestCase
             } else {
                 $adapter->delete($item->path());
             }
+        }
+    }
+
+
+    public function clearCustomAdapter(): void
+    {
+        if ($this->isUsingCustomAdapter) {
+            $this->isUsingCustomAdapter = false;
+            $this->adapter = null;
         }
     }
 

@@ -92,13 +92,19 @@ class AwsS3V3Adapter implements FilesystemAdapter
      */
     private $options;
 
+    /**
+     * @var bool
+     */
+    private $streamReads;
+
     public function __construct(
         S3ClientInterface $client,
         string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null,
         MimeTypeDetector $mimeTypeDetector = null,
-        array $options = []
+        array $options = [],
+        bool $streamReads = true
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
@@ -106,6 +112,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
         $this->options = $options;
+        $this->streamReads = $streamReads;
     }
 
     public function fileExists(string $path): bool
@@ -372,10 +379,14 @@ class AwsS3V3Adapter implements FilesystemAdapter
         }
     }
 
-    private function readObject(string $path, bool $stream): StreamInterface
+    private function readObject(string $path, bool $wantsStream): StreamInterface
     {
         $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $stream && $options['@http']['stream'] = true;
+
+        if ($wantsStream && $this->streamReads && ! isset($this->options['@http']['stream'])) {
+            $options['@http']['stream'] = true;
+        }
+
         $command = $this->client->getCommand('GetObject', $options + $this->options);
 
         try {
