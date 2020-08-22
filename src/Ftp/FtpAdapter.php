@@ -251,7 +251,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function setVisibility(string $path, $visibility): void
     {
-        $location = trim($this->prefixer->prefixPath($path), '/');
+        $location = $this->prefixer->prefixPath($path);
         $mode = $this->visibilityConverter->forFile($visibility);
 
         if ( ! @ftp_chmod($this->connection(), $mode, $location)) {
