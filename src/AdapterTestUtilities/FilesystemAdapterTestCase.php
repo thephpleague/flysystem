@@ -40,7 +40,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     public function adapter(): FilesystemAdapter
     {
         if ( ! static::$adapter instanceof FilesystemAdapter) {
-            static::$adapter = $this->createFilesystemAdapter();
+            static::$adapter = static::createFilesystemAdapter();
         }
 
         return static::$adapter;
