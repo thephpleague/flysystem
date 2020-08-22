@@ -89,4 +89,9 @@ class SftpStub extends SFTP
 
         return $key;
     }
+
+    public function reset(): void
+    {
+        $this->tripWires = [];
+    }
 }
