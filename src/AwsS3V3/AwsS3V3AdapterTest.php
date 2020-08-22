@@ -150,6 +150,10 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
      */
     public function streaming_reads_are_not_seekable_and_non_streaming_are(bool $streaming, bool $seekable): void
     {
+        if (getenv('COMPOSER_OPTS') === '--prefer-lowest') {
+            $this->markTestSkipped('The SDK does not support streaming in low versions.');
+        }
+
         $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming));
         $this->givenWeHaveAnExistingFile('path.txt');
 
