@@ -214,4 +214,9 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
     {
         return '/' . ltrim($path, '/');
     }
+
+    public function deleteEverything(): void
+    {
+        $this->files = [];
+    }
 }

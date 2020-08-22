@@ -6,8 +6,6 @@ namespace League\Flysystem\InMemory;
 
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
-use League\Flysystem\DirectoryAttributes;
-use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
@@ -28,6 +26,9 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function resetFunctionMocks(): void
     {
         reset_function_mocks();
+        /** @var InMemoryFilesystemAdapter $filesystemAdapter */
+        $filesystemAdapter = $this->adapter();
+        $filesystemAdapter->deleteEverything();
     }
 
     /**
