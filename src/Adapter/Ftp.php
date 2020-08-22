@@ -565,9 +565,10 @@ class Ftp extends AbstractFtpAdapter
 
         if ($this->isPureFtpd) {
             $path = str_replace(' ', '\ ', $path);
+            $this->escapePath($path);
         }
 
-        return ftp_rawlist($connection, $options . ' ' . $this->escapePath($path));
+        return ftp_rawlist($connection, $options . ' ' . $path);
     }
 
     private function getRawExecResponseCode($command)

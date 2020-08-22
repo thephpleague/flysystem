@@ -109,6 +109,8 @@ abstract class FtpIntegrationTestCase extends TestCase
         yield "a path with curly brackets in dirname 1" => ["some{name}/filename.txt"];
         yield "a path with curly brackets in dirname 2" => ["some{0}/filename.txt"];
         yield "a path with curly brackets in dirname 3" => ["some{10}/filename.txt"];
+        yield "a path with plus sign in dirname" => ["some+dir/filename.txt"];
+        yield "a path with plus sign in filename" => ["some/file+name.txt"];
     }
 
     /**
