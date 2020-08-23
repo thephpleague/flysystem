@@ -140,9 +140,13 @@ class Filesystem implements FilesystemOperator
      */
     private function assertIsResource($contents): void
     {
-        if ( ! is_resource($contents)) {
+        if (is_resource($contents) === false) {
             throw new InvalidStreamProvided(
-                "Invalid stream provided, expected resource, received " . gettype($contents)
+                "Invalid stream provided, expected stream resource, received " . gettype($contents)
+            );
+        } elseif ($type = get_resource_type($contents) !== 'stream') {
+            throw new InvalidStreamProvided(
+                "Invalid stream provided, expected stream resource, received resource of type" . $type
             );
         }
     }

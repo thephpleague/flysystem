@@ -49,12 +49,21 @@ class FilesystemTest extends TestCase
 
     /**
      * @test
+     * @dataProvider invalidStreamInput
      */
-    public function trying_to_write_with_an_invalid_stream_arguments(): void
+    public function trying_to_write_with_an_invalid_stream_arguments($input): void
     {
         $this->expectException(InvalidStreamProvided::class);
 
-        $this->filesystem->writeStream('path.txt', false);
+        $this->filesystem->writeStream('path.txt', $input);
+    }
+
+    public function invalidStreamInput(): Generator
+    {
+        $handle = tmpfile();
+        fclose($handle);
+        yield "resource that is not open" => [$handle];
+        yield "something that is not a resource" => [false];
     }
 
     /**
