@@ -50,6 +50,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      * @dataProvider invalidStreamInput
+     * @param mixed $input
      */
     public function trying_to_write_with_an_invalid_stream_arguments($input): void
     {
