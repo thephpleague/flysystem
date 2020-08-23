@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.3 - 2020-08-23
+
+### Fixes
+
+* Prevent closed resources from being passed.
+* Allow FTP to use paths with special characters: "[]{}*"
+
 ## 1.1.2 - 2020-08-18
 
 ### Changes
