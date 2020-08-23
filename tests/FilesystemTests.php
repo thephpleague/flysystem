@@ -156,6 +156,26 @@ class FilesystemTests extends TestCase
         $this->filesystem->putStream('path.txt', '__INVALID__');
     }
 
+    /**
+     * @dataProvider methodsThatGuardAgainstClosedResources
+     */
+    public function testSupplyingClosedStreams($method)
+    {
+        $handle = tmpfile();
+        fclose($handle);
+        $this->expectException('InvalidArgumentException');
+        $this->filesystem->{$method}('path.txt', $handle);
+    }
+
+    public function methodsThatGuardAgainstClosedResources()
+    {
+        return [
+            ['putStream'],
+            ['writeStream'],
+            ['updateStream'],
+        ];
+    }
+
     public function testWriteStreamInvalid()
     {
         $this->expectException('InvalidArgumentException');
