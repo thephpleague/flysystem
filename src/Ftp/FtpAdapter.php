@@ -260,24 +260,21 @@ class FtpAdapter implements FilesystemAdapter
         }
     }
 
-    private function fetchFileMetadata(string $path, string $type): FileAttributes
+    private function fetchMetadata(string $path, string $type): FileAttributes
     {
-        $path = ltrim($path, '/');
-        $dirname = dirname($path);
-        $attributes = null;
+        $location = $this->prefixer->prefixPath($path);
 
-        if ($dirname === '.') {
-            $dirname = '';
+        if ($this->isPureFtpdServer) {
+            $location = $this->escapePath($location);
         }
 
-        /** @var StorageAttributes[] $items */
-        $items = $this->listContents($dirname, false);
+        $object = @ftp_raw($this->connection(), 'STAT ' . $location);
 
-        foreach ($items as $attributes) {
-            if ($attributes->path() === $path) {
-                break;
-            }
+        if (empty($object) || count($object) < 3 || substr($object[1], 0, 5) === "ftpd:") {
+            throw UnableToRetrieveMetadata::create($path, $type, error_get_last()['message'] ?? '');
         }
+
+        $attributes = $this->normalizeObject($object[1], '');
 
         if ( ! $attributes instanceof FileAttributes) {
             throw UnableToRetrieveMetadata::create(
@@ -317,7 +314,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function visibility(string $path): FileAttributes
     {
-        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
+        return $this->fetchMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
     public function fileSize(string $path): FileAttributes
@@ -327,7 +324,7 @@ class FtpAdapter implements FilesystemAdapter
         $fileSize = @ftp_size($connection, $location);
 
         if ($fileSize < 0) {
-            throw UnableToRetrieveMetadata::fileSize($path);
+            throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
         }
 
         return new FileAttributes($path, $fileSize);
