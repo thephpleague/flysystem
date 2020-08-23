@@ -51,8 +51,8 @@ install:
   - if [[ "${UPGRADE_AWS_SDK}" == "yes" ]]; then composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3; fi
 
 script:
-  - if [[ "${DISABLE_TRAVIS_RETRY}" == "yes" ]]; then vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml; fi
-  - if [[ "${DISABLE_TRAVIS_RETRY}" != "yes" ]]; then travis_retry vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml; fi
+  - if [[ "${DISABLE_TRAVIS_RETRY}" == "yes" ]]; then vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.xml; fi
+  - if [[ "${DISABLE_TRAVIS_RETRY}" != "yes" ]]; then travis_retry vendor/bin/phpunit --verbose --coverage-text --coverage-clover=coverage.xml; fi
   - vendor/bin/phpstan analyse -l 6 src
 
 after_script:
