@@ -35,7 +35,7 @@ of your code.
 
 ### Commonly-Used Adapters
 
-* **[AWS S3](/v1/docs/adapter/aws-s3-v2/)**
+* **[AWS S3](/v1/docs/adapter/aws-s3-v3/)**
 * **[Azure](/v1/docs/adapter/azure/)**
 * **[DigitalOcean Spaces](/v1/docs/adapter/digitalocean-spaces/)**
 * **[Local](/v1/docs/adapter/local/)**
