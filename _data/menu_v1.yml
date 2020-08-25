@@ -19,7 +19,7 @@ Guides:
 Adapters:
     Local: '/v1/docs/adapter/local/'
     Azure: '/v1/docs/adapter/azure/'
-    AWS S3: '/v1/docs/adapter/aws-s3/'
+    AWS S3: '/v1/docs/adapter/aws-s3-v3/'
     DigitalOcean Spaces: '/v1/docs/adapter/digitalocean-spaces/'
     Scaleway Object Storage: '/v1/docs/adapter/scaleway-object-storage/'
     Dropbox: '/v1/docs/adapter/dropbox/'

@@ -1,8 +1,9 @@
 ---
 layout: default
-permalink: /v1/docs/adapter/aws-s3-v2/
+permalink: /v1/docs/adapter/aws-s3-v3/
 redirect_from:
     - /v1/docs/adapter/aws-s3/
+    - /v1/docs/adapter/aws-s3-v2/
     - /docs/adapter/aws-s3/
     - /adapter/aws-s3/
     - /adapter/aws-s3-v2/
@@ -36,6 +37,8 @@ $adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix')
 
 $filesystem = new Filesystem($adapter);
 ```
+
+### Streamed reads
 
 Since 1.0.28, by default all readStream calls will result in a streamed HTTP response. This
 makes it not possible to seek through the stream. You can disable streaming by using a constructor
