@@ -8,6 +8,7 @@ use League\Flysystem\Plugin\PluggableTrait;
 use League\Flysystem\Util\ContentListingFormatter;
 
 /**
+ * @method void  emptyDir(string $dirname)
  * @method array getWithMetadata(string $path, array $metadata)
  * @method bool  forceCopy(string $path, string $newpath)
  * @method bool  forceRename(string $path, string $newpath)
