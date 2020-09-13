@@ -32,6 +32,10 @@ for which ever storage is right for you.
 
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
 
+#### Community Created Adapters
+
+* **[AsyncAWS S3](https://github.com/async-aws/flysystem-s3)**
+
 ## Security
 
 If you discover any security related issues, please email info@frankdejonge.nl instead of using the issue tracker.
