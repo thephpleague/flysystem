@@ -72,6 +72,7 @@ Want to get started quickly? Check out some of these integrations:
 * AliYun OSS Storage: https://github.com/xxtime/flysystem-aliyun-oss
 * AliYun OSS Storage: https://github.com/kaysonwu/flysystem-aliyun-oss
 * Amazon Cloud Drive - https://github.com/nikkiii/flysystem-acd
+* AsyncAws - https://github.com/async-aws/flysystem-s3
 * Azure File Storage: https://github.com/academe/flysystem-azure-file-storage
 * Backblaze: https://github.com/mhetreramesh/flysystem-backblaze
 * Chroot (filesystem from subfolder): https://github.com/fisharebest/flysystem-chroot-adapter
