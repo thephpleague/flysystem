@@ -119,7 +119,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $path = $this->prefixer->prefixPath($location);
         $this->ensureDirectoryExists(
             dirname($path),
-            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+            $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
         error_clear_last();
@@ -232,7 +232,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $destinationPath = $this->prefixer->prefixPath($destination);
         $this->ensureDirectoryExists(
             dirname($destinationPath),
-            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+            $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
         if ( ! @rename($sourcePath, $destinationPath)) {
@@ -246,7 +246,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $destinationPath = $this->prefixer->prefixPath($destination);
         $this->ensureDirectoryExists(
             dirname($destinationPath),
-            $this->resolveDirectoryVisibility($config->get('directory_visibility'))
+            $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
         if ( ! @copy($sourcePath, $destinationPath)) {
