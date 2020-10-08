@@ -361,16 +361,16 @@ class AwsS3V3Adapter implements FilesystemAdapter
                 $exception
             );
         }
-        $options = [
-            'ACL' => $this->visibility->visibilityToAcl($visibility),
-            'Bucket' => $this->bucket,
-            'Key' => $this->prefixer->prefixPath($destination),
-            'CopySource' => S3Client::encodeKey($this->bucket . '/' . $this->prefixer->prefixPath($source)),
-        ];
-        $command = $this->client->getCommand('CopyObject', $options + $this->options);
 
         try {
-            $this->client->execute($command);
+            $this->client->copy(
+                $this->bucket,
+                $this->prefixer->prefixPath($source),
+                $this->bucket,
+                $this->prefixer->prefixPath($destination),
+                $this->visibility->visibilityToAcl($visibility),
+                $this->options
+            );
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
         }

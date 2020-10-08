@@ -24,6 +24,11 @@ class S3ClientStub implements S3ClientInterface
      */
     private $stagedExceptions = [];
 
+    /**
+     * @var bool
+     */
+    private $failOnNextCopy = false;
+
     public function __construct(S3ClientInterface $actualClient)
     {
         $this->actualClient = $actualClient;
@@ -155,8 +160,18 @@ class S3ClientStub implements S3ClientInterface
         return $this->actualClient->uploadAsync($bucket, $key, $body, $acl, $options);
     }
 
+    public function failOnNextCopy(): void
+    {
+        $this->failOnNextCopy = true;
+    }
+
     public function copy($fromBucket, $fromKey, $destBucket, $destKey, $acl = 'private', array $options = [])
     {
+        if ($this->failOnNextCopy) {
+            $this->failOnNextCopy = false;
+            throw new S3Exception('copyObject', new Command('copyObject'));
+        }
+
         return $this->actualClient->copy($fromBucket, $fromKey, $destBucket, $destKey, $acl, $options);
     }
 

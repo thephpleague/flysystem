@@ -125,7 +125,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
         $adapter = $this->adapter();
         $adapter->write('source.txt', 'contents to be copied', new Config());
-        static::$stubS3Client->throwExceptionWhenExecutingCommand('CopyObject');
+        static::$stubS3Client->failOnNextCopy();
 
         $adapter->move('source.txt', 'destination.txt', new Config());
     }
