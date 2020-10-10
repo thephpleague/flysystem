@@ -15,6 +15,7 @@ interface FilesystemReader
 
     /**
      * @throws FilesystemException
+     * @throws UnableToCheckFileExistence
      */
     public function fileExists(string $location): bool;
 
