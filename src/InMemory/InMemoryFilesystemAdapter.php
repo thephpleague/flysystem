@@ -13,6 +13,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\Visibility;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
@@ -22,6 +23,16 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
      * @var InMemoryFile[]
      */
     private $files = [];
+
+    /**
+     * @var string
+     */
+    private $defaultVisibility;
+
+    public function __construct(string $defaultVisibility = Visibility::PUBLIC)
+    {
+        $this->defaultVisibility = $defaultVisibility;
+    }
 
     public function fileExists(string $path): bool
     {
@@ -34,9 +45,8 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $file = $this->files[$path] = $this->files[$path] ?? new InMemoryFile();
         $file->updateContents($contents);
 
-        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
-            $file->setVisibility($visibility);
-        }
+        $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
+        $file->setVisibility($visibility);
     }
 
     public function writeStream(string $path, $contents, Config $config): void
