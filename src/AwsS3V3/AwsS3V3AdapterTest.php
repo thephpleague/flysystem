@@ -12,6 +12,7 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 
@@ -52,6 +53,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         }
 
         $adapter = $this->adapter();
+        $adapter->deleteDirectory('/');
         /** @var StorageAttributes[] $listing */
         $listing = $adapter->listContents('', false);
 
@@ -121,11 +123,11 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
      */
     public function failing_to_delete_while_moving(): void
     {
-        $this->expectException(UnableToMoveFile::class);
-
         $adapter = $this->adapter();
         $adapter->write('source.txt', 'contents to be copied', new Config());
         static::$stubS3Client->failOnNextCopy();
+
+        $this->expectException(UnableToMoveFile::class);
 
         $adapter->move('source.txt', 'destination.txt', new Config());
     }
@@ -135,12 +137,26 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
      */
     public function failing_to_delete_a_file(): void
     {
-        $this->expectException(UnableToDeleteFile::class);
-
         $adapter = $this->adapter();
         static::$stubS3Client->throwExceptionWhenExecutingCommand('DeleteObject');
 
+        $this->expectException(UnableToDeleteFile::class);
+
         $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_check_for_file_existence(): void
+    {
+        $adapter = $this->adapter();
+
+        static::$stubS3Client->throw500ExceptionWhenExecutingCommand('HeadObject');
+
+        $this->expectException(UnableToCheckFileExistence::class);
+
+        $adapter->fileExists('something-that-does-exist.txt');
     }
 
     /**

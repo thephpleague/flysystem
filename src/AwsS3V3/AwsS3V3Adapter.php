@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace League\Flysystem\AwsS3V3;
 
 use Aws\Api\DateTimeResult;
-use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
 use Generator;
 use League\Flysystem\Config;
@@ -15,6 +14,7 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
@@ -117,7 +117,11 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path), $this->options);
+        try {
+            return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path), $this->options);
+        } catch (Throwable $exception) {
+            throw UnableToCheckFileExistence::forLocation($path, $exception);
+        }
     }
 
     public function write(string $path, string $contents, Config $config): void
