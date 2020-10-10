@@ -8,12 +8,13 @@ use Aws\Command;
 use Aws\CommandInterface;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3ClientInterface;
+use Aws\S3\S3ClientTrait;
+use GuzzleHttp\Psr7\Response;
 
-/**
- * @codeCoverageIgnore
- */
 class S3ClientStub implements S3ClientInterface
 {
+    use S3ClientTrait;
+
     /**
      * @var S3ClientInterface
      */
@@ -24,19 +25,32 @@ class S3ClientStub implements S3ClientInterface
      */
     private $stagedExceptions = [];
 
-    /**
-     * @var bool
-     */
-    private $failOnNextCopy = false;
-
-    public function __construct(S3ClientInterface $actualClient)
+    public function __construct(S3ClientInterface $client)
     {
-        $this->actualClient = $actualClient;
+        return $this->actualClient = $client;
     }
 
-    public function __call($name, array $arguments)
+    public function failOnNextCopy(): void
     {
-        return $this->actualClient->__call($name, $arguments);
+        $this->throwExceptionWhenExecutingCommand('CopyObject');
+    }
+
+    public function throwExceptionWhenExecutingCommand(string $commandName, S3Exception $exception = null): void
+    {
+        $this->stagedExceptions[$commandName] = $exception ?: new S3Exception($commandName, new Command($commandName));
+    }
+
+    public function throw500ExceptionWhenExecutingCommand(string $commandName): void
+    {
+        $response = new Response(500);
+        $exception = new S3Exception($commandName, new Command($commandName), compact('response'));
+
+        $this->throwExceptionWhenExecutingCommand($commandName, $exception);
+    }
+
+    public function execute(CommandInterface $command)
+    {
+        return $this->executeAsync($command)->wait();
     }
 
     public function getCommand($name, array $args = [])
@@ -44,7 +58,22 @@ class S3ClientStub implements S3ClientInterface
         return $this->actualClient->getCommand($name, $args);
     }
 
-    public function execute(CommandInterface $command)
+    public function getHandlerList()
+    {
+        return $this->actualClient->getHandlerList();
+    }
+
+    public function getIterator($name, array $args = [])
+    {
+        return $this->actualClient->getIterator($name, $args);
+    }
+
+    public function __call($name, array $arguments)
+    {
+        return $this->actualClient->__call($name, $arguments);
+    }
+
+    public function executeAsync(CommandInterface $command)
     {
         if (array_key_exists($name = $command->getName(), $this->stagedExceptions)) {
             $exception = $this->stagedExceptions[$name];
@@ -52,16 +81,6 @@ class S3ClientStub implements S3ClientInterface
             throw $exception;
         }
 
-        return $this->actualClient->execute($command);
-    }
-
-    public function throwExceptionWhenExecutingCommand(string $commandName): void
-    {
-        $this->stagedExceptions[$commandName] = new S3Exception($commandName, new Command($commandName));
-    }
-
-    public function executeAsync(CommandInterface $command)
-    {
         return $this->actualClient->executeAsync($command);
     }
 
@@ -90,16 +109,6 @@ class S3ClientStub implements S3ClientInterface
         return $this->actualClient->getConfig($option);
     }
 
-    public function getHandlerList()
-    {
-        return $this->actualClient->getHandlerList();
-    }
-
-    public function getIterator($name, array $args = [])
-    {
-        return $this->actualClient->getIterator($name, $args);
-    }
-
     public function getPaginator($name, array $args = [])
     {
         return $this->actualClient->getPaginator($name, $args);
@@ -123,90 +132,5 @@ class S3ClientStub implements S3ClientInterface
     public function getObjectUrl($bucket, $key)
     {
         return $this->actualClient->getObjectUrl($bucket, $key);
-    }
-
-    public function doesBucketExist($bucket)
-    {
-        return $this->actualClient->doesBucketExist($bucket);
-    }
-
-    public function doesObjectExist($bucket, $key, array $options = [])
-    {
-        return $this->actualClient->doesObjectExist($bucket, $key, $options);
-    }
-
-    public function registerStreamWrapper(): void
-    {
-        $this->actualClient->registerStreamWrapper();
-    }
-
-    public function deleteMatchingObjects($bucket, $prefix = '', $regex = '', array $options = [])
-    {
-        return $this->actualClient->deleteMatchingObjects($bucket, $prefix, $regex, $options);
-    }
-
-    public function deleteMatchingObjectsAsync($bucket, $prefix = '', $regex = '', array $options = [])
-    {
-        return $this->actualClient->deleteMatchingObjectsAsync($bucket, $prefix, $regex, $options);
-    }
-
-    public function upload($bucket, $key, $body, $acl = 'private', array $options = [])
-    {
-        return $this->actualClient->upload($bucket, $key, $body, $acl, $options);
-    }
-
-    public function uploadAsync($bucket, $key, $body, $acl = 'private', array $options = [])
-    {
-        return $this->actualClient->uploadAsync($bucket, $key, $body, $acl, $options);
-    }
-
-    public function failOnNextCopy(): void
-    {
-        $this->failOnNextCopy = true;
-    }
-
-    public function copy($fromBucket, $fromKey, $destBucket, $destKey, $acl = 'private', array $options = [])
-    {
-        if ($this->failOnNextCopy) {
-            $this->failOnNextCopy = false;
-            throw new S3Exception('copyObject', new Command('copyObject'));
-        }
-
-        return $this->actualClient->copy($fromBucket, $fromKey, $destBucket, $destKey, $acl, $options);
-    }
-
-    public function copyAsync($fromBucket, $fromKey, $destBucket, $destKey, $acl = 'private', array $options = [])
-    {
-        return $this->actualClient->copyAsync($fromBucket, $fromKey, $destBucket, $destKey, $acl, $options);
-    }
-
-    public function uploadDirectory($directory, $bucket, $keyPrefix = null, array $options = [])
-    {
-        return $this->actualClient->uploadDirectory($directory, $bucket, $keyPrefix, $options);
-    }
-
-    public function uploadDirectoryAsync($directory, $bucket, $keyPrefix = null, array $options = [])
-    {
-        return $this->actualClient->uploadDirectoryAsync($directory, $bucket, $keyPrefix, $options);
-    }
-
-    public function downloadBucket($directory, $bucket, $keyPrefix = '', array $options = [])
-    {
-        return $this->actualClient->downloadBucket($directory, $bucket, $keyPrefix, $options);
-    }
-
-    public function downloadBucketAsync($directory, $bucket, $keyPrefix = '', array $options = [])
-    {
-        return $this->actualClient->downloadBucketAsync($directory, $bucket, $keyPrefix, $options);
-    }
-
-    public function determineBucketRegion($bucketName)
-    {
-        return $this->actualClient->determineBucketRegion($bucketName);
-    }
-
-    public function determineBucketRegionAsync($bucketName)
-    {
-        return $this->actualClient->determineBucketRegionAsync($bucketName);
     }
 }
