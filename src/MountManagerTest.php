@@ -348,6 +348,7 @@ class MountManagerTest extends TestCase
     {
         $this->expectException(UnableToMountFilesystem::class);
 
+        /** @phpstan-ignore-next-line */
         new MountManager([1 => new Filesystem(new InMemoryFilesystemAdapter())]);
     }
 
@@ -358,6 +359,7 @@ class MountManagerTest extends TestCase
     {
         $this->expectException(UnableToMountFilesystem::class);
 
+        /** @phpstan-ignore-next-line */
         new MountManager(['valid' => 'something else']);
     }
 

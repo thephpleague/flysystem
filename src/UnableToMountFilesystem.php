@@ -18,6 +18,9 @@ class UnableToMountFilesystem extends LogicException implements FilesystemExcept
         );
     }
 
+    /**
+     * @param mixed $filesystem
+     */
     public static function becauseTheFilesystemWasNotValid($filesystem): UnableToMountFilesystem
     {
         return new UnableToMountFilesystem(

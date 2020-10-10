@@ -266,18 +266,10 @@ class MountManager implements FilesystemOperator
         return [$this->filesystems[$mountIdentifier], $mountPath];
     }
 
-    /**
-     * @param FilesystemOperator $sourceFilesystem
-     * @param                    $sourcePath
-     * @param                    $destinationPath
-     * @param string             $source
-     * @param string             $destination
-     * @throws FilesystemException
-     */
     private function copyInSameFilesystem(
         FilesystemOperator $sourceFilesystem,
-        $sourcePath,
-        $destinationPath,
+        string $sourcePath,
+        string $destinationPath,
         string $source,
         string $destination
     ): void {
@@ -288,16 +280,6 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    /**
-     * @param                    $visibility1
-     * @param FilesystemOperator $sourceFilesystem
-     * @param                    $sourcePath
-     * @param FilesystemOperator $destinationFilesystem
-     * @param                    $destinationPath
-     * @param string             $source
-     * @param string             $destination
-     * @throws FilesystemException
-     */
     private function copyAcrossFilesystem(
         ?string $visibility,
         FilesystemOperator $sourceFilesystem,
@@ -316,18 +298,10 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    /**
-     * @param FilesystemOperator $sourceFilesystem
-     * @param                    $sourcePath
-     * @param                    $destinationPath
-     * @param string             $source
-     * @param string             $destination
-     * @throws FilesystemException
-     */
     private function moveInTheSameFilesystem(
         FilesystemOperator $sourceFilesystem,
-        $sourcePath,
-        $destinationPath,
+        string $sourcePath,
+        string $destinationPath,
         string $source,
         string $destination
     ): void {
@@ -338,11 +312,6 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    /**
-     * @param string $source
-     * @param string $destination
-     * @throws FilesystemException
-     */
     private function moveAcrossFilesystems(string $source, string $destination): void
     {
         try {
