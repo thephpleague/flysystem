@@ -17,7 +17,7 @@ final class UnableToReadFile extends RuntimeException implements FilesystemOpera
     /**
      * @var string
      */
-    private $reason;
+    private $reason = '';
 
     public static function fromLocation(string $location, string $reason = '', Throwable $previous = null): UnableToReadFile
     {

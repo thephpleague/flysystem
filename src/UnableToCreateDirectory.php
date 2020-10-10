@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use RuntimeException;
+use Throwable;
 
 final class UnableToCreateDirectory extends RuntimeException implements FilesystemOperationFailed
 {
@@ -17,6 +18,15 @@ final class UnableToCreateDirectory extends RuntimeException implements Filesyst
     {
         $message = "'Unable to create a directory at {$dirname}. ${errorMessage}";
         $e = new static(rtrim($message));
+        $e->location = $dirname;
+
+        return $e;
+    }
+
+    public static function dueToFailure(string $dirname, Throwable $previous): UnableToCreateDirectory
+    {
+        $message = "'Unable to create a directory at {$dirname}";
+        $e = new static($message, 0, $previous);
         $e->location = $dirname;
 
         return $e;
