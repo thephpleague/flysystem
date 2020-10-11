@@ -11,6 +11,9 @@ use Aws\S3\S3ClientInterface;
 use Aws\S3\S3ClientTrait;
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * @codeCoverageIgnore
+ */
 class S3ClientStub implements S3ClientInterface
 {
     use S3ClientTrait;
