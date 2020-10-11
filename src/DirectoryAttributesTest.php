@@ -30,6 +30,17 @@ class DirectoryAttributesTest extends TestCase
         $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
     }
 
+
+
+    /**
+     * @test
+     */
+    public function exposing_last_modified(): void
+    {
+        $attrs = new DirectoryAttributes('some/path', null, $timestamp = time());
+        $this->assertEquals($timestamp, $attrs->lastModified());
+    }
+
     /**
      * @test
      */
