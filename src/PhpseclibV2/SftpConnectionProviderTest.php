@@ -133,6 +133,25 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
+    public function not_being_able_to_authenticate_with_a_private_key(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'privateKey' => __DIR__.'/../../test_files/sftp/unknown.key',
+                'passphrase' => 'secret',
+                'port' => 2222,
+            ]
+        );
+
+        $this->expectExceptionObject(UnableToAuthenticate::withPrivateKey());
+        $provider->provideConnection();
+    }
+
+    /**
+     * @test
+     */
     public function verifying_a_fingerprint(): void
     {
         $key = file_get_contents(__DIR__.'/../../test_files/sftp/ssh_host_rsa_key.pub');
