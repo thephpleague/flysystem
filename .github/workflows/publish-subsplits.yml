@@ -5,7 +5,7 @@ on:
       - 2.x
 
 jobs:
-  hello_world_job:
+  publish_subsplits:
     runs-on: ubuntu-latest
     name: Publish package sub-splits
     steps:
