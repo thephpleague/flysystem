@@ -23,3 +23,5 @@ jobs:
           authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
           user_name: 'Frank de Jonge'
           user_email: 'info@frenky.net'
+      - name: Publish subsplits
+        run: bin/push.sh
