@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Publish package sub-splits
     steps:
+      - uses: actions/checkout@v1
       - uses: actions/cache@v2
         id: splitsh
         with:
@@ -17,7 +18,6 @@ jobs:
       - name: install split.sh
         if: steps.splitsh.outputs.cache-hit != 'true'
         run: bin/install-split.sh
-      - uses: actions/checkout@v1
       - uses: frankdejonge/use-github-token@1.0.0-beta.2
         with:
           authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
