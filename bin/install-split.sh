@@ -12,10 +12,10 @@ if [ "${url}" == "unknown" ]; then
   exit 1;
 fi
 
-wget -O build/split-lite.tar.gz "${url}"
-tar -zxpf build/split-lite.tar.gz --directory ./build/
-chmod +x build/splitsh-lite
-rm build/split-lite.tar.gz
+wget -O bin/split-lite.tar.gz "${url}"
+tar -zxpf bin/split-lite.tar.gz --directory ./bin/
+chmod +x bin/splitsh-lite
+rm bin/split-lite.tar.gz
 
 
 
