@@ -1,0 +1,17 @@
+---
+on:
+  push:
+    branches:
+      - 2.x
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: Publish package sub-splits
+    steps:
+      - uses: actions/checkout@v1
+      - uses: frankdejonge/use-github-token@1.0.0-beta.1
+        with:
+          authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
+          user_name: 'Frank de Jonge'
+          user_email: 'info@frenky.net'
