@@ -43,7 +43,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     public static function setUpBeforeClass(): void
     {
-        static::$adapterPrefix = 'travis-ci/' . bin2hex(random_bytes(10));
+        static::$adapterPrefix = 'ci/' . bin2hex(random_bytes(10));
     }
 
     protected function tearDown(): void
