@@ -146,7 +146,7 @@ class FtpAdapter implements FilesystemAdapter
         }
     }
 
-    public function writeStream(string $path, $resource, Config $config): void
+    public function writeStream(string $path, $contents, Config $config): void
     {
         try {
             $this->ensureParentDirectoryExists($path, $config->get(Config::OPTION_DIRECTORY_VISIBILITY));
@@ -156,7 +156,7 @@ class FtpAdapter implements FilesystemAdapter
 
         $location = $this->prefixer->prefixPath($path);
 
-        if ( ! ftp_fput($this->connection(), $location, $resource, $this->connectionOptions->transferMode())) {
+        if ( ! ftp_fput($this->connection(), $location, $contents, $this->connectionOptions->transferMode())) {
             throw UnableToWriteFile::atLocation($path, 'writing the file failed');
         }
 
