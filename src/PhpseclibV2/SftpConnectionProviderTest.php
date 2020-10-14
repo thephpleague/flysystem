@@ -63,7 +63,7 @@ class SftpConnectionProviderTest extends TestCase
             [
                 'host' => 'localhost',
                 'username' => 'bar',
-                'privateKey' => __DIR__.'/../../test_files/sftp/id_rsa',
+                'privateKey' => __DIR__ . '/../../test_files/sftp/id_rsa',
                 'passphrase' => 'secret',
                 'port' => 2222,
             ]
@@ -120,7 +120,7 @@ class SftpConnectionProviderTest extends TestCase
                 'host' => 'localhost',
                 'username' => 'foo',
                 'password' => 'pass',
-                'privateKey' => __DIR__.'/../../test_files/sftp/id_rsa',
+                'privateKey' => __DIR__ . '/../../test_files/sftp/id_rsa',
                 'passphrase' => 'secret',
                 'port' => 2222,
             ]
@@ -139,7 +139,7 @@ class SftpConnectionProviderTest extends TestCase
             [
                 'host' => 'localhost',
                 'username' => 'foo',
-                'privateKey' => __DIR__.'/../../test_files/sftp/unknown.key',
+                'privateKey' => __DIR__ . '/../../test_files/sftp/unknown.key',
                 'passphrase' => 'secret',
                 'port' => 2222,
             ]
@@ -154,7 +154,7 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function verifying_a_fingerprint(): void
     {
-        $key = file_get_contents(__DIR__.'/../../test_files/sftp/ssh_host_rsa_key.pub');
+        $key = file_get_contents(__DIR__ . '/../../test_files/sftp/ssh_host_rsa_key.pub');
         $fingerPrint = $this->computeFingerPrint($key);
 
         $provider = SftpConnectionProvider::fromArray(

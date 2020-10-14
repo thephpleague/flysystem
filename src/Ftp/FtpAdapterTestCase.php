@@ -65,19 +65,19 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingWriteFailure(): Generator
     {
-        yield "Not being able to create the parent directory" => [function() {
+        yield "Not being able to create the parent directory" => [function () {
             mock_function('ftp_mkdir', false);
         }];
 
-        yield "Not being able to set the parent directory visibility" => [function() {
+        yield "Not being able to set the parent directory visibility" => [function () {
             mock_function('ftp_chmod', false);
         }];
 
-        yield "Not being able to write the file" => [function() {
+        yield "Not being able to write the file" => [function () {
             mock_function('ftp_fput', false);
         }];
 
-        yield "Not being able to set the visibility" => [function() {
+        yield "Not being able to set the visibility" => [function () {
             mock_function('ftp_chmod', true, false);
         }];
     }
@@ -99,11 +99,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingDirectoryDeleteFailure(): Generator
     {
-        yield "ftp_delete failure" => [function() {
+        yield "ftp_delete failure" => [function () {
             mock_function('ftp_delete', false);
         }];
 
-        yield "ftp_rmdir failure" => [function() {
+        yield "ftp_rmdir failure" => [function () {
             mock_function('ftp_rmdir', false);
         }];
     }
@@ -139,11 +139,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingCopyFailure(): Generator
     {
-        yield "failing to read" => [function() {
+        yield "failing to read" => [function () {
             mock_function('ftp_fget', false);
         }];
 
-        yield "failing to write" => [function() {
+        yield "failing to write" => [function () {
             mock_function('ftp_fput', false);
         }];
     }
@@ -213,7 +213,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $adapter = $this->adapter();
         iterator_to_array($adapter->listContents('/', false), false);
-}
+    }
 
     /**
      * @test

@@ -23,7 +23,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
            'username' => 'foo',
            'password' => 'pass',
        ]);
-        $connection  = (new FtpConnectionProvider())->createConnection($options);
+        $connection = (new FtpConnectionProvider())->createConnection($options);
         $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);
 
         $this->assertTrue($connected);
@@ -40,7 +40,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
            'username' => 'foo',
            'password' => 'pass',
        ]);
-        $connection  = (new FtpConnectionProvider())->createConnection($options);
+        $connection = (new FtpConnectionProvider())->createConnection($options);
         ftp_close($connection);
 
         $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);

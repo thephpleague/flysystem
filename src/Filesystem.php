@@ -47,7 +47,7 @@ class Filesystem implements FilesystemOperator
 
     public function writeStream(string $location, $contents, array $config = []): void
     {
-        /** @var resource $contents */
+        /* @var resource $contents */
         $this->assertIsResource($contents);
         $this->rewindStream($contents);
         $this->adapter->writeStream(

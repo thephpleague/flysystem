@@ -18,6 +18,7 @@ trait ProxyArrayAccessToProperties
 
     /**
      * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset): bool
@@ -29,6 +30,7 @@ trait ProxyArrayAccessToProperties
 
     /**
      * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)

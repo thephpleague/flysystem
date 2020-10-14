@@ -14,6 +14,7 @@ interface FilesystemWriter
 
     /**
      * @param mixed $contents
+     *
      * @throws UnableToWriteFile
      * @throws FilesystemException
      */

@@ -1,6 +1,7 @@
 * text=auto
 
 .editorconfig export-ignore
+.php_cs.dist export-ignore
 phpstan.neon export-ignore
 phpunit.php export-ignore
 phpunit.xml.dist export-ignore

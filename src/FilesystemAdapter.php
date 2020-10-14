@@ -19,6 +19,7 @@ interface FilesystemAdapter
 
     /**
      * @param resource $contents
+     *
      * @throws UnableToWriteFile
      * @throws FilesystemException
      */
@@ -32,6 +33,7 @@ interface FilesystemAdapter
 
     /**
      * @return resource
+     *
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
@@ -57,6 +59,7 @@ interface FilesystemAdapter
 
     /**
      * @param mixed $visibility
+     *
      * @throws InvalidVisibilityProvided
      * @throws FilesystemException
      */
@@ -89,7 +92,9 @@ interface FilesystemAdapter
     /**
      * @param string $path
      * @param bool   $deep
+     *
      * @return iterable<StorageAttributes>
+     *
      * @throws FilesystemException
      */
     public function listContents(string $path, bool $deep): iterable;

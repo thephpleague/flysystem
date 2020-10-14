@@ -4,3 +4,4 @@
 /phpunit.xml
 /composer.lock
 /index_*.php
+/.php_cs.cache

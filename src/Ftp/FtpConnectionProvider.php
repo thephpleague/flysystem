@@ -10,6 +10,7 @@ class FtpConnectionProvider implements ConnectionProvider
 {
     /**
      * @return resource
+     *
      * @throws FtpConnectionException
      */
     public function createConnection(FtpConnectionOptions $options)

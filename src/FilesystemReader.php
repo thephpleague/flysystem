@@ -27,6 +27,7 @@ interface FilesystemReader
 
     /**
      * @return resource
+     *
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
@@ -34,6 +35,7 @@ interface FilesystemReader
 
     /**
      * @return DirectoryListing<StorageAttributes>
+     *
      * @throws FilesystemException
      */
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing;

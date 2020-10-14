@@ -49,7 +49,7 @@ class FtpConnectionProviderTest extends TestCase
             'password' => 'pass',
        ]);
 
-        $connection  = $this->connectionProvider->createConnection($options);
+        $connection = $this->connectionProvider->createConnection($options);
 
         $this->assertIsResource($connection);
         $this->assertTrue(ftp_close($connection));

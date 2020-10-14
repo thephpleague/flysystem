@@ -33,6 +33,7 @@ class ConnectivityCheckerThatCanFail implements ConnectivityChecker
     {
         if ($this->failNextCall) {
             $this->failNextCall = false;
+
             return false;
         }
 

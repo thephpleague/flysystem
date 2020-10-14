@@ -26,9 +26,10 @@ class SftpStub extends SFTP
      * @param int    $mode
      * @param string $filename
      * @param bool   $recursive
+     *
      * @return bool|mixed
      */
-    function chmod($mode, $filename, $recursive = false)
+    public function chmod($mode, $filename, $recursive = false)
     {
         $key = $this->formatTripKey('chmod', $filename);
         $shouldTrip = $this->tripWires[$key] ?? false;
@@ -55,9 +56,10 @@ class SftpStub extends SFTP
      * @param int             $start
      * @param int             $local_start
      * @param null            $progressCallback
+     *
      * @return bool
      */
-    function put(
+    public function put(
         $remote_file,
         $data,
         $mode = self::SOURCE_STRING,
@@ -77,6 +79,7 @@ class SftpStub extends SFTP
 
     /**
      * @param array<int,mixed> $arguments
+     *
      * @return string
      */
     private function formatTripKey(...$arguments): string

@@ -178,7 +178,7 @@ class MountManager implements FilesystemOperator
     public function move(string $source, string $destination, array $config = []): void
     {
         /** @var FilesystemOperator $sourceFilesystem */
-        /** @var FilesystemOperator $destinationFilesystem */
+        /* @var FilesystemOperator $destinationFilesystem */
         [$sourceFilesystem, $sourcePath] = $this->determineFilesystemAndPath($source);
         [$destinationFilesystem, $destinationPath] = $this->determineFilesystemAndPath($destination);
 
@@ -194,7 +194,7 @@ class MountManager implements FilesystemOperator
     public function copy(string $source, string $destination, array $config = []): void
     {
         /** @var FilesystemOperator $sourceFilesystem */
-        /** @var FilesystemOperator $destinationFilesystem */
+        /* @var FilesystemOperator $destinationFilesystem */
         [$sourceFilesystem, $sourcePath] = $this->determineFilesystemAndPath($source);
         [$destinationFilesystem, $destinationPath] = $this->determineFilesystemAndPath($destination);
 
@@ -219,8 +219,8 @@ class MountManager implements FilesystemOperator
     {
         foreach ($filesystems as $key => $filesystem) {
             $this->guardAgainstInvalidMount($key, $filesystem);
-            /** @var string $key */
-            /** @var FilesystemOperator $filesystem */
+            /* @var string $key */
+            /* @var FilesystemOperator $filesystem */
             $this->mountFilesystem($key, $filesystem);
         }
     }
@@ -247,6 +247,7 @@ class MountManager implements FilesystemOperator
 
     /**
      * @param string $path
+     *
      * @return array{0:FilesystemOperator, 1:string}
      */
     private function determineFilesystemAndPath(string $path): array

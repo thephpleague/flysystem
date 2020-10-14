@@ -93,8 +93,7 @@ class FtpConnectionOptions
         ?bool $ignorePassiveAddress = null,
         bool $enableTimestampsOnUnixListings = false,
         bool $recurseManually = false
-    )
-    {
+    ) {
         $this->host = $host;
         $this->root = $root;
         $this->username = $username;

@@ -67,5 +67,4 @@ class DirectoryListing implements IteratorAggregate
             ? iterator_to_array($this->listing, false)
             : (array) $this->listing;
     }
-
 }

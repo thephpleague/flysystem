@@ -106,7 +106,7 @@ class SftpConnectionProvider implements ConnectionProvider
             ? $this->connection
             : $this->setupConnection();
 
-        if( ! $this->connectivityChecker->isConnected($connection)) {
+        if ( ! $this->connectivityChecker->isConnected($connection)) {
             $connection->disconnect();
             $this->connection = null;
 

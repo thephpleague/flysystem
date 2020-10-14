@@ -179,7 +179,8 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         int $mode = RecursiveIteratorIterator::SELF_FIRST
     ): Generator {
         yield from new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS), $mode
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+            $mode
         );
     }
 
@@ -221,7 +222,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
 
             yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(
-                $path, $fileInfo->getSize(), $visibility, $lastModified
+                $path,
+                $fileInfo->getSize(),
+                $visibility,
+                $lastModified
             );
         }
     }

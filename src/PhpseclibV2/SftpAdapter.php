@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PhpseclibV2;
 
-use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
@@ -71,6 +70,7 @@ class SftpAdapter implements FilesystemAdapter
      * @param string          $path
      * @param string|resource $contents
      * @param Config          $config
+     *
      * @throws FilesystemException
      */
     private function upload(string $path, $contents, Config $config): void

@@ -118,7 +118,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     public function detecting_mimetype(): void
     {
         $adapter = $this->adapter();
-        $adapter->write('file.svg', (string) file_get_contents(__DIR__.'/../AdapterTestUtilities/test_files/flysystem.svg'), new Config());
+        $adapter->write('file.svg', (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/flysystem.svg'), new Config());
 
         $mimeType = $adapter->mimeType('file.svg');
 

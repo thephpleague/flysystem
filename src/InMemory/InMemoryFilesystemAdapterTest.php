@@ -253,7 +253,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter = $this->adapter();
         $adapter->write(
             self::PATH,
-            (string) file_get_contents(__DIR__.'/../AdapterTestUtilities/test_files/flysystem.svg'),
+            (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/flysystem.svg'),
             new Config()
         );
 
