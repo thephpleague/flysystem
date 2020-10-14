@@ -42,7 +42,7 @@ jobs:
           tools: composer:v2
       - run: composer update --no-progress ${{ matrix.composer-flags }}
       - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
-        if: ${{ matric.update-aws-sdk == 'yes' }}
+        if: ${{ matrix.update-aws-sdk == 'yes' }}
       - run: vendor/bin/phpunit --group=aws ${{ matrix.phpunit-flags }}
       - run: vendor/bin/phpstan analyse -l 6 src
         if: ${{ matrix.php == '7.4' }}
