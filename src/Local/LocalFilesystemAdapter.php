@@ -114,18 +114,18 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
     public function writeStream(string $path, $contents, Config $config): void
     {
-        $path = $this->prefixer->prefixPath($path);
+        $prefixedLocation = $this->prefixer->prefixPath($path);
         $this->ensureDirectoryExists(
-            dirname($path),
+            dirname($prefixedLocation),
             $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
         error_clear_last();
-        $stream = @fopen($path, 'w+b');
+        $stream = @fopen($prefixedLocation, 'w+b');
 
         if ( ! ($stream && false !== stream_copy_to_stream($contents, $stream) && fclose($stream))) {
             $reason = error_get_last()['message'] ?? '';
-            throw UnableToWriteFile::atLocation($path, $reason);
+            throw UnableToWriteFile::atLocation($prefixedLocation, $reason);
         }
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
