@@ -1,0 +1,51 @@
+---
+name: Quality Assurance
+on:
+  push:
+    branches:
+      - 2.x
+  pull_request:
+    branches:
+      - 2.x
+
+env:
+  FLYSYSTEM_AWS_S3_KEY: '${{ secrets.FLYSYSTEM_AWS_S3_KEY }}'
+  FLYSYSTEM_AWS_S3_SECRET: '${{ secrets.FLYSYSTEM_AWS_S3_SECRET }}'
+  FLYSYSTEM_AWS_S3_BUCKET: '${{ secrets.FLYSYSTEM_AWS_S3_BUCKET }}'
+  FLYSYSTEM_TEST_DANGEROUS_THINGS: "yes"
+  FLYSYSTEM_TEST_SFTP: "yes"
+
+jobs:
+  phpunit:
+    name: PHPUnit tests on ${{ matrix.php }} ${{ matrix.composer-flags }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ '7.2', '7.3', '7.4' ]
+        composer-flags: [ '' ]
+        upgrade-aws-sdk: [ 'no' ]
+        phpunit-flags: [ '--coverage-text' ]
+        include:
+          - php: '8.0'
+            composer-flags: '--ignore-platform-req=php'
+            phpunit-flags: '--no-coverage'
+            upgrade-aws-sdk: 'yes'
+          - php: '7.2'
+            composer-flags: '--prefer-lowest'
+            phpunit-flags: '--no-coverage'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+          tools: composer:v2
+      - run: composer update --no-progress ${{ matrix.composer-flags }}
+      - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
+        if: ${{ matric.update-aws-sdk == 'yes' }}
+      - run: vendor/bin/phpunit --group=aws ${{ matrix.phpunit-flags }}
+      - run: vendor/bin/phpstan analyse -l 6 src
+        if: ${{ matrix.php == '7.4' }}
+      - run: vendor/bin/php-cs-fixer fix --dry-run
+        if: ${{ matrix.php == '7.4' }}
+
