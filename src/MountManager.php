@@ -132,10 +132,10 @@ class MountManager implements FilesystemOperator
         $filesystem->writeStream($path, $contents, $config);
     }
 
-    public function setVisibility(string $location, string $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         /** @var FilesystemOperator $filesystem */
-        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+        [$filesystem, $path] = $this->determineFilesystemAndPath($path);
         $filesystem->setVisibility($path, $visibility);
     }
 

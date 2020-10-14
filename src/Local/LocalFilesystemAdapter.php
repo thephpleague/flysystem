@@ -94,9 +94,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
-    public function write(string $location, string $contents, Config $config): void
+    public function write(string $path, string $contents, Config $config): void
     {
-        $prefixedLocation = $this->prefixer->prefixPath($location);
+        $prefixedLocation = $this->prefixer->prefixPath($path);
         $this->ensureDirectoryExists(
             dirname($prefixedLocation),
             $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
@@ -104,17 +104,17 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         error_clear_last();
 
         if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
-            throw UnableToWriteFile::atLocation($location, error_get_last()['message'] ?? '');
+            throw UnableToWriteFile::atLocation($path, error_get_last()['message'] ?? '');
         }
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
-            $this->setVisibility($location, (string) $visibility);
+            $this->setVisibility($path, (string) $visibility);
         }
     }
 
-    public function writeStream(string $location, $contents, Config $config): void
+    public function writeStream(string $path, $contents, Config $config): void
     {
-        $path = $this->prefixer->prefixPath($location);
+        $path = $this->prefixer->prefixPath($path);
         $this->ensureDirectoryExists(
             dirname($path),
             $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
@@ -129,7 +129,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
-            $this->setVisibility($location, (string) $visibility);
+            $this->setVisibility($path, (string) $visibility);
         }
     }
 

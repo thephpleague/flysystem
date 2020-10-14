@@ -154,9 +154,9 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         return new FileAttributes($path, $this->files[$path]->fileSize());
     }
 
-    public function listContents(string $prefix, bool $deep): iterable
+    public function listContents(string $path, bool $deep): iterable
     {
-        $prefix = rtrim($this->preparePath($prefix), '/') . '/';
+        $prefix = rtrim($this->preparePath($path), '/') . '/';
         $prefixLength = strlen($prefix);
         $listedDirectories = [];
 
