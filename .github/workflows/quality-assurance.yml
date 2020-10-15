@@ -39,7 +39,7 @@ jobs:
       - run: chmod 0400 ./test_files/sftp/id_*
       - id: ssh_agent
         run: |
-          eval `ssh-agent -s`
+          eval "$(ssh-agent -s)"
           ssh-add ./test_files/sftp/id_rsa
           echo SSH_AUTH_SOCK=$(ssh-auth-sock) >> $GITHUB_ENV
       - uses: shivammathur/setup-php@v2
