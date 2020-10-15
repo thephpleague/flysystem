@@ -260,7 +260,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertTrue($adapter->fileExists(self::PATH));
         $this->assertEquals(754, $adapter->fileSize(self::PATH)->fileSize());
         $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
-        $this->assertEquals('image/svg', $adapter->mimeType(self::PATH)->mimeType());
+        $this->assertStringStartsWith('image/svg', $adapter->mimeType(self::PATH)->mimeType());
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
