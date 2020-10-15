@@ -21,6 +21,12 @@ use League\Flysystem\Visibility;
  */
 abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->retryOnException(UnableToConnectToFtpHost::class, 1);
+    }
+
     /**
      * @var ConnectivityCheckerThatCanFail
      */

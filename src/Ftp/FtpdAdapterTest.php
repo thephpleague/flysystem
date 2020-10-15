@@ -7,7 +7,7 @@ namespace League\Flysystem\Ftp;
 use League\Flysystem\FilesystemAdapter;
 
 /**
- * @group ftp
+ * @group ftpd
  */
 class FtpdAdapterTest extends FtpAdapterTestCase
 {

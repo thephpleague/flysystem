@@ -24,6 +24,8 @@ use Throwable;
  */
 abstract class FilesystemAdapterTestCase extends TestCase
 {
+    use RetryOnTestException;
+
     /**
      * @var FilesystemAdapter
      */
