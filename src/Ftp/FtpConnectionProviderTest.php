@@ -40,7 +40,6 @@ class FtpConnectionProviderTest extends TestCase
         reset_function_mocks();
     }
 
-
     /**
      * @test
      */
