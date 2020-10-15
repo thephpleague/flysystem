@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use League\Flysystem\AdapterTestUtilities\RetryOnTestException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,6 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class NoopCommandConnectivityCheckerTest extends TestCase
 {
+    use RetryOnTestException;
+
+    protected function setUp(): void
+    {
+        $this->retryOnException(UnableToConnectToFtpHost::class, 1);
+    }
+
     /**
      * @test
      */
