@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: docker-compose -f test_files/docker-compose.yml up -d
       - run: chmod 0400 ./test_files/sftp/id_*
-      - run: eval `ssh-agent -s` && ssh-add ./test_files/sftp/id_rsa
+      - run: eval `ssh-agent -s` && ssh-add ./test_files/sftp/id_rsa && export SSH_AUTH_SOCK=$(ssh-auth-sock)
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
