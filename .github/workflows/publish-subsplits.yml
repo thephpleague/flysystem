@@ -19,7 +19,7 @@ jobs:
       - name: install split.sh
         if: steps.splitsh.outputs.cache-hit != 'true'
         run: bin/install-split.sh
-      - uses: frankdejonge/use-github-token@1.0.0-beta.2
+      - uses: frankdejonge/use-github-token@1.0.1
         with:
           authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
           user_name: 'Frank de Jonge'

@@ -35,11 +35,18 @@ jobs:
             phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v2
+      - run: docker-compose -f test_files/docker-compose.yml up -d
+      - run: chmod 0400 ./test_files/sftp/id_*
+      - run: eval `ssh-agent`
+      - run: ssh-add ./test_files/sftp/id_rsa
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: pcov
           tools: composer:v2
+      - run: php test_files/wait_for_sftp.php
+      - run: php test_files/wait_for_ftp.php 2121
+      - run: php test_files/wait_for_ftp.php 2122
       - run: composer update --no-progress ${{ matrix.composer-flags }}
       - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
         if: ${{ matrix.update-aws-sdk == 'yes' }}
