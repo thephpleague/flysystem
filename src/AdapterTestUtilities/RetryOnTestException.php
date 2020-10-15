@@ -27,6 +27,11 @@ trait RetryOnTestException
         $this->timeoutForExceptionRetry = $timout;
     }
 
+    protected function dontRetryOnException(): void
+    {
+        $this->exceptionTypeToRetryOn = null;
+    }
+
     public function runTest(): void
     {
         $firstTryAt = \time();

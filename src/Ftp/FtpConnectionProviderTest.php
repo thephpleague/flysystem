@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use League\Flysystem\AdapterTestUtilities\RetryOnTestException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,10 +12,17 @@ use PHPUnit\Framework\TestCase;
  */
 class FtpConnectionProviderTest extends TestCase
 {
+    use RetryOnTestException;
+
     /**
      * @var FtpConnectionProvider
      */
     private $connectionProvider;
+
+    protected function setUp(): void
+    {
+        $this->retryOnException(UnableToConnectToFtpHost::class, 1);
+    }
 
     /**
      * @before
@@ -123,6 +131,8 @@ class FtpConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_connect(): void
     {
+        $this->dontRetryOnException();
+
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'port' => 313131,
@@ -141,6 +151,8 @@ class FtpConnectionProviderTest extends TestCase
      */
     public function not_being_able_to_connect_over_ssl(): void
     {
+        $this->dontRetryOnException();
+
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
            'ssl' => true,
