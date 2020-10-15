@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use const DIRECTORY_SEPARATOR;
+use const LOCK_EX;
 use DirectoryIterator;
 use FilesystemIterator;
 use Generator;
@@ -29,7 +31,6 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-
 use function chmod;
 use function clearstatcache;
 use function dirname;
@@ -41,9 +42,6 @@ use function is_file;
 use function mkdir;
 use function rename;
 use function stream_copy_to_stream;
-
-use const DIRECTORY_SEPARATOR;
-use const LOCK_EX;
 
 class LocalFilesystemAdapter implements FilesystemAdapter
 {

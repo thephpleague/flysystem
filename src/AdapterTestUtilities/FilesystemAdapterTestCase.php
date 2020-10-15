@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -17,8 +18,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 use Throwable;
-
-use const PHP_EOL;
 
 /**
  * @codeCoverageIgnore

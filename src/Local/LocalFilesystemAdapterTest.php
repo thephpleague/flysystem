@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
@@ -20,17 +21,13 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
-
 use Traversable;
-
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
 use function iterator_to_array;
 use function mkdir;
 use function symlink;
-
-use const LOCK_EX;
 
 /**
  * @group local
