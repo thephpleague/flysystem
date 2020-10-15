@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
-use Throwable;
-
 use const PHP_EOL;
 use const STDOUT;
+use Throwable;
 
 trait RetryOnTestException
 {
@@ -39,6 +38,7 @@ trait RetryOnTestException
 
         if ($this->exceptionTypeToRetryOn === null) {
             parent::runTest();
+
             return;
         }
 
@@ -46,6 +46,7 @@ trait RetryOnTestException
             try {
                 /* @phpstan-ignore-next-line */
                 parent::runTest();
+
                 return;
             } catch (Throwable $exception) {
                 if (get_class($exception) !== $this->exceptionTypeToRetryOn) {
