@@ -24,7 +24,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->retryOnException(UnableToConnectToFtpHost::class, 1);
+        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     /**

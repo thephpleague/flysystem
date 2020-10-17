@@ -16,7 +16,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->retryOnException(UnableToConnectToFtpHost::class, 1);
+        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     /**

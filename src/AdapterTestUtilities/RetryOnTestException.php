@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use PHPUnit\Framework\ExpectationFailedException;
 use const PHP_EOL;
 use const STDOUT;
 use Throwable;
@@ -20,10 +21,16 @@ trait RetryOnTestException
      */
     protected $timeoutForExceptionRetry = 0;
 
-    protected function retryOnException(string $className, int $timout): void
+    protected function retryOnException(string $className, int $timout = 1): void
     {
         $this->exceptionTypeToRetryOn = $className;
         $this->timeoutForExceptionRetry = $timout;
+    }
+
+    protected function retryScenarioOnException(string $className, callable $scenario, int $timeout = 1): void
+    {
+        $this->retryOnException($className, $timeout);
+        $this->runTestScenario($scenario);
     }
 
     protected function dontRetryOnException(): void
@@ -33,19 +40,28 @@ trait RetryOnTestException
 
     public function runTest(): void
     {
-        $firstTryAt = \time();
-        $lastTryAt = $firstTryAt + 5;
-
         if ($this->exceptionTypeToRetryOn === null) {
             parent::runTest();
 
             return;
         }
 
-        while (time() <= $lastTryAt) {
-            try {
+        $this->runTestScenario(
+            function () {
                 /* @phpstan-ignore-next-line */
                 parent::runTest();
+            }
+        );
+    }
+
+    private function runTestScenario(callable $scenario): void
+    {
+        $firstTryAt = \time();
+        $lastTryAt = $firstTryAt + 5;
+
+        while (time() <= $lastTryAt) {
+            try {
+                $scenario();
 
                 return;
             } catch (Throwable $exception) {
