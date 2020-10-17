@@ -4,7 +4,7 @@
 [![Source Code](https://img.shields.io/badge/source-thephpleague/flysystem-blue.svg)](https://github.com/thephpleague/flysystem)
 [![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg)](https://github.com/thephpleague/flysystem/releases)
 [![Software License](https:////img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/thephpleague/flysystem.svg?branch=v1.0)](https://travis-ci.org/thephpleague/flysystem)
+[![Quality Assurance](https://github.com/thephpleague/flysystem/workflows/Quality%20Assurance/badge.svg?branch=2.x)](https://github.com/thephpleague/flysystem/actions?query=workflow%3A%22Quality+Assurance%22)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
 [![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
@@ -13,7 +13,7 @@
 ## About Flysystem
 
 Flysystem is a file storage library for PHP. It provides one interface to
-interact with many different types of filesystems. When you use Flysystem, you're
+interact with many types of filesystems. When you use Flysystem, you're
 not only protected from vendor lock-in, you'll also have a consistent experience
 for which ever storage is right for you. 
 
