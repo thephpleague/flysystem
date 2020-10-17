@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
-use PHPUnit\Framework\ExpectationFailedException;
 use const PHP_EOL;
 use const STDOUT;
 use Throwable;
