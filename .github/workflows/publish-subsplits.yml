@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - src/**.*
+      - .github/workflows/publish-subsplits.yml
     branches:
       - 2.x
 
