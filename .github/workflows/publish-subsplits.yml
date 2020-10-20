@@ -13,6 +13,8 @@ jobs:
     name: Publish package sub-splits
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
       - uses: actions/cache@v2
         id: splitsh
         with:
