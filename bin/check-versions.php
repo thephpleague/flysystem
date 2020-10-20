@@ -21,18 +21,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 
-include_once __DIR__.'/../vendor/autoload.php';
-
-function write_line(string $line)
-{
-    fwrite(STDOUT, "{$line}\n");
-}
-
-function panic(string $reason)
-{
-    write_line('🚨 ' . $reason);
-    exit(1);
-}
+include_once __DIR__.'/tools.php';
 
 
 function constraint_has_conflict(string $mainConstraint, string $packageConstraint): bool
@@ -87,6 +76,8 @@ foreach ($otherComposers as $composerFile) {
         if ($dependency === 'league/flysystem') {
             if ( ! Semver::satisfies($mainVersion, $constraint)) {
                 panic("Composer file {$composerFile} does not allow league/flysystem:{$mainVersion}");
+            } else {
+                write_line("Composer file {$composerFile} allows league/flysystem:{$mainVersion} with {$constraint}");
             }
             continue;
         }
