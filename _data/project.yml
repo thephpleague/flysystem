@@ -2,5 +2,5 @@ title: "Flysystem"
 tagline: "Many filesystems, one API."
 description: "Filesystem abstraction library for PHP."
 version_v1: 1.1.3
-version_v2: 2.0.0-beta.3
+version_v2: 2.0.0-RC1
 google_analytics_tracking_id: UA-46050814-3
