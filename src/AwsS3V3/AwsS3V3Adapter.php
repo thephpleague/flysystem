@@ -260,7 +260,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
         $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
 
-        if ( ! $attributes instanceof FileAttributes || $attributes->mimeType() === null) {
+        if ( ! $attributes instanceof FileAttributes) {
             throw UnableToRetrieveMetadata::create($path, $type, '');
         }
 
@@ -308,17 +308,35 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     public function mimeType(string $path): FileAttributes
     {
-        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_MIME_TYPE);
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_MIME_TYPE);
+
+        if ($attributes->mimeType() === null) {
+            throw UnableToRetrieveMetadata::mimeType($path);
+        }
+
+        return $attributes;
     }
 
     public function lastModified(string $path): FileAttributes
     {
-        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED);
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED);
+
+        if ($attributes->lastModified() === null) {
+            throw UnableToRetrieveMetadata::lastModified($path);
+        }
+
+        return $attributes;
     }
 
     public function fileSize(string $path): FileAttributes
     {
-        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
+
+        if ($attributes->fileSize() === null) {
+            throw UnableToRetrieveMetadata::fileSize($path);
+        }
+
+        return $attributes;
     }
 
     public function listContents(string $path, bool $deep): iterable
