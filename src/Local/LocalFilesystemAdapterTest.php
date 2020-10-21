@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
+use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -472,6 +474,16 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
             new Config()
         );
         $this->assertStringStartsWith('image/svg', $adapter->mimeType('flysystem.svg')->mimeType());
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_unknown_mime_type_of_a_file(): void
+    {
+        $this->useAdapter(new LocalFilesystemAdapter(self::ROOT, null, LOCK_EX, LocalFilesystemAdapter::DISALLOW_LINKS, new ExtensionMimeTypeDetector(new EmptyExtensionToMimeTypeMap())));
+
+        parent::fetching_unknown_mime_type_of_a_file();
     }
 
     /**

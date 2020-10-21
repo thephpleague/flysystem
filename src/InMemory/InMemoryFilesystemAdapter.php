@@ -14,6 +14,8 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
@@ -29,9 +31,15 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
      */
     private $defaultVisibility;
 
-    public function __construct(string $defaultVisibility = Visibility::PUBLIC)
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
+    public function __construct(string $defaultVisibility = Visibility::PUBLIC, MimeTypeDetector $mimeTypeDetector = null)
     {
         $this->defaultVisibility = $defaultVisibility;
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     public function fileExists(string $path): bool
@@ -123,13 +131,19 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
 
     public function mimeType(string $path): FileAttributes
     {
-        $path = $this->preparePath($path);
+        $preparedPath = $this->preparePath($path);
 
-        if (array_key_exists($path, $this->files) === false) {
+        if (array_key_exists($preparedPath, $this->files) === false) {
             throw UnableToRetrieveMetadata::mimeType($path, 'file does not exist');
         }
 
-        return new FileAttributes($path, null, null, null, $this->files[$path]->mimeType());
+        $mimeType = $this->mimeTypeDetector->detectMimeType($path, $this->files[$preparedPath]->read());
+
+        if ($mimeType === null) {
+            throw UnableToRetrieveMetadata::mimeType($path);
+        }
+
+        return new FileAttributes($preparedPath, null, null, null, $mimeType);
     }
 
     public function lastModified(string $path): FileAttributes

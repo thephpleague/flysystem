@@ -7,6 +7,9 @@ namespace League\Flysystem\InMemory;
 use const FILEINFO_MIME_TYPE;
 use finfo;
 
+/**
+ * @internal
+ */
 class InMemoryFile
 {
     /**
