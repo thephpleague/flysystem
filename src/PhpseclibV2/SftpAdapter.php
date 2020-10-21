@@ -225,11 +225,15 @@ class SftpAdapter implements FilesystemAdapter
         try {
             $contents = $this->read($path);
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
-
-            return new FileAttributes($path, null, null, null, $mimetype);
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
         }
+
+        if ($mimetype === null) {
+            throw UnableToRetrieveMetadata::mimeType($path, 'Unknown.');
+        }
+
+        return new FileAttributes($path, null, null, null, $mimetype);
     }
 
     public function lastModified(string $path): FileAttributes
