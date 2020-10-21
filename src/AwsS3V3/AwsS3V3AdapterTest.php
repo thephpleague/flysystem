@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
+use Aws\Result;
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
 use Generator;
@@ -143,6 +144,20 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToDeleteFile::class);
 
         $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_unknown_mime_type_of_a_file(): void
+    {
+        $this->adapter();
+        $result = new Result([
+            'Key' => static::$adapterPrefix . '/unknown-mime-type.md5',
+        ]);
+        static::$stubS3Client->stageResultForCommand('HeadObject', $result);
+
+        parent::fetching_unknown_mime_type_of_a_file();
     }
 
     /**

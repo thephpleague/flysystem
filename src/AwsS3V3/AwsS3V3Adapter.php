@@ -260,7 +260,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
         $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
 
-        if ( ! $attributes instanceof FileAttributes) {
+        if ( ! $attributes instanceof FileAttributes || $attributes->mimeType() === null) {
             throw UnableToRetrieveMetadata::create($path, $type, '');
         }
 
