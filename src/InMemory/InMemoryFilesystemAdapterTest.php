@@ -12,6 +12,9 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\Visibility;
+use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
+use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 
 /**
  * @group in-memory
@@ -261,6 +264,15 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertEquals(754, $adapter->fileSize(self::PATH)->fileSize());
         $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
         $this->assertStringStartsWith('image/svg', $adapter->mimeType(self::PATH)->mimeType());
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_unknown_mime_type_of_a_file(): void
+    {
+        $this->useAdapter(new InMemoryFilesystemAdapter(Visibility::PUBLIC, new ExtensionMimeTypeDetector(new EmptyExtensionToMimeTypeMap())));
+        parent::fetching_unknown_mime_type_of_a_file();
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
