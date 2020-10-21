@@ -6,10 +6,15 @@ namespace League\Flysystem\AwsS3V3;
 
 use Aws\Command;
 use Aws\CommandInterface;
+use Aws\ResultInterface;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3ClientInterface;
 use Aws\S3\S3ClientTrait;
 use GuzzleHttp\Psr7\Response;
+
+use Psr\Http\Message\ResponseInterface;
+
+use function GuzzleHttp\Promise\promise_for;
 
 /**
  * @codeCoverageIgnore
@@ -27,6 +32,11 @@ class S3ClientStub implements S3ClientInterface
      * @var S3Exception[]
      */
     private $stagedExceptions = [];
+
+    /**
+     * @var ResultInterface[]
+     */
+    private $stagedResult = [];
 
     public function __construct(S3ClientInterface $client)
     {
@@ -49,6 +59,11 @@ class S3ClientStub implements S3ClientInterface
         $exception = new S3Exception($commandName, new Command($commandName), compact('response'));
 
         $this->throwExceptionWhenExecutingCommand($commandName, $exception);
+    }
+
+    public function stageResultForCommand(string $commandName, ResultInterface $result): void
+    {
+        $this->stagedResult[$commandName] = $result;
     }
 
     public function execute(CommandInterface $command)
@@ -78,10 +93,19 @@ class S3ClientStub implements S3ClientInterface
 
     public function executeAsync(CommandInterface $command)
     {
-        if (array_key_exists($name = $command->getName(), $this->stagedExceptions)) {
+        $name = $command->getName();
+
+        if (array_key_exists($name, $this->stagedExceptions)) {
             $exception = $this->stagedExceptions[$name];
             unset($this->stagedExceptions[$name]);
             throw $exception;
+        }
+
+        if (array_key_exists($name, $this->stagedResult)) {
+            $result = $this->stagedResult[$name];
+            unset($this->stagedResult[$name]);
+
+            return promise_for($result);
         }
 
         return $this->actualClient->executeAsync($command);
