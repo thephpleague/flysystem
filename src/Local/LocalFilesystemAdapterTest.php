@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
-use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -23,6 +21,8 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
+use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
+use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use Traversable;
 use function file_get_contents;
 use function file_put_contents;

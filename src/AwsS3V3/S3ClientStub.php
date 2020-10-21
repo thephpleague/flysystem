@@ -12,7 +12,6 @@ use Aws\S3\S3ClientInterface;
 use Aws\S3\S3ClientTrait;
 use GuzzleHttp\Psr7\Response;
 
-use Psr\Http\Message\ResponseInterface;
 
 use function GuzzleHttp\Promise\promise_for;
 
