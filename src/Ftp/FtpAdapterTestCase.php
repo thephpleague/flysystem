@@ -18,6 +18,7 @@ use League\Flysystem\Visibility;
 
 /**
  * @group ftp
+ * @codeCoverageIgnore
  */
 abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 {

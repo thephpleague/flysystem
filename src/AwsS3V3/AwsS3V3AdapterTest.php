@@ -7,6 +7,7 @@ namespace League\Flysystem\AwsS3V3;
 use Aws\Result;
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
+use Exception;
 use Generator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -16,6 +17,7 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 
 /**
  * @group aws
@@ -158,6 +160,30 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         static::$stubS3Client->stageResultForCommand('HeadObject', $result);
 
         parent::fetching_unknown_mime_type_of_a_file();
+    }
+
+    /**
+     * @test
+     * @dataProvider dpFailingMetadataGetters
+     */
+    public function failing_to_retrieve_metadata(Exception $exception, string $getterName): void
+    {
+        $adapter = $this->adapter();
+        $result = new Result([
+             'Key' => static::$adapterPrefix . '/filename.txt',
+        ]);
+        static::$stubS3Client->stageResultForCommand('HeadObject', $result);
+
+        $this->expectExceptionObject($exception);
+
+        $adapter->{$getterName}('filename.txt');
+    }
+
+    public function dpFailingMetadataGetters(): iterable
+    {
+        yield "mimeType" => [UnableToRetrieveMetadata::mimeType('filename.txt'), 'mimeType'];
+        yield "lastModified" => [UnableToRetrieveMetadata::lastModified('filename.txt'), 'lastModified'];
+        yield "fileSize" => [UnableToRetrieveMetadata::fileSize('filename.txt'), 'fileSize'];
     }
 
     /**
