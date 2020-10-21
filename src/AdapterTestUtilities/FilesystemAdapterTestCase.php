@@ -18,6 +18,7 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 use Throwable;
+use function file_get_contents;
 
 /**
  * @codeCoverageIgnore
@@ -392,6 +393,18 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->expectException(UnableToRetrieveMetadata::class);
 
         $this->adapter()->mimeType('non-existing-file.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function fetching_unknown_mime_type_of_a_file(): void
+    {
+        $this->givenWeHaveAnExistingFile('unknown-mime-type.md5', file_get_contents(__DIR__ . '/test_files/unknown-mime-type.md5'));
+
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $this->adapter()->mimeType('unknown-mime-type.md5');
     }
 
     /**
