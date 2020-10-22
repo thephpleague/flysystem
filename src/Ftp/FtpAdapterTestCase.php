@@ -13,6 +13,7 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
@@ -237,6 +238,19 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $adapter = $this->adapter();
         iterator_to_array($adapter->listContents('/', false), false);
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_get_the_file_size_of_a_directory(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->createDirectory('directory_name', new Config());
+
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $adapter->fileSize('directory_name');
     }
 
     /**
