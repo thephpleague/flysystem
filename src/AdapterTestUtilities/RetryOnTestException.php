@@ -8,6 +8,9 @@ use const PHP_EOL;
 use const STDOUT;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 trait RetryOnTestException
 {
     /**

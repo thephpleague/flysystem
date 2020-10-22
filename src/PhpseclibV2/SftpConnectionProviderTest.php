@@ -45,7 +45,7 @@ class SftpConnectionProviderTest extends TestCase
             'password' => 'pass',
             'port' => 2222,
             'timeout' => 10,
-            'connectivityCheckout' => new FixatedConnectivityChecker(4)
+            'connectivityChecker' => new FixatedConnectivityChecker(4)
         ]);
         $connection = $provider->provideConnection();
         $sameConnection = $provider->provideConnection();
@@ -71,6 +71,25 @@ class SftpConnectionProviderTest extends TestCase
 
         $connection = $provider->provideConnection();
         $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     */
+    public function authenticating_with_an_invalid_private_key(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'bar',
+                'privateKey' => __DIR__ . '/../../test_files/sftp/users.conf',
+                'port' => 2222,
+            ]
+        );
+
+        $this->expectException(UnableToLoadPrivateKey::class);
+
+        $provider->provideConnection();
     }
 
     /**
