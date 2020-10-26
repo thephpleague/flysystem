@@ -22,7 +22,7 @@ for which ever storage is right for you.
 * **[New in V2](https://flysystem.thephpleague.com/v2/docs/what-is-new/)**: What it new in Flysystem V2?
 * **[Architecture](https://flysystem.thephpleague.com/v2/docs/architecture/)**: Flysystem's internal architecture
 * **[Flysystem API](https://flysystem.thephpleague.com/v2/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
-* **[Upgrade to V2](https://flysystem.thephpleague.com/v2/docs/advanced/upgrade-to-2.0.0/)**: How to interact with your Flysystem instance
+* **[Upgrade to V2](https://flysystem.thephpleague.com/v2/docs/advanced/upgrade-to-2.0.0/)**: How to upgrade your Flysystem V1 instance to V2
 
 ### Commonly-Used Adapters
 
