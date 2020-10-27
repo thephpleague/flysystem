@@ -5,3 +5,4 @@
 /composer.lock
 /index_*.php
 /.php_cs.cache
+/google-cloud-service-account.json
