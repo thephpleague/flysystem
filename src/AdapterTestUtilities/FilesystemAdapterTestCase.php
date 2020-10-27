@@ -481,7 +481,9 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $adapter = $this->adapter();
 
             $adapter->writeStream('path.txt', $writeStream, new Config());
-            fclose($writeStream);
+            if (is_resource($writeStream)) {
+                fclose($writeStream);
+            };
             $readStream = $adapter->readStream('path.txt');
 
             $this->assertIsResource($readStream);
