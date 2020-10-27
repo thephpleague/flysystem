@@ -8,6 +8,9 @@ use Google\Cloud\Storage\StorageClient;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\FilesystemAdapter;
 
+/**
+ * @group gcs
+ */
 class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
 {
     /**
