@@ -11,6 +11,7 @@ parameters:
         - src/InMemory
         - src/PHPSecLibV2
     ignoreErrors:
+        - '#Call to function iterator_to_array\(\) on a separate line has no effect\.#'
         - '#Comparison operation "<" between 0|1 and 4 is always true.#'
         - '#Method League\\Flysystem\\AwsS3V3\\S3ClientStub.*#'
         - '#Constant NET_SFTP_TYPE_DIRECTORY not found\.#'
