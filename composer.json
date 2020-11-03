@@ -25,7 +25,9 @@
         "phpseclib/phpseclib": "^2.0",
         "aws/aws-sdk-php": "^3.132.4",
         "composer/semver": "^3.0",
-        "friendsofphp/php-cs-fixer": "^2.16"
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "async-aws/s3": "^1.5",
+        "async-aws/simple-s3": "^1.0"
     },
     "conflict": {
         "guzzlehttp/ringphp": "<1.1.1"

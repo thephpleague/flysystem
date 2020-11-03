@@ -6,6 +6,7 @@ parameters:
         - src/AdapterTestUtilities/test-functions.php
     excludes_analyse:
         - src/AdapterTestUtilities/
+        - src/AsyncAwsS3
         - src/AwsS3V3
         - src/FTP
         - src/InMemory

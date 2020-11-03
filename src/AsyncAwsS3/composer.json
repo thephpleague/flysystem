@@ -1,0 +1,27 @@
+{
+    "name": "league/flysystem-async-aws-s3",
+    "description": "AsyncAws S3 filesystem adapter for Flysystem.",
+    "keywords": ["async-aws","aws", "s3", "flysystem", "filesystem", "storage", "file", "files"],
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\AsyncAwsS3\\": ""
+        }
+    },
+    "require": {
+        "php": "^7.2",
+        "league/flysystem": "^2.0.0-RC1",
+        "league/mime-type-detection": "^1.0.0",
+        "async-aws/s3": "^1.5"
+    },
+    "require-dev": {
+        "async-aws/simple-s3": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}

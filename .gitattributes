@@ -10,6 +10,7 @@
 /CHANGELOG.md export-ignore
 /README.md export-ignore
 /.github export-ignore
+/src/AsyncAwsS3 export-ignore
 /src/AwsS3V3 export-ignore
 /src/FTP export-ignore
 /src/InMemory export-ignore

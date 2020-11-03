@@ -26,15 +26,12 @@ for which ever storage is right for you.
 
 ### Commonly-Used Adapters
 
+* **[AsyncAws S3](https://flysystem.thephpleague.com/v2/docs/adapter/async-aws-s3/)**
 * **[AWS S3](https://flysystem.thephpleague.com/v2/docs/adapter/aws-s3-v3/)**
 * **[Local](https://flysystem.thephpleague.com/v2/docs/adapter/local/)**
 * **[Memory](https://flysystem.thephpleague.com/v2/docs/adapter/in-memory/)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
-
-#### Community Created Adapters
-
-* **[AsyncAWS S3](https://github.com/async-aws/flysystem-s3)**
 
 ## Security
 
