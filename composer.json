@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "phpunit/phpunit": "^8.5",
+        "phpunit/phpunit": "^8.5 || ^9.4",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
         "aws/aws-sdk-php": "^3.132.4",

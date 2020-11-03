@@ -165,7 +165,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         file_put_contents(static::ROOT . '/file.txt', 'contents');
         $adapter->delete('/file.txt');
-        $this->assertFileNotExists(static::ROOT . '/file.txt');
+        $this->assertFileDoesNotExist(static::ROOT . '/file.txt');
     }
 
     /**
@@ -299,9 +299,9 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         file_put_contents(static::ROOT . '/directory/subdir/file.txt', 'content');
         symlink(static::ROOT . '/directory/subdir/file.txt', static::ROOT . '/directory/subdir/link.txt');
         $adapter->deleteDirectory('directory/subdir');
-        $this->assertDirectoryNotExists(static::ROOT . '/directory/subdir/');
+        $this->assertDirectoryDoesNotExist(static::ROOT . '/directory/subdir/');
         $adapter->deleteDirectory('directory');
-        $this->assertDirectoryNotExists(static::ROOT . '/directory/');
+        $this->assertDirectoryDoesNotExist(static::ROOT . '/directory/');
     }
 
     /**
@@ -313,7 +313,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter->write('a/b/c/d/e.txt', 'contents', new Config());
         $adapter->deleteDirectory('a/b');
         $this->assertDirectoryExists(static::ROOT . '/a');
-        $this->assertDirectoryNotExists(static::ROOT . '/a/b');
+        $this->assertDirectoryDoesNotExist(static::ROOT . '/a/b');
     }
 
     /**
@@ -427,7 +427,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertFileExists(static::ROOT . '/first.txt');
         $adapter->move('first.txt', 'second.txt', new Config());
         $this->assertFileExists(static::ROOT . '/second.txt');
-        $this->assertFileNotExists(static::ROOT . '/first.txt');
+        $this->assertFileDoesNotExist(static::ROOT . '/first.txt');
     }
 
     /**
