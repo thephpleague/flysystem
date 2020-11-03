@@ -9,7 +9,7 @@ use RuntimeException;
 
 class UnableToLoadPrivateKey extends RuntimeException implements FilesystemException
 {
-    public function __construct($message = "Unable to load private key.")
+    public function __construct(string $message = "Unable to load private key.")
     {
         parent::__construct($message);
     }
