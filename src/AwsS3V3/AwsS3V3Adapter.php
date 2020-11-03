@@ -215,7 +215,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $this->upload(rtrim($path, '/') . '/', '', $config);
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $arguments = [
             'Bucket' => $this->bucket,

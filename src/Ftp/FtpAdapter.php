@@ -249,7 +249,7 @@ class FtpAdapter implements FilesystemAdapter
         $this->ensureDirectoryExists($path, $config->get('visibility'));
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $location = $this->prefixer->prefixPath($path);
         $mode = $this->visibilityConverter->forFile($visibility);

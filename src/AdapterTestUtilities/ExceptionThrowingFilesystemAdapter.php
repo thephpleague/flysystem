@@ -101,7 +101,7 @@ class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
         $this->adapter->createDirectory($path, $config);
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $this->throwStagedException(__METHOD__, $path);
 
