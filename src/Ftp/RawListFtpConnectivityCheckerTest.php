@@ -4,6 +4,9 @@ namespace League\Flysystem\Ftp;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group ftp
+ */
 class RawListFtpConnectivityCheckerTest extends TestCase
 {
     /**

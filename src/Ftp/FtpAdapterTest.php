@@ -6,6 +6,9 @@ namespace League\Flysystem\Ftp;
 
 use League\Flysystem\FilesystemAdapter;
 
+/**
+ * @group ftp
+ */
 class FtpAdapterTest extends FtpAdapterTestCase
 {
     protected static function createFilesystemAdapter(): FilesystemAdapter
