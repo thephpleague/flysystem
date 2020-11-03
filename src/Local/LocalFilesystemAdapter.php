@@ -329,7 +329,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $path = $this->prefixer->prefixPath($path);
         $visibility = is_dir($path) ? $this->visibility->forDirectory($visibility) : $this->visibility->forFile(

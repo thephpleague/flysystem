@@ -190,7 +190,7 @@ class SftpAdapter implements FilesystemAdapter
         $this->makeDirectory($path, $config->get(Config::OPTION_VISIBILITY));
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();

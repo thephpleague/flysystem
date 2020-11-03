@@ -58,12 +58,10 @@ interface FilesystemAdapter
     public function createDirectory(string $path, Config $config): void;
 
     /**
-     * @param mixed $visibility
-     *
      * @throws InvalidVisibilityProvided
      * @throws FilesystemException
      */
-    public function setVisibility(string $path, $visibility): void;
+    public function setVisibility(string $path, string $visibility): void;
 
     /**
      * @throws UnableToRetrieveMetadata
