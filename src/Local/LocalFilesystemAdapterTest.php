@@ -614,4 +614,24 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         return new LocalFilesystemAdapter(static::ROOT);
     }
+
+    public static function assertFileDoesNotExist(string $filename, string $message = ''): void
+    {
+        if (is_callable('parent::assertFileDoesNotExist')) {
+            // PHPUnit 9+
+            parent::assertFileDoesNotExist($filename, $message);
+        } else {
+            self::assertFileNotExists($filename, $message);
+        }
+    }
+
+    public static function assertDirectoryDoesNotExist(string $directory, string $message = ''): void
+    {
+        if (is_callable('parent::assertDirectoryDoesNotExist')) {
+            // PHPUnit 9+
+            parent::assertDirectoryDoesNotExist($directory, $message);
+        } else {
+            self::assertDirectoryNotExists($directory, $message);
+        }
+    }
 }
