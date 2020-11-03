@@ -39,7 +39,8 @@ your own visibility strategy.
 
 Adapter | Visibility Interface
 --- | ---
-AWS S3 | `League\Flysystem\AwsS3V3\VisibilityConverter` 
-Local | `League\Flysystem\UnixVisibility\VisibilityConverter` 
+AsyncAws S3 | `League\Flysystem\AsyncAwsS3\VisibilityConverter`
+AWS S3 | `League\Flysystem\AwsS3V3\VisibilityConverter`
+Local | `League\Flysystem\UnixVisibility\VisibilityConverter`
 FTP | `League\Flysystem\UnixVisibility\VisibilityConverter` 
 SFTP | `League\Flysystem\UnixVisibility\VisibilityConverter` 

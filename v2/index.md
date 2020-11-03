@@ -33,6 +33,7 @@ for which ever storage is right for you.
 
 ### Commonly-Used Adapters
 
+* **[AsyncAws S3](https://flysystem.thephpleague.com/v2/docs/adapter/async-aws-s3/)**
 * **[AWS S3](/v2/docs/adapter/aws-s3-v3/)**
 * **[Local](/v2/docs/adapter/local/)**
 * **[Memory](/v2/docs/adapter/in-memory/)**

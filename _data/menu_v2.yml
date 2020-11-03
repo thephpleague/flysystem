@@ -19,6 +19,7 @@ Usage:
 Adapters:
     Local: '/v2/docs/adapter/local/'
     AWS S3: '/v2/docs/adapter/aws-s3-v3/'
+    AsyncAws S3: '/v2/docs/adapter/async-aws-s3/'
     FTP: '/v2/docs/adapter/ftp/'
     SFTP: '/v2/docs/adapter/sftp/'
     InMemory: '/v2/docs/adapter/in-memory/'
