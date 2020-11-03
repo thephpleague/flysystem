@@ -23,10 +23,10 @@ class UnableToMountFilesystem extends LogicException implements FilesystemExcept
      */
     public static function becauseTheFilesystemWasNotValid($filesystem): UnableToMountFilesystem
     {
+        $received = is_object($filesystem) ? get_class($filesystem) : gettype($filesystem);
+
         return new UnableToMountFilesystem(
-            'Unable to mount filesystem, key was invalid. Instance of ' . FilesystemOperator::class . ' expected, received: ' . gettype(
-                $filesystem
-            )
+            'Unable to mount filesystem, filesystem was invalid. Instance of ' . FilesystemOperator::class . ' expected, received: ' . $received
         );
     }
 }
