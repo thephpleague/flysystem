@@ -30,7 +30,7 @@ use Throwable;
 class AwsS3V3Adapter implements FilesystemAdapter
 {
     /**
-     * @var array
+     * @var string[]
      */
     public const AVAILABLE_OPTIONS = [
         'ACL',
@@ -55,6 +55,10 @@ class AwsS3V3Adapter implements FilesystemAdapter
         'Tagging',
         'WebsiteRedirectLocation',
     ];
+
+    /**
+     * @var string[]
+     */
     private const EXTRA_METADATA_FIELDS = [
         'Metadata',
         'StorageClass',
