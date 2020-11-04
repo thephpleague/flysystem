@@ -53,6 +53,9 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 ## Support for large files:
 
 If you want to upload files larger than 5GB you need to use the `SimpleS3Client`.
+The `SimpleS3Client` automatically switches to MultipartUpload for large files. It
+also supports a user friendly interface to `upload()`, `download()`, `getUrl()` etc
+if you happen to use the client without Flysystem.
 
 ```cli
 composer require async-aws/simple-s3
