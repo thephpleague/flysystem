@@ -7,6 +7,9 @@ namespace League\Flysystem\ZipArchive;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\FilesystemAdapter;
 
+/**
+ * @group zip
+ */
 final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 {
     private const ARCHIVE = __DIR__ . '/test.zip';
