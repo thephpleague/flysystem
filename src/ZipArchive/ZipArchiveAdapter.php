@@ -166,7 +166,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         $this->ensureDirectoryExists($path);
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         $archive = $this->archive();
         $location = $this->pathNormalizer->forFile($path);
