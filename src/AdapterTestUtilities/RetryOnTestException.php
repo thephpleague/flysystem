@@ -32,7 +32,7 @@ trait RetryOnTestException
     protected function retryScenarioOnException(string $className, callable $scenario, int $timeout = 1): void
     {
         $this->retryOnException($className, $timeout);
-        $this->runTestScenario($scenario);
+        $this->runScenario($scenario);
     }
 
     protected function dontRetryOnException(): void
