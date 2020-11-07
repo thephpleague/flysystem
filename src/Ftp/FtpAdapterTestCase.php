@@ -16,6 +16,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
+use Throwable;
 
 /**
  * @group ftp
@@ -23,10 +24,23 @@ use League\Flysystem\Visibility;
  */
 abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 {
-    protected function setUp(): void
+    protected function runScenario(callable $callable): void
     {
-        parent::setUp();
-        $this->retryOnException(UnableToConnectToFtpHost::class);
+        $exception = null;
+        $tries = 0;
+
+        while($tries < 10) {
+            try {
+                $callable();
+                return;
+            } catch (FtpConnectionException $exception) {
+                sleep(1);
+            }
+        }
+
+        if ($exception instanceof Throwable) {
+            throw $exception;
+        }
     }
 
     /**
@@ -61,14 +75,15 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function failing_to_write_a_file(callable $scenario): void
     {
         $scenario();
-        $adapter = $this->adapter();
 
         $this->expectException(UnableToWriteFile::class);
 
-        $adapter->write('some/path.txt', 'contents', new Config([
-            Config::OPTION_VISIBILITY => Visibility::PUBLIC,
-            Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC
-        ]));
+        $this->runScenario(function() {
+            $this->adapter()->write('some/path.txt', 'contents', new Config([
+                Config::OPTION_VISIBILITY => Visibility::PUBLIC,
+                Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC
+            ]));
+        });
     }
 
     public function scenariosCausingWriteFailure(): Generator
@@ -97,12 +112,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
     {
         $scenario();
-        $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('some/nested/path.txt');
 
         $this->expectException(UnableToDeleteDirectory::class);
 
-        $adapter->deleteDirectory('some');
+        $this->runScenario(function() {
+            $this->adapter()->deleteDirectory('some');
+        });
     }
 
     public function scenariosCausingDirectoryDeleteFailure(): Generator
@@ -122,13 +138,14 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function failing_to_copy(callable $scenario): void
     {
-        $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt');
         $scenario();
 
         $this->expectException(UnableToCopyFile::class);
 
-        $adapter->copy('path.txt', 'new/path.txt', new Config());
+        $this->runScenario(function() {
+            $this->adapter()->copy('path.txt', 'new/path.txt', new Config());
+        });
     }
 
     /**
@@ -136,13 +153,14 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function failing_to_move_because_creating_the_directory_fails(): void
     {
-        $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('path.txt');
         mock_function('ftp_mkdir', false);
 
         $this->expectException(UnableToMoveFile::class);
 
-        $adapter->move('path.txt', 'new/path.txt', new Config());
+        $this->runScenario(function() {
+            $this->adapter()->move('path.txt', 'new/path.txt', new Config());
+        });
     }
 
     public function scenariosCausingCopyFailure(): Generator
@@ -162,12 +180,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function failing_to_delete_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
-        $adapter = $this->adapter();
         mock_function('ftp_delete', false);
 
         $this->expectException(UnableToDeleteFile::class);
 
-        $adapter->delete('path.txt');
+        $this->runScenario(function() {
+            $this->adapter()->delete('path.txt');
+        });
     }
 
     /**
@@ -219,8 +238,10 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(InvalidListResponseReceived::class);
 
-        $adapter = $this->adapter();
-        iterator_to_array($adapter->listContents('/', false), false);
+        $this->runScenario(function() {
+            $adapter = $this->adapter();
+            iterator_to_array($adapter->listContents('/', false), false);
+        });
     }
 
     /**
@@ -236,8 +257,10 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(InvalidListResponseReceived::class);
 
-        $adapter = $this->adapter();
-        iterator_to_array($adapter->listContents('/', false), false);
+        $this->runScenario(function() {
+            $adapter = $this->adapter();
+            iterator_to_array($adapter->listContents('/', false), false);
+        });
     }
 
     /**
@@ -250,7 +273,9 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $adapter->fileSize('directory_name');
+        $this->runScenario(function() use ($adapter) {
+            $adapter->fileSize('directory_name');
+        });
     }
 
     /**
