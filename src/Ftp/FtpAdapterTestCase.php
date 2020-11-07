@@ -29,9 +29,10 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         $exception = null;
         $tries = 0;
 
-        while($tries < 10) {
+        while ($tries < 10) {
             try {
                 $callable();
+
                 return;
             } catch (FtpConnectionException $exception) {
                 sleep(1);
@@ -79,7 +80,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToWriteFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->write('some/path.txt', 'contents', new Config([
                 Config::OPTION_VISIBILITY => Visibility::PUBLIC,
                 Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC
@@ -117,7 +118,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToDeleteDirectory::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->deleteDirectory('some');
         });
     }
@@ -144,7 +145,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToCopyFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->copy('path.txt', 'new/path.txt', new Config());
         });
     }
@@ -159,7 +160,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToMoveFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->move('path.txt', 'new/path.txt', new Config());
         });
     }
@@ -185,7 +186,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToDeleteFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->delete('path.txt');
         });
     }
@@ -239,7 +240,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(InvalidListResponseReceived::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $adapter = $this->adapter();
             iterator_to_array($adapter->listContents('/', false), false);
         });
@@ -258,7 +259,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(InvalidListResponseReceived::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $adapter = $this->adapter();
             iterator_to_array($adapter->listContents('/', false), false);
         });
@@ -274,7 +275,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() use ($adapter) {
+        $this->runScenario(function () use ($adapter) {
             $adapter->fileSize('directory_name');
         });
     }

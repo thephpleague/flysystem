@@ -44,6 +44,7 @@ trait RetryOnTestException
     {
         if ($this->exceptionTypeToRetryOn === null) {
             $scenario();
+
             return;
         }
 

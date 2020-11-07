@@ -103,7 +103,7 @@ class FtpConnectionProviderTest extends TestCase
 
         $this->expectException(UnableToSetFtpOption::class);
 
-        $this->runScenario(function() use ($options) {
+        $this->runScenario(function () use ($options) {
             $this->connectionProvider->createConnection($options);
         });
     }
