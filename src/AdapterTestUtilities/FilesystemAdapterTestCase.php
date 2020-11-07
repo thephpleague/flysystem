@@ -345,7 +345,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $adapter = $this->adapter();
         $adapter->createDirectory('path', new Config());
 
-        $this->runScenario(function() use ($adapter) {
+        $this->runScenario(function () use ($adapter) {
             $adapter->fileSize('path/');
         });
     }
@@ -357,7 +357,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->fileSize('non-existing-file.txt');
         });
     }
@@ -369,7 +369,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->lastModified('non-existing-file.txt');
         });
     }
@@ -381,7 +381,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->visibility('non-existing-file.txt');
         });
     }
@@ -405,7 +405,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->mimeType('non-existing-file.txt');
         });
     }
@@ -419,7 +419,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->mimeType('unknown-mime-type.md5');
         });
     }
@@ -462,7 +462,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToSetVisibility::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->setVisibility('path.txt', Visibility::PRIVATE);
         });
     }
@@ -512,7 +512,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToReadFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->read('path.txt');
         });
     }
@@ -524,7 +524,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToMoveFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $this->adapter()->move('source.txt', 'destination.txt', new Config());
         });
     }
