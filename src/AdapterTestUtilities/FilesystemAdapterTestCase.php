@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use League\Flysystem\Ftp\UnableToConnectToFtpHost;
 use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
@@ -51,6 +52,12 @@ abstract class FilesystemAdapterTestCase extends TestCase
     public static function setUpBeforeClass(): void
     {
         static::$adapter = null;
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
