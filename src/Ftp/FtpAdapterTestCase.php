@@ -35,6 +35,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
                 return;
             } catch (FtpConnectionException $exception) {
                 sleep(1);
+                $tries++;
             }
         }
 
