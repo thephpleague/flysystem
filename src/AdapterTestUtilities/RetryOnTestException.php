@@ -40,26 +40,15 @@ trait RetryOnTestException
         $this->exceptionTypeToRetryOn = null;
     }
 
-    public function runTest(): void
+    protected function runScenario(callable $scenario): void
     {
         if ($this->exceptionTypeToRetryOn === null) {
-            parent::runTest();
-
+            $scenario();
             return;
         }
 
-        $this->runTestScenario(
-            function () {
-                /* @phpstan-ignore-next-line */
-                parent::runTest();
-            }
-        );
-    }
-
-    private function runTestScenario(callable $scenario): void
-    {
         $firstTryAt = \time();
-        $lastTryAt = $firstTryAt + 5;
+        $lastTryAt = $firstTryAt + 15;
 
         while (time() <= $lastTryAt) {
             try {

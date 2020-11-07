@@ -80,7 +80,7 @@ class FtpConnectionProviderTest extends TestCase
 
         $this->expectException(UnableToEnableUtf8Mode::class);
 
-        $this->retryScenarioOnException(UnableToConnectToFtpHost::class, function () use ($options) {
+        $this->runScenario(function () use ($options) {
             $this->connectionProvider->createConnection($options);
         });
     }
