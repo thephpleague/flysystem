@@ -9,6 +9,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
+use League\Flysystem\PathPrefixer;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -31,8 +32,8 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     private $filename;
     /** @var ZipArchive|null */
     private $archive;
-    /** @var ZipArchivePathNormalizer */
-    private $pathNormalizer;
+    /** @var PathPrefixer */
+    private $pathPrefixer;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
     /** @var VisibilityConverter */
@@ -52,7 +53,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
 
         $this->filename = $filename;
-        $this->pathNormalizer = new ZipArchivePathNormalizer($root);
+        $this->pathPrefixer = new PathPrefixer($root);
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->visibility = $visibility ?? new PortableVisibilityConverter();
     }
@@ -64,7 +65,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        return $this->archive()->locateName($this->pathNormalizer->forFile($path)) !== false;
+        return $this->archive()->locateName($this->pathPrefixer->prefixPath($path)) !== false;
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -75,7 +76,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             throw UnableToWriteFile::atLocation($path, 'creating parent directory failed', $exception);
         }
 
-        if ( ! $this->archive()->addFromString($this->pathNormalizer->forFile($path), $contents)) {
+        if ( ! $this->archive()->addFromString($this->pathPrefixer->prefixPath($path), $contents)) {
             throw UnableToWriteFile::atLocation($path, 'writing the file failed');
         }
 
@@ -103,7 +104,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function read(string $path): string
     {
-        $contents = $this->archive()->getFromName($this->pathNormalizer->forFile($path));
+        $contents = $this->archive()->getFromName($this->pathPrefixer->prefixPath($path));
 
         if ($contents === false) {
             throw UnableToReadFile::fromLocation($path, $this->archive()->getStatusString());
@@ -114,7 +115,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function readStream(string $path)
     {
-        $resource = $this->archive()->getStream($this->pathNormalizer->forFile($path));
+        $resource = $this->archive()->getStream($this->pathPrefixer->prefixPath($path));
 
         if ($resource === false) {
             throw UnableToReadFile::fromLocation($path, $this->archive()->getStatusString());
@@ -129,7 +130,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             return;
         }
 
-        if ($this->archive()->deleteName($this->pathNormalizer->forFile($path))) {
+        if ($this->archive()->deleteName($this->pathPrefixer->prefixPath($path))) {
             return;
         }
 
@@ -139,7 +140,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function deleteDirectory(string $path): void
     {
         $archive = $this->archive();
-        $location = $this->pathNormalizer->forDirectory($path);
+        $location = $this->pathPrefixer->prefixDirectoryPath($path);
 
         for ($i = $archive->numFiles; $i > 0; $i--) {
             $stats = $archive->statIndex($i);
@@ -169,7 +170,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function setVisibility(string $path, string $visibility): void
     {
         $archive = $this->archive();
-        $location = $this->pathNormalizer->forFile($path);
+        $location = $this->pathPrefixer->prefixPath($path);
         $stats = $archive->statName($location);
         if ($stats === false) {
             throw UnableToSetVisibility::atLocation($path, $archive->getStatusString());
@@ -197,7 +198,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         $opsys = null;
         $attr = null;
         $this->archive()->getExternalAttributesName(
-            $this->pathNormalizer->forFile($path),
+            $this->pathPrefixer->prefixPath($path),
             $opsys,
             $attr
         );
@@ -231,7 +232,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function lastModified(string $path): FileAttributes
     {
-        $stats = $this->archive()->statName($this->pathNormalizer->forFile($path));
+        $stats = $this->archive()->statName($this->pathPrefixer->prefixPath($path));
 
         if ($stats === false) {
             throw UnableToRetrieveMetadata::lastModified($path, $this->archive()->getStatusString());
@@ -242,7 +243,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function fileSize(string $path): FileAttributes
     {
-        $stats = $this->archive()->statName($this->pathNormalizer->forFile($path));
+        $stats = $this->archive()->statName($this->pathPrefixer->prefixPath($path));
 
         if ($stats === false) {
             throw UnableToRetrieveMetadata::fileSize($path, $this->archive()->getStatusString());
@@ -258,7 +259,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep): iterable
     {
         $archive = $this->archive();
-        $location = $this->pathNormalizer->forDirectory($path);
+        $location = $this->pathPrefixer->prefixDirectoryPath($path);
 
         for ($i = 0; $i < $archive->numFiles; $i++) {
             $stats = $archive->statIndex($i);
@@ -268,9 +269,10 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
             $path = $stats['name'];
 
+
             if (
                 $location === $path
-                || ($location !== '' && strpos($path, $location) !== 0)
+                || ($deep && $location !== '' && strpos($path, $location) !== 0)
                 || ( ! $deep && ! $this->isAtRootDirectory($location, $path))
             ) {
                 continue;
@@ -278,12 +280,12 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
             yield $this->isDirectory($path)
                 ? new DirectoryAttributes(
-                    $this->pathNormalizer->inverseForDirectory($path),
+                    $this->pathPrefixer->stripDirectoryPrefix($path),
                     null,
                     $stats['mtime']
                 )
                 : new FileAttributes(
-                    $this->pathNormalizer->inverseForFile($path),
+                    $this->pathPrefixer->stripPrefix($path),
                     $stats['size'],
                     null,
                     $stats['mtime']
@@ -301,8 +303,8 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
         if (
             $this->archive()->renameName(
-                $this->pathNormalizer->forFile($source),
-                $this->pathNormalizer->forFile($destination)
+                $this->pathPrefixer->prefixPath($source),
+                $this->pathPrefixer->prefixPath($destination)
             )
         ) {
             return;
@@ -370,7 +372,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
         foreach ($parts as $part) {
             $dirPath .= '/' . $part;
-            $location = $this->pathNormalizer->forDirectory($dirPath);
+            $location = $this->pathPrefixer->prefixDirectoryPath($dirPath);
 
             if ($archive->addEmptyDir($location)) {
                 continue;
@@ -389,13 +391,14 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         return substr($path, -1) === '/';
     }
 
-    private function isAtRootDirectory(string $directory, string $path): bool
+    private function isAtRootDirectory(string $directoryRoot, string $path): bool
     {
-        $parent = dirname($path) . '/';
-        if ($directory === '' && $parent === './') {
+        $parent = rtrim(dirname($path), '/') . '/';
+
+        if ($directoryRoot === '' && ($parent === './' || $parent === '/')) {
             return true;
         }
 
-        return $directory === $parent;
+        return $directoryRoot === $parent;
     }
 }
