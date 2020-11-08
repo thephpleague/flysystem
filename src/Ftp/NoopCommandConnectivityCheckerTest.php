@@ -42,17 +42,20 @@ class NoopCommandConnectivityCheckerTest extends TestCase
     public function detecting_a_closed_connection(): void
     {
         $options = FtpConnectionOptions::fromArray([
-           'host' => 'localhost',
-           'port' => 2121,
-           'root' => '/home/foo/upload',
-           'username' => 'foo',
-           'password' => 'pass',
-       ]);
-        $connection = (new FtpConnectionProvider())->createConnection($options);
-        ftp_close($connection);
+            'host' => 'localhost',
+            'port' => 2121,
+            'root' => '/home/foo/upload',
+            'username' => 'foo',
+            'password' => 'pass',
+        ]);
 
-        $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);
+        $this->runScenario(function () {
+            $connection = (new FtpConnectionProvider())->createConnection($options);
+            ftp_close($connection);
 
-        $this->assertFalse($connected);
+            $connected = (new NoopCommandConnectivityChecker())->isConnected($connection);
+
+            $this->assertFalse($connected);
+        });
     }
 }
