@@ -113,7 +113,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
     {
-        $scenario();
+        $this->runScenario($scenario);
         $this->givenWeHaveAnExistingFile('some/nested/path.txt');
 
         $this->expectException(UnableToDeleteDirectory::class);
@@ -202,11 +202,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         ];
         mock_function('ftp_rawlist', $response);
 
-        $adapter = $this->adapter();
-        $contents = iterator_to_array($adapter->listContents('/', false), false);
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $contents = iterator_to_array($adapter->listContents('/', false), false);
 
-        $this->assertCount(1, $contents);
-        $this->assertContainsOnlyInstancesOf(FileAttributes::class, $contents);
+            $this->assertCount(1, $contents);
+            $this->assertContainsOnlyInstancesOf(FileAttributes::class, $contents);
+        });
     }
 
     /**
@@ -220,11 +222,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         ];
         mock_function('ftp_rawlist', $response);
 
-        $adapter = $this->adapter();
-        $contents = iterator_to_array($adapter->listContents('/', false), false);
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $contents = iterator_to_array($adapter->listContents('/', false), false);
 
-        $this->assertCount(2, $contents);
-        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+            $this->assertCount(2, $contents);
+            $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+        });
     }
 
     /**
@@ -236,7 +240,6 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
             '05-23-15  12:09PM    file2.txt',
         ];
         mock_function('ftp_rawlist', $response);
-
 
         $this->expectException(InvalidListResponseReceived::class);
 
@@ -271,7 +274,10 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function failing_to_get_the_file_size_of_a_directory(): void
     {
         $adapter = $this->adapter();
-        $adapter->createDirectory('directory_name', new Config());
+
+        $this->runScenario(function () use ($adapter) {
+            $adapter->createDirectory('directory_name', new Config());
+        });
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
@@ -314,12 +320,14 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
            'password' => 'pass',
        ]);
 
-        $adapter = new FtpAdapter($options);
+        $this->runScenario(function () use ($options) {
+            $adapter = new FtpAdapter($options);
 
-        $contents = iterator_to_array($adapter->listContents('somewhere', true), false);
+            $contents = iterator_to_array($adapter->listContents('somewhere', true), false);
 
-        $this->assertCount(4, $contents);
-        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+            $this->assertCount(4, $contents);
+            $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+        });
     }
 
     /**
@@ -328,11 +336,14 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function filenames_and_dirnames_with_spaces_are_supported(): void
     {
         $this->givenWeHaveAnExistingFile('some dirname/file name.txt');
-        $adapter = $this->adapter();
 
-        $this->assertTrue($adapter->fileExists('some dirname/file name.txt'));
-        $contents = iterator_to_array($adapter->listContents('', true));
-        $this->assertCount(2, $contents);
-        $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+
+            $this->assertTrue($adapter->fileExists('some dirname/file name.txt'));
+            $contents = iterator_to_array($adapter->listContents('', true));
+            $this->assertCount(2, $contents);
+            $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $contents);
+        });
     }
 }

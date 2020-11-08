@@ -2,6 +2,7 @@
 version: "3"
 services:
   sftp:
+    container_name: sftp
     restart: always
     image: atmoz/sftp
     volumes:
@@ -12,6 +13,7 @@ services:
     ports:
       - "2222:22"
   ftp:
+    container_name: ftp
     restart: always
     image: delfer/alpine-ftp-server
     environment:

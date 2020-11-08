@@ -49,7 +49,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         return static::$adapter;
     }
 
-    public static function setUpBeforeClass(): void
+    public static function tearDownAfterClass(): void
     {
         static::$adapter = null;
     }
@@ -57,6 +57,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->adapter();
         $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
@@ -117,14 +118,16 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function writing_and_reading_with_string(): void
     {
-        $adapter = $this->adapter();
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
 
-        $adapter->write('path.txt', 'contents', new Config());
-        $fileExists = $adapter->fileExists('path.txt');
-        $contents = $adapter->read('path.txt');
+            $adapter->write('path.txt', 'contents', new Config());
+            $fileExists = $adapter->fileExists('path.txt');
+            $contents = $adapter->read('path.txt');
 
-        $this->assertTrue($fileExists);
-        $this->assertEquals('contents', $contents);
+            $this->assertTrue($fileExists);
+            $this->assertEquals('contents', $contents);
+        });
     }
 
     /**
@@ -132,13 +135,15 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function writing_a_file_with_a_stream(): void
     {
-        $adapter = $this->adapter();
-        $writeStream = stream_with_contents('contents');
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $writeStream = stream_with_contents('contents');
 
-        $adapter->writeStream('path.txt', $writeStream, new Config());
-        $fileExists = $adapter->fileExists('path.txt');
+            $adapter->writeStream('path.txt', $writeStream, new Config());
+            $fileExists = $adapter->fileExists('path.txt');
 
-        $this->assertTrue($fileExists);
+            $this->assertTrue($fileExists);
+        });
     }
 
     /**
@@ -147,12 +152,14 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function writing_and_reading_files_with_special_path(string $path): void
     {
-        $adapter = $this->adapter();
+        $this->runScenario(function () use ($path) {
+            $adapter = $this->adapter();
 
-        $adapter->write($path, 'contents', new Config());
-        $contents = $adapter->read($path);
+            $adapter->write($path, 'contents', new Config());
+            $contents = $adapter->read($path);
 
-        $this->assertEquals('contents', $contents);
+            $this->assertEquals('contents', $contents);
+        });
     }
 //
     public function filenameProvider(): Generator
@@ -178,16 +185,18 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function writing_a_file_with_an_empty_stream(): void
     {
-        $adapter = $this->adapter();
-        $writeStream = stream_with_contents('');
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $writeStream = stream_with_contents('');
 
-        $adapter->writeStream('path.txt', $writeStream, new Config());
-        $fileExists = $adapter->fileExists('path.txt');
+            $adapter->writeStream('path.txt', $writeStream, new Config());
+            $fileExists = $adapter->fileExists('path.txt');
 
-        $this->assertTrue($fileExists);
+            $this->assertTrue($fileExists);
 
-        $contents = $adapter->read('path.txt');
-        $this->assertEquals('', $contents);
+            $contents = $adapter->read('path.txt');
+            $this->assertEquals('', $contents);
+        });
     }
 
     /**
@@ -197,9 +206,11 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
-        $contents = $this->adapter()->read('path.txt');
+        $this->runScenario(function () {
+            $contents = $this->adapter()->read('path.txt');
 
-        $this->assertEquals('contents', $contents);
+            $this->assertEquals('contents', $contents);
+        });
     }
 
     /**
@@ -209,12 +220,14 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
-        $readStream = $this->adapter()->readStream('path.txt');
-        $contents = stream_get_contents($readStream);
+        $this->runScenario(function () {
+            $readStream = $this->adapter()->readStream('path.txt');
+            $contents = stream_get_contents($readStream);
 
-        $this->assertIsResource($readStream);
-        $this->assertEquals('contents', $contents);
-        fclose($readStream);
+            $this->assertIsResource($readStream);
+            $this->assertEquals('contents', $contents);
+            fclose($readStream);
+        });
     }
 
     /**

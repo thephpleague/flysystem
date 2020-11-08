@@ -67,6 +67,8 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
                 $adapter->deleteDirectory($item->path());
             }
         }
+
+        self::$adapter = null;
     }
 
     private static function s3Client(): S3ClientInterface
