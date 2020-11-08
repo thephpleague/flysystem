@@ -40,4 +40,15 @@ final class PathPrefixer
     {
         return substr($path, strlen($this->prefix));
     }
+
+    public function prefixDirectoryPath(string $path): string
+    {
+        $prefixedPath = $this->prefixPath(rtrim($path, '\\/'));
+
+        if (substr($prefixedPath, -1) === $this->separator || $prefixedPath === '') {
+            return $prefixedPath;
+        }
+
+        return $prefixedPath . $this->separator;
+    }
 }

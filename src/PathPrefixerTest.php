@@ -39,4 +39,44 @@ class PathPrefixerTest extends TestCase
         $prefixedPath = $prefixer->prefixPath('some/path.txt');
         $this->assertEquals('some/path.txt', $prefixer->stripPrefix($prefixedPath));
     }
+
+    /**
+     * @test
+     */
+    public function prefixing_without_a_prefix(): void
+    {
+        $prefixer = new PathPrefixer('');
+
+        $path = $prefixer->prefixPath('path/to/prefix.txt');
+        $this->assertEquals('path/to/prefix.txt', $path);
+
+        $path = $prefixer->prefixPath('/path/to/prefix.txt');
+        $this->assertEquals('path/to/prefix.txt', $path);
+    }
+
+    /**
+     * @test
+     */
+    public function prefixing_for_a_directory(): void
+    {
+        $prefixer = new PathPrefixer('/prefix');
+
+        $path = $prefixer->prefixDirectoryPath('something');
+        $this->assertEquals('/prefix/something/', $path);
+        $path = $prefixer->prefixDirectoryPath('');
+        $this->assertEquals('/prefix/', $path);
+    }
+
+    /**
+     * @test
+     */
+    public function prefixing_for_a_directory_without_a_prefix(): void
+    {
+        $prefixer = new PathPrefixer('');
+
+        $path = $prefixer->prefixDirectoryPath('something');
+        $this->assertEquals('something/', $path);
+        $path = $prefixer->prefixDirectoryPath('');
+        $this->assertEquals('', $path);
+    }
 }
