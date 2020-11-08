@@ -41,6 +41,11 @@ final class PathPrefixer
         return substr($path, strlen($this->prefix));
     }
 
+    public function stripDirectoryPrefix(string $path): string
+    {
+        return $this->stripPrefix(rtrim($path, '\\/'));
+    }
+
     public function prefixDirectoryPath(string $path): string
     {
         $prefixedPath = $this->prefixPath(rtrim($path, '\\/'));

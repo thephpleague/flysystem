@@ -79,4 +79,17 @@ class PathPrefixerTest extends TestCase
         $path = $prefixer->prefixDirectoryPath('');
         $this->assertEquals('', $path);
     }
+
+    /**
+     * @test
+     */
+    public function stripping_a_directory_prefix(): void
+    {
+        $prefixer = new PathPrefixer('/something/');
+
+        $path = $prefixer->stripDirectoryPrefix('/something/this/');
+        $this->assertEquals('this', $path);
+        $path = $prefixer->stripDirectoryPrefix('/something/and-this\\');
+        $this->assertEquals('and-this', $path);
+    }
 }
