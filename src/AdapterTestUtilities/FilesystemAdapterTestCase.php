@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use League\Flysystem\UnableToWriteFile;
 use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
@@ -58,7 +59,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         parent::setUp();
         $this->adapter();
-        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     protected function useAdapter(FilesystemAdapter $adapter): FilesystemAdapter
@@ -279,7 +279,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
             $this->assertInstanceOf(Generator::class, $listing);
             $this->assertContainsOnlyInstancesOf(StorageAttributes::class, $items);
-            $this->assertCount(2, $items);
+
+            $this->assertCount(2, $items, $this->formatIncorrectListingCount($items));
 
             // Order of entries is not guaranteed
             [$fileIndex, $directoryIndex] = $items[0]->isFile() ? [0, 1] : [1, 0];
@@ -493,7 +494,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     }
 
     /**
-     * @test
+     * @tes
      */
     public function setting_visibility_on_a_file_that_does_not_exist(): void
     {
@@ -508,6 +509,28 @@ abstract class FilesystemAdapterTestCase extends TestCase
      * @test
      */
     public function copying_a_file(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->write(
+                'source.txt',
+                'contents to be copied',
+                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+            );
+
+            $adapter->copy('source.txt', 'destination.txt', new Config());
+
+            $this->assertTrue($adapter->fileExists('source.txt'));
+            $this->assertTrue($adapter->fileExists('destination.txt'));
+            $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_again(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
@@ -621,6 +644,27 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $this->assertTrue($attributes->lastModified() < time() + 30);
         });
     }
+
+    /**
+     * @test
+     */
+    public function failing_to_read_a_non_existing_file_into_a_stream(): void
+    {
+        $this->expectException(UnableToReadFile::class);
+
+        $this->adapter()->readStream('something.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_read_a_non_existing_file(): void
+    {
+        $this->expectException(UnableToReadFile::class);
+
+        $this->adapter()->readStream('something.txt');
+    }
+
 
     /**
      * @test

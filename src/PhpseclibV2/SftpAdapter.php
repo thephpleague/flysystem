@@ -264,8 +264,8 @@ class SftpAdapter implements FilesystemAdapter
 
             // Ensure numeric keys are strings.
             $filename = (string) $filename;
-            $itemPath = $this->prefixer->stripPrefix($location . ltrim($filename, '/'));
-            $attributes = $this->convertListingToAttributes($itemPath, $attributes);
+            $path = $this->prefixer->stripPrefix($location . ltrim($filename, '/'));
+            $attributes = $this->convertListingToAttributes($path, $attributes);
             yield $attributes;
 
             if ($deep && $attributes->isDir()) {

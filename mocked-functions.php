@@ -139,3 +139,13 @@ namespace League\Flysystem\Ftp {
         return return_mocked_value('ftp_rawlist');
     }
 }
+
+namespace League\Flysystem\ZipArchive {
+    function stream_get_contents(...$arguments) {
+        if ( ! is_mocked('stream_get_contents')) {
+            return \stream_get_contents(...$arguments);
+        }
+
+        return return_mocked_value('stream_get_contents');
+    }
+}

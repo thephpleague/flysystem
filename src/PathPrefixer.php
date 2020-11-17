@@ -38,12 +38,19 @@ final class PathPrefixer
 
     public function stripPrefix(string $path): string
     {
-        return substr($path, strlen($this->prefix));
+        $return = substr($path, strlen($this->prefix));
+
+        if ($return === false) {
+            var_dump($path, $this->prefix);
+            die();
+        }
+
+        return $return;
     }
 
     public function stripDirectoryPrefix(string $path): string
     {
-        return $this->stripPrefix(rtrim($path, '\\/'));
+        return rtrim($this->stripPrefix($path), '\\/');
     }
 
     public function prefixDirectoryPath(string $path): string

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace League\Flysystem\ZipArchive;
 
+use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
@@ -28,73 +28,68 @@ use ZipArchive;
 
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
-    /** @var string */
-    private $filename;
-    /** @var ZipArchive|null */
-    private $archive;
     /** @var PathPrefixer */
     private $pathPrefixer;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
     /** @var VisibilityConverter */
     private $visibility;
+    /** @var ZipArchiveProvider */
+    private $zipArchiveProvider;
 
     public function __construct(
-        string $filename,
-        string $root,
+        ZipArchiveProvider $zipArchiveProvider,
+        string $root = '',
         ?MimeTypeDetector $mimeTypeDetector = null,
         ?VisibilityConverter $visibility = null
     ) {
-        try {
-            // create the root directory containing the zip archive
-            new LocalFilesystemAdapter(dirname($filename));
-        } catch (Throwable $exception) {
-            throw UnableToOpenZipArchive::failedToCreateParentDirectory($filename, $exception);
-        }
-
-        $this->filename = $filename;
         $this->pathPrefixer = new PathPrefixer($root);
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->visibility = $visibility ?? new PortableVisibilityConverter();
-    }
-
-    public function __destruct()
-    {
-        $this->close();
+        $this->zipArchiveProvider = $zipArchiveProvider;
     }
 
     public function fileExists(string $path): bool
     {
-        return $this->archive()->locateName($this->pathPrefixer->prefixPath($path)) !== false;
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $fileExists = $archive->locateName($this->pathPrefixer->prefixPath($path)) !== false;
+        $archive->close();
+
+        return $fileExists;
     }
 
     public function write(string $path, string $contents, Config $config): void
     {
         try {
-            $this->ensureParentDirectoryExists($path);
+            $this->ensureParentDirectoryExists($path, $config);
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, 'creating parent directory failed', $exception);
         }
 
-        if ( ! $this->archive()->addFromString($this->pathPrefixer->prefixPath($path), $contents)) {
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $prefixedPath = $this->pathPrefixer->prefixPath($path);
+
+        if ( ! $archive->addFromString($prefixedPath, $contents)) {
             throw UnableToWriteFile::atLocation($path, 'writing the file failed');
         }
 
-        $visibility = $config->get(Config::OPTION_VISIBILITY);
-        if ($visibility === null) {
-            return;
-        }
+        $archive->close();
+        $archive = $this->zipArchiveProvider->createZipArchive();
 
-        try {
-            $this->setVisibility($path, $visibility);
-        } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, 'setting visibility failed', $exception);
+        $visibility = $config->get(Config::OPTION_VISIBILITY);
+        $visibilityResult = $visibility === null
+            || $this->setVisibilityAttribute($prefixedPath, $visibility, $archive);
+        $archive->close();
+
+        if ($visibilityResult === false) {
+            throw UnableToWriteFile::atLocation($path, 'setting visibility failed');
         }
     }
 
     public function writeStream(string $path, $contents, Config $config): void
     {
         $contents = stream_get_contents($contents);
+
         if ($contents === false) {
             throw UnableToWriteFile::atLocation($path, 'Could not get contents of given resource.');
         }
@@ -104,10 +99,13 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function read(string $path): string
     {
-        $contents = $this->archive()->getFromName($this->pathPrefixer->prefixPath($path));
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $contents = $archive->getFromName($this->pathPrefixer->prefixPath($path));
+        $statusString = $archive->getStatusString();
+        $archive->close();
 
         if ($contents === false) {
-            throw UnableToReadFile::fromLocation($path, $this->archive()->getStatusString());
+            throw UnableToReadFile::fromLocation($path, $statusString);
         }
 
         return $contents;
@@ -115,10 +113,13 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function readStream(string $path)
     {
-        $resource = $this->archive()->getStream($this->pathPrefixer->prefixPath($path));
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $resource = $archive->getStream($this->pathPrefixer->prefixPath($path));
+        $status = $archive->getStatusString();
+        $archive->close();
 
         if ($resource === false) {
-            throw UnableToReadFile::fromLocation($path, $this->archive()->getStatusString());
+            throw UnableToReadFile::fromLocation($path, $status);
         }
 
         return $resource;
@@ -126,82 +127,84 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
-        if ( ! $this->fileExists($path)) {
-            return;
-        }
+        $prefixedPath = $this->pathPrefixer->prefixPath($path);
+        $zipArchive = $this->zipArchiveProvider->createZipArchive();
+        $success = $zipArchive->locateName($prefixedPath) === false || $zipArchive->deleteName($prefixedPath);
+        $statusString = $zipArchive->getStatusString();
+        $zipArchive->close();
 
-        if ($this->archive()->deleteName($this->pathPrefixer->prefixPath($path))) {
-            return;
+        if ( ! $success) {
+            throw UnableToDeleteFile::atLocation($path, $statusString);
         }
-
-        throw UnableToDeleteFile::atLocation($path, $this->archive()->getStatusString());
     }
 
     public function deleteDirectory(string $path): void
     {
-        $archive = $this->archive();
-        $location = $this->pathPrefixer->prefixDirectoryPath($path);
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $prefixedPath = $this->pathPrefixer->prefixDirectoryPath($path);
 
         for ($i = $archive->numFiles; $i > 0; $i--) {
-            $stats = $archive->statIndex($i);
-            if ($stats === false) {
+            if (($stats = $archive->statIndex($i)) === false) {
                 continue;
             }
 
-            $path = $stats['name'];
+            $itemPath = $stats['name'];
 
-            if ($location !== '' && strpos($path, $location) !== 0) {
+            if ($prefixedPath === $itemPath || strpos($itemPath, $prefixedPath) !== 0) {
                 continue;
             }
 
-            if ($archive->deleteIndex($i)) {
-                continue;
+            if ( ! $archive->deleteIndex($i)) {
+                $statusString = $archive->getStatusString();
+                $archive->close();
+                throw UnableToDeleteDirectory::atLocation($path, $statusString);
             }
-
-            throw UnableToDeleteDirectory::atLocation($path, $archive->getStatusString());
         }
+
+        $archive->close();
     }
 
     public function createDirectory(string $path, Config $config): void
     {
-        $this->ensureDirectoryExists($path);
+        try {
+            $this->ensureDirectoryExists($path, $config);
+        } catch (Throwable $exception) {
+            throw UnableToCreateDirectory::dueToFailure($path, $exception);
+        }
     }
 
     public function setVisibility(string $path, string $visibility): void
     {
-        $archive = $this->archive();
+        $archive = $this->zipArchiveProvider->createZipArchive();
         $location = $this->pathPrefixer->prefixPath($path);
-        $stats = $archive->statName($location);
+        $stats = $archive->statName($location) ?: $archive->statName($location . '/');
+
         if ($stats === false) {
-            throw UnableToSetVisibility::atLocation($path, $archive->getStatusString());
+            $statusString = $archive->getStatusString();
+            $archive->close();
+            throw UnableToSetVisibility::atLocation($path, $statusString);
         }
 
-        if (
-            $archive->setExternalAttributesName(
-                $location,
-                ZipArchive::OPSYS_UNIX,
-                (
-                    $this->isDirectory($stats['name'])
-                        ? $this->visibility->forDirectory($visibility)
-                        : $this->visibility->forFile($visibility)
-                ) << 16
-            )
-        ) {
-            return;
+        if ( ! $this->setVisibilityAttribute($stats['name'], $visibility, $archive)) {
+            $statusString1 = $archive->getStatusString();
+            $archive->close();
+            throw UnableToSetVisibility::atLocation($path, $statusString1);
         }
 
-        throw UnableToSetVisibility::atLocation($path, $archive->getStatusString());
+        $archive->close();
     }
 
     public function visibility(string $path): FileAttributes
     {
         $opsys = null;
         $attr = null;
-        $this->archive()->getExternalAttributesName(
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $archive->getExternalAttributesName(
             $this->pathPrefixer->prefixPath($path),
             $opsys,
             $attr
         );
+        $archive->close();
 
         if ($opsys !== ZipArchive::OPSYS_UNIX || $attr === null) {
             throw UnableToRetrieveMetadata::visibility($path);
@@ -232,10 +235,13 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function lastModified(string $path): FileAttributes
     {
-        $stats = $this->archive()->statName($this->pathPrefixer->prefixPath($path));
+        $zipArchive = $this->zipArchiveProvider->createZipArchive();
+        $stats = $zipArchive->statName($this->pathPrefixer->prefixPath($path));
+        $statusString = $zipArchive->getStatusString();
+        $zipArchive->close();
 
         if ($stats === false) {
-            throw UnableToRetrieveMetadata::lastModified($path, $this->archive()->getStatusString());
+            throw UnableToRetrieveMetadata::lastModified($path, $statusString);
         }
 
         return new FileAttributes($path, null, null, $stats['mtime']);
@@ -243,13 +249,16 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function fileSize(string $path): FileAttributes
     {
-        $stats = $this->archive()->statName($this->pathPrefixer->prefixPath($path));
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $stats = $archive->statName($this->pathPrefixer->prefixPath($path));
+        $statusString = $archive->getStatusString();
+        $archive->close();
 
         if ($stats === false) {
-            throw UnableToRetrieveMetadata::fileSize($path, $this->archive()->getStatusString());
+            throw UnableToRetrieveMetadata::fileSize($path, $statusString);
         }
 
-        if ($this->isDirectory($stats['name'])) {
+        if ($this->isDirectoryPath($stats['name'])) {
             throw UnableToRetrieveMetadata::fileSize($path, "It's a directory.");
         }
 
@@ -258,59 +267,69 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep): iterable
     {
-        $archive = $this->archive();
+        $archive = $this->zipArchiveProvider->createZipArchive();
         $location = $this->pathPrefixer->prefixDirectoryPath($path);
+        $items = [];
 
         for ($i = 0; $i < $archive->numFiles; $i++) {
             $stats = $archive->statIndex($i);
+            // @codeCoverageIgnoreStart
             if ($stats === false) {
                 continue;
             }
+            // @codeCoverageIgnoreEnd
 
-            $path = $stats['name'];
-
+            $itemPath = $stats['name'];
 
             if (
-                $location === $path
-                || ($deep && $location !== '' && strpos($path, $location) !== 0)
-                || ( ! $deep && ! $this->isAtRootDirectory($location, $path))
+                $location === $itemPath
+                || ($deep && $location !== '' && strpos($itemPath, $location) !== 0)
+                || ($deep === false && ! $this->isAtRootDirectory($location, $itemPath))
             ) {
                 continue;
             }
 
-            yield $this->isDirectory($path)
+            $items[] = $this->isDirectoryPath($itemPath)
                 ? new DirectoryAttributes(
-                    $this->pathPrefixer->stripDirectoryPrefix($path),
+                    $this->pathPrefixer->stripDirectoryPrefix($itemPath),
                     null,
                     $stats['mtime']
                 )
                 : new FileAttributes(
-                    $this->pathPrefixer->stripPrefix($path),
+                    $this->pathPrefixer->stripPrefix($itemPath),
                     $stats['size'],
                     null,
                     $stats['mtime']
                 );
         }
+
+        $archive->close();
+
+        return $this->yieldItemsFrom($items);
+    }
+
+    private function yieldItemsFrom(array $items): Generator
+    {
+        yield from $items;
     }
 
     public function move(string $source, string $destination, Config $config): void
     {
         try {
-            $this->ensureParentDirectoryExists($destination);
+            $this->ensureParentDirectoryExists($destination, $config);
         } catch (Throwable $exception) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         }
 
-        if (
-            $this->archive()->renameName(
-                $this->pathPrefixer->prefixPath($source),
-                $this->pathPrefixer->prefixPath($destination)
-            )
-        ) {
-            return;
-        }
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $renamed = $archive->renameName(
+            $this->pathPrefixer->prefixPath($source),
+            $this->pathPrefixer->prefixPath($destination)
+        );
 
-        throw UnableToMoveFile::fromLocationTo($source, $destination);
+        if ($renamed === false) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination);
+        }
     }
 
     public function copy(string $source, string $destination, Config $config): void
@@ -327,32 +346,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
     }
 
-    private function archive(): ZipArchive
-    {
-        // ensure everything is flushed to disk
-        $this->close();
-
-        $this->archive = new ZipArchive();
-
-        $ret = $this->archive->open($this->filename, ZipArchive::CREATE);
-        if ($ret !== true) {
-            throw UnableToOpenZipArchive::atLocation($this->filename, $this->archive->getStatusString());
-        }
-
-        return $this->archive;
-    }
-
-    private function close(): void
-    {
-        if ($this->archive === null) {
-            return;
-        }
-
-        $this->archive->close();
-        $this->archive = null;
-    }
-
-    private function ensureParentDirectoryExists(string $path): void
+    private function ensureParentDirectoryExists(string $path, Config $config): void
     {
         $dirname = dirname($path);
 
@@ -360,45 +354,54 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             return;
         }
 
-        $this->ensureDirectoryExists($dirname);
+        $this->ensureDirectoryExists($dirname, $config);
     }
 
-    private function ensureDirectoryExists(string $dirname): void
+    private function ensureDirectoryExists(string $dirname, Config $config): void
     {
-        $archive = $this->archive();
-
-        $dirPath = '';
-        $parts = explode('/', trim($dirname, '/'));
+        $visibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY);
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $prefixedDirname = $this->pathPrefixer->prefixDirectoryPath($dirname);
+        $parts = array_filter(explode('/', trim($prefixedDirname, '/')));
+        $dirPath = '/';
 
         foreach ($parts as $part) {
-            $dirPath .= '/' . $part;
-            $location = $this->pathPrefixer->prefixDirectoryPath($dirPath);
+            $dirPath .= $part . '/';
+            $info = $archive->statName($dirPath);
 
-            if ($archive->addEmptyDir($location)) {
+            if ($info === false && $archive->addEmptyDir($dirPath) === false) {
+                throw UnableToCreateDirectory::atLocation($dirname);
+            }
+
+            if ($visibility === null) {
                 continue;
             }
 
-            if ($archive->status === ZipArchive::ER_OK || $archive->status === ZipArchive::ER_EXISTS) {
-                continue;
+            if ( ! $this->setVisibilityAttribute($dirPath, $visibility, $archive)) {
+                $archive->close();
+                throw UnableToCreateDirectory::atLocation($dirname, 'Unable to set visibility.');
             }
-
-            throw UnableToCreateDirectory::atLocation($dirname, $archive->getStatusString());
         }
+
+        $archive->close();
     }
 
-    private function isDirectory(string $path): bool
+    private function isDirectoryPath(string $path): bool
     {
         return substr($path, -1) === '/';
     }
 
     private function isAtRootDirectory(string $directoryRoot, string $path): bool
     {
-        $parent = rtrim(dirname($path), '/') . '/';
+        return $directoryRoot === (rtrim(dirname($path), '/') . '/');
+    }
 
-        if ($directoryRoot === '' && ($parent === './' || $parent === '/')) {
-            return true;
-        }
+    private function setVisibilityAttribute($statsName, string $visibility, ZipArchive $archive): bool
+    {
+        $visibility = $this->isDirectoryPath($statsName)
+            ? $this->visibility->forDirectory($visibility)
+            : $this->visibility->forFile($visibility);
 
-        return $directoryRoot === $parent;
+        return $archive->setExternalAttributesName($statsName, ZipArchive::OPSYS_UNIX, $visibility << 16);
     }
 }

@@ -88,9 +88,6 @@ interface FilesystemAdapter
     public function fileSize(string $path): FileAttributes;
 
     /**
-     * @param string $path
-     * @param bool   $deep
-     *
      * @return iterable<StorageAttributes>
      *
      * @throws FilesystemException
