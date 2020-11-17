@@ -16,7 +16,6 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
-use Throwable;
 
 /**
  * @group ftp
@@ -24,25 +23,10 @@ use Throwable;
  */
 abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 {
-    protected function runScenario(callable $callable): void
+    protected function setUp(): void
     {
-        $exception = null;
-        $tries = 0;
-
-        while ($tries < 10) {
-            try {
-                $callable();
-
-                return;
-            } catch (FtpConnectionException $exception) {
-                sleep(1);
-                $tries++;
-            }
-        }
-
-        if ($exception instanceof Throwable) {
-            throw $exception;
-        }
+        parent::setUp();
+        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     /**

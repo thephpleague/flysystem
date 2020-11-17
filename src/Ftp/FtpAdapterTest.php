@@ -11,12 +11,6 @@ use League\Flysystem\FilesystemAdapter;
  */
 class FtpAdapterTest extends FtpAdapterTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->retryOnException(UnableToConnectToFtpHost::class);
-    }
-
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         $options = FtpConnectionOptions::fromArray([
