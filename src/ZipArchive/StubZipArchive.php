@@ -38,7 +38,7 @@ class StubZipArchive extends ZipArchive
         $this->failNextDirectoryCreation = true;
     }
 
-    public function addEmptyDir($dirname)
+    public function addEmptyDir($dirname, $flags = 0)
     {
         if ($this->failNextDirectoryCreation) {
             $this->failNextDirectoryCreation = false;
