@@ -54,7 +54,7 @@ class StubZipArchive extends ZipArchive
         $this->failNextWrite = true;
     }
 
-    public function addFromString($localname, $contents)
+    public function addFromString($localname, $contents, $flags = 0)
     {
         if ($this->failNextWrite) {
             $this->failNextWrite = false;
