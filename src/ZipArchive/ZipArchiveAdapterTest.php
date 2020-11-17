@@ -31,8 +31,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
     protected function setUp(): void
     {
-        static::createFilesystemAdapter();
-        unset(static::$adapter);
+        static::$adapter = static::createFilesystemAdapter();
         static::removeZipArchive();
         parent::setUp();
     }
