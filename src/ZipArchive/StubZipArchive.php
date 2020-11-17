@@ -19,12 +19,12 @@ class StubZipArchive extends ZipArchive
     private $failNextWrite = false;
 
     /**
-     * @var false
+     * @var bool
      */
     private $failNextDeleteName = false;
 
     /**
-     * @var false
+     * @var bool
      */
     private $failWhenSettingVisibility = false;
 
@@ -38,6 +38,12 @@ class StubZipArchive extends ZipArchive
         $this->failNextDirectoryCreation = true;
     }
 
+    /**
+     * @param string $dirname
+     * @param int    $flags
+     *
+     * @return bool
+     */
     public function addEmptyDir($dirname, $flags = 0)
     {
         if ($this->failNextDirectoryCreation) {
@@ -54,6 +60,13 @@ class StubZipArchive extends ZipArchive
         $this->failNextWrite = true;
     }
 
+    /**
+     * @param string $localname
+     * @param string $contents
+     * @param int    $flags
+     *
+     * @return bool
+     */
     public function addFromString($localname, $contents, $flags = 0)
     {
         if ($this->failNextWrite) {
@@ -89,7 +102,7 @@ class StubZipArchive extends ZipArchive
         $this->failWhenSettingVisibility = true;
     }
 
-    public function setExternalAttributesName($name, $opsys, $attr, $flags = NULL): bool
+    public function setExternalAttributesName($name, $opsys, $attr, $flags = null): bool
     {
         if ($this->failWhenSettingVisibility) {
             $this->failWhenSettingVisibility = false;

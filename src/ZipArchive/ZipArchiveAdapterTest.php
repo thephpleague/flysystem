@@ -32,7 +32,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     protected function setUp(): void
     {
         static::createFilesystemAdapter();
-        static::$adapter = null;
+        unset(static::$adapter);
         static::removeZipArchive();
         parent::setUp();
     }
@@ -50,6 +50,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         static::$archiveProvider = new StubZipArchiveProvider(self::ARCHIVE);
+
         return new ZipArchiveAdapter(self::$archiveProvider, '/path-prefix');
     }
 
@@ -86,7 +87,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToWriteFile::class);
 
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $handle = stream_with_contents('contents');
             $this->adapter()->writeStream('some/path.txt', $handle, new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC]));
             is_resource($handle) && @fclose($handle);
@@ -95,15 +96,15 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
     public function scenariosThatCauseWritesToFail(): Generator
     {
-        yield "writing a file fails when writing" => [function() {
+        yield "writing a file fails when writing" => [function () {
             static::$archiveProvider->stubbedZipArchive()->failNextWrite();
         }];
 
-        yield "writing a file fails when setting visibility" => [function() {
+        yield "writing a file fails when setting visibility" => [function () {
             static::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
         }];
 
-        yield "writing a file fails to get the stream contents" => [function() {
+        yield "writing a file fails to get the stream contents" => [function () {
             mock_function('stream_get_contents', false);
         }];
     }

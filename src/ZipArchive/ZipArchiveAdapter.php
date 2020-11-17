@@ -396,7 +396,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         return $directoryRoot === (rtrim(dirname($path), '/') . '/');
     }
 
-    private function setVisibilityAttribute($statsName, string $visibility, ZipArchive $archive): bool
+    private function setVisibilityAttribute(string $statsName, string $visibility, ZipArchive $archive): bool
     {
         $visibility = $this->isDirectoryPath($statsName)
             ? $this->visibility->forDirectory($visibility)

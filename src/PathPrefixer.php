@@ -38,14 +38,8 @@ final class PathPrefixer
 
     public function stripPrefix(string $path): string
     {
-        $return = substr($path, strlen($this->prefix));
-
-        if ($return === false) {
-            var_dump($path, $this->prefix);
-            die();
-        }
-
-        return $return;
+        /* @var string */
+        return substr($path, strlen($this->prefix));
     }
 
     public function stripDirectoryPrefix(string $path): string
@@ -57,7 +51,7 @@ final class PathPrefixer
     {
         $prefixedPath = $this->prefixPath(rtrim($path, '\\/'));
 
-        if (substr($prefixedPath, -1) === $this->separator || $prefixedPath === '') {
+        if ((substr($prefixedPath, -1) === $this->separator) || $prefixedPath === '') {
             return $prefixedPath;
         }
 

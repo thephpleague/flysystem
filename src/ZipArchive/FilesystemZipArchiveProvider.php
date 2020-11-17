@@ -31,7 +31,6 @@ class FilesystemZipArchiveProvider implements ZipArchiveProvider
 
     public function createZipArchive(): ZipArchive
     {
-
         if ($this->parentDirectoryCreated !== true) {
             $this->parentDirectoryCreated = true;
             $this->createParentDirectoryForZipArchive($this->filename);
