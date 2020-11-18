@@ -205,7 +205,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $lastModified = strtotime($info['updated']);
 
         if (substr($path, -1, 1) === '/') {
-            return new DirectoryAttributes($path, null, $lastModified);
+            return new DirectoryAttributes(rtrim($path, '/'), null, $lastModified);
         }
 
         $fileSize = intval($info['size']);
@@ -218,6 +218,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
         $options = ['prefix' => rtrim($prefixedPath, '/') . '/'];
+        $prefixes = [];
 
         if ($deep === false) {
             $options['delimiter'] = '/';
@@ -228,12 +229,19 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
         /** @var StorageObject $object */
         foreach ($objects as $object) {
+            $prefixes[$this->prefixer->stripDirectoryPrefix($object->name())] = true;
             yield $this->storageObjectToStorageAttributes($object);
         }
 
         foreach ($objects->prefixes() as $prefix) {
-            $strippedPrefix = $this->prefixer->stripPrefix($prefix);
-            yield new DirectoryAttributes($strippedPrefix);
+            $prefix = $this->prefixer->stripDirectoryPrefix($prefix);
+
+            if (array_key_exists($prefix, $prefixes)) {
+                continue;
+            }
+
+            $prefixes[$prefix] = true;
+            yield new DirectoryAttributes($prefix);
         }
     }
 
