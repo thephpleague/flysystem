@@ -76,6 +76,9 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
+    /**
+     * @param resource|string $contents
+     */
     private function upload(string $path, $contents, Config $config): void
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
@@ -144,7 +147,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $this->bucket->upload('', ['name' => $prefixedPath]);
     }
 
-    public function setVisibility(string $path, $visibility): void
+    public function setVisibility(string $path, string $visibility): void
     {
         try {
             $prefixedPath = $this->prefixer->prefixPath($path);
