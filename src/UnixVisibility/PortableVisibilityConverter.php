@@ -102,7 +102,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             $permissionMap['file']['public'] ?? 0644,
             $permissionMap['file']['private'] ?? 0600,
             $permissionMap['dir']['public'] ?? 0755,
-            $permissionMap['dir']['private'] ?? 0755,
+            $permissionMap['dir']['private'] ?? 0700,
             $defaultForDirectories
         );
     }
