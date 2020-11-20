@@ -4,12 +4,18 @@ on:
   push:
     paths:
       - src/**/*.php
+      - phpunit.xml.dist
+      - phpunit.php
+      - mocked-functions.php
       - .github/workflows/quality-assurance.yml
     branches:
       - 2.x
   pull_request:
     paths:
       - src/**/*.php
+      - phpunit.xml.dist
+      - phpunit.php
+      - mocked-functions.php
       - .github/workflows/quality-assurance.yml
     branches:
       - 2.x
