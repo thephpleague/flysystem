@@ -36,7 +36,7 @@ class StubBucket extends Bucket
 
     public function withObject(string $path): StubObject
     {
-        return $this->stubbedObjects[$path] = new StubObject($this->theConnection, $path, [], parent::object($path));
+        return $this->stubbedObjects[$path] = new StubObject($this->theConnection, $path, '', parent::object($path));
     }
 
     public function object($name, array $options = [])
