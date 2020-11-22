@@ -14,11 +14,13 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use Throwable;
 
@@ -76,10 +78,18 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
         $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
-        $this->bucket->upload($contents, [
-            'name' => $prefixedPath,
-            'predefinedAcl' => $this->visibilityHandler->visibilityToPredefinedAcl($visibility),
-        ]);
+
+        try {
+            $this->bucket->upload(
+                $contents,
+                [
+                    'name' => $prefixedPath,
+                    'predefinedAcl' => $this->visibilityHandler->visibilityToPredefinedAcl($visibility),
+                ]
+            );
+        } catch (Throwable $exception) {
+            throw UnableToWriteFile::atLocation($path, '', $exception);
+        }
     }
 
     public function read(string $path): string
@@ -105,9 +115,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }
 
+        // @codeCoverageIgnoreStart
         if ( ! is_resource($stream)) {
             throw UnableToReadFile::fromLocation($path, 'Downloaded object does not contain a file resource.');
         }
+        // @codeCoverageIgnoreEnd
 
         return $stream;
     }
@@ -126,11 +138,15 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
     public function deleteDirectory(string $path): void
     {
-        /** @var StorageAttributes[] $listing */
-        $listing = $this->listContents($path, true);
+        try {
+            /** @var StorageAttributes[] $listing */
+            $listing = $this->listContents($path, true);
 
-        foreach ($listing as $attributes) {
-            $this->delete($attributes->path());
+            foreach ($listing as $attributes) {
+                $this->delete($attributes->path());
+            }
+        } catch (Throwable $exception) {
+            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
         }
     }
 

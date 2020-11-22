@@ -494,7 +494,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     }
 
     /**
-     * @tes
+     * @test
      */
     public function setting_visibility_on_a_file_that_does_not_exist(): void
     {
