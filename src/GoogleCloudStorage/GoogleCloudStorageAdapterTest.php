@@ -102,7 +102,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_delete_a_file(): void
     {
         $adapter = $this->adapter();
-        static::$bucket->withObject(static::$adapterPrefix.'/filename.txt')->failWhenDeleting();
+        static::$bucket->withObject(static::$adapterPrefix . '/filename.txt')->failWhenDeleting();
 
         $this->expectException(UnableToDeleteFile::class);
 
@@ -116,7 +116,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('dir/filename.txt');
-        static::$bucket->withObject(static::$adapterPrefix.'/dir/filename.txt')->failWhenDeleting();
+        static::$bucket->withObject(static::$adapterPrefix . '/dir/filename.txt')->failWhenDeleting();
 
         $this->expectException(UnableToDeleteDirectory::class);
 
@@ -129,7 +129,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_retrieve_visibility(): void
     {
         $adapter = $this->adapter();
-        static::$bucket->withObject(static::$adapterPrefix.'/filename.txt')->failWhenAccessingAcl();
+        static::$bucket->withObject(static::$adapterPrefix . '/filename.txt')->failWhenAccessingAcl();
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
