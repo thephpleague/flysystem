@@ -9,6 +9,9 @@ use Google\Cloud\Storage\StorageClient;
 
 class StubStorageClient extends StorageClient
 {
+    /**
+     * @var string|null
+     */
     protected $projectId;
 
     public function connection(): ConnectionInterface

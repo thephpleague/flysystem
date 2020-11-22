@@ -30,8 +30,8 @@ class StubObject extends StorageObject
 
     public function __construct(
         ConnectionInterface $connection,
-        $name,
-        $bucket,
+        string $name,
+        string $bucket,
         StorageObject $storageObject
     ) {
         parent::__construct($connection, $name, $bucket);
@@ -58,6 +58,9 @@ class StubObject extends StorageObject
         $this->shouldFailWhenDeleting = true;
     }
 
+    /**
+     * @param array $options
+     */
     public function delete(array $options = [])
     {
         if ($this->shouldFailWhenDeleting) {
@@ -65,6 +68,6 @@ class StubObject extends StorageObject
             throw new LogicException("Oh no!");
         }
 
-        return parent::delete($options);
+        parent::delete($options);
     }
 }

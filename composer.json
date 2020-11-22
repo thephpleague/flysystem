@@ -5,6 +5,9 @@
         "filesystem", "filesystems", "files", "storage", "aws",
         "s3", "ftp", "sftp", "webdav", "file", "cloud"
     ],
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan analyse -l 6 src"
+    },
     "type": "library",
     "minimum-stability": "dev",
     "prefer-stable": true,
