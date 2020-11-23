@@ -2,6 +2,11 @@
 
 ## 2.0.0-beta.3 - 2020-08-23
 
+### Added
+
+- UnableToCheckFileExistence error introduced
+- Mount manager is re-introduced
+
 ### Fixes
 
 - Allow FTP filenames to contain special characters.
