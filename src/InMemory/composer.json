@@ -13,7 +13,7 @@
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-fileinfo": "*",
-        "league/flysystem": "^2.0.0-RC1"
+        "league/flysystem": "^2.0.0"
     },
     "license": "MIT",
     "authors": [

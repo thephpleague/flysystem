@@ -1,5 +1,15 @@
 # Version 2.x Changelog
 
+## 2.0.0 - 2020-24-11
+
+## Changed
+
+- string type added to all visibility input
+
+## Added
+
+- Google Cloud Storage adapter.
+
 ## 2.0.0-beta.3 - 2020-08-23
 
 ### Added
