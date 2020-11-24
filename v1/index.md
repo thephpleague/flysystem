@@ -3,8 +3,7 @@ layout: default
 title: Filesystem abstraction for PHP
 permalink: /v1/docs/
 redirect_from:
-    - /
-    - /docs/
+    - /v1/
 ---
 
 [![Buy a tree](https://img.shields.io/badge/Buy%20me%20a%20tree-%F0%9F%8C%B3-green)](https://offset.earth/frankdejonge?gift-trees)
@@ -13,8 +12,6 @@ redirect_from:
 [![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg)](https://github.com/thephpleague/flysystem/releases)
 [![Software License](https:////img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/thephpleague/flysystem.svg?branch=v1.0)](https://travis-ci.org/thephpleague/flysystem)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
 ![php 5.5.9+](https://img.shields.io/badge/php-min%205.5.9-red.svg)
 
