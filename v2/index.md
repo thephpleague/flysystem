@@ -14,8 +14,6 @@ redirect_from:
 [![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg)](https://github.com/thephpleague/flysystem/releases)
 [![Software License](https:////img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/thephpleague/flysystem.svg?branch=v1.0)](https://travis-ci.org/thephpleague/flysystem)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/thephpleague/flysystem.svg)](https://scrutinizer-ci.com/g/thephpleague/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
 ![php 7.2+](https://img.shields.io/badge/php-min%207.2-red.svg)
 
