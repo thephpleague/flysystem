@@ -31,6 +31,10 @@ for which ever storage is right for you.
 * **[Local](https://flysystem.thephpleague.com/v2/docs/adapter/local/)**
 * **[Memory](https://flysystem.thephpleague.com/v2/docs/adapter/in-memory/)**
 
+### Third party Adapters
+
+* **[Gitlab](https://github.com/RoyVoetman/flysystem-gitlab-storage)**
+
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
 
 ## Security
