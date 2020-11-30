@@ -38,4 +38,8 @@ for which ever storage is right for you.
 * **[Local](/v2/docs/adapter/local/)**
 * **[Memory](/v2/docs/adapter/in-memory/)**
 
+### Third party Adapters
+
+* **[Gitlab](/v2/docs/adapter/gitlab/)**
+
 You can always [create an adapter](/v2/docs/advanced/creating-an-adapter/) yourself.
