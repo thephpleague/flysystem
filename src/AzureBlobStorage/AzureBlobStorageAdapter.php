@@ -15,6 +15,7 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\Models\BlobPrefix;
 use MicrosoftAzure\Storage\Blob\Models\BlobProperties;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
@@ -23,8 +24,6 @@ use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use function array_map;
 use function array_merge;
 use function call_user_func;
-use function compact;
-use function is_resource;
 use function rtrim;
 use function stream_get_contents;
 use function strlen;
@@ -64,11 +63,17 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         'ContentEncoding',
     ];
 
+    /**
+     * @var int
+     */
     private $maxResultsForContentsListing = 5000;
 
-    public function __construct(BlobRestProxy $client, $container, $prefix = null,
-        MimeTypeDetector $mimeTypeDetector = null)
-    {
+    public function __construct(
+        BlobRestProxy $client,
+        string $container,
+        string $prefix = null,
+        MimeTypeDetector $mimeTypeDetector = null
+    ) {
         $this->client = $client;
         $this->container = $container;
         $this->prefixer = new PathPrefixer($prefix);
@@ -92,7 +97,7 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function write(string $path, string $contents, Config $config) : void
     {
-        $this->upload($path, $contents, $config) + compact('contents');
+        $this->upload($path, $contents, $config);
     }
 
     public function writeStream(string $path, $contents, Config $config) : void
@@ -100,7 +105,12 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
-    protected function upload($path, $contents, Config $config) : void
+    /**
+     * @param string $path
+     * @param string|resource $contents
+     * @param Config $config
+     */
+    protected function upload(string $path, $contents, Config $config) : void
     {
         $destination = $this->prefixer->prefixPath($path);
 
@@ -127,16 +137,9 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function read(string $path) : string
     {
-        $response = $this->readStream($path);
+        $resource = $this->readStream($path);
 
-        if ( ! isset($response['stream']) || ! is_resource($response['stream'])) {
-            return $response;
-        }
-
-        $response['contents'] = stream_get_contents($response['stream']);
-        unset($response['stream']);
-
-        return $response;
+        return stream_get_contents($resource);
     }
 
     public function readStream(string $path)
@@ -153,7 +156,7 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
                 throw UnableToReadFile::fromLocation($path, '', $exception);
             }
 
-            return false;
+            throw $exception;
         }
     }
 
@@ -200,7 +203,7 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         return $this->normalizeFileAttributes($path, $properties);
     }
 
-    private function normalizeFileAttributes($path, BlobProperties $properties) : FileAttributes
+    private function normalizeFileAttributes(string $path, BlobProperties $properties) : FileAttributes
     {
         if (substr($path, -1) === '/') {
             return new FileAttributes($path);
@@ -277,7 +280,15 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         }
 
         if ( ! $deep) {
-            $result = array_merge($result, array_map([$this, 'normalizeBlobPrefix'], $response->getBlobPrefixes()));
+            $result = array_merge(
+                $result,
+                array_map(
+                    function (BlobPrefix $prefix) {
+                        return $this->normalizeBlobPrefix($prefix);
+                    },
+                    $response->getBlobPrefixes()
+                )
+            );
         }
 
         if ($continuationToken instanceof ContinuationToken) {
@@ -290,7 +301,8 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function move(string $source, string $destination, Config $config) : void
     {
-        $this->copy($source, $destination, $config) && $this->delete($source);
+        $this->copy($source, $destination, $config);
+        $this->delete($source);
     }
 
     public function copy(string $source, string $destination, Config $config) : void
@@ -300,7 +312,7 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         $this->client->copyBlob($this->container, $destination, $this->container, $source);
     }
 
-    protected function getOptionsFromConfig(Config $config)
+    protected function getOptionsFromConfig(Config $config): CreateBlockBlobOptions
     {
         $options = $config->get('blobOptions', new CreateBlockBlobOptions());
         foreach (static::$metaOptions as $option) {
@@ -314,5 +326,10 @@ final class AzureBlobStorageAdapter implements FilesystemAdapter
         }
 
         return $options;
+    }
+
+    protected function normalizeBlobPrefix(BlobPrefix $blobPrefix): array
+    {
+        return ['type' => 'dir', 'path' => $this->prefixer->stripPrefix(rtrim($blobPrefix->getName(), '/'))];
     }
 }
