@@ -1,0 +1,27 @@
+{
+    "name": "league/flysystem-azure-blob-storage",
+    "description": "Azure Blob Storage filesystem adapter for Flysystem.",
+    "keywords": ["azure", "blob", "flysystem", "filesystem", "storage", "file", "files"],
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\AzureBlobStorage\\": ""
+        }
+    },
+    "require": {
+        "php": "^7.2 || ^8.0",
+        "league/flysystem": "^2.0.0",
+        "microsoft/azure-storage-blob": "^1.1",
+        "guzzlehttp/psr7": "^1.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}
