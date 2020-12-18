@@ -109,9 +109,3 @@ In V1, plugins allowed you to extend the functionality of the filesystem. It use
 lot of magic to accomplish this, which creates an unpredictable API and promotes
 bad object-oriented design. If you need additional filesystem functionality, simply
 create the functionality outside of Flysystem and use it.
-
-## Miscellaneous changes
-
-- All adapters have changed constructors to allow more modular extension points.
-- The cached adapter was not ported to V2.
-

@@ -115,4 +115,7 @@ long as V1 is, breaking with past mistakes is needed sometimes.
 Directory listings received a big overhaul. To read more about it check out the
 [documentation for directory listings](/v2/docs/usage/directory-listings/).
 
+## Miscellaneous changes
 
+- All adapters have changed constructors to allow more modular extension points.
+- The cached adapter was not ported to V2.
