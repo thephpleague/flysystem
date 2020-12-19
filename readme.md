@@ -3,7 +3,7 @@
 [![Author](https://img.shields.io/badge/author-@frankdejonge-blue.svg)](https://twitter.com/frankdejonge)
 [![Source Code](https://img.shields.io/badge/source-thephpleague/flysystem-blue.svg)](https://github.com/thephpleague/flysystem)
 [![Latest Version](https://img.shields.io/github/tag/thephpleague/flysystem.svg)](https://github.com/thephpleague/flysystem/releases)
-[![Software License](https:////img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Quality Assurance](https://github.com/thephpleague/flysystem/workflows/Quality%20Assurance/badge.svg?branch=2.x)](https://github.com/thephpleague/flysystem/actions?query=workflow%3A%22Quality+Assurance%22)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
 ![php 7.2+](https://img.shields.io/badge/php-min%207.2-red.svg)
