@@ -9,7 +9,7 @@ use const FTP_USEPASVADDRESS;
 class FtpConnectionProvider implements ConnectionProvider
 {
     /**
-     * @return resource
+     * @return resource|\FTPConnection
      *
      * @throws FtpConnectionException
      */
@@ -36,13 +36,13 @@ class FtpConnectionProvider implements ConnectionProvider
     }
 
     /**
-     * @return resource
+     * @return resource|\FTPConnection
      */
     private function createConnectionResource(string $host, int $port, int $timeout, bool $ssl)
     {
         $connection = $ssl ? @ftp_ssl_connect($host, $port, $timeout) : @ftp_connect($host, $port, $timeout);
 
-        if ( ! is_resource($connection)) {
+        if ($connection === false) {
             throw UnableToConnectToFtpHost::forHost($host, $port, $ssl);
         }
 
@@ -50,7 +50,7 @@ class FtpConnectionProvider implements ConnectionProvider
     }
 
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     private function authenticate(FtpConnectionOptions $options, $connection): void
     {
@@ -60,7 +60,7 @@ class FtpConnectionProvider implements ConnectionProvider
     }
 
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     private function enableUtf8Mode(FtpConnectionOptions $options, $connection): void
     {
@@ -78,7 +78,7 @@ class FtpConnectionProvider implements ConnectionProvider
     }
 
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     private function ignorePassiveAddress(FtpConnectionOptions $options, $connection): void
     {
@@ -94,7 +94,7 @@ class FtpConnectionProvider implements ConnectionProvider
     }
 
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     private function makeConnectionPassive(FtpConnectionOptions $options, $connection): void
     {

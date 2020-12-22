@@ -48,7 +48,7 @@ class FtpAdapter implements FilesystemAdapter
     private $connectivityChecker;
 
     /**
-     * @var resource|false
+     * @var resource|\FTPConnection|false
      */
     private $connection = false;
 
@@ -93,12 +93,12 @@ class FtpAdapter implements FilesystemAdapter
     }
 
     /**
-     * @return resource
+     * @return resource|\FTPConnection
      */
     private function connection()
     {
         start:
-        if ( ! is_resource($this->connection)) {
+        if ( ! is_resource($this->connection) && ! $this->connection instanceof \FTPConnection) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
         }
 
@@ -204,7 +204,7 @@ class FtpAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     private function deleteFile(string $path, $connection): void
     {

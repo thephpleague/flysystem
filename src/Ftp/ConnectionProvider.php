@@ -7,7 +7,7 @@ namespace League\Flysystem\Ftp;
 interface ConnectionProvider
 {
     /**
-     * @return resource
+     * @return resource|\FTPConnection
      */
     public function createConnection(FtpConnectionOptions $options);
 }

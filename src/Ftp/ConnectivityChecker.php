@@ -7,7 +7,7 @@ namespace League\Flysystem\Ftp;
 interface ConnectivityChecker
 {
     /**
-     * @param resource $connection
+     * @param resource|\FTPConnection $connection
      */
     public function isConnected($connection): bool;
 }
