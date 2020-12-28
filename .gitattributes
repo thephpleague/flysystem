@@ -13,7 +13,7 @@
 /src/AsyncAwsS3 export-ignore
 /src/AwsS3V3 export-ignore
 /src/GoogleCloudStorage export-ignore
-/src/FTP export-ignore
+/src/Ftp export-ignore
 /src/InMemory export-ignore
 /src/PhpseclibV2 export-ignore
 /src/AdapterTestUtilities export-ignore
