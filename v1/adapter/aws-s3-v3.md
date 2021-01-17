@@ -21,7 +21,7 @@ composer require league/flysystem-aws-s3-v3
 
 ```php
 use Aws\S3\S3Client;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\AwsS3v3\AwsS3V3Adapter;
 use League\Flysystem\Filesystem;
 
 $client = new S3Client([
@@ -33,7 +33,7 @@ $client = new S3Client([
     'version' => 'latest|version',
 ]);
 
-$adapter = new AwsS3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
+$adapter = new AwsS3V3Adapter($client, 'your-bucket-name', 'optional/path/prefix');
 
 $filesystem = new Filesystem($adapter);
 ```
