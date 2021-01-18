@@ -662,7 +662,7 @@ class FtpTests extends TestCase
                     [
                         'type' => 'dir',
                         'path' => 'folder',
-                        'timestamp' => 1606226340,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Nov 24 13:59')->getTimestamp(),
                     ],
                     [
                         'type' => 'file',
@@ -693,7 +693,7 @@ class FtpTests extends TestCase
                     [
                         'type' => 'dir',
                         'path' => 'folder',
-                        'timestamp' => 1606226340,
+                        'timestamp' => DateTime::createFromFormat('M d H:i', 'Nov 24 13:59')->getTimestamp(),
                     ],
                     [
                         'type' => 'file',
