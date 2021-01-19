@@ -32,15 +32,15 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 $client = new AsyncAws\S3\S3Client();
 
 // The internal adapter
-$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Filesystem(
+$adapter = new League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter(
     // S3Client
     $client,
     // Bucket name
     'bucket-name',
     // Optional path prefix
     'path/prefix',
-    // Visibility converter (League\Flysystem\AwsS3V3\VisibilityConverter)
-    new League\Flysystem\AwsS3V3\PortableVisibilityConverter(
+    // Visibility converter (League\Flysystem\AsyncAwsS3\VisibilityConverter)
+    new League\Flysystem\AsyncAwsS3\PortableVisibilityConverter(
         // Optional default for directories
         League\Flysystem\Visibility::PUBLIC // or ::PRIVATE
     )
