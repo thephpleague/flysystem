@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-class MountManager implements FilesystemOperator
+class MountManager implements MountManagerInterface, FilesystemOperator
 {
+    protected const FILESYSTEM_PATH_SEPARATOR = '://';
+
     /**
      * @var array<string, FilesystemOperator>
      */
-    private $filesystems = [];
+    protected $filesystems = [];
 
     /**
      * MountManager constructor.
@@ -18,7 +20,25 @@ class MountManager implements FilesystemOperator
      */
     public function __construct(array $filesystems = [])
     {
-        $this->mountFilesystems($filesystems);
+        foreach ($filesystems as $key => $filesystem) {
+            if ($this->isFilesystemExists($key)) {
+                continue;
+            }
+
+            $this->mountFilesystem($key, $filesystem);
+        }
+    }
+
+    public function mountFilesystem(string $key, FilesystemOperator $filesystem): void
+    {
+        $this->guardAgainstInvalidMount($key, $filesystem);
+
+        $this->filesystems[$key] = $filesystem;
+    }
+
+    public function isFilesystemExists(string $key): bool
+    {
+        return array_key_exists($key, $this->filesystems);
     }
 
     public function fileExists(string $location): bool
@@ -215,21 +235,11 @@ class MountManager implements FilesystemOperator
         );
     }
 
-    private function mountFilesystems(array $filesystems): void
-    {
-        foreach ($filesystems as $key => $filesystem) {
-            $this->guardAgainstInvalidMount($key, $filesystem);
-            /* @var string $key */
-            /* @var FilesystemOperator $filesystem */
-            $this->mountFilesystem($key, $filesystem);
-        }
-    }
-
     /**
      * @param mixed $key
      * @param mixed $filesystem
      */
-    private function guardAgainstInvalidMount($key, $filesystem): void
+    protected function guardAgainstInvalidMount($key, $filesystem): void
     {
         if ( ! is_string($key)) {
             throw UnableToMountFilesystem::becauseTheKeyIsNotValid($key);
@@ -240,25 +250,20 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function mountFilesystem(string $key, FilesystemOperator $filesystem): void
-    {
-        $this->filesystems[$key] = $filesystem;
-    }
-
     /**
      * @param string $path
      *
      * @return array{0:FilesystemOperator, 1:string}
      */
-    private function determineFilesystemAndPath(string $path): array
+    protected function determineFilesystemAndPath(string $path): array
     {
-        if (strpos($path, '://') < 1) {
+        if (strpos($path, static::FILESYSTEM_PATH_SEPARATOR) < 1) {
             throw UnableToResolveFilesystemMount::becauseTheSeparatorIsMissing($path);
         }
 
         /** @var string $mountIdentifier */
         /** @var string $mountPath */
-        [$mountIdentifier, $mountPath] = explode('://', $path, 2);
+        [$mountIdentifier, $mountPath] = explode(static::FILESYSTEM_PATH_SEPARATOR, $path, 2);
 
         if ( ! array_key_exists($mountIdentifier, $this->filesystems)) {
             throw UnableToResolveFilesystemMount::becauseTheMountWasNotRegistered($mountIdentifier);
@@ -267,7 +272,7 @@ class MountManager implements FilesystemOperator
         return [$this->filesystems[$mountIdentifier], $mountPath];
     }
 
-    private function copyInSameFilesystem(
+    protected function copyInSameFilesystem(
         FilesystemOperator $sourceFilesystem,
         string $sourcePath,
         string $destinationPath,
@@ -281,7 +286,7 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function copyAcrossFilesystem(
+    protected function copyAcrossFilesystem(
         ?string $visibility,
         FilesystemOperator $sourceFilesystem,
         string $sourcePath,
@@ -299,7 +304,7 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function moveInTheSameFilesystem(
+    protected function moveInTheSameFilesystem(
         FilesystemOperator $sourceFilesystem,
         string $sourcePath,
         string $destinationPath,
@@ -313,7 +318,7 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function moveAcrossFilesystems(string $source, string $destination): void
+    protected function moveAcrossFilesystems(string $source, string $destination): void
     {
         try {
             $this->copy($source, $destination);
