@@ -393,6 +393,12 @@ class AwsS3V3Adapter implements FilesystemAdapter
             );
         }
 
+        $options = $this->createOptionsFromConfig($config);
+
+        if ($metadataDirective = $config->get('MetadataDirective')) {
+            $options['MetadataDirective'] = $metadataDirective;
+        }
+
         try {
             $this->client->copy(
                 $this->bucket,
@@ -400,7 +406,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
                 $this->bucket,
                 $this->prefixer->prefixPath($destination),
                 $this->visibility->visibilityToAcl($visibility),
-                $this->options
+                $options
             );
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
