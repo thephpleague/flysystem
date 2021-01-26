@@ -21,9 +21,7 @@ class MountManager implements MountManagerInterface, FilesystemOperator
     public function __construct(array $filesystems = [])
     {
         foreach ($filesystems as $key => $filesystem) {
-            if ($this->isFilesystemExists($key)) {
-                continue;
-            }
+            $this->guardAgainstInvalidMount($key, $filesystem);
 
             $this->mountFilesystem($key, $filesystem);
         }
@@ -31,7 +29,9 @@ class MountManager implements MountManagerInterface, FilesystemOperator
 
     public function mountFilesystem(string $key, FilesystemOperator $filesystem): void
     {
-        $this->guardAgainstInvalidMount($key, $filesystem);
+        if ($this->isFilesystemExists($key)) {
+            return;
+        }
 
         $this->filesystems[$key] = $filesystem;
     }
