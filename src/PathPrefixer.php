@@ -22,10 +22,14 @@ final class PathPrefixer
 
     public function __construct(string $prefix, string $separator = '/')
     {
-        $this->prefix = rtrim($prefix, '\\/');
+        if ($prefix === '/' || $prefix === '\\') {
+            $this->prefix = $prefix;
+        } else {
+            $this->prefix = rtrim($prefix, '\\/');
 
-        if ($prefix !== '') {
-            $this->prefix .= $separator;
+            if ($this->prefix !== '') {
+                $this->prefix .= $separator;
+            }
         }
 
         $this->separator = $separator;
