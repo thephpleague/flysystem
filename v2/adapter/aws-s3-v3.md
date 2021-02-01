@@ -32,7 +32,7 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 $client = new Aws\S3\S3Client($options);
 
 // The internal adapter
-$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Filesystem(
+$adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
     // S3Client
     $client,
     // Bucket name
