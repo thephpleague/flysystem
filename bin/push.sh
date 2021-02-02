@@ -34,6 +34,7 @@ remote adapter-test-utilities git@github.com:thephpleague/flysystem-adapter-test
 
 split 'src/Ftp' ftp
 split 'src/PhpseclibV2' sftp
+split 'src/PhpseclibV3' sftp
 split 'src/InMemory' memory
 split 'src/ZipArchive' ziparchive
 split 'src/AwsS3V3' aws-s3-v3
