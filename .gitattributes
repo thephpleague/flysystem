@@ -18,6 +18,7 @@
 /src/Ftp export-ignore
 /src/InMemory export-ignore
 /src/PhpseclibV2 export-ignore
+/src/PhpseclibV3 export-ignore
 /src/AdapterTestUtilities export-ignore
 /src/ZipArchive export-ignore
 /.gitattributes export-ignore
