@@ -8,5 +8,5 @@ interface MountManagerInterface
 {
     public function mountFilesystem(string $key, FilesystemOperator $filesystem): void;
 
-    public function isFilesystemExists(string $key): bool;
+    public function isFileSystemExists(string $key): bool;
 }

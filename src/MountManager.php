@@ -29,16 +29,26 @@ class MountManager implements MountManagerInterface, FilesystemOperator
 
     public function mountFilesystem(string $key, FilesystemOperator $filesystem): void
     {
-        if ($this->isFilesystemExists($key)) {
+        if ($this->isFileSystemExists($key)) {
             return;
         }
 
         $this->filesystems[$key] = $filesystem;
     }
 
-    public function isFilesystemExists(string $key): bool
+    public function isFileSystemExists(string $key): bool
     {
         return array_key_exists($key, $this->filesystems);
+    }
+
+    public function getFileSystem(string $key): ?FilesystemOperator
+    {
+        return $this->isFileSystemExists($key) ? $this->filesystems[$key] : null;
+    }
+
+    public function extractMountedFileSystemsKeys(): array
+    {
+        return array_keys($this->filesystems);
     }
 
     public function fileExists(string $location): bool

@@ -382,4 +382,45 @@ class MountManagerTest extends TestCase
 
         $this->mountManager->read('unknown://location.txt');
     }
+
+    /**
+     * @test
+     */
+    public function is_file_system_exists(): void
+    {
+        $this->assertTrue($this->mountManager->isFileSystemExists('first'));
+        $this->assertFalse($this->mountManager->isFileSystemExists('missed'));
+    }
+
+    /**
+     * @test
+     */
+    public function get_file_system(): void
+    {
+        $this->assertSame($this->firstFilesystem, $this->mountManager->getFileSystem('first'));
+        $this->assertSame($this->secondFilesystem, $this->mountManager->getFileSystem('second'));
+        $this->assertNull($this->mountManager->getFileSystem('missed'));
+    }
+
+    /**
+     * @test
+     */
+    public function extract_mounted_file_systems_keys(): void
+    {
+        $this->assertEquals(['first', 'second'], $this->mountManager->extractMountedFileSystemsKeys());
+    }
+
+    /**
+     * @test
+     */
+    public function try_to_mount_existing_file_system(): void
+    {
+        $mountManager = new MountManager(
+            ['first' => $this->firstFilesystem]
+        );
+
+        $mountManager->mountFilesystem('first', $this->secondFilesystem);
+
+        $this->assertSame($mountManager->getFileSystem('first'), $this->firstFilesystem);
+    }
 }
