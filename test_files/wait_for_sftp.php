@@ -1,6 +1,6 @@
 <?php
 
-use League\Flysystem\PhpseclibV2\SftpConnectionProvider;
+use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
 
 include __DIR__ . '/../vendor/autoload.php';
 
