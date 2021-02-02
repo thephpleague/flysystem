@@ -54,7 +54,7 @@ jobs:
           tools: composer:v2
       - run: composer update --no-progress ${{ matrix.composer-flags }}
       - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
-        if: ${{ matrix.update-aws-sdk == 'yes' }}
+        if: ${{ matrix.upgrade-aws-sdk == 'yes' }}
       - run: php test_files/wait_for_sftp.php
       - run: php test_files/wait_for_ftp.php 2121
       - run: php test_files/wait_for_ftp.php 2122
