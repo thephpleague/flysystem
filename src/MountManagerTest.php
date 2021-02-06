@@ -204,7 +204,6 @@ class MountManagerTest extends TestCase
         $now = time();
         $this->firstFilesystem->write('location.txt', 'contents');
 
-
         $lastModified = $this->mountManager->lastModified('first://location.txt');
         $fileSize = $this->mountManager->fileSize('first://location.txt');
         $mimeType = $this->mountManager->mimeType('first://location.txt');

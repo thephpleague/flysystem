@@ -30,8 +30,6 @@ class DirectoryAttributesTest extends TestCase
         $this->assertEquals(Visibility::PRIVATE, $attrs->visibility());
     }
 
-
-
     /**
      * @test
      */
