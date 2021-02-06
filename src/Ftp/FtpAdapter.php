@@ -93,6 +93,17 @@ class FtpAdapter implements FilesystemAdapter
     }
 
     /**
+     * Disconnect FTP connection on destruct.
+     */
+    public function __destruct()
+    {
+        if ($this->connection !== false) {
+            @ftp_close($this->connection);
+            $this->connection = false;
+        }
+    }
+
+    /**
      * @return resource
      */
     private function connection()

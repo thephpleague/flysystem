@@ -26,4 +26,21 @@ class FtpAdapterTest extends FtpAdapterTestCase
 
         return new FtpAdapter($options, null, static::$connectivityChecker);
     }
+
+    /**
+     * @test
+     */
+    public function disconnect_after_destruct(): void
+    {
+        $adapter = $this->createFilesystemAdapter();
+        $reflection = new \ReflectionObject($adapter);
+        $adapter->fileExists('foo.txt');
+        $reflectionProperty = $reflection->getProperty('connection');
+        $reflectionProperty->setAccessible(true);
+        $connection = $reflectionProperty->getValue($adapter);
+
+        $this->assertTrue(false !== ftp_pwd($connection));
+        unset($adapter);
+        $this->assertFalse(ftp_pwd($connection));
+    }
 }
