@@ -72,8 +72,6 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertFalse($this->adapter()->fileExists('path.txt'));
     }
 
-
-
     /**
      * @test
      */

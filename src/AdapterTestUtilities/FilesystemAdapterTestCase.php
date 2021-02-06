@@ -107,7 +107,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
         }
     }
 
-
     public function clearCustomAdapter(): void
     {
         if ($this->isUsingCustomAdapter) {
@@ -669,7 +668,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $this->adapter()->readStream('something.txt');
     }
-
 
     /**
      * @test
