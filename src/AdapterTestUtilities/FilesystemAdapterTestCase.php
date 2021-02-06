@@ -164,7 +164,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $this->assertEquals('contents', $contents);
         });
     }
-//
+
     public function filenameProvider(): Generator
     {
         yield "a path with square brackets in filename 1" => ["some/file[name].txt"];

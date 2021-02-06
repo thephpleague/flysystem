@@ -49,6 +49,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
      * @var int
      */
     public const SKIP_LINKS = 0001;
+
     /**
      * @var int
      */

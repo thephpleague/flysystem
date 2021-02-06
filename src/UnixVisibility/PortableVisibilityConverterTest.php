@@ -32,6 +32,7 @@ class PortableVisibilityConverterTest extends TestCase
         $interpreter = new PortableVisibilityConverter();
         $interpreter->forFile('incorrect');
     }
+
     /**
      * @test
      */
