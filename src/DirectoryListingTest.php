@@ -25,6 +25,7 @@ class DirectoryListingTest extends TestCase
         $expectedNumbers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
         $this->assertEquals($expectedNumbers, $mappedNumbers);
     }
+
     /**
      * @test
      */

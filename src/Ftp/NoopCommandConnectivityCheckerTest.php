@@ -36,6 +36,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
 
         $this->assertTrue($connected);
     }
+
     /**
      * @test
      */
