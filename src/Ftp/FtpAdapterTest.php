@@ -32,15 +32,18 @@ class FtpAdapterTest extends FtpAdapterTestCase
      */
     public function disconnect_after_destruct(): void
     {
-        $adapter = $this->createFilesystemAdapter();
+        /** @var FtpAdapter $adapter */
+        $adapter = $this->adapter();
         $reflection = new \ReflectionObject($adapter);
         $adapter->fileExists('foo.txt');
         $reflectionProperty = $reflection->getProperty('connection');
         $reflectionProperty->setAccessible(true);
         $connection = $reflectionProperty->getValue($adapter);
+        unset($reflection);
 
         $this->assertTrue(false !== ftp_pwd($connection));
         unset($adapter);
-        $this->assertFalse(ftp_pwd($connection));
+        static::clearFilesystemAdapterCache();
+        $this->assertFalse(@ftp_pwd($connection));
     }
 }

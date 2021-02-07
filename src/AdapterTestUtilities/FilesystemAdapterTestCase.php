@@ -37,6 +37,11 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     private $isUsingCustomAdapter = false;
 
+    public static function clearFilesystemAdapterCache(): void
+    {
+        static::$adapter = null;
+    }
+
     abstract protected static function createFilesystemAdapter(): FilesystemAdapter;
 
     public function adapter(): FilesystemAdapter
@@ -50,7 +55,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
     public static function tearDownAfterClass(): void
     {
-        static::$adapter = null;
+        self::clearFilesystemAdapterCache();
     }
 
     protected function setUp(): void
@@ -107,7 +112,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         if ($this->isUsingCustomAdapter) {
             $this->isUsingCustomAdapter = false;
-            static::$adapter = null;
+            self::clearFilesystemAdapterCache();
         }
     }
 
