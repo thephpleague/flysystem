@@ -2,14 +2,14 @@
 
 set -e
 
-php bin/check-versions.php $1
-
 # Make sure the release tag is provided.
 if (( "$#" != 1 && "$#" != 2 ))
 then
     echo "Tag has to be provided."
     exit 1
 fi
+
+php bin/check-versions.php $1
 
 RELEASE_BRANCH="2.x"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
