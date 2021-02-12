@@ -58,9 +58,7 @@ class InMemoryFile
 
     public function fileSize(): int
     {
-        return function_exists('mb_strlen')
-            ? mb_strlen($this->contents)
-            : strlen($this->contents);
+        return strlen($this->contents);
     }
 
     public function mimeType(): string
