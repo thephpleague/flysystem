@@ -1,5 +1,13 @@
 # Version 2.x Changelog
 
+## 2.0.3 - 2021-02-09
+
+## Fixed
+
+* [AwsS3V3] Use the $config array during the copy operation.
+* [Ftp] Close FTP connections when the object is destructed.
+* [Core] Allow for an absolute root path of `/`.
+
 ## 2.0.2 - 2020-12-28
 
 ## Fixed
