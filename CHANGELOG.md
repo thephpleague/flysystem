@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.1 - 2020-12-28
+
+## Fixed
+
+* Corrected the ignored exports for Phpseclib
+
 ## 2.0.0 - 2020-11-24
 
 ## Changed
