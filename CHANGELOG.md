@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.4 - 2021-02-13
+
+## Fixed
+
+* [InMemory] Corrected how the file size is determined.
+
 ## 2.0.3 - 2021-02-09
 
 ## Fixed
