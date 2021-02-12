@@ -267,6 +267,25 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function checking_for_metadata2(): void
+    {
+        mock_function('time', 1234);
+        $adapter = $this->adapter();
+        $adapter->write(
+            self::PATH,
+            (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/image.jpg'),
+            new Config()
+        );
+
+        $this->assertTrue($adapter->fileExists(self::PATH));
+        $this->assertEquals(22518, $adapter->fileSize(self::PATH)->fileSize());
+        $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
+        $this->assertStringStartsWith('image/jpeg', $adapter->mimeType(self::PATH)->mimeType());
+    }
+
+    /**
+     * @test
+     */
     public function fetching_unknown_mime_type_of_a_file(): void
     {
         $this->useAdapter(new InMemoryFilesystemAdapter(Visibility::PUBLIC, new ExtensionMimeTypeDetector(new EmptyExtensionToMimeTypeMap())));
