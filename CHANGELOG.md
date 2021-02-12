@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.2 - 2020-12-28
+
+## Fixed
+
+* Corrected the ignored exports for Ftp
+
 ## 2.0.1 - 2020-12-28
 
 ## Fixed
