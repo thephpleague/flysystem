@@ -245,42 +245,40 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertCount(1, $contents);
     }
 
-    /**
-     * @test
-     */
-    public function checking_for_metadata(): void
+    public function metadataProvider()
     {
-        mock_function('time', 1234);
-        $adapter = $this->adapter();
-        $adapter->write(
-            self::PATH,
-            (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/flysystem.svg'),
-            new Config()
-        );
-
-        $this->assertTrue($adapter->fileExists(self::PATH));
-        $this->assertEquals(754, $adapter->fileSize(self::PATH)->fileSize());
-        $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
-        $this->assertStringStartsWith('image/svg', $adapter->mimeType(self::PATH)->mimeType());
+        return [
+            [
+                'file' => __DIR__.'/../AdapterTestUtilities/test_files/flysystem.svg',
+                'size' => 754,
+                'mimeType' => 'image/svg',
+            ],
+            [
+                'file' => __DIR__.'/../AdapterTestUtilities/test_files/image.jpg',
+                'size' => 22518,
+                'mimeType' => 'image/jpeg',
+            ],
+        ];
     }
 
     /**
      * @test
+     * @dataProvider metadataProvider
      */
-    public function checking_for_metadata2(): void
+    public function checking_for_metadata($file, $fileSize, $mimeType): void
     {
         mock_function('time', 1234);
         $adapter = $this->adapter();
         $adapter->write(
             self::PATH,
-            (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/image.jpg'),
+            (string) file_get_contents($file),
             new Config()
         );
 
         $this->assertTrue($adapter->fileExists(self::PATH));
-        $this->assertEquals(22518, $adapter->fileSize(self::PATH)->fileSize());
+        $this->assertEquals($fileSize, $adapter->fileSize(self::PATH)->fileSize());
         $this->assertEquals(1234, $adapter->lastModified(self::PATH)->lastModified());
-        $this->assertStringStartsWith('image/jpeg', $adapter->mimeType(self::PATH)->mimeType());
+        $this->assertStringStartsWith($mimeType, $adapter->mimeType(self::PATH)->mimeType());
     }
 
     /**
