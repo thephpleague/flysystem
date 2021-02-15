@@ -4,6 +4,14 @@ title: AsyncAws S3 Adapter
 permalink: /v2/docs/adapter/async-aws-s3/
 ---
 
+## Installation
+
+```bash
+composer require league/flysystem-async-aws-s3
+```
+
+## About
+
 Interacting with Aws S3 through Flysystem can be done
 by using the `League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter`.
 

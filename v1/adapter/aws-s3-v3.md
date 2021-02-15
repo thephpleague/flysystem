@@ -14,7 +14,7 @@ title: Aws S3 Adapter V3
 ## Installation
 
 ```bash
-composer require league/flysystem-aws-s3-v3
+composer require league/flysystem-aws-s3-v3:^1.0
 ```
 
 ## Usage

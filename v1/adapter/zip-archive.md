@@ -10,7 +10,7 @@ title: ZipArchive Adapter
 ## Installation
 
 ```bash
-composer require league/flysystem-ziparchive
+composer require league/flysystem-ziparchive:^1.0
 ```
 
 ## Usage

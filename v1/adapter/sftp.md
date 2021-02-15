@@ -10,7 +10,7 @@ title: SFTP Adapter
 ## Installation
 
 ```bash
-composer require league/flysystem-sftp
+composer require league/flysystem-sftp:^1.0
 ```
 
 ## Usage

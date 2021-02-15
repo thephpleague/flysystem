@@ -4,6 +4,14 @@ title: FTP Adapter
 permalink: /v2/docs/adapter/ftp/
 ---
 
+## Installation
+
+```bash
+composer require league/flysystem-ftp:^2.0
+```
+
+## About
+
 Interacting with an ftp filesystem through Flysystem can be done
 by using the `League\Flysystem\Ftp\FtpAdapter`.
 

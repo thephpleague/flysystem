@@ -4,6 +4,14 @@ title: Aws S3 (v3) Adapter
 permalink: /v2/docs/adapter/aws-s3-v3/
 ---
 
+## Installation
+
+```bash
+composer require league/flysystem-aws-s3-v3:^2.0
+```
+
+## About
+
 Interacting with Aws S3 through Flysystem can be done
 by using the `League\Flysystem\AwsS3V3\AwsS3V3Adapter`.
 

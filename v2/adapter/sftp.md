@@ -4,6 +4,14 @@ title: SFTP Adapter
 permalink: /v2/docs/adapter/sftp/
 ---
 
+## Installation
+
+```bash
+composer require league/flysystem-sftp:^2.0
+```
+
+## About
+
 ## Setup
 
 ```php

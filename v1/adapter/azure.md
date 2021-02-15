@@ -10,7 +10,7 @@ title: Azure Blob Storage
 ## Installation
 
 ```bash
-composer require league/flysystem-azure-blob-storage
+composer require league/flysystem-azure-blob-storage:^1.0
 ```
 
 ## Usage

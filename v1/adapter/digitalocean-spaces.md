@@ -13,7 +13,7 @@ The DO Spaces api are compatible with those of S3, from Flysystem's perspective 
 ## Installation
 
 ~~~ bash
-composer require league/flysystem-aws-s3-v3
+composer require league/flysystem-aws-s3-v3:^1.0
 ~~~
 
 ## Usage

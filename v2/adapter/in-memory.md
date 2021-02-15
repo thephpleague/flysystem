@@ -10,7 +10,7 @@ by using the `League\Flysystem\InMemory\InMemoryFilesystemAdapter`.
 ## Installation:
 
 ```bash
-composer require league/flysystem-memory
+composer require league/flysystem-memory:^2.0
 ```
 
 ## Usage:
