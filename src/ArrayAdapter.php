@@ -23,15 +23,41 @@ class ArrayAdapter implements FilesystemAdapter
      */
     public function __construct(array $adapters, ?string $default = null)
     {
-        $adapters = array_filter(
+        array_walk(
             $adapters,
-            function ($adapter) {
-                return $adapter instanceof FilesystemAdapter;
+            function ($adapter, $name) {
+                $this->addAdapter($name, $adapter);
             }
         );
 
-        $this->adapters = $adapters;
-        $this->default = $default;
+        $this->setDefault($default);
+    }
+
+    /**
+     * Add adapter.
+     *
+     * @param string $name
+     * @param FilesystemAdapter $adapter
+     */
+    public function addAdapter(string $name, FilesystemAdapter $adapter): void
+    {
+        $this->adapters[$name] = $adapter;
+    }
+
+    /**
+     * Set default namespace.
+     *
+     * @param string|null $name
+     */
+    public function setDefault(string $name = null): void
+    {
+        if (null !== $name) {
+            if (false === array_key_exists($name, $this->adapters)) {
+                throw new InvalidArgumentException('Default namespace doest not exists');
+            }
+        }
+
+        $this->default = $name;
     }
 
     /**
