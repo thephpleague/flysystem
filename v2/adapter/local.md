@@ -48,7 +48,7 @@ $adapter = new LocalFilesystemAdapter(
 
     // How to deal with links, either DISALLOW_LINKS or SKIP_LINKS
     // Disallowing them causes exceptions when encountered
-    LocalFilesystem::DISALLOW_LINKS
+    LocalFilesystemAdapter::DISALLOW_LINKS
 );
 
 // The FilesystemOperator
