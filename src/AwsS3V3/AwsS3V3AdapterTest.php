@@ -18,6 +18,8 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
+use League\Flysystem\UnableToWriteFile;
+use RuntimeException;
 
 /**
  * @group aws
@@ -135,6 +137,21 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToMoveFile::class);
 
         $adapter->move('source.txt', 'destination.txt', new Config());
+    }
+
+
+
+    /**
+     * @test
+     */
+    public function failing_to_write_a_file(): void
+    {
+        $adapter = $this->adapter();
+        static::$stubS3Client->throwDuringUpload(new RuntimeException('Oh no'));
+
+        $this->expectException(UnableToWriteFile::class);
+
+        $adapter->write('path.txt', 'contents', new Config());
     }
 
     /**

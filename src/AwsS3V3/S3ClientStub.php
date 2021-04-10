@@ -12,6 +12,8 @@ use Aws\S3\S3ClientInterface;
 use Aws\S3\S3ClientTrait;
 use GuzzleHttp\Psr7\Response;
 
+use Throwable;
+
 use function GuzzleHttp\Promise\promise_for;
 
 /**
@@ -36,9 +38,28 @@ class S3ClientStub implements S3ClientInterface
      */
     private $stagedResult = [];
 
+    /**
+     * @var Throwable|null
+     */
+    private $exceptionForUpload = null;
+
     public function __construct(S3ClientInterface $client)
     {
         return $this->actualClient = $client;
+    }
+
+    public function throwDuringUpload(Throwable $throwable): void
+    {
+        $this->exceptionForUpload = $throwable;
+    }
+
+    public function upload($bucket, $key, $body, $acl = 'private', array $options = [])
+    {
+        if ($this->exceptionForUpload instanceof Throwable) {
+            $throwable = $this->exceptionForUpload;
+            $this->exceptionForUpload = null;
+            throw $throwable;
+        }
     }
 
     public function failOnNextCopy(): void

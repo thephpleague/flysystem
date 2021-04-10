@@ -21,6 +21,7 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -150,7 +151,11 @@ class AwsS3V3Adapter implements FilesystemAdapter
             $options['ContentType'] = $mimeType;
         }
 
-        $this->client->upload($this->bucket, $key, $body, $acl, ['params' => $options]);
+        try {
+            $this->client->upload($this->bucket, $key, $body, $acl, ['params' => $options]);
+        } catch (Throwable $exception) {
+            throw UnableToWriteFile::atLocation($path, '', $exception);
+        }
     }
 
     private function determineAcl(Config $config): string
