@@ -10,8 +10,8 @@ parameters:
         - src/AwsS3V3
         - src/FTP
         - src/InMemory
-        - src/PHPSecLibV2
-        - src/PHPSecLibV3
+        - src/PhpseclibV2
+        - src/PhpseclibV3
     ignoreErrors:
         - '#Call to function iterator_to_array\(\) on a separate line has no effect\.#'
         - '#Comparison operation "<" between 0|1 and 4 is always true.#'
