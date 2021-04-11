@@ -8,6 +8,7 @@ use phpseclib3\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 
 use function base64_decode;
+use function class_exists;
 use function explode;
 use function hash;
 use function implode;
@@ -19,6 +20,13 @@ use function str_split;
  */
 class SftpConnectionProviderTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        if ( ! class_exists(SFTP::class)) {
+            self::markTestIncomplete("No phpseclib v3 installed");
+        }
+    }
+
     /**
      * @test
      */
