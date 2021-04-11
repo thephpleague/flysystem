@@ -153,7 +153,7 @@ class FtpAdapter implements FilesystemAdapter
             rewind($writeStream);
             $this->writeStream($path, $writeStream, $config);
         } finally {
-            is_resource($writeStream) && fclose($writeStream);
+            isset($writeStream) && is_resource($writeStream) && fclose($writeStream);
         }
     }
 

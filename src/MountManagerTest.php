@@ -6,6 +6,8 @@ use League\Flysystem\AdapterTestUtilities\ExceptionThrowingFilesystemAdapter;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
+use function is_resource;
+
 /**
  * @group core
  */
@@ -101,7 +103,7 @@ class MountManagerTest extends TestCase
             $handle = tmpfile();
             $this->mountManager->writeStream('first://file.txt', $handle);
         } finally {
-            fclose($handle);
+            isset($handle) && is_resource($handle) && fclose($handle);
         }
     }
 

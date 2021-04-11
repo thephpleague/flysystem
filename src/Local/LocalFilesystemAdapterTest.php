@@ -27,6 +27,7 @@ use Traversable;
 use function file_get_contents;
 use function file_put_contents;
 use function fileperms;
+use function is_resource;
 use function iterator_to_array;
 use function mkdir;
 use function symlink;
@@ -153,7 +154,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
             $stream = stream_with_contents('something');
             (new LocalFilesystemAdapter('/'))->writeStream('/cannot-create-a-file-here', $stream, new Config());
         } finally {
-            fclose($stream);
+            isset($stream) && is_resource($stream) && fclose($stream);
         }
     }
 
