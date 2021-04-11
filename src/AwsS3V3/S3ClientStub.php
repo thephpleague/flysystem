@@ -60,6 +60,8 @@ class S3ClientStub implements S3ClientInterface
             $this->exceptionForUpload = null;
             throw $throwable;
         }
+
+        return $this->actualClient->upload($bucket, $key, $bucket, $acl, $options);
     }
 
     public function failOnNextCopy(): void
