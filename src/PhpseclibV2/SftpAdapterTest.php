@@ -13,6 +13,8 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToWriteFile;
 
+use function class_exists;
+
 /**
  * @group sftp
  */
@@ -27,6 +29,13 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
      * @var SftpStub
      */
     private $connection;
+
+    public static function setUpBeforeClass(): void
+    {
+        if ( ! class_exists('phpseclib\Net\SFTP')) {
+            self::markTestSkipped("PHPSecLib V2 is not installed");
+        }
+    }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {

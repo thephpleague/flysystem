@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem-sftp",
+    "name": "league/flysystem-sftp-v3",
     "description": "In-memory filesystem adapter for Flysystem.",
     "keywords": ["flysystem", "filesystem", "sftp", "files", "file"],
     "autoload": {

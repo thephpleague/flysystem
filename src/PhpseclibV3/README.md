@@ -1,7 +1,7 @@
-## Sub-split of Flysystem for SFTP using phpseclib2.
+## Sub-split of Flysystem for SFTP using phpseclib v3.
 
 ```bash
-composer require league/flysystem-sftp
+composer require league/flysystem-sftp-v3
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/sftp/).
+View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/sftp-v3/).

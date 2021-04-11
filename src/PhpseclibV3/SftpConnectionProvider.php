@@ -12,6 +12,10 @@ use phpseclib3\System\SSH\Agent;
 use RuntimeException;
 use Throwable;
 
+use function base64_decode;
+use function implode;
+use function str_split;
+
 class SftpConnectionProvider implements ConnectionProvider
 {
     /**
@@ -157,8 +161,9 @@ class SftpConnectionProvider implements ConnectionProvider
     private function getFingerprintFromPublicKey(string $publicKey): string
     {
         $content = explode(' ', $publicKey, 3);
+        $algo = $content[0] === 'ssh-rsa' ? 'md5' : 'sha512';
 
-        return implode(':', str_split(md5(base64_decode($content[1])), 2));
+        return implode(':', str_split(hash($algo, base64_decode($content[1])), 2));
     }
 
     private function authenticate(SFTP $connection): void

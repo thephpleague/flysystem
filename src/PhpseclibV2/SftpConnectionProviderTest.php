@@ -7,12 +7,23 @@ namespace League\Flysystem\PhpseclibV2;
 use phpseclib\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 
+use function class_exists;
+
 /**
  * @group sftp
  * @group sftp-connection
  */
 class SftpConnectionProviderTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if ( ! class_exists('phpseclib\Net\SFTP')) {
+            self::markTestSkipped("PHPSecLib V2 is not installed");
+        }
+
+        parent::setUp();
+    }
+
     /**
      * @test
      */
