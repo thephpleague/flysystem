@@ -7,6 +7,12 @@ namespace League\Flysystem\PhpseclibV3;
 use phpseclib3\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 
+use function base64_decode;
+use function explode;
+use function hash;
+use function implode;
+use function str_split;
+
 /**
  * @group sftp
  * @group sftp-connection
@@ -173,7 +179,7 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function verifying_a_fingerprint(): void
     {
-        $key = file_get_contents(__DIR__ . '/../../test_files/sftp/ssh_host_rsa_key.pub');
+        $key = file_get_contents(__DIR__ . '/../../test_files/sftp/ssh_host_ed25519_key.pub');
         $fingerPrint = $this->computeFingerPrint($key);
 
         $provider = SftpConnectionProvider::fromArray(
@@ -229,7 +235,8 @@ class SftpConnectionProviderTest extends TestCase
     private function computeFingerPrint(string $publicKey): string
     {
         $content = explode(' ', $publicKey, 3);
+        $algo = $content[0] === 'ssh-rsa' ? 'md5' : 'sha512';
 
-        return implode(':', str_split(md5(base64_decode($content[1])), 2));
+        return implode(':', str_split(hash($algo, base64_decode($content[1])), 2));
     }
 }
