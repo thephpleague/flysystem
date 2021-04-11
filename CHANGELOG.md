@@ -1,14 +1,20 @@
 # Version 2.x Changelog
 
+## 2.0.5 - 2021-04-11
+
+### Fixed
+
+* [AwsS3] ensure write errors are turned into exceptions. 
+
 ## 2.0.4 - 2021-02-13
 
-## Fixed
+### Fixed
 
 * [InMemory] Corrected how the file size is determined.
 
 ## 2.0.3 - 2021-02-09
 
-## Fixed
+### Fixed
 
 * [AwsS3V3] Use the $config array during the copy operation.
 * [Ftp] Close FTP connections when the object is destructed.
@@ -16,23 +22,23 @@
 
 ## 2.0.2 - 2020-12-28
 
-## Fixed
+### Fixed
 
 * Corrected the ignored exports for Ftp
 
 ## 2.0.1 - 2020-12-28
 
-## Fixed
+### Fixed
 
 * Corrected the ignored exports for Phpseclib
 
 ## 2.0.0 - 2020-11-24
 
-## Changed
+### Changed
 
 - string type added to all visibility input
 
-## Added
+### Added
 
 - Google Cloud Storage adapter.
 
