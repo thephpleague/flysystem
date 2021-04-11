@@ -139,8 +139,6 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $adapter->move('source.txt', 'destination.txt', new Config());
     }
 
-
-
     /**
      * @test
      */
