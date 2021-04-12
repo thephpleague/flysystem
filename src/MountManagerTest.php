@@ -235,6 +235,29 @@ class MountManagerTest extends TestCase
     /**
      * @test
      */
+    public function list_directory(): void
+    {
+        $this->mountManager->createDirectory('first://directory');
+        $this->mountManager->write('first://directory/file', 'foo');
+
+        $directoryListing = $this->mountManager->listContents('first://', Filesystem::LIST_DEEP)->toArray();
+
+        $this->assertCount(2, $directoryListing);
+
+        /** @var DirectoryAttributes $directory */
+        $directory = $directoryListing[0];
+        $this->assertInstanceOf(DirectoryAttributes::class, $directory);
+        $this->assertEquals('first://directory', $directory->path());
+
+        /** @var FileAttributes $file */
+        $file = $directoryListing[1];
+        $this->assertInstanceOf(FileAttributes::class, $file);
+        $this->assertEquals('first://directory/file', $file->path());
+    }
+
+    /**
+     * @test
+     */
     public function copying_in_the_same_filesystem(): void
     {
         $this->firstFilesystem->write('location.txt', 'contents');
