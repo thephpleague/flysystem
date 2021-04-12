@@ -60,9 +60,35 @@ class MountManager implements FilesystemOperator
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
         /** @var FilesystemOperator $filesystem */
-        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+        [$filesystem, $path, $mountIdentifier] = $this->determineFilesystemAndPath($location);
 
-        return $filesystem->listContents($path, $deep);
+        return
+            $filesystem
+                ->listContents($path, $deep)
+                ->map(
+                    function (StorageAttributes $attributes) use ($mountIdentifier) {
+                        if ($attributes instanceof FileAttributes) {
+                            return new FileAttributes(
+                                sprintf('%s://%s', $mountIdentifier, $attributes->path()),
+                                $attributes->fileSize(),
+                                $attributes->visibility(),
+                                $attributes->lastModified(),
+                                $attributes->mimeType(),
+                                $attributes->extraMetadata()
+                            );
+                        }
+
+                        if ($attributes instanceof DirectoryAttributes) {
+                            return new DirectoryAttributes(
+                                sprintf('%s://%s', $mountIdentifier, $attributes->path()),
+                                $attributes->visibility(),
+                                $attributes->lastModified()
+                            );
+                        }
+
+                        return $attributes;
+                    }
+                );
     }
 
     public function lastModified(string $location): int
@@ -264,7 +290,7 @@ class MountManager implements FilesystemOperator
             throw UnableToResolveFilesystemMount::becauseTheMountWasNotRegistered($mountIdentifier);
         }
 
-        return [$this->filesystems[$mountIdentifier], $mountPath];
+        return [$this->filesystems[$mountIdentifier], $mountPath, $mountIdentifier];
     }
 
     private function copyInSameFilesystem(
