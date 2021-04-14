@@ -104,6 +104,14 @@ class FileAttributes implements StorageAttributes
         return false;
     }
 
+    public function withPath(string $path): StorageAttributes
+    {
+        $clone = clone $this;
+        $clone->path = $path;
+
+        return $clone;
+    }
+
     public static function fromArray(array $attributes): StorageAttributes
     {
         return new FileAttributes(

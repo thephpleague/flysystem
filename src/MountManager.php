@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use function sprintf;
+
 class MountManager implements FilesystemOperator
 {
     /**
@@ -67,26 +69,7 @@ class MountManager implements FilesystemOperator
                 ->listContents($path, $deep)
                 ->map(
                     function (StorageAttributes $attributes) use ($mountIdentifier) {
-                        if ($attributes instanceof FileAttributes) {
-                            return new FileAttributes(
-                                sprintf('%s://%s', $mountIdentifier, $attributes->path()),
-                                $attributes->fileSize(),
-                                $attributes->visibility(),
-                                $attributes->lastModified(),
-                                $attributes->mimeType(),
-                                $attributes->extraMetadata()
-                            );
-                        }
-
-                        if ($attributes instanceof DirectoryAttributes) {
-                            return new DirectoryAttributes(
-                                sprintf('%s://%s', $mountIdentifier, $attributes->path()),
-                                $attributes->visibility(),
-                                $attributes->lastModified()
-                            );
-                        }
-
-                        return $attributes;
+                        return $attributes->withPath(sprintf('%s://%s', $mountIdentifier, $attributes->path()));
                     }
                 );
     }

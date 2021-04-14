@@ -33,4 +33,6 @@ interface StorageAttributes extends JsonSerializable, ArrayAccess
     public function isFile(): bool;
 
     public function isDir(): bool;
+
+    public function withPath(string $path): StorageAttributes;
 }
