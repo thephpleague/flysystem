@@ -262,7 +262,7 @@ function ftp_rawlist($connection, $directory)
     if (strpos($directory, 'file1.with-total-line.txt') !== false) {
         return [
             'total 1',
-            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.with-total-line.txt',
         ];
     }
 
@@ -276,6 +276,14 @@ function ftp_rawlist($connection, $directory)
         return [
             'invalid line',
             '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file1.txt',
+        ];
+    }
+
+    if (strpos($directory, 'some-avm-ftp.txt') !== false) {
+        return [
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 file-i-dont-care-about.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 another-file-i-dont-care-about.txt',
+            '-rw-r--r--   1 ftp      ftp           409 Aug 19 09:01 some-avm-ftp.txt',
         ];
     }
 
@@ -531,7 +539,17 @@ class FtpTests extends TestCase
     {
         $adapter = new Ftp($this->options);
         $metadata = $adapter->getMetadata('file1.with-total-line.txt');
-        $this->assertEquals('file1.txt', $metadata['path']);
+        $this->assertEquals('file1.with-total-line.txt', $metadata['path']);
+    }
+
+    /**
+     * @depends testInstantiable
+     */
+    public function testGetMetadataReturnsCorrectFile()
+    {
+        $adapter = new Ftp($this->options);
+        $metadata = $adapter->getMetadata('some-avm-ftp.txt');
+        $this->assertEquals('some-avm-ftp.txt', $metadata['path']);
     }
 
     /**
