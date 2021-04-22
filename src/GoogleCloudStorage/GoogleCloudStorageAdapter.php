@@ -77,7 +77,10 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     private function upload(string $path, $contents, Config $config): void
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
-        $options = ['name' => $prefixedPath];
+        $options = [
+            'name' => $prefixedPath,
+            'metadata' => $config->get('metadata', []),
+        ];
 
         $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
         $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl($visibility);

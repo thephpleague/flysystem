@@ -57,6 +57,17 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function writing_with_specific_metadata(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'contents', new Config(['metadata' => ['contentType' => 'text/plain+special']]));
+        $mimeType = $adapter->mimeType('some/path.txt')->mimeType();
+        $this->assertEquals('text/plain+special', $mimeType);
+    }
+
+    /**
+     * @test
+     */
     public function fetching_visibility_of_non_existing_file(): void
     {
         $this->markTestSkipped("
