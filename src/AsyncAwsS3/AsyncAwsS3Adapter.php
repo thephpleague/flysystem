@@ -294,7 +294,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             'ACL' => $this->visibility->visibilityToAcl($visibility),
             'Bucket' => $this->bucket,
             'Key' => $this->prefixer->prefixPath($destination),
-            'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
+            'CopySource' => $this->bucket . '/' . $this->prefixer->prefixPath($source),
         ];
 
         try {
