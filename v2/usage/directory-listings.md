@@ -16,7 +16,7 @@ return all the files contained in the path.
 
 The directory listings use generators to provide an efficient delivery mechanism for
 storage items within the filesystems. This comes with one caveat; listings are a "read-once"
-response. Unlike arrays, when a generator has yielded all if its response the items are gone.
+response. Unlike arrays, when a generator has yielded all of its response the items are gone.
 
 ## Filtering listing items
 

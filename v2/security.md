@@ -9,9 +9,9 @@ This document describes what to do in case of a security issue with `league/flys
 ## Vulnerability Response
 
 Your report will be acknowledged within 2 business days. Any information shared with
-the security team stays will not be shared with other parties except as required to
+the security team will not be shared with other parties except as required to
 get the issue fixed or to coordinate a vendor response. As a security issue moves
-through our process, during which the reporter will be kept up-to-date.
+through our process, the reporter will be kept up-to-date.
 
 Our goal is to disclose bugs as soon as possible once a user mitigation is available.
 We will set a disclosure date once the bug is well-understood (in consultation with

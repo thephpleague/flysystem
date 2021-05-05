@@ -66,7 +66,7 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 
 ### Connection provider
 
-The `League\Flysystem\FTP\ConnectionProvider` allows you change how a connection
+The `League\Flysystem\FTP\ConnectionProvider` allows you to change how a connection
 is setup. If you have particular needs, or if your FTP server is exotic, this allows
 you to modify this process.
 

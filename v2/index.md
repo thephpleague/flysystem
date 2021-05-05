@@ -26,10 +26,10 @@ for which ever storage is right for you.
 
 ## Getting Started
 
-* **[New in V2](/v2/docs/what-is-new/)**: What it new in Flysystem V2?
+* **[New in V2](/v2/docs/what-is-new/)**: What is new in Flysystem V2?
 * **[Architecture](/v2/docs/architecture/)**: Flysystem's internal architecture
 * **[Flysystem API](/v2/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
-* **[Upgrade to V2](/v2/docs/advanced/upgrade-to-2.0.0/)**: How to interact with your Flysystem instance
+* **[Upgrade to V2](/v2/docs/advanced/upgrade-to-2.0.0/)**: How to upgrade to V2
 
 ### Commonly-Used Adapters
 

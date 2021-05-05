@@ -21,12 +21,12 @@ methods. This means, the write methods will overwrite any previously written fil
 The `update` and `updateStream` methods are no longer required and have been removed
 from the main interface.
 
-The `put` method was exposed to prevent for having to choose between `write`
+The `put` method was exposed to prevent having to choose between `write`
 and `update`. Needless to say, this method now has no value and has been removed.
 
 In addition to a more streamlined API, each write call is now less expensive. Since
-writes now overwrite, there is no longer a file existence needed. For all the "over the
-network filesystems", this is a big win!  
+writes now overwrite, there is no longer a file existence check needed. For all the
+"over the network filesystems", this is a big win!  
 
 ### No more success result booleans
 
@@ -84,14 +84,14 @@ You can read more about it in the
 ## Custom mime-type detection
 
 In V1, looking up mime-types could give performance penalties. In V2, this
-components was extracted into its own package called `league/mime-type-detection`.
+component was extracted into its own package called `league/mime-type-detection`.
 This package allows you to control how a mime-type is resolved for a
 path + file contents combination. This package is shipped by default with
 Flysystem.
 
 ## Customizable visibility conversion
 
-All adapter now provide their own interface to convert visibility
+All adapters now provide their own interface to convert visibility
 input and configuration options to their implementation specific
 permissions. This gives you fine-grained control over your
 security settings.
@@ -101,7 +101,7 @@ security settings.
 In V1, the filesystem protected against path traversals and weird whitespace in
 paths. For V2, this was extracted into its own internal component, allowing you
 to replace this behavior entirely, or add your own special verification on top
-the traversal protection. 
+of the traversal protection. 
 
 ## Plugins are removed
 

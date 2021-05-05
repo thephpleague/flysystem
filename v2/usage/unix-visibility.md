@@ -5,7 +5,7 @@ permalink: /v2/docs/usage/unix-visibility/
 ---
 
 For a number of adapters, the visibility settings are based on unix-style
-permissions. Since everyone of these are the same, a general implementation
+permissions. Since every one of these are the same, a general implementation
 is provided in Flysystem.
 
 At the base of this module is the

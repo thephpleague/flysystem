@@ -20,7 +20,7 @@ cases, they are even implemented as an afterthought. These filesystems
 act more like key-value stores. This causes Flysystem to have to make
 a choice. Either every cloud storage will have to create directories,
 or directories do not _have to be created_ for any of them. Flysystem
-choose to do that latter. Directories are second grade citizen within
+chose to do the latter. Directories are second grade citizens within
 the package.
 
 This means a couple of things:
@@ -32,7 +32,7 @@ This means a couple of things:
 Most adapters allow you to create directories. For others, they simply
 do not exist. Any type of Filesystem that's commonly used to display
 files to users (Local/S3/etc) all have directory creation support. Each
-directory that doesn't will have to list that in their respective
+adapter that doesn't will have to list that in their respective
 documentation.
 
 ## Directory listings are backed by generators
