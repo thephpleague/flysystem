@@ -8,7 +8,7 @@ In case you have special requirements, or your filesystem of choice is
 not available, you can always create your own adapter.
 
 Every adapter must implement the `League\Flysystem\FilesystemAdapter`
-interface. This interface defines all the required method and lists which
+interface. This interface defines all the required methods and lists which
 exceptions should be thrown in case of a failure.
 
 ## Testing your adapter

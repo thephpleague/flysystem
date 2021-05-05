@@ -30,7 +30,7 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
 
 ### Project ID
-Every project in Gitlab has its own Project ID. It can be found at to top of the frontpage of your repository. [See](https://stackoverflow.com/questions/39559689/where-do-i-find-the-project-id-for-the-gitlab-api#answer-53126068)
+Every project in Gitlab has its own Project ID. It can be found at the top of the frontpage of your repository. [See](https://stackoverflow.com/questions/39559689/where-do-i-find-the-project-id-for-the-gitlab-api#answer-53126068)
 
 ### Base URL
 This will be the URL where you host your gitlab server (e.g. https://gitlab.com)

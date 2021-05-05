@@ -12,7 +12,7 @@ for the use-case.
 
 The `League\Flysystem\FilesystemOperator` interface represents the outside
 boundary. It defines how you should interact with Flysystem. This layer
-providers common functionality that the underlying filesystem adapters
+provides common functionality that the underlying filesystem adapters
 rely on.
 
 The `League\Flysystem\Filesystem` (the main filesystem operator implementation)
@@ -22,7 +22,7 @@ the same contract and behavior specifications (enforced by tests).
 
 ## Consuming Flysystem
 
-The `League\Flysystem\FilesystemOperator` interface represents is most complete
+The `League\Flysystem\FilesystemOperator` interface represents the most complete
 interface to integrate with. You can distinguish between _reads_ and _writes_ by
 hinting on the underlying interfaces:
 

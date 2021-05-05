@@ -6,14 +6,14 @@ permalink: /v2/docs/advanced/upgrade-to-2.0.0/
 
 Flysystem V1 was released on the 19th of January in 2015. Since then it has maintained full
 backwards compatibility. In order to guarantee that for the years to come, some changes were
-needed. Some functionality needed to be standardized across in order to make behavior more
+needed. Some functionality needed to be standardized in order to make behavior more
 predictable. This meant some functionality needed to be scoped down, some "accidental" features
 were removed.
 
 ### Upgrade your dependencies
 
 Firstly you'll need to upgrade Flysystem itself. You can do this by requiring `^2.0`
-instead of  `^1.0`. The same needs to be done for all the adapter too, in the same action.
+instead of  `^1.0`. The same needs to be done for all the adapters too, in the same action.
 
 ## Removed functionality.
 
@@ -46,7 +46,7 @@ Plugin | Alternative
 
 When this method was introduced, the `rename` operation didn't move files to new parent
 directory. This behavior was added later. Renaming the operation `move` better reflects
-this behaviour. It's will now also enforce that it _only moves files_, this is the
+this behaviour. It will now also enforce that it _only moves files_, this is the
 only way to be adapter agnostic, which is the main purpose of the library.
 
 ```diff

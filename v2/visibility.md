@@ -15,7 +15,7 @@ fine-grained control over permissions for every adapter.
 
 By default, all the adapters understand a public/private visibility setting. This
 setting is translated to the adapter's own way of interpreting this setting. The 
-interpretation is aimed to be as similar in effect across all adapter. This can,
+interpretation is aimed to be similar in effect across all adapters. This can,
 however, not fit your needs. In this case you can implement your own visibility
 strategy.
 
