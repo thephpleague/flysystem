@@ -33,7 +33,7 @@ jobs:
         phpunit-flags: [ '--coverage-text' ]
         include:
           - php: '8.0'
-            composer-flags: '--ignore-platform-req=php'
+            composer-flags: ''
             phpunit-flags: '--no-coverage'
             upgrade-aws-sdk: 'yes'
           - php: '7.2'
