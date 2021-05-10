@@ -32,7 +32,7 @@ operation.
 ```php
 try {
     $filesystem->write($path, $contents, $config);
-} catch (FilesystemError | UnableToWriteFile $exception) {
+} catch (FilesystemException | UnableToWriteFile $exception) {
     // handle the error
 }
 ```
@@ -48,7 +48,7 @@ param         | description                                   | type
 ```php
 try {
     $filesystem->writeStream($path, $stream, $config);
-} catch (FilesystemError | UnableToWriteFile $exception) {
+} catch (FilesystemException | UnableToWriteFile $exception) {
     // handle the error
 }
 ```
@@ -73,7 +73,7 @@ filesystem) in order to keep memory usage low.
 ```php
 try {
     $response = $filesystem->read($path);
-} catch (FilesystemError | UnableToReadFile $exception) {
+} catch (FilesystemException | UnableToReadFile $exception) {
     // handle the error
 }
 ```
@@ -88,7 +88,7 @@ param         | description                                   | type
 ```php
 try {
     $response = $filesystem->readStream($path);
-} catch (FilesystemError | UnableToReadFile $exception) {
+} catch (FilesystemException | UnableToReadFile $exception) {
     // handle the error
 }
 ```
@@ -107,7 +107,7 @@ param         | description                                   | type
 ```php
 try {
     $filesystem->delete($path);
-} catch (FilesystemError | UnableToDeleteFile $exception) {
+} catch (FilesystemException | UnableToDeleteFile $exception) {
     // handle the error
 }
 ```
@@ -121,7 +121,7 @@ param         | description                                   | type
 ```php
 try {
     $filesystem->deleteDirectory($path);
-} catch (FilesystemError | UnableToDeleteDirectory $exception) {
+} catch (FilesystemException | UnableToDeleteDirectory $exception) {
     // handle the error
 }
 ```
@@ -150,7 +150,7 @@ try {
             // handle the directory
         }
     }
-} catch (FilesystemError $exception) {
+} catch (FilesystemException $exception) {
     // handle the error
 }
 ```
@@ -170,7 +170,7 @@ param         | description                                   | type
 ```php
 try {
     $fileExists = $filesystem->fileExists($path);
-} catch (FilesystemError | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
     // handle the error
 }
 ```
@@ -185,7 +185,7 @@ param         | description                                   | type
 ```php
 try {
     $lastModified = $filesystem->lastModified($path);
-} catch (FilesystemError | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
     // handle the error
 }
 ```
@@ -200,7 +200,7 @@ param          | description                                   | type
 ```php
 try {
     $mimeType = $filesystem->mimeType($path);
-} catch (FilesystemError | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
     // handle the error
 }
 ```
@@ -216,7 +216,7 @@ param          | description                                   | type
 ```php
 try {
     $fileSize = $filesystem->fileSize($path);
-} catch (FilesystemError | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
     // handle the error
 }
 ```
@@ -231,7 +231,7 @@ param          | description                                   | type
 ```php
 try {
     $visibility = $filesystem->visibility($path);
-} catch (FilesystemError | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
     // handle the error
 }
 ```
@@ -250,7 +250,7 @@ param          | description                                   | type
 ```php
 try {
     $filesystem->setVisibility($path, $visibility);
-} catch (FilesystemError | UnableToSetVisibility $exception) {
+} catch (FilesystemException | UnableToSetVisibility $exception) {
     // handle the error
 }
 ```
@@ -269,7 +269,7 @@ param          | description                                   | type
 ```php
 try {
     $filesystem->createDirectory($path, $config);
-} catch (FilesystemError | UnableToCreateDirectory $exception) {
+} catch (FilesystemException | UnableToCreateDirectory $exception) {
     // handle the error
 }
 ```
@@ -292,7 +292,7 @@ always created (if and when needed).
 ```php
 try {
     $filesystem->move($source, $destination, $config);
-} catch (FilesystemError | UnableToMoveFile $exception) {
+} catch (FilesystemException | UnableToMoveFile $exception) {
     // handle the error
 }
 ```
@@ -310,7 +310,7 @@ param          | description                                   | type
 ```php
 try {
     $filesystem->copy($source, $destination, $config);
-} catch (FilesystemError | UnableToCopyFile $exception) {
+} catch (FilesystemException | UnableToCopyFile $exception) {
     // handle the error
 }
 ```
