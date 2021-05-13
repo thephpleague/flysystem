@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - 2.x
+  create:
+    tags:
+      - '*'
+  delete:
+    tags:
+      - '*'
 
 jobs:
   publish_subsplits:
