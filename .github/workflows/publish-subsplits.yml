@@ -25,13 +25,20 @@ jobs:
         with:
           path: bin/splitsh-lite
           key: ${{ runner.os }}-splitsh-lite
-      - name: install split.sh
-        if: steps.splitsh.outputs.cache-hit != 'true'
-        run: bin/install-split.sh
       - uses: frankdejonge/use-github-token@1.0.1
         with:
           authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
           user_name: 'Frank de Jonge'
           user_email: 'info@frenky.net'
-      - name: Publish subsplits
-        run: bin/push.sh
+      - name: Cache splitsh-lite
+        id: splitsh-cache
+        uses: actions/cache@v2
+        with:
+          path: './.splitsh'
+          key: '${{ runner.os }}-splitsh'
+      - uses: frankdejonge/use-subsplit-publish@1.0.0-beta.2
+        with:
+          source-branch: 'main'
+          config-path: './config.subsplit-publish.json'
+          splitsh-path: './.splitsh/splitsh-lite'
+          splitsh-version: 'v1.0.1'
