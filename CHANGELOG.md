@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.7 - 2021-05-13
+
+### Fixed
+
+* [LocalFilesystem] convert windows style paths to unix style paths on listing
+
 ## 2.0.6 - 2021-05-13
 
 ### Fixed
