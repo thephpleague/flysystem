@@ -20,11 +20,6 @@ jobs:
         with:
           fetch-depth: '0'
           persist-credentials: 'false'
-      - uses: actions/cache@v2
-        id: splitsh
-        with:
-          path: bin/splitsh-lite
-          key: ${{ runner.os }}-splitsh-lite
       - uses: frankdejonge/use-github-token@1.0.1
         with:
           authentication: 'frankdejonge:${{ secrets.PERSONAL_ACCESS_TOKEN }}'
