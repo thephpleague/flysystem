@@ -221,7 +221,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
 
             yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(
-                $path,
+                str_replace('\\', '/', $path),
                 $fileInfo->getSize(),
                 $visibility,
                 $lastModified
