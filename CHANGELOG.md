@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.6 - 2021-05-13
+
+### Fixed
+
+* [AsyncAwsS3] do not urlencode CopySource arguments (#1302)
+
 ## 2.0.5 - 2021-04-11
 
 ### Fixed
