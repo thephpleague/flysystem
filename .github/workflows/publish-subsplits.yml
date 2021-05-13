@@ -38,7 +38,7 @@ jobs:
           key: '${{ runner.os }}-splitsh'
       - uses: frankdejonge/use-subsplit-publish@1.0.0-beta.2
         with:
-          source-branch: 'main'
+          source-branch: '2.x'
           config-path: './config.subsplit-publish.json'
           splitsh-path: './.splitsh/splitsh-lite'
           splitsh-version: 'v1.0.1'
