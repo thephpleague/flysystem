@@ -1,0 +1,44 @@
+{
+    "sub-splits": [
+        {
+            "name": "ftp",
+            "directory": "src/Ftp",
+            "target": "git@github.com:thephpleague/flysystem-ftp.git"
+        },
+        {
+            "name": "sftp",
+            "directory": "src/PhpseclibV2",
+            "target": "git@github.com:thephpleague/flysystem-sftp.git"
+        },
+        {
+            "name": "memory",
+            "directory": "src/InMemory",
+            "target": "git@github.com:thephpleague/flysystem-memory.git"
+        },
+        {
+            "name": "ziparchive",
+            "directory": "src/ZipArchive",
+            "target": "git@github.com:thephpleague/flysystem-ziparchive.git"
+        },
+        {
+            "name": "aws-s3-v3",
+            "directory": "src/AwsS3V3",
+            "target": "git@github.com:thephpleague/flysystem-aws-s3-v3.git"
+        },
+        {
+            "name": "async-aws-s3",
+            "directory": "src/AsyncAwsS3",
+            "target": "git@github.com:thephpleague/flysystem-async-aws-s3.git"
+        },
+        {
+            "name": "google-cloud-storage",
+            "directory": "src/GoogleCloudStorage",
+            "target": "git@github.com:thephpleague/flysystem-google-cloud-storage.git"
+        },
+        {
+            "name": "adapter-test-utilities",
+            "directory": "src/AdapterTestUtilities",
+            "target": "git@github.com:thephpleague/flysystem-adapter-test-utilities.git"
+        }
+    ]
+}
