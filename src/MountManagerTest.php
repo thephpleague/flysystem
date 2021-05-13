@@ -7,6 +7,7 @@ use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 use function is_resource;
+use function tmpfile;
 
 /**
  * @group core
@@ -95,15 +96,15 @@ class MountManagerTest extends TestCase
      */
     public function not_being_able_to_stream_write_a_file(): void
     {
+        $handle = tmpfile();
         $this->firstStubAdapter->stageException('writeStream', 'file.txt', UnableToWriteFile::atLocation('file.txt'));
 
         $this->expectException(UnableToWriteFile::class);
 
         try {
-            $handle = tmpfile();
             $this->mountManager->writeStream('first://file.txt', $handle);
         } finally {
-            isset($handle) && is_resource($handle) && fclose($handle);
+            is_resource($handle) && fclose($handle);
         }
     }
 
