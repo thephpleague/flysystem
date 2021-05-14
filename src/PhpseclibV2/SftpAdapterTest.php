@@ -194,6 +194,15 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
         }
     }
 
+    /**
+     * @test
+     */
+    public function list_contents_directory_does_not_exist(): void
+    {
+        $contents = $this->adapter()->listContents('/does_not_exist', false);
+        $this->assertCount(0, iterator_to_array($contents));
+    }
+
     private static function connectionProvider(): ConnectionProvider
     {
         if ( ! static::$connectionProvider instanceof ConnectionProvider) {
