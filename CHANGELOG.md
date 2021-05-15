@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.0.8 - 2021-05-15
+
+### Fixed
+
+* [SFTP] Don't fail listing contents when a directory does not exist (#1301)
+
 ## 2.0.7 - 2021-05-13
 
 ### Fixed
