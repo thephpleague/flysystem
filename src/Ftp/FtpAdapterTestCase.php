@@ -47,11 +47,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function reconnecting_after_failure(): void
     {
-        $adapter = $this->adapter();
-        static::$connectivityChecker->failNextCall();
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            static::$connectivityChecker->failNextCall();
 
-        $contents = iterator_to_array($adapter->listContents('', false));
-        $this->assertIsArray($contents);
+            $contents = iterator_to_array($adapter->listContents('', false));
+            $this->assertIsArray($contents);
+        });
     }
 
     /**
@@ -60,7 +62,9 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function failing_to_write_a_file(callable $scenario): void
     {
-        $scenario();
+        $this->runScenario(function () use ($scenario) {
+            $scenario();
+        });
 
         $this->expectException(UnableToWriteFile::class);
 
