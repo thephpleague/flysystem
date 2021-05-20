@@ -21,6 +21,7 @@ class DirectoryAttributesTest extends TestCase
         $this->assertNull($attrs->visibility());
     }
 
+
     /**
      * @test
      */
@@ -37,6 +38,15 @@ class DirectoryAttributesTest extends TestCase
     {
         $attrs = new DirectoryAttributes('some/path', null, $timestamp = time());
         $this->assertEquals($timestamp, $attrs->lastModified());
+    }
+
+    /**
+     * @test
+     */
+    public function exposing_extra_meta_data(): void
+    {
+        $attrs = new DirectoryAttributes('some/path', null, null, ['key' => 'value']);
+        $this->assertEquals(['key' => 'value'], $attrs->extraMetadata());
     }
 
     /**

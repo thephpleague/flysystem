@@ -28,11 +28,17 @@ class DirectoryAttributes implements StorageAttributes
      */
     private $lastModified;
 
-    public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null)
+    /**
+     * @var array
+     */
+    private $extraMetadata;
+
+    public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null, array $extraMetadata = [])
     {
         $this->path = $path;
         $this->visibility = $visibility;
         $this->lastModified = $lastModified;
+        $this->extraMetadata = $extraMetadata;
     }
 
     public function path(): string
@@ -53,6 +59,11 @@ class DirectoryAttributes implements StorageAttributes
     public function lastModified(): ?int
     {
         return $this->lastModified;
+    }
+
+    public function extraMetadata(): array
+    {
+        return $this->extraMetadata;
     }
 
     public function isFile(): bool
@@ -78,7 +89,8 @@ class DirectoryAttributes implements StorageAttributes
         return new DirectoryAttributes(
             $attributes[StorageAttributes::ATTRIBUTE_PATH],
             $attributes[StorageAttributes::ATTRIBUTE_VISIBILITY] ?? null,
-            $attributes[StorageAttributes::ATTRIBUTE_LAST_MODIFIED] ?? null
+            $attributes[StorageAttributes::ATTRIBUTE_LAST_MODIFIED] ?? null,
+            $attributes[StorageAttributes::ATTRIBUTE_EXTRA_METADATA] ?? [],
         );
     }
 
@@ -92,6 +104,7 @@ class DirectoryAttributes implements StorageAttributes
             StorageAttributes::ATTRIBUTE_PATH => $this->path,
             StorageAttributes::ATTRIBUTE_VISIBILITY => $this->visibility,
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => $this->lastModified,
+            StorageAttributes::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
         ];
     }
 }
