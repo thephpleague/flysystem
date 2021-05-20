@@ -90,7 +90,7 @@ class DirectoryAttributes implements StorageAttributes
             $attributes[StorageAttributes::ATTRIBUTE_PATH],
             $attributes[StorageAttributes::ATTRIBUTE_VISIBILITY] ?? null,
             $attributes[StorageAttributes::ATTRIBUTE_LAST_MODIFIED] ?? null,
-            $attributes[StorageAttributes::ATTRIBUTE_EXTRA_METADATA] ?? [],
+            $attributes[StorageAttributes::ATTRIBUTE_EXTRA_METADATA] ?? []
         );
     }
 
