@@ -21,7 +21,6 @@ class DirectoryAttributesTest extends TestCase
         $this->assertNull($attrs->visibility());
     }
 
-
     /**
      * @test
      */
