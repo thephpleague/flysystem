@@ -11,6 +11,9 @@ use RuntimeException;
 
 use function time;
 
+/**
+ * @group core
+ */
 class FileAttributesTest extends TestCase
 {
     /**

@@ -9,6 +9,9 @@ use IteratorAggregate;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group core
+ */
 class FilesystemTest extends TestCase
 {
     const ROOT = __DIR__ . '/../test_files/test-root';

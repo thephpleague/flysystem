@@ -6,6 +6,9 @@ namespace League\Flysystem;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group core
+ */
 class DirectoryAttributesTest extends TestCase
 {
     /**

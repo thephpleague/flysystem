@@ -7,6 +7,9 @@ namespace League\Flysystem;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group core
+ */
 class DirectoryListingTest extends TestCase
 {
     /**
