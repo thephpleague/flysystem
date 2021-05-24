@@ -143,8 +143,8 @@ class AwsS3V3Adapter implements FilesystemAdapter
     private function upload(string $path, $body, Config $config): void
     {
         $key = $this->prefixer->prefixPath($path);
-        $acl = $this->determineAcl($config);
         $options = $this->createOptionsFromConfig($config);
+        $acl = $options['ACL'] ?? $this->determineAcl($config);
         $shouldDetermineMimetype = $body !== '' && ! array_key_exists('ContentType', $options);
 
         if ($shouldDetermineMimetype && $mimeType = $this->mimeTypeDetector->detectMimeType($key, $body)) {

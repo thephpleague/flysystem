@@ -13,6 +13,7 @@ use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
@@ -20,6 +21,8 @@ use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use RuntimeException;
+
+use function getenv;
 
 /**
  * @group aws
@@ -48,7 +51,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     public static function setUpBeforeClass(): void
     {
-        static::$adapterPrefix = 'ci/' . bin2hex(random_bytes(10));
+        static::$adapterPrefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: 'ci/' . bin2hex(random_bytes(10));
     }
 
     protected function tearDown(): void
@@ -276,12 +279,30 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->assertSame('text/plain+special', $mimeTypeDestination);
     }
 
+    /**
+     * @test
+     */
+    public function setting_acl_via_options(): void
+    {
+        $adapter = $this->adapter();
+        $prefixer = new PathPrefixer(static::$adapterPrefix);
+        $prefixedPath = $prefixer->prefixPath('path.txt');
+
+        $adapter->write('path.txt', 'contents', new Config(['ACL' => 'bucket-owner-full-control']));
+        $arguments = ['Bucket' => getenv('FLYSYSTEM_AWS_S3_BUCKET'), 'Key' => $prefixedPath];
+        $command = static::$s3Client->getCommand('GetObjectAcl', $arguments);
+        $response = static::$s3Client->execute($command)->toArray();
+        $permission = $response['Grants'][0]['Permission'];
+
+        self::assertEquals('FULL_CONTROL', $permission);
+    }
+
     protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
     {
         static::$stubS3Client = new S3ClientStub(static::s3Client());
         /** @var string $bucket */
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
-        $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
+        $prefix = static::$adapterPrefix;
 
         return new AwsS3V3Adapter(static::$stubS3Client, $bucket, $prefix, null, null, $options, $streaming);
     }
