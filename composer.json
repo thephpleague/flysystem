@@ -31,7 +31,8 @@
         "friendsofphp/php-cs-fixer": "^2.16",
         "google/cloud-storage": "^1.23",
         "async-aws/s3": "^1.5",
-        "async-aws/simple-s3": "^1.0"
+        "async-aws/simple-s3": "^1.0",
+        "sabre/dav": "^4.1"
     },
     "conflict": {
         "guzzlehttp/ringphp": "<1.1.1"

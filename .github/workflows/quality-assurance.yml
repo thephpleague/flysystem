@@ -41,7 +41,7 @@ jobs:
             phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v2
-      - run: docker-compose -f test_files/docker-compose.yml up -d
+      - run: docker-compose -f docker-compose.yml up -d
       - name: Start an SSH Agent
         uses: frankdejonge/use-ssh-agent@1.0.0
       - run: chmod 0400 ./test_files/sftp/id_*

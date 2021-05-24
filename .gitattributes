@@ -9,6 +9,7 @@
 /.travis.yml export-ignore
 /.scrutinizer.yml export-ignore
 /CHANGELOG.md export-ignore
+/docker-composer.yml export-ignore
 /README.md export-ignore
 /.github export-ignore
 /src/AsyncAwsS3 export-ignore

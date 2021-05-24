@@ -1,15 +1,24 @@
 ---
 version: "3"
 services:
+  webdav:
+    image: bytemark/webdav
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      AUTH_TYPE: Digest
+      USERNAME: alice
+      PASSWORD: secret1234
   sftp:
     container_name: sftp
     restart: always
     image: atmoz/sftp
     volumes:
-      - ./sftp/users.conf:/etc/sftp/users.conf
-      - ./sftp/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
-      - ./sftp/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-      - ./sftp/id_rsa.pub:/home/bar/.ssh/keys/id_rsa.pub
+      - ./test_files/sftp/users.conf:/etc/sftp/users.conf
+      - ./test_files/sftp/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+      - ./test_files/sftp/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+      - ./test_files/sftp/id_rsa.pub:/home/bar/.ssh/keys/id_rsa.pub
     ports:
       - "2222:22"
   ftp:
