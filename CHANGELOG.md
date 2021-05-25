@@ -1,5 +1,15 @@
 # Version 2.x Changelog
 
+## 2.1.0 - 2021-05-25
+
+### Added
+
+* [Core] the DirectoryAttributes now have an `extraMetadata` like files do.
+
+### Fixed
+
+* [AwsS3V3] Allow the ACL config option to take precedence over the visibility key.
+
 ## 2.0.8 - 2021-05-15
 
 ### Fixed
