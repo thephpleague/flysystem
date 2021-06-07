@@ -185,17 +185,17 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
-        $body = $this->readObject($path, false);
+        $body = $this->readObject($path, false, $config);
 
         return (string) $body->getContents();
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         /** @var resource $resource */
-        $resource = $this->readObject($path, true)->detach();
+        $resource = $this->readObject($path, true, $config)->detach();
 
         return $resource;
     }
@@ -413,15 +413,22 @@ class AwsS3V3Adapter implements FilesystemAdapter
         }
     }
 
-    private function readObject(string $path, bool $wantsStream): StreamInterface
+    private function readObject(string $path, bool $wantsStream, Config $config): StreamInterface
     {
-        $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $options = $this->createOptionsFromConfig($config);
 
         if ($wantsStream && $this->streamReads && ! isset($this->options['@http']['stream'])) {
             $options['@http']['stream'] = true;
         }
 
-        $command = $this->client->getCommand('GetObject', $options + $this->options);
+        $command = $this->client->getCommand('GetObject', array_merge(
+            [
+                'Bucket' => $this->bucket,
+                'Key' => $this->prefixer->prefixPath($path)
+            ],
+            $this->options,
+            $options
+        ));
 
         try {
             return $this->client->execute($command)->get('Body');

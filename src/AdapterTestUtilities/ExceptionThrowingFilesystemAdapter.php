@@ -66,18 +66,18 @@ class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
         $this->adapter->writeStream($path, $contents, $config);
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $this->throwStagedException(__METHOD__, $path);
 
-        return $this->adapter->read($path);
+        return $this->adapter->read($path, $config);
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $this->throwStagedException(__METHOD__, $path);
 
-        return $this->adapter->readStream($path);
+        return $this->adapter->readStream($path, $config);
     }
 
     public function delete(string $path): void

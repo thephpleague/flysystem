@@ -547,7 +547,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('path.txt', 'contents', new Config());
-        $contents = $adapter->read('path.txt');
+        $contents = $adapter->read('path.txt', new Config());
         $this->assertEquals('contents', $contents);
     }
 
@@ -558,7 +558,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         $this->expectException(UnableToReadFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
-        $adapter->read('path.txt');
+        $adapter->read('path.txt', new Config());
     }
 
     /**
@@ -568,7 +568,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
         $adapter->write('path.txt', 'contents', new Config());
-        $contents = $adapter->readStream('path.txt');
+        $contents = $adapter->readStream('path.txt', new Config());
         $this->assertIsResource($contents);
         $fileContents = stream_get_contents($contents);
         fclose($contents);
@@ -582,7 +582,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         $this->expectException(UnableToReadFile::class);
         $adapter = new LocalFilesystemAdapter(static::ROOT);
-        $adapter->readStream('path.txt');
+        $adapter->readStream('path.txt', new Config());
     }
 
     /* //////////////////////

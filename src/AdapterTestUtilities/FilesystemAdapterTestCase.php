@@ -125,7 +125,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
             $adapter->write('path.txt', 'contents', new Config());
             $fileExists = $adapter->fileExists('path.txt');
-            $contents = $adapter->read('path.txt');
+            $contents = $adapter->read('path.txt', new Config());
 
             $this->assertTrue($fileExists);
             $this->assertEquals('contents', $contents);
@@ -158,7 +158,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $adapter = $this->adapter();
 
             $adapter->write($path, 'contents', new Config());
-            $contents = $adapter->read($path);
+            $contents = $adapter->read($path, new Config());
 
             $this->assertEquals('contents', $contents);
         });
@@ -196,7 +196,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
             $this->assertTrue($fileExists);
 
-            $contents = $adapter->read('path.txt');
+            $contents = $adapter->read('path.txt', new Config());
             $this->assertEquals('', $contents);
         });
     }
@@ -209,7 +209,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
         $this->runScenario(function () {
-            $contents = $this->adapter()->read('path.txt');
+            $contents = $this->adapter()->read('path.txt', new Config());
 
             $this->assertEquals('contents', $contents);
         });
@@ -223,7 +223,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
         $this->runScenario(function () {
-            $readStream = $this->adapter()->readStream('path.txt');
+            $readStream = $this->adapter()->readStream('path.txt', new Config());
             $contents = stream_get_contents($readStream);
 
             $this->assertIsResource($readStream);
@@ -243,7 +243,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
             $adapter->write('path.txt', 'new contents', new Config(['visibility' => Visibility::PRIVATE]));
 
-            $contents = $adapter->read('path.txt');
+            $contents = $adapter->read('path.txt', new Config());
             $this->assertEquals('new contents', $contents);
             $visibility = $adapter->visibility('path.txt')->visibility();
             $this->assertEquals(Visibility::PRIVATE, $visibility);
@@ -488,7 +488,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             if (is_resource($writeStream)) {
                 fclose($writeStream);
             };
-            $readStream = $adapter->readStream('path.txt');
+            $readStream = $adapter->readStream('path.txt', new Config());
 
             $this->assertIsResource($readStream);
             $contents = stream_get_contents($readStream);
@@ -527,7 +527,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $this->assertTrue($adapter->fileExists('source.txt'));
             $this->assertTrue($adapter->fileExists('destination.txt'));
             $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
-            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt', new Config()));
         });
     }
 
@@ -549,7 +549,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $this->assertTrue($adapter->fileExists('source.txt'));
             $this->assertTrue($adapter->fileExists('destination.txt'));
             $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
-            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt', new Config()));
         });
     }
 
@@ -575,7 +575,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
                 'After moving, a file should be present at the new location.'
             );
             $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
-            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt', new Config()));
         });
     }
 
@@ -587,7 +587,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->expectException(UnableToReadFile::class);
 
         $this->runScenario(function () {
-            $this->adapter()->read('path.txt');
+            $this->adapter()->read('path.txt', new Config());
         });
     }
 
@@ -656,7 +656,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToReadFile::class);
 
-        $this->adapter()->readStream('something.txt');
+        $this->adapter()->readStream('something.txt', new Config());
     }
 
     /**
@@ -666,7 +666,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToReadFile::class);
 
-        $this->adapter()->readStream('something.txt');
+        $this->adapter()->readStream('something.txt', new Config());
     }
 
     /**
@@ -702,7 +702,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $adapter->write('new-path.txt', 'contents', new Config());
 
             $adapter->copy('path.txt', 'new-path.txt', new Config());
-            $contents = $adapter->read('new-path.txt');
+            $contents = $adapter->read('new-path.txt', new Config());
 
             $this->assertEquals('new contents', $contents);
         });

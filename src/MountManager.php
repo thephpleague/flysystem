@@ -35,25 +35,25 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    public function read(string $location): string
+    public function read(string $location, array $config = []): string
     {
         /** @var FilesystemOperator $filesystem */
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
-            return $filesystem->read($path);
+            return $filesystem->read($path, $config);
         } catch (UnableToReadFile $exception) {
             throw UnableToReadFile::fromLocation($location, $exception->reason(), $exception);
         }
     }
 
-    public function readStream(string $location)
+    public function readStream(string $location, array $config = [])
     {
         /** @var FilesystemOperator $filesystem */
         [$filesystem, $path] = $this->determineFilesystemAndPath($location);
 
         try {
-            return $filesystem->readStream($path);
+            return $filesystem->readStream($path, $config);
         } catch (UnableToReadFile $exception) {
             throw UnableToReadFile::fromLocation($location, $exception->reason(), $exception);
         }
@@ -220,7 +220,8 @@ class MountManager implements FilesystemOperator
             $destinationFilesystem,
             $destinationPath,
             $source,
-            $destination
+            $destination,
+            $config
         );
     }
 
@@ -297,11 +298,12 @@ class MountManager implements FilesystemOperator
         FilesystemOperator $destinationFilesystem,
         string $destinationPath,
         string $source,
-        string $destination
+        string $destination,
+        array $config = []
     ): void {
         try {
             $visibility = $visibility ?? $sourceFilesystem->visibility($sourcePath);
-            $stream = $sourceFilesystem->readStream($sourcePath);
+            $stream = $sourceFilesystem->readStream($sourcePath, $config);
             $destinationFilesystem->writeStream($destinationPath, $stream, compact('visibility'));
         } catch (UnableToRetrieveMetadata | UnableToReadFile | UnableToWriteFile $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);

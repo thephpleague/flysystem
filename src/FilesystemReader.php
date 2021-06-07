@@ -23,7 +23,7 @@ interface FilesystemReader
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
-    public function read(string $location): string;
+    public function read(string $location, array $config = []): string;
 
     /**
      * @return resource
@@ -31,7 +31,7 @@ interface FilesystemReader
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
-    public function readStream(string $location);
+    public function readStream(string $location, array $config = []);
 
     /**
      * @return DirectoryListing<StorageAttributes>

@@ -233,7 +233,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming));
         $this->givenWeHaveAnExistingFile('path.txt');
 
-        $resource = $adapter->readStream('path.txt');
+        $resource = $adapter->readStream('path.txt', new Config());
         $metadata = stream_get_meta_data($resource);
         fclose($resource);
 
@@ -255,7 +255,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming, ['@http' => ['stream' => false]]));
         $this->givenWeHaveAnExistingFile('path.txt');
 
-        $resource = $adapter->readStream('path.txt');
+        $resource = $adapter->readStream('path.txt', new Config());
         $metadata = stream_get_meta_data($resource);
         fclose($resource);
 

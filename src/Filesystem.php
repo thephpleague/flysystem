@@ -57,14 +57,14 @@ class Filesystem implements FilesystemOperator
         );
     }
 
-    public function read(string $location): string
+    public function read(string $location, array $config = []): string
     {
-        return $this->adapter->read($this->pathNormalizer->normalizePath($location));
+        return $this->adapter->read($this->pathNormalizer->normalizePath($location), $this->config->extend($config));
     }
 
-    public function readStream(string $location)
+    public function readStream(string $location, array $config = [])
     {
-        return $this->adapter->readStream($this->pathNormalizer->normalizePath($location));
+        return $this->adapter->readStream($this->pathNormalizer->normalizePath($location), $this->config->extend($config));
     }
 
     public function delete(string $location): void

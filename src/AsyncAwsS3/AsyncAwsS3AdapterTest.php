@@ -211,7 +211,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
         $adapter = $this->useAdapter($this->createFilesystemAdapter());
         $this->givenWeHaveAnExistingFile('path.txt');
 
-        $resource = $adapter->readStream('path.txt');
+        $resource = $adapter->readStream('path.txt', new Config());
         $metadata = stream_get_meta_data($resource);
         fclose($resource);
 

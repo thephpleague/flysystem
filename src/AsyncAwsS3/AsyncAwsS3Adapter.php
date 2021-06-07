@@ -136,16 +136,16 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
-        $body = $this->readObject($path);
+        $body = $this->readObject($path, $config);
 
         return $body->getContentAsString();
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
-        $body = $this->readObject($path);
+        $body = $this->readObject($path, $config);
 
         return $body->getContentAsResource();
     }
@@ -449,12 +449,17 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
     }
 
-    private function readObject(string $path): ResultStream
+    private function readObject(string $path, Config $config): ResultStream
     {
-        $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
 
+        $options = $this->createOptionsFromConfig($config);
         try {
-            return $this->client->getObject($options)->getBody();
+            return $this->client->getObject(array_merge($options,
+                [
+                    'Bucket' => $this->bucket,
+                    'Key' => $this->prefixer->prefixPath($path)
+                ]
+            ))->getBody();
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }

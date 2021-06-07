@@ -62,7 +62,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $this->write($path, (string) stream_get_contents($contents), $config);
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $path = $this->preparePath($path);
 
@@ -73,7 +73,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         return $this->files[$path]->read();
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $path = $this->preparePath($path);
 

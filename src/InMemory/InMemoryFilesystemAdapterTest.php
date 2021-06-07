@@ -106,7 +106,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     {
         $handle = stream_with_contents('contents');
         $this->adapter()->writeStream(self::PATH, $handle, new Config());
-        $contents = $this->adapter()->read(self::PATH);
+        $contents = $this->adapter()->read(self::PATH, new Config());
         $this->assertEquals('contents', $contents);
     }
 
@@ -116,7 +116,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function reading_a_stream(): void
     {
         $this->adapter()->write(self::PATH, 'contents', new Config());
-        $contents = $this->adapter()->readStream(self::PATH);
+        $contents = $this->adapter()->readStream(self::PATH, new Config());
         $this->assertEquals('contents', stream_get_contents($contents));
         fclose($contents);
     }
@@ -127,7 +127,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function reading_a_non_existing_file(): void
     {
         $this->expectException(UnableToReadFile::class);
-        $this->adapter()->read('path.txt');
+        $this->adapter()->read('path.txt', new Config());
     }
 
     /**
@@ -136,7 +136,7 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function stream_reading_a_non_existing_file(): void
     {
         $this->expectException(UnableToReadFile::class);
-        $this->adapter()->readStream('path.txt');
+        $this->adapter()->readStream('path.txt', new Config());
     }
 
     /**

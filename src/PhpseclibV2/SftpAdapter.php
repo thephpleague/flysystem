@@ -141,7 +141,7 @@ class SftpAdapter implements FilesystemAdapter
         }
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
@@ -154,7 +154,7 @@ class SftpAdapter implements FilesystemAdapter
         return $contents;
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
@@ -223,7 +223,7 @@ class SftpAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = $this->read($path);
+            $contents = $this->read($path, new Config());
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
@@ -321,7 +321,7 @@ class SftpAdapter implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            $readStream = $this->readStream($source);
+            $readStream = $this->readStream($source, $config);
             $visibility = $this->visibility($source)->visibility();
             $this->writeStream($destination, $readStream, new Config(compact('visibility')));
         } catch (Throwable $exception) {

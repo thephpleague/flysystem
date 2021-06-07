@@ -257,7 +257,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
@@ -270,7 +270,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return $contents;
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();

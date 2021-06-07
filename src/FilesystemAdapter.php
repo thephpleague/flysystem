@@ -29,7 +29,7 @@ interface FilesystemAdapter
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
-    public function read(string $path): string;
+    public function read(string $path, Config $config): string;
 
     /**
      * @return resource
@@ -37,7 +37,7 @@ interface FilesystemAdapter
      * @throws UnableToReadFile
      * @throws FilesystemException
      */
-    public function readStream(string $path);
+    public function readStream(string $path, Config $config);
 
     /**
      * @throws UnableToDeleteFile

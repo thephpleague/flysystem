@@ -92,7 +92,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         }
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
 
@@ -103,7 +103,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         }
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
 

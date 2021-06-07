@@ -97,7 +97,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         $this->write($path, $contents, $config);
     }
 
-    public function read(string $path): string
+    public function read(string $path, Config $config): string
     {
         $archive = $this->zipArchiveProvider->createZipArchive();
         $contents = $archive->getFromName($this->pathPrefixer->prefixPath($path));
@@ -111,7 +111,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         return $contents;
     }
 
-    public function readStream(string $path)
+    public function readStream(string $path, Config $config)
     {
         $archive = $this->zipArchiveProvider->createZipArchive();
         $resource = $archive->getStream($this->pathPrefixer->prefixPath($path));
@@ -220,7 +220,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = $this->read($path);
+            $contents = $this->read($path, new Config());
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
@@ -335,7 +335,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            $readStream = $this->readStream($source);
+            $readStream = $this->readStream($source, $config);
             $this->writeStream($destination, $readStream, $config);
         } catch (Throwable $exception) {
             if (isset($readStream)) {

@@ -80,7 +80,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToReadFile::class);
 
-        $adapter->read('not-gonna-happen');
+        $adapter->read('not-gonna-happen', new Config());
     }
 
     /**
@@ -92,7 +92,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToReadFile::class);
 
-        $adapter->readStream('not-gonna-happen');
+        $adapter->readStream('not-gonna-happen', new Config());
     }
 
     /**
