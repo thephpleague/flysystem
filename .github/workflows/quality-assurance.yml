@@ -62,5 +62,6 @@ jobs:
       - run: vendor/bin/phpstan analyse -l 6 src
         if: ${{ matrix.php == '7.4' }}
       - run: vendor/bin/php-cs-fixer fix --dry-run
+        continue-on-error: true
         if: ${{ matrix.php == '7.4' }}
 
