@@ -407,4 +407,55 @@ class MountManagerTest extends TestCase
 
         $this->mountManager->read('unknown://location.txt');
     }
+
+    /**
+     * @test
+     */
+    public function mount_filesystem(): void
+    {
+        $this->mountManager = new MountManager();
+        $this->mountManager->mountFilesystem('first', new Filesystem($this->firstStubAdapter));
+        $this->mountManager->mountFilesystem('second', new Filesystem($this->secondStubAdapter));
+
+        $this->firstFilesystem->write('location.txt', 'contents');
+        $this->secondFilesystem->write('location.txt', 'contents2');
+
+        $contents = $this->mountManager->read('first://location.txt');
+        $this->assertEquals('contents', $contents);
+
+        $contents = $this->mountManager->read('second://location.txt');
+        $this->assertEquals('contents2', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function has_filesystem(): void
+    {
+        $this->mountManager = new MountManager();
+        $this->mountManager->mountFilesystem('first', new Filesystem($this->firstStubAdapter));
+        $this->mountManager->mountFilesystem('second', new Filesystem($this->secondStubAdapter));
+
+        $this->assertTrue($this->mountManager->hasFilesystem('first'));
+        $this->assertTrue($this->mountManager->hasFilesystem('second'));
+        $this->assertFalse($this->mountManager->hasFilesystem('third'));
+    }
+
+    /**
+     * @test
+     */
+    public function unmount_filesystem(): void
+    {
+        $this->mountManager = new MountManager();
+        $this->mountManager->mountFilesystem('first', new Filesystem($this->firstStubAdapter));
+        $this->mountManager->mountFilesystem('second', new Filesystem($this->secondStubAdapter));
+
+        $this->assertTrue($this->mountManager->hasFilesystem('first'));
+        $this->assertTrue($this->mountManager->hasFilesystem('second'));
+
+        $this->mountManager->unmountFilesystem('second');
+
+        $this->assertTrue($this->mountManager->hasFilesystem('first'));
+        $this->assertFalse($this->mountManager->hasFilesystem('second'));
+    }
 }
