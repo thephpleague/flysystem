@@ -124,6 +124,14 @@ class SftpConnectionProvider implements ConnectionProvider
     private function setupConnection(): SFTP
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
+        $connection->setPreferredAlgorithms([
+            'hostkey' => [
+                'ssh-rsa',
+                'ssh-dss',
+                'rsa-sha2-512',
+                'rsa-sha2-256',
+            ],
+        ]);
         $connection->disableStatCache();
 
         try {

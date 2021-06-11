@@ -11,7 +11,7 @@
         "php": "^7.2 || ^8.0",
         "league/flysystem": "^2.0.0",
         "league/mime-type-detection": "^1.0.0",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib2_compat": "1.0.x-dev"
     },
     "license": "MIT",
     "authors": [
