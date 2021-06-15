@@ -17,6 +17,7 @@ use function str_split;
 /**
  * @group sftp
  * @group sftp-connection
+ * @group phpseclib3
  */
 class SftpConnectionProviderTest extends TestCase
 {
