@@ -18,6 +18,7 @@ use function class_exists;
 
 /**
  * @group sftp
+ * @group phpseclib3
  */
 class SftpAdapterTest extends FilesystemAdapterTestCase
 {
