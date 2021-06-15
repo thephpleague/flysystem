@@ -25,7 +25,7 @@
         "ext-fileinfo": "*",
         "phpunit/phpunit": "^8.5 || ^9.4",
         "phpstan/phpstan": "^0.12.26",
-        "phpseclib/phpseclib": "^2.0 || ^3.0",
+        "phpseclib/phpseclib": "^2.0",
         "aws/aws-sdk-php": "^3.132.4",
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.16",
