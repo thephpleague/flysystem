@@ -49,7 +49,7 @@ trait RetryOnTestException
         }
 
         $firstTryAt = \time();
-        $lastTryAt = $firstTryAt + 20;
+        $lastTryAt = $firstTryAt + 30;
 
         while (time() <= $lastTryAt) {
             try {
