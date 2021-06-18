@@ -1,0 +1,29 @@
+{
+    "name": "league/flysystem-azure-blob-storage",
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\AzureBlobStorage\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "League\\Flysystem\\AzureBlobStorage\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.2",
+        "league/flysystem": "^2.0",
+        "microsoft/azure-storage-blob": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0",
+        "league/flysystem-adapter-test-utilities": "^2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Warxcell",
+            "email": "warxcell@gmail.com"
+        }
+    ]
+}
