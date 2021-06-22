@@ -332,6 +332,11 @@ class FtpAdapter implements FilesystemAdapter
         return $this->fetchMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        return $this->fetchMetadata($path, FileAttributes::ATTRIBUTE_EXTRA_METADATA);
+    }
+
     public function fileSize(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);

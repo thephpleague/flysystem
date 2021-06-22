@@ -377,6 +377,11 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return new FileAttributes($path, null, null, null, $mimeType);
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        throw UnableToRetrieveMetadata::extraMetadata($path, 'No extra metadata available for local files');
+    }
+
     public function lastModified(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
