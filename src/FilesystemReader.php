@@ -68,5 +68,5 @@ interface FilesystemReader
      * @throws UnableToRetrieveMetadata
      * @throws FilesystemException
      */
-    public function extraMetadata(string $path): FileAttributes;
+    public function extraMetadata(string $path): array;
 }
