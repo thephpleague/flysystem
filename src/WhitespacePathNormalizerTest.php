@@ -55,7 +55,6 @@ class WhitespacePathNormalizerTest extends TestCase
             ['example/path/..txt', 'example/path/..txt'],
             ['\\example\\path.txt', 'example/path.txt'],
             ['\\example\\..\\path.txt', 'path.txt'],
-            ["some\0/path.txt", 'some/path.txt'],
         ];
     }
 
@@ -67,6 +66,21 @@ class WhitespacePathNormalizerTest extends TestCase
     {
         $this->expectException(PathTraversalDetected::class);
         $this->normalizer->normalizePath($input);
+    }
+
+    /**
+     * @test
+     * @dataProvider dpFunkyWhitespacePaths
+     */
+    public function rejecting_funky_whitespace(string $path): void
+    {
+        self::expectException(CorruptedPathDetected::class);
+        $this->normalizer->normalizePath($path);
+    }
+
+    public function dpFunkyWhitespacePaths(): iterable
+    {
+        return [["some\0/path.txt"], ["s\x09i.php"]];
     }
 
     /**

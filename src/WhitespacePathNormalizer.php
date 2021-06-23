@@ -9,21 +9,16 @@ class WhitespacePathNormalizer implements PathNormalizer
     public function normalizePath(string $path): string
     {
         $path = str_replace('\\', '/', $path);
-        $path = $this->removeFunkyWhiteSpace($path);
+        $this->rejectFunkyWhiteSpace($path);
 
         return $this->normalizeRelativePath($path);
     }
 
-    private function removeFunkyWhiteSpace(string $path): string
+    private function rejectFunkyWhiteSpace(string $path): void
     {
-        // Remove unprintable characters and invalid unicode characters.
-        // We do this check in a loop, since removing invalid unicode characters
-        // can lead to new characters being created.
-        while (preg_match('#\p{C}+|^\./#u', $path)) {
-            $path = (string) preg_replace('#\p{C}+|^\./#u', '', $path);
+        if (preg_match('#\p{C}+#u', $path)) {
+            throw CorruptedPathDetected::forPath($path);
         }
-
-        return $path;
     }
 
     private function normalizeRelativePath(string $path): string
