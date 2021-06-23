@@ -35,6 +35,23 @@ class UtilTests extends TestCase
         $this->assertEquals(3, Util::contentSize('135'));
     }
 
+    /**
+     * @dataProvider dbCorruptedPath
+     */
+    public function testRejectingPathWithFunkyWhitespace($path)
+    {
+        $this->expectException(CorruptedPathDetected::class);
+        Util::normalizePath($path);
+    }
+
+    /**
+     * @return array
+     */
+    public function dbCorruptedPath()
+    {
+        return [["some\0/path.txt"], ["s\x09i.php"]];
+    }
+
     public function mapProvider()
     {
         return [
@@ -95,7 +112,7 @@ class UtilTests extends TestCase
     }
 
     /**
-     * @dataProvider       invalidPathProvider
+     * @dataProvider invalidPathProvider
      */
     public function testOutsideRootPath($path)
     {
@@ -125,7 +142,6 @@ class UtilTests extends TestCase
             ['example/path/..txt', 'example/path/..txt'],
             ['\\example\\path.txt', 'example/path.txt'],
             ['\\example\\..\\path.txt', 'path.txt'],
-            ["some\0/path.txt", 'some/path.txt'],
         ];
     }
 
