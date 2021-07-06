@@ -166,7 +166,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         try {
             return $this->getMetadata($path);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path);
+            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
         }
     }
 
