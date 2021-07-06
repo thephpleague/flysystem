@@ -58,26 +58,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         $this->maxResultsForContentsListing = $maxResultsForContentsListing;
     }
 
-    private function upload(string $destination, $contents, Config $config): void
-    {
-        try {
-            $options = $this->getOptionsFromConfig($config);
-
-            if (empty($options->getContentType())) {
-                $options->setContentType($this->mimeTypeDetector->detectMimeType($destination, $contents));
-            }
-
-            $this->client->createBlockBlob(
-                $this->container,
-                $destination,
-                $contents,
-                $options
-            );
-        } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($destination, '', $exception);
-        }
-    }
-
     public function copy(string $source, string $destination, Config $config): void
     {
         $this->client->copyBlob($this->container, $destination, $this->container, $source);
@@ -113,7 +93,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep = false): iterable
     {
         if (strlen($path) > 0) {
-            $path = rtrim($path, '/') . '/';
+            $path = rtrim($path, '/').'/';
         }
 
         $options = new ListBlobsOptions();
@@ -147,51 +127,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         } while ($continuationToken instanceof ContinuationToken);
     }
 
-    private function getMetadata($path): FileAttributes
-    {
-        return $this->normalizeBlobProperties(
-            $path,
-            $this->client->getBlobProperties($this->container, $path)->getProperties()
-        );
-    }
-
-    public function getSize($path): FileAttributes
-    {
-        try {
-            return $this->getMetadata($path);
-        } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::fileSize($path, '', $exception);
-        }
-    }
-
-    private function getOptionsFromConfig(Config $config): CreateBlockBlobOptions
-    {
-        $options = $config->get('blobOptions', new CreateBlockBlobOptions());
-        foreach (self::META_OPTIONS as $option) {
-            if (!$config->get($option)) {
-                continue;
-            }
-            call_user_func([$options, "set$option"], $config->get($option));
-        }
-        $mimeType = $config->get('mimetype');
-        if ($mimeType !== null) {
-            $options->setContentType($mimeType);
-        }
-
-        return $options;
-    }
-
-    private function normalizeBlobProperties($path, BlobProperties $properties): FileAttributes
-    {
-        return new FileAttributes(
-            $path,
-            $properties->getContentLength(),
-            null,
-            $properties->getLastModified()->getTimestamp(),
-            $properties->getContentType()
-        );
-    }
-
     public function fileExists(string $path): bool
     {
         try {
@@ -208,13 +143,13 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     {
         try {
             $options = new ListBlobsOptions();
-            $options->setPrefix($path . '/');
+            $options->setPrefix($path.'/');
             $listResults = $this->client->listBlobs($this->container, $options);
             foreach ($listResults->getBlobs() as $blob) {
                 $this->client->deleteBlob($this->container, $blob->getName());
             }
         } catch (Throwable $exception) {
-            UnableToDeleteDirectory::atLocation($path, '', $exception);
+            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
         }
     }
 
@@ -280,5 +215,61 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function writeStream(string $path, $contents, Config $config): void
     {
         $this->upload($path, $contents, $config);
+    }
+
+    private function upload(string $destination, $contents, Config $config): void
+    {
+        try {
+            $options = $this->getOptionsFromConfig($config);
+
+            if (empty($options->getContentType())) {
+                $options->setContentType($this->mimeTypeDetector->detectMimeType($destination, $contents));
+            }
+
+            $this->client->createBlockBlob(
+                $this->container,
+                $destination,
+                $contents,
+                $options
+            );
+        } catch (Throwable $exception) {
+            throw UnableToWriteFile::atLocation($destination, '', $exception);
+        }
+    }
+
+    private function getMetadata($path): FileAttributes
+    {
+        return $this->normalizeBlobProperties(
+            $path,
+            $this->client->getBlobProperties($this->container, $path)->getProperties()
+        );
+    }
+
+    private function getOptionsFromConfig(Config $config): CreateBlockBlobOptions
+    {
+        $options = $config->get('blobOptions', new CreateBlockBlobOptions());
+        foreach (self::META_OPTIONS as $option) {
+            if (!$config->get($option)) {
+                continue;
+            }
+            call_user_func([$options, "set$option"], $config->get($option));
+        }
+        $mimeType = $config->get('mimetype');
+        if ($mimeType !== null) {
+            $options->setContentType($mimeType);
+        }
+
+        return $options;
+    }
+
+    private function normalizeBlobProperties($path, BlobProperties $properties): FileAttributes
+    {
+        return new FileAttributes(
+            $path,
+            $properties->getContentLength(),
+            null,
+            $properties->getLastModified()->getTimestamp(),
+            $properties->getContentType()
+        );
     }
 }
