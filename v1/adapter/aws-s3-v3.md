@@ -17,6 +17,10 @@ title: Aws S3 Adapter V3
 composer require league/flysystem-aws-s3-v3:^1.0
 ```
 
+> **Note:** If you're using this adapter with Laravel 8 and below, make sure to require the 1.x version as shown above.
+> For fresh installations, require this dependency using the `--with-all-dependencies` dependencies flag, otherwise
+> composer will not be able to install it due to a misaligned underlying dependency.
+
 ## Usage
 
 ```php
