@@ -28,7 +28,7 @@ composer require --dev league/flysystem-adapter-test-utilities
 
 Once installed you can use the `League\Flysystem\AdapterTestUtilitiesFilesystemAdapterTestCase`
 class as your adapter test base-class. This will ensure you're covering a lot of
-test scenario's.
+test scenarios.
 
 The test scenario tests your adapter as a black box, this means it's designed to perform
 actual filesystem operations. All of the supported adapters perform actual interactions
