@@ -32,6 +32,7 @@ for which ever storage is right for you.
 ### Third party Adapters
 
 * **[Gitlab](https://github.com/RoyVoetman/flysystem-gitlab-storage)**
+* **[Google Drive (using regular paths)](https://github.com/masbug/flysystem-google-drive-ext)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
 
