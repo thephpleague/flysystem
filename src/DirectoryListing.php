@@ -50,6 +50,17 @@ class DirectoryListing implements IteratorAggregate
         return new DirectoryListing($generator);
     }
 
+    public function sortByPath(): DirectoryListing
+    {
+        $listing = $this->toArray();
+
+        usort($listing, function (StorageAttributes $a, StorageAttributes $b) {
+            return strcasecmp($a->path(), $b->path());
+        });
+
+        return new DirectoryListing($listing);
+    }
+
     /**
      * @return iterable<T>
      */

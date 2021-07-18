@@ -87,6 +87,26 @@ class DirectoryListingTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function sorting_a_directory_listing(): void
+    {
+        $expected = ['/a/a/a.txt', '/b/c/a.txt', '/c/b/a.txt', '/c/c/a.txt'];
+        $listing = new DirectoryListing([
+            new FileAttributes('/b/c/a.txt'),
+            new FileAttributes('/c/c/a.txt'),
+            new FileAttributes('/c/b/a.txt'),
+            new FileAttributes('/a/a/a.txt'),
+        ]);
+
+        $actual = $listing->sortByPath()
+            ->map(function($i) { return $i->path(); })
+            ->toArray();
+
+        self::assertEquals($expected, $actual);
+    }
+
+    /**
      * @return Generator<int>
      */
     private function generateIntegers(int $min, int $max): Generator
