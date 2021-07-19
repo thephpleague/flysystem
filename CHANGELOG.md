@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.2.0 - 2021-07-19
+
+### Added
+
+* [Core] Added sortByPath on the directory listing to allows content listings to be sorted. 
+
 ## 2.1.1 - 2021-06-24
 
 ### Fixed
