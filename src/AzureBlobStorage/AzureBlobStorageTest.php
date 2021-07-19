@@ -20,7 +20,7 @@ class AzureBlobStorageTest extends TestCase
         $connectString = "DefaultEndpointsProtocol=https;AccountName={$accountName};AccountKey={$accountKey}==;EndpointSuffix=core.windows.net";
         $client = BlobRestProxy::createBlobService($connectString);
 
-        return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME);
+        return new AzureBlobStorageAdapter($client, new StaticContainerPathResolver(self::CONTAINER_NAME));
     }
 
     /**
@@ -28,15 +28,17 @@ class AzureBlobStorageTest extends TestCase
      */
     public function overwriting_a_file(): void
     {
-        $this->runScenario(function () {
-            $this->givenWeHaveAnExistingFile('path.txt', 'contents');
-            $adapter = $this->adapter();
+        $this->runScenario(
+            function () {
+                $this->givenWeHaveAnExistingFile('path.txt', 'contents');
+                $adapter = $this->adapter();
 
-            $adapter->write('path.txt', 'new contents', new Config());
+                $adapter->write('path.txt', 'new contents', new Config());
 
-            $contents = $adapter->read('path.txt');
-            $this->assertEquals('new contents', $contents);
-        });
+                $contents = $adapter->read('path.txt');
+                $this->assertEquals('new contents', $contents);
+            }
+        );
     }
 
     /**
