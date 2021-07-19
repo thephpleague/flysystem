@@ -160,7 +160,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
                 $this->client->deleteContainer($resolved->getContainer());
             } else {
                 $options = new ListBlobsOptions();
-                $options->setPrefix($path.'/');
+                $options->setPrefix($resolved->getPath().'/');
                 $listResults = $this->client->listBlobs($resolved->getContainer(), $options);
                 foreach ($listResults->getBlobs() as $blob) {
                     $this->client->deleteBlob($resolved->getContainer(), $blob->getName());
