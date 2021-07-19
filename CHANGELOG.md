@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.1.1 - 2021-06-24
+
+### Fixed
+
+* [Core] Whitespace normalization now no longer strips funky whitespace but throws an exception.
+
 ## 2.1.0 - 2021-05-25
 
 ### Added
