@@ -55,7 +55,7 @@ class DirectoryListing implements IteratorAggregate
         $listing = $this->toArray();
 
         usort($listing, function (StorageAttributes $a, StorageAttributes $b) {
-            return strcasecmp($a->path(), $b->path());
+            return $a->path() <=> $b->path();
         });
 
         return new DirectoryListing($listing);
