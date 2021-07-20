@@ -63,4 +63,10 @@ interface FilesystemReader
      * @throws FilesystemException
      */
     public function visibility(string $path): string;
+
+    /**
+     * @throws UnableToRetrieveMetadata
+     * @throws FilesystemException
+     */
+    public function extraMetadata(string $path): array;
 }

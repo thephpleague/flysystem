@@ -349,6 +349,17 @@ class AwsS3V3Adapter implements FilesystemAdapter
         return $attributes;
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_EXTRA_METADATA);
+
+        if ($attributes->extraMetadata() === null) {
+            throw UnableToRetrieveMetadata::extraMetadata($path);
+        }
+
+        return $attributes;
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $prefix = trim($this->prefixer->prefixPath($path), '/');

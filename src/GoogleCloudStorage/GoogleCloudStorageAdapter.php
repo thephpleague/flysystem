@@ -195,6 +195,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         return $this->fileAttributes($path, 'fileSize');
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        return $this->fileAttributes($path, 'extraMetadata');
+    }
+
     private function fileAttributes(string $path, string $type): FileAttributes
     {
         $exception = null;

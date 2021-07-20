@@ -168,6 +168,17 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         return new FileAttributes($path, $this->files[$path]->fileSize());
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        $path = $this->preparePath($path);
+
+        if (array_key_exists($path, $this->files) === false) {
+            throw UnableToRetrieveMetadata::extraMetadata($path, 'file does not exist');
+        }
+
+        return new FileAttributes($path, null, null, null, null, $this->files[$path]->extraMetadata());
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $prefix = rtrim($this->preparePath($path), '/') . '/';

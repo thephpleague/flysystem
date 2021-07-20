@@ -125,6 +125,11 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->mimeType($this->pathNormalizer->normalizePath($path))->mimeType();
     }
 
+    public function extraMetadata(string $path): array
+    {
+        return $this->adapter->extraMetadata($this->pathNormalizer->normalizePath($path))->extraMetadata();
+    }
+
     public function setVisibility(string $path, string $visibility): void
     {
         $this->adapter->setVisibility($this->pathNormalizer->normalizePath($path), $visibility);
