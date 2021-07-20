@@ -102,10 +102,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep = false): iterable
     {
-        if (strlen($path) > 0) {
-            $path = rtrim($path, '/').'/';
-        }
-
         $resolved = $this->pathResolver->resolve($path);
 
         $options = new ListBlobsOptions();
