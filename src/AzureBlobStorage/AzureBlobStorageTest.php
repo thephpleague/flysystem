@@ -8,6 +8,7 @@ use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase as TestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use function getenv;
 
 class AzureBlobStorageTest extends TestCase
 {
@@ -15,12 +16,9 @@ class AzureBlobStorageTest extends TestCase
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        $accountKey = getenv('FLYSYSTEM_AZURE_ACCOUNT_KEY');
-        $accountName = getenv('FLYSYSTEM_AZURE_ACCOUNT_NAME');
-        $connectString = "DefaultEndpointsProtocol=https;AccountName={$accountName};AccountKey={$accountKey}==;EndpointSuffix=core.windows.net";
-        $client = BlobRestProxy::createBlobService($connectString);
+        $client = BlobRestProxy::createBlobService(getenv('FLYSYSTEM_AZURE_DSN'));
 
-        return new AzureBlobStorageAdapter($client, new StaticContainerPathResolver(self::CONTAINER_NAME));
+        return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME);
     }
 
     /**

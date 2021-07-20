@@ -9,7 +9,6 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToCheckFileExistence;
-use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
@@ -26,7 +25,6 @@ use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
 use function stream_get_contents;
-use function strpos;
 
 class AzureBlobStorageAdapter implements FilesystemAdapter
 {
@@ -40,8 +38,8 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     ];
     /** @var BlobRestProxy */
     private $client;
-    /** @var PathResolverInterface */
-    private $pathResolver;
+    /** @var string */
+    private $container;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
     /** @var int */
@@ -49,33 +47,30 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function __construct(
         BlobRestProxy $client,
-        PathResolverInterface $pathResolver,
+        string $container,
         MimeTypeDetector $mimeTypeDetector = null,
         int $maxResultsForContentsListing = 5000
     ) {
         $this->client = $client;
-        $this->pathResolver = $pathResolver;
+        $this->container = $container;
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->maxResultsForContentsListing = $maxResultsForContentsListing;
     }
 
     public function copy(string $source, string $destination, Config $config): void
     {
-        $sourceResolved = $this->pathResolver->resolve($source);
-        $destinationResolved = $this->pathResolver->resolve($destination);
         $this->client->copyBlob(
-            $destinationResolved->getContainer(),
-            $destinationResolved->getPath(),
-            $sourceResolved->getContainer(),
-            $sourceResolved->getPath()
+            $this->container,
+            $destination,
+            $this->container,
+            $source
         );
     }
 
     public function delete(string $path): void
     {
         try {
-            $resolved = $this->pathResolver->resolve($path);
-            $this->client->deleteBlob($resolved->getContainer(), $resolved->getPath());
+            $this->client->deleteBlob($this->container, $path);
         } catch (Throwable $exception) {
             throw UnableToDeleteFile::atLocation($path, '', $exception);
         }
@@ -91,8 +86,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function readStream($path)
     {
         try {
-            $resolved = $this->pathResolver->resolve($path);
-            $response = $this->client->getBlob($resolved->getContainer(), $resolved->getPath());
+            $response = $this->client->getBlob($this->container, $path);
 
             return $response->getContentStream();
         } catch (Throwable $exception) {
@@ -102,35 +96,26 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep = false): iterable
     {
-        $resolved = $this->pathResolver->resolve($path);
-
         $options = new ListBlobsOptions();
-        $options->setPrefix($resolved->getPath());
+        $options->setPrefix($path);
         $options->setMaxResults($this->maxResultsForContentsListing);
-
-        if (!$deep) {
-            $options->setDelimiter('/');
-        }
+        $options->setDelimiter('/');
 
         do {
-            $response = $this->client->listBlobs($resolved->getContainer(), $options);
-            $continuationToken = $response->getContinuationToken();
+            $response = $this->client->listBlobs($this->container, $options);
 
             foreach ($response->getBlobs() as $blob) {
                 $name = $blob->getName();
-
-                if ($path === '' || strpos($name, $path) === 0) {
-                    yield $this->normalizeBlobProperties($name, $blob->getProperties());
-                }
+                yield $this->normalizeBlobProperties($name, $blob->getProperties());
             }
 
             if (!$deep) {
                 foreach ($response->getBlobPrefixes() as $blobPrefix) {
-                    yield new DirectoryAttributes(
-                        rtrim($blobPrefix->getName(), '/')
-                    );
+                    yield new DirectoryAttributes($blobPrefix->getName());
                 }
             }
+
+            $continuationToken = $response->getContinuationToken();
             $options->setContinuationToken($continuationToken);
         } while ($continuationToken instanceof ContinuationToken);
     }
@@ -150,17 +135,11 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function deleteDirectory(string $path): void
     {
         try {
-            $resolved = $this->pathResolver->resolve($path);
-
-            if ($resolved->getPath() === '') {
-                $this->client->deleteContainer($resolved->getContainer());
-            } else {
-                $options = new ListBlobsOptions();
-                $options->setPrefix($resolved->getPath().'/');
-                $listResults = $this->client->listBlobs($resolved->getContainer(), $options);
-                foreach ($listResults->getBlobs() as $blob) {
-                    $this->client->deleteBlob($resolved->getContainer(), $blob->getName());
-                }
+            $options = new ListBlobsOptions();
+            $options->setPrefix($path);
+            $listResults = $this->client->listBlobs($this->container, $options);
+            foreach ($listResults->getBlobs() as $blob) {
+                $this->client->deleteBlob($this->container, $blob->getName());
             }
         } catch (Throwable $exception) {
             throw UnableToDeleteDirectory::atLocation($path, '', $exception);
@@ -169,12 +148,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        try {
-            $resolved = $this->pathResolver->resolve($path);
-            $this->client->createContainer($resolved->getContainer());
-        } catch (Throwable $exception) {
-            throw UnableToCreateDirectory::dueToFailure($path, $exception);
-        }
     }
 
     public function setVisibility(string $path, string $visibility): void
@@ -240,8 +213,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     private function upload(string $destination, $contents, Config $config): void
     {
         try {
-            $resolved = $this->pathResolver->resolve($destination);
-
             $options = $this->getOptionsFromConfig($config);
 
             if (empty($options->getContentType())) {
@@ -249,8 +220,8 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
             }
 
             $this->client->createBlockBlob(
-                $resolved->getContainer(),
-                $resolved->getPath(),
+                $this->container,
+                $destination,
                 $contents,
                 $options
             );
@@ -261,11 +232,9 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     private function getMetadata(string $path): FileAttributes
     {
-        $resolved = $this->pathResolver->resolve($path);
-
         return $this->normalizeBlobProperties(
             $path,
-            $this->client->getBlobProperties($resolved->getContainer(), $resolved->getPath())->getProperties()
+            $this->client->getBlobProperties($this->container, $path)->getProperties()
         );
     }
 
