@@ -39,6 +39,18 @@ $allPaths = $filesystem->listContents('/some/path')
     ->toArray();
 ```
 
+## Sorting directory listings
+
+In V1 directory listing responses were sorted, in V2 this is not the case by default. To sort
+the listing, call the `sortByPath` method on the directory listing. Sorting directory listings will automatically
+retrieve all the items as opposed to the default generator based responses, which are more memory performant.
+
+```php
+$sortedListing = $filesystem->listContents('/somewhere/over/the/rainbox')
+    ->sortedByPath()
+    ->toArray();
+```
+
 ## Storage attributes
 
 Directory listings contain storage attributes, objects that expose information about
