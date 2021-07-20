@@ -15,6 +15,7 @@ use AsyncAws\SimpleS3\SimpleS3Client;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\EncryptedFilesystemAdapter;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
@@ -31,7 +32,7 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
-class AsyncAwsS3Adapter implements FilesystemAdapter
+class AsyncAwsS3Adapter implements FilesystemAdapter, EncryptedFilesystemAdapter
 {
     /**
      * @var string[]
@@ -114,16 +115,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        try {
-            return $this->client->objectExists(
-                [
-                    'Bucket' => $this->bucket,
-                    'Key' => $this->prefixer->prefixPath($path),
-                ]
-            )->isSuccess();
-        } catch (ClientException $e) {
-            throw UnableToCheckFileExistence::forLocation($path, $e);
-        }
+        return $this->fileExistsImp($path);
+    }
+
+    public function encryptedFileExists(string $path, string $encryptionKey): bool
+    {
+        return $this->fileExistsImp($path, $this->generateEncryptionConfig($encryptionKey));
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -131,9 +128,19 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         $this->upload($path, $contents, $config);
     }
 
+    public function encryptedWrite(string $path, string $contents, Config $config, string $encryptionKey): void
+    {
+        $this->upload($path, $contents, $config, $this->generateEncryptionConfig($encryptionKey));
+    }
+
     public function writeStream(string $path, $contents, Config $config): void
     {
         $this->upload($path, $contents, $config);
+    }
+
+    public function encryptedWriteStream(string $path, $contents, Config $config, string $encryptionKey): void
+    {
+        $this->upload($path, $contents, $config, $this->generateEncryptionConfig($encryptionKey));
     }
 
     public function read(string $path): string
@@ -143,9 +150,23 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         return $body->getContentAsString();
     }
 
+    public function encryptedRead(string $path, string $encryptionKey): string
+    {
+        $body = $this->readObject($path, $this->generateEncryptionConfig($encryptionKey));
+
+        return $body->getContentAsString();
+    }
+
     public function readStream(string $path)
     {
         $body = $this->readObject($path);
+
+        return $body->getContentAsResource();
+    }
+
+    public function encryptedReadStream(string $path, string $encryptionKey)
+    {
+        $body = $this->readObject($path, $this->generateEncryptionConfig($encryptionKey));
 
         return $body->getContentAsResource();
     }
@@ -223,35 +244,32 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
 
     public function mimeType(string $path): FileAttributes
     {
-        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_MIME_TYPE);
+        return $this->mimeTypeImpl($path);
+    }
 
-        if (null === $attributes->mimeType()) {
-            throw UnableToRetrieveMetadata::mimeType($path);
-        }
-
-        return $attributes;
+    public function encryptedMimeType(string $path, string $encryptionKey): FileAttributes
+    {
+        return $this->mimeTypeImpl($path, $this->generateEncryptionConfig($encryptionKey));
     }
 
     public function lastModified(string $path): FileAttributes
     {
-        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED);
+        return $this->lastModifiedImpl($path);
+    }
 
-        if (null === $attributes->lastModified()) {
-            throw UnableToRetrieveMetadata::lastModified($path);
-        }
-
-        return $attributes;
+    public function encryptedLastModified(string $path, string $encryptionKey): FileAttributes
+    {
+        return $this->lastModifiedImpl($path, $this->generateEncryptionConfig($encryptionKey));
     }
 
     public function fileSize(string $path): FileAttributes
     {
-        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
+        return $this->fileSizeImpl($path);
+    }
 
-        if (null === $attributes->fileSize()) {
-            throw UnableToRetrieveMetadata::fileSize($path);
-        }
-
-        return $attributes;
+    public function encryptedFileSize(string $path, string $encryptionKey): FileAttributes
+    {
+        return $this->fileSizeImpl($path, $this->generateEncryptionConfig($encryptionKey));
     }
 
     public function listContents(string $path, bool $deep): iterable
@@ -281,33 +299,30 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
     }
 
-    public function copy(string $source, string $destination, Config $config): void
+    public function encryptedMove(string $source, string $destination, Config $config, string $sourceKey, ?string $destinationKey = null): void
     {
         try {
-            /** @var string $visibility */
-            $visibility = $this->visibility($source)->visibility();
+            $this->copyImpl($source, $destination, $config, $sourceKey, $destinationKey);
+            $this->delete($source);
         } catch (Throwable $exception) {
-            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
+            throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         }
+    }
 
-        $arguments = [
-            'ACL' => $this->visibility->visibilityToAcl($visibility),
-            'Bucket' => $this->bucket,
-            'Key' => $this->prefixer->prefixPath($destination),
-            'CopySource' => $this->bucket . '/' . $this->prefixer->prefixPath($source),
-        ];
+    public function copy(string $source, string $destination, Config $config): void
+    {
+        $this->copyImpl($source, $destination, $config);
+    }
 
-        try {
-            $this->client->copyObject($arguments);
-        } catch (Throwable $exception) {
-            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
-        }
+    public function encryptedCopy(string $source, string $destination, Config $config, string $sourceKey, ?string $destinationKey = null): void
+    {
+        $this->copyImpl($source, $destination, $config, $sourceKey, $destinationKey);
     }
 
     /**
      * @param string|resource $body
      */
-    private function upload(string $path, $body, Config $config): void
+    private function upload(string $path, $body, Config $config, array $extraConfig = []): void
     {
         $key = $this->prefixer->prefixPath($path);
         $acl = $this->determineAcl($config);
@@ -320,14 +335,16 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
 
         if ($this->client instanceof SimpleS3Client) {
             // Supports upload of files larger than 5GB
-            $this->client->upload($this->bucket, $key, $body, array_merge($options, ['ACL' => $acl]));
+            $this->client->upload($this->bucket, $key, $body, array_merge($options, ['ACL' => $acl], $extraConfig));
         } else {
             $this->client->putObject(array_merge($options, [
                 'Bucket' => $this->bucket,
                 'Key' => $key,
                 'Body' => $body,
                 'ACL' => $acl,
-            ]));
+            ],
+            $extraConfig
+            ));
         }
     }
 
@@ -353,12 +370,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         return $options;
     }
 
-    private function fetchFileMetadata(string $path, string $type): FileAttributes
+    private function fetchFileMetadata(string $path, string $type, array $config = []): FileAttributes
     {
         $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
 
         try {
-            $result = $this->client->headObject($arguments);
+            $result = $this->client->headObject(array_merge($arguments, $config));
             $result->resolve();
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
@@ -449,14 +466,108 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
     }
 
-    private function readObject(string $path): ResultStream
+    private function readObject(string $path, array $config = []): ResultStream
     {
         $options = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
 
         try {
-            return $this->client->getObject($options)->getBody();
+            return $this->client->getObject(array_merge($options, $config))->getBody();
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }
+    }
+
+    private function fileExistsImp(string $path, array $config = []): bool
+    {
+        try {
+            return $this->client->objectExists(
+                array_merge(
+                    [
+                        'Bucket' => $this->bucket,
+                        'Key' => $this->prefixer->prefixPath($path),
+                    ],
+                    $config
+                )
+            )->isSuccess();
+        } catch (ClientException $e) {
+            throw UnableToCheckFileExistence::forLocation($path, $e);
+        }
+    }
+
+    private function mimeTypeImpl(string $path, array $config = []): FileAttributes
+    {
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_MIME_TYPE, $config);
+
+        if (null === $attributes->mimeType()) {
+            throw UnableToRetrieveMetadata::mimeType($path);
+        }
+
+        return $attributes;
+    }
+
+    private function lastModifiedImpl(string $path, array $config = []): FileAttributes
+    {
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_LAST_MODIFIED, $config);
+
+        if (null === $attributes->lastModified()) {
+            throw UnableToRetrieveMetadata::lastModified($path);
+        }
+
+        return $attributes;
+    }
+
+    private function fileSizeImpl(string $path, array $config = []): FileAttributes
+    {
+        $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE, $config);
+
+        if (null === $attributes->fileSize()) {
+            throw UnableToRetrieveMetadata::fileSize($path);
+        }
+
+        return $attributes;
+    }
+
+    private function copyImpl(string $source, string $destination, Config $config, ?string $sourceKey = null, ?string $destinationKey = null): void
+    {
+        try {
+            /** @var string $visibility */
+            $visibility = $this->visibility($source)->visibility();
+        } catch (Throwable $exception) {
+            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
+        }
+
+        $arguments = [
+            'ACL' => $this->visibility->visibilityToAcl($visibility),
+            'Bucket' => $this->bucket,
+            'Key' => $this->prefixer->prefixPath($destination),
+            'CopySource' => $this->bucket . '/' . $this->prefixer->prefixPath($source),
+        ];
+
+        if ($sourceKey) {
+            $arguments = array_merge($arguments,[
+                'CopySourceSSECustomerAlgorithm' => 'AES256',
+                'CopySourceSSECustomerKey' => base64_encode($sourceKey),
+                'CopySourceSSECustomerKeyMD5' => base64_encode(md5($sourceKey)),
+            ]);
+        }
+
+        if ($destinationKey) {
+            $arguments = array_merge($arguments,$this->generateEncryptionConfig($destinationKey));
+        }
+
+        try {
+            $this->client->copyObject($arguments);
+        } catch (Throwable $exception) {
+            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
+        }
+    }
+
+    private function generateEncryptionConfig(string $encryptionKey): array
+    {
+        return [
+            'SSECustomerAlgorithm' => 'AES256',
+            'SSECustomerKey' => base64_encode($encryptionKey),
+            'SSECustomerKeyMD5' => base64_encode(md5($encryptionKey))
+        ];
     }
 }
