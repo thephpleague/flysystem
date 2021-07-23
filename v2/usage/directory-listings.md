@@ -47,7 +47,7 @@ retrieve all the items as opposed to the default generator based responses, whic
 
 ```php
 $sortedListing = $filesystem->listContents('/somewhere/over/the/rainbox')
-    ->sortedByPath()
+    ->sortByPath()
     ->toArray();
 ```
 
