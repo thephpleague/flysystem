@@ -25,23 +25,28 @@ jobs:
   phpunit:
     name: PHPUnit tests on ${{ matrix.php }} ${{ matrix.composer-flags }}
     runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
         php: [ '7.2', '7.3', '7.4' ]
         composer-flags: [ '' ]
+        experimental: [false]
         upgrade-aws-sdk: [ 'no' ]
         phpunit-flags: [ '--coverage-text' ]
         include:
           - php: '8.0'
             composer-flags: ''
+            experimental: false
             phpunit-flags: '--no-coverage'
             upgrade-aws-sdk: 'yes'
           - php: '8.1'
             composer-flags: '--ignore-platform-reqs'
+            experimental: true
             phpunit-flags: '--no-coverage'
             upgrade-aws-sdk: 'yes'
           - php: '7.2'
             composer-flags: '--prefer-lowest'
+            experimental: false
             phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v2
