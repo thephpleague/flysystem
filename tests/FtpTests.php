@@ -125,6 +125,10 @@ function ftp_raw($connection, $command)
     }
 
     if ($command === 'OPTS UTF8 ON') {
+        if ($connection === 'utf8.alreadyActive') {
+            return [0 => '202 UTF8 mode is always enabled. No need to send this command.'];
+        }
+    
         return [0 => '200 UTF8 set to on'];
     }
 
@@ -922,6 +926,16 @@ class FtpTests extends TestCase
     public function testItSetUtf8Mode()
     {
         $adapter = new Ftp($this->options + ['utf8' => true]);
+        $adapter->setUtf8(true);
+        $this->assertNull($adapter->connect());
+    }
+
+        /**
+     * @depends testInstantiable
+     */
+    public function testItSetUtf8ModeWhenAlreadySetByServer()
+    {
+        $adapter = new Ftp(['host' => 'utf8.alreadyActive', 'utf8' => true]);
         $adapter->setUtf8(true);
         $this->assertNull($adapter->connect());
     }
