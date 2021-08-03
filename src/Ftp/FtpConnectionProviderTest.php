@@ -21,7 +21,7 @@ class FtpConnectionProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        //$this->retryOnException(UnableToConnectToFtpHost::class);
+        $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     /**
