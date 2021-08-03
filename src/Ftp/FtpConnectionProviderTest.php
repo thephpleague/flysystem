@@ -21,7 +21,7 @@ class FtpConnectionProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->retryOnException(UnableToConnectToFtpHost::class);
+        //$this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
     /**
@@ -80,6 +80,27 @@ class FtpConnectionProviderTest extends TestCase
         mock_function('ftp_raw', ['Error']);
 
         $this->expectException(UnableToEnableUtf8Mode::class);
+
+        $this->runScenario(function () use ($options) {
+            $this->connectionProvider->createConnection($options);
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function uft8_mode_already_active_by_server(): void
+    {
+        $options = FtpConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'utf8' => true,
+            'root' => '/home/foo/upload',
+            'username' => 'foo',
+            'password' => 'pass',
+       ]);
+
+        mock_function('ftp_raw', ['202 UTF8 mode is always enabled. No need to send this command.']);
 
         $this->runScenario(function () use ($options) {
             $this->connectionProvider->createConnection($options);
