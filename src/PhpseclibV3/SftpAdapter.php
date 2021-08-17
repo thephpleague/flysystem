@@ -304,7 +304,7 @@ class SftpAdapter implements FilesystemAdapter
         $connection = $this->connectionProvider->provideConnection();
 
         try {
-            $this->ensureParentDirectoryExists($destinationLocation, $config);
+            $this->ensureParentDirectoryExists($destination, $config);
         } catch (Throwable $exception) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         }
