@@ -19,7 +19,7 @@ $connectionProvider = $providerName::fromArray(
 $start = time();
 $connected = false;
 
-while (time() - $start < 15) {
+while (time() - $start < 60) {
     try {
         $connectionProvider->provideConnection();
         $connected = true;
