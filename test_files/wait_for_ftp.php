@@ -23,6 +23,11 @@ while(time() - $start < 60) {
         $connected = true;
         break;
     } catch (Throwable $exception) {
+        if (time() - $start < 30) {
+            fwrite(STDOUT, "Exception while trying to connect:'\n");
+            fwrite(STDOUT, (string) $exception);
+            fwrite(STDOUT, "\n\n");
+        }
         usleep(10000);
     }
 }
