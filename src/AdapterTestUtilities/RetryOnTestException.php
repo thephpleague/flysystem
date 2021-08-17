@@ -21,7 +21,7 @@ trait RetryOnTestException
     /**
      * @var int
      */
-    protected $timeoutForExceptionRetry = 2;
+    protected $timeoutForExceptionRetry = 3;
 
     protected function retryOnException(string $className, int $timout = 2): void
     {
@@ -49,7 +49,7 @@ trait RetryOnTestException
         }
 
         $firstTryAt = \time();
-        $lastTryAt = $firstTryAt + 30;
+        $lastTryAt = $firstTryAt + 60;
 
         while (time() <= $lastTryAt) {
             try {
