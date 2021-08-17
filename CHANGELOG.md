@@ -1,5 +1,12 @@
 # Version 2.x Changelog
 
+## 2.2.1 - 2021-08-17
+
+### Fixed
+
+- [FTP] use original path when ensuring the parent directory exists during `move` operation.
+- [FTP] do not fail setting UTF-8 when the server is already on UTF-8.
+ 
 ## 2.2.0 - 2021-07-20
 
 ### Added
