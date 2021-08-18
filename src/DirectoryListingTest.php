@@ -7,6 +7,8 @@ namespace League\Flysystem;
 use Generator;
 use PHPUnit\Framework\TestCase;
 
+use function iterator_to_array;
+
 /**
  * @group core
  */
@@ -104,6 +106,25 @@ class DirectoryListingTest extends TestCase
             ->toArray();
 
         self::assertEquals($expected, $actual);
+    }
+
+    /**
+     * @test
+     * @description this ensures that the output of a sorted listing is iterable
+     * @see https://github.com/thephpleague/flysystem/issues/1342
+     */
+    public function iterating_over_storted_output(): void
+    {
+        $listing = new DirectoryListing([
+            new FileAttributes('/b/c/a.txt'),
+            new FileAttributes('/c/c/a.txt'),
+            new FileAttributes('/c/b/a.txt'),
+            new FileAttributes('/a/a/a.txt'),
+        ]);
+
+        self::expectNotToPerformAssertions();
+
+        iterator_to_array($listing->sortByPath());
     }
 
     /**

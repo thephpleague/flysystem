@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use ArrayIterator;
 use Generator;
 use IteratorAggregate;
 use Traversable;
@@ -62,11 +63,13 @@ class DirectoryListing implements IteratorAggregate
     }
 
     /**
-     * @return iterable<T>
+     * @return Traversable<T>
      */
-    public function getIterator(): iterable
+    public function getIterator(): Traversable
     {
-        return $this->listing;
+        return $this->listing instanceof Traversable
+            ? $this->listing
+            : new ArrayIterator($this->listing);
     }
 
     /**
