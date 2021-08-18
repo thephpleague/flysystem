@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.2.2 - 2021-08-18
+
+### Fixed
+
+- [Core] Ensure the sorted directory listing can be iterated over (#1342).
+
 ## 2.2.1 - 2021-08-17
 
 ### Fixed
