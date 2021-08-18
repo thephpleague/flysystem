@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.2.3 - 2021-08-18
+
+### Fixed
+
+- [Core] Corrected exception message for UnableToCopyFile.
+
 ## 2.2.2 - 2021-08-18
 
 ### Fixed
