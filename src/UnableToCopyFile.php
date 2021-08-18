@@ -34,7 +34,7 @@ final class UnableToCopyFile extends RuntimeException implements FilesystemOpera
         string $destinationPath,
         Throwable $previous = null
     ): UnableToCopyFile {
-        $e = new static("Unable to move file from $sourcePath to $destinationPath", 0 , $previous);
+        $e = new static("Unable to copy file from $sourcePath to $destinationPath", 0 , $previous);
         $e->source = $sourcePath;
         $e->destination = $destinationPath;
 
