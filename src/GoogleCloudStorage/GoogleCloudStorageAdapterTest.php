@@ -68,6 +68,17 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function guessing_the_mime_type_when_writing(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('some/config.txt', '<?xml version="1.0" encoding="UTF-8"?><test/>', new Config());
+        $mimeType = $adapter->mimeType('some/config.txt')->mimeType();
+        $this->assertEquals('text/xml', $mimeType);
+    }
+
+    /**
+     * @test
+     */
     public function fetching_visibility_of_non_existing_file(): void
     {
         $this->markTestSkipped("
