@@ -40,6 +40,15 @@ Plugin | Alternative
 `ListPaths` | Transform over the contents listing instead.
 `ListWith` | This operation is very unpredictable and has bad performance, don't use it.
 
+### `basename` is no longer precomputed
+
+These values are often part of a rename that can just as well incorporate functions like `basename()`.
+
+```diff
+- $name = $item['basename'];
++ $name = basename($item->path());
+```
+
 ## Changes
 
 ### Rename is now move, specific for files.
