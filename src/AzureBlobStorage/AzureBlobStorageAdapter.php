@@ -9,6 +9,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToCheckFileExistence;
+use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
@@ -20,11 +21,14 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Blob\Models\BlobProperties;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
+use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
+use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
 
+use function sprintf;
 use function stream_get_contents;
 
 class AzureBlobStorageAdapter implements FilesystemAdapter
@@ -159,6 +163,23 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
+        $createContainerOptions = new CreateContainerOptions();
+        $createContainerOptions->setPublicAccess(PublicAccessType::BLOBS_ONLY);
+
+        try {
+            $this->client->createContainer(
+                $this->pathResolver->resolve($path)->getContainer(),
+                $createContainerOptions
+            );
+        } catch (Throwable $exception) {
+            if ($exception instanceof ServiceException && 409 === $exception->getCode()) {
+                throw UnableToCreateDirectory::dueToFailure($path, $exception);
+            }
+            throw UnableToCreateDirectory::dueToFailure(
+                sprintf('Unable to create container "%s".', $path),
+                $exception
+            );
+        }
     }
 
     public function setVisibility(string $path, string $visibility): void
