@@ -24,6 +24,7 @@ use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
+
 use function stream_get_contents;
 
 class AzureBlobStorageAdapter implements FilesystemAdapter
@@ -38,8 +39,8 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     ];
     /** @var BlobRestProxy */
     private $client;
-    /** @var string */
-    private $container;
+    /** @var PathResolverInterface */
+    private $pathResolver;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
     /** @var int */
@@ -47,30 +48,34 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function __construct(
         BlobRestProxy $client,
-        string $container,
+        PathResolverInterface $pathResolver,
         MimeTypeDetector $mimeTypeDetector = null,
         int $maxResultsForContentsListing = 5000
     ) {
         $this->client = $client;
-        $this->container = $container;
+        $this->pathResolver = $pathResolver;
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->maxResultsForContentsListing = $maxResultsForContentsListing;
     }
 
     public function copy(string $source, string $destination, Config $config): void
     {
+        $resolvedDestination = $this->pathResolver->resolve($destination);
+        $resolvedSource = $this->pathResolver->resolve($source);
+
         $this->client->copyBlob(
-            $this->container,
-            $destination,
-            $this->container,
-            $source
+            $resolvedDestination->getContainer(),
+            $resolvedDestination->getPath(),
+            $resolvedSource->getContainer(),
+            $resolvedSource->getPath()
         );
     }
 
     public function delete(string $path): void
     {
+        $resolved = $this->pathResolver->resolve($path);
         try {
-            $this->client->deleteBlob($this->container, $path);
+            $this->client->deleteBlob($resolved->getContainer(), $resolved->getPath());
         } catch (Throwable $exception) {
             throw UnableToDeleteFile::atLocation($path, '', $exception);
         }
@@ -85,8 +90,9 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function readStream($path)
     {
+        $resolved = $this->pathResolver->resolve($path);
         try {
-            $response = $this->client->getBlob($this->container, $path);
+            $response = $this->client->getBlob($resolved->getContainer(), $resolved->getPath());
 
             return $response->getContentStream();
         } catch (Throwable $exception) {
@@ -96,13 +102,15 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep = false): iterable
     {
+        $resolved = $this->pathResolver->resolve($path);
+
         $options = new ListBlobsOptions();
-        $options->setPrefix($path);
+        $options->setPrefix($resolved->getPath());
         $options->setMaxResults($this->maxResultsForContentsListing);
         $options->setDelimiter('/');
 
         do {
-            $response = $this->client->listBlobs($this->container, $options);
+            $response = $this->client->listBlobs($resolved->getContainer(), $options);
 
             foreach ($response->getBlobs() as $blob) {
                 $name = $blob->getName();
@@ -122,8 +130,9 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
+        $resolved = $this->pathResolver->resolve($path);
         try {
-            return $this->getMetadata($path) !== null;
+            return $this->getMetadata($resolved) !== null;
         } catch (Throwable $exception) {
             if ($exception instanceof ServiceException && $exception->getCode() === 404) {
                 return false;
@@ -134,12 +143,14 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function deleteDirectory(string $path): void
     {
+        $resolved = $this->pathResolver->resolve($path);
+
         try {
             $options = new ListBlobsOptions();
-            $options->setPrefix($path);
-            $listResults = $this->client->listBlobs($this->container, $options);
+            $options->setPrefix($resolved->getPath());
+            $listResults = $this->client->listBlobs($resolved->getContainer(), $options);
             foreach ($listResults->getBlobs() as $blob) {
-                $this->client->deleteBlob($this->container, $blob->getName());
+                $this->client->deleteBlob($resolved->getContainer(), $blob->getName());
             }
         } catch (Throwable $exception) {
             throw UnableToDeleteDirectory::atLocation($path, '', $exception);
@@ -157,7 +168,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function visibility(string $path): FileAttributes
     {
         try {
-            return $this->getMetadata($path);
+            return $this->getMetadata($this->pathResolver->resolve($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::visibility($path, '', $exception);
         }
@@ -166,7 +177,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            return $this->getMetadata($path);
+            return $this->getMetadata($this->pathResolver->resolve($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
         }
@@ -175,7 +186,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function lastModified(string $path): FileAttributes
     {
         try {
-            return $this->getMetadata($path);
+            return $this->getMetadata($this->pathResolver->resolve($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::lastModified($path, '', $exception);
         }
@@ -184,7 +195,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     public function fileSize(string $path): FileAttributes
     {
         try {
-            return $this->getMetadata($path);
+            return $this->getMetadata($this->pathResolver->resolve($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::fileSize($path, '', $exception);
         }
@@ -212,16 +223,17 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     private function upload(string $destination, $contents, Config $config): void
     {
+        $resolved = $this->pathResolver->resolve($destination);
         try {
             $options = $this->getOptionsFromConfig($config);
 
             if (empty($options->getContentType())) {
-                $options->setContentType($this->mimeTypeDetector->detectMimeType($destination, $contents));
+                $options->setContentType($this->mimeTypeDetector->detectMimeType($resolved->getPath(), $contents));
             }
 
             $this->client->createBlockBlob(
-                $this->container,
-                $destination,
+                $resolved->getContainer(),
+                $resolved->getPath(),
                 $contents,
                 $options
             );
@@ -230,11 +242,11 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         }
     }
 
-    private function getMetadata(string $path): FileAttributes
+    private function getMetadata(Path $path): FileAttributes
     {
         return $this->normalizeBlobProperties(
-            $path,
-            $this->client->getBlobProperties($this->container, $path)->getProperties()
+            $path->getPath(),
+            $this->client->getBlobProperties($path->getContainer(), $path->getPath())->getProperties()
         );
     }
 
@@ -255,7 +267,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         return $options;
     }
 
-    private function normalizeBlobProperties($path, BlobProperties $properties): FileAttributes
+    private function normalizeBlobProperties(string $path, BlobProperties $properties): FileAttributes
     {
         return new FileAttributes(
             $path,
