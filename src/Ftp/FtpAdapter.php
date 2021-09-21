@@ -97,10 +97,10 @@ class FtpAdapter implements FilesystemAdapter
      */
     public function __destruct()
     {
-        if ($this->connection !== false) {
+        if (is_resource($this->connection)) {
             @ftp_close($this->connection);
-            $this->connection = false;
         }
+        $this->connection = false;
     }
 
     /**
