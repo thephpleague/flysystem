@@ -102,7 +102,9 @@ class DirectoryListingTest extends TestCase
         ]);
 
         $actual = $listing->sortByPath()
-            ->map(function($i) { return $i->path(); })
+            ->map(function ($i) {
+                return $i->path();
+            })
             ->toArray();
 
         self::assertEquals($expected, $actual);
@@ -111,6 +113,7 @@ class DirectoryListingTest extends TestCase
     /**
      * @test
      * @description this ensures that the output of a sorted listing is iterable
+     *
      * @see https://github.com/thephpleague/flysystem/issues/1342
      */
     public function iterating_over_storted_output(): void

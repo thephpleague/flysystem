@@ -70,7 +70,7 @@ class FtpConnectionProvider implements ConnectionProvider
 
         $response = ftp_raw($connection, "OPTS UTF8 ON");
 
-        if (!in_array(substr($response[0], 0, 3), ['200', '202'])) {
+        if ( ! in_array(substr($response[0], 0, 3), ['200', '202'])) {
             throw new UnableToEnableUtf8Mode(
                 'Could not set UTF-8 mode for connection: ' . $options->host() . '::' . $options->port()
             );

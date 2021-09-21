@@ -236,7 +236,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $prefixedPath = $this->prefixer->prefixPath($path);
         $prefixes = $options = [];
 
-        if (! empty($prefixedPath)) {
+        if ( ! empty($prefixedPath)) {
             $options = ['prefix' => sprintf('%s/', rtrim($prefixedPath, '/'))];
         }
 
