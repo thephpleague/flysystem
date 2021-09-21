@@ -11,6 +11,6 @@ class RawListFtpConnectivityChecker implements ConnectivityChecker
      */
     public function isConnected($connection): bool
     {
-        return @ftp_rawlist($connection, './') !== false;
+        return $connection !== false && @ftp_rawlist($connection, './') !== false;
     }
 }
