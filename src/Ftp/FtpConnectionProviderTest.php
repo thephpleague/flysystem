@@ -101,6 +101,7 @@ class FtpConnectionProviderTest extends TestCase
        ]);
 
         mock_function('ftp_raw', ['202 UTF8 mode is always enabled. No need to send this command.']);
+        $this->expectNotToPerformAssertions();
 
         $this->runScenario(function () use ($options) {
             $this->connectionProvider->createConnection($options);
