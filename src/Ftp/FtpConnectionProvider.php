@@ -42,7 +42,7 @@ class FtpConnectionProvider implements ConnectionProvider
     {
         $connection = $ssl ? @ftp_ssl_connect($host, $port, $timeout) : @ftp_connect($host, $port, $timeout);
 
-        if ( ! is_resource($connection)) {
+        if ($connection === false) {
             throw UnableToConnectToFtpHost::forHost($host, $port, $ssl);
         }
 
