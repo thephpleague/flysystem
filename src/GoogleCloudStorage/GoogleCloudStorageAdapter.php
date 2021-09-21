@@ -233,8 +233,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep): iterable
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
-        $options = ['prefix' => rtrim($prefixedPath, '/') . '/'];
-        $prefixes = [];
+        $prefixes = $options = [];
+
+        if (! empty($prefixedPath)) {
+            $options = ['prefix' => sprintf('%s/', rtrim($prefixedPath, '/'))];
+        }
 
         if ($deep === false) {
             $options['delimiter'] = '/';
