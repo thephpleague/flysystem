@@ -77,16 +77,17 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     private function upload(string $path, $contents, Config $config): void
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
+        $options = ['name' => $prefixedPath];
+
         $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
+        $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl($visibility);
+
+        if ($predefinedAcl !== PortableVisibilityHandler::NO_PREDEFINED_VISIBILITY) {
+            $options['predefinedAcl'] = $predefinedAcl;
+        }
 
         try {
-            $this->bucket->upload(
-                $contents,
-                [
-                    'name' => $prefixedPath,
-                    'predefinedAcl' => $this->visibilityHandler->visibilityToPredefinedAcl($visibility),
-                ]
-            );
+            $this->bucket->upload($contents, $options);
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, '', $exception);
         }
@@ -277,11 +278,14 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             /** @var string $visibility */
             $visibility = $this->visibility($source)->visibility();
             $prefixedSource = $this->prefixer->prefixPath($source);
-            $prefixedDestination = $this->prefixer->prefixPath($destination);
-            $this->bucket->object($prefixedSource)->copy($this->bucket, [
-                'name' => $prefixedDestination,
-                'predefinedAcl' => $this->visibilityHandler->visibilityToPredefinedAcl($visibility),
-            ]);
+            $options = ['name' => $this->prefixer->prefixPath($destination)];
+            $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl($visibility);
+
+            if ($predefinedAcl !== PortableVisibilityHandler::NO_PREDEFINED_VISIBILITY) {
+                $options['predefinedAcl'] = $predefinedAcl;
+            }
+
+            $this->bucket->object($prefixedSource)->copy($this->bucket, $options);
         } catch (Throwable $previous) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $previous);
         }

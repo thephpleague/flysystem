@@ -11,6 +11,8 @@ use League\Flysystem\Visibility;
 
 class PortableVisibilityHandler implements VisibilityHandler
 {
+    public const NO_PREDEFINED_VISIBILITY = 'noPredefinedVisibility';
+
     public const ACL_PUBLIC_READ = 'publicRead';
     public const ACL_AUTHENTICATED_READ = 'authenticatedRead';
     public const ACL_PRIVATE = 'private';
@@ -65,10 +67,13 @@ class PortableVisibilityHandler implements VisibilityHandler
 
     public function visibilityToPredefinedAcl(string $visibility): string
     {
-        if ($visibility === Visibility::PUBLIC) {
-            return $this->predefinedPublicAcl;
+        switch ($visibility) {
+            case Visibility::PUBLIC:
+                return $this->predefinedPublicAcl;
+            case self::NO_PREDEFINED_VISIBILITY:
+                return self::NO_PREDEFINED_VISIBILITY;
+            default:
+                return $this->predefinedPrivateAcl;
         }
-
-        return $this->predefinedPrivateAcl;
     }
 }
