@@ -1,5 +1,12 @@
 # Version 2.x Changelog
 
+## 2.3.0 - 2021-09-22
+
+### Added
+
+- [GoogleCloudStorage] Make it possible to set an empty prefix (#1358)
+- [GoogleCloudStorage] Added possibility not to set visibility (#1356)
+
 ## 2.2.3 - 2021-08-18
 
 ### Fixed
