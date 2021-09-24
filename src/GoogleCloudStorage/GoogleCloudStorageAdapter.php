@@ -278,8 +278,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            /** @var string $visibility */
-            $visibility = $this->visibility($source)->visibility();
+            $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
             $prefixedSource = $this->prefixer->prefixPath($source);
             $options = ['name' => $this->prefixer->prefixPath($destination)];
             $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl($visibility);
