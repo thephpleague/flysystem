@@ -44,7 +44,7 @@ class StubZipArchive extends ZipArchive
      *
      * @return bool
      */
-    public function addEmptyDir($dirname, $flags = 0)
+    public function addEmptyDir($dirname, $flags = 0): bool
     {
         if ($this->failNextDirectoryCreation) {
             $this->failNextDirectoryCreation = false;
@@ -67,7 +67,7 @@ class StubZipArchive extends ZipArchive
      *
      * @return bool
      */
-    public function addFromString($localname, $contents, $flags = 0)
+    public function addFromString($localname, $contents, $flags = 0): bool
     {
         if ($this->failNextWrite) {
             $this->failNextWrite = false;
@@ -84,9 +84,9 @@ class StubZipArchive extends ZipArchive
     }
 
     /**
-     * @return bool|resource
+     * @return bool
      */
-    public function deleteName($name)
+    public function deleteName($name): bool
     {
         if ($this->failNextDeleteName) {
             $this->failNextDeleteName = false;
@@ -118,7 +118,7 @@ class StubZipArchive extends ZipArchive
         $this->failWhenDeletingAnIndex = true;
     }
 
-    public function deleteIndex($index)
+    public function deleteIndex($index): bool
     {
         if ($this->failWhenDeletingAnIndex) {
             $this->failWhenDeletingAnIndex = false;
