@@ -104,7 +104,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         );
         error_clear_last();
 
-        if (($size = @file_put_contents($prefixedLocation, $contents, $this->writeFlags)) === false) {
+        if (@file_put_contents($prefixedLocation, $contents, $this->writeFlags) === false) {
             throw UnableToWriteFile::atLocation($path, error_get_last()['message'] ?? '');
         }
 
@@ -217,7 +217,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
             $lastModified = $fileInfo->getMTime();
             $isDirectory = $fileInfo->isDir();
-            $permissions = $fileInfo->getPerms();
+            $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
             $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
 
             yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(

@@ -292,6 +292,33 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function retrieving_visibility_while_listing_directory_contents(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT);
+        $adapter->createDirectory('public', new Config(['visibility' => 'public']));
+        $adapter->createDirectory('private', new Config(['visibility' => 'private']));
+        $adapter->write('public/private.txt', 'private', new Config(['visibility' => 'private']));
+        $adapter->write('private/public.txt', 'public', new Config(['visibility' => 'public']));
+
+        /** @var Traversable<StorageAttributes> $contentListing */
+        $contentListing = $adapter->listContents('/', true);
+        /**
+         * @var StorageAttributes $publicDirectoryAttributes
+         * @var StorageAttributes $privateFileAttributes
+         * @var StorageAttributes $privateDirectoryAttributes
+         * @var StorageAttributes $publicFileAttributes
+         */
+        [$publicDirectoryAttributes, $privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes] = iterator_to_array($contentListing);
+
+        $this->assertEquals('public', $publicDirectoryAttributes->visibility());
+        $this->assertEquals('private', $privateFileAttributes->visibility());
+        $this->assertEquals('private', $privateDirectoryAttributes->visibility());
+        $this->assertEquals('public', $publicFileAttributes->visibility());
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_directory(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
