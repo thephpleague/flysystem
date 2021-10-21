@@ -4,13 +4,13 @@ $finder = PhpCsFixer\Finder::create()
     ->in([__DIR__ . '/src'])
 ;
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRules([
         '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
         'binary_operator_spaces' => true,
         'single_line_after_imports' => true,
-        'blank_line_before_return' => true,
+        'blank_line_before_statement' => ['statements' => ['return']],
         'cast_spaces' => true,
         'concat_space' => ['spacing' => 'one'],
         'no_singleline_whitespace_before_semicolons' => true,
