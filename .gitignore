@@ -4,5 +4,6 @@
 /phpunit.xml
 /composer.lock
 /index_*.php
-/.php_cs.cache
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
 /google-cloud-service-account.json
