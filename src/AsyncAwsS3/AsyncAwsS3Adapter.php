@@ -18,6 +18,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\PrefixedFilesystem;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -30,6 +31,11 @@ use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
+
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
 
 class AsyncAwsS3Adapter implements FilesystemAdapter
 {
@@ -110,6 +116,13 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+
+        if ($prefix !== '') {
+            trigger_error(
+                sprintf('Passing $prefix on %s is deprecated. Use %s.', self::class, PrefixedFilesystem::class),
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     public function fileExists(string $path): bool

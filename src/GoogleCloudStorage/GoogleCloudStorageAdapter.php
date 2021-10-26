@@ -12,6 +12,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\PrefixedFilesystem;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -23,6 +24,11 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use Throwable;
+
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter
 {
@@ -52,6 +58,13 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
         $this->defaultVisibility = $defaultVisibility;
+
+        if ($prefix !== '') {
+            trigger_error(
+                sprintf('Passing $prefix on %s is deprecated. Use %s.', self::class, PrefixedFilesystem::class),
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     public function fileExists(string $path): bool

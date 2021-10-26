@@ -13,6 +13,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\PrefixedFilesystem;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -27,6 +28,11 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
+
+use function sprintf;
+use function trigger_error;
+
+use const E_USER_DEPRECATED;
 
 class AwsS3V3Adapter implements FilesystemAdapter
 {
@@ -119,6 +125,13 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
         $this->options = $options;
         $this->streamReads = $streamReads;
+
+        if ($prefix !== '') {
+            trigger_error(
+                sprintf('Passing $prefix on %s is deprecated. Use %s.', self::class, PrefixedFilesystem::class),
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     public function fileExists(string $path): bool
