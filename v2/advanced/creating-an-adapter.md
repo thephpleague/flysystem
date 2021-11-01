@@ -26,7 +26,7 @@ There is a test package available that allows you to easily test your adapter:
 composer require --dev league/flysystem-adapter-test-utilities
 ```
 
-Once installed you can use the `League\Flysystem\AdapterTestUtilitiesFilesystemAdapterTestCase`
+Once installed you can use the `League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase`
 class as your adapter test base-class. This will ensure you're covering a lot of
 test scenarios.
 
