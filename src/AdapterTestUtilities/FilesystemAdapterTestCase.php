@@ -666,7 +666,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $this->expectException(UnableToReadFile::class);
 
-        $this->adapter()->readStream('something.txt');
+        $this->adapter()->read('something.txt');
     }
 
     /**
