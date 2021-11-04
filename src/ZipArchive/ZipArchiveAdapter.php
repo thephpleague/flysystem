@@ -26,6 +26,12 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 use ZipArchive;
 
+use function fclose;
+use function fopen;
+use function rewind;
+use function stream_copy_to_stream;
+use function stream_with_contents;
+
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
     /** @var PathPrefixer */
@@ -115,14 +121,19 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     {
         $archive = $this->zipArchiveProvider->createZipArchive();
         $resource = $archive->getStream($this->pathPrefixer->prefixPath($path));
-        $status = $archive->getStatusString();
-        $archive->close();
 
         if ($resource === false) {
+            $status = $archive->getStatusString();
+            $archive->close();
             throw UnableToReadFile::fromLocation($path, $status);
         }
 
-        return $resource;
+        $stream = fopen('php://temp', 'w+b');
+        stream_copy_to_stream($resource, $stream);
+        rewind($stream);
+        fclose($resource);
+
+        return $stream;
     }
 
     public function delete(string $path): void
