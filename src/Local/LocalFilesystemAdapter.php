@@ -295,7 +295,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $mkdirError = error_get_last();
         }
 
-        clearstatcache(false, $dirname);
+        clearstatcache(true, $dirname);
 
         if ( ! is_dir($dirname)) {
             $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
