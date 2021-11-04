@@ -45,6 +45,7 @@ trait ProxyArrayAccessToProperties
      * @param mixed $offset
      * @param mixed $value
      */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value): void
     {
         throw new RuntimeException('Properties can not be manipulated');
@@ -53,6 +54,7 @@ trait ProxyArrayAccessToProperties
     /**
      * @param mixed $offset
      */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset): void
     {
         throw new RuntimeException('Properties can not be manipulated');
