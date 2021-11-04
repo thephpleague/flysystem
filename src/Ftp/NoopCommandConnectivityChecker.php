@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\Ftp;
 
 use TypeError;
+use ValueError;
 
 class NoopCommandConnectivityChecker implements ConnectivityChecker
 {
@@ -13,7 +14,7 @@ class NoopCommandConnectivityChecker implements ConnectivityChecker
         // @codeCoverageIgnoreStart
         try {
             $response = @ftp_raw($connection, 'NOOP');
-        } catch (TypeError $typeError) {
+        } catch (TypeError | ValueError $typeError) {
             return false;
         }
         // @codeCoverageIgnoreEnd
