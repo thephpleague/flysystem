@@ -1,5 +1,16 @@
 # Version 2.x Changelog
 
+## 2.3.1 - 2021-09-22
+
+### Fixed
+
+- [ZipArchive] copy stream, the ziparchive is closed after getting the stream
+- [Core] PHP 8.1 compatibility updates
+- [LocalFilesystem] parse permissions during listing
+- [LocalFilesystem] clear realstatcache
+- [FTP] PHP 8.1 compatibility updates
+- [Core] Upgraded PHP-CS-Fixer
+
 ## 2.3.0 - 2021-09-22
 
 ### Added
