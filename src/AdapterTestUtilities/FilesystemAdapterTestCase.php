@@ -142,6 +142,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $writeStream = stream_with_contents('contents');
 
             $adapter->writeStream('path.txt', $writeStream, new Config());
+            fclose($writeStream);
             $fileExists = $adapter->fileExists('path.txt');
 
             $this->assertTrue($fileExists);
@@ -192,6 +193,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $writeStream = stream_with_contents('');
 
             $adapter->writeStream('path.txt', $writeStream, new Config());
+            fclose($writeStream);
             $fileExists = $adapter->fileExists('path.txt');
 
             $this->assertTrue($fileExists);
