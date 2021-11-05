@@ -97,14 +97,16 @@ abstract class FilesystemAdapterTestCase extends TestCase
             return;
         }
 
-        /** @var StorageAttributes $item */
-        foreach ($adapter->listContents('', false) as $item) {
-            if ($item->isDir()) {
-                $adapter->deleteDirectory($item->path());
-            } else {
-                $adapter->delete($item->path());
+        $this->runScenario(function () use ($adapter) {
+            /** @var StorageAttributes $item */
+            foreach ($adapter->listContents('', false) as $item) {
+                if ($item->isDir()) {
+                    $adapter->deleteDirectory($item->path());
+                } else {
+                    $adapter->delete($item->path());
+                }
             }
-        }
+        });
     }
 
     public function clearCustomAdapter(): void
