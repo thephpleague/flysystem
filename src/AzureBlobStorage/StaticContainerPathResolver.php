@@ -16,7 +16,7 @@ class StaticContainerPathResolver implements PathResolverInterface
 
     public function resolve(string $path): Path
     {
-        return new Path($this > $this->container, $path);
+        return new Path($this->container, $path);
     }
 }
 
