@@ -44,6 +44,6 @@ class FtpAdapterTest extends FtpAdapterTestCase
         $this->assertTrue(false !== ftp_pwd($connection));
         unset($adapter);
         static::clearFilesystemAdapterCache();
-        $this->assertFalse(@ftp_pwd($connection));
+        $this->assertFalse((new NoopCommandConnectivityChecker())->isConnected($connection));
     }
 }
