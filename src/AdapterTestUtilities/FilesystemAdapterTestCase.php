@@ -627,12 +627,14 @@ abstract class FilesystemAdapterTestCase extends TestCase
     {
         $adapter = $this->adapter();
 
-        $fileExistsBefore = $adapter->fileExists('some/path.txt');
-        $adapter->write('some/path.txt', 'contents', new Config());
-        $fileExistsAfter = $adapter->fileExists('some/path.txt');
+        $this->runScenario(function() use ($adapter) {
+            $fileExistsBefore = $adapter->fileExists('some/path.txt');
+            $adapter->write('some/path.txt', 'contents', new Config());
+            $fileExistsAfter = $adapter->fileExists('some/path.txt');
 
-        $this->assertFalse($fileExistsBefore);
-        $this->assertTrue($fileExistsAfter);
+            $this->assertFalse($fileExistsBefore);
+            $this->assertTrue($fileExistsAfter);
+        });
     }
 
     /**
