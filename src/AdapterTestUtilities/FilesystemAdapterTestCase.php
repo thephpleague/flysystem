@@ -509,7 +509,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->expectException(UnableToSetVisibility::class);
 
         $this->runScenario(function () {
-            $this->adapter()->setVisibility('path.txt', Visibility::PRIVATE);
+            $this->adapter()->setVisibility('this-path-does-not-exists.txt', Visibility::PRIVATE);
         });
     }
 
