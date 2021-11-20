@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use League\Flysystem\FilesystemException;
 use const PHP_EOL;
 use const STDOUT;
 use Throwable;
@@ -21,7 +22,7 @@ trait RetryOnTestException
     /**
      * @var int
      */
-    protected $timeoutForExceptionRetry = 3;
+    protected $timeoutForExceptionRetry = 2;
 
     protected function retryOnException(string $className, int $timout = 2): void
     {
@@ -29,7 +30,7 @@ trait RetryOnTestException
         $this->timeoutForExceptionRetry = $timout;
     }
 
-    protected function retryScenarioOnException(string $className, callable $scenario, int $timeout = 1): void
+    protected function retryScenarioOnException(string $className, callable $scenario, int $timeout = 2): void
     {
         $this->retryOnException($className, $timeout);
         $this->runScenario($scenario);
@@ -38,6 +39,24 @@ trait RetryOnTestException
     protected function dontRetryOnException(): void
     {
         $this->exceptionTypeToRetryOn = null;
+    }
+
+    /**
+     * @internal
+     * @throws Throwable
+     */
+    protected function runSetup(callable $scenario): void
+    {
+        $previousException = $this->exceptionTypeToRetryOn;
+        $previousTimeout = $this->timeoutForExceptionRetry;
+        $this->retryOnException(FilesystemException::class);
+
+        try {
+            $this->runScenario($scenario);
+        } finally {
+            $this->exceptionTypeToRetryOn = $previousException;
+            $this->timeoutForExceptionRetry = $previousTimeout;
+        }
     }
 
     protected function runScenario(callable $scenario): void

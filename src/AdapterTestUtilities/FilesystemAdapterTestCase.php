@@ -97,7 +97,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             return;
         }
 
-        $this->runScenario(function () use ($adapter) {
+        $this->runSetup(function () use ($adapter) {
             /** @var StorageAttributes $item */
             foreach ($adapter->listContents('', false) as $item) {
                 if ($item->isDir()) {
@@ -625,9 +625,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function checking_if_files_exist(): void
     {
-        $adapter = $this->adapter();
-
-        $this->runScenario(function() use ($adapter) {
+        $this->runScenario(function() {
+            $adapter = $this->adapter();
             $fileExistsBefore = $adapter->fileExists('some/path.txt');
             $adapter->write('some/path.txt', 'contents', new Config());
             $fileExistsAfter = $adapter->fileExists('some/path.txt');
