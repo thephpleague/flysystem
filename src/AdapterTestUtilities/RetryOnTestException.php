@@ -57,7 +57,7 @@ trait RetryOnTestException
 
                 return;
             } catch (Throwable $exception) {
-                if (get_class($exception) !== $this->exceptionTypeToRetryOn) {
+                if ( ! $exception instanceof $this->exceptionTypeToRetryOn) {
                     throw $exception;
                 }
                 fwrite(STDOUT, 'Retrying ...' . PHP_EOL);
