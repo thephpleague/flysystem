@@ -329,7 +329,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
     protected function givenWeHaveAnExistingFile(string $path, string $contents = 'contents', array $config = []): void
     {
-        $this->runScenario(function () use ($path, $contents, $config) {
+        $this->runSetup(function () use ($path, $contents, $config) {
             $this->adapter()->write($path, $contents, new Config($config));
         });
     }
