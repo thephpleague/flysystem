@@ -201,6 +201,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     * @runInSeparateProcess
      */
     public function receiving_a_windows_listing(): void
     {
