@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.5 - 2021-11-21
+
+### Fixed
+
+- [FTP] Listing contents required escaping for special characters (caused missing contents and failure of directory deletes)
+
 ## 1.1.4 - 2021-05-22
 
 ### Fixed
