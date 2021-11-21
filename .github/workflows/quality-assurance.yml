@@ -1,0 +1,49 @@
+---
+name: Quality Assurance
+on:
+  push:
+    branches:
+      - 1.x
+  pull_request:
+    branches:
+      - 1.x
+
+jobs:
+  phpunit:
+    name: PHPUnit tests on ${{ matrix.php }} ${{ matrix.composer-flags }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      matrix:
+        php: [ '7.2', '7.3', '7.4' ]
+        composer-flags: [ '' ]
+        experimental: [false]
+        phpunit-flags: [ '--coverage-text' ]
+        include:
+          - php: '8.0'
+            composer-flags: ''
+            experimental: false
+            phpunit-flags: '--no-coverage'
+          - php: '8.1'
+            composer-flags: '--ignore-platform-reqs'
+            experimental: true
+            phpunit-flags: '--no-coverage'
+          - php: '7.2'
+            composer-flags: '--prefer-lowest'
+            experimental: false
+            phpunit-flags: '--no-coverage'
+    steps:
+      - uses: actions/checkout@v2
+      - run: docker-compose -f tests/docker-compose.yml up -d
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: pcov
+          tools: composer:v2
+      - run: composer update --no-progress ${{ matrix.composer-flags }}
+      - run: php wait_for_ftp_service.php
+      - run: vendor/bin/phpunit tests/ftp/*Tests.php
+      - run: vendor/bin/phpunit --exclude-group integration --coverage-text
+      - run: composer phpstan || true
+        if: ${{ matrix.php == '7.3' }}
+
