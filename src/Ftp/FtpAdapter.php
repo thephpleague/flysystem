@@ -380,9 +380,9 @@ class FtpAdapter implements FilesystemAdapter
 
     private function normalizeObject(string $item, string $base): StorageAttributes
     {
-        $systemType = $this->systemType ?: $this->detectSystemType($item);
+        $this->systemType = $this->systemType ?: $this->detectSystemType($item);
 
-        if ($systemType === self::SYSTEM_TYPE_UNIX) {
+        if ($this->systemType === self::SYSTEM_TYPE_UNIX) {
             return $this->normalizeUnixObject($item, $base);
         }
 
