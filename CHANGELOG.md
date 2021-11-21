@@ -6,6 +6,12 @@
 
 - [FTP] Listing contents required escaping for special characters (caused missing contents and failure of directory deletes)
 
+## 1.1.5 - 2021-08-17
+
+### Fixed
+
+* [FTP] Do not fail when setting a connection to UTF-8 when it is already on UTF-8.
+
 ## 1.1.4 - 2021-05-22
 
 ### Fixed
