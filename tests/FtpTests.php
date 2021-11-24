@@ -103,6 +103,7 @@ function ftp_chdir($connection, $directory)
         'file2.txt',
         'file3.txt',
         'file4.txt',
+        'file5WithPadding.txt',
         'dir1',
         'file1.with-total-line.txt',
         'file1.with-invalid-line.txt',
@@ -128,7 +129,7 @@ function ftp_raw($connection, $command)
         if ($connection === 'utf8.alreadyActive') {
             return [0 => '202 UTF8 mode is always enabled. No need to send this command.'];
         }
-    
+
         return [0 => '200 UTF8 set to on'];
     }
 
@@ -226,6 +227,12 @@ function ftp_rawlist($connection, $directory)
     if (strpos($directory, 'file4.txt') !== false) {
         return [
             '2016-05-23  12:09PM                  684 file4.txt',
+        ];
+    }
+
+    if (strpos($directory, 'file5WithPadding.txt') !== false) {
+        return [
+            '   2016-05-23  12:09PM                  685 file5WithPadding.txt',
         ];
     }
 
@@ -567,6 +574,14 @@ class FtpTests extends TestCase
         $this->assertEquals(1464005340, $metadata['timestamp']);
         $this->assertEquals('public', $metadata['visibility']);
         $this->assertEquals(684, $metadata['size']);
+
+        $metadata = $adapter->getMetadata('file5WithPadding.txt');
+        $this->assertIsArray($metadata);
+        $this->assertEquals('file', $metadata['type']);
+        $this->assertEquals('file5WithPadding.txt', $metadata['path']);
+        $this->assertEquals(1464005340, $metadata['timestamp']);
+        $this->assertEquals('public', $metadata['visibility']);
+        $this->assertEquals(685, $metadata['size']);
 
         $metadata = $adapter->getMetadata('dir1');
         $this->assertEquals('dir', $metadata['type']);

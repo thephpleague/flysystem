@@ -539,7 +539,7 @@ abstract class AbstractFtpAdapter extends AbstractAdapter
      */
     protected function detectSystemType($item)
     {
-        return preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', $item) ? 'windows' : 'unix';
+        return preg_match('/^[0-9]{2,4}-[0-9]{2}-[0-9]{2}/', trim($item)) ? 'windows' : 'unix';
     }
 
     /**
