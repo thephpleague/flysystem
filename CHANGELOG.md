@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.7 - 2021-11-25
+
+### Fixed
+
+- [FTP] Windows detection on installations that produce lines with whitespaces (#1384)
+
 ## 1.1.6 - 2021-11-21
 
 ### Fixed
