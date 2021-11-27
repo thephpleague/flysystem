@@ -27,4 +27,5 @@ Adapters:
 Advanced:
   Mime-type detection: '/v2/docs/advanced/mime-type-detection/'
   Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
+  Mount Manager: '/v2/docs/advanced/mount-manager/'
   Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
