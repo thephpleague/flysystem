@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.8 - 2021-11-28
+
+### Fixed
+
+- [FTP] Detect PHP an FTP connection by either is_resource OR it being an instance of `FTP\Connection` (PHP 8.1)
+
 ## 1.1.7 - 2021-11-25
 
 ### Fixed
