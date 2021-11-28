@@ -11,6 +11,8 @@ use League\Flysystem\InvalidRootException;
 use League\Flysystem\Util;
 use League\Flysystem\Util\MimeType;
 
+use function in_array;
+
 class Ftp extends AbstractFtpAdapter
 {
     use StreamedCopyTrait;
@@ -235,7 +237,7 @@ class Ftp extends AbstractFtpAdapter
      */
     public function disconnect()
     {
-        if (is_resource($this->connection)) {
+        if ($this->hasFtpConnection()) {
             @ftp_close($this->connection);
         }
 
@@ -536,8 +538,7 @@ class Ftp extends AbstractFtpAdapter
      */
     public function isConnected()
     {
-        return is_resource($this->connection)
-            && $this->getRawExecResponseCode('NOOP') === 200;
+        return $this->hasFtpConnection() && $this->getRawExecResponseCode('NOOP') === 200;
     }
 
     /**
@@ -574,5 +575,10 @@ class Ftp extends AbstractFtpAdapter
         $response = @ftp_raw($this->connection, trim($command));
 
         return (int) preg_replace('/\D/', '', implode(' ', $response));
+    }
+
+    private function hasFtpConnection(): bool
+    {
+        return is_resource($this->connection) || $this->connection instanceof \FTP\Connection;
     }
 }
