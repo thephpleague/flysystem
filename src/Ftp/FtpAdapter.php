@@ -97,7 +97,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     public function __destruct()
     {
-        if (is_resource($this->connection)) {
+        if ($this->hasFtpConnection()) {
             @ftp_close($this->connection);
         }
         $this->connection = false;
@@ -109,7 +109,7 @@ class FtpAdapter implements FilesystemAdapter
     private function connection()
     {
         start:
-        if ( ! is_resource($this->connection)) {
+        if ( ! $this->hasFtpConnection()) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
         }
 
@@ -613,5 +613,13 @@ class FtpAdapter implements FilesystemAdapter
     private function escapePath(string $path): string
     {
         return str_replace(['*', '[', ']'], ['\\*', '\\[', '\\]'], $path);
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasFtpConnection(): bool
+    {
+        return $this->connection instanceof \FTP\Connection || is_resource($this->connection);
     }
 }
