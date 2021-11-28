@@ -1,5 +1,12 @@
 # Version 2.x Changelog
 
+## 2.3.2 - 2021-11-28
+
+### Fixed
+
+- [FTP] Check for FTP\Connection object in addition to a `resource` for connectivity checks and connection handling.
+- [Local] Simplify writeStream, as a bonus, have an EXT_LOCK on it now by default.
+
 ## 2.3.1 - 2021-09-22
 
 ### Fixed
