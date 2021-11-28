@@ -48,7 +48,7 @@ class FtpAdapter implements FilesystemAdapter
     private $connectivityChecker;
 
     /**
-     * @var resource|false
+     * @var resource|false|\FTP\Connection
      */
     private $connection = false;
 

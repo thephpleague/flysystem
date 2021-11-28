@@ -16,6 +16,8 @@ parameters:
         - src/PhpseclibV2
         - src/PhpseclibV3
     ignoreErrors:
+        - '#FTP\\Connection not found#'
+        - '#unknown class FTP\\Connection#'
         - '#Call to function iterator_to_array\(\) on a separate line has no effect\.#'
         - '#Comparison operation "<" between 0|1 and 4 is always true.#'
         - '#Method League\\Flysystem\\AwsS3V3\\S3ClientStub.*#'
