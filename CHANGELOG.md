@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.9 - 2021-12-09
+
+- [Core] prevent `strlen` from receiving `NULL`.
+
 ## 1.1.8 - 2021-11-28
 
 ### Fixed
