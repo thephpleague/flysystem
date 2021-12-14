@@ -200,7 +200,7 @@ class FtpAdapter implements FilesystemAdapter
         if ( ! $result) {
             fclose($stream);
 
-            throw UnableToReadFile::fromLocation($path);
+            throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
         }
 
         rewind($stream);
