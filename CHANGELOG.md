@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.4.0 - 2022-01-04
+
+### Added
+
+- [SFTP V3] New adapter officially published
+
 ## 2.3.2 - 2021-11-28
 
 ### Fixed
