@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use function strnatcasecmp;
+use function usort;
 use function var_dump;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
@@ -296,29 +298,41 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function retrieving_visibility_while_listing_directory_contents(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
-        $adapter->createDirectory('public', new Config(['visibility' => 'public']));
-//        $adapter->createDirectory('private', new Config(['visibility' => 'private']));
-//        $adapter->write('public/private.txt', 'private', new Config(['visibility' => 'private']));
-//        $adapter->write('private/public.txt', 'public', new Config(['visibility' => 'public']));
+        $adapter->createDirectory('public-dir', new Config(['visibility' => 'public']));
+        $adapter->createDirectory('private-dir', new Config(['visibility' => 'private']));
+        $adapter->write('public-dir/private.txt', 'private', new Config(['visibility' => 'private']));
+        $adapter->write('private-dir/public.txt', 'public', new Config(['visibility' => 'public']));
 
         /** @var Traversable<StorageAttributes> $contentListing */
         $contentListing = $adapter->listContents('/', true);
+        $listing = iterator_to_array($contentListing);
+        usort($listing, function(StorageAttributes $a, StorageAttributes $b) {
+            return strnatcasecmp($a->path(), $b->path());
+        });
         /**
          * @var StorageAttributes $publicDirectoryAttributes
-//         * @var StorageAttributes $privateFileAttributes
-//         * @var StorageAttributes $privateDirectoryAttributes
-//         * @var StorageAttributes $publicFileAttributes
+         * @var StorageAttributes $privateFileAttributes
+         * @var StorageAttributes $privateDirectoryAttributes
+         * @var StorageAttributes $publicFileAttributes
          */
-        [$publicDirectoryAttributes /** ,$privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes**/] = iterator_to_array($contentListing);
+        [$publicDirectoryAttributes, $privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes] = $listing;
+
 
         var_dump($publicDirectoryAttributes->path());
+        self::assertEquals('public-dir', $publicDirectoryAttributes->path());
         $this->assertEquals('public', $publicDirectoryAttributes->visibility());
-//        var_dump($privateFileAttributes->path());
-//        $this->assertEquals('private', $privateFileAttributes->visibility());
-//        var_dump($privateDirectoryAttributes->path());
-//        $this->assertEquals('private', $privateDirectoryAttributes->visibility());
-//        var_dump($publicFileAttributes->path());
-//        $this->assertEquals('public', $publicFileAttributes->visibility());
+
+        var_dump($privateFileAttributes->path());
+        self::assertEquals('public-dir/private.txt', $privateFileAttributes->path());
+        $this->assertEquals('private', $privateFileAttributes->visibility());
+
+        var_dump($privateDirectoryAttributes->path());
+        self::assertEquals('private-dir', $privateDirectoryAttributes->path());
+        $this->assertEquals('private', $privateDirectoryAttributes->visibility());
+
+        var_dump($publicFileAttributes->path());
+        self::assertEquals('private-dir/public.txt', $publicFileAttributes->path());
+        $this->assertEquals('public', $publicFileAttributes->visibility());
     }
 
     /**
