@@ -33,6 +33,7 @@ for which ever storage is right for you.
 
 * **[Gitlab](https://github.com/RoyVoetman/flysystem-gitlab-storage)**
 * **[Google Drive (using regular paths)](https://github.com/masbug/flysystem-google-drive-ext)**
+* **[bunny.net / BunnyCDN](https://github.com/tinect/bunnycdn-s3-flysystem2-adapter)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
 
