@@ -301,6 +301,41 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function checking_if_a_non_existing_directory_exists(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            self::assertFalse($adapter->directoryExists('this-does-not-exist.php'));
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function checking_if_a_directory_exists_after_writing_a_file(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $this->givenWeHaveAnExistingFile('existing-directory/file.txt');
+            self::assertTrue($adapter->directoryExists('existing-directory'));
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function checking_if_a_directory_exists_after_creating_it(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->createDirectory('explicitly-created-directory', new Config());
+            self::assertTrue($adapter->directoryExists('explicitly-created-directory'));
+        });
+    }
+
+    /**
+     * @test
+     */
     public function listing_contents_recursive(): void
     {
         $this->runScenario(function () {

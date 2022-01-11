@@ -14,6 +14,7 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
@@ -27,6 +28,8 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Psr\Http\Message\StreamInterface;
 use Throwable;
+
+use function trim;
 
 class AwsS3V3Adapter implements FilesystemAdapter
 {
@@ -57,7 +60,6 @@ class AwsS3V3Adapter implements FilesystemAdapter
         'Tagging',
         'WebsiteRedirectLocation',
     ];
-
     /**
      * @var string[]
      */
@@ -127,6 +129,19 @@ class AwsS3V3Adapter implements FilesystemAdapter
             return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path), $this->options);
         } catch (Throwable $exception) {
             throw UnableToCheckFileExistence::forLocation($path, $exception);
+        }
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        try {
+            $prefix = $this->prefixer->prefixDirectoryPath($path);
+            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'Delimiter' => '/'];
+            $command = $this->client->getCommand('ListObjects', $options);
+
+            return $this->client->execute($command)->hasKey('Contents');
+        } catch (Throwable $exception) {
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         }
     }
 
@@ -294,12 +309,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $lastModified = $dateTime instanceof DateTimeResult ? $dateTime->getTimeStamp() : null;
 
         return new FileAttributes(
-            $path,
-            $fileSize,
-            null,
-            $lastModified,
-            $mimetype,
-            $this->extractExtraMetadata($metadata)
+            $path, $fileSize, null, $lastModified, $mimetype, $this->extractExtraMetadata($metadata)
         );
     }
 

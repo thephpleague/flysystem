@@ -31,6 +31,8 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
+use function trim;
+
 class AsyncAwsS3Adapter implements FilesystemAdapter
 {
     /**
@@ -252,6 +254,14 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
 
         return $attributes;
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        $prefix = $this->prefixer->prefixDirectoryPath($path);
+        $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'Delimiter' => '/'];
+
+        return $this->client->listObjectsV2($options)->getKeyCount() > 0;
     }
 
     public function listContents(string $path, bool $deep): iterable
