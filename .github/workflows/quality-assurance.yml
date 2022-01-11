@@ -28,23 +28,20 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php: [ '7.2', '7.3', '7.4' ]
-        composer-flags: [ '' ]
+        php: [ '8.0' ]
+        composer-flags: [ '--no-coverage' ]
         experimental: [false]
-        upgrade-aws-sdk: [ 'no' ]
         phpunit-flags: [ '--coverage-text' ]
         include:
           - php: '8.0'
             composer-flags: ''
             experimental: false
             phpunit-flags: '--no-coverage'
-            upgrade-aws-sdk: 'yes'
           - php: '8.1'
             composer-flags: '--ignore-platform-reqs'
-            experimental: true
+            experimental: false
             phpunit-flags: '--no-coverage'
-            upgrade-aws-sdk: 'yes'
-          - php: '7.2'
+          - php: '8.0'
             composer-flags: '--prefer-lowest'
             experimental: false
             phpunit-flags: '--no-coverage'
@@ -62,8 +59,6 @@ jobs:
           coverage: pcov
           tools: composer:v2
       - run: composer update --no-progress ${{ matrix.composer-flags }}
-      - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
-        if: ${{ matrix.upgrade-aws-sdk == 'yes' }}
       - run: php test_files/wait_for_sftp.php
       - run: php test_files/wait_for_ftp.php 2121
       - run: php test_files/wait_for_ftp.php 2122
