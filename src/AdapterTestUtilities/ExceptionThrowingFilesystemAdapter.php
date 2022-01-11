@@ -156,4 +156,11 @@ class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
 
         $this->adapter->copy($source, $destination, $config);
     }
+
+    public function directoryExists(string $path): bool
+    {
+        $this->throwStagedException(__METHOD__, $path);
+
+        return $this->adapter->directoryExists($path);
+    }
 }
