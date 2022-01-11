@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use function var_dump;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -310,9 +311,13 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
          */
         [$publicDirectoryAttributes, $privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes] = iterator_to_array($contentListing);
 
+        var_dump($publicDirectoryAttributes->path());
         $this->assertEquals('public', $publicDirectoryAttributes->visibility());
+        var_dump($privateFileAttributes->path());
         $this->assertEquals('private', $privateFileAttributes->visibility());
+        var_dump($privateDirectoryAttributes->path());
         $this->assertEquals('private', $privateDirectoryAttributes->visibility());
+        var_dump($publicFileAttributes->path());
         $this->assertEquals('public', $publicFileAttributes->visibility());
     }
 
