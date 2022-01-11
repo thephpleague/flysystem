@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace League\Flysystem\Local;
 
 use function file_put_contents;
+use function sprintf;
+use function substr;
+use function var_dump;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -210,8 +213,14 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
             $lastModified = $fileInfo->getMTime();
             $isDirectory = $fileInfo->isDir();
-            $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
+            $permissions = $fileInfo->getPerms();
+            var_dump($permissions);
+            var_dump(sprintf('%o', $permissions));
+            var_dump(substr(sprintf('%o', $permissions), -4));
+            $permissions = octdec(substr(sprintf('%o', $permissions), -4));
+            var_dump($permissions);
             $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
+            var_dump($permissions);
 
             yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(
                 str_replace('\\', '/', $path),

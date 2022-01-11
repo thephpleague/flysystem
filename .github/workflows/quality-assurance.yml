@@ -28,45 +28,45 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php: [ '7.2', '7.3', '7.4' ]
+        php: [] // [ '7.2', '7.3', '7.4' ]
         composer-flags: [ '' ]
         experimental: [false]
-        upgrade-aws-sdk: [ 'no' ]
+#        upgrade-aws-sdk: [ 'no' ]
         phpunit-flags: [ '--coverage-text' ]
         include:
           - php: '8.0'
             composer-flags: ''
             experimental: false
-            phpunit-flags: '--no-coverage'
-            upgrade-aws-sdk: 'yes'
-          - php: '8.1'
-            composer-flags: '--ignore-platform-reqs'
-            experimental: true
-            phpunit-flags: '--no-coverage'
-            upgrade-aws-sdk: 'yes'
-          - php: '7.2'
-            composer-flags: '--prefer-lowest'
-            experimental: false
-            phpunit-flags: '--no-coverage'
+            phpunit-flags: '--no-coverage --filter=retrieving_visibility_while_listing_directory_contents'
+#            upgrade-aws-sdk: 'yes'
+#          - php: '8.1'
+#            composer-flags: '--ignore-platform-reqs'
+#            experimental: true
+#            phpunit-flags: '--no-coverage'
+#            upgrade-aws-sdk: 'yes'
+#          - php: '7.2'
+#            composer-flags: '--prefer-lowest'
+#            experimental: false
+#            phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v2
       - run: docker-compose -f docker-compose.yml up -d
-      - name: Start an SSH Agent
-        uses: frankdejonge/use-ssh-agent@1.0.0
-      - run: chmod 0400 ./test_files/sftp/id_*
-      - id: ssh_agent
-        run: ssh-add ./test_files/sftp/id_rsa
+#      - name: Start an SSH Agent
+#        uses: frankdejonge/use-ssh-agent@1.0.0
+#      - run: chmod 0400 ./test_files/sftp/id_*
+#      - id: ssh_agent
+#        run: ssh-add ./test_files/sftp/id_rsa
       - uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: pcov
           tools: composer:v2
       - run: composer update --no-progress ${{ matrix.composer-flags }}
-      - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
-        if: ${{ matrix.upgrade-aws-sdk == 'yes' }}
-      - run: php test_files/wait_for_sftp.php
-      - run: php test_files/wait_for_ftp.php 2121
-      - run: php test_files/wait_for_ftp.php 2122
+#      - run: composer require --dev --ignore-platform-reqs aws/aws-sdk-php:^3.147.3
+#        if: ${{ matrix.upgrade-aws-sdk == 'yes' }}
+#      - run: php test_files/wait_for_sftp.php
+#      - run: php test_files/wait_for_ftp.php 2121
+#      - run: php test_files/wait_for_ftp.php 2122
       - run: COMPOSER_OPTS='${{ matrix.composer-flags }}' vendor/bin/phpunit --exclude-group phpseclib3 ${{ matrix.phpunit-flags }}
       - run: composer require --dev --with-all-dependencies phpseclib/phpseclib:^3.0 --no-progress ${{ matrix.composer-flags }}
       - run: vendor/bin/phpunit --group phpseclib3 ${{ matrix.phpunit-flags }}
