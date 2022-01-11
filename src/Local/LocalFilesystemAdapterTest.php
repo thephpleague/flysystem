@@ -315,7 +315,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
          * @var StorageAttributes $privateDirectoryAttributes
          * @var StorageAttributes $publicFileAttributes
          */
-        [$publicDirectoryAttributes, $privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes] = $listing;
+        [$privateDirectoryAttributes, $publicFileAttributes, $publicDirectoryAttributes, $privateFileAttributes] = $listing;
 
 
         var_dump($publicDirectoryAttributes->path());
