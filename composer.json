@@ -17,25 +17,22 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.0.2",
         "ext-json": "*",
         "league/mime-type-detection": "^1.0.0"
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "phpunit/phpunit": "^8.5 || ^9.4",
+        "phpunit/phpunit": "^9.4",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
-        "aws/aws-sdk-php": "^3.132.4",
+        "aws/aws-sdk-php": "^3.198.1",
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.2",
         "google/cloud-storage": "^1.23",
         "async-aws/s3": "^1.5",
         "async-aws/simple-s3": "^1.0",
         "sabre/dav": "^4.1"
-    },
-    "conflict": {
-        "guzzlehttp/ringphp": "<1.1.1"
     },
     "license": "MIT",
     "authors": [
