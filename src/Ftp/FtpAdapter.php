@@ -10,6 +10,7 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemException;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
@@ -621,5 +622,12 @@ class FtpAdapter implements FilesystemAdapter
     private function hasFtpConnection(): bool
     {
         return $this->connection instanceof \FTP\Connection || is_resource($this->connection);
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        $connection = $this->connection();
+
+        return @ftp_chdir($connection, $path) === true;
     }
 }

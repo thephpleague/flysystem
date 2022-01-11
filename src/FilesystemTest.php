@@ -106,6 +106,20 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function checking_if_directories_exist(): void
+    {
+        $this->filesystem->createDirectory('existing-directory');
+
+        $existingDirectory = $this->filesystem->directoryExists('existing-directory');
+        $notExistingDirectory = $this->filesystem->directoryExists('not-existing-directory');
+
+        $this->assertTrue($existingDirectory);
+        $this->assertFalse($notExistingDirectory);
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_file(): void
     {
         $this->filesystem->write('path.txt', 'content');

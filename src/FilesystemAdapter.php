@@ -12,6 +12,11 @@ interface FilesystemAdapter
     public function fileExists(string $path): bool;
 
     /**
+     * @throws FilesystemException
+     */
+    public function directoryExists(string $path): bool;
+
+    /**
      * @throws UnableToWriteFile
      * @throws FilesystemException
      */

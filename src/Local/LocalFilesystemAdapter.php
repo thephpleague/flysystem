@@ -304,6 +304,13 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         return is_file($location);
     }
 
+    public function directoryExists(string $location): bool
+    {
+        $location = $this->prefixer->prefixPath($location);
+
+        return is_dir($location);
+    }
+
     public function createDirectory(string $path, Config $config): void
     {
         $location = $this->prefixer->prefixPath($path);

@@ -20,6 +20,12 @@ interface FilesystemReader
     public function fileExists(string $location): bool;
 
     /**
+     * @throws FilesystemException
+     * @throws UnableToCheckDirectoryExistence
+     */
+    public function directoryExists(string $location): bool;
+
+    /**
      * @throws UnableToReadFile
      * @throws FilesystemException
      */

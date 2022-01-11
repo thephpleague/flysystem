@@ -66,6 +66,13 @@ class SftpAdapter implements FilesystemAdapter
         return $this->connectionProvider->provideConnection()->is_file($location);
     }
 
+    public function directoryExists(string $path): bool
+    {
+        $location = $this->prefixer->prefixDirectoryPath($path);
+
+        return $this->connectionProvider->provideConnection()->is_dir($location);
+    }
+
     /**
      * @param string          $path
      * @param string|resource $contents

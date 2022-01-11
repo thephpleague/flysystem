@@ -184,6 +184,14 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
     }
 
+    public function directoryExists(string $path): bool
+    {
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $location = $this->pathPrefixer->prefixDirectoryPath($path);
+
+        return $archive->statName($location) !== false;
+    }
+
     public function setVisibility(string $path, string $visibility): void
     {
         $archive = $this->zipArchiveProvider->createZipArchive();
