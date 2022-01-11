@@ -28,16 +28,16 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        php: [] // [ '7.2', '7.3', '7.4' ]
+        php: ['8.0'] # [ '7.2', '7.3', '7.4' ]
         composer-flags: [ '' ]
         experimental: [false]
 #        upgrade-aws-sdk: [ 'no' ]
-        phpunit-flags: [ '--coverage-text' ]
-        include:
-          - php: '8.0'
-            composer-flags: ''
-            experimental: false
-            phpunit-flags: '--no-coverage --filter=retrieving_visibility_while_listing_directory_contents'
+        phpunit-flags: [ '--no-coverage --filter=retrieving_visibility_while_listing_directory_contents' ]
+#        include:
+#          - php: '8.0'
+#            composer-flags: ''
+#            experimental: false
+#            phpunit-flags: '--no-coverage --filter=retrieving_visibility_while_listing_directory_contents'
 #            upgrade-aws-sdk: 'yes'
 #          - php: '8.1'
 #            composer-flags: '--ignore-platform-reqs'
