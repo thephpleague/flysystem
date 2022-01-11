@@ -190,7 +190,6 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep): iterable
     {
-        clearstatcache();
         $location = $this->prefixer->prefixPath($path);
 
         if ( ! is_dir($location)) {
