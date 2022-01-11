@@ -210,7 +210,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
             $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
             $lastModified = $fileInfo->getMTime();
             $isDirectory = $fileInfo->isDir();
-            $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
+            $permissions = $fileInfo->getPerms() & 0777;
             $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
 
             yield $isDirectory ? new DirectoryAttributes($path, $visibility, $lastModified) : new FileAttributes(
