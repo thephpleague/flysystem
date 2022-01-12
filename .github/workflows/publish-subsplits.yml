@@ -6,10 +6,10 @@ on:
       - 2.x
   create:
     tags:
-      - '*'
+      - '2.*'
   delete:
     tags:
-      - '*'
+      - '2.*'
 
 jobs:
   publish_subsplits:
