@@ -35,7 +35,8 @@
         "sabre/dav": "^4.1"
     },
     "conflict": {
-        "symfony/http-client": "<5.2"
+        "symfony/http-client": "<5.2",
+        "guzzlehttp/ringphp": "<1.1.1"
     },
     "license": "MIT",
     "authors": [
