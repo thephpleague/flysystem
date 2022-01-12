@@ -69,7 +69,7 @@ foreach ($otherComposers as $composerFile) {
     $information = json_decode($filesystem->read($composerFile), true);
 
     foreach ($information['require'] as $dependency => $constraint) {
-        if (strpos($dependency, 'ext-') === 0) {
+        if (strpos($dependency, 'ext-') === 0 || $dependency === 'phpseclib/phpseclib') {
             continue;
         }
 
