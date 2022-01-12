@@ -36,7 +36,8 @@
     },
     "conflict": {
         "symfony/http-client": "<5.2",
-        "guzzlehttp/ringphp": "<1.1.1"
+        "guzzlehttp/ringphp": "<1.1.1",
+        "guzzlehttp/guzzle": "<7.0"
     },
     "license": "MIT",
     "authors": [
