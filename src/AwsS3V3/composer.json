@@ -9,13 +9,14 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^8.0.2",
         "league/flysystem": "^2.0.0",
         "league/mime-type-detection": "^1.0.0",
         "aws/aws-sdk-php": "^3.132.4"
     },
     "conflict": {
-        "guzzlehttp/ringphp": "<1.1.1"
+        "guzzlehttp/ringphp": "<1.1.1",
+        "guzzlehttp/guzzle": "<7.0"
     },
     "license": "MIT",
     "authors": [
