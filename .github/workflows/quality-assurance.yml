@@ -6,7 +6,7 @@ on:
       - src/**/*.php
       - .github/workflows/quality-assurance.yml
     branches:
-      - 2.x
+      - 3.x
   pull_request:
     paths:
       - src/**/*.php
