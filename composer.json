@@ -23,7 +23,7 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
-        "phpunit/phpunit": "^9.4",
+        "phpunit/phpunit": "^9.5.11",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
         "aws/aws-sdk-php": "^3.198.1",
@@ -33,6 +33,9 @@
         "async-aws/s3": "^1.5",
         "async-aws/simple-s3": "^1.0",
         "sabre/dav": "^4.1"
+    },
+    "conflict": {
+        "symfony/http-client": "<5.2"
     },
     "license": "MIT",
     "authors": [

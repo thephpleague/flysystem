@@ -17,6 +17,9 @@
     "require-dev": {
         "async-aws/simple-s3": "^1.0"
     },
+    "conflict": {
+        "symfony/http-client": "<5.2"
+    },
     "license": "MIT",
     "authors": [
         {
