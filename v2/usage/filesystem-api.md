@@ -37,11 +37,11 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$contents`   | file contents                                 | `string`
-`$config`     | An optional configuration array               | `array` (optional)
+| param       | description                     | type               |
+|-------------|---------------------------------|--------------------|
+| `$path`     | location of a file              | `string`           |
+| `$contents` | file contents                   | `string`           |
+| `$config`   | An optional configuration array | `array` (optional) |
 
 ### FilesystemWriter::writeStream
 
@@ -53,11 +53,11 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$stream`     | file resource                                 | `resource`
-`$config`     | An optional configuration array               | `array` (optional)
+| param     | description                     | type               |
+|-----------|---------------------------------|--------------------|
+| `$path`   | location of a file              | `string`           |
+| `$stream` | file resource                   | `resource`         |
+| `$config` | An optional configuration array | `array` (optional) |
 
 ---
 
@@ -78,10 +78,10 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$response`   | file contents                                 | `string`
+| param       | description        | type     |
+|-------------|--------------------|----------|
+| `$path`     | location of a file | `string` |
+| `$response` | file contents      | `string` |
 
 ### FilesystemReader::readStream
 
@@ -93,10 +93,10 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$response`   | file contents handle                          | `resource`
+| param       | description          | type       |
+|-------------|----------------------|------------|
+| `$path`     | location of a file   | `string`   |
+| `$response` | file contents handle | `resource` |
 
 ---
 
@@ -112,9 +112,9 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
+| param   | description        | type     |
+|---------|--------------------|----------|
+| `$path` | location of a file | `string` |
 
 ### FilesystemWriter::deleteDirectory
 
@@ -126,9 +126,9 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
+| param   | description        | type     |
+|---------|--------------------|----------|
+| `$path` | location of a file | `string` |
 
 ---
 
@@ -155,11 +155,11 @@ try {
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$recursive`  | recursive or not (default false)              | `boolean` (optional)
-`$listing`    | directory listing                             | `League\Flysystem\DirectoryListing`
+| param        | description                      | type                                |
+|--------------|----------------------------------|-------------------------------------|
+| `$path`      | location of a file               | `string`                            |
+| `$recursive` | recursive or not (default false) | `boolean` (optional)                |
+| `$listing`   | directory listing                | `League\Flysystem\DirectoryListing` |
 
 ---
 
@@ -170,15 +170,45 @@ param         | description                                   | type
 ```php
 try {
     $fileExists = $filesystem->fileExists($path);
-} catch (FilesystemException | UnableToRetrieveMetadata $exception) {
+} catch (FilesystemException | UnableToCheckExistance $exception) {
     // handle the error
 }
 ```
 
-param         | description                                   | type
-------------- | --------------------------------------------- | -----------
-`$path`       | location of a file                            | `string`
-`$fileExists` | whether or not a file exists                  | `boolean`
+| param         | description                  | type      |
+|---------------|------------------------------|-----------|
+| `$path`       | location of a file           | `string`  |
+| `$fileExists` | whether or not a file exists | `boolean` |
+
+### FilesystemReader::directoryExists (new in 3.0.0)
+
+```php
+try {
+    $dirExists = $filesystem->directoryExists($path);
+} catch (FilesystemException | UnableToCheckExistance $exception) {
+    // handle the error
+}
+```
+
+| param        | description                       | type      |
+|--------------|-----------------------------------|-----------|
+| `$path`      | location of a directory           | `string`  |
+| `$dirExists` | whether or not a directory exists | `boolean` |
+
+### FilesystemReader::has (new in 3.0.0)
+
+```php
+try {
+    $exists = $filesystem->has($path);
+} catch (FilesystemException | UnableToCheckExistance $exception) {
+    // handle the error
+}
+```
+
+| param     | description                               | type      |
+|-----------|-------------------------------------------|-----------|
+| `$path`   | location of a file or directory           | `string`  |
+| `$exists` | whether or not a file or directory exists | `boolean` |
 
 ### FilesystemReader::lastModified
 
@@ -190,10 +220,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$lastModified`| timestamp                                     | `int`
+| param           | description        | type     |
+|-----------------|--------------------|----------|
+| `$path`         | location of a file | `string` |
+| `$lastModified` | timestamp          | `int`    |
 
 ### FilesystemReader::mimeType
 
@@ -205,11 +235,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$mimeType`    | mime-type                                     | `string`
-
+| param       | description        | type     |
+|-------------|--------------------|----------|
+| `$path`     | location of a file | `string` |
+| `$mimeType` | mime-type          | `string` |
 
 ### FilesystemReader::fileSize
 
@@ -221,10 +250,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$fileSize`    | file size                                     | `int`
+| param       | description        | type     |
+|-------------|--------------------|----------|
+| `$path`     | location of a file | `string` |
+| `$fileSize` | file size          | `int`    |
 
 ### FilesystemReader::visibility
 
@@ -236,10 +265,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$visibility`  | visibility                                    | `string`
+| param         | description        | type     |
+|---------------|--------------------|----------|
+| `$path`       | location of a file | `string` |
+| `$visibility` | visibility         | `string` |
 
 ---
 
@@ -255,10 +284,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$visibility`  | visibility                                    | `string`
+| param         | description        | type     |
+|---------------|--------------------|----------|
+| `$path`       | location of a file | `string` |
+| `$visibility` | visibility         | `string` |
 
 ---
 
@@ -274,10 +303,10 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$path`        | location of a file                            | `string`
-`$config`      | config array                                  | `array`
+| param     | description        | type     |
+|-----------|--------------------|----------|
+| `$path`   | location of a file | `string` |
+| `$config` | config array       | `array`  |
 
 ---
 
@@ -297,13 +326,11 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$source`      | location of a file                            | `string`
-`$destination` | new location of the file                      | `string`
-`$config`      | config array                                  | `array` (optional)
-
-
+| param          | description              | type               |
+|----------------|--------------------------|--------------------|
+| `$source`      | location of a file       | `string`           |
+| `$destination` | new location of the file | `string`           |
+| `$config`      | config array             | `array` (optional) |
 
 ### FilesystemWriter::copy
 
@@ -315,9 +342,9 @@ try {
 }
 ```
 
-param          | description                                   | type
--------------- | --------------------------------------------- | -----------
-`$source`      | location of a file                            | `string`
-`$destination` | location for the file  copy                   | `string`
-`$config`      | config array                                  | `array` (optional)
+| param          | description                 | type               |
+|----------------|-----------------------------|--------------------|
+| `$source`      | location of a file          | `string`           |
+| `$destination` | location for the file  copy | `string`           |
+| `$config`      | config array                | `array` (optional) |
 
