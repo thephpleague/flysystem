@@ -135,7 +135,7 @@ class MountManagerTest extends TestCase
         yield 'createDirectory' => ['createDirectory', UnableToCreateDirectory::atLocation('location.txt')];
         yield 'read' => ['read', UnableToReadFile::fromLocation('location.txt')];
         yield 'readStream' => ['readStream', UnableToReadFile::fromLocation('location.txt')];
-        yield 'fileExists' => ['fileExists', UnableToCheckExistence::forLocation('location.txt')];
+        yield 'fileExists' => ['fileExists', UnableToCheckFileExistence::forLocation('location.txt')];
     }
 
     /**

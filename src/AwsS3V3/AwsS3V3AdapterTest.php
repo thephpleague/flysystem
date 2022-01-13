@@ -15,7 +15,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
-use League\Flysystem\UnableToCheckExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -215,7 +215,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
         static::$stubS3Client->throw500ExceptionWhenExecutingCommand('HeadObject');
 
-        $this->expectException(UnableToCheckExistence::class);
+        $this->expectException(UnableToCheckFileExistence::class);
 
         $adapter->fileExists('something-that-does-exist.txt');
     }

@@ -8,7 +8,7 @@ interface FilesystemAdapter
 {
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckExistence
+     * @throws UnableToCheckFileExistence
      */
     public function fileExists(string $path): bool;
 

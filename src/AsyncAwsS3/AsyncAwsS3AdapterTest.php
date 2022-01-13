@@ -19,7 +19,7 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
-use League\Flysystem\UnableToCheckExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -198,7 +198,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
         $exception = new ClientException(new SimpleMockedResponse());
         static::$stubS3Client->throwExceptionWhenExecutingCommand('ObjectExists', $exception);
 
-        $this->expectException(UnableToCheckExistence::class);
+        $this->expectException(UnableToCheckFileExistence::class);
 
         $adapter->fileExists('something-that-does-exist.txt');
     }

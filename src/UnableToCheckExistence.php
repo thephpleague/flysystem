@@ -9,9 +9,9 @@ use Throwable;
 
 class UnableToCheckExistence extends RuntimeException implements FilesystemOperationFailed
 {
-    public static function forLocation(string $path, Throwable $exception = null): UnableToCheckExistence
+    public static function forLocation(string $path, Throwable $exception = null): static
     {
-        return new UnableToCheckExistence("Unable to check existence for: ${path}", 0, $exception);
+        return new static("Unable to check existence for: ${path}", 0, $exception);
     }
 
     public function operation(): string

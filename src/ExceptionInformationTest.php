@@ -60,6 +60,15 @@ class ExceptionInformationTest extends TestCase
     /**
      * @test
      */
+    public function unable_to_check_for_file_existence(): void
+    {
+        $exception = UnableToCheckFileExistence::forLocation('location');
+        $this->assertEquals(FilesystemOperationFailed::OPERATION_FILE_EXISTS, $exception->operation());
+    }
+
+    /**
+     * @test
+     */
     public function unable_to_check_for_existence(): void
     {
         $exception = UnableToCheckExistence::forLocation('location');

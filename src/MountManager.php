@@ -33,7 +33,7 @@ class MountManager implements FilesystemOperator
         try {
             return $filesystem->fileExists($path);
         } catch (Throwable $exception) {
-            throw UnableToCheckExistence::forLocation($location, $exception);
+            throw UnableToCheckFileExistence::forLocation($location, $exception);
         }
     }
 

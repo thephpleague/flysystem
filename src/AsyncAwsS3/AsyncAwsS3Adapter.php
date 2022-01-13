@@ -19,7 +19,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
-use League\Flysystem\UnableToCheckExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
@@ -124,7 +124,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
                 ]
             )->isSuccess();
         } catch (ClientException $e) {
-            throw UnableToCheckExistence::forLocation($path, $e);
+            throw UnableToCheckFileExistence::forLocation($path, $e);
         }
     }
 

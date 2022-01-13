@@ -15,7 +15,7 @@ interface FilesystemReader
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckExistence
+     * @throws UnableToCheckFileExistence
      */
     public function fileExists(string $location): bool;
 
@@ -27,7 +27,6 @@ interface FilesystemReader
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckDirectoryExistence
      * @throws UnableToCheckExistence
      */
     public function has(string $location): bool;
