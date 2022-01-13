@@ -1,4 +1,14 @@
-# Version 2.x Changelog
+# Changelog
+
+## 3.0.0 - 2022-01-13
+
+### Added
+
+* FilesystemReader::has to check for directory or file existence
+* FilesystemReader::directoryExists to check for directory existence
+* FilesystemReader::fileExists to check for file existence
+* FilesystemAdapter::directoryExists to check for directory existence
+* FilesystemAdapter::fileExists to check for file existence
 
 ## 2.4.0 - 2022-01-04
 
