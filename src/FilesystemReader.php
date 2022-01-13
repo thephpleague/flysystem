@@ -15,13 +15,13 @@ interface FilesystemReader
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckFileExistence
+     * @throws UnableToCheckExistence
      */
     public function fileExists(string $location): bool;
 
     /**
      * @throws FilesystemException
-     * @throws UnableToCheckDirectoryExistence
+     * @throws UnableToCheckExistence
      */
     public function directoryExists(string $location): bool;
 
