@@ -11,6 +11,8 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckDirectoryExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToMoveFile;
@@ -63,14 +65,22 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
 
-        return $this->connectionProvider->provideConnection()->is_file($location);
+        try {
+            return $this->connectionProvider->provideConnection()->is_file($location);
+        } catch (Throwable $exception) {
+            throw UnableToCheckFileExistence::forLocation($path, $exception);
+        }
     }
 
     public function directoryExists(string $path): bool
     {
         $location = $this->prefixer->prefixDirectoryPath($path);
 
-        return $this->connectionProvider->provideConnection()->is_dir($location);
+        try {
+            return $this->connectionProvider->provideConnection()->is_dir($location);
+        } catch (Throwable $exception) {
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
+        }
     }
 
     /**

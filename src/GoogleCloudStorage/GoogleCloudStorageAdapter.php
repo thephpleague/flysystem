@@ -14,6 +14,8 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckDirectoryExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
@@ -59,14 +61,22 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
 
-        return $this->bucket->object($prefixedPath)->exists();
+        try {
+            return $this->bucket->object($prefixedPath)->exists();
+        } catch (Throwable $exception) {
+            UnableToCheckFileExistence::forLocation($path);
+        }
     }
 
     public function directoryExists(string $path): bool
     {
         $prefixedPath = $this->prefixer->prefixDirectoryPath($path);
 
-        return $this->bucket->object($prefixedPath)->exists();
+        try {
+            return $this->bucket->object($prefixedPath)->exists();
+        } catch (Throwable $exception) {
+            UnableToCheckDirectoryExistence::forLocation($path);
+        }
     }
 
     public function write(string $path, string $contents, Config $config): void
