@@ -15,7 +15,7 @@ use League\Flysystem\FilesystemOperationFailed;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
-use League\Flysystem\UnableToCheckFileExistence;
+use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
@@ -128,7 +128,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         try {
             return $this->client->doesObjectExist($this->bucket, $this->prefixer->prefixPath($path), $this->options);
         } catch (Throwable $exception) {
-            throw UnableToCheckFileExistence::forLocation($path, $exception);
+            throw UnableToCheckExistence::forLocation($path, $exception);
         }
     }
 
