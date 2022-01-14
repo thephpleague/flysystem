@@ -15,7 +15,7 @@ redirect_from:
 [![Software License](https:////img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/thephpleague/flysystem.svg?branch=v1.0)](https://travis-ci.org/thephpleague/flysystem)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
-![php 7.2+](https://img.shields.io/badge/php-min%207.2-red.svg)
+![php 7.2+](https://img.shields.io/badge/php-min%208.0.2-red.svg)
 
 ## About Flysystem
 
