@@ -11,7 +11,6 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
-use League\Flysystem\FilesystemException;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
@@ -26,6 +25,12 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use Throwable;
+
+use function array_key_exists;
+use function count;
+use function rtrim;
+use function sprintf;
+use function strlen;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter
 {
@@ -49,8 +54,12 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
      */
     private $defaultVisibility;
 
-    public function __construct(Bucket $bucket, string $prefix = '', VisibilityHandler $visibilityHandler = null, string $defaultVisibility = Visibility::PRIVATE)
-    {
+    public function __construct(
+        Bucket $bucket,
+        string $prefix = '',
+        VisibilityHandler $visibilityHandler = null,
+        string $defaultVisibility = Visibility::PRIVATE
+    ) {
         $this->bucket = $bucket;
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
@@ -70,13 +79,32 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
     public function directoryExists(string $path): bool
     {
-        $prefixedPath = $this->prefixer->prefixDirectoryPath($path);
+        $prefixedPath = $this->prefixer->prefixPath($path);
+        $options = [
+            'delimiter' => '/',
+            'includeTrailingDelimiter' => true,
+        ];
+
+        if (strlen($prefixedPath) > 0) {
+            $options = ['prefix' => rtrim($prefixedPath, '/') . '/'];
+        }
 
         try {
-            return $this->bucket->object($prefixedPath)->exists();
+            $objects = $this->bucket->objects($options);
         } catch (Throwable $exception) {
             throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         }
+
+        if (count($objects->prefixes()) > 0) {
+            return true;
+        }
+
+        /** @var StorageObject $object */
+        foreach ($objects as $object) {
+            return true;
+        }
+
+        return false;
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -127,9 +155,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $prefixedPath = $this->prefixer->prefixPath($path);
 
         try {
-            $stream = $this->bucket->object($prefixedPath)
-                ->downloadAsStream()
-                ->detach();
+            $stream = $this->bucket->object($prefixedPath)->downloadAsStream()->detach();
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }
@@ -138,6 +164,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         if ( ! is_resource($stream)) {
             throw UnableToReadFile::fromLocation($path, 'Downloaded object does not contain a file resource.');
         }
+
         // @codeCoverageIgnoreEnd
 
         return $stream;
