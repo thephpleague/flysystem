@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use function is_resource;
 use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
@@ -144,7 +145,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $writeStream = stream_with_contents('contents');
 
             $adapter->writeStream('path.txt', $writeStream, new Config());
-            fclose($writeStream);
+            is_resource($writeStream) && fclose($writeStream);
             $fileExists = $adapter->fileExists('path.txt');
 
             $this->assertTrue($fileExists);
@@ -195,7 +196,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $writeStream = stream_with_contents('');
 
             $adapter->writeStream('path.txt', $writeStream, new Config());
-            fclose($writeStream);
+            is_resource($writeStream) && fclose($writeStream);
             $fileExists = $adapter->fileExists('path.txt');
 
             $this->assertTrue($fileExists);
