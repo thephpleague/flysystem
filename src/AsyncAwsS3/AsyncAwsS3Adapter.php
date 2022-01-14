@@ -125,7 +125,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
                 ]
             )->isSuccess();
         } catch (ClientException $e) {
-            throw UnableToCheckFileExistence:: forLocation($path, $e);
+            throw UnableToCheckFileExistence::forLocation($path, $e);
         }
     }
 
