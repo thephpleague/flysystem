@@ -64,7 +64,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         try {
             return $this->bucket->object($prefixedPath)->exists();
         } catch (Throwable $exception) {
-            UnableToCheckFileExistence::forLocation($path, $exception);
+            throw UnableToCheckFileExistence::forLocation($path, $exception);
         }
     }
 
@@ -75,7 +75,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         try {
             return $this->bucket->object($prefixedPath)->exists();
         } catch (Throwable $exception) {
-            UnableToCheckDirectoryExistence::forLocation($path, $exception);
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         }
     }
 
