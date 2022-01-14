@@ -11,8 +11,8 @@
         }
     },
     "require": {
-        "php": ">=7.2",
-        "league/flysystem": "^2.0",
+        "php": "^8.0.2",
+        "league/flysystem": "^2.0.0 || ^3.0.0",
         "microsoft/azure-storage-blob": "^1.1"
     },
     "require-dev": {

@@ -24,6 +24,7 @@
     "require-dev": {
         "ext-zip": "*",
         "ext-fileinfo": "*",
+        "microsoft/azure-storage-blob": "^1.1",
         "phpunit/phpunit": "^9.5.11",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",

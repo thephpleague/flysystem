@@ -8,6 +8,8 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\FilesystemException;
+use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -111,20 +113,20 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         $options = new ListBlobsOptions();
         $options->setPrefix($resolved->getPath());
         $options->setMaxResults($this->maxResultsForContentsListing);
-        $options->setDelimiter('/');
+        if ($deep) {
+            $options->setDelimiter('/');
+        }
 
         do {
             $response = $this->client->listBlobs($resolved->getContainer(), $options);
 
+            foreach ($response->getBlobPrefixes() as $blobPrefix) {
+                yield new DirectoryAttributes($blobPrefix->getName());
+            }
+
             foreach ($response->getBlobs() as $blob) {
                 $name = $blob->getName();
                 yield $this->normalizeBlobProperties($name, $blob->getProperties());
-            }
-
-            if (!$deep) {
-                foreach ($response->getBlobPrefixes() as $blobPrefix) {
-                    yield new DirectoryAttributes($blobPrefix->getName());
-                }
             }
 
             $continuationToken = $response->getContinuationToken();
@@ -143,6 +145,11 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
             }
             throw UnableToCheckFileExistence::forLocation($path, $exception);
         }
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        return false;
     }
 
     public function deleteDirectory(string $path): void
