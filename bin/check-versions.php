@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * This script check for composer dependency incompatibilities:
+ * This script check for composer dependency incompatibilities:.
  *
  *  - All required dependencies of the extracted packages MUST be
  *    present in the main composer.json's require(-dev) section.
@@ -23,7 +23,6 @@ use League\Flysystem\StorageAttributes;
 
 include_once __DIR__ . '/tools.php';
 
-
 function constraint_has_conflict(string $mainConstraint, string $packageConstraint): bool
 {
     $parser = new VersionParser();
@@ -33,7 +32,6 @@ function constraint_has_conflict(string $mainConstraint, string $packageConstrai
     $packageConstraint = $parser->parseConstraints($packageConstraint);
     $packageLowerBound = $packageConstraint->getLowerBound()->getVersion();
     $packageUpperBound = $packageConstraint->getUpperBound()->getVersion();
-
 
     if (Comparator::compare($mainUpperBound, '<=', $packageLowerBound)) {
         return true;
@@ -58,9 +56,15 @@ $filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/../'));
 $mainComposer = $filesystem->read('composer.json');
 /** @var string[] $otherComposers */
 $otherComposers = $filesystem->listContents('src', true)
-    ->filter(function(StorageAttributes $item) { return $item->isFile(); })
-    ->filter(function(FileAttributes $item) { return substr($item->path(), -5) === '.json'; })
-    ->map(function(FileAttributes $item) { return $item->path(); })
+    ->filter(function (StorageAttributes $item) {
+        return $item->isFile();
+    })
+    ->filter(function (FileAttributes $item) {
+        return substr($item->path(), -5) === '.json';
+    })
+    ->map(function (FileAttributes $item) {
+        return $item->path();
+    })
     ->toArray();
 
 $mainInformation = json_decode($mainComposer, true);
@@ -107,4 +111,3 @@ foreach ($otherComposers as $composerFile) {
 }
 
 write_line("✅ Composer dependencies are looking fine.");
-

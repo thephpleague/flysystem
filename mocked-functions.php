@@ -39,7 +39,8 @@ namespace League\Flysystem\Local {
 }
 
 namespace League\Flysystem\InMemory {
-    function time() {
+    function time()
+    {
         if ( ! is_mocked('time')) {
             return \time();
         }
@@ -141,7 +142,8 @@ namespace League\Flysystem\Ftp {
 }
 
 namespace League\Flysystem\ZipArchive {
-    function stream_get_contents(...$arguments) {
+    function stream_get_contents(...$arguments)
+    {
         if ( ! is_mocked('stream_get_contents')) {
             return \stream_get_contents(...$arguments);
         }

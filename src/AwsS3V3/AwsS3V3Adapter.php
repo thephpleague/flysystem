@@ -328,7 +328,12 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $lastModified = $dateTime instanceof DateTimeResult ? $dateTime->getTimeStamp() : null;
 
         return new FileAttributes(
-            $path, $fileSize, null, $lastModified, $mimetype, $this->extractExtraMetadata($metadata)
+            $path,
+            $fileSize,
+            null,
+            $lastModified,
+            $mimetype,
+            $this->extractExtraMetadata($metadata)
         );
     }
 

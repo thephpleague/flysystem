@@ -17,7 +17,7 @@ $provider = new FtpConnectionProvider();
 $start = time();
 $connected = false;
 
-while(time() - $start < 60) {
+while (time() - $start < 60) {
     try {
         $provider->createConnection($options);
         $connected = true;

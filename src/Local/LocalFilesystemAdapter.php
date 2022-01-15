@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use function file_put_contents;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -38,11 +37,11 @@ use function dirname;
 use function error_clear_last;
 use function error_get_last;
 use function file_exists;
+use function file_put_contents;
 use function is_dir;
 use function is_file;
 use function mkdir;
 use function rename;
-use function stream_copy_to_stream;
 
 class LocalFilesystemAdapter implements FilesystemAdapter
 {

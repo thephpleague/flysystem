@@ -8,8 +8,6 @@ use Google\Cloud\Storage\Bucket;
 use LogicException;
 use Throwable;
 
-use function array_key_exists;
-
 class StubRiggedBucket extends Bucket
 {
     private array $triggers = [];

@@ -1,8 +1,8 @@
 <?php
 
 $finder = PhpCsFixer\Finder::create()
-    ->in([__DIR__ . '/src'])
-;
+    ->in([__DIR__ . '/'])
+    ->exclude(__DIR__ . '/vendor');
 
 return (new PhpCsFixer\Config())
     ->setRules([
@@ -35,5 +35,4 @@ return (new PhpCsFixer\Config())
         'no_extra_blank_lines' => true,
         'no_whitespace_in_blank_line' => true,
     ])
-    ->setFinder($finder)
-    ;
+    ->setFinder($finder);

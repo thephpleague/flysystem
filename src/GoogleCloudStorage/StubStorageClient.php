@@ -27,6 +27,7 @@ class StubStorageClient extends StorageClient
                 'requesterProjectId' => $this->projectId,
             ]);
         }
+
         return $name === 'flysystem' ? $this->riggedBucket : parent::bucket($name, $userProject);
     }
 }

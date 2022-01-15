@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
-use function is_resource;
-use function iterator_to_array;
 use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
@@ -21,6 +19,8 @@ use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use function file_get_contents;
+use function is_resource;
+use function iterator_to_array;
 
 /**
  * @codeCoverageIgnore
@@ -674,7 +674,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function checking_if_files_exist(): void
     {
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $adapter = $this->adapter();
             $fileExistsBefore = $adapter->fileExists('some/path.txt');
             $adapter->write('some/path.txt', 'contents', new Config());

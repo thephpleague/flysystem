@@ -29,7 +29,7 @@
         "phpseclib/phpseclib": "^2.0",
         "aws/aws-sdk-php": "^3.198.1",
         "composer/semver": "^3.0",
-        "friendsofphp/php-cs-fixer": "^3.2",
+        "friendsofphp/php-cs-fixer": "^3.5",
         "google/cloud-storage": "^1.23",
         "async-aws/s3": "^1.5",
         "async-aws/simple-s3": "^1.0",

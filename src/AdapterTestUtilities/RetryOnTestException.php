@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
-use League\Flysystem\FilesystemException;
 use const PHP_EOL;
 use const STDOUT;
+use League\Flysystem\FilesystemException;
 use Throwable;
 
 /**
@@ -43,6 +43,7 @@ trait RetryOnTestException
 
     /**
      * @internal
+     *
      * @throws Throwable
      */
     protected function runSetup(callable $scenario): void

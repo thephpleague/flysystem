@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use function strnatcasecmp;
-use function usort;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -32,7 +30,9 @@ use function fileperms;
 use function is_resource;
 use function iterator_to_array;
 use function mkdir;
+use function strnatcasecmp;
 use function symlink;
+use function usort;
 
 /**
  * @group local
@@ -305,7 +305,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         /** @var Traversable<StorageAttributes> $contentListing */
         $contentListing = $adapter->listContents('/', true);
         $listing = iterator_to_array($contentListing);
-        usort($listing, function(StorageAttributes $a, StorageAttributes $b) {
+        usort($listing, function (StorageAttributes $a, StorageAttributes $b) {
             return strnatcasecmp($a->path(), $b->path());
         });
         /**
