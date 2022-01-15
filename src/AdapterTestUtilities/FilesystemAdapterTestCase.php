@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\AdapterTestUtilities;
 
 use function is_resource;
+use function iterator_to_array;
 use const PHP_EOL;
 use Generator;
 use League\Flysystem\Config;
@@ -36,7 +37,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @var bool
      */
-    private $isUsingCustomAdapter = false;
+    protected $isUsingCustomAdapter = false;
 
     public static function clearFilesystemAdapterCache(): void
     {
@@ -78,8 +79,8 @@ abstract class FilesystemAdapterTestCase extends TestCase
      */
     public function cleanupAdapter(): void
     {
-        $this->clearStorage();
         $this->clearCustomAdapter();
+        $this->clearStorage();
     }
 
     public function clearStorage(): void
@@ -331,6 +332,10 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $adapter = $this->adapter();
             $adapter->createDirectory('explicitly-created-directory', new Config());
             self::assertTrue($adapter->directoryExists('explicitly-created-directory'));
+            $adapter->deleteDirectory('explicitly-created-directory');
+            $l = iterator_to_array($adapter->listContents('/', false), false);
+            self::assertEquals([], $l);
+            self::assertFalse($adapter->directoryExists('explicitly-created-directory'));
         });
     }
 
@@ -718,17 +723,18 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->runScenario(function () {
             $adapter = $this->adapter();
 
-            $adapter->createDirectory('path', new Config());
+            $adapter->createDirectory('creating_a_directory/path', new Config());
 
             // Creating a directory should be idempotent.
-            $adapter->createDirectory('path', new Config());
+            $adapter->createDirectory('creating_a_directory/path', new Config());
 
-            $contents = iterator_to_array($adapter->listContents('', false));
+            $contents = iterator_to_array($adapter->listContents('creating_a_directory', false));
             $this->assertCount(1, $contents, $this->formatIncorrectListingCount($contents));
             /** @var DirectoryAttributes $directory */
             $directory = $contents[0];
             $this->assertInstanceOf(DirectoryAttributes::class, $directory);
-            $this->assertEquals('path', $directory->path());
+            $this->assertEquals('creating_a_directory/path', $directory->path());
+            $adapter->deleteDirectory('creating_a_directory/path');
         });
     }
 

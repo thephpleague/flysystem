@@ -191,6 +191,10 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             foreach ($listing as $attributes) {
                 $this->delete($attributes->path());
             }
+
+            if ($path !== '') {
+                $this->delete(rtrim($path, '/') . '/');
+            }
         } catch (Throwable $exception) {
             throw UnableToDeleteDirectory::atLocation($path, '', $exception);
         }
@@ -198,8 +202,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $prefixedPath = rtrim($this->prefixer->prefixPath($path), '/') . '/';
-        $this->bucket->upload('', ['name' => $prefixedPath]);
+        $prefixedPath = $this->prefixer->prefixDirectoryPath($path);
+
+        if ($prefixedPath !== '') {
+            $this->bucket->upload('', ['name' => $prefixedPath]);
+        }
     }
 
     public function setVisibility(string $path, string $visibility): void
