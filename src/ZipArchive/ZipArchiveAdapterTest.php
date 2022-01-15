@@ -17,6 +17,8 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
+use function iterator_to_array;
+
 /**
  * @group zip
  */
@@ -136,7 +138,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         $this->adapter()->deleteDirectory('one');
 
         $items = iterator_to_array($this->adapter()->listContents('', true));
-        $this->assertCount(4, $items);
+        $this->assertCount(3, $items);
     }
 
     /**
@@ -225,6 +227,20 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToSetVisibility::class);
 
         $this->adapter()->setVisibility('path.txt', Visibility::PUBLIC);
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_a_directory_with_files_in_it(): void
+    {
+        $this->givenWeHaveAnExistingFile('nested/path-a.txt');
+        $this->givenWeHaveAnExistingFile('nested/path-b.txt');
+
+        $this->adapter()->deleteDirectory('nested');
+        $listing = iterator_to_array($this->adapter()->listContents('', true));
+
+        self::assertEquals([], $listing);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace League\Flysystem\AsyncAwsS3;
 
 use AsyncAws\Core\Exception\Http\ClientException;
 
+use AsyncAws\Core\Exception\Http\NetworkException;
 use AsyncAws\Core\Test\Http\SimpleMockedResponse;
 use AsyncAws\Core\Test\ResultMockFactory;
 
@@ -18,6 +19,7 @@ use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\Ftp\UnableToConnectToFtpHost;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
@@ -48,6 +50,12 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
      * @var S3ClientStub
      */
     private static $stubS3Client;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->retryOnException(NetworkException::class);
+    }
 
     public static function setUpBeforeClass(): void
     {

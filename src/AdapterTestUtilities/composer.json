@@ -13,8 +13,8 @@
         ]
     },
     "require": {
-        "php": "^7.2 || ^8.0",
-        "league/flysystem": "^2.0.0"
+        "php": "^8.0.2",
+        "league/flysystem": "^2.0.0 || ^3.0.0"
     },
     "license": "MIT",
     "authors": [

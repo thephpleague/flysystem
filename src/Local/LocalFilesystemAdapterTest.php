@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use function strnatcasecmp;
+use function usort;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -302,13 +304,17 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
 
         /** @var Traversable<StorageAttributes> $contentListing */
         $contentListing = $adapter->listContents('/', true);
+        $listing = iterator_to_array($contentListing);
+        usort($listing, function(StorageAttributes $a, StorageAttributes $b) {
+            return strnatcasecmp($a->path(), $b->path());
+        });
         /**
          * @var StorageAttributes $publicDirectoryAttributes
          * @var StorageAttributes $privateFileAttributes
          * @var StorageAttributes $privateDirectoryAttributes
          * @var StorageAttributes $publicFileAttributes
          */
-        [$publicDirectoryAttributes, $privateFileAttributes, $privateDirectoryAttributes, $publicFileAttributes] = iterator_to_array($contentListing);
+        [$privateDirectoryAttributes, $publicFileAttributes, $publicDirectoryAttributes, $privateFileAttributes] = $listing;
 
         $this->assertEquals('public', $publicDirectoryAttributes->visibility());
         $this->assertEquals('private', $privateFileAttributes->visibility());

@@ -1,4 +1,30 @@
-# Version 2.x Changelog
+# Changelog
+
+## 3.0.1 - 2022-01-15
+
+### Fixes
+
+* [ZipArchive] delete top-level directory too when deleting a directory
+* [GoogleCloudStorage] Use listing to check for directory existence (consistency)
+* [GoogleCloudStorage] Fixed bug where exceptions were not thrown 
+* [AwsS3V3] Allow passing options for controlling multi-upload options (#1396)
+* [Local] Convert windows-style directory separator to unix-style (#1398)
+
+## 3.0.0 - 2022-01-13
+
+### Added
+
+* FilesystemReader::has to check for directory or file existence
+* FilesystemReader::directoryExists to check for directory existence
+* FilesystemReader::fileExists to check for file existence
+* FilesystemAdapter::directoryExists to check for directory existence
+* FilesystemAdapter::fileExists to check for file existence
+
+## 2.4.0 - 2022-01-04
+
+### Added
+
+- [SFTP V3] New adapter officially published
 
 ## 2.3.2 - 2021-11-28
 

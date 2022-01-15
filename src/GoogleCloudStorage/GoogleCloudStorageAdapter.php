@@ -13,6 +13,8 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckDirectoryExistence;
+use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
@@ -23,6 +25,12 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use Throwable;
+
+use function array_key_exists;
+use function count;
+use function rtrim;
+use function sprintf;
+use function strlen;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter
 {
@@ -46,8 +54,12 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
      */
     private $defaultVisibility;
 
-    public function __construct(Bucket $bucket, string $prefix = '', VisibilityHandler $visibilityHandler = null, string $defaultVisibility = Visibility::PRIVATE)
-    {
+    public function __construct(
+        Bucket $bucket,
+        string $prefix = '',
+        VisibilityHandler $visibilityHandler = null,
+        string $defaultVisibility = Visibility::PRIVATE
+    ) {
         $this->bucket = $bucket;
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
@@ -58,7 +70,41 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     {
         $prefixedPath = $this->prefixer->prefixPath($path);
 
-        return $this->bucket->object($prefixedPath)->exists();
+        try {
+            return $this->bucket->object($prefixedPath)->exists();
+        } catch (Throwable $exception) {
+            throw UnableToCheckFileExistence::forLocation($path, $exception);
+        }
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        $prefixedPath = $this->prefixer->prefixPath($path);
+        $options = [
+            'delimiter' => '/',
+            'includeTrailingDelimiter' => true,
+        ];
+
+        if (strlen($prefixedPath) > 0) {
+            $options = ['prefix' => rtrim($prefixedPath, '/') . '/'];
+        }
+
+        try {
+            $objects = $this->bucket->objects($options);
+        } catch (Throwable $exception) {
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
+        }
+
+        if (count($objects->prefixes()) > 0) {
+            return true;
+        }
+
+        /** @var StorageObject $object */
+        foreach ($objects as $object) {
+            return true;
+        }
+
+        return false;
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -109,9 +155,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $prefixedPath = $this->prefixer->prefixPath($path);
 
         try {
-            $stream = $this->bucket->object($prefixedPath)
-                ->downloadAsStream()
-                ->detach();
+            $stream = $this->bucket->object($prefixedPath)->downloadAsStream()->detach();
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
         }
@@ -120,6 +164,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         if ( ! is_resource($stream)) {
             throw UnableToReadFile::fromLocation($path, 'Downloaded object does not contain a file resource.');
         }
+
         // @codeCoverageIgnoreEnd
 
         return $stream;
@@ -146,6 +191,10 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             foreach ($listing as $attributes) {
                 $this->delete($attributes->path());
             }
+
+            if ($path !== '') {
+                $this->delete(rtrim($path, '/') . '/');
+            }
         } catch (Throwable $exception) {
             throw UnableToDeleteDirectory::atLocation($path, '', $exception);
         }
@@ -153,8 +202,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $prefixedPath = rtrim($this->prefixer->prefixPath($path), '/') . '/';
-        $this->bucket->upload('', ['name' => $prefixedPath]);
+        $prefixedPath = $this->prefixer->prefixDirectoryPath($path);
+
+        if ($prefixedPath !== '') {
+            $this->bucket->upload('', ['name' => $prefixedPath]);
+        }
     }
 
     public function setVisibility(string $path, string $visibility): void

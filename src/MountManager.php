@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use Throwable;
+
 use function sprintf;
 
 class MountManager implements FilesystemOperator
@@ -30,8 +32,32 @@ class MountManager implements FilesystemOperator
 
         try {
             return $filesystem->fileExists($path);
-        } catch (UnableToCheckFileExistence $exception) {
+        } catch (Throwable $exception) {
             throw UnableToCheckFileExistence::forLocation($location, $exception);
+        }
+    }
+
+    public function has(string $location): bool
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+
+        try {
+            return $filesystem->fileExists($path) || $filesystem->directoryExists($path);
+        } catch (Throwable $exception) {
+            throw UnableToCheckExistence::forLocation($location, $exception);
+        }
+    }
+
+    public function directoryExists(string $location): bool
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+
+        try {
+            return $filesystem->directoryExists($path);
+        } catch (Throwable $exception) {
+            throw UnableToCheckDirectoryExistence::forLocation($location, $exception);
         }
     }
 

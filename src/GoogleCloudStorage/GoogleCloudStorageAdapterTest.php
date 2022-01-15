@@ -7,6 +7,7 @@ namespace League\Flysystem\GoogleCloudStorage;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\PathPrefixer;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -21,15 +22,23 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
      * @var string
      */
     private static $adapterPrefix = 'ci';
-
-    /**
-     * @var StubBucket
-     */
-    private static $bucket;
+    private static StubRiggedBucket $bucket;
+    private static PathPrefixer $prefixer;
 
     public static function setUpBeforeClass(): void
     {
-        static::$adapterPrefix = 'ci/' . bin2hex(random_bytes(10));
+        static::$adapterPrefix = 'frank-ci'; // . bin2hex(random_bytes(10));
+        static::$prefixer = new PathPrefixer(static::$adapterPrefix);
+    }
+
+    public function prefixPath(string $path): string
+    {
+        return static::$prefixer->prefixPath($path);
+    }
+
+    public function prefixDirectoryPath(string $path): string
+    {
+        return static::$prefixer->prefixDirectoryPath($path);
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
@@ -44,12 +53,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
 
         ];
         $storageClient = new StubStorageClient($clientOptions);
-        $connection = $storageClient->connection();
-        $projectId = $storageClient->projectId();
-
-        static::$bucket = $bucket = new StubBucket($connection, 'flysystem', [
-            'requesterProjectId' => $projectId,
-        ]);
+        static::$bucket = $bucket = $storageClient->bucket('flysystem');
 
         return new GoogleCloudStorageAdapter($bucket, static::$adapterPrefix);
     }
@@ -62,7 +66,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
         $this->markTestSkipped("
             Not relevant for this adapter since it's a missing ACL,
             which turns into a 404 which is the expected outcome
-            of a private visibility. 🤷‍♂️
+            of a private visibility. ¯\_(ツ)_/¯
         ");
     }
 
@@ -89,7 +93,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_write_a_file(): void
     {
         $adapter = $this->adapter();
-        static::$bucket->failOnUpload();
+        static::$bucket->failForUpload($this->prefixPath('something.txt'));
 
         $this->expectException(UnableToWriteFile::class);
 
@@ -102,7 +106,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_delete_a_file(): void
     {
         $adapter = $this->adapter();
-        static::$bucket->withObject(static::$adapterPrefix . '/filename.txt')->failWhenDeleting();
+        static::$bucket->failForObject($this->prefixPath('filename.txt'));
 
         $this->expectException(UnableToDeleteFile::class);
 
@@ -116,7 +120,8 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('dir/filename.txt');
-        static::$bucket->withObject(static::$adapterPrefix . '/dir/filename.txt')->failWhenDeleting();
+
+        static::$bucket->failForObject($this->prefixPath('dir/filename.txt'));
 
         $this->expectException(UnableToDeleteDirectory::class);
 
@@ -129,7 +134,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_retrieve_visibility(): void
     {
         $adapter = $this->adapter();
-        static::$bucket->withObject(static::$adapterPrefix . '/filename.txt')->failWhenAccessingAcl();
+        static::$bucket->failForObject($this->prefixPath('filename.txt'));
 
         $this->expectException(UnableToRetrieveMetadata::class);
 

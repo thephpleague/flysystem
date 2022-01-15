@@ -8,6 +8,8 @@ interface FilesystemOperationFailed extends FilesystemException
 {
     public const OPERATION_WRITE = 'WRITE';
     public const OPERATION_UPDATE = 'UPDATE';
+    public const OPERATION_EXISTENCE_CHECK = 'EXISTENCE_CHECK';
+    public const OPERATION_DIRECTORY_EXISTS = 'DIRECTORY_EXISTS';
     public const OPERATION_FILE_EXISTS = 'FILE_EXISTS';
     public const OPERATION_CREATE_DIRECTORY = 'CREATE_DIRECTORY';
     public const OPERATION_DELETE = 'DELETE';

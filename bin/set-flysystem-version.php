@@ -5,7 +5,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 
-include_once __DIR__.'/tools.php';
+include_once __DIR__ . '/tools.php';
 
 if ( ! isset($argv[1])) {
     panic('No base version provided');
@@ -15,7 +15,7 @@ $mainVersion = $argv[1];
 
 write_line("☝️ Setting all flysystem constraints to {$mainVersion}.");
 
-$filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__.'/../'));
+$filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/../'));
 
 /** @var string[] $otherComposers */
 $composerFiles = $filesystem->listContents('src', true)

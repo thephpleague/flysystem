@@ -6,7 +6,9 @@ use League\Flysystem\AdapterTestUtilities\ExceptionThrowingFilesystemAdapter;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
+use function fclose;
 use function is_resource;
+use function stream_get_contents;
 use function tmpfile;
 
 /**
@@ -160,6 +162,94 @@ class MountManagerTest extends TestCase
         fclose($handle);
 
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_existing_file(): void
+    {
+        $this->secondFilesystem->write('location.txt', 'contents');
+
+        $existence = $this->mountManager->fileExists('second://location.txt');
+
+        $this->assertTrue($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_non_existing_file(): void
+    {
+        $existence = $this->mountManager->fileExists('second://location.txt');
+
+        $this->assertFalse($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_non_existing_directory(): void
+    {
+        $existence = $this->mountManager->directoryExists('second://some-directory');
+
+        $this->assertFalse($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_existing_directory(): void
+    {
+        $this->secondFilesystem->write('nested/location.txt', 'contents');
+
+        $existence = $this->mountManager->directoryExists('second://nested');
+
+        $this->assertTrue($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_existing_file_using_has(): void
+    {
+        $this->secondFilesystem->write('location.txt', 'contents');
+
+        $existence = $this->mountManager->has('second://location.txt');
+
+        $this->assertTrue($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_non_existing_file_using_has(): void
+    {
+        $existence = $this->mountManager->has('second://location.txt');
+
+        $this->assertFalse($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_non_existing_directory_using_has(): void
+    {
+        $existence = $this->mountManager->has('second://some-directory');
+
+        $this->assertFalse($existence);
+    }
+
+    /**
+     * @test
+     */
+    public function checking_existence_for_an_existing_directory_using_has(): void
+    {
+        $this->secondFilesystem->write('nested/location.txt', 'contents');
+
+        $existence = $this->mountManager->has('second://nested');
+
+        $this->assertTrue($existence);
     }
 
     /**

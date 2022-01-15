@@ -30,7 +30,6 @@ use function fclose;
 use function fopen;
 use function rewind;
 use function stream_copy_to_stream;
-use function stream_with_contents;
 
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
@@ -161,7 +160,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
             $itemPath = $stats['name'];
 
-            if ($prefixedPath === $itemPath || strpos($itemPath, $prefixedPath) !== 0) {
+            if (strpos($itemPath, $prefixedPath) !== 0) {
                 continue;
             }
 
@@ -182,6 +181,14 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         } catch (Throwable $exception) {
             throw UnableToCreateDirectory::dueToFailure($path, $exception);
         }
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $location = $this->pathPrefixer->prefixDirectoryPath($path);
+
+        return $archive->statName($location) !== false;
     }
 
     public function setVisibility(string $path, string $visibility): void

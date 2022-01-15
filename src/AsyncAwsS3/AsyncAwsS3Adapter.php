@@ -19,6 +19,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
@@ -30,6 +31,8 @@ use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
+
+use function trim;
 
 class AsyncAwsS3Adapter implements FilesystemAdapter
 {
@@ -252,6 +255,18 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         }
 
         return $attributes;
+    }
+
+    public function directoryExists(string $path): bool
+    {
+        try {
+            $prefix = $this->prefixer->prefixDirectoryPath($path);
+            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'Delimiter' => '/'];
+
+            return $this->client->listObjectsV2($options)->getKeyCount() > 0;
+        } catch (Throwable $exception) {
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
+        }
     }
 
     public function listContents(string $path, bool $deep): iterable

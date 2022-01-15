@@ -6,7 +6,7 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://github.com/thephpleague/flysystem/blob/master/LICENSE)
 [![Quality Assurance](https://github.com/thephpleague/flysystem/workflows/Quality%20Assurance/badge.svg?branch=2.x)](https://github.com/thephpleague/flysystem/actions?query=workflow%3A%22Quality+Assurance%22)
 [![Total Downloads](https://img.shields.io/packagist/dt/league/flysystem.svg)](https://packagist.org/packages/league/flysystem)
-![php 7.2+](https://img.shields.io/badge/php-min%207.2-red.svg)
+![php 7.2+](https://img.shields.io/badge/php-min%208.0.2-red.svg)
 
 ## About Flysystem
 
