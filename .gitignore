@@ -7,3 +7,4 @@
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 /google-cloud-service-account.json
+.idea
