@@ -8,7 +8,7 @@ declare(strict_types=1);
  *  - All required dependencies of the extracted packages MUST be
  *    present in the main composer.json's require(-dev) section.
  *  - Dependency constraints of extracted packages may not exclude
- *    the constrains of the main package and visa versa.
+ *    the constraints of the main package and visa versa.
  *  - The provided target release argument must be satisfiable by
  *    all of the extracted packages' core dependency constraint.
  */
@@ -21,7 +21,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 
-include_once __DIR__.'/tools.php';
+include_once __DIR__ . '/tools.php';
 
 
 function constraint_has_conflict(string $mainConstraint, string $packageConstraint): bool
@@ -53,7 +53,7 @@ if ( ! isset($argv[1])) {
 write_line("🔎 Inspecting composer dependency incompatibilities.");
 
 $mainVersion = $argv[1];
-$filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__.'/../'));
+$filesystem = new Filesystem(new LocalFilesystemAdapter(__DIR__ . '/../'));
 
 $mainComposer = $filesystem->read('composer.json');
 /** @var string[] $otherComposers */
@@ -69,7 +69,7 @@ foreach ($otherComposers as $composerFile) {
     $information = json_decode($filesystem->read($composerFile), true);
 
     foreach ($information['require'] as $dependency => $constraint) {
-        if (strpos($dependency, 'ext-') === 0 || $dependency === 'phpseclib/phpseclib') {
+        if (str_starts_with($dependency, 'ext-') || $dependency === 'phpseclib/phpseclib') {
             continue;
         }
 
@@ -79,6 +79,7 @@ foreach ($otherComposers as $composerFile) {
             } else {
                 write_line("Composer file {$composerFile} allows league/flysystem:{$mainVersion} with {$constraint}");
             }
+
             continue;
         }
 
