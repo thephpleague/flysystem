@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.1 - 2022-01-15
+
+### Fixes
+
+* [ZipArchive] delete top-level directory too when deleting a directory
+* [GoogleCloudStorage] Use listing to check for directory existence (consistency)
+* [GoogleCloudStorage] Fixed bug where exceptions were not thrown 
+* [AwsS3V3] Allow passing options for controlling multi-upload options (#1396)
+* [Local] Convert windows-style directory separator to unix-style (#1398)
+
 ## 3.0.0 - 2022-01-13
 
 ### Added
