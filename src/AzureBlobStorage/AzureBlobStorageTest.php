@@ -18,7 +18,7 @@ class AzureBlobStorageTest extends TestCase
     {
         $client = BlobRestProxy::createBlobService(getenv('FLYSYSTEM_AZURE_DSN'));
 
-        return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME);
+        return new AzureBlobStorageAdapter($client, new StaticContainerPathResolver(self::CONTAINER_NAME));
     }
 
     /**

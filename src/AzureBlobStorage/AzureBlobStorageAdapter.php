@@ -45,7 +45,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
     ];
     /** @var BlobRestProxy */
     private $client;
-    /** @var PathResolverInterface */
+    /** @var PathResolver */
     private $pathResolver;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
@@ -54,7 +54,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function __construct(
         BlobRestProxy $client,
-        PathResolverInterface $pathResolver,
+        PathResolver $pathResolver,
         MimeTypeDetector $mimeTypeDetector = null,
         int $maxResultsForContentsListing = 5000
     ) {

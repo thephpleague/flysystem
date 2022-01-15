@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AzureBlobStorage;
 
-interface PathResolverInterface
+interface PathResolver
 {
     public function resolve(string $path): Path;
 }

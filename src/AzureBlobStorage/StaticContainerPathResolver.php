@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AzureBlobStorage;
 
-class StaticContainerPathResolver implements PathResolverInterface
+class StaticContainerPathResolver implements PathResolver
 {
     /** @var string */
     private $container;
