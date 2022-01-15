@@ -136,7 +136,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         $this->adapter()->deleteDirectory('one');
 
         $items = iterator_to_array($this->adapter()->listContents('', true));
-        $this->assertCount(4, $items);
+        $this->assertCount(3, $items);
     }
 
     /**
