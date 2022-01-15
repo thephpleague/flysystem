@@ -195,7 +195,15 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         $options = ['params' => []];
 
-        foreach (array_merge(static::AVAILABLE_OPTIONS, static::MUP_AVAILABLE_OPTIONS) as $option) {
+        foreach (static::AVAILABLE_OPTIONS as $option) {
+            $value = $config->get($option, '__NOT_SET__');
+
+            if ($value !== '__NOT_SET__') {
+                $options['params'][$option] = $value;
+            }
+        }
+
+        foreach (static::MUP_AVAILABLE_OPTIONS as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ($value !== '__NOT_SET__') {
@@ -427,7 +435,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
                 $this->bucket,
                 $this->prefixer->prefixPath($destination),
                 $this->visibility->visibilityToAcl($visibility),
-                $this->createOptionsFromConfig($config)
+                $this->createOptionsFromConfig($config)['params']
             );
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
