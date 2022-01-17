@@ -5,11 +5,6 @@
             "League\\Flysystem\\AzureBlobStorage\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "League\\Flysystem\\AzureBlobStorage\\Tests\\": "tests/"
-        }
-    },
     "require": {
         "php": "^8.0.2",
         "league/flysystem": "^2.0.0 || ^3.0.0",
@@ -22,8 +17,8 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Warxcell",
-            "email": "warxcell@gmail.com"
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
         }
     ]
 }
