@@ -9,15 +9,6 @@
     <meta name="description" content="{{ site.data.project.description }}">
     {% endif %}
     {% unless site.data.dev.dev_mode %}
-    {% if site.data.project.google_analytics_tracking_id %}
-    <script async src="https://www.googletagmanager.com/gtag/js?id={{  site.data.project.google_analytics_tracking_id }}"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '{{  site.data.project.google_analytics_tracking_id }}');
-    </script>
-    {% endif %}
     <base href="https://flysystem.thephpleague.com/" />
     {% endunless %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
