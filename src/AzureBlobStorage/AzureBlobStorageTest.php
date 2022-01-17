@@ -18,7 +18,13 @@ class AzureBlobStorageTest extends TestCase
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        $client = BlobRestProxy::createBlobService(getenv('FLYSYSTEM_AZURE_DSN'));
+        $dsn = getenv('FLYSYSTEM_AZURE_DSN');
+
+        if (empty($dsn)) {
+            self::markTestSkipped('FLYSYSTEM_AZURE_DSN is not provided.');
+        }
+
+        $client = BlobRestProxy::createBlobService($dsn);
 
         return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME, 'ci');
     }
