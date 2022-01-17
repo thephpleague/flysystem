@@ -2,7 +2,7 @@
     "name": "league/flysystem-azure-blob-storage",
     "autoload": {
         "psr-4": {
-            "League\\Flysystem\\AzureBlobStorage\\": "src/"
+            "League\\Flysystem\\AzureBlobStorage\\": ""
         }
     },
     "require": {
