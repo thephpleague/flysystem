@@ -8,4 +8,3 @@ interface PathResolver
 {
     public function resolve(string $path): Path;
 }
-

@@ -19,4 +19,3 @@ class StaticContainerPathResolver implements PathResolver
         return new Path($this->container, $path);
     }
 }
-
