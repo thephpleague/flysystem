@@ -12,6 +12,9 @@ use League\Flysystem\Visibility;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use function getenv;
 
+/**
+ * @group azure
+ */
 class AzureBlobStorageTest extends TestCase
 {
     const CONTAINER_NAME = 'flysystem';
