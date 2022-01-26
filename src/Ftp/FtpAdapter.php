@@ -27,6 +27,9 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
+use function ftp_chdir;
+use function ftp_pwd;
+
 class FtpAdapter implements FilesystemAdapter
 {
     private const SYSTEM_TYPE_WINDOWS = 'windows';
@@ -77,6 +80,8 @@ class FtpAdapter implements FilesystemAdapter
      */
     private $mimeTypeDetector;
 
+    private ?string $rootDirectory = null;
+
     public function __construct(
         FtpConnectionOptions $connectionOptions,
         FtpConnectionProvider $connectionProvider = null,
@@ -111,6 +116,7 @@ class FtpAdapter implements FilesystemAdapter
         start:
         if ( ! $this->hasFtpConnection()) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
+            $this->rootDirectory = $this->resolveConnectionRoot($this->connection);
         }
 
         if ($this->connectivityChecker->isConnected($this->connection) === false) {
@@ -118,7 +124,7 @@ class FtpAdapter implements FilesystemAdapter
             goto start;
         }
 
-        ftp_chdir($this->connection, $this->connectionOptions->root());
+        ftp_chdir($this->connection, $this->rootDirectory);
 
         return $this->connection;
     }
@@ -434,15 +440,15 @@ class FtpAdapter implements FilesystemAdapter
         $isDirectory = $this->listingItemIsDirectory($permissions);
         $permissions = $this->normalizePermissions($permissions);
         $path = $base === '' ? $name : rtrim($base, '/') . '/' . $name;
-        $lastModified = $this->connectionOptions->timestampsOnUnixListingsEnabled()
-            ? $this->normalizeUnixTimestamp($month, $day, $timeOrYear)
-            : null;
+        $lastModified = $this->connectionOptions->timestampsOnUnixListingsEnabled() ? $this->normalizeUnixTimestamp(
+            $month,
+            $day,
+            $timeOrYear
+        ) : null;
 
         if ($isDirectory) {
             return new DirectoryAttributes(
-                $path,
-                $this->visibilityConverter->inverseForDirectory($permissions),
-                $lastModified
+                $path, $this->visibilityConverter->inverseForDirectory($permissions), $lastModified
             );
         }
 
@@ -628,5 +634,16 @@ class FtpAdapter implements FilesystemAdapter
         $connection = $this->connection();
 
         return @ftp_chdir($connection, $path) === true;
+    }
+
+    private function resolveConnectionRoot($connection): string
+    {
+        $root = $this->connectionOptions->root();
+
+        if ($root !== '') {
+            ftp_chdir($connection, $root);
+        }
+
+        return ftp_pwd($connection);
     }
 }
