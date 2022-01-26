@@ -23,6 +23,7 @@
     },
     "require-dev": {
         "ext-fileinfo": "*",
+        "ext-ftp": "*",
         "phpunit/phpunit": "^8.5 || ^9.4",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^2.0",
