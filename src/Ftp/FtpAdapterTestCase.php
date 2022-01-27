@@ -58,13 +58,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         $this->runScenario(function () use ($options) {
             $adapter = new FtpAdapter($options);
 
-            $adapter->write('dirname/path.txt', 'contents', new Config([
-                Config::OPTION_VISIBILITY => Visibility::PUBLIC,
-                Config::OPTION_DIRECTORY_VISIBILITY => Visibility::PUBLIC
-            ]));
+            $adapter->write('dirname1/dirname2/path.txt', 'contents', new Config());
+            $adapter->write('dirname1/dirname2/path.txt', 'contents', new Config());
 
-            $this->assertTrue($adapter->fileExists('dirname/path.txt'));
-            $this->assertSame('contents', $adapter->read('dirname/path.txt'));
+            $this->assertTrue($adapter->fileExists('dirname1/dirname2/path.txt'));
+            $this->assertSame('contents', $adapter->read('dirname1/dirname2/path.txt'));
         });
     }
 
