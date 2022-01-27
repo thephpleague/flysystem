@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Fixes
+
+* [FTP] Support relative or empty connection root directories (#1410)
+
 ## 3.0.1 - 2022-01-15
 
 ### Fixes
