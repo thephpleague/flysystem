@@ -93,7 +93,8 @@ class FtpAdapter implements FilesystemAdapter
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
-        $this->prefixer = new PathPrefixer($connectionOptions->root());
+        $this->rootDirectory = $this->resolveConnectionRoot($this->connection());
+        $this->prefixer = new PathPrefixer($this->rootDirectory);
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
@@ -116,7 +117,6 @@ class FtpAdapter implements FilesystemAdapter
         start:
         if ( ! $this->hasFtpConnection()) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
-            $this->rootDirectory = $this->resolveConnectionRoot($this->connection);
 
             return $this->connection;
         }
@@ -593,7 +593,7 @@ class FtpAdapter implements FilesystemAdapter
         $connection = $this->connection();
 
         $dirPath = '';
-        $parts = explode('/', rtrim($dirname, '/'));
+        $parts = explode('/', trim($dirname, '/'));
         $mode = $visibility ? $this->visibilityConverter->forDirectory($visibility) : false;
 
         foreach ($parts as $part) {
