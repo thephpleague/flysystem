@@ -635,7 +635,7 @@ class FtpAdapter implements FilesystemAdapter
     }
 
     /**
-     * @param resource|\FTP\Connection$connection
+     * @param resource|\FTP\Connection $connection
      */
     private function resolveConnectionRoot($connection): string
     {
