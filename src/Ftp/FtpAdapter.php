@@ -634,6 +634,9 @@ class FtpAdapter implements FilesystemAdapter
         return $this->connection instanceof \FTP\Connection || is_resource($this->connection);
     }
 
+    /**
+     * @param resource|\FTP\Connection$connection
+     */
     private function resolveConnectionRoot($connection): string
     {
         $root = $this->connectionOptions->root();
