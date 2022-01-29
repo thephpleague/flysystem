@@ -80,7 +80,10 @@ class FtpAdapter implements FilesystemAdapter
      */
     private $mimeTypeDetector;
 
-    private ?string $rootDirectory = null;
+    /**
+     * @var null|string
+     */
+    private $rootDirectory = null;
 
     public function __construct(
         FtpConnectionOptions $connectionOptions,
