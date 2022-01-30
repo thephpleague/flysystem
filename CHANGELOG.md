@@ -2,7 +2,7 @@
 
 ## 2.4.1 - 2022-01-30
 
-### Added
+### Fixed
 
 - [FTP] Fix relative connection root handling
 
