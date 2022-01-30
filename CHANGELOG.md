@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.2 - 2022-01-30
+
+### Fixes
+
+* [FTP] Support relative or empty connection root directories (#1410)
+
 ## 3.0.1 - 2022-01-15
 
 ### Fixes
@@ -19,6 +25,12 @@
 * FilesystemReader::fileExists to check for file existence
 * FilesystemAdapter::directoryExists to check for directory existence
 * FilesystemAdapter::fileExists to check for file existence
+
+## 2.4.1 - 2022-01-30
+
+### Fixed
+
+- [FTP] Fix relative connection root handling
 
 ## 2.4.0 - 2022-01-04
 

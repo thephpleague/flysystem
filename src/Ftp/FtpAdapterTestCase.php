@@ -45,6 +45,30 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function using_empty_string_for_root(): void
+    {
+        $options = FtpConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'root' => '',
+            'username' => 'foo',
+            'password' => 'pass',
+        ]);
+
+        $this->runScenario(function () use ($options) {
+            $adapter = new FtpAdapter($options);
+
+            $adapter->write('dirname1/dirname2/path.txt', 'contents', new Config());
+            $adapter->write('dirname1/dirname2/path.txt', 'contents', new Config());
+
+            $this->assertTrue($adapter->fileExists('dirname1/dirname2/path.txt'));
+            $this->assertSame('contents', $adapter->read('dirname1/dirname2/path.txt'));
+        });
+    }
+
+    /**
+     * @test
+     */
     public function reconnecting_after_failure(): void
     {
         $this->runScenario(function () {
