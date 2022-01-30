@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.4.1 - 2022-01-29
+
+### Added
+
+- [FTP] Fix relative connection root handling
+
 ## 2.4.0 - 2022-01-04
 
 ### Added

@@ -16,6 +16,7 @@ parameters:
         - src/PhpseclibV2
         - src/PhpseclibV3
     ignoreErrors:
+        - '#invalid typehint type FTP\\Connection#'
         - '#FTP\\Connection not found#'
         - '#unknown class FTP\\Connection#'
         - '#Call to function iterator_to_array\(\) on a separate line has no effect\.#'
