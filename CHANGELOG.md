@@ -26,6 +26,12 @@
 * FilesystemAdapter::directoryExists to check for directory existence
 * FilesystemAdapter::fileExists to check for file existence
 
+## 2.4.1 - 2022-01-30
+
+### Added
+
+- [FTP] Fix relative connection root handling
+
 ## 2.4.0 - 2022-01-04
 
 ### Added

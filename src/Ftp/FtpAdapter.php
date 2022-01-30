@@ -638,6 +638,9 @@ class FtpAdapter implements FilesystemAdapter
         return @ftp_chdir($connection, $path) === true;
     }
 
+    /**
+     * @param resource|\FTP\Connection $connection
+     */
     private function resolveConnectionRoot($connection): string
     {
         $root = $this->connectionOptions->root();
