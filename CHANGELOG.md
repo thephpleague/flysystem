@@ -1,6 +1,6 @@
 # Changelog
 
-## UNRELEASED
+## 3.0.2 - 2022-01-30
 
 ### Fixes
 
