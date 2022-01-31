@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.3 - 2022-01-31
+
+### Fixed
+
+- [FTP] Made connection resolving lazy again (#1414)
+
 ## 3.0.2 - 2022-01-30
 
 ### Fixes
