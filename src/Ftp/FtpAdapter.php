@@ -93,8 +93,6 @@ class FtpAdapter implements FilesystemAdapter
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
-        $this->rootDirectory = $this->resolveConnectionRoot($this->connection());
-        $this->prefixer = new PathPrefixer($this->rootDirectory);
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
@@ -117,6 +115,8 @@ class FtpAdapter implements FilesystemAdapter
         start:
         if ( ! $this->hasFtpConnection()) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
+            $this->rootDirectory = $this->resolveConnectionRoot($this->connection);
+            $this->prefixer = new PathPrefixer($this->rootDirectory);
 
             return $this->connection;
         }
@@ -173,7 +173,7 @@ class FtpAdapter implements FilesystemAdapter
             throw UnableToWriteFile::atLocation($path, 'creating parent directory failed', $exception);
         }
 
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
 
         if ( ! ftp_fput($this->connection(), $location, $contents, $this->connectionOptions->transferMode())) {
             throw UnableToWriteFile::atLocation($path, 'writing the file failed');
@@ -201,7 +201,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function readStream(string $path)
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
         $stream = fopen('php://temp', 'w+b');
         $result = @ftp_fget($this->connection(), $stream, $location, $this->connectionOptions->transferMode());
 
@@ -227,7 +227,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     private function deleteFile(string $path, $connection): void
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
         $success = @ftp_delete($connection, $location);
 
         if ($success === false && ftp_size($connection, $location) !== -1) {
@@ -257,7 +257,7 @@ class FtpAdapter implements FilesystemAdapter
         rsort($directories);
 
         foreach ($directories as $directory) {
-            if ( ! @ftp_rmdir($connection, $this->prefixer->prefixPath($directory))) {
+            if ( ! @ftp_rmdir($connection, $this->prefixer()->prefixPath($directory))) {
                 throw UnableToDeleteDirectory::atLocation($path, "Could not delete directory $directory");
             }
         }
@@ -270,7 +270,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function setVisibility(string $path, string $visibility): void
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
         $mode = $this->visibilityConverter->forFile($visibility);
 
         if ( ! @ftp_chmod($this->connection(), $mode, $location)) {
@@ -281,7 +281,7 @@ class FtpAdapter implements FilesystemAdapter
 
     private function fetchMetadata(string $path, string $type): FileAttributes
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
 
         if ($this->isPureFtpdServer) {
             $location = $this->escapePath($location);
@@ -324,7 +324,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function lastModified(string $path): FileAttributes
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
         $connection = $this->connection();
         $lastModified = @ftp_mdtm($connection, $location);
 
@@ -342,7 +342,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function fileSize(string $path): FileAttributes
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->prefixer()->prefixPath($path);
         $connection = $this->connection();
         $fileSize = @ftp_size($connection, $location);
 
@@ -361,7 +361,7 @@ class FtpAdapter implements FilesystemAdapter
         if ($deep && $this->connectionOptions->recurseManually()) {
             yield from $this->listDirectoryContentsRecursive($path);
         } else {
-            $location = $this->prefixer->prefixPath($path);
+            $location = $this->prefixer()->prefixPath($path);
             $options = $deep ? '-alnR' : '-aln';
             $listing = $this->ftpRawlist($options, $location);
             yield from $this->normalizeListing($listing, $path);
@@ -510,7 +510,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     private function listDirectoryContentsRecursive(string $directory): Generator
     {
-        $location = $this->prefixer->prefixPath($directory);
+        $location = $this->prefixer()->prefixPath($directory);
         $listing = $this->ftpRawlist('-aln', $location);
         /** @var StorageAttributes[] $listing */
         $listing = $this->normalizeListing($listing, $directory);
@@ -551,8 +551,8 @@ class FtpAdapter implements FilesystemAdapter
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         }
 
-        $sourceLocation = $this->prefixer->prefixPath($source);
-        $destinationLocation = $this->prefixer->prefixPath($destination);
+        $sourceLocation = $this->prefixer()->prefixPath($source);
+        $destinationLocation = $this->prefixer()->prefixPath($destination);
         $connection = $this->connection();
 
         if ( ! @ftp_rename($connection, $sourceLocation, $destinationLocation)) {
@@ -598,7 +598,7 @@ class FtpAdapter implements FilesystemAdapter
 
         foreach ($parts as $part) {
             $dirPath .= '/' . $part;
-            $location = $this->prefixer->prefixPath($dirPath);
+            $location = $this->prefixer()->prefixPath($dirPath);
 
             if (@ftp_chdir($connection, $location)) {
                 continue;
@@ -650,5 +650,17 @@ class FtpAdapter implements FilesystemAdapter
         }
 
         return ftp_pwd($connection);
+    }
+
+    /**
+     * @return PathPrefixer
+     */
+    private function prefixer(): PathPrefixer
+    {
+        if ($this->rootDirectory === null) {
+            $this->connection();
+        }
+
+        return $this->prefixer;
     }
 }
