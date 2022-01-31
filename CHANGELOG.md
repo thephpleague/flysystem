@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.4.2 - 2022-01-31
+
+### Fixed
+
+- [FTP] Made connection resolving lazy again (#1414)
+
 ## 2.4.1 - 2022-01-30
 
 ### Fixed
