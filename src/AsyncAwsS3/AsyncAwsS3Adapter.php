@@ -357,7 +357,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         $options = [];
 
-        foreach (static::AVAILABLE_OPTIONS as $option) {
+        foreach (self::AVAILABLE_OPTIONS as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ('__NOT_SET__' !== $value) {
@@ -441,7 +441,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         $extracted = [];
 
-        foreach (static::EXTRA_METADATA_FIELDS as $field) {
+        foreach (self::EXTRA_METADATA_FIELDS as $field) {
             $method = 'get' . $field;
             if ( ! method_exists($metadata, $method)) {
                 continue;
