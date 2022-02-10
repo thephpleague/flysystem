@@ -184,7 +184,7 @@ class FtpConnectionOptions
     {
         return new FtpConnectionOptions(
             $options['host'] ?? 'invalid://host-not-set',
-            $options['root'] ?? 'invalid://root-not-set',
+            $options['root'] ?? '',
             $options['username'] ?? 'invalid://username-not-set',
             $options['password'] ?? 'invalid://password-not-set',
             $options['port'] ?? 21,
