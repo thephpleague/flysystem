@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.4 - 2022-02-10
+
+### Fixed
+
+- [FTP] Do not require setting of the root directory, use '' by default.
+
 ## 3.0.3 - 2022-01-31
 
 ### Fixed
