@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/sftp/
-redirect_from: 
-    - /docs/adapter/sftp/
-    - /adapter/sftp/
 title: SFTP Adapter
 ---
 

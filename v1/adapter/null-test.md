@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/null-test/
-redirect_from:
-    - /docs/adapter/null-test/
-    - /adapter/null-test/
 title: Null Adapter
 ---
 

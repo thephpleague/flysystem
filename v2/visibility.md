@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Visibility
-permalink: /v2/docs/visibility/
+permalink: /docs/visibility/
+redirect_from: /v2/docs/visibility/
 ---
 
 ## What is visibility?
@@ -23,7 +24,7 @@ strategy.
 
 For filesystems with a Unix-style visibility system, like on MacOS and Linux, these string
 values are translated to permissions like `0600` or `0744`. The
-[unix-style visibility](/v2/docs/usage/unix-visibility/) module provides an implementation
+[unix-style visibility](/docs/usage/unix-visibility/) module provides an implementation
 to configure how you want these values to be interpreted.
 
 Unix-style visibility is used for:

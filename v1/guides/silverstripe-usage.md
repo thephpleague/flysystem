@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/guides/silverstripe-usage/
-redirect_from:
-    - /docs/guides/silverstripe-usage/
 title: Silverstripe CMS Usage
 ---
 Flysystem comes bundled with Silverstripe CMS 4 and newer.

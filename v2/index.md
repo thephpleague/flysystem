@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Filesystem Abstraction for PHP
-permalink: /v2/docs/
+permalink: /docs/
 redirect_from:
     - /
     - /v2/
-    - /docs/
+    - /v2/docs/
 ---
 
 [![Buy a tree](https://img.shields.io/badge/Buy%20me%20a%20tree-%F0%9F%8C%B3-green)](https://offset.earth/frankdejonge?gift-trees)
@@ -26,20 +26,20 @@ for which ever storage is right for you.
 
 ## Getting Started
 
-* **[New in V2](/v2/docs/what-is-new/)**: What is new in Flysystem V2?
-* **[Architecture](/v2/docs/architecture/)**: Flysystem's internal architecture
-* **[Flysystem API](/v2/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
-* **[Upgrade to V2](/v2/docs/advanced/upgrade-to-2.0.0/)**: How to upgrade to V2
+* **[New in V2](/docs/what-is-new/)**: What is new in Flysystem V2/V3?
+* **[Architecture](/docs/architecture/)**: Flysystem's internal architecture
+* **[Flysystem API](/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
+* **[Upgrade from 1x](/docs/advanced/upgrade-from-1.x/)**: How to upgrade from 2.x
 
 ### Commonly-Used Adapters
 
-* **[AsyncAws S3](https://flysystem.thephpleague.com/v2/docs/adapter/async-aws-s3/)**
-* **[AWS S3](/v2/docs/adapter/aws-s3-v3/)**
-* **[Local](/v2/docs/adapter/local/)**
-* **[Memory](/v2/docs/adapter/in-memory/)**
+* **[AsyncAws S3](/docs/adapter/async-aws-s3/)**
+* **[AWS S3](/docs/adapter/aws-s3-v3/)**
+* **[Local](/docs/adapter/local/)**
+* **[Memory](/docs/adapter/in-memory/)**
 
 ### Third party Adapters
 
-* **[Gitlab](/v2/docs/adapter/gitlab/)**
+* **[Gitlab](/docs/adapter/gitlab/)**
 
-You can always [create an adapter](/v2/docs/advanced/creating-an-adapter/) yourself.
+You can always [create an adapter](/docs/advanced/creating-an-adapter/) yourself.

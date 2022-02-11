@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Design Considerations
-permalink: /v2/docs/design-considerations/
+permalink: /docs/design-considerations/
+redirect_from: /v2/docs/design-considerations/
 ---
 
 As is true for any abstraction, Flysystem is a 80-20 solution. This

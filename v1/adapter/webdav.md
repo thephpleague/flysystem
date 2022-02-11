@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/webdav/
-redirect_from:
-    - /docs/adapter/webdav/
-    - /adapter/webdav/
 title: WebDAV Adapter
 ---
 

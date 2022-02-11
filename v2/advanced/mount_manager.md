@@ -1,6 +1,7 @@
 ---
 layout: default
-permalink: /v2/docs/advanced/mount-manager/
+permalink: /docs/advanced/mount-manager/
+redirect_from: /v2/docs/advanced/mount-manager/
 title: Mount Manager
 ---
 

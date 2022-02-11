@@ -1,31 +1,31 @@
 Flysystem:
-    Introduction: '/v2/docs/'
-    Getting Started: '/v2/docs/getting-started/'
-    Security Policy: '/v2/security/'
+    Introduction: '/docs/'
+    Getting Started: '/docs/getting-started/'
+    Security Policy: '/security/'
     Version 1 Docs: '/v1/docs/'
+    Upgrade from 1.x: '/docs/upgrade-from-1.x/'
 
 Background Info:
-    New In V2: '/v2/docs/what-is-new/'
-    Architecture: '/v2/docs/architecture/'
-    Design Considerations: '/v2/docs/design-considerations/'
-    Visibility and Permissions: '/v2/docs/visibility/'
+    New In V2 and V3: '/docs/what-is-new/'
+    Architecture: '/docs/architecture/'
+    Design Considerations: '/docs/design-considerations/'
+    Visibility and Permissions: '/docs/visibility/'
 
 Usage:
-    Filesystem API: '/v2/docs/usage/filesystem-api/'
-    Directory Listings: '/v2/docs/usage/directory-listings/'
-    Exception Handling: '/v2/docs/usage/exception-handling/'
-    Unix-Style Visibility: '/v2/docs/usage/unix-visibility/'
+    Filesystem API: '/docs/usage/filesystem-api/'
+    Directory Listings: '/docs/usage/directory-listings/'
+    Exception Handling: '/docs/usage/exception-handling/'
+    Unix-Style Visibility: '/docs/usage/unix-visibility/'
 
 Adapters:
-    Local: '/v2/docs/adapter/local/'
-    AWS S3: '/v2/docs/adapter/aws-s3-v3/'
-    AsyncAws S3: '/v2/docs/adapter/async-aws-s3/'
-    FTP: '/v2/docs/adapter/ftp/'
-    SFTP: '/v2/docs/adapter/sftp/'
-    InMemory: '/v2/docs/adapter/in-memory/'
+    Local: '/docs/adapter/local/'
+    AWS S3: '/docs/adapter/aws-s3-v3/'
+    AsyncAws S3: '/docs/adapter/async-aws-s3/'
+    FTP: '/docs/adapter/ftp/'
+    SFTP: '/docs/adapter/sftp/'
+    InMemory: '/docs/adapter/in-memory/'
 
 Advanced:
-  Mime-type detection: '/v2/docs/advanced/mime-type-detection/'
-  Creating an adapter: '/v2/docs/advanced/creating-an-adapter/'
-  Mount Manager: '/v2/docs/advanced/mount-manager/'
-  Upgrade to 2.0.0: '/v2/docs/advanced/upgrade-to-2.0.0/'
+  Mime-type detection: '/docs/advanced/mime-type-detection/'
+  Creating an adapter: '/docs/advanced/creating-an-adapter/'
+  Mount Manager: '/docs/advanced/mount-manager/'

@@ -23,10 +23,10 @@
                 <img class="h-10 w-10 mr-3" width="30" height="30" src="/img/flysystem.svg"/>
                 <span class="pr-2 font-normal overflow-hidden font-heading text-3xl text-indigo-darkest -sm:hidden">
                     Flysystem
-                    {% if page.url contains "/v2/" %}
-                        {% assign library_version = site.data.project.version_v2 %}
-                    {% else %}
+                    {% if page.url contains "/v1/" %}
                         {% assign library_version = site.data.project.version_v1 %}
+                    {% else %}
+                        {% assign library_version = site.data.project.version_v2 %}
                     {% endif %}
                     <sup class="text-xs relative text-indigo" style="top: -20px;">{{ library_version }}</sup>
                 </span>
@@ -53,10 +53,10 @@
     <div class="flex flex-grow">
         <nav role="navigation" id="navigation" class="md:w-4/14 w-full lg:relative hidden md:block font-heading pt-2">
             <menu class="pl-0 mt-0">
-                {% if page.url contains "/v2/" %}
-                    {% assign menu = site.data.menu_v2 %}
-                {% else %}
+                {% if page.url contains "/v1/" %}
                     {% assign menu = site.data.menu_v1 %}
+                {% else %}
+                    {% assign menu = site.data.menu_v2 %}
                 {% endif %}
                 {% for section in menu %}
                 <h2 class="tracking-wide mb-0 mt-0 text-xs leading-loose tracking-wide text-indigo-light uppercase">{{ section[0] }}</h2>

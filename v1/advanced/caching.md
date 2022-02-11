@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/advanced/caching/
-redirect_from:
-    - /docs/advanced/caching/
 title: Caching
 ---
 

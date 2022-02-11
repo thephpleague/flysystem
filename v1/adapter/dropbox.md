@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/dropbox/
-redirect_from:
-    - /docs/adapter/dropbox/
-    - /adapter/dropbox/
 title: Dropbox Adapter
 ---
 

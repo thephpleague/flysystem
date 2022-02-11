@@ -2,8 +2,6 @@
 layout: default
 title: Filesystem abstraction for PHP
 permalink: /v1/docs/
-redirect_from:
-    - /v1/
 ---
 
 [![Buy a tree](https://img.shields.io/badge/Buy%20me%20a%20tree-%F0%9F%8C%B3-green)](https://offset.earth/frankdejonge?gift-trees)

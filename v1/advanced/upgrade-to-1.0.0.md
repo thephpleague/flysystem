@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/advanced/upgrade-to-1.0.0/
-redirect_from:
-    - /docs/advanced/upgrade-to-1.0.0/
 title: Upgrade to 1.0.0
 ---
 

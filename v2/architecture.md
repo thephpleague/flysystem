@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Architecture
-permalink: /v2/docs/architecture/
+permalink: /docs/architecture/
+redirect_from: /v2/docs/architecture/
 ---
 
 ## It's all about adapting.

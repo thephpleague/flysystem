@@ -2,8 +2,6 @@
 layout: default
 title: Setup / Bootstrap
 permalink: /v1/docs/usage/setup/
-redirect_from:
-    - /docs/usage/setup/
 ---
 
 As explained in the [architecture description](/docs/architecture/), Flysystem uses

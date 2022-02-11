@@ -1,7 +1,8 @@
 ---
 layout: default
 title: AsyncAws S3 Adapter
-permalink: /v2/docs/adapter/async-aws-s3/
+permalink: /docs/adapter/async-aws-s3/
+redirect_from: /v2/docs/adapter/async-aws-s3/
 ---
 
 ## Installation

@@ -1,14 +1,18 @@
 ---
 layout: default
-title: What is new in Flysystem V2
-permalink: /v2/docs/what-is-new/
+title: What is new in Flysystem V2 & V3
+permalink: /docs/what-is-new/
+redirect_from: /v2/docs/what-is-new/
 ---
 
-Flysystem V2 is a full, from the ground up rewrite. It features simplifications
+Flysystem V2 featured full, from the ground up rewrite. It features simplifications
 of the interface, introduces a new error/exception handling strategy, and
 brings all the latest type-related features of PHP 7 to the filesystem.
 
-While the overall concept of Flysystem has not changed, V2 brings you a bunch
+Since V2, V3 has been released which is backwards compatible from a consumption
+point of view, but it has a BC break for custom adapter implementations.
+
+While the overall concept of Flysystem has not changed, V2 and V3 brings you a bunch
 of developer-experience improvements. Let's check them out!
 
 ## API Simplification
@@ -71,7 +75,7 @@ for exception handling appeared. There was little consistency between the variou
 exceptions thrown in V1. For V2, the exceptions have been planned out carefully.
 
 For an in-depth overview of how it all works in V2, read about it in
-the [docs about exception handling](/v2/docs/usage/exception-handling/).
+the [docs about exception handling](/docs/usage/exception-handling/).
 
 ## Better content listing developer experience
 
@@ -79,7 +83,7 @@ Developer experience was top of mind when creating V2 of Flysystem. Well-known
 issues were tackled. One of these was the response for a `listContents` call.
 
 You can read more about it in the
-[docs about directory listings](/v2/docs/usage/directory-listings/).
+[docs about directory listings](/docs/usage/directory-listings/).
 
 ## Custom mime-type detection
 

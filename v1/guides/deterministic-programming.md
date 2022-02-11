@@ -2,8 +2,6 @@
 layout: default
 title: Deterministic Programming
 permalink: /v1/docs/guides/deterministic-programming/
-redirect_from:
-    - /docs/guides/deterministic-programming/
 ---
 
 Deterministic programming is a great way to approach handling filesystems

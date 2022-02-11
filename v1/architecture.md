@@ -3,8 +3,6 @@ layout: default
 title: Architecture
 alternate_title: Architecture
 permalink: /v1/docs/architecture/
-redirect_from:
-    - /docs/architecture/
 ---
 
 Flysystem uses the  **adapter pattern**. This pattern is especially

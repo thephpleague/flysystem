@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/gitlab/
-redirect_from:
-    - /docs/adapter/gitlab/
-    - /adapter/gitlab/
 title: GitLab Adapter
 ---
 

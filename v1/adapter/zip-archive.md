@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/zip-archive/
-redirect_from:
-    - /docs/adapter/zip-archive/
-    - /adapter/zip-archive/
 title: ZipArchive Adapter
 ---
 

@@ -1,10 +1,11 @@
 ---
 layout: default
-title: Upgrade to 2.0.0
-permalink: /v2/docs/advanced/upgrade-to-2.0.0/
+title: Upgrade from 1.x
+permalink: /docs/upgrade-from-1.x/
+redirect_from: /v2/docs/advanced/upgrade-to-2.0.0/
 ---
 
-Flysystem V1 was released on the 19th of January in 2015. Since then it has maintained full
+Flysystem V1 was released on the 19th of January in 2015. Since then, it has maintained full
 backwards compatibility. In order to guarantee that for the years to come, some changes were
 needed. Some functionality needed to be standardized in order to make behavior more
 predictable. This meant some functionality needed to be scoped down, some "accidental" features
@@ -12,7 +13,7 @@ were removed.
 
 ### Upgrade your dependencies
 
-Firstly you'll need to upgrade Flysystem itself. You can do this by requiring `^2.0`
+Firstly you'll need to upgrade Flysystem itself. You can do this by requiring `^3.0`
 instead of  `^1.0`. The same needs to be done for all the adapters too, in the same action.
 
 ## Removed functionality.
@@ -106,6 +107,10 @@ long as V1 is, breaking with past mistakes is needed sometimes.
 - $fileExists = $filesystem->has($path); 
 + $fileExists = $filesystem->fileExists($path);
 
+// More explicit it's only for directories, better portability.
+- $directoryExists = $filesystem->has($path); 
++ $directoryExists = $filesystem->directoryExists($path);
+
 // Correct casing.
 - $mimetype = $filesystem->getMimetype($path); 
 + $mimetype = $filesystem->mimeType($path);
@@ -122,7 +127,7 @@ long as V1 is, breaking with past mistakes is needed sometimes.
 ## Directory Listings
 
 Directory listings received a big overhaul. To read more about it check out the
-[documentation for directory listings](/v2/docs/usage/directory-listings/).
+[documentation for directory listings](/docs/usage/directory-listings/).
 
 ## Miscellaneous changes
 

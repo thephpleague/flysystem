@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/rackspace/
-redirect_from:
-    - /docs/adapter/rackspace/
-    - /adapter/rackspace/
 title: Rackspace Adapter
 ---
 

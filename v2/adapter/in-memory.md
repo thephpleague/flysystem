@@ -1,7 +1,8 @@
 ---
 layout: default
 title: In Memory Filesystem Adapter
-permalink: /v2/docs/adapter/in-memory/
+permalink: /docs/adapter/in-memory/
+redirect_from: /v2/docs/adapter/in-memory/
 ---
 
 Interacting with the local filesystem through Flysystem can be done

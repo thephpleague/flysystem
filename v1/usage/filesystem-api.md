@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/usage/filesystem-api/
-redirect_from: 
-    - /docs/usage/filesystem-api/
-    - /api/
 title: API
 alternate_title: Filesystem API
 ---

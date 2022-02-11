@@ -1,7 +1,8 @@
 ---
 layout: default
 title: FTP Adapter
-permalink: /v2/docs/adapter/ftp/
+permalink: /docs/adapter/ftp/
+redirect_from: /v2/docs/adapter/ftp/
 ---
 
 ## Installation
@@ -90,4 +91,4 @@ corresponds with what happened. Every connection exception is marked with the
 ### Visibility Converter
 
 If you want to learn more about the permissions for local adapters,
-read the [docs about unix visibility](/v2/docs/usage/unix-visibility/).
+read the [docs about unix visibility](/docs/usage/unix-visibility/).

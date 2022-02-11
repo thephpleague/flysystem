@@ -1,7 +1,8 @@
 ---
 layout: default
 title: SFTP Adapter
-permalink: /v2/docs/adapter/sftp/
+permalink: /docs/adapter/sftp/
+redirect_from: /v2/docs/adapter/sftp/
 ---
 
 ## Installation

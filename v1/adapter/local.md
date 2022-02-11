@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/local/
-redirect_from:
-    - /docs/adapter/local/
-    - /adapter/local/
 title: Local Adapter
 ---
 

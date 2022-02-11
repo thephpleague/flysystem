@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/replicate/
-redirect_from:
-    - /docs/adapter/replicate/
-    - /adapter/replicate/
 title: Replicate Adapter
 ---
 

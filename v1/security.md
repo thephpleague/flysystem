@@ -2,8 +2,6 @@
 layout: default
 title: Security Policy
 permalink: /v1/security/
-redirect_from:
-    - /docs/security/
 ---
 
 This document describes what to do in case of a security issue with `league/flysystem`.

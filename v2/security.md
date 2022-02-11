@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Security Policy
-permalink: /v2/security/
+permalink: /security/
+redirect_from: /v2/security/
 ---
 
 This document describes what to do in case of a security issue with `league/flysystem`.

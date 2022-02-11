@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/memory/
-redirect_from:
-    - /docs/adapter/memory/
-    - /adapter/memory/
 title: Memory Adapter
 ---
 

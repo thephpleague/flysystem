@@ -1,13 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/aws-s3-v3/
-redirect_from:
-    - /v1/docs/adapter/aws-s3/
-    - /v1/docs/adapter/aws-s3-v2/
-    - /docs/adapter/aws-s3/
-    - /adapter/aws-s3/
-    - /adapter/aws-s3-v2/
-    - /adapter/aws-s3-v3/
 title: Aws S3 Adapter V3
 ---
 

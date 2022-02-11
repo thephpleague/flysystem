@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/guides/laravel-usage/
-redirect_from:
-    - /docs/guides/laravel-usage/
 title: Laravel Usage
 ---
 

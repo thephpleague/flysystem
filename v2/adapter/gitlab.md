@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Gitlab Filesystem Adapter
-permalink: /v2/docs/adapter/gitlab/
+permalink: /docs/adapter/gitlab/
+redirect_from: /v2/docs/adapter/gitlab/
 ---
 
 Interacting with a gitlab repo through Flysystem can be done

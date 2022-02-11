@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Local Filesystem Adapter
-permalink: /v2/docs/adapter/local/
+permalink: /docs/adapter/local/
+redirect_from: /v2/docs/adapter/local/
 ---
 
 Interacting with the local filesystem through Flysystem can be done
@@ -58,5 +59,5 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 ### Visibility Converter
 
 If you want to learn more about the permissions for local adapters,
-read the [docs about unix visibility](/v2/docs/usage/unix-visibility/) 
+read the [docs about unix visibility](/docs/usage/unix-visibility/) 
 

@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/guides/nette-usage/
-redirect_from:
-    - /docs/guides/nette-usage/
 title: Nette Usage
 ---
 

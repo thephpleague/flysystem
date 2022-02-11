@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/scaleway-object-storage/
-redirect_from:
-    - /docs/adapter/scaleway-object-storage/
-    - /adapter/scaleway-object-storage/
 title: Scaleway Object Storage
 ---
 

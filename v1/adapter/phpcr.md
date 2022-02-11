@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/phpcr/
-redirect_from:
-    - /docs/adapter/phpcr/
-    - /adapter/phpcr/
 title: PHPCR Adapter
 ---
 

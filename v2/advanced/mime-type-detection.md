@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Mime-type Detection
-permalink: /v2/docs/advanced/mime-type-detection/
+permalink: /docs/advanced/mime-type-detection/
+redirect_from: /v2/docs/advanced/mime-type-detection/
 ---
 
 In V2 mime-type detection was promoted to its own package, called

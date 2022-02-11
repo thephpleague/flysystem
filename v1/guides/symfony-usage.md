@@ -1,8 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/guides/symfony-usage/
-redirect_from:
-    - /docs/guides/symfony-usage/
 title: Symfony Usage
 ---
 

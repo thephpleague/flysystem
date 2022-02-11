@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/guides/uploads/
-redirect_from:
-    - /docs/guides/uploads/
-    - /recipes/
 title: Handling Uploads
 ---
 

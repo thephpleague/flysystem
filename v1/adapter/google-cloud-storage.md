@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/google-cloud-storage/
-redirect_from:
-    - /docs/adapter/google-cloud-storage/
-    - /adapter/google-cloud-storage/
 title: Google Cloud Storage Adapter
 ---
 

@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Create a Filesystem Adapter
-permalink: /v2/docs/advanced/creating-an-adapter/
+permalink: /docs/advanced/creating-an-adapter/
+redirect_from: /v2/docs/advanced/creating-an-adapter/
 ---
 
 In case you have special requirements, or your filesystem of choice is
@@ -37,4 +38,4 @@ with the underlying filesystems to provide the most accurate guarantees.
 ## Throwing exceptions
 
 In order to see which exceptions need to be thrown, checkout the
-[documentation about exceptions](/v2/docs/usage/exception-handling/).
+[documentation about exceptions](/docs/usage/exception-handling/).

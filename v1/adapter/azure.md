@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/azure/
-redirect_from:
-    - /docs/adapter/azure/
-    - /adapter/azure/
 title: Azure Blob Storage
 ---
 

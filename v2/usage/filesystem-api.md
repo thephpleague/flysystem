@@ -1,14 +1,15 @@
 ---
 layout: default
 title: Filesystem API
-permalink: /v2/docs/usage/filesystem-api/
+permalink: /docs/usage/filesystem-api/
+redirect_from: /v2/docs/usage/filesystem-api/
 ---
 
 The Filesystem API is the most important interface Flysystem describes
 when you want to _use_ Flysystem in your application.
 
 For more information about the exception, read all about
-[exception handling](/v2/docs/usage/exception-handling/).
+[exception handling](/docs/usage/exception-handling/).
 
 ---
 

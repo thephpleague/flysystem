@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Directory Listings
-permalink: /v2/docs/usage/directory-listings/
+permalink: /docs/usage/directory-listings/
+redirect_from: /v2/docs/usage/directory-listings/
 ---
 
 Directory listings allow you to inspect the contents of a filesystem. The functionality

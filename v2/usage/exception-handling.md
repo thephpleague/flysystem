@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Error Handling
-permalink: /v2/docs/usage/exception-handling/
+permalink: /docs/usage/exception-handling/
+redirect_from: /v2/docs/usage/exception-handling/
 ---
 
 For every action operation in Flysystem, there's an exception telling you what

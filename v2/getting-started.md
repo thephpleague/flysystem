@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Visibility
-permalink: /v2/docs/getting-started/
+permalink: /docs/getting-started/
+redirect_from: /v2/docs/getting-started/
 ---
 
 ## Installation
@@ -9,7 +10,7 @@ permalink: /v2/docs/getting-started/
 Flysystem can be installed using composer.
 
 ```bash
-composer require league/flysystem
+composer require league/flysystem:^3.0
 ```
 
 > NOTE: If you're installing a beta release, make sure to specify the
@@ -22,7 +23,7 @@ types of filesystems. You can find the adapters in the menu.
 
 To safely interact with the filesystem, always wrap the adapter
 in a `Filesystem` instance. You can read more about why in the
-information about the [architecture](/v2/docs/architecture/).
+information about the [architecture](/docs/architecture/).
 
 ```php
 // SETUP

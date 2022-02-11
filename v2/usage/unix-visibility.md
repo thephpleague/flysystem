@@ -1,7 +1,8 @@
 ---
 layout: default
 title: Unix-Style Visibility
-permalink: /v2/docs/usage/unix-visibility/
+permalink: /docs/usage/unix-visibility/
+redirect_from: /v2/docs/usage/unix-visibility/
 ---
 
 For a number of adapters, the visibility settings are based on unix-style

@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/digitalocean-spaces/
-redirect_from: 
-    - /docs/adapter/digitalocean-spaces/
-    - /adapter/digitalocean-spaces/
 title: DigitalOcean Spaces
 ---
 

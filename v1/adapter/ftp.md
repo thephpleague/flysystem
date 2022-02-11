@@ -1,9 +1,6 @@
 ---
 layout: default
 permalink: /v1/docs/adapter/ftp/
-redirect_from:
-    - /docs/adapter/ftp/
-    - /adapter/ftp/
 title: FTP Adapter
 ---
 
