@@ -88,9 +88,9 @@ let colors = {
 };
 
 module.exports = {
-    prefix: '',
-    important: false,
-    separator: ':',
+    content: [
+        './_site/**/*.html',
+    ],
     theme: {
         extend: {
             colors: colors,

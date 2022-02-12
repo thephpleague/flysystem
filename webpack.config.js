@@ -1,9 +1,7 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PurgecssPlugin = require('purgecss-webpack-plugin');
-const glob = require("glob-all");
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const path = require('path');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -18,8 +16,7 @@ let plugins = [
     new MiniCssExtractPlugin({
         filename: isProduction ? 'styles.[hash].css' : 'styles.css'
     }),
-    new OptimizeCssAssetsPlugin(),
-    new ManifestPlugin({
+    new WebpackManifestPlugin({
         fileName: '../_data/manifest.yml',
         publicPath: '/dist/',
     }),
@@ -27,20 +24,8 @@ let plugins = [
 
 let isProd = process.env.NODE_ENV === 'production';
 
-if (isProd) {
-    plugins.push(new PurgecssPlugin({
-        paths: glob.sync([
-            path.join(__dirname, "_site/**/*.html"),
-        ]),
-        extractors: [{
-            extractor: TailwindExtractor,
-            extensions: ["html"]
-        }]
-    }));
-}
-
 module.exports = {
-    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+    mode: isProd ? 'production' : 'development',
     entry: {
         docs: './assets/index.js'
     },
@@ -53,17 +38,21 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: process.env.NODE_ENV === 'development',
-                        },
-                    },
+                    MiniCssExtractPlugin.loader,
                     'css-loader',
                     'postcss-loader',
                 ]
             }
         ]
+    },
+    optimization: {
+        minimizer: [
+            `...`,
+            new CssMinimizerPlugin(),
+        ]
+    },
+    watchOptions: {
+        ignored: ['**/node_modules/', '/_site/'],
     },
     plugins: plugins
 };

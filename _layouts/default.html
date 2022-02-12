@@ -73,6 +73,12 @@
         </nav>
 
         <article id="article" role="main" class="max-w-full md:block md:w-10/14">
+            {% if page.url contains "/v1/" %}
+            <blockquote class="bg-yellow-dark px-4 py-2 rounded text-yellow-darkest mb-4">
+                <strong>WARNING</strong>: you're viewing docs for an outdated version.
+                View the <a class="text-yellow-darker font-bold" href="{{ page.url | replace: "/v1/", "/" }}">docs for the current version</a>.
+            </blockquote>
+            {% endif %}
             {% unless page.hide_title %}
             <h1 class="mb-4">{% if page.alternate_title %}{{ page.alternate_title }}{% else %}{{ page.title }}{% endif %}</h1>
             {% endunless %}

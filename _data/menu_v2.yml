@@ -2,7 +2,6 @@ Flysystem:
     Introduction: '/docs/'
     Getting Started: '/docs/getting-started/'
     Security Policy: '/security/'
-    Version 1 Docs: '/v1/docs/'
     Upgrade from 1.x: '/docs/upgrade-from-1.x/'
 
 Background Info:
@@ -17,6 +16,10 @@ Usage:
     Exception Handling: '/docs/usage/exception-handling/'
     Unix-Style Visibility: '/docs/usage/unix-visibility/'
 
+Guides:
+  Laravel Usage: '/docs/guides/laravel-usage/'
+  Symfony Usage: '/docs/guides/symfony-usage/'
+
 Adapters:
     Local: '/docs/adapter/local/'
     AWS S3: '/docs/adapter/aws-s3-v3/'
@@ -29,3 +32,6 @@ Advanced:
   Mime-type detection: '/docs/advanced/mime-type-detection/'
   Creating an adapter: '/docs/advanced/creating-an-adapter/'
   Mount Manager: '/docs/advanced/mount-manager/'
+
+Legacy:
+  Version 1 Docs: '/v1/docs/'
