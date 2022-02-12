@@ -2,6 +2,10 @@
 
 ## 3.0.5 - UNRELEASED
 
+### Added
+
+- [AzureBlobStorage] New adapter added
+
 ### Fixed
 
 - [AsyncAwsS3] Make EXTRA_METADATA_FIELDS protected to prevent error when extending the class
