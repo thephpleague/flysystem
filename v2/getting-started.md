@@ -13,9 +13,6 @@ Flysystem can be installed using composer.
 composer require league/flysystem:^3.0
 ```
 
-> NOTE: If you're installing a beta release, make sure to specify the
-> exact version, otherwise you'll get a v1 release until v2 is fully released.
-
 Additionally, you may want to install an extra adapter to interact with specific
 types of filesystems. You can find the adapters in the menu.
 
