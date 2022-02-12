@@ -51,7 +51,7 @@ class FileAttributes implements StorageAttributes
         ?string $mimeType = null,
         array $extraMetadata = []
     ) {
-        $this->path = $path;
+        $this->path = ltrim($path, '/');
         $this->fileSize = $fileSize;
         $this->visibility = $visibility;
         $this->lastModified = $lastModified;

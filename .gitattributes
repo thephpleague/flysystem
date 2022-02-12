@@ -22,6 +22,7 @@
 /src/AdapterTestUtilities export-ignore
 /src/AzureBlobStorage export-ignore
 /src/ZipArchive export-ignore
+/src/WebDAV export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /bin/ export-ignore

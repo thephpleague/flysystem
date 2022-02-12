@@ -35,7 +35,7 @@ class DirectoryAttributes implements StorageAttributes
 
     public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null, array $extraMetadata = [])
     {
-        $this->path = $path;
+        $this->path = trim($path, '/');
         $this->visibility = $visibility;
         $this->lastModified = $lastModified;
         $this->extraMetadata = $extraMetadata;
