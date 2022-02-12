@@ -18,7 +18,7 @@ It's important to know this adapter does not fully comply with the adapter conta
 
 - Visibility setting or retrieving is not supported.
 - Mimetypes are _always_ resolved, where others do not.
-- Direction creation is not supported in any way.
+- Directory creation is not supported in any way.
 
 ## Usage
 
