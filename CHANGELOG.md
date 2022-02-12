@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.5 - UNRELEASED
+
+### Fixed
+
+- [AsyncAwsS3] Make EXTRA_METADATA_FIELDS protected to prevent error when extending the class
+
 ## 3.0.4 - 2022-02-10
 
 ### Fixed
