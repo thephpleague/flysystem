@@ -66,7 +66,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     /**
      * @var string[]
      */
-    private const EXTRA_METADATA_FIELDS = [
+    protected const EXTRA_METADATA_FIELDS = [
         'Metadata',
         'StorageClass',
         'ETag',
