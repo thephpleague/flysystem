@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.0.5 - UNRELEASED
+## 3.0.5 - 2022-02-12
 
 ### Added
 
