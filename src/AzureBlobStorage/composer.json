@@ -1,0 +1,20 @@
+{
+    "name": "league/flysystem-azure-blob-storage",
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\AzureBlobStorage\\": ""
+        }
+    },
+    "require": {
+        "php": "^8.0.2",
+        "league/flysystem": "^2.0.0 || ^3.0.0",
+        "microsoft/azure-storage-blob": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}

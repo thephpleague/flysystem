@@ -1,0 +1,7 @@
+* text=auto
+
+.github export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+**/*Test.php export-ignore
+**/*Stub.php export-ignore
