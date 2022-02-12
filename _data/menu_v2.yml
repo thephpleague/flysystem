@@ -24,6 +24,7 @@ Adapters:
     Local: '/docs/adapter/local/'
     AWS S3: '/docs/adapter/aws-s3-v3/'
     AsyncAws S3: '/docs/adapter/async-aws-s3/'
+    Azure Blob Storeage: '/docs/adapter/azure-blob-storage/'
     FTP: '/docs/adapter/ftp/'
     SFTP: '/docs/adapter/sftp/'
     InMemory: '/docs/adapter/in-memory/'
