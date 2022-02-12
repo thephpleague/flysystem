@@ -17,8 +17,7 @@
         }
     },
     "require": {
-        "php": "^8.0.2",
-        "ext-json": "*",
+        "php": "^8.0.2"
         "league/mime-type-detection": "^1.0.0"
     },
     "require-dev": {
