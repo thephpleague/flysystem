@@ -36,6 +36,11 @@
             "target": "git@github.com:thephpleague/flysystem-async-aws-s3.git"
         },
         {
+            "name": "azure-blob-storage",
+            "directory": "src/AzureBlobStorage",
+            "target": "git@github.com:thephpleague/flysystem-azure-blob-storage.git"
+        },
+        {
             "name": "google-cloud-storage",
             "directory": "src/GoogleCloudStorage",
             "target": "git@github.com:thephpleague/flysystem-google-cloud-storage.git"
