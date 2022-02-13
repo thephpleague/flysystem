@@ -127,9 +127,9 @@ try {
 }
 ```
 
-| param   | description        | type     |
-|---------|--------------------|----------|
-| `$path` | location of a file | `string` |
+| param   | description             | type     |
+|---------|-------------------------|----------|
+| `$path` | location of a directory | `string` |
 
 ---
 
