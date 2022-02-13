@@ -12,6 +12,14 @@ For more information about the exception, read all about
 [exception handling](/docs/usage/exception-handling/).
 
 ---
+### Config options
+
+Several calls accept configuration options. These are the default options:
+
+| setting                | description                                                                    | type                  |
+|------------------------|--------------------------------------------------------------------------------|-----------------------|
+| `visibility`           | visibility setting, used when files, for directories when creating a directory | `public` or `private` |
+| `directory_visibility` | directory visibility                                                           | `public` or `private` |
 
 ## Writing files
 
