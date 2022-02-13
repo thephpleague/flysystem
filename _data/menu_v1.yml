@@ -2,7 +2,7 @@ Flysystem:
     Introduction: '/v1/docs/'
     Architecture: '/v1/docs/architecture/'
     Security Policy: '/v1/security/'
-    Check out V2: '/docs/'
+    👋 Check out V2: '/docs/'
 
 Usage:
     Setup / Bootstrap: '/v1/docs/usage/setup/'
