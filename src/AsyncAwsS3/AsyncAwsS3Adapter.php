@@ -189,7 +189,8 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $config = $config->withDefaults(['visibility' => $this->visibility->defaultForDirectories()]);
+        $defaultVisibility = $config->get('directory_visibility', $this->visibility->defaultForDirectories());
+        $config = $config->withDefaults(['visibility' => $defaultVisibility]);
         $this->upload(rtrim($path, '/') . '/', '', $config);
     }
 
