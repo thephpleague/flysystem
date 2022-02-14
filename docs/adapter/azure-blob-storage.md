@@ -14,7 +14,7 @@ composer require league/flysystem-azure-blob-storage
 
 ## Notice
 
-It's important to know this adapter does not fully comply with the adapter contact. The main differences are:
+It's important to know this adapter does not fully comply with the adapter contract. The difference(s) is/are:
 
 - Visibility setting or retrieving is not supported.
 - Mimetypes are _always_ resolved, where others do not.

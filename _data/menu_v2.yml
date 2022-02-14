@@ -27,6 +27,7 @@ Adapters:
     Azure Blob Storage: '/docs/adapter/azure-blob-storage/'
     FTP: '/docs/adapter/ftp/'
     SFTP: '/docs/adapter/sftp/'
+    WebDAV: '/docs/adapter/webdav/'
     InMemory: '/docs/adapter/in-memory/'
 
 Advanced:
