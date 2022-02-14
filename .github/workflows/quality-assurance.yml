@@ -7,6 +7,7 @@ on:
       - .github/workflows/quality-assurance.yml
     branches:
       - 3.x
+      - 3.x-sabre
   pull_request:
     paths:
       - src/**/*.php

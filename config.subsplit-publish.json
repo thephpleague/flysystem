@@ -46,6 +46,11 @@
             "target": "git@github.com:thephpleague/flysystem-google-cloud-storage.git"
         },
         {
+            "name": "webdav",
+            "directory": "src/WebDAV",
+            "target": "git@github.com:thephpleague/flysystem-webdav.git"
+        },
+        {
             "name": "adapter-test-utilities",
             "directory": "src/AdapterTestUtilities",
             "target": "git@github.com:thephpleague/flysystem-adapter-test-utilities.git"

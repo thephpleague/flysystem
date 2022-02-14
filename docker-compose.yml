@@ -1,11 +1,19 @@
 ---
 version: "3"
 services:
+  sabredav:
+    image: php:8.1-alpine3.15
+    restart: always
+    volumes:
+      - ./:/var/www/html/
+    ports:
+      - "4040:4040"
+    command: php -S 0.0.0.0:4040 /var/www/html/src/WebDAV/resources/server.php
   webdav:
     image: bytemark/webdav
     restart: always
     ports:
-      - "80:80"
+      - "4080:80"
     environment:
       AUTH_TYPE: Digest
       USERNAME: alice

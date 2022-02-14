@@ -223,11 +223,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
     public function visibility(string $path): FileAttributes
     {
-        try {
-            return $this->fetchMetadata($this->prefixer->prefixPath($path));
-        } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
-        }
+        throw UnableToRetrieveMetadata::visibility($path, 'Azure does not support visibility');
     }
 
     public function mimeType(string $path): FileAttributes
