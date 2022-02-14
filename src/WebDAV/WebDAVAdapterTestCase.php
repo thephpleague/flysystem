@@ -6,11 +6,9 @@ namespace League\Flysystem\WebDAV;
 
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
-use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
-use Sabre\DAV\Client;
 
 abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
 {

@@ -5,6 +5,8 @@ use Sabre\DAV\Server;
 
 include __DIR__ . '/../../../vendor/autoload.php';
 
+error_reporting(E_ALL ^ E_DEPRECATED);
+
 $rootPath = __DIR__ . '/data';
 
 if ( ! is_dir($rootPath)) {
