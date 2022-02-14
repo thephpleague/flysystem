@@ -80,7 +80,7 @@
             </blockquote>
             {% endif %}
             {% unless page.hide_title %}
-            <h1 class="mb-4">{% if page.alternate_title %}{{ page.alternate_title }}{% else %}{{ page.title }}{% endif %}</h1>
+            <h1 class="mb-4">{% if page.alternate_title %}{{ page.alternate_title }}{% else %}{{ page.title }}{% endif %}{% if page.url contains "/v1/" %} (V1){% endif %}</h1>
             {% endunless %}
             {{ content }}
         </article>
