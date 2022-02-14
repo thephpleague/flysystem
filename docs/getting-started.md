@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Visibility
+title: Getting Started
 permalink: /docs/getting-started/
 redirect_from: /v2/docs/getting-started/
 ---

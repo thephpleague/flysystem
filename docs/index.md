@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Filesystem Abstraction for PHP
+title: File Storage Abstraction for PHP
 permalink: /docs/
 redirect_from:
     - /
