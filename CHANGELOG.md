@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.7 - 2022-02-14
+
+### Fixed
+
+- [WebDAV] added missing composer.json for sub-split
+
 ## 3.0.6 - 2022-02-14
 
 ### Added
