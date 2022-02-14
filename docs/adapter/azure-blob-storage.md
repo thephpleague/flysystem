@@ -9,7 +9,7 @@ redirect_from:
 ## Installation
 
 ```bash
-composer require league/flysystem-azure-blob-storage
+composer require league/flysystem-azure-blob-storage:^3.0
 ```
 
 ## Notice

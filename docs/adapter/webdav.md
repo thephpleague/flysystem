@@ -7,7 +7,7 @@ permalink: /docs/adapter/webdav/
 ## Installation
 
 ```bash
-composer require league/flysystem-webdav
+composer require league/flysystem-webdav:^3.0
 ```
 
 This adapter is powered by [sabre/dav](https://sabre.io/dav/).

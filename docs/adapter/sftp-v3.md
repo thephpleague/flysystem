@@ -1,15 +1,16 @@
 ---
 layout: default
-title: SFTP Adapter
-permalink: /docs/adapter/sftp/
-redirect_from: /v2/docs/adapter/sftp/
+title: SFTP Adapter (V3)
+permalink: /docs/adapter/sftp-v3/
 ---
 
 ## Installation
 
 ```bash
-composer require league/flysystem-sftp:^2.0
+composer require league/flysystem-sftp-v3:^3.0
 ```
+
+This implementation uses version 3 of phpseclib
 
 ## About
 
@@ -17,8 +18,8 @@ composer require league/flysystem-sftp:^2.0
 
 ```php
 use League\Flysystem\Filesystem;
-use League\Flysystem\PhpseclibV2\SftpConnectionProvider;
-use League\Flysystem\PhpseclibV2\SftpAdapter;
+use League\Flysystem\PhpseclibV3\SftpConnectionProvider;
+use League\Flysystem\PhpseclibV3\SftpAdapter;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 
 

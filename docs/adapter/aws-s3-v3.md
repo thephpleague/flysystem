@@ -8,7 +8,7 @@ redirect_from: /v2/docs/adapter/aws-s3-v3/
 ## Installation
 
 ```bash
-composer require league/flysystem-aws-s3-v3:^2.0
+composer require league/flysystem-aws-s3-v3:^3.0
 ```
 
 ## About

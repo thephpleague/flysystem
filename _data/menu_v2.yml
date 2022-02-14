@@ -26,7 +26,8 @@ Adapters:
     AsyncAws S3: '/docs/adapter/async-aws-s3/'
     Azure Blob Storage: '/docs/adapter/azure-blob-storage/'
     FTP: '/docs/adapter/ftp/'
-    SFTP: '/docs/adapter/sftp/'
+    SFTP (V2): '/docs/adapter/sftp-v2/'
+    SFTP (V3): '/docs/adapter/sftp-v3/'
     WebDAV: '/docs/adapter/webdav/'
     InMemory: '/docs/adapter/in-memory/'
 

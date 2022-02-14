@@ -8,7 +8,7 @@ redirect_from: /v2/docs/adapter/ftp/
 ## Installation
 
 ```bash
-composer require league/flysystem-ftp:^2.0
+composer require league/flysystem-ftp:^3.0
 ```
 
 ## About

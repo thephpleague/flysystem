@@ -8,7 +8,7 @@ redirect_from: /v2/docs/adapter/async-aws-s3/
 ## Installation
 
 ```bash
-composer require league/flysystem-async-aws-s3
+composer require league/flysystem-async-aws-s3:^3.0
 ```
 
 ## About
