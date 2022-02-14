@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.0.6 - UNRELEASED
+
+### Added
+
+- [WebDAV] new adapter added
+
+### Fixed
+
+- [Core] Trim slashed uniformly in the attribute classes.
+- [Core] Uniformly use directory_visibility over visibility for directory usage.
+- [FTP] export-ignore the test case.
+
 ## 3.0.5 - 2022-02-12
 
 ### Added
