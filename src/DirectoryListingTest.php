@@ -93,12 +93,12 @@ class DirectoryListingTest extends TestCase
      */
     public function sorting_a_directory_listing(): void
     {
-        $expected = ['/a/a/a.txt', '/b/c/a.txt', '/c/b/a.txt', '/c/c/a.txt'];
+        $expected = ['a/a/a.txt', 'b/c/a.txt', 'c/b/a.txt', 'c/c/a.txt'];
         $listing = new DirectoryListing([
-            new FileAttributes('/b/c/a.txt'),
-            new FileAttributes('/c/c/a.txt'),
-            new FileAttributes('/c/b/a.txt'),
-            new FileAttributes('/a/a/a.txt'),
+            new FileAttributes('b/c/a.txt'),
+            new FileAttributes('c/c/a.txt'),
+            new FileAttributes('c/b/a.txt'),
+            new FileAttributes('a/a/a.txt'),
         ]);
 
         $actual = $listing->sortByPath()
@@ -119,10 +119,10 @@ class DirectoryListingTest extends TestCase
     public function iterating_over_storted_output(): void
     {
         $listing = new DirectoryListing([
-            new FileAttributes('/b/c/a.txt'),
-            new FileAttributes('/c/c/a.txt'),
-            new FileAttributes('/c/b/a.txt'),
-            new FileAttributes('/a/a/a.txt'),
+            new FileAttributes('b/c/a.txt'),
+            new FileAttributes('c/c/a.txt'),
+            new FileAttributes('c/b/a.txt'),
+            new FileAttributes('a/a/a.txt'),
         ]);
 
         self::expectNotToPerformAssertions();
