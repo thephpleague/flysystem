@@ -1,0 +1,22 @@
+{
+    "name": "league/flysystem-webdav",
+    "description": "WebDAV filesystem adapter for Flysystem.",
+    "keywords": ["flysystem", "filesystem", "webdav", "files", "file"],
+    "autoload": {
+        "psr-4": {
+                "League\\Flysystem\\WebDAV\\": ""
+        }
+    },
+    "require": {
+        "php": "^8.0.2",
+        "league/flysystem": "^2.0.0 || ^3.0.0",
+        "sabre/dav": "^4.3.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}
