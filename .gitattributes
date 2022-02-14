@@ -1,6 +1,7 @@
 * text=auto
 
-/config.subsplit-publish.json
+/.docker export-ignore
+/config.subsplit-publish.json export-ignore
 /.editorconfig export-ignore
 /.php-cs-fixer.dist.php export-ignore
 /phpstan.neon export-ignore
