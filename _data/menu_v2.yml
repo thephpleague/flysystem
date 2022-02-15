@@ -1,24 +1,17 @@
 Flysystem:
     Introduction: '/docs/'
     Getting Started: '/docs/getting-started/'
+    Architecture &amp; Design: '/docs/architecture/'
     Security Policy: '/security/'
     Upgrade from 1.x: '/docs/upgrade-from-1.x/'
-
-Background Info:
     New In V2 and V3: '/docs/what-is-new/'
-    Architecture: '/docs/architecture/'
-    Design Considerations: '/docs/design-considerations/'
-    Visibility and Permissions: '/docs/visibility/'
 
 Usage:
     Filesystem API: '/docs/usage/filesystem-api/'
     Directory Listings: '/docs/usage/directory-listings/'
     Exception Handling: '/docs/usage/exception-handling/'
+    Visibility and Permissions: '/docs/visibility/'
     Unix-Style Visibility: '/docs/usage/unix-visibility/'
-
-Guides:
-  Laravel Usage: '/docs/guides/laravel-usage/'
-  Symfony Usage: '/docs/guides/symfony-usage/'
 
 Official Adapters:
     Local: '/docs/adapter/local/'
@@ -34,6 +27,10 @@ Official Adapters:
 
 Community Adapters:
     GitLab: '/docs/adapter/gitlab/'
+
+Guides:
+    Laravel Usage: '/docs/guides/laravel-usage/'
+    Symfony Usage: '/docs/guides/symfony-usage/'
 
 Advanced:
   Mime-type detection: '/docs/advanced/mime-type-detection/'
