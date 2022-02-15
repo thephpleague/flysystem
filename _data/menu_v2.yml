@@ -20,7 +20,7 @@ Guides:
   Laravel Usage: '/docs/guides/laravel-usage/'
   Symfony Usage: '/docs/guides/symfony-usage/'
 
-Adapters:
+Official Adapters:
     Local: '/docs/adapter/local/'
     FTP: '/docs/adapter/ftp/'
     InMemory: '/docs/adapter/in-memory/'
@@ -31,6 +31,9 @@ Adapters:
     SFTP (V2): '/docs/adapter/sftp-v2/'
     SFTP (V3): '/docs/adapter/sftp-v3/'
     WebDAV: '/docs/adapter/webdav/'
+
+Community Adapters:
+    GitLab: '/docs/adapter/gitlab/'
 
 Advanced:
   Mime-type detection: '/docs/advanced/mime-type-detection/'
