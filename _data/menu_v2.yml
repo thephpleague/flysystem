@@ -22,14 +22,15 @@ Guides:
 
 Adapters:
     Local: '/docs/adapter/local/'
+    FTP: '/docs/adapter/ftp/'
+    InMemory: '/docs/adapter/in-memory/'
     AWS S3: '/docs/adapter/aws-s3-v3/'
     AsyncAws S3: '/docs/adapter/async-aws-s3/'
     Azure Blob Storage: '/docs/adapter/azure-blob-storage/'
-    FTP: '/docs/adapter/ftp/'
+    Google Cloud Storage: '/docs/adapter/google-cloud-storage/'
     SFTP (V2): '/docs/adapter/sftp-v2/'
     SFTP (V3): '/docs/adapter/sftp-v3/'
     WebDAV: '/docs/adapter/webdav/'
-    InMemory: '/docs/adapter/in-memory/'
 
 Advanced:
   Mime-type detection: '/docs/advanced/mime-type-detection/'

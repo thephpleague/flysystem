@@ -31,12 +31,17 @@ for which ever storage is right for you.
 * **[Flysystem API](/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
 * **[Upgrade from 1x](/docs/advanced/upgrade-from-1.x/)**: How to upgrade from 2.x
 
-### Commonly-Used Adapters
+### Officially supported adapters
 
-* **[AsyncAws S3](/docs/adapter/async-aws-s3/)**
-* **[AWS S3](/docs/adapter/aws-s3-v3/)**
 * **[Local](/docs/adapter/local/)**
+* **[FTP](/docs/adapter/ftp/)**
+* **[SFTP](/docs/adapter/sftp-v3/)**
 * **[Memory](/docs/adapter/in-memory/)**
+* **[AWS S3](/docs/adapter/aws-s3-v3/)**
+* **[AsyncAws S3](/docs/adapter/async-aws-s3/)**
+* **[Google Cloud Storage](/docs/adapter/google-cloud-storage/)**
+* **[Azure Blob Storage](/docs/adapter/azure-blob-storage/)**
+* **[WebDAV](/docs/adapter/webdav/)**
 
 ### Third party Adapters
 

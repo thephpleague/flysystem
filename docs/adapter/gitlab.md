@@ -18,7 +18,7 @@ composer require royvoetman/flysystem-gitlab-storage
 // Create a Gitlab Client to talk with the API
 $client = new Client('project-id', 'branch', 'base-url', 'personal-access-token');
    
-// Create the Adapter that implements Flysystems AdapterInterface
+// Create the Adapter that implements Flysystem's AdapterInterface
 $adapter = new GitlabAdapter(
     // Gitlab API Client
     $client,
