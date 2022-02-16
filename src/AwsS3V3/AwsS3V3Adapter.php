@@ -196,7 +196,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $options = ['params' => []];
 
         if ($mimetype = $config->get('mimetype')) {
-            $options['ContentType'] = $mimetype;
+            $options['params']['ContentType'] = $mimetype;
         }
 
         foreach (static::AVAILABLE_OPTIONS as $option) {
