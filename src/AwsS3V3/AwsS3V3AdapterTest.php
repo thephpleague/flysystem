@@ -110,6 +110,17 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function writing_a_file_with_explicit_mime_type(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'contents', new Config(['mimetype' => 'text/plain+special']));
+        $mimeType = $adapter->mimeType('some/path.txt')->mimeType();
+        $this->assertEquals('text/plain+special', $mimeType);
+    }
+
+    /**
+     * @test
+     */
     public function listing_contents_recursive(): void
     {
         $adapter = $this->adapter();
