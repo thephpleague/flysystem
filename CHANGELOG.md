@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.4.3 - 2022-02-16
+
+### Fixed
+
+- [AWS S3] Set ContentType when mime-type config option is set during writes, like in v1.
+
 ## 2.4.2 - 2022-01-31
 
 ### Fixed
