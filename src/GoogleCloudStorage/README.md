@@ -4,4 +4,4 @@
 composer require league/flysystem-google-cloud-storage
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/gcs/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/google-cloud-storage/).

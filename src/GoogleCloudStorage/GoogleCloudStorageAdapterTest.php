@@ -50,7 +50,6 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
         $clientOptions = [
             'projectId' => 'flysystem-testing',
             'keyFilePath' => __DIR__ . '/../../google-cloud-service-account.json',
-
         ];
         $storageClient = new StubStorageClient($clientOptions);
         static::$bucket = $bucket = $storageClient->bucket('flysystem');
