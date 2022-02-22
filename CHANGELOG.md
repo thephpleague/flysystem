@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.9 - 2022-02-22
+
+### Fixed
+
+- [AWS S3] support setting an ACL as a direct option instead of using visibility.
+
 ## 3.0.8 - 2022-02-16
 
 ### Fixed
