@@ -262,7 +262,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         try {
             $prefix = $this->prefixer->prefixDirectoryPath($path);
-            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'Delimiter' => '/'];
+            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'MaxKeys' => 1, 'Delimiter' => '/'];
 
             return $this->client->listObjectsV2($options)->getKeyCount() > 0;
         } catch (Throwable $exception) {

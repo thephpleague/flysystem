@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace League\Flysystem\AsyncAwsS3;
 
 use AsyncAws\Core\Exception\Http\ClientException;
-
 use AsyncAws\Core\Exception\Http\NetworkException;
 use AsyncAws\Core\Test\Http\SimpleMockedResponse;
 use AsyncAws\Core\Test\ResultMockFactory;
-
 use AsyncAws\S3\Result\HeadObjectOutput;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
@@ -101,6 +99,19 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             'accessKeySecret' => $secret,
             'region' => $region,
         ]);
+    }
+
+    /**
+     * @test
+     *
+     * @see https://github.com/thephpleague/flysystem-aws-s3-v3/issues/287
+     */
+    public function issue_287(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('KmFVvKqo/QLMExy2U/620ff60c8a154.pdf', 'pdf content', new Config());
+
+        self::assertTrue($adapter->directoryExists('KmFVvKqo'));
     }
 
     /**

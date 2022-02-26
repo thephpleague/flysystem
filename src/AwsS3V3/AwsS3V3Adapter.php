@@ -147,10 +147,11 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         try {
             $prefix = $this->prefixer->prefixDirectoryPath($path);
-            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'Delimiter' => '/'];
+            $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'MaxKeys' => 1, 'Delimiter' => '/'];
             $command = $this->client->getCommand('ListObjects', $options);
+            $result = $this->client->execute($command);
 
-            return $this->client->execute($command)->hasKey('Contents');
+            return $result->hasKey('Contents') || $result->hasKey('CommonPrefixes');
         } catch (Throwable $exception) {
             throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         }

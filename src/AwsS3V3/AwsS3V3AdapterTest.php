@@ -155,6 +155,19 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
+     * @see https://github.com/thephpleague/flysystem-aws-s3-v3/issues/287
+     */
+    public function issue_287(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('KmFVvKqo/QLMExy2U/620ff60c8a154.pdf', 'pdf content', new Config());
+
+        self::assertTrue($adapter->directoryExists('KmFVvKqo'));
+    }
+
+    /**
+     * @test
      */
     public function failing_to_write_a_file(): void
     {
