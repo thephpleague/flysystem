@@ -17,6 +17,7 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
@@ -255,7 +256,12 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         $prefix = $this->prefixer->prefixPath($path);
         $prefix = ltrim(rtrim($prefix, '/') . '/', '/');
-        $this->client->deleteMatchingObjects($this->bucket, $prefix);
+
+        try {
+            $this->client->deleteMatchingObjects($this->bucket, $prefix);
+        } catch (Throwable $exception) {
+            throw UnableToCreateDirectory::dueToFailure($path, $exception);
+        }
     }
 
     public function createDirectory(string $path, Config $config): void
