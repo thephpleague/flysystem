@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.10 - 2022-02-26
+
+### Fixed
+
+- [AWS S3] fix detecting directories that only contain other directories but no files.
+- [AWS S3] when checking for directory existence, limit the result set (perf)
+- [AWS S3] throw interface exception when failing to delete directory
+- [Async AWS S3] when checking for directory existence, limit the result set (perf)
+
 ## 3.0.9 - 2022-02-22
 
 ### Fixed
