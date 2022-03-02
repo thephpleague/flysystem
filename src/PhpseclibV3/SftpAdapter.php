@@ -274,6 +274,10 @@ class SftpAdapter implements FilesystemAdapter
         $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
         $listing = $connection->rawlist($location, false);
 
+        if (false === $listing) {
+            return [];
+        }
+
         foreach ($listing as $filename => $attributes) {
             if ($filename === '.' || $filename === '..') {
                 continue;
