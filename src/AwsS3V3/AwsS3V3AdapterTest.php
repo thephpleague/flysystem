@@ -288,6 +288,19 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     * @dataProvider casesWhereHttpStreamingInfluencesSeekability
+     */
+    public function use_globally_configured_options(bool $streaming): void
+    {
+        $adapter = $this->useAdapter($this->createFilesystemAdapter($streaming, ['ContentType' => 'text/plain+special']));
+        $this->givenWeHaveAnExistingFile('path.txt');
+
+        $mimeType = $adapter->mimeType('path.txt')->mimeType();
+        $this->assertSame('text/plain+special', $mimeType);
+    }
+
+    /**
+     * @test
      */
     public function moving_with_updated_metadata(): void
     {

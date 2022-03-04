@@ -195,6 +195,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     private function createOptionsFromConfig(Config $config): array
     {
+        $config = $config->withDefaults($this->options);
         $options = ['params' => []];
 
         if ($mimetype = $config->get('mimetype')) {
@@ -217,7 +218,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
             }
         }
 
-        return $options + $this->options;
+        return $options;
     }
 
     public function writeStream(string $path, $contents, Config $config): void
