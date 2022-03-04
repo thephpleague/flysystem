@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.11 - 2022-03-04
+
+### Fixed
+
+- [AWS S3] Use globally configured options.
+
 ## 3.0.10 - 2022-02-26
 
 ### Fixed
