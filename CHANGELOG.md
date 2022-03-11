@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.12 - 2022-03-11
+
+### Fixed
+
+- [SFTP V3] Fix issue where listing is false.
+- [Async AWS S3] Cosmetic fix for directory prefixing.
+
 ## 3.0.11 - 2022-03-04
 
 ### Fixed
