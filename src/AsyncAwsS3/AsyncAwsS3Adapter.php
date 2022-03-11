@@ -166,8 +166,8 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
 
     public function deleteDirectory(string $path): void
     {
-        $prefix = $this->prefixer->prefixPath($path);
-        $prefix = ltrim(rtrim($prefix, '/') . '/', '/');
+        $prefix = $this->prefixer->prefixDirectoryPath($path);
+        $prefix = ltrim($prefix, '/');
 
         $objects = [];
         $params = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
