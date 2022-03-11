@@ -275,7 +275,7 @@ class SftpAdapter implements FilesystemAdapter
         $listing = $connection->rawlist($location, false);
 
         if (false === $listing) {
-            return [];
+            return;
         }
 
         foreach ($listing as $filename => $attributes) {
