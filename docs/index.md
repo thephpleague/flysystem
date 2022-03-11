@@ -29,7 +29,7 @@ for which ever storage is right for you.
 * **[New in V2](/docs/what-is-new/)**: What is new in Flysystem V2/V3?
 * **[Architecture](/docs/architecture/)**: Flysystem's internal architecture
 * **[Flysystem API](/docs/usage/filesystem-api/)**: How to interact with your Flysystem instance
-* **[Upgrade from 1x](/docs/advanced/upgrade-from-1.x/)**: How to upgrade from 2.x
+* **[Upgrade from 1x](/docs/upgrade-from-1.x/)**: How to upgrade from 2.x
 
 ### Officially supported adapters
 
