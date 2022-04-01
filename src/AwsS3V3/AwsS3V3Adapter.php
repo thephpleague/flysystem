@@ -324,12 +324,8 @@ class AwsS3V3Adapter implements FilesystemAdapter
         return $attributes;
     }
 
-    private function mapS3ObjectMetadata(array $metadata, string $path = null): StorageAttributes
+    private function mapS3ObjectMetadata(array $metadata, string $path): StorageAttributes
     {
-        if ($path === null) {
-            $path = $this->prefixer->stripPrefix($metadata['Key'] ?? $metadata['Prefix']);
-        }
-
         if (substr($path, -1) === '/') {
             return new DirectoryAttributes(rtrim($path, '/'));
         }
@@ -409,7 +405,13 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $listing = $this->retrievePaginatedListing($options);
 
         foreach ($listing as $item) {
-            yield $this->mapS3ObjectMetadata($item);
+            $key = $item['Key'] ?? $item['Prefix'];
+
+            if ($key === $prefix) {
+                continue;
+            }
+
+            yield $this->mapS3ObjectMetadata($item, $this->prefixer->stripPrefix($key));
         }
     }
 

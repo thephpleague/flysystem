@@ -23,6 +23,7 @@ use League\Flysystem\UnableToWriteFile;
 use RuntimeException;
 
 use function getenv;
+use function iterator_to_array;
 
 /**
  * @group aws
@@ -116,6 +117,19 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $adapter->write('some/path.txt', 'contents', new Config(['mimetype' => 'text/plain+special']));
         $mimeType = $adapter->mimeType('some/path.txt')->mimeType();
         $this->assertEquals('text/plain+special', $mimeType);
+    }
+
+    /**
+     * @test
+     * @see https://github.com/thephpleague/flysystem-aws-s3-v3/issues/291
+     */
+    public function issue_291(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->createDirectory('directory', new Config());
+        $listing = iterator_to_array($adapter->listContents('directory', true));
+
+        self::assertCount(0, $listing);
     }
 
     /**
