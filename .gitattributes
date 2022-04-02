@@ -10,6 +10,8 @@
 /.travis.yml export-ignore
 /.scrutinizer.yml export-ignore
 /CHANGELOG.md export-ignore
+/CODE_OF_CONDUCT.md export-ignore
+/deprecations.md export-ignore
 /docker-composer.yml export-ignore
 /README.md export-ignore
 /.github export-ignore
