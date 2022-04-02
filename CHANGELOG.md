@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.13 - 2022-04-02
+
+### Fixed
+
+- [AWS S3 V3] Do not return top-level directory when listing that same directory
+
 ## 3.0.12 - 2022-03-12
 
 ### Fixed
