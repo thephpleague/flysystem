@@ -55,7 +55,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
     {
         $path = $this->preparePath($path);
         $file = $this->files[$path] = $this->files[$path] ?? new InMemoryFile();
-        $file->updateContents($contents);
+        $file->updateContents($contents, $config->get('timestamp'));
 
         $visibility = $config->get(Config::OPTION_VISIBILITY, $this->defaultVisibility);
         $file->setVisibility($visibility);
@@ -249,7 +249,9 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
             throw UnableToCopyFile::fromLocationTo($source, $destination);
         }
 
-        $this->files[$destination] = clone $this->files[$source];
+        $lastModified = $config->get('timestamp', time());
+
+        $this->files[$destination] = $this->files[$source]->withLastModified($lastModified);
     }
 
     private function preparePath(string $path): string

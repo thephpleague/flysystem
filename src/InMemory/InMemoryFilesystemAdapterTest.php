@@ -273,6 +273,22 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         parent::fetching_unknown_mime_type_of_a_file();
     }
 
+    /**
+     * @test
+     */
+    public function using_custom_timestamp(): void
+    {
+        $adapter = $this->adapter();
+
+        $now = 100;
+        $adapter->write('file.txt', 'contents', new Config(['timestamp' => $now]));
+        $this->assertEquals($now, $adapter->lastModified('file.txt')->lastModified());
+
+        $earlier = 50;
+        $adapter->copy('file.txt', 'new_file.txt', new Config(['timestamp' => $earlier]));
+        $this->assertEquals($earlier, $adapter->lastModified('new_file.txt')->lastModified());
+    }
+
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         return new InMemoryFilesystemAdapter();
