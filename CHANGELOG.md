@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.14 - 2022-04-06
+
+### Added
+
+- [InMemory] allow to set a last-updated time (#1438)
+- [SFTP V3] allow configuring preferred algo's (#1440)
+
 ## 3.0.13 - 2022-04-02
 
 ### Fixed
