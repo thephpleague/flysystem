@@ -29,6 +29,16 @@ services:
       - ./test_files/sftp/id_rsa.pub:/home/bar/.ssh/keys/id_rsa.pub
     ports:
       - "2222:22"
+  sftp_eddsa_only:
+    container_name: sftp_eddsa_only
+    restart: always
+    image: atmoz/sftp
+    volumes:
+      - ./test_files/sftp/users.conf:/etc/sftp/users.conf
+      - ./test_files/sftp/sshd_custom_configs.sh:/etc/sftp.d/sshd_custom_configs.sh
+      - ./test_files/sftp/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+    ports:
+      - "2223:22"
   ftp:
     container_name: ftp
     restart: always
