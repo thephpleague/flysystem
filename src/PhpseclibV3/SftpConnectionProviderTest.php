@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PhpseclibV3;
 
+use phpseclib3\Exception\NoSupportedAlgorithmsException;
 use phpseclib3\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 
@@ -21,6 +22,8 @@ use function str_split;
  */
 class SftpConnectionProviderTest extends TestCase
 {
+    const KEX_ACCEPTED_BY_DEFAULT_OPENSSH_BUT_DISABLED_IN_EDDSA_ONLY = 'diffie-hellman-group14-sha256';
+
     public static function setUpBeforeClass(): void
     {
         if ( ! class_exists(SFTP::class)) {
@@ -238,6 +241,60 @@ class SftpConnectionProviderTest extends TestCase
                 'port' => 2222,
             ]
         );
+        $provider->provideConnection();
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_with_supported_preferred_kex_algorithm_succedes(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'preferredAlgorithms' => [
+                    'kex' => [self::KEX_ACCEPTED_BY_DEFAULT_OPENSSH_BUT_DISABLED_IN_EDDSA_ONLY],
+                ],
+            ]
+        );
+        $this->assertInstanceOf(SFTP::class, $provider->provideConnection());
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2223,
+                'preferredAlgorithms' => [
+                    'kex' => ['curve25519-sha256'],
+                ],
+            ]
+        );
+        $provider->provideConnection();
+        $this->assertInstanceOf(SFTP::class, $provider->provideConnection());
+    }
+
+    /**
+     * @test
+     */
+    public function authenticate_with_unsupported_preferred_kex_algorithm_failes(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2223,
+                'preferredAlgorithms' => [
+                    'kex' => [self::KEX_ACCEPTED_BY_DEFAULT_OPENSSH_BUT_DISABLED_IN_EDDSA_ONLY],
+                ],
+            ]
+        );
+
+        $this->expectException(NoSupportedAlgorithmsException::class);
         $provider->provideConnection();
     }
 

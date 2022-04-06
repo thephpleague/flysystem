@@ -78,6 +78,11 @@ class SftpConnectionProvider implements ConnectionProvider
      */
     private $maxTries;
 
+    /**
+     * @var array
+     */
+    private $preferredAlgorithms;
+
     public function __construct(
         string $host,
         string $username,
@@ -89,7 +94,8 @@ class SftpConnectionProvider implements ConnectionProvider
         int $timeout = 10,
         int $maxTries = 4,
         string $hostFingerprint = null,
-        ConnectivityChecker $connectivityChecker = null
+        ConnectivityChecker $connectivityChecker = null,
+        array $preferredAlgorithms = []
     ) {
         $this->host = $host;
         $this->username = $username;
@@ -102,6 +108,7 @@ class SftpConnectionProvider implements ConnectionProvider
         $this->hostFingerprint = $hostFingerprint;
         $this->connectivityChecker = $connectivityChecker ?: new SimpleConnectivityChecker();
         $this->maxTries = $maxTries;
+        $this->preferredAlgorithms = $preferredAlgorithms;
     }
 
     public function provideConnection(): SFTP
@@ -131,6 +138,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private function setupConnection(): SFTP
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
+        $connection->setPreferredAlgorithms($this->preferredAlgorithms);
         $connection->disableStatCache();
 
         try {
@@ -190,7 +198,8 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['timeout'] ?? 10,
             $options['maxTries'] ?? 4,
             $options['hostFingerprint'] ?? null,
-            $options['connectivityChecker'] ?? null
+            $options['connectivityChecker'] ?? null,
+            $options['preferredAlgorithms'] ?? [],
         );
     }
 
