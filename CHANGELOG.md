@@ -4,6 +4,7 @@
 
 - [GCS] Allow setting upload metadata
 - [GCS] Allow setting contentType, or resolve it
+- [SFTP v2+v3] Delete top-level directory too.
 
 ## 3.0.14 - 2022-04-06
 
