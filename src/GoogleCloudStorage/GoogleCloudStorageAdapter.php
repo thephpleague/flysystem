@@ -132,6 +132,10 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             $options['predefinedAcl'] = $predefinedAcl;
         }
 
+        if ($config->get('metadata')) {
+            $options['metadata'] = $config->get('metadata');
+        }
+
         try {
             $this->bucket->upload($contents, $options);
         } catch (Throwable $exception) {
