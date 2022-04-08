@@ -27,6 +27,8 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use phpseclib3\Net\SFTP;
 use Throwable;
 
+use function rtrim;
+
 class SftpAdapter implements FilesystemAdapter
 {
     /**
@@ -197,9 +199,10 @@ class SftpAdapter implements FilesystemAdapter
 
     public function deleteDirectory(string $path): void
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = rtrim($this->prefixer->prefixPath($path), '/') . '/';
         $connection = $this->connectionProvider->provideConnection();
-        $connection->delete(rtrim($location, '/') . '/');
+        $connection->delete($location);
+        $connection->rmdir($location);
     }
 
     public function createDirectory(string $path, Config $config): void
