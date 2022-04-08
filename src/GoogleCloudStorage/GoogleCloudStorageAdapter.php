@@ -143,9 +143,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
         $metadata = $config->get('metadata', []);
         $shouldDetermineMimetype = $contents !== '' && ! array_key_exists('contentType', $metadata);
+
         if ($shouldDetermineMimetype && $mimeType = $this->mimeTypeDetector->detectMimeType($path, $contents)) {
             $metadata['contentType'] = $mimeType;
         }
+
         $options['metadata'] = $metadata;
 
         try {
