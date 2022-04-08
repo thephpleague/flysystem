@@ -14,6 +14,7 @@
 /deprecations.md export-ignore
 /docker-composer.yml export-ignore
 /README.md export-ignore
+/CODE_OF_CONDUCT.md export-ignore
 /.github export-ignore
 /src/AsyncAwsS3 export-ignore
 /src/AwsS3V3 export-ignore
