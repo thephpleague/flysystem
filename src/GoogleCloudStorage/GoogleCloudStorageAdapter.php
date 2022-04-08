@@ -22,6 +22,8 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter
@@ -46,12 +48,23 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
      */
     private $defaultVisibility;
 
-    public function __construct(Bucket $bucket, string $prefix = '', VisibilityHandler $visibilityHandler = null, string $defaultVisibility = Visibility::PRIVATE)
-    {
+    /**
+     * @var MimeTypeDetector
+     */
+    private $mimeTypeDetector;
+
+    public function __construct(
+        Bucket $bucket,
+        string $prefix = '',
+        VisibilityHandler $visibilityHandler = null,
+        string $defaultVisibility = Visibility::PRIVATE,
+        MimeTypeDetector $mimeTypeDetector = null
+    ) {
         $this->bucket = $bucket;
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
         $this->defaultVisibility = $defaultVisibility;
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 
     public function fileExists(string $path): bool
@@ -85,6 +98,13 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         if ($predefinedAcl !== PortableVisibilityHandler::NO_PREDEFINED_VISIBILITY) {
             $options['predefinedAcl'] = $predefinedAcl;
         }
+
+        $metadata = $config->get('metadata', []);
+        $shouldDetermineMimetype = $contents !== '' && ! array_key_exists('contentType', $metadata);
+        if ($shouldDetermineMimetype && $mimeType = $this->mimeTypeDetector->detectMimeType($path, $contents)) {
+            $metadata['contentType'] = $mimeType;
+        }
+        $options['metadata'] = $metadata;
 
         try {
             $this->bucket->upload($contents, $options);
