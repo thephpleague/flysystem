@@ -73,6 +73,19 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     * @see https://github.com/thephpleague/flysystem/issues/1442
+     */
+    public function falling_back_to_extension_lookup_when_finding_mime_type_of_empty_file(): void
+    {
+        $this->givenWeHaveAnExistingFile('something.csv', '');
+
+        $mimeType = $this->adapter()->mimeType('something.csv');
+
+        self::assertEquals('text/csv', $mimeType->mimeType());
+    }
+
+    /**
+     * @test
      */
     public function writing_a_file(): void
     {

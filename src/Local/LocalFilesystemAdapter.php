@@ -92,7 +92,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $this->linkHandling = $linkHandling;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->ensureDirectoryExists($location, $this->visibility->defaultForDirectories());
-        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->mimeTypeDetector = $mimeTypeDetector ?: new FallbackMimeTypeDetector(new FinfoMimeTypeDetector());
     }
 
     public function write(string $path, string $contents, Config $config): void
