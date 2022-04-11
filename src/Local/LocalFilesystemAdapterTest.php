@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -539,7 +540,10 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function not_being_able_to_get_mimetype(): void
     {
         $this->expectException(UnableToRetrieveMetadata::class);
-        $adapter = new LocalFilesystemAdapter(static::ROOT);
+        $adapter = new LocalFilesystemAdapter(
+            location: static::ROOT,
+            mimeTypeDetector: new FinfoMimeTypeDetector(),
+        );
         $adapter->mimeType('flysystem.svg');
     }
 
