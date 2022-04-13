@@ -10,6 +10,7 @@ class Config
 {
     public const OPTION_VISIBILITY = 'visibility';
     public const OPTION_DIRECTORY_VISIBILITY = 'directory_visibility';
+    public const WRITE_FLAG = 'write_flag';
 
     /**
      * @var array

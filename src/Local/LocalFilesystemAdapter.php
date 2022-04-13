@@ -117,9 +117,16 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         );
         error_clear_last();
 
-        if (@file_put_contents($prefixedLocation, $contents, $this->writeFlags) === false) {
+        if (!is_null($writeFlag = $config->get(Config::WRITE_FLAG))) {
+            $this->setWriteFlag($writeFlag);
+        }
+        $writeFlag = $this->writeFlag;
+
+
+        if (@file_put_contents($prefixedLocation, $contents, $writeFlag) === false) {
             throw UnableToWriteFile::atLocation($path, error_get_last()['message'] ?? '');
         }
+
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
             $this->setVisibility($path, (string) $visibility);
@@ -327,6 +334,11 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         if ( ! @mkdir($location, $permissions, true)) {
             throw UnableToCreateDirectory::atLocation($path, error_get_last()['message'] ?? '');
         }
+    }
+
+    public function setWriteFlag(int $writeFlag): void
+    {
+        $this->writeFlag = $writeFlag;
     }
 
     public function setVisibility(string $path, string $visibility): void
