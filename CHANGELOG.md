@@ -1,5 +1,12 @@
 # Version 2.x Changelog
 
+## 2.4.4 - 2022-04-14
+
+### Fixed
+
+- [SFTP v2] Avoid type errors when public key is not retrieved (#1446)
+- [SFTP v3] Avoid type errors when public key is not retrieved (#1446)
+
 ## 2.4.3 - 2022-02-16
 
 ### Fixed
