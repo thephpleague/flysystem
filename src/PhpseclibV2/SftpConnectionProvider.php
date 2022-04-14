@@ -143,7 +143,12 @@ class SftpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        $publicKey = $connection->getServerPublicHostKey() ?: 'no-public-key';
+        $publicKey = $connection->getServerPublicHostKey();
+
+        if ($publicKey === false) {
+            throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
+        }
+
         $fingerprint = $this->getFingerprintFromPublicKey($publicKey);
 
         if (0 !== strcasecmp($this->hostFingerprint, $fingerprint)) {
