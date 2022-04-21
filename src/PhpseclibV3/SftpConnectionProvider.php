@@ -9,7 +9,6 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Exception\NoKeyLoadedException;
 use phpseclib3\Net\SFTP;
 use phpseclib3\System\SSH\Agent;
-use RuntimeException;
 use Throwable;
 
 use function base64_decode;
@@ -229,8 +228,6 @@ class SftpConnectionProvider implements ConnectionProvider
         } catch (NoKeyLoadedException $exception) {
             throw new UnableToLoadPrivateKey();
         }
-
-        throw new RuntimeException();
     }
 
     private function authenticateWithAgent(SFTP $connection): void
