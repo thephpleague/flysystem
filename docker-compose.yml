@@ -44,3 +44,15 @@ services:
       - "2122:21"
       - "30000-30009:30000-30009"
     command: "/run.sh -l puredb:/etc/pure-ftpd/pureftpd.pdb -E -j -P localhost"
+  toxiproxy:
+    container_name: toxiproxy
+    restart: unless-stopped
+    image: ghcr.io/shopify/toxiproxy
+    command: "-host 0.0.0.0 -config /opt/toxiproxy/config.json"
+    volumes:
+      - ./test_files/toxiproxy/toxiproxy.json:/opt/toxiproxy/config.json:ro
+    ports:
+      - "8474:8474" # HTTP API
+      - "8222:8222" # SFTP
+      - "8121:8121" # FTP
+      - "8122:8122" # FTPD
