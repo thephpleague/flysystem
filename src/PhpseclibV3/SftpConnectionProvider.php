@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PhpseclibV3;
 
+use League\Flysystem\FilesystemException;
 use phpseclib3\Crypt\Common\AsymmetricKey;
 use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Exception\NoKeyLoadedException;
@@ -137,7 +138,10 @@ class SftpConnectionProvider implements ConnectionProvider
             $this->authenticate($connection);
         } catch (Throwable $exception) {
             $connection->disconnect();
-            throw $exception;
+
+            if ($exception instanceof FilesystemException) {
+                throw $exception;
+            }
         }
 
         return $connection;
