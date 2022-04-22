@@ -336,7 +336,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
         try {
             $response = $this->client->request('MOVE', '/' . ltrim($location, '/'), null, [
-                'Destination' => '/' . ltrim($newLocation, '/'),
+                'Destination' => $this->client->getAbsoluteUrl('/' . ltrim($newLocation, '/')),
             ]);
 
             if ($response['statusCode'] < 200 || $response['statusCode'] >= 300) {
@@ -372,7 +372,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
         try {
             $response = $this->client->request('COPY', '/' . ltrim($location, '/'), null, [
-                'Destination' => '/' . ltrim($newLocation, '/'),
+                'Destination' => $this->client->getAbsoluteUrl('/' . ltrim($newLocation, '/')),
             ]);
 
             if ($response['statusCode'] < 200 || $response['statusCode'] >= 300) {
