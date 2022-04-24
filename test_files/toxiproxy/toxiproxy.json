@@ -1,0 +1,20 @@
+[
+  {
+    "name": "sftp",
+    "listen": "[::]:8222",
+    "upstream": "sftp:22",
+    "enabled": true
+  },
+  {
+    "name": "ftp",
+    "listen": "[::]:8121",
+    "upstream": "ftp:21",
+    "enabled": true
+  },
+  {
+    "name": "ftpd",
+    "listen": "[::]:8122",
+    "upstream": "ftpd:21",
+    "enabled": true
+  }
+]
