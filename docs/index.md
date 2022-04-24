@@ -46,5 +46,6 @@ for which ever storage is right for you.
 ### Third party Adapters
 
 * **[Gitlab](/docs/adapter/gitlab/)**
+* **[Google Drive (using regular paths)](https://github.com/masbug/flysystem-google-drive-ext)**
 
 You can always [create an adapter](/docs/advanced/creating-an-adapter/) yourself.
