@@ -134,6 +134,10 @@
 * FilesystemAdapter::directoryExists to check for directory existence
 * FilesystemAdapter::fileExists to check for file existence
 
+## 2.4.5 - 2022-04-25
+
+- [SFTP v3] Fix retries (#1451)
+
 ## 2.4.4 - 2022-04-14
 
 ### Fixed
