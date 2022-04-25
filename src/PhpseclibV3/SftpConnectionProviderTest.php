@@ -341,7 +341,7 @@ class SftpConnectionProviderTest extends TestCase
             ]
         );
 
-        $this->expectException(NoSupportedAlgorithmsException::class);
+        $this->expectException(UnableToConnectToSftpHost::class);
         $provider->provideConnection();
     }
 
