@@ -1,6 +1,6 @@
 {
     "name": "league/flysystem-sftp",
-    "description": "In-memory filesystem adapter for Flysystem.",
+    "description": "SFTP filesystem adapter for Flysystem.",
     "keywords": ["flysystem", "filesystem", "sftp", "files", "file"],
     "autoload": {
         "psr-4": {
