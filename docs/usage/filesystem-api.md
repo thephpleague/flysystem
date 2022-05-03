@@ -179,7 +179,7 @@ try {
 ```php
 try {
     $fileExists = $filesystem->fileExists($path);
-} catch (FilesystemException | UnableToCheckExistance $exception) {
+} catch (FilesystemException | UnableToCheckExistence $exception) {
     // handle the error
 }
 ```
@@ -194,7 +194,7 @@ try {
 ```php
 try {
     $dirExists = $filesystem->directoryExists($path);
-} catch (FilesystemException | UnableToCheckExistance $exception) {
+} catch (FilesystemException | UnableToCheckExistence $exception) {
     // handle the error
 }
 ```
@@ -209,7 +209,7 @@ try {
 ```php
 try {
     $exists = $filesystem->has($path);
-} catch (FilesystemException | UnableToCheckExistance $exception) {
+} catch (FilesystemException | UnableToCheckExistence $exception) {
     // handle the error
 }
 ```
