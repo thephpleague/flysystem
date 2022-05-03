@@ -7,6 +7,8 @@ namespace League\Flysystem\Ftp;
 use League\Flysystem\AdapterTestUtilities\RetryOnTestException;
 use PHPUnit\Framework\TestCase;
 
+use function ftp_close;
+
 /**
  * @group ftp
  */
@@ -54,7 +56,7 @@ class FtpConnectionProviderTest extends TestCase
             'root' => '/home/foo/upload',
             'username' => 'foo',
             'password' => 'pass',
-       ]);
+        ]);
 
         $this->runScenario(function () use ($options) {
             $connection = $this->connectionProvider->createConnection($options);

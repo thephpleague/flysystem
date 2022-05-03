@@ -27,8 +27,10 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 
+use function error_clear_last;
+use function error_get_last;
 use function ftp_chdir;
-use function ftp_pwd;
+use function is_string;
 
 class FtpAdapter implements FilesystemAdapter
 {
@@ -644,12 +646,20 @@ class FtpAdapter implements FilesystemAdapter
     private function resolveConnectionRoot($connection): string
     {
         $root = $this->connectionOptions->root();
+        error_clear_last();
 
-        if ($root !== '') {
-            ftp_chdir($connection, $root);
+        if ($root !== '' && @ftp_chdir($connection, $root) !== true) {
+            throw UnableToResolveConnectionRoot::itDoesNotExist($root, error_get_last()['message'] ?? '');
         }
 
-        return ftp_pwd($connection);
+        error_clear_last();
+        $pwd = @ftp_pwd($connection);
+
+        if ( ! is_string($pwd)) {
+            throw UnableToResolveConnectionRoot::couldNotGetCurrentDirectory(error_get_last()['message'] ?? '');
+        }
+
+        return $pwd;
     }
 
     /**

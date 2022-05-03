@@ -77,6 +77,15 @@ namespace League\Flysystem\Ftp {
         return return_mocked_value('ftp_pasv');
     }
 
+    function ftp_pwd(...$arguments)
+    {
+        if ( ! is_mocked('ftp_pwd')) {
+            return \ftp_pwd(...$arguments);
+        }
+
+        return return_mocked_value('ftp_pwd');
+    }
+
     function ftp_fput(...$arguments)
     {
         if ( ! is_mocked('ftp_fput')) {

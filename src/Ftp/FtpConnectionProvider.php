@@ -68,7 +68,7 @@ class FtpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        $response = ftp_raw($connection, "OPTS UTF8 ON");
+        $response = @ftp_raw($connection, "OPTS UTF8 ON");
 
         if ( ! in_array(substr($response[0], 0, 3), ['200', '202'])) {
             throw new UnableToEnableUtf8Mode(
@@ -88,7 +88,7 @@ class FtpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        if ( ! ftp_set_option($connection, FTP_USEPASVADDRESS, ! $ignorePassiveAddress)) {
+        if ( ! @ftp_set_option($connection, FTP_USEPASVADDRESS, ! $ignorePassiveAddress)) {
             throw UnableToSetFtpOption::whileSettingOption('FTP_USEPASVADDRESS');
         }
     }
@@ -98,7 +98,7 @@ class FtpConnectionProvider implements ConnectionProvider
      */
     private function makeConnectionPassive(FtpConnectionOptions $options, $connection): void
     {
-        if ( ! ftp_pasv($connection, $options->passive())) {
+        if ( ! @ftp_pasv($connection, $options->passive())) {
             throw new UnableToMakeConnectionPassive(
                 'Could not set passive mode for connection: ' . $options->host() . '::' . $options->port()
             );
