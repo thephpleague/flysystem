@@ -5,6 +5,14 @@ permalink: /docs/adapter/local/
 redirect_from: /v2/docs/adapter/local/
 ---
 
+## Installation
+
+This adapter is shipped with the main package.
+
+```bash
+composer require league/flysystem:^3.0
+```
+
 Interacting with the local filesystem through Flysystem can be done
 by using the `League\Flysystem\Local\LocalFilesystemAdapter`.
 
