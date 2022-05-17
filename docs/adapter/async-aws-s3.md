@@ -75,3 +75,5 @@ $client = new AsyncAws\SimpleS3\SimpleS3Client();
 $adapter = new League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter($client, 'bucket-name');
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
+
+You can read about required IAM permissions in [docs about AWS S3 adapter](/docs/adapter/aws-s3-v3/).

@@ -59,3 +59,29 @@ $adapter = new League\Flysystem\AwsS3V3\AwsS3V3Adapter(
 $filesystem = new League\Flysystem\Filesystem($adapter);
 ```
 
+## IAM Permissions
+
+The required IAM permissions are as followed:
+
+~~~ json
+ {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject",
+                "s3:DeleteObject",
+                "s3:GetObjectAcl",
+                "s3:PutObjectAcl",
+                "s3:PutObject"
+            ],
+            "Resource": [
+                "arn:aws:s3:::your-bucket-name",
+                "arn:aws:s3:::your-bucket-name/*"
+            ]
+        }
+    ]
+}
+~~~
