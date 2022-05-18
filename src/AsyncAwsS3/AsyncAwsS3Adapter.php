@@ -442,7 +442,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         $extracted = [];
 
-        foreach (static::EXTRA_METADATA_FIELDS as $field) {
+        foreach (self::EXTRA_METADATA_FIELDS as $field) {
             $method = 'get' . $field;
             if ( ! method_exists($metadata, $method)) {
                 continue;
