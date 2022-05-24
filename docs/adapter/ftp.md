@@ -85,8 +85,8 @@ are the most common forms for these checks.
 
 All connection failures result in exceptions. The exceptions thrown have a name that
 corresponds with what happened. Every connection exception is marked with the
-`League\Flsysytem\FTP\FtpConnectionException` interface, which is an extension of the
-`League\Flsysytem\FilesystemException` interface.
+`League\Flysystem\FTP\FtpConnectionException` interface, which is an extension of the
+`League\Flysystem\FilesystemException` interface.
 
 ### Visibility Converter
 
