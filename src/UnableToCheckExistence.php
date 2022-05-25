@@ -11,7 +11,7 @@ class UnableToCheckExistence extends RuntimeException implements FilesystemOpera
 {
     public static function forLocation(string $path, Throwable $exception = null): static
     {
-        return new static("Unable to check existence for: ${path}", 0, $exception);
+        return new static("Unable to check existence for: {$path}", 0, $exception);
     }
 
     public function operation(): string
