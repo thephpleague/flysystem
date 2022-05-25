@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0.20 - 2022-05-25
+
+### Fixed
+
+- [Core] Fix deprecated ${var} string interpolation patterns (#1470)
+
 ## 3.0.19 - 2022-05-03
 
 ### Fixed
