@@ -254,10 +254,11 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $location = $this->prefixer->prefixPath($path);
 
         if ($this->writeFlags & LOCK_EX) {
+            error_clear_last();
             $fileHandle = fopen($location, 'rb');
 
             if ($fileHandle === false) {
-                return false;
+                throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
             }
 
             flock($fileHandle, LOCK_SH);
