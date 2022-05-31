@@ -252,11 +252,31 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     public function read(string $path): string
     {
         $location = $this->prefixer->prefixPath($path);
+
+        if ($this->writeFlags & LOCK_EX) {
+            $fileHandle = fopen($location, 'rb');
+
+            if ($fileHandle === false) {
+                return false;
+            }
+
+            flock($fileHandle, LOCK_SH);
+        }
+
         error_clear_last();
         $contents = @file_get_contents($location);
 
         if ($contents === false) {
-            throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
+            $lastError = error_get_last();
+        }
+
+        if ($this->writeFlags & LOCK_EX && ($fileHandle ?? false) !== false) {
+            flock($fileHandle, LOCK_UN);
+            fclose($fileHandle);
+        }
+
+        if ($contents === false) {
+            throw UnableToReadFile::fromLocation($path, $lastError['message'] ?? '');
         }
 
         return $contents;
@@ -270,6 +290,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
         if ($contents === false) {
             throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
+        }
+
+        if ($this->writeFlags & LOCK_EX && $contents !== false) {
+            flock($contents, LOCK_SH);
         }
 
         return $contents;
