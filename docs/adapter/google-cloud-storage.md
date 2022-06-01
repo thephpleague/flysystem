@@ -22,7 +22,7 @@ It's important to know this adapter does not fully comply with the adapter contr
 ```php
 <?php
 
-use League\Flysystem\AzureBlobStorage\AzureBlobStorageAdapter;
+use League\Flysystem\GoogleCloudStorage\GoogleCloudStorageAdapter;
 use League\Flysystem\Filesystem;
 use Google\Cloud\Storage\StorageClient;
 
@@ -31,6 +31,8 @@ include __DIR__.'/vendor/autoload.php';
 $storageClient = new StorageClient($clientOptions);
 $bucket = $storageClient->bucket('your-bucket-name');
 
-return new GoogleCloudStorageAdapter($bucket, 'optional-prefix');
+$adapter = new GoogleCloudStorageAdapter($bucket, 'optional-prefix');
+
+$filesystem = new Filesystem($adapter);
 ```
 
