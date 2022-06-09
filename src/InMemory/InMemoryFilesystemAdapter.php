@@ -19,6 +19,8 @@ use League\MimeTypeDetection\MimeTypeDetector;
 
 use function array_keys;
 use function rtrim;
+use function str_starts_with;
+use function strlen;
 use function strpos;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
@@ -232,12 +234,27 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $source = $this->preparePath($source);
         $destination = $this->preparePath($destination);
 
-        if ( ! $this->fileExists($source) || $this->fileExists($destination)) {
-            throw UnableToMoveFile::fromLocationTo($source, $destination);
+        if ($this->fileExists($destination) || $this->directoryExists($destination)) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination, new \RuntimeException("Destination already exist"));
         }
 
-        $this->files[$destination] = $this->files[$source];
-        unset($this->files[$source]);
+        try {
+            $this->copy($source, $destination, $config);
+        } catch (UnableToCopyFile $e) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination, $e);
+        }
+
+        if ($this->fileExists($source)) {
+            $this->delete($source);
+
+            return;
+        } elseif ($this->directoryExists($source)) {
+            $this->deleteDirectory($source);
+
+            return;
+        }
+
+        throw UnableToMoveFile::fromLocationTo($source, $destination);
     }
 
     public function copy(string $source, string $destination, Config $config): void
@@ -245,13 +262,29 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $source = $this->preparePath($source);
         $destination = $this->preparePath($destination);
 
-        if ( ! $this->fileExists($source)) {
-            throw UnableToCopyFile::fromLocationTo($source, $destination);
+        $lastModified = $config->get('timestamp', time());
+        if ($this->fileExists($source)) {
+            $this->files[$destination] = $this->files[$source]->withLastModified($lastModified);
+
+            return;
+        } elseif ($this->directoryExists($source)) {
+            $sourcePrefix = rtrim($source, '/') . '/';
+            $destinationPrefix = rtrim($destination, '/') . '/';
+
+            $sourcePrefixLength = strlen($source) + 1;
+
+            foreach (array_keys($this->files) as $path) {
+                if (str_starts_with($path, $sourcePrefix)) {
+                    $newPath = $destinationPrefix . substr($path, $sourcePrefixLength);
+
+                    $this->files[$newPath] = $this->files[$path]->withLastModified($lastModified);
+                }
+            }
+
+            return;
         }
 
-        $lastModified = $config->get('timestamp', time());
-
-        $this->files[$destination] = $this->files[$source]->withLastModified($lastModified);
+        throw UnableToCopyFile::fromLocationTo($source, $destination, new \RuntimeException("Source does not exist"));
     }
 
     private function preparePath(string $path): string
