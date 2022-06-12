@@ -149,7 +149,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         try {
             $prefix = $this->prefixer->prefixDirectoryPath($path);
             $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix, 'MaxKeys' => 1, 'Delimiter' => '/'];
-            $command = $this->client->getCommand('ListObjects', $options);
+            $command = $this->client->getCommand('ListObjectsV2', $options);
             $result = $this->client->execute($command);
 
             return $result->hasKey('Contents') || $result->hasKey('CommonPrefixes');

@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.22 - 2022-06-12
+
+- [AwsS3V3] Use ListObjectsV2 instead of ListObjects
+
 ## 3.0.21 - 2022-06-12
 
 - [AwsS3V3] Use ListObjectsV2 instead of ListObjects
