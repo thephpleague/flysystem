@@ -6,4 +6,4 @@
 composer require league/flysystem-sftp-v3
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/sftp).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/sftp-v3/).
