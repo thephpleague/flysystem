@@ -417,7 +417,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
 
     private function retrievePaginatedListing(array $options): Generator
     {
-        $resultPaginator = $this->client->getPaginator('ListObjects', $options + $this->options);
+        $resultPaginator = $this->client->getPaginator('ListObjectsV2', $options + $this->options);
 
         foreach ($resultPaginator as $result) {
             yield from ($result->get('CommonPrefixes') ?: []);
