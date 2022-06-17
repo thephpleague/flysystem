@@ -1,0 +1,25 @@
+{
+    "name": "league/flysystem-replicate",
+    "description": "Replication filesystem adapter for Flysystem.",
+    "keywords": ["flysystem", "filesystem", "replica", "replicate", "file", "files"],
+    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\Replicate\\": ""
+        }
+    },
+    "require": {
+        "php": "^8.0.2",
+        "ext-fileinfo": "*",
+        "league/flysystem": "^2.0.0 || ^3.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}
