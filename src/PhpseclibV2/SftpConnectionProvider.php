@@ -9,6 +9,9 @@ use phpseclib\Net\SFTP;
 use phpseclib\System\SSH\Agent;
 use Throwable;
 
+/**
+ * @deprecated The "League\Flysystem\PhpseclibV2\SftpConnectionProvider" class is deprecated since Flysystem 3.0, use "League\Flysystem\PhpseclibV3\SftpConnectionProvider" instead.
+ */
 class SftpConnectionProvider implements ConnectionProvider
 {
     /**

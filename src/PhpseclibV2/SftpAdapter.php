@@ -29,6 +29,9 @@ use Throwable;
 
 use function rtrim;
 
+/**
+ * @deprecated The "League\Flysystem\PhpseclibV2\SftpAdapter" class is deprecated since Flysystem 3.0, use "League\Flysystem\PhpseclibV3\SftpAdapter" instead.
+ */
 class SftpAdapter implements FilesystemAdapter
 {
     /**

@@ -8,6 +8,8 @@ use phpseclib\Net\SFTP;
 
 /**
  * @internal This is only used for testing purposes.
+ *
+ * @deprecated The "League\Flysystem\PhpseclibV2\SftpStub" class is deprecated since Flysystem 3.0, use "League\Flysystem\PhpseclibV3\SftpStub" instead.
  */
 class SftpStub extends SFTP
 {

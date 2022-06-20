@@ -7,6 +7,9 @@ namespace League\Flysystem\PhpseclibV2;
 use League\Flysystem\FilesystemException;
 use RuntimeException;
 
+/**
+ * @deprecated The "League\Flysystem\PhpseclibV2\UnableToAuthenticate" class is deprecated since Flysystem 3.0, use "League\Flysystem\PhpseclibV3\UnableToAuthenticate" instead.
+ */
 class UnableToAuthenticate extends RuntimeException implements FilesystemException
 {
     public static function withPassword(): UnableToAuthenticate
