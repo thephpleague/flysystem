@@ -173,7 +173,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $key = $this->prefixer->prefixPath($path);
         $options = $this->createOptionsFromConfig($config);
         $acl = $options['params']['ACL'] ?? $this->determineAcl($config);
-        $shouldDetermineMimetype = $body !== '' && ! array_key_exists('ContentType', $options['params']);
+        $shouldDetermineMimetype = ! array_key_exists('ContentType', $options['params']);
 
         if ($shouldDetermineMimetype && $mimeType = $this->mimeTypeDetector->detectMimeType($key, $body)) {
             $options['params']['ContentType'] = $mimeType;
