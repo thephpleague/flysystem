@@ -21,9 +21,6 @@ $manager = new League\Flysystem\MountManager([
     'ftp' => $ftp,
     's3' => $s3,
 ]);
-
-// Or mount them later
-$manager->mountFilesystem('local', $local);
 ```
 
 Now we do all the file operations we'd normally do on a `Flysystem\Filesystem` instance.
