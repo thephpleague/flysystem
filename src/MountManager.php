@@ -275,7 +275,7 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function mountFilesystem(string $key, FilesystemOperator $filesystem): void
+    public function mountFilesystem(string $key, FilesystemOperator $filesystem): void
     {
         $this->filesystems[$key] = $filesystem;
     }
