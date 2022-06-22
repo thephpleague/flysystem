@@ -1,5 +1,5 @@
 {
-    "name": "league/flysystem",
+    "name": "nabeeljavaid/flysystem",
     "description": "File storage abstraction for PHP",
     "keywords": [
         "filesystem", "filesystems", "files", "storage", "aws",
