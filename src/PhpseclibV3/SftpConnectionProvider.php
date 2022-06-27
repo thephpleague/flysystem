@@ -228,20 +228,25 @@ class SftpConnectionProvider implements ConnectionProvider
 
     private function loadPrivateKey(): AsymmetricKey
     {
-        if ("---" !== substr($this->privateKey, 0, 3) && is_file($this->privateKey)) {
+        if (is_file($this->privateKey)) {
             $this->privateKey = file_get_contents($this->privateKey);
-        }
-
-        try {
-            if ($this->passphrase !== null) {
-                return PublicKeyLoader::load($this->privateKey, $this->passphrase);
-            }
-
-            return PublicKeyLoader::load($this->privateKey);
-        } catch (NoKeyLoadedException $exception) {
+        } else
             throw new UnableToLoadPrivateKey();
-        }
+
+        if (str_starts_with($this->privateKey, "---")) {
+            try {
+                if ($this->passphrase !== null) {
+                    return PublicKeyLoader::load($this->privateKey, $this->passphrase);
+                }
+
+                return PublicKeyLoader::load($this->privateKey);
+            } catch (NoKeyLoadedException $exception) {
+                throw new UnableToLoadPrivateKey();
+            }
+        } else
+            throw new UnableToLoadPrivateKey();
     }
+
 
     private function authenticateWithAgent(SFTP $connection): void
     {
