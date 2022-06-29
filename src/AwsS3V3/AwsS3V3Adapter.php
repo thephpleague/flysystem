@@ -182,7 +182,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         try {
             $this->client->upload($this->bucket, $key, $body, $acl, $options);
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, '', $exception);
+            throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
