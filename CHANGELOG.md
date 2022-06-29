@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.23 - 2022-06-29
+
+- Added reasons for exceptions for all adapters that were missing previous exception messages.
+
 ## 3.0.22 - 2022-06-29
 
 - [AwsS3V3] Added reasons for exceptions
