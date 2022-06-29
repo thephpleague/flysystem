@@ -66,6 +66,15 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function creating_a_local_filesystem_does_not_create_a_root_directory_when_constructed_with_lazy_root_creation(): void
+    {
+        new LocalFilesystemAdapter(static::ROOT, lazyRootCreation: true);
+        $this->assertDirectoryDoesNotExist(static::ROOT);
+    }
+
+    /**
+     * @test
+     */
     public function not_being_able_to_create_a_root_directory_results_in_an_exception(): void
     {
         $this->expectException(UnableToCreateDirectory::class);
@@ -214,7 +223,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function checking_if_a_file_exists(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
-        file_put_contents(static::ROOT . '/file.txt', 'contents');
+        $adapter->write('/file.txt', 'contents', new Config);
 
         $this->assertTrue($adapter->fileExists('/file.txt'));
     }
@@ -280,7 +289,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     public function listing_directory_contents_with_link_skipping(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT, null, LOCK_EX, LocalFilesystemAdapter::SKIP_LINKS);
-        file_put_contents(static::ROOT . '/file.txt', 'content');
+        $adapter->write('/file.txt', 'content', new Config());
         symlink(static::ROOT . '/file.txt', static::ROOT . '/link.txt');
 
         /** @var Traversable $contentListing */
