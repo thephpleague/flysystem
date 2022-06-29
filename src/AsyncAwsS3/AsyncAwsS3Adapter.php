@@ -205,7 +205,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         try {
             $this->client->putObjectAcl($arguments);
         } catch (Throwable $exception) {
-            throw UnableToSetVisibility::atLocation($path, '', $exception);
+            throw UnableToSetVisibility::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -217,7 +217,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             $result = $this->client->getObjectAcl($arguments);
             $grants = $result->getGrants();
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
+            throw UnableToRetrieveMetadata::visibility($path, $exception->getMessage(), $exception);
         }
 
         $visibility = $this->visibility->aclToVisibility($grants);
@@ -377,13 +377,13 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             $result = $this->client->headObject($arguments);
             $result->resolve();
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
+            throw UnableToRetrieveMetadata::create($path, $type, $exception->getMessage(), $exception);
         }
 
         $attributes = $this->mapS3ObjectMetadata($result, $path);
 
         if ( ! $attributes instanceof FileAttributes) {
-            throw UnableToRetrieveMetadata::create($path, $type, '');
+            throw UnableToRetrieveMetadata::create($path, $type, 'Unable to retrieve file attributes, directory attributes received.');
         }
 
         return $attributes;
@@ -472,7 +472,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         try {
             return $this->client->getObject($options)->getBody();
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 }
