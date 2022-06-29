@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.0.24 - 2022-06-29
+
+- Added option for the Local adapter to create the root directory only on the first mutating (write/copy/move) action.
+
 ## 3.0.23 - 2022-06-29
 
 - Added reasons for exceptions for all adapters that were missing previous exception messages.
