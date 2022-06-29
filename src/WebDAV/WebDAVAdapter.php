@@ -22,7 +22,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use RuntimeException;
 use Sabre\DAV\Client;
-use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\Xml\Property\ResourceType;
 use Sabre\HTTP\ClientHttpException;
 use Sabre\HTTP\Request;
@@ -57,7 +56,6 @@ class WebDAVAdapter implements FilesystemAdapter
         private string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
         private bool $manualCopy = false,
         private bool $manualMove = false,
-
     ) {
         $this->prefixer = new PathPrefixer($prefix);
     }
@@ -133,7 +131,7 @@ class WebDAVAdapter implements FilesystemAdapter
                 throw new RuntimeException('Unexpected status code received: ' . $statusCode);
             }
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, '', $exception);
+            throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -150,7 +148,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
             return $response['body'];
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -170,7 +168,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
             return $response->getBodyAsStream();
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -187,7 +185,7 @@ class WebDAVAdapter implements FilesystemAdapter
             }
         } catch (Throwable $exception) {
             if ( ! ($exception instanceof ClientHttpException && $exception->getCode() === 404)) {
-                throw UnableToDeleteFile::atLocation($path, '', $exception);
+                throw UnableToDeleteFile::atLocation($path, $exception->getMessage(), $exception);
             }
         }
     }
@@ -204,7 +202,7 @@ class WebDAVAdapter implements FilesystemAdapter
             }
         } catch (Throwable $exception) {
             if ( ! ($exception instanceof ClientHttpException && $exception->getCode() === 404)) {
-                throw UnableToDeleteDirectory::atLocation($path, '', $exception);
+                throw UnableToDeleteDirectory::atLocation($path, $exception->getMessage(), $exception);
             }
         }
     }
@@ -290,7 +288,7 @@ class WebDAVAdapter implements FilesystemAdapter
                 }
             } else {
                 yield new FileAttributes(
-                                  $path,
+                    $path,
                     fileSize:     $object['file_size'] ?? null,
                     lastModified: $object['last_modified'] ?? null,
                     mimeType:     $object['mime_type'] ?? null,
@@ -327,6 +325,7 @@ class WebDAVAdapter implements FilesystemAdapter
     {
         if ($this->manualMove) {
             $this->manualMove($source, $destination);
+
             return;
         }
 
@@ -363,6 +362,7 @@ class WebDAVAdapter implements FilesystemAdapter
     {
         if ($this->manualCopy) {
             $this->manualCopy($source, $destination);
+
             return;
         }
 
@@ -434,7 +434,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
             return $result[$property];
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::create($path, $section, '', $exception);
+            throw UnableToRetrieveMetadata::create($path, $section, $exception->getMessage(), $exception);
         }
     }
 }

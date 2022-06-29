@@ -145,7 +145,7 @@ class SftpAdapter implements FilesystemAdapter
         } catch (UnableToWriteFile $exception) {
             throw $exception;
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, '', $exception);
+            throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -156,7 +156,7 @@ class SftpAdapter implements FilesystemAdapter
         } catch (UnableToWriteFile $exception) {
             throw $exception;
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, '', $exception);
+            throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -246,7 +246,7 @@ class SftpAdapter implements FilesystemAdapter
             $contents = $this->read($path);
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
+            throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }
 
         if ($mimetype === null) {

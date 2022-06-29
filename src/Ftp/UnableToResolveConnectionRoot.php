@@ -14,10 +14,10 @@ final class UnableToResolveConnectionRoot extends RuntimeException implements Ft
         parent::__construct($message, 0, $previous);
     }
 
-    public static function itDoesNotExist(string $root): UnableToResolveConnectionRoot
+    public static function itDoesNotExist(string $root, string $reason = ''): UnableToResolveConnectionRoot
     {
         return new UnableToResolveConnectionRoot(
-            'Unable to resolve connection root. It does not seem to exist: ' . $root
+            'Unable to resolve connection root. It does not seem to exist: ' . $root . "\nreason: $reason"
         );
     }
 

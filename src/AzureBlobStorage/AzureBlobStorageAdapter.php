@@ -100,7 +100,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
                 return;
             }
 
-            throw UnableToDeleteFile::atLocation($path, '', $exception);
+            throw UnableToDeleteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -120,7 +120,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
 
             return $response->getContentStream();
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -205,7 +205,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
                 goto start;
             }
         } catch (Throwable $exception) {
-            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
+            throw UnableToDeleteDirectory::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -231,7 +231,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         try {
             return $this->fetchMetadata($this->prefixer->prefixPath($path));
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
+            throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -240,7 +240,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         try {
             return $this->fetchMetadata($this->prefixer->prefixPath($path));
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::lastModified($path, '', $exception);
+            throw UnableToRetrieveMetadata::lastModified($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -249,7 +249,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         try {
             return $this->fetchMetadata($this->prefixer->prefixPath($path));
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::fileSize($path, '', $exception);
+            throw UnableToRetrieveMetadata::fileSize($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -290,7 +290,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
                 $options
             );
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($destination, '', $exception);
+            throw UnableToWriteFile::atLocation($destination, $exception->getMessage(), $exception);
         }
     }
 

@@ -153,7 +153,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         try {
             $this->bucket->upload($contents, $options);
         } catch (Throwable $exception) {
-            throw UnableToWriteFile::atLocation($path, '', $exception);
+            throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -164,7 +164,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         try {
             return $this->bucket->object($prefixedPath)->downloadAsString();
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -175,7 +175,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         try {
             $stream = $this->bucket->object($prefixedPath)->downloadAsStream()->detach();
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
 
         // @codeCoverageIgnoreStart
@@ -196,7 +196,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         } catch (NotFoundException $thisIsOk) {
             // this is ok
         } catch (Throwable $exception) {
-            throw UnableToDeleteFile::atLocation($path, '', $exception);
+            throw UnableToDeleteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -214,7 +214,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
                 $this->delete(rtrim($path, '/') . '/');
             }
         } catch (Throwable $exception) {
-            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
+            throw UnableToDeleteDirectory::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -234,7 +234,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
             $object = $this->bucket->object($prefixedPath);
             $this->visibilityHandler->setVisibility($object, $visibility);
         } catch (Throwable $previous) {
-            throw UnableToSetVisibility::atLocation($path, '', $previous);
+            throw UnableToSetVisibility::atLocation($path, $previous->getMessage(), $previous);
         }
     }
 
@@ -247,7 +247,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
 
             return new FileAttributes($path, null, $visibility);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
+            throw UnableToRetrieveMetadata::visibility($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -279,7 +279,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         }
 
         if ( ! isset($fileAttributes) || ! $fileAttributes instanceof FileAttributes || $fileAttributes[$type] === null) {
-            throw UnableToRetrieveMetadata::{$type}($path, '', $exception);
+            throw UnableToRetrieveMetadata::{$type}($path, isset($exception) ? $exception->getMessage() : '', $exception);
         }
 
         return $fileAttributes;

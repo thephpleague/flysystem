@@ -314,7 +314,7 @@ class FtpAdapter implements FilesystemAdapter
             $contents = $this->read($path);
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
+            throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }
 
         if ($mimetype === null) {

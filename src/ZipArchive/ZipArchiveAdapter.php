@@ -241,7 +241,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             $contents = $this->read($path);
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::mimeType($path, '', $exception);
+            throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }
 
         if ($mimetype === null) {
@@ -277,7 +277,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
 
         if ($this->isDirectoryPath($stats['name'])) {
-            throw UnableToRetrieveMetadata::fileSize($path, "It's a directory.");
+            throw UnableToRetrieveMetadata::fileSize($path, 'It\'s a directory.');
         }
 
         return new FileAttributes($path, $stats['size'], null, null);
