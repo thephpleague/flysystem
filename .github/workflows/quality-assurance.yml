@@ -61,8 +61,5 @@ jobs:
       - run: composer require --dev --with-all-dependencies phpseclib/phpseclib:^3.0 --no-progress ${{ matrix.composer-flags }}
       - run: vendor/bin/phpunit --group phpseclib3 ${{ matrix.phpunit-flags }}
       - run: vendor/bin/phpstan analyse
-        if: ${{ matrix.php == '7.4' }}
       - run: vendor/bin/php-cs-fixer fix --diff --dry-run
         continue-on-error: true
-        if: ${{ matrix.php == '7.4' }}
-
