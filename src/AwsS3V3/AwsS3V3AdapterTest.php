@@ -121,6 +121,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @see https://github.com/thephpleague/flysystem-aws-s3-v3/issues/291
      */
     public function issue_291(): void

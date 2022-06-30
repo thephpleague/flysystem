@@ -452,7 +452,9 @@ class FtpAdapter implements FilesystemAdapter
 
         if ($isDirectory) {
             return new DirectoryAttributes(
-                $path, $this->visibilityConverter->inverseForDirectory($permissions), $lastModified
+                $path,
+                $this->visibilityConverter->inverseForDirectory($permissions),
+                $lastModified
             );
         }
 

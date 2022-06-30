@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace League\Flysystem\PhpseclibV3;
 
 use League\Flysystem\AdapterTestUtilities\ToxiproxyManagement;
-use phpseclib3\Exception\NoSupportedAlgorithmsException;
 use phpseclib3\Net\SFTP;
 use PHPUnit\Framework\TestCase;
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -24,6 +23,7 @@ use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
+use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use Traversable;
 use function file_get_contents;
 use function file_put_contents;
@@ -83,6 +83,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @see https://github.com/thephpleague/flysystem/issues/1442
      */
     public function falling_back_to_extension_lookup_when_finding_mime_type_of_empty_file(): void
