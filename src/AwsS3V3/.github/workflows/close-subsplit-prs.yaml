@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: frankdejonge/action-close-subsplit-pr@0.1.0
         with:
-          close_pr: 'no'
+          close_pr: 'yes'
           target_branch_match: '^(?!master).+$'
           message: |
             Hi :wave:,

@@ -10,10 +10,6 @@ $subsplits = json_decode($filesystem->read('config.subsplit-publish.json'), true
 $workflowContents = $filesystem->read('bin/close-subsplit-prs.yml');
 
 foreach ($subsplits['sub-splits'] as ['directory' => $subsplit]) {
-    if ($subsplit !== 'src/AwsS3V3') {
-        continue;
-    }
-
     $workflowPath = $subsplit . '/.github/workflows/close-subsplit-prs.yaml';
     $filesystem->write($workflowPath, $workflowContents);
 }
