@@ -1,0 +1,27 @@
+---
+on: workflow_dispatch
+
+jobs:
+  set-default-branch:
+    name: Set default git branch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+          persist-credentials: 'false'
+      - uses: actions/github-scripts@v6
+        with:
+          script: |
+            const fs = require('fs');
+            let splits = JSON.parse(fs.readFileSync('config.subsplit-publish.json'))['sub-splits'];
+
+            for (let split of split) {
+              const { groups: { repo } } = /git@github\.com:thephpleague\/(?P<repo>.*)\.git/.exec(split.target);
+
+              await github.rest.repos.update({
+                owner: 'thephpleague',
+                repo,
+                default_branch: '3.x',
+              });
+            }
