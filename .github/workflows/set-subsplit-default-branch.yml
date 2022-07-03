@@ -1,4 +1,6 @@
 ---
+name: Update default sub-split branch
+
 on: workflow_dispatch
 
 jobs:
