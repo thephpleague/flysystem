@@ -20,7 +20,7 @@ jobs:
             let splits = JSON.parse(fs.readFileSync('config.subsplit-publish.json'))['sub-splits'];
 
             for (let split of splits) {
-              const { groups: { repo } } = /git@github\.com:thephpleague\/(?P<repo>.*)\.git/.exec(split.target);
+              const { groups: { repo } } = /git@github\.com:thephpleague\/(?<repo>.*)\.git/.exec(split.target);
               console.log(`Found repo ${repo}`);
               await github.rest.repos.update({
                 owner: 'thephpleague',
