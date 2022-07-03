@@ -19,7 +19,7 @@ jobs:
             const fs = require('fs');
             let splits = JSON.parse(fs.readFileSync('config.subsplit-publish.json'))['sub-splits'];
 
-            for (let split of split) {
+            for (let split of splits) {
               const { groups: { repo } } = /git@github\.com:thephpleague\/(?P<repo>.*)\.git/.exec(split.target);
               console.log(`Found repo ${repo}`);
               await github.rest.repos.update({
