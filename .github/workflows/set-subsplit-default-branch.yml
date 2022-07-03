@@ -12,15 +12,16 @@ jobs:
         with:
           fetch-depth: '0'
           persist-credentials: 'false'
-      - uses: actions/github-scripts@v6
+      - uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           script: |
             const fs = require('fs');
             let splits = JSON.parse(fs.readFileSync('config.subsplit-publish.json'))['sub-splits'];
 
             for (let split of split) {
               const { groups: { repo } } = /git@github\.com:thephpleague\/(?P<repo>.*)\.git/.exec(split.target);
-
+              console.log(`Found repo ${repo}`);
               await github.rest.repos.update({
                 owner: 'thephpleague',
                 repo,
