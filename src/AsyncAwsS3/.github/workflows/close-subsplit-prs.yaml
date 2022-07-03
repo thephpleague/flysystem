@@ -27,4 +27,4 @@ jobs:
             
             Thank you for contributing to Flysystem. Unfortunately, you've sent a PR to a read-only sub-split repository. 
 
-            All pull requests should be directed towards: https://github.com/thephpleague/flsysystem
+            All pull requests should be directed towards: https://github.com/thephpleague/flysystem
