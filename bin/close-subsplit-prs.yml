@@ -2,6 +2,10 @@
 name: Close sub-split PRs
 
 on:
+  pull_request:
+    branches:
+      - 2.x
+      - 3.x
   schedule:
     - cron: '30 7 * * *'
 
