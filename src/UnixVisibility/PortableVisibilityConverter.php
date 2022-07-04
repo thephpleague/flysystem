@@ -70,7 +70,8 @@ class PortableVisibilityConverter implements VisibilityConverter
     {
         if ($visibility === $this->filePublic) {
             return Visibility::PUBLIC;
-        } elseif ($visibility === $this->filePrivate) {
+        }
+        if ($visibility === $this->filePrivate) {
             return Visibility::PRIVATE;
         }
 
@@ -81,7 +82,8 @@ class PortableVisibilityConverter implements VisibilityConverter
     {
         if ($visibility === $this->directoryPublic) {
             return Visibility::PUBLIC;
-        } elseif ($visibility === $this->directoryPrivate) {
+        }
+        if ($visibility === $this->directoryPrivate) {
             return Visibility::PRIVATE;
         }
 
