@@ -447,7 +447,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             if ( ! method_exists($metadata, $method)) {
                 continue;
             }
-            $value = $metadata->$method();
+            $value = $metadata->{$method}();
             if (null !== $value) {
                 $extracted[$field] = $value;
             }
