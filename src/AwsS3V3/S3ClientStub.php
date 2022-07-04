@@ -162,7 +162,7 @@ class S3ClientStub implements S3ClientInterface
         return $this->actualClient->getPaginator($name, $args);
     }
 
-    public function waitUntil($name, array $args = [])
+    public function waitUntil($name, array $args = []): void
     {
         $this->actualClient->waitUntil($name, $args);
     }

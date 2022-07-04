@@ -30,7 +30,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function overwriting_a_file(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $this->givenWeHaveAnExistingFile('path.txt', 'contents');
             $adapter = $this->adapter();
 
@@ -46,7 +46,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function copying_a_file(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
@@ -67,7 +67,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function copying_a_file_again(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
@@ -88,7 +88,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function moving_a_file(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
@@ -115,7 +115,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     {
         $this->expectException(UnableToMoveFile::class);
 
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $this->adapter()->move('source.txt', 'destination.txt', new Config());
         });
     }

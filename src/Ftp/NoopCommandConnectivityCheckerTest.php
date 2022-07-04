@@ -50,7 +50,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
             'password' => 'pass',
         ]);
 
-        $this->runScenario(function () use ($options) {
+        $this->runScenario(function () use ($options): void {
             $connection = (new FtpConnectionProvider())->createConnection($options);
             ftp_close($connection);
 

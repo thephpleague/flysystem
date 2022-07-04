@@ -38,7 +38,7 @@ class AzureBlobStorageTest extends TestCase
     public function overwriting_a_file(): void
     {
         $this->runScenario(
-            function () {
+            function (): void {
                 $this->givenWeHaveAnExistingFile('path.txt', 'contents');
                 $adapter = $this->adapter();
 
@@ -89,7 +89,7 @@ class AzureBlobStorageTest extends TestCase
      */
     public function copying_a_file(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
@@ -110,7 +110,7 @@ class AzureBlobStorageTest extends TestCase
      */
     public function moving_a_file(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
@@ -135,7 +135,7 @@ class AzureBlobStorageTest extends TestCase
      */
     public function copying_a_file_again(): void
     {
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',

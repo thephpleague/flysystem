@@ -88,7 +88,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
         $this->expectException(UnableToWriteFile::class);
 
-        $this->runScenario(function () {
+        $this->runScenario(function (): void {
             $handle = stream_with_contents('contents');
             $this->adapter()->writeStream('some/path.txt', $handle, new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC]));
             is_resource($handle) && @fclose($handle);
@@ -97,15 +97,15 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
     public function scenariosThatCauseWritesToFail(): Generator
     {
-        yield "writing a file fails when writing" => [function () {
+        yield "writing a file fails when writing" => [function (): void {
             static::$archiveProvider->stubbedZipArchive()->failNextWrite();
         }];
 
-        yield "writing a file fails when setting visibility" => [function () {
+        yield "writing a file fails when setting visibility" => [function (): void {
             static::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
         }];
 
-        yield "writing a file fails to get the stream contents" => [function () {
+        yield "writing a file fails to get the stream contents" => [function (): void {
             mock_function('stream_get_contents', false);
         }];
     }

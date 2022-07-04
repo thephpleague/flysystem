@@ -7,7 +7,7 @@ function return_mocked_value(string $name)
     return array_shift($_ENV['__FM:RETURNS:' . $name]);
 }
 
-function reset_function_mocks()
+function reset_function_mocks(): void
 {
     foreach (array_keys($_ENV) as $name) {
         if (is_string($name) && substr($name, 0, 5) === '__FM:') {
@@ -16,7 +16,7 @@ function reset_function_mocks()
     }
 }
 
-function mock_function(string $name, ...$returns)
+function mock_function(string $name, ...$returns): void
 {
     $_ENV['__FM:FUNC_IS_MOCKED:' . $name] = 'yes';
     $_ENV['__FM:RETURNS:' . $name] = $returns;
