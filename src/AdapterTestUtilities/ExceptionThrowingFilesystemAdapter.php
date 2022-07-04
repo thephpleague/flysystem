@@ -28,13 +28,13 @@ class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
 
     public function stageException(string $method, string $path, FilesystemOperationFailed $exception): void
     {
-        $this->stagedExceptions[join('@', [$method, $path])] = $exception;
+        $this->stagedExceptions[implode('@', [$method, $path])] = $exception;
     }
 
     private function throwStagedException(string $method, $path): void
     {
         $method = preg_replace('~.+::~', '', $method);
-        $key = join('@', [$method, $path]);
+        $key = implode('@', [$method, $path]);
 
         if ( ! array_key_exists($key, $this->stagedExceptions)) {
             return;
