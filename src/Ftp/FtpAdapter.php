@@ -497,9 +497,7 @@ class FtpAdapter implements FilesystemAdapter
         $parts = str_split($permissions, 3);
 
         // convert the groups
-        $mapper = function ($part) {
-            return array_sum(str_split($part));
-        };
+        $mapper = fn ($part) => array_sum(str_split($part));
 
         // converts to decimal number
         return octdec(implode('', array_map($mapper, $parts)));

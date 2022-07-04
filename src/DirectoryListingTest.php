@@ -22,9 +22,7 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 10);
         $listing = new DirectoryListing($numbers);
 
-        $mappedListing = $listing->map(function (int $i) {
-            return $i * 2;
-        });
+        $mappedListing = $listing->map(fn (int $i) => $i * 2);
         $mappedNumbers = $mappedListing->toArray();
 
         $expectedNumbers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
@@ -39,12 +37,8 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 10);
         $listing = new DirectoryListing($numbers);
 
-        $mappedListing = $listing->map(function (int $i) {
-            return $i * 2;
-        });
-        $mappedListing = $mappedListing->map(function (int $i) {
-            return $i / 2;
-        });
+        $mappedListing = $listing->map(fn (int $i) => $i * 2);
+        $mappedListing = $mappedListing->map(fn (int $i) => $i / 2);
         $mappedNumbers = $mappedListing->toArray();
 
         $expectedNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -59,9 +53,7 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 20);
         $listing = new DirectoryListing($numbers);
 
-        $fileredListing = $listing->filter(function (int $i) {
-            return $i % 2 === 0;
-        });
+        $fileredListing = $listing->filter(fn (int $i) => $i % 2 === 0);
         $mappedNumbers = $fileredListing->toArray();
 
         $expectedNumbers = [2, 4, 6, 8, 10, 12, 14, 16, 18, 20];
@@ -76,12 +68,8 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 20);
         $listing = new DirectoryListing($numbers);
 
-        $filteredListing = $listing->filter(function (int $i) {
-            return $i % 2 === 0;
-        });
-        $filteredListing = $filteredListing->filter(function (int $i) {
-            return $i > 10;
-        });
+        $filteredListing = $listing->filter(fn (int $i) => $i % 2 === 0);
+        $filteredListing = $filteredListing->filter(fn (int $i) => $i > 10);
         $mappedNumbers = $filteredListing->toArray();
 
         $expectedNumbers = [12, 14, 16, 18, 20];
@@ -102,9 +90,7 @@ class DirectoryListingTest extends TestCase
         ]);
 
         $actual = $listing->sortByPath()
-            ->map(function ($i) {
-                return $i->path();
-            })
+            ->map(fn ($i) => $i->path())
             ->toArray();
 
         self::assertEquals($expected, $actual);
