@@ -425,7 +425,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             $dateTime = $item->getLastModified();
             $metadata = $this->extractExtraMetadata($item);
         } else {
-            throw new \RuntimeException(sprintf('Object of class "%s" is not supported in %s()', \get_class($item), __METHOD__));
+            throw new \RuntimeException(sprintf('Object of class "%s" is not supported in %s()', $item::class, __METHOD__));
         }
 
         if ($dateTime instanceof \DateTimeInterface) {

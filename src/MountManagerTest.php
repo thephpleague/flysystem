@@ -119,7 +119,7 @@ class MountManagerTest extends TestCase
     {
         $this->firstStubAdapter->stageException($method, 'location.txt', $exception);
 
-        $this->expectException(get_class($exception));
+        $this->expectException($exception::class);
 
         $this->mountManager->{$method}('first://location.txt');
     }
