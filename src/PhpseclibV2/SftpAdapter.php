@@ -178,7 +178,7 @@ class SftpAdapter implements FilesystemAdapter
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
         /** @var resource $readStream */
-        $readStream = fopen('php://temp', 'w+');
+        $readStream = fopen('php://temp', 'w+b');
 
         if ( ! $connection->get($location, $readStream)) {
             fclose($readStream);
