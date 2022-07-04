@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use League\Flysystem\FilesystemException;
-use Throwable;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
