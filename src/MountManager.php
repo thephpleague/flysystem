@@ -326,7 +326,7 @@ class MountManager implements FilesystemOperator
         string $destination
     ): void {
         try {
-            $visibility = $visibility ?? $sourceFilesystem->visibility($sourcePath);
+            $visibility ??= $sourceFilesystem->visibility($sourcePath);
             $stream = $sourceFilesystem->readStream($sourcePath);
             $destinationFilesystem->writeStream($destinationPath, $stream, compact('visibility'));
         } catch (UnableToRetrieveMetadata | UnableToReadFile | UnableToWriteFile $exception) {
