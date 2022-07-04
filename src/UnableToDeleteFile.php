@@ -21,7 +21,7 @@ final class UnableToDeleteFile extends RuntimeException implements FilesystemOpe
 
     public static function atLocation(string $location, string $reason = '', Throwable $previous = null): UnableToDeleteFile
     {
-        $e = new static(rtrim("Unable to delete file located at: {$location}. {$reason}"), 0, $previous);
+        $e = new self(rtrim("Unable to delete file located at: {$location}. {$reason}"), 0, $previous);
         $e->location = $location;
         $e->reason = $reason;
 

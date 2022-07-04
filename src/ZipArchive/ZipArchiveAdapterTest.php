@@ -33,24 +33,24 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
     protected function setUp(): void
     {
-        static::$adapter = static::createFilesystemAdapter();
-        static::removeZipArchive();
+        self::$adapter = self::createFilesystemAdapter();
+        self::removeZipArchive();
         parent::setUp();
     }
 
     public static function tearDownAfterClass(): void
     {
-        static::removeZipArchive();
+        self::removeZipArchive();
     }
 
     protected function tearDown(): void
     {
-        static::removeZipArchive();
+        self::removeZipArchive();
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        static::$archiveProvider = new StubZipArchiveProvider(self::ARCHIVE);
+        self::$archiveProvider = new StubZipArchiveProvider(self::ARCHIVE);
 
         return new ZipArchiveAdapter(self::$archiveProvider, '/path-prefix');
     }
@@ -116,7 +116,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_delete_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt');
-        static::$archiveProvider->stubbedZipArchive()->failNextDeleteName();
+        self::$archiveProvider->stubbedZipArchive()->failNextDeleteName();
         $this->expectException(UnableToDeleteFile::class);
 
         $this->adapter()->delete('path.txt');
@@ -146,7 +146,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
      */
     public function failing_to_create_a_directory(): void
     {
-        static::$archiveProvider->stubbedZipArchive()->failNextDirectoryCreation();
+        self::$archiveProvider->stubbedZipArchive()->failNextDirectoryCreation();
 
         $this->expectException(UnableToCreateDirectory::class);
 
@@ -158,7 +158,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
      */
     public function failing_to_create_a_directory_because_setting_visibility_fails(): void
     {
-        static::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
+        self::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
 
         $this->expectException(UnableToCreateDirectory::class);
 
@@ -170,7 +170,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
      */
     public function failing_to_delete_a_directory(): void
     {
-        static::$archiveProvider->stubbedZipArchive()->failWhenDeletingAnIndex();
+        self::$archiveProvider->stubbedZipArchive()->failWhenDeletingAnIndex();
 
         $this->givenWeHaveAnExistingFile('here/path.txt');
 
@@ -198,7 +198,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     {
         $this->givenWeHaveAnExistingFile('somewhere/here.txt');
 
-        static::$archiveProvider->stubbedZipArchive()->failNextDirectoryCreation();
+        self::$archiveProvider->stubbedZipArchive()->failNextDirectoryCreation();
 
         $this->expectException(UnableToMoveFile::class);
 
@@ -212,7 +212,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     {
         $this->givenWeHaveAnExistingFile('here.txt');
 
-        static::$archiveProvider->stubbedZipArchive()->failNextWrite();
+        self::$archiveProvider->stubbedZipArchive()->failNextWrite();
 
         $this->expectException(UnableToCopyFile::class);
 
@@ -249,7 +249,7 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     public function failing_to_set_visibility_because_setting_it_fails(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt');
-        static::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
+        self::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
 
         $this->expectException(UnableToSetVisibility::class);
 

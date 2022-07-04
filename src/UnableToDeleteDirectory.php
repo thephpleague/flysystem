@@ -24,7 +24,7 @@ final class UnableToDeleteDirectory extends RuntimeException implements Filesyst
         string $reason = '',
         Throwable $previous = null
     ): UnableToDeleteDirectory {
-        $e = new static(rtrim("Unable to delete directory located at: {$location}. {$reason}"), 0, $previous);
+        $e = new self(rtrim("Unable to delete directory located at: {$location}. {$reason}"), 0, $previous);
         $e->location = $location;
         $e->reason = $reason;
 
