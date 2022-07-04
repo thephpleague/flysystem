@@ -94,7 +94,7 @@ class MountManager implements FilesystemOperator
             $filesystem
                 ->listContents($path, $deep)
                 ->map(
-                    function (StorageAttributes $attributes) use ($mountIdentifier) {
+                    static function (StorageAttributes $attributes) use ($mountIdentifier) {
                         return $attributes->withPath(sprintf('%s://%s', $mountIdentifier, $attributes->path()));
                     }
                 );

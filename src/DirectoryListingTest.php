@@ -22,7 +22,7 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 10);
         $listing = new DirectoryListing($numbers);
 
-        $mappedListing = $listing->map(function (int $i) {
+        $mappedListing = $listing->map(static function (int $i) {
             return $i * 2;
         });
         $mappedNumbers = $mappedListing->toArray();
@@ -39,10 +39,10 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 10);
         $listing = new DirectoryListing($numbers);
 
-        $mappedListing = $listing->map(function (int $i) {
+        $mappedListing = $listing->map(static function (int $i) {
             return $i * 2;
         });
-        $mappedListing = $mappedListing->map(function (int $i) {
+        $mappedListing = $mappedListing->map(static function (int $i) {
             return $i / 2;
         });
         $mappedNumbers = $mappedListing->toArray();
@@ -59,7 +59,7 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 20);
         $listing = new DirectoryListing($numbers);
 
-        $fileredListing = $listing->filter(function (int $i) {
+        $fileredListing = $listing->filter(static function (int $i) {
             return $i % 2 === 0;
         });
         $mappedNumbers = $fileredListing->toArray();
@@ -76,10 +76,10 @@ class DirectoryListingTest extends TestCase
         $numbers = $this->generateIntegers(1, 20);
         $listing = new DirectoryListing($numbers);
 
-        $filteredListing = $listing->filter(function (int $i) {
+        $filteredListing = $listing->filter(static function (int $i) {
             return $i % 2 === 0;
         });
-        $filteredListing = $filteredListing->filter(function (int $i) {
+        $filteredListing = $filteredListing->filter(static function (int $i) {
             return $i > 10;
         });
         $mappedNumbers = $filteredListing->toArray();
@@ -102,7 +102,7 @@ class DirectoryListingTest extends TestCase
         ]);
 
         $actual = $listing->sortByPath()
-            ->map(function ($i) {
+            ->map(static function ($i) {
                 return $i->path();
             })
             ->toArray();

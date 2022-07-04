@@ -99,7 +99,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             return;
         }
 
-        $this->runSetup(function () use ($adapter) {
+        $this->runSetup(static function () use ($adapter) {
             /** @var StorageAttributes $item */
             foreach ($adapter->listContents('', false) as $item) {
                 if ($item->isDir()) {
@@ -428,7 +428,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $adapter = $this->adapter();
 
-        $this->runScenario(function () use ($adapter) {
+        $this->runScenario(static function () use ($adapter) {
             $adapter->createDirectory('path', new Config());
             $adapter->fileSize('path/');
         });

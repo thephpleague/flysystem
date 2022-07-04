@@ -252,7 +252,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             ->getMock();
         $s3Client->expects(self::once())
             ->method('putObject')
-            ->with(self::callback(function (array $input) use ($file, $prefix, $bucket, $contents) {
+            ->with(self::callback(static function (array $input) use ($file, $prefix, $bucket, $contents) {
                 if ($input['Key'] !== $prefix . '/' . $file) {
                     return false;
                 }

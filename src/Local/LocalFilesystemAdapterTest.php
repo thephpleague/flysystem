@@ -328,7 +328,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         /** @var Traversable<StorageAttributes> $contentListing */
         $contentListing = $adapter->listContents('/', true);
         $listing = iterator_to_array($contentListing);
-        usort($listing, function (StorageAttributes $a, StorageAttributes $b) {
+        usort($listing, static function (StorageAttributes $a, StorageAttributes $b) {
             return strnatcasecmp($a->path(), $b->path());
         });
         /**

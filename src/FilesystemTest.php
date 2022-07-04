@@ -302,25 +302,25 @@ class FilesystemTest extends TestCase
 
     public function scenariosCausingPathTraversal(): Generator
     {
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->delete('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->deleteDirectory('../path');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->createDirectory('../path');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->read('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->readStream('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->write('../path.txt', 'contents');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $stream = stream_with_contents('contents');
             try {
                 $filesystem->writeStream('../path.txt', $stream);
@@ -328,37 +328,37 @@ class FilesystemTest extends TestCase
                 fclose($stream);
             }
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->listContents('../path');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->fileExists('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->mimeType('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->fileSize('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->lastModified('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->visibility('../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->setVisibility('../path.txt', Visibility::PUBLIC);
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->copy('../path.txt', 'path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->copy('path.txt', '../path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->move('../path.txt', 'path.txt');
         }];
-        yield [function (FilesystemOperator $filesystem) {
+        yield [static function (FilesystemOperator $filesystem) {
             $filesystem->move('path.txt', '../path.txt');
         }];
     }

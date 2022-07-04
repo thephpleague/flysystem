@@ -97,15 +97,15 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 
     public function scenariosThatCauseWritesToFail(): Generator
     {
-        yield "writing a file fails when writing" => [function () {
+        yield "writing a file fails when writing" => [static function () {
             static::$archiveProvider->stubbedZipArchive()->failNextWrite();
         }];
 
-        yield "writing a file fails when setting visibility" => [function () {
+        yield "writing a file fails when setting visibility" => [static function () {
             static::$archiveProvider->stubbedZipArchive()->failWhenSettingVisibility();
         }];
 
-        yield "writing a file fails to get the stream contents" => [function () {
+        yield "writing a file fails to get the stream contents" => [static function () {
             mock_function('stream_get_contents', false);
         }];
     }

@@ -86,7 +86,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      */
     public function failing_to_write_a_file(callable $scenario): void
     {
-        $this->runScenario(function () use ($scenario) {
+        $this->runScenario(static function () use ($scenario) {
             $scenario();
         });
 
@@ -102,19 +102,19 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingWriteFailure(): Generator
     {
-        yield "Not being able to create the parent directory" => [function () {
+        yield "Not being able to create the parent directory" => [static function () {
             mock_function('ftp_mkdir', false);
         }];
 
-        yield "Not being able to set the parent directory visibility" => [function () {
+        yield "Not being able to set the parent directory visibility" => [static function () {
             mock_function('ftp_chmod', false);
         }];
 
-        yield "Not being able to write the file" => [function () {
+        yield "Not being able to write the file" => [static function () {
             mock_function('ftp_fput', false);
         }];
 
-        yield "Not being able to set the visibility" => [function () {
+        yield "Not being able to set the visibility" => [static function () {
             mock_function('ftp_chmod', true, false);
         }];
     }
@@ -137,11 +137,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingDirectoryDeleteFailure(): Generator
     {
-        yield "ftp_delete failure" => [function () {
+        yield "ftp_delete failure" => [static function () {
             mock_function('ftp_delete', false);
         }];
 
-        yield "ftp_rmdir failure" => [function () {
+        yield "ftp_rmdir failure" => [static function () {
             mock_function('ftp_rmdir', false);
         }];
     }
@@ -179,11 +179,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     public function scenariosCausingCopyFailure(): Generator
     {
-        yield "failing to read" => [function () {
+        yield "failing to read" => [static function () {
             mock_function('ftp_fget', false);
         }];
 
-        yield "failing to write" => [function () {
+        yield "failing to write" => [static function () {
             mock_function('ftp_fput', false);
         }];
     }
@@ -288,13 +288,13 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     {
         $adapter = $this->adapter();
 
-        $this->runScenario(function () use ($adapter) {
+        $this->runScenario(static function () use ($adapter) {
             $adapter->createDirectory('directory_name', new Config());
         });
 
         $this->expectException(UnableToRetrieveMetadata::class);
 
-        $this->runScenario(function () use ($adapter) {
+        $this->runScenario(static function () use ($adapter) {
             $adapter->fileSize('directory_name');
         });
     }

@@ -497,7 +497,7 @@ class FtpAdapter implements FilesystemAdapter
         $parts = str_split($permissions, 3);
 
         // convert the groups
-        $mapper = function ($part) {
+        $mapper = static function ($part) {
             return array_sum(str_split($part));
         };
 
