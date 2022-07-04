@@ -324,7 +324,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         clearstatcache(true, $dirname);
 
         if ( ! is_dir($dirname)) {
-            $errorMessage = isset($mkdirError['message']) ? $mkdirError['message'] : '';
+            $errorMessage = $mkdirError['message'] ?? '';
 
             throw UnableToCreateDirectory::atLocation($dirname, $errorMessage);
         }
