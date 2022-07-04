@@ -41,8 +41,8 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         'ContentLanguage',
         'ContentEncoding',
     ];
-    const ON_VISIBILITY_THROW_ERROR = 'throw';
-    const ON_VISIBILITY_IGNORE = 'ignore';
+    public const ON_VISIBILITY_THROW_ERROR = 'throw';
+    public const ON_VISIBILITY_IGNORE = 'ignore';
 
     private BlobRestProxy $client;
 

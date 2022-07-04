@@ -17,7 +17,7 @@ use function getenv;
  */
 class AzureBlobStorageTest extends TestCase
 {
-    const CONTAINER_NAME = 'flysystem';
+    public const CONTAINER_NAME = 'flysystem';
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {

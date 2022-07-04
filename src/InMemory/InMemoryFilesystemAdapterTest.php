@@ -21,7 +21,7 @@ use League\MimeTypeDetection\ExtensionMimeTypeDetector;
  */
 class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
 {
-    const PATH = 'path.txt';
+    public const PATH = 'path.txt';
 
     /**
      * @before

@@ -23,7 +23,7 @@ use function str_split;
  */
 class SftpConnectionProviderTest extends TestCase
 {
-    const KEX_ACCEPTED_BY_DEFAULT_OPENSSH_BUT_DISABLED_IN_EDDSA_ONLY = 'diffie-hellman-group14-sha256';
+    public const KEX_ACCEPTED_BY_DEFAULT_OPENSSH_BUT_DISABLED_IN_EDDSA_ONLY = 'diffie-hellman-group14-sha256';
 
     public static function setUpBeforeClass(): void
     {

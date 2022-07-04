@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FilesystemTest extends TestCase
 {
-    const ROOT = __DIR__ . '/../test_files/test-root';
+    public const ROOT = __DIR__ . '/../test_files/test-root';
 
     /**
      * @var Filesystem
