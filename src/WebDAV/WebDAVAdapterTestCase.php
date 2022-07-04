@@ -15,7 +15,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function setting_visibility(): void
+    final public function setting_visibility(): void
     {
         $adapter = $this->adapter();
         $this->givenWeHaveAnExistingFile('some/file.txt');
@@ -28,7 +28,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function overwriting_a_file(): void
+    final public function overwriting_a_file(): void
     {
         $this->runScenario(function () {
             $this->givenWeHaveAnExistingFile('path.txt', 'contents');
@@ -44,7 +44,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file(): void
+    final public function copying_a_file(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
@@ -65,7 +65,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file_again(): void
+    final public function copying_a_file_again(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
@@ -86,7 +86,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file(): void
+    final public function moving_a_file(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
@@ -111,7 +111,7 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file_that_does_not_exist(): void
+    final public function moving_a_file_that_does_not_exist(): void
     {
         $this->expectException(UnableToMoveFile::class);
 

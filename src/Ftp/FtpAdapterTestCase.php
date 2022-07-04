@@ -37,7 +37,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @after
      */
-    public function resetFunctionMocks(): void
+    final public function resetFunctionMocks(): void
     {
         reset_function_mocks();
     }
@@ -45,7 +45,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function using_empty_string_for_root(): void
+    final public function using_empty_string_for_root(): void
     {
         $options = FtpConnectionOptions::fromArray([
             'host' => 'localhost',
@@ -69,7 +69,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function reconnecting_after_failure(): void
+    final public function reconnecting_after_failure(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
@@ -84,7 +84,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingWriteFailure
      */
-    public function failing_to_write_a_file(callable $scenario): void
+    final public function failing_to_write_a_file(callable $scenario): void
     {
         $this->runScenario(function () use ($scenario) {
             $scenario();
@@ -100,7 +100,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingWriteFailure(): Generator
+    final public function scenariosCausingWriteFailure(): Generator
     {
         yield "Not being able to create the parent directory" => [function () {
             mock_function('ftp_mkdir', false);
@@ -123,7 +123,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingDirectoryDeleteFailure
      */
-    public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
+    final public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
     {
         $this->runScenario($scenario);
         $this->givenWeHaveAnExistingFile('some/nested/path.txt');
@@ -135,7 +135,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingDirectoryDeleteFailure(): Generator
+    final public function scenariosCausingDirectoryDeleteFailure(): Generator
     {
         yield "ftp_delete failure" => [function () {
             mock_function('ftp_delete', false);
@@ -150,7 +150,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      * @test
      * @dataProvider scenariosCausingCopyFailure
      */
-    public function failing_to_copy(callable $scenario): void
+    final public function failing_to_copy(callable $scenario): void
     {
         $this->givenWeHaveAnExistingFile('path.txt');
         $scenario();
@@ -165,7 +165,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_move_because_creating_the_directory_fails(): void
+    final public function failing_to_move_because_creating_the_directory_fails(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt');
         mock_function('ftp_mkdir', false);
@@ -177,7 +177,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingCopyFailure(): Generator
+    final public function scenariosCausingCopyFailure(): Generator
     {
         yield "failing to read" => [function () {
             mock_function('ftp_fget', false);
@@ -191,7 +191,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_delete_a_file(): void
+    final public function failing_to_delete_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
         mock_function('ftp_delete', false);
@@ -206,7 +206,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function formatting_a_directory_listing_with_a_total_indicator(): void
+    final public function formatting_a_directory_listing_with_a_total_indicator(): void
     {
         $response = [
             'total 1',
@@ -227,7 +227,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      * @test
      * @runInSeparateProcess
      */
-    public function receiving_a_windows_listing(): void
+    final public function receiving_a_windows_listing(): void
     {
         $response = [
             '2015-05-23  12:09       <DIR>          dir1',
@@ -247,7 +247,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function receiving_an_invalid_windows_listing(): void
+    final public function receiving_an_invalid_windows_listing(): void
     {
         $response = [
             '05-23-15  12:09PM    file2.txt',
@@ -265,7 +265,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function getting_an_invalid_listing_response_for_unix_listings(): void
+    final public function getting_an_invalid_listing_response_for_unix_listings(): void
     {
         $response = [
             'total 1',
@@ -284,7 +284,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function failing_to_get_the_file_size_of_a_directory(): void
+    final public function failing_to_get_the_file_size_of_a_directory(): void
     {
         $adapter = $this->adapter();
 
@@ -302,7 +302,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function formatting_non_manual_recursive_listings(): void
+    final public function formatting_non_manual_recursive_listings(): void
     {
         $response = [
             'drwxr-xr-x   4 ftp      ftp          4096 Nov 24 13:58 .',
@@ -346,7 +346,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function filenames_and_dirnames_with_spaces_are_supported(): void
+    final public function filenames_and_dirnames_with_spaces_are_supported(): void
     {
         $this->givenWeHaveAnExistingFile('some dirname/file name.txt');
 
