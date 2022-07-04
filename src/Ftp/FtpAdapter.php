@@ -86,10 +86,10 @@ class FtpAdapter implements FilesystemAdapter
 
     public function __construct(
         FtpConnectionOptions $connectionOptions,
-        FtpConnectionProvider $connectionProvider = null,
-        ConnectivityChecker $connectivityChecker = null,
-        VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        ?FtpConnectionProvider $connectionProvider = null,
+        ?ConnectivityChecker $connectivityChecker = null,
+        ?VisibilityConverter $visibilityConverter = null,
+        ?MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->connectionOptions = $connectionOptions;
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();

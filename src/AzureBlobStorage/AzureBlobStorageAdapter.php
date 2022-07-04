@@ -60,7 +60,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
         BlobRestProxy $client,
         string $container,
         string $prefix = '',
-        MimeTypeDetector $mimeTypeDetector = null,
+        ?MimeTypeDetector $mimeTypeDetector = null,
         int $maxResultsForContentsListing = 5000,
         string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
     ) {

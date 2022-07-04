@@ -32,7 +32,7 @@ final class UnableToMoveFile extends RuntimeException implements FilesystemOpera
     public static function fromLocationTo(
         string $sourcePath,
         string $destinationPath,
-        Throwable $previous = null
+        ?Throwable $previous = null
     ): UnableToMoveFile {
         $e = new static("Unable to move file from $sourcePath to $destinationPath", 0, $previous);
         $e->source = $sourcePath;

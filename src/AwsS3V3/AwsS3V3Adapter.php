@@ -121,8 +121,8 @@ class AwsS3V3Adapter implements FilesystemAdapter
         S3ClientInterface $client,
         string $bucket,
         string $prefix = '',
-        VisibilityConverter $visibility = null,
-        MimeTypeDetector $mimeTypeDetector = null,
+        ?VisibilityConverter $visibility = null,
+        ?MimeTypeDetector $mimeTypeDetector = null,
         array $options = [],
         bool $streamReads = true
     ) {

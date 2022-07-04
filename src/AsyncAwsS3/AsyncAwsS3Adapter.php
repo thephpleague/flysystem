@@ -105,8 +105,8 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         S3Client $client,
         string $bucket,
         string $prefix = '',
-        VisibilityConverter $visibility = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        ?VisibilityConverter $visibility = null,
+        ?MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
@@ -392,7 +392,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     /**
      * @param HeadObjectOutput|AwsObject|CommonPrefix $item
      */
-    private function mapS3ObjectMetadata($item, string $path = null): StorageAttributes
+    private function mapS3ObjectMetadata($item, ?string $path = null): StorageAttributes
     {
         if (null === $path) {
             if ($item instanceof AwsObject) {

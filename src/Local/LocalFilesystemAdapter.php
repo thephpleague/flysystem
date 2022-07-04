@@ -94,10 +94,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
     public function __construct(
         string $location,
-        VisibilityConverter $visibility = null,
+        ?VisibilityConverter $visibility = null,
         int $writeFlags = LOCK_EX,
         int $linkHandling = self::DISALLOW_LINKS,
-        MimeTypeDetector $mimeTypeDetector = null,
+        ?MimeTypeDetector $mimeTypeDetector = null,
         bool $lazyRootCreation = false,
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);

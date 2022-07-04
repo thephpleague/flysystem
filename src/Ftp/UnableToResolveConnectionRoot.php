@@ -9,7 +9,7 @@ use Throwable;
 
 final class UnableToResolveConnectionRoot extends RuntimeException implements FtpConnectionException
 {
-    private function __construct(string $message, Throwable $previous = null)
+    private function __construct(string $message, ?Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
     }

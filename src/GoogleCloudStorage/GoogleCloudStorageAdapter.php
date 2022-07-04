@@ -64,9 +64,9 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     public function __construct(
         Bucket $bucket,
         string $prefix = '',
-        VisibilityHandler $visibilityHandler = null,
+        ?VisibilityHandler $visibilityHandler = null,
         string $defaultVisibility = Visibility::PRIVATE,
-        MimeTypeDetector $mimeTypeDetector = null
+        ?MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->bucket = $bucket;
         $this->prefixer = new PathPrefixer($prefix);

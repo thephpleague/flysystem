@@ -24,7 +24,7 @@ class Filesystem implements FilesystemOperator
     public function __construct(
         FilesystemAdapter $adapter,
         array $config = [],
-        PathNormalizer $pathNormalizer = null
+        ?PathNormalizer $pathNormalizer = null
     ) {
         $this->adapter = $adapter;
         $this->config = new Config($config);
