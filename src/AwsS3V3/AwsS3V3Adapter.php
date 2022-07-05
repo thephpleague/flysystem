@@ -44,6 +44,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         'ContentEncoding',
         'ContentLength',
         'ContentType',
+        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
