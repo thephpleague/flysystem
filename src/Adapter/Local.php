@@ -95,12 +95,13 @@ class Local extends AbstractAdapter
      *
      * @throws Exception in case the root directory can not be created
      */
-    protected function ensureDirectory($root)
+    protected function ensureDirectory($root, ?Config $config = null)
     {
         if ( ! is_dir($root)) {
             $umask = umask(0);
+	        $visibility = $config === null ? 'public' : $config->get('visibility', 'public');
 
-            if ( ! @mkdir($root, $this->permissionMap['dir']['public'], true)) {
+            if ( ! @mkdir($root, $this->permissionMap['dir'][$visibility], true)) {
                 $mkdirError = error_get_last();
             }
 
@@ -130,7 +131,7 @@ class Local extends AbstractAdapter
     public function write($path, $contents, Config $config)
     {
         $location = $this->applyPathPrefix($path);
-        $this->ensureDirectory(dirname($location));
+        $this->ensureDirectory(dirname($location), $config);
 
         if (($size = file_put_contents($location, $contents, $this->writeFlags)) === false) {
             return false;
@@ -153,7 +154,7 @@ class Local extends AbstractAdapter
     public function writeStream($path, $resource, Config $config)
     {
         $location = $this->applyPathPrefix($path);
-        $this->ensureDirectory(dirname($location));
+        $this->ensureDirectory(dirname($location), $config);
         $stream = fopen($location, 'w+b');
 
         if ( ! $stream || stream_copy_to_stream($resource, $stream) === false || ! fclose($stream)) {
