@@ -99,7 +99,7 @@ class Local extends AbstractAdapter
     {
         if ( ! is_dir($root)) {
             $umask = umask(0);
-	        $visibility = $config === null ? 'public' : $config->get('visibility', 'public');
+	        $visibility = $config instanceof Config ? $config->get('visibility', 'public') : 'public';
 
             if ( ! @mkdir($root, $this->permissionMap['dir'][$visibility], true)) {
                 $mkdirError = error_get_last();
