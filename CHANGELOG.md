@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.1 - 2022-07-18
+
+- [AwsS3V3] Corrected exception type (#1524)
+
 ## 3.1.0 - 2022-06-29
 
 - Added option for the Local adapter to create the root directory only on the first mutating (write/copy/move) action.
