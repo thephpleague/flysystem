@@ -261,7 +261,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         try {
             $this->client->deleteMatchingObjects($this->bucket, $prefix);
         } catch (Throwable $exception) {
-            throw UnableToDeleteDirectory::dueToFailure($path, $exception);
+            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
         }
     }
 
