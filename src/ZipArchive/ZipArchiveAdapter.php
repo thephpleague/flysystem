@@ -171,6 +171,8 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             }
         }
 
+        $archive->deleteName($prefixedPath);
+
         $archive->close();
     }
 

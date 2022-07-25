@@ -22,7 +22,7 @@ use function iterator_to_array;
 /**
  * @group zip
  */
-final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
+abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
 {
     private const ARCHIVE = __DIR__ . '/test.zip';
 
@@ -52,8 +52,10 @@ final class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     {
         static::$archiveProvider = new StubZipArchiveProvider(self::ARCHIVE);
 
-        return new ZipArchiveAdapter(self::$archiveProvider, '/path-prefix');
+        return new ZipArchiveAdapter(self::$archiveProvider, static::getRoot());
     }
+
+    abstract protected static function getRoot(): string;
 
     /**
      * @test
