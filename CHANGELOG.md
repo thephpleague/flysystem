@@ -1,6 +1,10 @@
 # Changelog
 
-## 3.1.2 - 2022-0726
+## 3.2.0 - 2022-0726
+
+### Added
+
+- [AwsS3V3] Added configuration options for forwarded options, multipart upload configuration, and metadata fields.
 
 ### Fixes
 
