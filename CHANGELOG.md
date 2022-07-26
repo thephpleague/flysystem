@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.2 - 2022-0726
+
+### Fixes
+
+- [ZipArchive] delete top-level directory when deleting directories.
+- [AwsS3V2] add `ChecksumAlgorithm` to forwarded options.
+
 ## 3.1.1 - 2022-07-18
 
 - [AwsS3V3] Corrected exception type (#1524)
