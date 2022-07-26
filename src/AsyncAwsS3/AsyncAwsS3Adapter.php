@@ -99,6 +99,16 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     private $mimeTypeDetector;
 
     /**
+     * @var array|string[]
+     */
+    private array $forwardedOptions;
+
+    /**
+     * @var array|string[]
+     */
+    private array $metadataFields;
+
+    /**
      * @param S3Client|SimpleS3Client $client Uploading of files larger than 5GB is only supported with SimpleS3Client
      */
     public function __construct(
@@ -106,13 +116,17 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        array $forwardedOptions = self::AVAILABLE_OPTIONS,
+        array $metadataFields = self::EXTRA_METADATA_FIELDS,
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
         $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->forwardedOptions = $forwardedOptions;
+        $this->metadataFields = $metadataFields;
     }
 
     public function fileExists(string $path): bool
@@ -358,7 +372,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         $options = [];
 
-        foreach (static::AVAILABLE_OPTIONS as $option) {
+        foreach ($this->forwardedOptions as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ('__NOT_SET__' !== $value) {
@@ -442,7 +456,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
     {
         $extracted = [];
 
-        foreach (static::EXTRA_METADATA_FIELDS as $field) {
+        foreach ($this->metadataFields as $field) {
             $method = 'get' . $field;
             if ( ! method_exists($metadata, $method)) {
                 continue;
