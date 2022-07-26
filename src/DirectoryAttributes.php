@@ -76,7 +76,7 @@ class DirectoryAttributes implements StorageAttributes
         return true;
     }
 
-    public function withPath(string $path): StorageAttributes
+    public function withPath(string $path): self
     {
         $clone = clone $this;
         $clone->path = $path;
@@ -84,7 +84,7 @@ class DirectoryAttributes implements StorageAttributes
         return $clone;
     }
 
-    public static function fromArray(array $attributes): StorageAttributes
+    public static function fromArray(array $attributes): self
     {
         return new DirectoryAttributes(
             $attributes[StorageAttributes::ATTRIBUTE_PATH],
