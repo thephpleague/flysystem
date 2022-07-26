@@ -119,6 +119,21 @@ class AwsS3V3Adapter implements FilesystemAdapter
      */
     private $streamReads;
 
+    /**
+     * @var string[]
+     */
+    private array $forwardedOptions;
+
+    /**
+     * @var string[]
+     */
+    private array $metadataFields;
+
+    /**
+     * @var string[]
+     */
+    private array $multipartUploadOptions;
+
     public function __construct(
         S3ClientInterface $client,
         string $bucket,
@@ -126,7 +141,10 @@ class AwsS3V3Adapter implements FilesystemAdapter
         VisibilityConverter $visibility = null,
         MimeTypeDetector $mimeTypeDetector = null,
         array $options = [],
-        bool $streamReads = true
+        bool $streamReads = true,
+        array $forwardedOptions = self::AVAILABLE_OPTIONS,
+        array $metadataFields = self::EXTRA_METADATA_FIELDS,
+        array $multipartUploadOptions = self::MUP_AVAILABLE_OPTIONS,
     ) {
         $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
@@ -135,6 +153,9 @@ class AwsS3V3Adapter implements FilesystemAdapter
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
         $this->options = $options;
         $this->streamReads = $streamReads;
+        $this->forwardedOptions = $forwardedOptions;
+        $this->metadataFields = $metadataFields;
+        $this->multipartUploadOptions = $multipartUploadOptions;
     }
 
     public function fileExists(string $path): bool
@@ -204,7 +225,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
             $options['params']['ContentType'] = $mimetype;
         }
 
-        foreach (static::AVAILABLE_OPTIONS as $option) {
+        foreach ($this->forwardedOptions as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ($value !== '__NOT_SET__') {
@@ -212,7 +233,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
             }
         }
 
-        foreach (static::MUP_AVAILABLE_OPTIONS as $option) {
+        foreach ($this->multipartUploadOptions as $option) {
             $value = $config->get($option, '__NOT_SET__');
 
             if ($value !== '__NOT_SET__') {
@@ -352,7 +373,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
     {
         $extracted = [];
 
-        foreach (static::EXTRA_METADATA_FIELDS as $field) {
+        foreach ($this->metadataFields as $field) {
             if (isset($metadata[$field]) && $metadata[$field] !== '') {
                 $extracted[$field] = $metadata[$field];
             }
