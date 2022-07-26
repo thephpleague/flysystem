@@ -5,7 +5,8 @@
 ### Fixes
 
 - [ZipArchive] delete top-level directory when deleting directories.
-- [AwsS3V2] add `ChecksumAlgorithm` to forwarded options.
+- [AwsS3V3] add `ChecksumAlgorithm` to forwarded options.
+- [AwsS3V3] add `ContentMD5` to forwarded options.
 
 ## 3.1.1 - 2022-07-18
 
