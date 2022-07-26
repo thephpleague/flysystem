@@ -46,12 +46,14 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         'ContentEncoding',
         'ContentLength',
         'ContentType',
+        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
         'GrantReadACP',
         'GrantWriteACP',
         'Metadata',
+        'MetadataDirective',
         'RequestPayer',
         'SSECustomerAlgorithm',
         'SSECustomerKey',
@@ -61,6 +63,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
         'StorageClass',
         'Tagging',
         'WebsiteRedirectLocation',
+        'ChecksumAlgorithm',
     ];
 
     /**
