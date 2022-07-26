@@ -7,6 +7,7 @@
 - [ZipArchive] delete top-level directory when deleting directories.
 - [AwsS3V3] add `ChecksumAlgorithm` to forwarded options.
 - [AwsS3V3] add `ContentMD5` to forwarded options.
+- [SftpV3] upgrade minimum version, PHP 8 and the lowest version fails to authenticate.
 
 ## 3.1.1 - 2022-07-18
 
