@@ -265,7 +265,7 @@ class SftpConnectionProviderTest extends TestCase
         $managesConnectionToxics = ToxiproxyManagement::forServer();
         $managesConnectionToxics->resetPeerOnRequest('sftp', 10);
 
-        $maxTries = 5;
+        $maxTries = 2;
 
         $provider = SftpConnectionProvider::fromArray(
             [
