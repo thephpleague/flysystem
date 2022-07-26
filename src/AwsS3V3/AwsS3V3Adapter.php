@@ -60,6 +60,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
         'StorageClass',
         'Tagging',
         'WebsiteRedirectLocation',
+        'ChecksumAlgorithm',
     ];
     /**
      * @var string[]
