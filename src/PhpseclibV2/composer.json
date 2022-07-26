@@ -19,5 +19,6 @@
             "name": "Frank de Jonge",
             "email": "info@frankdejonge.nl"
         }
-    ]
+    ],
+    "abandoned": "league/flysystem-sftp-v3"
 }

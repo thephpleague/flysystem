@@ -17,6 +17,7 @@ use function class_exists;
 
 /**
  * @group sftp
+ * @group legacy
  */
 class SftpAdapterTest extends FilesystemAdapterTestCase
 {

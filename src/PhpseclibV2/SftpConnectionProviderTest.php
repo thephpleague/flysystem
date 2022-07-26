@@ -12,6 +12,7 @@ use function class_exists;
 /**
  * @group sftp
  * @group sftp-connection
+ * @group legacy
  */
 class SftpConnectionProviderTest extends TestCase
 {
