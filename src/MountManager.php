@@ -223,7 +223,7 @@ class MountManager implements FilesystemOperator
             $destinationPath,
             $source,
             $destination
-        ) : $this->moveAcrossFilesystems($source, $destination);
+        ) : $this->moveAcrossFilesystems($source, $destination, $config);
     }
 
     public function copy(string $source, string $destination, array $config = []): void
@@ -348,10 +348,10 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    private function moveAcrossFilesystems(string $source, string $destination): void
+    private function moveAcrossFilesystems(string $source, string $destination, array $config = []): void
     {
         try {
-            $this->copy($source, $destination);
+            $this->copy($source, $destination, $config);
             $this->delete($source);
         } catch (UnableToCopyFile | UnableToDeleteFile $exception) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
