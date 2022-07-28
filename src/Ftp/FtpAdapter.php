@@ -71,6 +71,11 @@ class FtpAdapter implements FilesystemAdapter
      * @var bool|null
      */
     private $isPureFtpdServer;
+    
+    /**
+     * @var bool|null
+     */
+    private $isFileZillaServer;
 
     /**
      * @var null|string
@@ -143,6 +148,18 @@ class FtpAdapter implements FilesystemAdapter
 
         return $this->isPureFtpdServer = stripos(implode(' ', $response), 'Pure-FTPd') !== false;
     }
+   
+    private function isFileZillaServer(): bool
+    {
+        if ($this->isFileZillaServer !== null) {
+            return $this->isFileZillaServer;
+        }
+        
+        $response = ftp_raw($this->connection, 'SYST');
+
+        return $this->isFileZillaServer = stripos(implode(' ', $response), 'FileZilla') !== false;
+    }
+
 
     public function fileExists(string $path): bool
     {
@@ -541,8 +558,12 @@ class FtpAdapter implements FilesystemAdapter
             $path = str_replace(' ', '\ ', $path);
             $path = $this->escapePath($path);
         }
+        
+        if ($this->isFileZillaServer()) {
+            $options = '';
+        }
 
-        return ftp_rawlist($connection, $options . ' ' . $path, stripos($options, 'R') !== false) ?: [];
+        return ftp_rawlist($connection, (! empty($options) ? $options . ' ' : '') . $path, stripos($options, 'R') !== false) ?: [];
     }
 
     public function move(string $source, string $destination, Config $config): void
