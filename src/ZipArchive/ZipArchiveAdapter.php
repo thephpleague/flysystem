@@ -48,7 +48,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         ?MimeTypeDetector $mimeTypeDetector = null,
         ?VisibilityConverter $visibility = null
     ) {
-        $this->pathPrefixer = new PathPrefixer($root);
+        $this->pathPrefixer = new PathPrefixer(ltrim($root, '/'));
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->visibility = $visibility ?? new PortableVisibilityConverter();
         $this->zipArchiveProvider = $zipArchiveProvider;
@@ -383,7 +383,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         $archive = $this->zipArchiveProvider->createZipArchive();
         $prefixedDirname = $this->pathPrefixer->prefixDirectoryPath($dirname);
         $parts = array_filter(explode('/', trim($prefixedDirname, '/')));
-        $dirPath = '/';
+        $dirPath = '';
 
         foreach ($parts as $part) {
             $dirPath .= $part . '/';
