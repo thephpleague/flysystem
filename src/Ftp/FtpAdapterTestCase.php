@@ -17,6 +17,8 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 
+use function iterator_to_array;
+
 /**
  * @group ftp
  * @codeCoverageIgnore
@@ -77,6 +79,22 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
             $contents = iterator_to_array($adapter->listContents('', false));
             $this->assertIsArray($contents);
+        });
+    }
+
+    /**
+     * @test
+     * @see https://github.com/thephpleague/flysystem/issues/1522
+     */
+    public function reading_a_file_twice_for_issue_1522(): void
+    {
+        $this->givenWeHaveAnExistingFile('some/nested/path.txt', 'this is it');
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+
+            self::assertEquals('this is it', $adapter->read('some/nested/path.txt'));
+            self::assertEquals('this is it', $adapter->read('some/nested/path.txt'));
+            self::assertEquals('this is it', $adapter->read('some/nested/path.txt'));
         });
     }
 
