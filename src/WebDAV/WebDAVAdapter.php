@@ -213,6 +213,10 @@ class WebDAVAdapter implements FilesystemAdapter
         $directoryParts = [];
 
         foreach ($parts as $directory) {
+            if ($directory === '.' || $directory === '') {
+                return;
+            }
+
             $directoryParts[] = $directory;
             $directoryPath = implode('/', $directoryParts);
             $location = $this->encodePath($directoryPath);
@@ -409,10 +413,6 @@ class WebDAVAdapter implements FilesystemAdapter
     private function createParentDirFor(string $path): void
     {
         $dirname = dirname($path);
-
-        if ($dirname === '.' || $dirname === '') {
-            return;
-        }
 
         if ($this->directoryExists($dirname)) {
             return;
