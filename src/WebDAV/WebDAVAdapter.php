@@ -62,7 +62,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function fileExists(string $path): bool
     {
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $properties = $this->client->propFind($location, ['{DAV:}resourcetype', '{DAV:}iscollection']);
@@ -90,7 +90,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function directoryExists(string $path): bool
     {
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $properties = $this->client->propFind($location, ['{DAV:}resourcetype', '{DAV:}iscollection']);
@@ -121,7 +121,7 @@ class WebDAVAdapter implements FilesystemAdapter
     private function upload(string $path, mixed $contents): void
     {
         $this->createParentDirFor($path);
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $response = $this->client->request('PUT', $location, $contents);
@@ -137,7 +137,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function read(string $path): string
     {
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $response = $this->client->request('GET', $location);
@@ -154,7 +154,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function readStream(string $path)
     {
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $url = $this->client->getAbsoluteUrl($location);
@@ -174,7 +174,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
-        $location = $this->prefixer->prefixPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $response = $this->client->request('DELETE', $location);
@@ -192,7 +192,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function deleteDirectory(string $path): void
     {
-        $location = $this->prefixer->prefixDirectoryPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixDirectoryPath($path));
 
         try {
             $statusCode = $this->client->request('DELETE', $location)['statusCode'];
@@ -209,13 +209,13 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $parts = explode('/', $path);
+        $parts = explode('/', $this->prefixer->prefixDirectoryPath($path));
         $directoryParts = [];
 
         foreach ($parts as $directory) {
             $directoryParts[] = $directory;
             $directoryPath = implode('/', $directoryParts);
-            $location = $this->prefixer->prefixDirectoryPath($this->encodePath($directoryPath));
+            $location = $this->encodePath($directoryPath);
 
             if ($this->directoryExists($directoryPath)) {
                 continue;
@@ -268,7 +268,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function listContents(string $path, bool $deep): iterable
     {
-        $location = $this->prefixer->prefixDirectoryPath($this->encodePath($path));
+        $location = $this->encodePath($this->prefixer->prefixDirectoryPath($path));
         $response = $this->client->propFind($location, self::FIND_PROPERTIES, 1);
         array_shift($response);
 
@@ -330,8 +330,8 @@ class WebDAVAdapter implements FilesystemAdapter
         }
 
         $this->createParentDirFor($destination);
-        $location = $this->prefixer->prefixPath($this->encodePath($source));
-        $newLocation = $this->prefixer->prefixPath($this->encodePath($destination));
+        $location = $this->encodePath($this->prefixer->prefixPath($source));
+        $newLocation = $this->encodePath($this->prefixer->prefixPath($destination));
 
         try {
             $response = $this->client->request('MOVE', '/' . ltrim($location, '/'), null, [
@@ -367,8 +367,8 @@ class WebDAVAdapter implements FilesystemAdapter
         }
 
         $this->createParentDirFor($destination);
-        $location = $this->prefixer->prefixPath($this->encodePath($source));
-        $newLocation = $this->prefixer->prefixPath($this->encodePath($destination));
+        $location = $this->encodePath($this->prefixer->prefixPath($source));
+        $newLocation = $this->encodePath($this->prefixer->prefixPath($destination));
 
         try {
             $response = $this->client->request('COPY', '/' . ltrim($location, '/'), null, [
