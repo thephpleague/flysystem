@@ -403,7 +403,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         $location = $this->prefixer->prefixPath($path);
         error_clear_last();
 
-        if ( ! is_file($location)) {
+        if ( ! file_exists($location)) {
             throw UnableToRetrieveMetadata::mimeType($location, 'No such file exists.');
         }
 
