@@ -27,7 +27,7 @@
         "microsoft/azure-storage-blob": "^1.1",
         "phpunit/phpunit": "^9.5.11",
         "phpstan/phpstan": "^0.12.26",
-        "phpseclib/phpseclib": "^2.0",
+        "phpseclib/phpseclib": "^3.0.14",
         "aws/aws-sdk-php": "^3.198.1",
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.5",
@@ -40,7 +40,8 @@
         "symfony/http-client": "<5.2",
         "guzzlehttp/ringphp": "<1.1.1",
         "guzzlehttp/guzzle": "<7.0",
-        "aws/aws-sdk-php": "3.209.31 || 3.210.0"
+        "aws/aws-sdk-php": "3.209.31 || 3.210.0",
+        "phpseclib/phpseclib": "3.0.15"
     },
     "license": "MIT",
     "authors": [

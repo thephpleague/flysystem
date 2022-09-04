@@ -12,6 +12,7 @@ use Throwable;
 use function base64_decode;
 use function class_exists;
 use function explode;
+use function getenv;
 use function hash;
 use function implode;
 use function is_a;
@@ -119,6 +120,10 @@ class SftpConnectionProviderTest extends TestCase
      */
     public function authenticating_with_an_ssh_agent(): void
     {
+        if (getenv('COMPOSER_OPTS') === false) {
+            $this->markTestSkipped('Test is not run locally');
+        }
+
         $provider = SftpConnectionProvider::fromArray(
             [
                 'host' => 'localhost',

@@ -56,9 +56,7 @@ jobs:
       - run: php test_files/wait_for_sftp.php
       - run: php test_files/wait_for_ftp.php 2121
       - run: php test_files/wait_for_ftp.php 2122
-      - run: COMPOSER_OPTS='${{ matrix.composer-flags }}' vendor/bin/phpunit --exclude-group phpseclib3 ${{ matrix.phpunit-flags }}
-      - run: composer require --dev --with-all-dependencies phpseclib/phpseclib:^3.0.14 --no-progress ${{ matrix.composer-flags }}
-      - run: vendor/bin/phpunit --group phpseclib3 ${{ matrix.phpunit-flags }}
+      - run: COMPOSER_OPTS='${{ matrix.composer-flags }}' vendor/bin/phpunit ${{ matrix.phpunit-flags }}
       - run: vendor/bin/phpstan analyse
         if: ${{ matrix.php == '7.4' }}
       - run: vendor/bin/php-cs-fixer fix --diff --dry-run
