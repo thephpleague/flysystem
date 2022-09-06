@@ -47,7 +47,7 @@ class StaticInMemoryFilesystemAdapterTest extends InMemoryFilesystemAdapterTest
 
     protected function tearDown(): void
     {
-        StaticInMemoryFilesystemAdapter::reset();
+        StaticInMemoryFilesystemAdapter::deleteAllFilesystems();
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter

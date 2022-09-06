@@ -15,7 +15,7 @@ class StaticInMemoryFilesystemAdapter implements FilesystemAdapter
     {
     }
 
-    public static function reset(): void
+    public static function deleteAllFilesystems(): void
     {
         self::$filesystems = [];
     }
