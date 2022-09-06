@@ -4,7 +4,7 @@
 
 ### Added
 
-- StaticInMemoryFilesystemAdapter contributed by @kbond
+- StaticInMemoryAdapterRegistry contributed by @kbond
 - ReadonlyFilesystemAdapter contributed by @kbond
 - PathPrefixedFilesystem contributed by @shyim
 
