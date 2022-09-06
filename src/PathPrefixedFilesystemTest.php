@@ -5,12 +5,12 @@ namespace League\Flysystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
-class PrefixFilesystemTest extends TestCase
+class PathPrefixedFilesystemTest extends TestCase
 {
     public function testPrefix(): void
     {
         $fs = new Filesystem(new InMemoryFilesystemAdapter());
-        $prefix = new PrefixFilesystem($fs, 'foo');
+        $prefix = new PathPrefixedFilesystem($fs, 'foo');
 
         $prefix->write('foo.txt', 'bla');
         static::assertTrue($prefix->fileExists('foo.txt'));
@@ -53,7 +53,7 @@ class PrefixFilesystemTest extends TestCase
     public function testWriteStream(): void
     {
         $fs = new Filesystem(new InMemoryFilesystemAdapter());
-        $prefix = new PrefixFilesystem($fs, 'foo');
+        $prefix = new PathPrefixedFilesystem($fs, 'foo');
         $tmpFile = sys_get_temp_dir() . '/' . uniqid('test', true);
         file_put_contents($tmpFile, 'test');
 
@@ -69,6 +69,6 @@ class PrefixFilesystemTest extends TestCase
     public function testEmptyPrefix(): void
     {
         static::expectException(\InvalidArgumentException::class);
-        new PrefixFilesystem(new Filesystem(new InMemoryFilesystemAdapter()), '');
+        new PathPrefixedFilesystem(new Filesystem(new InMemoryFilesystemAdapter()), '');
     }
 }
