@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.3.0 - UNRELEASED
+
+### Added
+
+- StaticInMemoryFilesystemAdapter contributed by @kbond
+- ReadonlyFilesystemAdapter contributed by @kbond
+- PathPrefixedFilesystem contributed by @shyim
+
 ## 3.2.1 - 2022-08-14
 
 ### Fixed
