@@ -1,8 +1,17 @@
 <?php
 
-namespace League\Flysystem;
+namespace League\Flysystem\ReadOnly;
 
+use League\Flysystem\Config;
+use League\Flysystem\FileAttributes;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UnableToWriteFile;
 use PHPUnit\Framework\TestCase;
 
 class ReadOnlyFilesystemAdapterTest extends TestCase
