@@ -5,7 +5,7 @@ namespace League\Flysystem;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
-class ReadonlyFilesystemAdapterTest extends TestCase
+class ReadOnlyFilesystemAdapterTest extends TestCase
 {
     /**
      * @test
@@ -15,7 +15,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->write('foo/bar.txt', 'content', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->assertTrue($adapter->fileExists('foo/bar.txt'));
         $this->assertTrue($adapter->directoryExists('foo'));
@@ -33,7 +33,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
      */
     public function cannot_write_stream(): void
     {
-        $adapter = new ReadonlyFilesystemAdapter($this->realAdapter());
+        $adapter = new ReadOnlyFilesystemAdapter($this->realAdapter());
 
         $this->expectException(UnableToWriteFile::class);
 
@@ -45,7 +45,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
      */
     public function cannot_write(): void
     {
-        $adapter = new ReadonlyFilesystemAdapter($this->realAdapter());
+        $adapter = new ReadOnlyFilesystemAdapter($this->realAdapter());
 
         $this->expectException(UnableToWriteFile::class);
 
@@ -60,7 +60,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->write('foo', 'content', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->expectException(UnableToDeleteFile::class);
 
@@ -75,7 +75,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->createDirectory('foo', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->expectException(UnableToDeleteDirectory::class);
 
@@ -87,7 +87,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
      */
     public function cannot_create_directory(): void
     {
-        $adapter = new ReadonlyFilesystemAdapter($this->realAdapter());
+        $adapter = new ReadOnlyFilesystemAdapter($this->realAdapter());
 
         $this->expectException(UnableToCreateDirectory::class);
 
@@ -102,7 +102,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->write('foo', 'content', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->expectException(UnableToSetVisibility::class);
 
@@ -117,7 +117,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->write('foo', 'content', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->expectException(UnableToMoveFile::class);
 
@@ -132,7 +132,7 @@ class ReadonlyFilesystemAdapterTest extends TestCase
         $adapter = $this->realAdapter();
         $adapter->write('foo', 'content', new Config());
 
-        $adapter = new ReadonlyFilesystemAdapter($adapter);
+        $adapter = new ReadOnlyFilesystemAdapter($adapter);
 
         $this->expectException(UnableToCopyFile::class);
 

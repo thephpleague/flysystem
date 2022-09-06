@@ -2,7 +2,7 @@
 
 namespace League\Flysystem;
 
-class ReadonlyFilesystemAdapter implements FilesystemAdapter
+class ReadOnlyFilesystemAdapter implements FilesystemAdapter
 {
     public function __construct(private FilesystemAdapter $inner)
     {
