@@ -28,8 +28,10 @@ use ZipArchive;
 
 use function fclose;
 use function fopen;
+use function is_file;
 use function rewind;
 use function stream_copy_to_stream;
+use function unlink;
 
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
@@ -173,7 +175,13 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
         $archive->deleteName($prefixedPath);
 
+        $filename = $archive->filename;
+
         $archive->close();
+
+        if ('' === $path) {
+            unlink($filename);
+        }
     }
 
     public function createDirectory(string $path, Config $config): void
@@ -189,6 +197,10 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     {
         $archive = $this->zipArchiveProvider->createZipArchive();
         $location = $this->pathPrefixer->prefixDirectoryPath($path);
+
+        if ('' === $path) {
+            return is_file($archive->filename);
+        }
 
         return $archive->statName($location) !== false;
     }
