@@ -1,0 +1,24 @@
+{
+    "name": "league/flysystem-path-prefixing",
+    "description": "Path prefixing filesystem adapter for Flysystem.",
+    "keywords": ["flysystem", "filesystem", "prefixing", "prefix"],
+    "type": "library",
+    "prefer-stable": true,
+    "autoload": {
+        "psr-4": {
+            "League\\Flysystem\\PathPrefixing\\": ""
+        }
+    },
+    "require": {
+        "php": "^8.0.2",
+        "ext-fileinfo": "*",
+        "league/flysystem": "^2.0.0 || ^3.0.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Frank de Jonge",
+            "email": "info@frankdejonge.nl"
+        }
+    ]
+}

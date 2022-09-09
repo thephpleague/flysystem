@@ -46,6 +46,16 @@
             "target": "git@github.com:thephpleague/flysystem-google-cloud-storage.git"
         },
         {
+            "name": "readonly",
+            "directory": "src/ReadOnly",
+            "target": "git@github.com:thephpleague/flysystem-read-only.git"
+        },
+        {
+            "name": "pathprefixing",
+            "directory": "src/PathPrefixing",
+            "target": "git@github.com:thephpleague/flysystem-path-prefixing.git"
+        },
+        {
             "name": "webdav",
             "directory": "src/WebDAV",
             "target": "git@github.com:thephpleague/flysystem-webdav.git"

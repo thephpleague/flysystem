@@ -27,6 +27,8 @@
 /src/AzureBlobStorage export-ignore
 /src/ZipArchive export-ignore
 /src/WebDAV export-ignore
+/src/PathPrefixing export-ignore
+/src/ReadOnly export-ignore
 /.gitattributes export-ignore
 /.gitignore export-ignore
 /bin/ export-ignore
