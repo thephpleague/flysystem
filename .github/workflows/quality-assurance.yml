@@ -39,6 +39,10 @@ jobs:
             composer-flags: '--prefer-lowest'
             experimental: false
             phpunit-flags: '--no-coverage'
+          - php: '8.2'
+            composer-flags: '--ignore-platform-reqs'
+            experimental: true
+            phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v2
       - run: docker-compose -f docker-compose.yml up -d
