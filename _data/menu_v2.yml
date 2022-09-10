@@ -17,6 +17,8 @@ Official Adapters:
     Local: '/docs/adapter/local/'
     FTP: '/docs/adapter/ftp/'
     InMemory: '/docs/adapter/in-memory/'
+    Read-Only: '/docs/adapter/read-only/'
+    Path Prefixing: '/docs/adapter/path-prefixing/'
     AWS S3: '/docs/adapter/aws-s3-v3/'
     AsyncAws S3: '/docs/adapter/async-aws-s3/'
     Azure Blob Storage: '/docs/adapter/azure-blob-storage/'
