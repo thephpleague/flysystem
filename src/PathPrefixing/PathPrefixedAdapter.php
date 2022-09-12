@@ -25,12 +25,9 @@ class PathPrefixedAdapter implements FilesystemAdapter
     protected FilesystemAdapter $adapter;
     private PathPrefixer $prefix;
 
-    /**
-     * @internal
-     */
     public function __construct(FilesystemAdapter $adapter, string $prefix)
     {
-        if (empty($prefix)) {
+        if ($prefix === '') {
             throw new \InvalidArgumentException('The prefix must not be empty.');
         }
 
