@@ -103,6 +103,7 @@ function ftp_chdir($connection, $directory)
         'file2.txt',
         'file3.txt',
         'file4.txt',
+        'mkdir.fail',
         'file5WithPadding.txt',
         'dir1',
         'file1.with-total-line.txt',
