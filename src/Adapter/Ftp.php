@@ -371,6 +371,7 @@ class Ftp extends AbstractFtpAdapter
      */
     protected function createActualDirectory($directory, $connection)
     {
+        /*
         // List the current directory
         $listing = ftp_nlist($connection, '.') ?: [];
 
@@ -385,6 +386,34 @@ class Ftp extends AbstractFtpAdapter
         }
 
         return (boolean) ftp_mkdir($connection, $directory);
+        */
+        if(!$this->ftpDirectoryExists($connection, $directory)){
+            return (boolean) ftp_mkdir($connection, $directory);
+        }
+
+        return true;
+    }
+    /**
+    * Check if directory exist using ftp_chdir, fix for hidden folders started with dot
+    *
+    * @param resource $connection
+    * @param string $directory
+    */
+    function ftpDirectoryExists($connection, $directory)
+    {
+        // Get the current working directory
+        $origin = ftp_pwd($connection);
+
+        // Attempt to change directory, suppress errors
+        if (@ftp_chdir($connection, $directory))
+        {
+            // If the directory exists, set back to origin
+            ftp_chdir($connection, $origin);
+            return true;
+        }
+
+        // Directory does not exist
+        return false;
     }
 
     /**
