@@ -1,6 +1,12 @@
 # Changelog
 
-## 3.3.0 - 09-09-2022
+## 3.4.0 - 2022-09-15
+
+### Added
+
+- UnableToListContents exception was added to uniformely represent content listing exceptions.
+
+## 3.3.0 - 2022-09-09
 
 ### Added
 
