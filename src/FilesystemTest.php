@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use Aws\S3\S3Client;
 use Generator;
 use IteratorAggregate;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
+
+use function iterator_to_array;
 
 /**
  * @group core
@@ -361,5 +365,23 @@ class FilesystemTest extends TestCase
         yield [function (FilesystemOperator $filesystem) {
             $filesystem->move('path.txt', '../path.txt');
         }];
+    }
+
+    /**
+     * @test
+     */
+    public function listing_exceptions_are_uniformely_represented(): void
+    {
+        $filesystem = new Filesystem(
+            new AwsS3V3Adapter(
+                new S3Client(['region' => 'us-east-1', 'version' => 'latest']),
+                'invalid-bucket'
+            )
+        );
+        $items = $filesystem->listContents('', true);
+
+        $this->expectException(UnableToListContents::class);
+
+        iterator_to_array($items); // force the yields
     }
 }

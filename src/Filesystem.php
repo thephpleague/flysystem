@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use Generator;
+use Throwable;
+
 class Filesystem implements FilesystemOperator
 {
     /**
@@ -100,8 +103,20 @@ class Filesystem implements FilesystemOperator
     public function listContents(string $location, bool $deep = self::LIST_SHALLOW): DirectoryListing
     {
         $path = $this->pathNormalizer->normalizePath($location);
+        $listing = $this->adapter->listContents($path, $deep);
 
-        return new DirectoryListing($this->adapter->listContents($path, $deep));
+        return new DirectoryListing($this->pipeListing($location, $deep, $listing));
+    }
+
+    private function pipeListing(string $location, bool $deep, iterable $listing): Generator
+    {
+        try {
+            foreach ($listing as $item) {
+                yield $item;
+            }
+        } catch (Throwable $exception) {
+            throw UnableToListContents::atLocation($location, $deep, $exception);
+        }
     }
 
     public function move(string $source, string $destination, array $config = []): void
