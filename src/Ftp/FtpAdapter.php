@@ -72,10 +72,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     private $isPureFtpdServer;
 
-    /**
-     * @var bool|null
-     */
-    private $useRawListOptions;
+    private ?bool $useRawListOptions = null;
 
     /**
      * @var null|string
@@ -101,6 +98,7 @@ class FtpAdapter implements FilesystemAdapter
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->useRawListOptions = $connectionOptions->useRawListOptions();
     }
 
     /**
@@ -156,9 +154,10 @@ class FtpAdapter implements FilesystemAdapter
         }
 
         $response = ftp_raw($this->connection, 'SYST');
+        $syst = implode(' ', $response);
 
-        return $this->useRawListOptions = stripos(implode(' ', $response), 'FileZilla') === false 
-            && stripos(implode(' ', $response), 'L8') === false;
+        return $this->useRawListOptions = stripos($syst, 'FileZilla') === false
+            && stripos($syst, 'L8') === false;
     }
 
     public function fileExists(string $path): bool
