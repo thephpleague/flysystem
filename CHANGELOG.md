@@ -5,7 +5,7 @@
 ### Added
 
 - Added FTP configuration option useRawListOptions (null|false|true).
-- UnableToListContents exception was added to uniformely represent content listing exceptions.
+- UnableToListContents exception was added to uniformly represent content listing exceptions.
 
 ### Fixed
 
