@@ -1,21 +1,16 @@
 # Changelog
 
-## 3.5.0 - 2022-0
+## 3.4.0 - 2022-09-15
 
 ### Added
 
 - Added FTP configuration option useRawListOptions (null|false|true).
+- UnableToListContents exception was added to uniformely represent content listing exceptions.
 
 ### Fixed
 
 - [FTP] Don't use raw list options for FileZilla FTP servers ([#1553](https://github.com/thephpleague/flysystem/pull/1553))
 - [WebDAV] Correct path formatting for move and copy operations ([#1552](https://github.com/thephpleague/flysystem/pull/1552))
-
-## 3.4.0 - 2022-09-15
-
-### Added
-
-- UnableToListContents exception was added to uniformely represent content listing exceptions.
 
 ## 3.3.0 - 2022-09-09
 
