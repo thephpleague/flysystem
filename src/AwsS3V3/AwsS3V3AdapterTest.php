@@ -20,6 +20,7 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\Visibility;
 use RuntimeException;
 
 use function getenv;
@@ -306,6 +307,54 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $permission = $response['Grants'][0]['Permission'];
 
         self::assertEquals('FULL_CONTROL', $permission);
+    }
+
+    /**
+     * @test
+     */
+    public function moving_a_file_with_visibility(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->write(
+                'source.txt',
+                'contents to be copied',
+                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+            );
+            $adapter->move('source.txt', 'destination.txt', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
+            $this->assertFalse(
+                $adapter->fileExists('source.txt'),
+                'After moving a file should no longer exist in the original location.'
+            );
+            $this->assertTrue(
+                $adapter->fileExists('destination.txt'),
+                'After moving, a file should be present at the new location.'
+            );
+            $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('destination.txt')->visibility());
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_with_visibility(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->write(
+                'source.txt',
+                'contents to be copied',
+                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+            );
+
+            $adapter->copy('source.txt', 'destination.txt', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
+
+            $this->assertTrue($adapter->fileExists('source.txt'));
+            $this->assertTrue($adapter->fileExists('destination.txt'));
+            $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('destination.txt')->visibility());
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+        });
     }
 
     protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
