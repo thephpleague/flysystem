@@ -1,5 +1,11 @@
 # Version 2.x Changelog
 
+## 2.5.0 - 2022-09-17
+
+### Added
+
+- [AWS S3] Allow specifying visibility on move and copy
+
 ## 2.4.5 - 2022-04-25
 
 - [SFTP v3] Fix retries (#1451)
