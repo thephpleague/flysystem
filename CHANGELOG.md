@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.0 - 2022-09-17
+
+### Added
+
+- [AWS S3] Allow specifying visibility on move and copy
+
 ## 3.4.0 - 2022-09-15
 
 ### Added
