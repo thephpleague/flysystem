@@ -27,6 +27,11 @@ class InMemoryFile
      */
     private $visibility;
 
+    /**
+     * @var array[]
+     */
+    private $extraMetadata;
+
     public function updateContents(string $contents): void
     {
         $this->contents = $contents;
@@ -74,5 +79,15 @@ class InMemoryFile
     public function visibility(): ?string
     {
         return $this->visibility;
+    }
+
+    public function extraMetadata(): array
+    {
+        return $this->extraMetadata;
+    }
+
+    public function setExtraMetadata(array $extraMetadata): void
+    {
+        $this->extraMetadata = $extraMetadata;
     }
 }

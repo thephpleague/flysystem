@@ -251,6 +251,11 @@ class SftpAdapter implements FilesystemAdapter
         return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
     }
 
+    public function extraMetadata(string $path): FileAttributes
+    {
+        return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_EXTRA_METADATA);
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $connection = $this->connectionProvider->provideConnection();
