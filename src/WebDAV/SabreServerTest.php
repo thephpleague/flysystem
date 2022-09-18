@@ -13,6 +13,6 @@ class SabreServerTest extends WebDAVAdapterTestCase
     {
         $client = new Client(['baseUri' => 'http://localhost:4040/']);
 
-        return new WebDAVAdapter($client);
+        return new WebDAVAdapter($client, 'directory/prefix');
     }
 }
