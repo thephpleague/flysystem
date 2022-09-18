@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use function file_put_contents;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -38,11 +37,11 @@ use function dirname;
 use function error_clear_last;
 use function error_get_last;
 use function file_exists;
+use function file_put_contents;
 use function is_dir;
 use function is_file;
 use function mkdir;
 use function rename;
-use function stream_copy_to_stream;
 
 class LocalFilesystemAdapter implements FilesystemAdapter
 {
@@ -253,11 +252,32 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     public function read(string $path): string
     {
         $location = $this->prefixer->prefixPath($path);
+
+        if ($this->writeFlags & LOCK_EX) {
+            error_clear_last();
+            $fileHandle = fopen($location, 'rb');
+
+            if ($fileHandle === false) {
+                throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
+            }
+
+            flock($fileHandle, LOCK_SH);
+        }
+
         error_clear_last();
         $contents = @file_get_contents($location);
 
         if ($contents === false) {
-            throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
+            $lastError = error_get_last();
+        }
+
+        if ($this->writeFlags & LOCK_EX && ($fileHandle ?? false) !== false) {
+            flock($fileHandle, LOCK_UN);
+            fclose($fileHandle);
+        }
+
+        if ($contents === false) {
+            throw UnableToReadFile::fromLocation($path, $lastError['message'] ?? '');
         }
 
         return $contents;
@@ -271,6 +291,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter
 
         if ($contents === false) {
             throw UnableToReadFile::fromLocation($path, error_get_last()['message'] ?? '');
+        }
+
+        if ($this->writeFlags & LOCK_EX && $contents !== false) {
+            flock($contents, LOCK_SH);
         }
 
         return $contents;
