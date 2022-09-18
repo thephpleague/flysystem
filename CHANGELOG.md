@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.1 - 2022-09-18
+
+### Fixed
+
+- [WebDAV] Strip directory prefix in `createDirectory` to prevent double prefixing in `directoryExists`.
+
 ## 3.5.0 - 2022-09-17
 
 ### Added
