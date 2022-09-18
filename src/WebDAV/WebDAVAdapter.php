@@ -209,7 +209,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $parts = explode('/', $this->prefixer->prefixDirectoryPath($path));
+        $parts = explode('/', ltrim($path, '/'));
         $directoryParts = [];
 
         foreach ($parts as $directory) {
@@ -219,7 +219,7 @@ class WebDAVAdapter implements FilesystemAdapter
 
             $directoryParts[] = $directory;
             $directoryPath = implode('/', $directoryParts);
-            $location = $this->encodePath($directoryPath);
+            $location = $this->encodePath($this->prefixer->prefixDirectoryPath($directoryPath));
 
             if ($this->directoryExists($directoryPath)) {
                 continue;
