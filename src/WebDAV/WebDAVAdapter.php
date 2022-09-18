@@ -221,7 +221,7 @@ class WebDAVAdapter implements FilesystemAdapter
             $directoryPath = implode('/', $directoryParts);
             $location = $this->encodePath($directoryPath);
 
-            if ($this->directoryExists($directoryPath)) {
+            if ($this->directoryExists($this->prefixer->stripDirectoryPrefix($directoryPath))) {
                 continue;
             }
 
