@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.2 - 2022-09-23
+
+### Fixed
+
+- [SFTP v2/v3] Fixed possible race-condition during directory creation leading to false failures.
+
 ## 3.5.1 - 2022-09-18
 
 ### Fixed
