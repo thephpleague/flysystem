@@ -133,7 +133,7 @@ class SftpAdapter implements FilesystemAdapter
             $visibility
         ) : $this->visibilityConverter->defaultForDirectories();
 
-        if ( ! $connection->mkdir($location, $mode, true)) {
+        if ( ! $connection->mkdir($location, $mode, true) && ! $connection->is_dir($location)) {
             throw UnableToCreateDirectory::atLocation($directory);
         }
     }
