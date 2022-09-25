@@ -1,3 +1,5 @@
+
+
 <?php
 
 declare(strict_types=1);
@@ -14,20 +16,27 @@ final class UnableToCreateDirectory extends RuntimeException implements Filesyst
      */
     private $location;
 
+    /**
+     * @var string
+     */
+    private $reason = '';
+
     public static function atLocation(string $dirname, string $errorMessage = '', ?Throwable $previous = null): UnableToCreateDirectory
     {
         $message = "Unable to create a directory at {$dirname}. {$errorMessage}";
         $e = new static(rtrim($message), 0, $previous);
         $e->location = $dirname;
+        $e->reason = $errorMessage;
 
         return $e;
     }
 
     public static function dueToFailure(string $dirname, Throwable $previous): UnableToCreateDirectory
     {
-        $message = "Unable to create a directory at {$dirname}";
-        $e = new static($message, 0, $previous);
+        $message = "Unable to create a directory at {$dirname}. {$previous->reason()}";
+        $e = new static(rtrim($message), 0, $previous);
         $e->location = $dirname;
+        $e->reason = $previous->reason();
 
         return $e;
     }
@@ -35,6 +44,11 @@ final class UnableToCreateDirectory extends RuntimeException implements Filesyst
     public function operation(): string
     {
         return FilesystemOperationFailed::OPERATION_CREATE_DIRECTORY;
+    }
+
+    public function reason(): string
+    {
+        return $this->reason;
     }
 
     public function location(): string
