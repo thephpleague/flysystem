@@ -156,7 +156,8 @@ class Filesystem implements FilesystemOperator
 
     public function publicUrl(string $path, array $config = []): string
     {
-        $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator();
+        $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator()
+            ?: throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
         $config = $this->config->extend($config);
 
         return $this->publicUrlGenerator->publicUrl($path, $config);
@@ -188,7 +189,7 @@ class Filesystem implements FilesystemOperator
         }
     }
 
-    private function resolvePublicUrlGenerator(): PublicUrlGenerator
+    private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
     {
         if ($publicUrl = $this->config->get('public_url')) {
             return new PrefixPublicUrlGenerator($publicUrl);
@@ -197,5 +198,7 @@ class Filesystem implements FilesystemOperator
         if ($this->adapter instanceof PublicUrlGenerator) {
             return $this->adapter;
         }
+
+        return null;
     }
 }

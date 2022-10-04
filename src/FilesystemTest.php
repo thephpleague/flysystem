@@ -403,6 +403,18 @@ class FilesystemTest extends TestCase
         $filesystem->publicUrl('path.txt');
     }
 
+    /**
+     * @test
+     */
+    public function not_configuring_a_public_url(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+
+        $this->expectException(UnableToGeneratePublicUrl::class);
+
+        $filesystem->publicUrl('path.txt');
+    }
+
 
 
     /**
