@@ -4,6 +4,8 @@ namespace League\Flysystem\PathPrefixing;
 
 use League\Flysystem\Config;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\UnableToGeneratePublicUrl;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
@@ -73,5 +75,35 @@ class PathPrefixedAdapterTest extends TestCase
     {
         static::expectException(\InvalidArgumentException::class);
         new PathPrefixedAdapter(new InMemoryFilesystemAdapter(), '');
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url(): void
+    {
+        $adapter = new class() extends InMemoryFilesystemAdapter implements PublicUrlGenerator {
+            public function publicUrl(string $path, Config $config): string
+            {
+                return 'memory://' . ltrim($path, '/');
+            }
+        };
+        $prefixedAdapter = new PathPrefixedAdapter($adapter, 'prefix');
+
+        $url = $prefixedAdapter->publicUrl('/path.txt', new Config());
+
+        self::assertEquals('memory://prefix/path.txt', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_generate_a_public_url(): void
+    {
+        $prefixedAdapter = new PathPrefixedAdapter(new InMemoryFilesystemAdapter(), 'prefix');
+
+        $this->expectException(UnableToGeneratePublicUrl::class);
+
+        $prefixedAdapter->publicUrl('/path.txt', new Config());
     }
 }

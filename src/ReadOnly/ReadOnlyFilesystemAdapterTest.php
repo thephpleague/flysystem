@@ -9,10 +9,14 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use PHPUnit\Framework\TestCase;
+
+use function ltrim;
 
 class ReadOnlyFilesystemAdapterTest extends TestCase
 {
@@ -146,6 +150,36 @@ class ReadOnlyFilesystemAdapterTest extends TestCase
         $this->expectException(UnableToCopyFile::class);
 
         $adapter->copy('foo', 'bar', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url(): void
+    {
+        $adapter = new class() extends InMemoryFilesystemAdapter implements PublicUrlGenerator {
+            public function publicUrl(string $path, Config $config): string
+            {
+                return 'memory://' . ltrim($path, '/');
+            }
+        };
+        $readOnlyAdapter = new ReadOnlyFilesystemAdapter($adapter);
+
+        $url = $readOnlyAdapter->publicUrl('/path.txt', new Config());
+
+        self::assertEquals('memory://path.txt', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_generate_a_public_url(): void
+    {
+        $adapter = new ReadOnlyFilesystemAdapter(new InMemoryFilesystemAdapter());
+
+        $this->expectException(UnableToGeneratePublicUrl::class);
+
+        $adapter->publicUrl('/path.txt', new Config());
     }
 
     private function realAdapter(): InMemoryFilesystemAdapter

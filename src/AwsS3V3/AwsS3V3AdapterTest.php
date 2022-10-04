@@ -23,8 +23,10 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use RuntimeException;
 
+use function file_get_contents;
 use function getenv;
 use function iterator_to_array;
+use function var_dump;
 
 /**
  * @group aws
@@ -257,6 +259,21 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToCheckFileExistence::class);
 
         $adapter->fileExists('something-that-does-exist.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url(): void
+    {
+        /** @var AwsS3V3Adapter $adapter */
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
+
+        $url = $adapter->publicUrl('some/path.txt', new Config());
+        $contents = file_get_contents($url);
+
+        self::assertEquals('public contents', $contents);
     }
 
     /**

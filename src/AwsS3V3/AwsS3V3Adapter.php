@@ -19,11 +19,13 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -32,7 +34,7 @@ use Throwable;
 
 use function trim;
 
-class AwsS3V3Adapter implements FilesystemAdapter
+class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator
 {
     /**
      * @var string[]
@@ -499,6 +501,17 @@ class AwsS3V3Adapter implements FilesystemAdapter
             return $this->client->execute($command)->get('Body');
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, '', $exception);
+        }
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        try {
+            return $this->client->getObjectUrl($this->bucket, $location);
+        } catch (Throwable $exception) {
+            throw UnableToGeneratePublicUrl::dueToError($path, $exception);
         }
     }
 }

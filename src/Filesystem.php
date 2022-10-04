@@ -5,24 +5,16 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use Generator;
+use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
 class Filesystem implements FilesystemOperator
 {
-    /**
-     * @var FilesystemAdapter
-     */
-    private $adapter;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var PathNormalizer
-     */
-    private $pathNormalizer;
+    private FilesystemAdapter $adapter;
+    private Config $config;
+    private PathNormalizer $pathNormalizer;
+    private PublicUrlGenerator $publicUrlGenerator;
 
     public function __construct(
         FilesystemAdapter $adapter,
@@ -162,6 +154,14 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
+    public function publicUrl(string $path, array $config = []): string
+    {
+        $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator();
+        $config = $this->config->extend($config);
+
+        return $this->publicUrlGenerator->publicUrl($path, $config);
+    }
+
     /**
      * @param mixed $contents
      */
@@ -185,6 +185,17 @@ class Filesystem implements FilesystemOperator
     {
         if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {
             rewind($resource);
+        }
+    }
+
+    private function resolvePublicUrlGenerator(): PublicUrlGenerator
+    {
+        if ($publicUrl = $this->config->get('public_url')) {
+            return new PrefixPublicUrlGenerator($publicUrl);
+        }
+
+        if ($this->adapter instanceof PublicUrlGenerator) {
+            return $this->adapter;
         }
     }
 }
