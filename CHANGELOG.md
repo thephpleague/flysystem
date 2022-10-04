@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.10 - 2022-10-04
+
+### Fixed
+
+- [FTP] Prevented type-error during network failure in `ftp_raw` calls.
+
 ## 1.1.9 - 2021-12-09
 
 - [Core] prevent `strlen` from receiving `NULL`.
