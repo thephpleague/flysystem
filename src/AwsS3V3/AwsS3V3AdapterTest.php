@@ -26,7 +26,6 @@ use RuntimeException;
 use function file_get_contents;
 use function getenv;
 use function iterator_to_array;
-use function var_dump;
 
 /**
  * @group aws
