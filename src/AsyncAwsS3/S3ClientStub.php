@@ -173,4 +173,9 @@ class S3ClientStub extends S3Client
         // @phpstan-ignore-next-line
         return $this->getStagedResult('GetObject') ?? $this->actualClient->getObject($input);
     }
+
+    public function getUrl(string $bucket, string $key): string
+    {
+        return $this->actualClient->getUrl($bucket, $key);
+    }
 }

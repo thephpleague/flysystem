@@ -497,6 +497,10 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator
 
     public function publicUrl(string $path, Config $config): string
     {
+        if ( ! $this->client instanceof SimpleS3Client) {
+            throw UnableToGeneratePublicUrl::noGeneratorConfigured($path, 'Client needs to be instance of SimpleS3Client');
+        }
+
         try {
             return $this->client->getUrl($this->bucket, $this->prefixer->prefixPath($path));
         } catch (Throwable $exception) {
