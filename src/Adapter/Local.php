@@ -179,6 +179,10 @@ class Local extends AbstractAdapter
         $location = $this->applyPathPrefix($path);
         $stream = fopen($location, 'rb');
 
+        if ($this->writeFlags & LOCK_EX && $stream !== false) {
+            flock($stream, LOCK_SH);
+        }
+
         return ['type' => 'file', 'path' => $path, 'stream' => $stream];
     }
 
@@ -220,7 +224,23 @@ class Local extends AbstractAdapter
     public function read($path)
     {
         $location = $this->applyPathPrefix($path);
+
+        if ($this->writeFlags & LOCK_EX) {
+            $fileHandle = fopen($location, 'rb');
+
+            if ($fileHandle === false) {
+                return false;
+            }
+
+            flock($fileHandle, LOCK_SH);
+        }
+
         $contents = @file_get_contents($location);
+
+        if ($this->writeFlags & LOCK_EX && ($fileHandle ?? false) !== false) {
+            flock($fileHandle, LOCK_UN);
+            fclose($fileHandle);
+        }
 
         if ($contents === false) {
             return false;
