@@ -11,7 +11,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 
-use function file_get_contents;
 use function getenv;
 
 /**
@@ -202,20 +201,5 @@ class AzureBlobStorageTest extends TestCase
     public function creating_a_directory(): void
     {
         $this->markTestSkipped('This adapter does not support creating directories');
-    }
-
-    /**
-     * @test
-     */
-    public function generating_a_public_url(): void
-    {
-        /** @var AzureBlobStorageAdapter $adapter */
-        $adapter = $this->adapter();
-        $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
-
-        $url = $adapter->publicUrl('some/path.txt', new Config());
-        $contents = file_get_contents($url);
-
-        self::assertEquals('public contents', $contents);
     }
 }

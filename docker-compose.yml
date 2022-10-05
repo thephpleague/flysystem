@@ -18,6 +18,7 @@ services:
       AUTH_TYPE: Digest
       USERNAME: alice
       PASSWORD: secret1234
+      ANONYMOUS_METHODS: 'GET,OPTIONS'
   sftp:
     container_name: sftp
     restart: always

@@ -20,6 +20,7 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use RuntimeException;
 use Sabre\DAV\Client;
 use Sabre\DAV\Xml\Property\ResourceType;
@@ -35,7 +36,7 @@ use function fclose;
 use function implode;
 use function ltrim;
 
-class WebDAVAdapter implements FilesystemAdapter
+class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
     public const ON_VISIBILITY_THROW_ERROR = 'throw';
     public const ON_VISIBILITY_IGNORE = 'ignore';
@@ -436,5 +437,10 @@ class WebDAVAdapter implements FilesystemAdapter
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::create($path, $section, $exception->getMessage(), $exception);
         }
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        return $this->client->getAbsoluteUrl($this->encodePath($this->prefixer->prefixPath($path)));
     }
 }

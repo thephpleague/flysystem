@@ -262,21 +262,6 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
-     */
-    public function generating_a_public_url(): void
-    {
-        /** @var AwsS3V3Adapter $adapter */
-        $adapter = $this->adapter();
-        $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
-
-        $url = $adapter->publicUrl('some/path.txt', new Config());
-        $contents = file_get_contents($url);
-
-        self::assertEquals('public contents', $contents);
-    }
-
-    /**
-     * @test
      * @dataProvider casesWhereHttpStreamingInfluencesSeekability
      */
     public function streaming_reads_are_not_seekable_and_non_streaming_are(bool $streaming, bool $seekable): void

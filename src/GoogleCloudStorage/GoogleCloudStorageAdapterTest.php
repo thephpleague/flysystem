@@ -163,19 +163,4 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
 
         $adapter->visibility('filename.txt');
     }
-
-    /**
-     * @test
-     */
-    public function generating_a_public_url(): void
-    {
-        /** @var GoogleCloudStorageAdapter $adapter */
-        $adapter = $this->adapter();
-        $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
-
-        $url = $adapter->publicUrl('some/path.txt', new Config());
-        $contents = file_get_contents($url);
-
-        self::assertEquals('public contents', $contents);
-    }
 }
