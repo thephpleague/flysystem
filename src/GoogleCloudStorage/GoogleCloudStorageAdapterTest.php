@@ -13,6 +13,8 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 
+use function file_get_contents;
+
 /**
  * @group gcs
  */
@@ -160,5 +162,20 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToRetrieveMetadata::class);
 
         $adapter->visibility('filename.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url(): void
+    {
+        /** @var GoogleCloudStorageAdapter $adapter */
+        $adapter = $this->adapter();
+        $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
+
+        $url = $adapter->publicUrl('some/path.txt', new Config());
+        $contents = file_get_contents($url);
+
+        self::assertEquals('public contents', $contents);
     }
 }

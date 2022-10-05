@@ -19,7 +19,7 @@ class Filesystem implements FilesystemOperator
     public function __construct(
         FilesystemAdapter $adapter,
         array $config = [],
-        PathNormalizer $pathNormalizer = null
+        PathNormalizer $pathNormalizer = null,
     ) {
         $this->adapter = $adapter;
         $this->config = new Config($config);
@@ -163,6 +163,19 @@ class Filesystem implements FilesystemOperator
         return $this->publicUrlGenerator->publicUrl($path, $config);
     }
 
+    private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
+    {
+        if ($publicUrl = $this->config->get('public_url')) {
+            return new PrefixPublicUrlGenerator($publicUrl);
+        }
+
+        if ($this->adapter instanceof PublicUrlGenerator) {
+            return $this->adapter;
+        }
+
+        return null;
+    }
+
     /**
      * @param mixed $contents
      */
@@ -187,18 +200,5 @@ class Filesystem implements FilesystemOperator
         if (ftell($resource) !== 0 && stream_get_meta_data($resource)['seekable']) {
             rewind($resource);
         }
-    }
-
-    private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
-    {
-        if ($publicUrl = $this->config->get('public_url')) {
-            return new PrefixPublicUrlGenerator($publicUrl);
-        }
-
-        if ($this->adapter instanceof PublicUrlGenerator) {
-            return $this->adapter;
-        }
-
-        return null;
     }
 }
