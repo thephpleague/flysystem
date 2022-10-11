@@ -308,7 +308,7 @@ class SftpAdapter implements FilesystemAdapter
         $permissions = $attributes['permissions'] & 0777;
         $lastModified = $attributes['mtime'] ?? null;
 
-        if ($attributes['type'] === NET_SFTP_TYPE_DIRECTORY) {
+        if (($attributes['type'] ?? null) === NET_SFTP_TYPE_DIRECTORY) {
             return new DirectoryAttributes(
                 ltrim($path, '/'),
                 $this->visibilityConverter->inverseForDirectory($permissions),
