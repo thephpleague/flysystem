@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.5.3 - 2022-09-23
+
+### Fixed
+
+- [SFTP] Account for missing "type" field in metadata result.
+
 ## 3.5.2 - 2022-09-23
 
 ### Fixed
