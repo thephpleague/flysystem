@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.6.0 - 2022-10-13
+
+### Added
+
+- [Filesystem] Added public url method
+- [AWS S3] Added public url method
+- [Async S3] Added public url method
+- [GCS] Added public url method
+- [WebDAV] Added public url method
+- [ReadOnly] Added public url method
+- [pathPrefixing] Added public url method
+
 ## 3.5.3 - 2022-09-23
 
 ### Fixed
