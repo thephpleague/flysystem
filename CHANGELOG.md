@@ -10,7 +10,7 @@
 - [GCS] Added public url method
 - [WebDAV] Added public url method
 - [ReadOnly] Added public url method
-- [pathPrefixing] Added public url method
+- [PathPrefixing] Added public url method
 
 ## 3.5.3 - 2022-09-23
 
