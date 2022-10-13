@@ -8,6 +8,7 @@ Flysystem:
 
 Usage:
     Filesystem API: '/docs/usage/filesystem-api/'
+    Public URLs: '/docs/usage/public-urls/'
     Directory Listings: '/docs/usage/directory-listings/'
     Exception Handling: '/docs/usage/exception-handling/'
     Visibility and Permissions: '/docs/visibility/'
