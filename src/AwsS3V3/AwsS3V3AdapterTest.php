@@ -23,6 +23,7 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use RuntimeException;
 
+use function file_get_contents;
 use function getenv;
 use function iterator_to_array;
 

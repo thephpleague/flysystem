@@ -5,29 +5,21 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use Generator;
+use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
 class Filesystem implements FilesystemOperator
 {
-    /**
-     * @var FilesystemAdapter
-     */
-    private $adapter;
-
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var PathNormalizer
-     */
-    private $pathNormalizer;
+    private FilesystemAdapter $adapter;
+    private Config $config;
+    private PathNormalizer $pathNormalizer;
+    private PublicUrlGenerator $publicUrlGenerator;
 
     public function __construct(
         FilesystemAdapter $adapter,
         array $config = [],
-        PathNormalizer $pathNormalizer = null
+        PathNormalizer $pathNormalizer = null,
     ) {
         $this->adapter = $adapter;
         $this->config = new Config($config);
@@ -160,6 +152,28 @@ class Filesystem implements FilesystemOperator
     public function visibility(string $path): string
     {
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
+    }
+
+    public function publicUrl(string $path, array $config = []): string
+    {
+        $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator()
+            ?: throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
+        $config = $this->config->extend($config);
+
+        return $this->publicUrlGenerator->publicUrl($path, $config);
+    }
+
+    private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
+    {
+        if ($publicUrl = $this->config->get('public_url')) {
+            return new PrefixPublicUrlGenerator($publicUrl);
+        }
+
+        if ($this->adapter instanceof PublicUrlGenerator) {
+            return $this->adapter;
+        }
+
+        return null;
     }
 
     /**

@@ -19,6 +19,7 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
@@ -31,7 +32,7 @@ use Throwable;
 
 use function stream_get_contents;
 
-class AzureBlobStorageAdapter implements FilesystemAdapter
+class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
     /** @var string[] */
     private const META_OPTIONS = [
@@ -334,5 +335,12 @@ class AzureBlobStorageAdapter implements FilesystemAdapter
             $properties->getLastModified()->getTimestamp(),
             $properties->getContentType()
         );
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        return $this->client->getBlobUrl($this->container, $location);
     }
 }

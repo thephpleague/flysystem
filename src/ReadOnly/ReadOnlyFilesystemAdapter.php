@@ -9,11 +9,13 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 
-class ReadOnlyFilesystemAdapter implements FilesystemAdapter
+class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
     public function __construct(private FilesystemAdapter $inner)
     {
@@ -102,5 +104,14 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter
     public function copy(string $source, string $destination, Config $config): void
     {
         throw new UnableToCopyFile("Unable to copy file from $source to $destination as this is a readonly adapter.");
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        if ( ! $this->inner instanceof PublicUrlGenerator) {
+            throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
+        }
+
+        return $this->inner->publicUrl($path, $config);
     }
 }

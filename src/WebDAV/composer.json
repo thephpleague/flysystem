@@ -9,7 +9,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "league/flysystem": "^3.0.0",
+        "league/flysystem": "^3.6.0",
         "sabre/dav": "^4.3.1"
     },
     "license": "MIT",

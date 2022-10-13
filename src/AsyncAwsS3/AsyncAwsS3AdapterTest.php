@@ -95,7 +95,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             self::markTestSkipped('No AWS credentials present for testing.');
         }
 
-        return static::$s3Client = new S3Client([
+        return static::$s3Client = new SimpleS3Client([
             'accessKeyId' => $key,
             'accessKeySecret' => $secret,
             'region' => $region,

@@ -13,14 +13,16 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
-class PathPrefixedAdapter implements FilesystemAdapter
+class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
     protected FilesystemAdapter $adapter;
     private PathPrefixer $prefix;
@@ -184,5 +186,14 @@ class PathPrefixedAdapter implements FilesystemAdapter
         } catch (Throwable $previous) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $previous);
         }
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        if ( ! $this->adapter instanceof PublicUrlGenerator) {
+            throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
+        }
+
+        return $this->adapter->publicUrl($this->prefix->prefixPath($path), $config);
     }
 }

@@ -8,6 +8,7 @@ use Aws\S3\S3Client;
 use Generator;
 use IteratorAggregate;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
@@ -383,5 +384,51 @@ class FilesystemTest extends TestCase
         $this->expectException(UnableToListContents::class);
 
         iterator_to_array($items); // force the yields
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_create_a_public_url(): void
+    {
+        $filesystem = new Filesystem(
+            new AwsS3V3Adapter(
+                new S3Client(['region' => 'us-east-1', 'version' => 'latest']),
+                'invalid-bucket'
+            )
+        );
+
+        $this->expectException(UnableToGeneratePublicUrl::class);
+
+        $filesystem->publicUrl('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function not_configuring_a_public_url(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+
+        $this->expectException(UnableToGeneratePublicUrl::class);
+
+        $filesystem->publicUrl('path.txt');
+    }
+
+
+
+    /**
+     * @test
+     */
+    public function creating_a_public_url(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            ['public_url' => 'https://example.org/public/'],
+        );
+
+        $url = $filesystem->publicUrl('path.txt');
+
+        self::assertEquals('https://example.org/public/path.txt', $url);
     }
 }

@@ -27,12 +27,13 @@ use AsyncAws\S3\Result\ObjectExistsWaiter;
 use AsyncAws\S3\Result\PutObjectAclOutput;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
+use AsyncAws\SimpleS3\SimpleS3Client;
 use Symfony\Component\HttpClient\MockHttpClient;
 
 /**
  * @codeCoverageIgnore
  */
-class S3ClientStub extends S3Client
+class S3ClientStub extends SimpleS3Client
 {
     /**
      * @var S3Client
@@ -172,5 +173,10 @@ class S3ClientStub extends S3Client
     {
         // @phpstan-ignore-next-line
         return $this->getStagedResult('GetObject') ?? $this->actualClient->getObject($input);
+    }
+
+    public function getUrl(string $bucket, string $key): string
+    {
+        return $this->actualClient->getUrl($bucket, $key);
     }
 }

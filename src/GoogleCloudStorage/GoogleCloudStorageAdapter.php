@@ -23,6 +23,7 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -34,7 +35,7 @@ use function rtrim;
 use function sprintf;
 use function strlen;
 
-class GoogleCloudStorageAdapter implements FilesystemAdapter
+class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
     /**
      * @var Bucket
@@ -73,6 +74,13 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
         $this->defaultVisibility = $defaultVisibility;
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        return 'https://storage.googleapis.com/' . $this->bucket->name() . '/' . ltrim($location, '/');
     }
 
     public function fileExists(string $path): bool

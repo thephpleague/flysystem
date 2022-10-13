@@ -23,10 +23,12 @@ use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
+use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -34,7 +36,7 @@ use Throwable;
 
 use function trim;
 
-class AsyncAwsS3Adapter implements FilesystemAdapter
+class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator
 {
     /**
      * @var string[]
@@ -490,6 +492,19 @@ class AsyncAwsS3Adapter implements FilesystemAdapter
             return $this->client->getObject($options)->getBody();
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
+        }
+    }
+
+    public function publicUrl(string $path, Config $config): string
+    {
+        if ( ! $this->client instanceof SimpleS3Client) {
+            throw UnableToGeneratePublicUrl::noGeneratorConfigured($path, 'Client needs to be instance of SimpleS3Client');
+        }
+
+        try {
+            return $this->client->getUrl($this->bucket, $this->prefixer->prefixPath($path));
+        } catch (Throwable $exception) {
+            throw UnableToGeneratePublicUrl::dueToError($path, $exception);
         }
     }
 }

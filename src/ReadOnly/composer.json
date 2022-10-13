@@ -11,8 +11,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "ext-fileinfo": "*",
-        "league/flysystem": "^2.0.0 || ^3.0.0"
+        "league/flysystem": "^3.6.0"
     },
     "license": "MIT",
     "authors": [
