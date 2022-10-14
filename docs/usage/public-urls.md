@@ -13,7 +13,10 @@ Filesystem configuration.
 ```php
 use League\Flysystem\Filesystem;
 
-$filesystem = new Filesystem($adapter, ['public_url' => 'https://example.org/assets/']);
+$filesystem = new Filesystem(
+    $adapter,
+    ['public_url' => 'https://example.org/assets/']
+);
 ```
 
 The following adapters have public URL generation capabilities:
