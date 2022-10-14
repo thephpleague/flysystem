@@ -420,7 +420,7 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
-    public function creating_a_public_url(): void
+    public function creating_a_public_url_with_single_prefix(): void
     {
         $filesystem = new Filesystem(
             new InMemoryFilesystemAdapter(),
@@ -430,5 +430,28 @@ class FilesystemTest extends TestCase
         $url = $filesystem->publicUrl('path.txt');
 
         self::assertEquals('https://example.org/public/path.txt', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function creating_a_public_url_with_multiple_prefixes(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            ['public_url' => ['https://cdn1', 'https://cdn2']],
+        );
+
+        $url1 = $filesystem->publicUrl('path1.txt');
+        $url2 = $filesystem->publicUrl('path2.txt');
+        $url3 = $filesystem->publicUrl('path1.txt'); // deterministic
+        $url4 = $filesystem->publicUrl('/some/path.txt');
+        $url5 = $filesystem->publicUrl('some/path.txt'); // deterministic even with leading "/"
+
+        self::assertEquals('https://cdn1/path1.txt', $url1);
+        self::assertEquals('https://cdn2/path2.txt', $url2);
+        self::assertEquals('https://cdn1/path1.txt', $url3);
+        self::assertEquals('https://cdn2/some/path.txt', $url4);
+        self::assertEquals('https://cdn2/some/path.txt', $url5);
     }
 }
