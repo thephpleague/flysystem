@@ -7,6 +7,7 @@ namespace League\Flysystem\GoogleCloudStorage;
 use Google\Cloud\Core\Exception\NotFoundException;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
@@ -19,6 +20,7 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
@@ -27,15 +29,20 @@ use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
+use LogicException;
 use Throwable;
 
 use function array_key_exists;
+use function base64_decode;
+use function bin2hex;
 use function count;
+use function in_array;
 use function rtrim;
 use function sprintf;
 use function strlen;
+use function var_dump;
 
-class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
+class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
 {
     /**
      * @var Bucket
@@ -61,6 +68,12 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
      * @var MimeTypeDetector
      */
     private $mimeTypeDetector;
+
+    private static $algoToInfoMap = [
+        'md5' => 'md5Hash',
+        'crc32c' => 'crc32c',
+        'etag' => 'etag',
+    ];
 
     public function __construct(
         Bucket $bucket,
@@ -370,5 +383,26 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         } catch (Throwable $previous) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $previous);
         }
+    }
+
+    public function checksum(string $path, Config $config): string
+    {
+        $algo = $config->get('checksum_algo', 'md5');
+
+        if ( ! in_array($algo, ['md5', 'crc32c', 'etag'])) {
+            throw new UnableToProvideChecksum("Checksum algo $algo is not supported", $path);
+        }
+
+        $header = static::$algoToInfoMap[$algo];
+        $prefixedPath = $this->prefixer->prefixPath($path);
+
+        try {
+            $checksum = $this->bucket->object($prefixedPath)->info()[$header]
+                ?? throw new LogicException("Header not present: $header");
+        } catch (Throwable $exception) {
+            throw new UnableToProvideChecksum($exception->getMessage(), $path);
+        }
+
+        return bin2hex(base64_decode($checksum));
     }
 }

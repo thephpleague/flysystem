@@ -32,6 +32,8 @@ use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
 
+use function base64_decode;
+use function bin2hex;
 use function stream_get_contents;
 
 class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
@@ -349,6 +351,12 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
 
     public function checksum(string $path, Config $config): string
     {
+        $algo = $config->get('checksum_algo', 'md5');
+
+        if ($algo !== 'md5') {
+            throw new UnableToProvideChecksum('Only md5 is supported', $path);
+        }
+
         try {
             $metadata = $this->fetchMetadata($this->prefixer->prefixPath($path));
             $checksum = $metadata->extraMetadata()['md5_checksum'] ?? '__not_specified';
@@ -360,6 +368,6 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
             throw new UnableToProvideChecksum('No checksum provided in metadata', $path);
         }
 
-        return $checksum;
+        return bin2hex(base64_decode($checksum));
     }
 }

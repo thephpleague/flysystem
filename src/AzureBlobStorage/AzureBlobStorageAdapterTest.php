@@ -37,22 +37,6 @@ class AzureBlobStorageAdapterTest extends TestCase
     /**
      * @test
      */
-    public function get_checksum(): void
-    {
-        $adapter = $this->adapter();
-
-        if ( ! $adapter instanceof ChecksumProvider) {
-            $this->markTestSkipped('Adapter does not supply providing checksums');
-        }
-
-        $adapter->write('path.txt', 'foobar', new Config());
-
-        $this->assertSame('OFj2IjCsPJFfMAxmQxLGPw==', $adapter->checksum('path.txt', new Config()));
-    }
-
-    /**
-     * @test
-     */
     public function overwriting_a_file(): void
     {
         $this->runScenario(
