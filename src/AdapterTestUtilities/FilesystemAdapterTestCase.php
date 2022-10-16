@@ -11,7 +11,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
-use League\Flysystem\UnableToProduceChecksum;
+use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -822,7 +822,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
             $this->markTestSkipped('Adapter does not supply providing checksums');
         }
 
-        $this->expectException(UnableToProduceChecksum::class);
+        $this->expectException(UnableToProvideChecksum::class);
 
         $adapter->checksum('path.txt', new Config());
     }
@@ -840,7 +840,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
         $adapter->createDirectory('dir', new Config());
 
-        $this->expectException(UnableToProduceChecksum::class);
+        $this->expectException(UnableToProvideChecksum::class);
 
         $adapter->checksum('dir', new Config());
     }

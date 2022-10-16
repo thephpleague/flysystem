@@ -484,7 +484,7 @@ class FilesystemTest extends TestCase
     {
         $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
 
-        $this->expectException(UnableToProduceChecksum::class);
+        $this->expectException(UnableToProvideChecksum::class);
 
         $filesystem->checksum('path.txt');
     }
@@ -497,7 +497,7 @@ class FilesystemTest extends TestCase
         $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
         $filesystem->createDirectory('foo');
 
-        $this->expectException(UnableToProduceChecksum::class);
+        $this->expectException(UnableToProvideChecksum::class);
 
         $filesystem->checksum('foo');
     }

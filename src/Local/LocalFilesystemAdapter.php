@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\Local;
 
 use League\Flysystem\ChecksumProvider;
-use League\Flysystem\UnableToProduceChecksum;
+use League\Flysystem\UnableToProvideChecksum;
 use function hash_file;
 use function is_readable;
 use function md5_file;
@@ -452,7 +452,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $checksum = @hash_file($algo, $location);
 
         if ($checksum === false) {
-            throw new UnableToProduceChecksum(error_get_last()['message'], $path);
+            throw new UnableToProvideChecksum(error_get_last()['message'], $path);
         }
 
         return $checksum;

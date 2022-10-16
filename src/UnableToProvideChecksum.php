@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-final class UnableToProduceChecksum extends RuntimeException implements FilesystemException
+final class UnableToProvideChecksum extends RuntimeException implements FilesystemException
 {
     public function __construct(string $reason, string $path, ?Throwable $previous = null)
     {

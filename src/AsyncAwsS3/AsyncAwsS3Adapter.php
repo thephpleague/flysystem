@@ -25,7 +25,7 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToGeneratePublicUrl;
-use League\Flysystem\UnableToProduceChecksum;
+use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -515,11 +515,11 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         try {
             $metadata = $this->fetchFileMetadata($path, 'checksum')->extraMetadata();
         } catch (UnableToRetrieveMetadata $exception) {
-            throw new UnableToProduceChecksum($exception->reason(), $path, $exception);
+            throw new UnableToProvideChecksum($exception->reason(), $path, $exception);
         }
 
         if ( ! isset($metadata['ETag'])) {
-            throw new UnableToProduceChecksum('ETag header not available.', $path);
+            throw new UnableToProvideChecksum('ETag header not available.', $path);
         }
 
         return trim($metadata['ETag'], '"');
