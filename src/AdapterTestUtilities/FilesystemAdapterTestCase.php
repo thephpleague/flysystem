@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace League\Flysystem\AdapterTestUtilities;
 
 use Generator;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToGetChecksum;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -791,5 +793,55 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $contents = file_get_contents($url);
 
         self::assertEquals('public contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function get_checksum(): void
+    {
+        $adapter = $this->adapter();
+
+        if ( ! $adapter instanceof ChecksumProvider) {
+            $this->markTestSkipped('Adapter does not supply providing checksums');
+        }
+
+        $adapter->write('path.txt', 'foobar', new Config());
+
+        $this->assertSame('3858f62230ac3c915f300c664312c63f', $adapter->checksum('path.txt', new Config()));
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_get_checksum_for_non_existent_file(): void
+    {
+        $adapter = $this->adapter();
+
+        if ( ! $adapter instanceof ChecksumProvider) {
+            $this->markTestSkipped('Adapter does not supply providing checksums');
+        }
+
+        $this->expectException(UnableToGetChecksum::class);
+
+        $adapter->checksum('path.txt', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_get_checksum_for_directory(): void
+    {
+        $adapter = $this->adapter();
+
+        if ( ! $adapter instanceof ChecksumProvider) {
+            $this->markTestSkipped('Adapter does not supply providing checksums');
+        }
+
+        $adapter->createDirectory('dir', new Config());
+
+        $this->expectException(UnableToGetChecksum::class);
+
+        $adapter->checksum('dir', new Config());
     }
 }

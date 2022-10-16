@@ -9,6 +9,8 @@ use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
+use function md5;
+
 class Filesystem implements FilesystemOperator
 {
     private FilesystemAdapter $adapter;
@@ -161,6 +163,19 @@ class Filesystem implements FilesystemOperator
         $config = $this->config->extend($config);
 
         return $this->publicUrlGenerator->publicUrl($path, $config);
+    }
+
+    public function checksum(string $path, array $config = []): string
+    {
+        if ($this->adapter instanceof ChecksumProvider) {
+            return $this->adapter->checksum($path, $this->config->extend($config));
+        }
+
+        try {
+            return md5($this->read($path));
+        } catch (FilesystemException $exception) {
+            throw new UnableToGetChecksum($exception->getMessage(), $path, $exception);
+        }
     }
 
     private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
