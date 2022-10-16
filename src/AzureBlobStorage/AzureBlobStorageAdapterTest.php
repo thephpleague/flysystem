@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\AzureBlobStorage;
 
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase as TestCase;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToSetVisibility;
@@ -16,7 +17,7 @@ use function getenv;
 /**
  * @group azure
  */
-class AzureBlobStorageTest extends TestCase
+class AzureBlobStorageAdapterTest extends TestCase
 {
     const CONTAINER_NAME = 'flysystem';
 
@@ -31,6 +32,22 @@ class AzureBlobStorageTest extends TestCase
         $client = BlobRestProxy::createBlobService($dsn);
 
         return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME, 'ci');
+    }
+
+    /**
+     * @test
+     */
+    public function get_checksum(): void
+    {
+        $adapter = $this->adapter();
+
+        if ( ! $adapter instanceof ChecksumProvider) {
+            $this->markTestSkipped('Adapter does not supply providing checksums');
+        }
+
+        $adapter->write('path.txt', 'foobar', new Config());
+
+        $this->assertSame('OFj2IjCsPJFfMAxmQxLGPw==', $adapter->checksum('path.txt', new Config()));
     }
 
     /**
