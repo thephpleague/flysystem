@@ -14,6 +14,7 @@ use AsyncAws\S3\S3Client;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use Exception;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
+use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
@@ -21,6 +22,7 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\Visibility;
 
@@ -100,6 +102,21 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             'accessKeySecret' => $secret,
             'region' => $region,
         ]);
+    }
+
+
+
+    /**
+     * @test
+     */
+    public function specifying_a_custom_checksum_algo_is_not_supported(): void
+    {
+        /** @var AwsS3V3Adapter $adapter */
+        $adapter = $this->adapter();
+
+        $this->expectException(UnableToProvideChecksum::class);
+
+        $adapter->checksum('something', new Config(['checksum_algo' => 'md5']));
     }
 
     /**

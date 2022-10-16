@@ -512,6 +512,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function checksum(string $path, Config $config): string
     {
+        $algo = $config->get('checksum_algo', 'internal');
+
+        if ($algo !== 'internal') {
+            throw new UnableToProvideChecksum('Custom checksum algorithm is not supported', $path);
+        }
+
         try {
             $metadata = $this->fetchFileMetadata($path, 'checksum')->extraMetadata();
         } catch (UnableToRetrieveMetadata $exception) {
