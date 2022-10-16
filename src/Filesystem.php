@@ -9,6 +9,10 @@ use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
+use function feof;
+use function hash_final;
+use function hash_init;
+use function hash_update_stream;
 use function md5;
 
 class Filesystem implements FilesystemOperator
@@ -167,12 +171,19 @@ class Filesystem implements FilesystemOperator
 
     public function checksum(string $path, array $config = []): string
     {
+        $config = $this->config->extend($config);
+
         if ($this->adapter instanceof ChecksumProvider) {
-            return $this->adapter->checksum($path, $this->config->extend($config));
+            return $this->adapter->checksum($path, $config);
         }
 
         try {
-            return md5($this->read($path));
+            $algo = (string) $config->get('checksum_algo', 'md5');
+            $context = hash_init($algo);
+            $stream = $this->readStream($path);
+            hash_update_stream($context, $stream);
+
+            return hash_final($context);
         } catch (FilesystemException $exception) {
             throw new UnableToGetChecksum($exception->getMessage(), $path, $exception);
         }

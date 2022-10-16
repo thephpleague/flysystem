@@ -415,8 +415,6 @@ class FilesystemTest extends TestCase
         $filesystem->publicUrl('path.txt');
     }
 
-
-
     /**
      * @test
      */
