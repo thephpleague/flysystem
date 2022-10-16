@@ -2,9 +2,6 @@
 
 namespace League\Flysystem;
 
-/**
- * @author Kevin Bond <kevinbond@gmail.com>
- */
 interface ChecksumProvider
 {
     /**
