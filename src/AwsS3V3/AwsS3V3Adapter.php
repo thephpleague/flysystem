@@ -519,6 +519,12 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
     public function checksum(string $path, Config $config): string
     {
+        $algo = $config->get('checksum_algo', 'internal');
+
+        if ($algo !== 'internal') {
+            throw new UnableToProvideChecksum('Custom checksum algorithm is not supported', $path);
+        }
+
         try {
             $metadata = $this->fetchFileMetadata($path, 'checksum')->extraMetadata();
         } catch (UnableToRetrieveMetadata $exception) {
