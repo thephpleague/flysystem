@@ -185,7 +185,7 @@ class Filesystem implements FilesystemOperator
 
             return hash_final($context);
         } catch (FilesystemException $exception) {
-            throw new UnableToGetChecksum($exception->getMessage(), $path, $exception);
+            throw new UnableToProduceChecksum($exception->getMessage(), $path, $exception);
         }
     }
 
