@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\FilesystemException;
+use League\Flysystem\UnableToGetChecksum;
 use Throwable;
+use function is_readable;
+use function md5_file;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -45,7 +49,7 @@ use function is_file;
 use function mkdir;
 use function rename;
 
-class LocalFilesystemAdapter implements FilesystemAdapter
+class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
 {
     /**
      * @var int
@@ -439,6 +443,26 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         }
 
         throw UnableToRetrieveMetadata::fileSize($path, error_get_last()['message'] ?? '');
+    }
+
+    public function checksum(string $path, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+        error_clear_last();
+
+        if ( ! file_exists($location)) {
+            throw new UnableToGetChecksum('Does not exist.', $path);
+        }
+
+        if ( ! is_file($location)) {
+            throw new UnableToGetChecksum('Not a file.', $path);
+        }
+
+        if ( ! is_readable($location)) {
+            throw new UnableToGetChecksum('Not readable.', $path);
+        }
+
+        return md5_file($location);
     }
 
     private function listDirectory(string $location): Generator

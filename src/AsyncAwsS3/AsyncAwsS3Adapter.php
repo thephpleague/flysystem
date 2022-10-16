@@ -13,6 +13,7 @@ use AsyncAws\S3\ValueObject\CommonPrefix;
 use AsyncAws\S3\ValueObject\ObjectIdentifier;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use Generator;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
@@ -24,6 +25,7 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToGeneratePublicUrl;
+use League\Flysystem\UnableToGetChecksum;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -36,7 +38,7 @@ use Throwable;
 
 use function trim;
 
-class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator
+class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
 {
     /**
      * @var string[]
@@ -506,5 +508,20 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator
         } catch (Throwable $exception) {
             throw UnableToGeneratePublicUrl::dueToError($path, $exception);
         }
+    }
+
+    public function checksum(string $path, Config $config): string
+    {
+        try {
+            $metadata = $this->fetchFileMetadata($path, 'checksum')->extraMetadata();
+        } catch (UnableToRetrieveMetadata $exception) {
+            throw new UnableToGetChecksum($exception->reason(), $path, $exception);
+        }
+
+        if ( ! isset($metadata['ETag'])) {
+            throw new UnableToGetChecksum('ETag header not available.', $path);
+        }
+
+        return trim($metadata['ETag'], '"');
     }
 }

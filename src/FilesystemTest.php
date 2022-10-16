@@ -431,4 +431,51 @@ class FilesystemTest extends TestCase
 
         self::assertEquals('https://example.org/public/path.txt', $url);
     }
+
+    /**
+     * @test
+     */
+    public function get_checksum_for_adapter_that_supports(): void
+    {
+        $this->filesystem->write('path.txt', 'foobar');
+
+        $this->assertSame('3858f62230ac3c915f300c664312c63f', $this->filesystem->checksum('path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function get_checksum_for_adapter_that_does_not_support(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+
+        $filesystem->write('path.txt', 'foobar');
+
+        $this->assertSame('3858f62230ac3c915f300c664312c63f', $filesystem->checksum('path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function unable_to_get_checksum_for_for_file_that_does_not_exist(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+
+        $this->expectException(UnableToGetChecksum::class);
+
+        $filesystem->checksum('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function unable_to_get_checksum_directory(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+        $filesystem->createDirectory('foo');
+
+        $this->expectException(UnableToGetChecksum::class);
+
+        $filesystem->checksum('foo');
+    }
 }
