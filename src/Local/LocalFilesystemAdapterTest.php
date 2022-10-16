@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\Flysystem\ChecksumProvider;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use const LOCK_EX;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
@@ -683,6 +684,20 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         } else {
             self::assertFileNotExists($filename, $message);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function get_checksum_with_specified_algo(): void
+    {
+        /** @var LocalFilesystemAdapter $adapter */
+        $adapter = $this->adapter();
+
+        $adapter->write('path.txt', 'foobar', new Config());
+        $checksum = $adapter->checksum('path.txt', new Config(['checksum_algo' => 'crc32c']));
+
+        $this->assertSame('0d5f5c7f', $checksum);
     }
 
     public static function assertDirectoryDoesNotExist(string $directory, string $message = ''): void

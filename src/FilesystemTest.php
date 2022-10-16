@@ -455,6 +455,31 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function get_sha256_checksum_for_adapter_that_does_not_support(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter(), ['checksum_algo' => 'sha256']);
+
+        $filesystem->write('path.txt', 'foobar');
+
+        $this->assertSame('c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2', $filesystem->checksum('path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function get_sha256_checksum_for_adapter_that_does_not_support_while_crc32c_is_the_default(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter(), ['checksum_algo' => 'crc32c']);
+
+        $filesystem->write('path.txt', 'foobar');
+        $checksum = $filesystem->checksum('path.txt', ['checksum_algo' => 'sha256']);
+
+        $this->assertSame('c3ab8ff13720e8ad9047dd39466b3c8974e592c2fa383d4a3960714caef0c4f2', $checksum);
+    }
+
+    /**
+     * @test
+     */
     public function unable_to_get_checksum_for_for_file_that_does_not_exist(): void
     {
         $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
