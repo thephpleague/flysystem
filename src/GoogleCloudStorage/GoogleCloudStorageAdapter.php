@@ -31,7 +31,6 @@ use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use LogicException;
 use Throwable;
-
 use function array_key_exists;
 use function base64_decode;
 use function bin2hex;
@@ -40,7 +39,6 @@ use function in_array;
 use function rtrim;
 use function sprintf;
 use function strlen;
-use function var_dump;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
 {

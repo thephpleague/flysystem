@@ -2,6 +2,8 @@
 
 namespace League\Flysystem\ReadOnly;
 
+use League\Flysystem\CalculateChecksumFromStream;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
@@ -15,20 +17,22 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 
-class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
+class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
 {
-    public function __construct(private FilesystemAdapter $inner)
+    use CalculateChecksumFromStream;
+
+    public function __construct(private FilesystemAdapter $adapter)
     {
     }
 
     public function fileExists(string $path): bool
     {
-        return $this->inner->fileExists($path);
+        return $this->adapter->fileExists($path);
     }
 
     public function directoryExists(string $path): bool
     {
-        return $this->inner->directoryExists($path);
+        return $this->adapter->directoryExists($path);
     }
 
     public function write(string $path, string $contents, Config $config): void
@@ -43,12 +47,12 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
 
     public function read(string $path): string
     {
-        return $this->inner->read($path);
+        return $this->adapter->read($path);
     }
 
     public function readStream(string $path)
     {
-        return $this->inner->readStream($path);
+        return $this->adapter->readStream($path);
     }
 
     public function delete(string $path): void
@@ -73,27 +77,27 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
 
     public function visibility(string $path): FileAttributes
     {
-        return $this->inner->visibility($path);
+        return $this->adapter->visibility($path);
     }
 
     public function mimeType(string $path): FileAttributes
     {
-        return $this->inner->mimeType($path);
+        return $this->adapter->mimeType($path);
     }
 
     public function lastModified(string $path): FileAttributes
     {
-        return $this->inner->lastModified($path);
+        return $this->adapter->lastModified($path);
     }
 
     public function fileSize(string $path): FileAttributes
     {
-        return $this->inner->fileSize($path);
+        return $this->adapter->fileSize($path);
     }
 
     public function listContents(string $path, bool $deep): iterable
     {
-        return $this->inner->listContents($path, $deep);
+        return $this->adapter->listContents($path, $deep);
     }
 
     public function move(string $source, string $destination, Config $config): void
@@ -108,10 +112,19 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
 
     public function publicUrl(string $path, Config $config): string
     {
-        if ( ! $this->inner instanceof PublicUrlGenerator) {
+        if ( ! $this->adapter instanceof PublicUrlGenerator) {
             throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
         }
 
-        return $this->inner->publicUrl($path, $config);
+        return $this->adapter->publicUrl($path, $config);
+    }
+
+    public function checksum(string $path, Config $config): string
+    {
+        if ($this->adapter instanceof ChecksumProvider) {
+            return $this->adapter->checksum($path, $config);
+        }
+
+        return $this->calculateChecksumFromStream($path, $config);
     }
 }

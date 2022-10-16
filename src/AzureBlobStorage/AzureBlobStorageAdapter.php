@@ -31,7 +31,6 @@ use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
-
 use function base64_decode;
 use function bin2hex;
 use function stream_get_contents;

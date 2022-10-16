@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace League\Flysystem\AzureBlobStorage;
 
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase as TestCase;
-use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-
 use function getenv;
 
 /**

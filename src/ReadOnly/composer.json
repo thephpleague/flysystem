@@ -11,7 +11,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "league/flysystem": "^3.6.0"
+        "league/flysystem": "^3.7.0"
     },
     "license": "MIT",
     "authors": [

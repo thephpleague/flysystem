@@ -3,6 +3,8 @@
 namespace League\Flysystem\PathPrefixing;
 
 use Generator;
+use League\Flysystem\CalculateChecksumFromStream;
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
@@ -22,8 +24,10 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
 
-class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator
+class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
 {
+    use CalculateChecksumFromStream;
+
     protected FilesystemAdapter $adapter;
     private PathPrefixer $prefix;
 
@@ -195,5 +199,14 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator
         }
 
         return $this->adapter->publicUrl($this->prefix->prefixPath($path), $config);
+    }
+
+    public function checksum(string $path, Config $config): string
+    {
+        if ($this->adapter instanceof ChecksumProvider) {
+            return $this->adapter->checksum($path, $config);
+        }
+
+        return $this->calculateChecksumFromStream($path, $config);
     }
 }
