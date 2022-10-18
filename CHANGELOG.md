@@ -4,6 +4,7 @@
 
 - [Filesystem] Added ability to inject custom public URL generator into a filesystem.
 - [MountManager] added `checksum` and `publicUrl` methods
+- [ZipArchive] Do not prefix directories when creating/reading an archive
 
 ## 3.8.0 - 2022-10-18
 
