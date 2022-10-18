@@ -13,6 +13,7 @@ use AsyncAws\S3\ValueObject\CommonPrefix;
 use AsyncAws\S3\ValueObject\ObjectIdentifier;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use Generator;
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -511,10 +512,10 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function checksum(string $path, Config $config): string
     {
-        $algo = $config->get('checksum_algo', 'internal');
+        $algo = $config->get('checksum_algo', 'etag');
 
-        if ($algo !== 'internal') {
-            throw new UnableToProvideChecksum('Custom checksum algorithm is not supported', $path);
+        if ($algo !== 'etag') {
+            throw new ChecksumAlgoIsNotSupported();
         }
 
         try {

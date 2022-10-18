@@ -169,11 +169,15 @@ class Filesystem implements FilesystemOperator
     {
         $config = $this->config->extend($config);
 
-        if ($this->adapter instanceof ChecksumProvider) {
-            return $this->adapter->checksum($path, $config);
+        if ( ! $this->adapter instanceof ChecksumProvider) {
+            return $this->calculateChecksumFromStream($path, $config);
         }
 
-        return $this->calculateChecksumFromStream($path, $config);
+        try {
+            return $this->adapter->checksum($path, $config);
+        } catch (ChecksumAlgoIsNotSupported) {
+            return $this->calculateChecksumFromStream($path, $config);
+        }
     }
 
     private function resolvePublicUrlGenerator(): ?PublicUrlGenerator

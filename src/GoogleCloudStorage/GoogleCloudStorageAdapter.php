@@ -7,6 +7,7 @@ namespace League\Flysystem\GoogleCloudStorage;
 use Google\Cloud\Core\Exception\NotFoundException;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -386,12 +387,12 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function checksum(string $path, Config $config): string
     {
         $algo = $config->get('checksum_algo', 'md5');
+        $header = static::$algoToInfoMap[$algo] ?? null;
 
-        if ( ! in_array($algo, ['md5', 'crc32c', 'etag'])) {
-            throw new UnableToProvideChecksum("Checksum algo $algo is not supported", $path);
+        if ($header === null) {
+            throw new ChecksumAlgoIsNotSupported();
         }
 
-        $header = static::$algoToInfoMap[$algo];
         $prefixedPath = $this->prefixer->prefixPath($path);
 
         try {

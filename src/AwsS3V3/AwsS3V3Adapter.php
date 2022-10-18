@@ -7,6 +7,7 @@ namespace League\Flysystem\AwsS3V3;
 use Aws\Api\DateTimeResult;
 use Aws\S3\S3ClientInterface;
 use Generator;
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -518,10 +519,10 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
     public function checksum(string $path, Config $config): string
     {
-        $algo = $config->get('checksum_algo', 'internal');
+        $algo = $config->get('checksum_algo', 'etag');
 
-        if ($algo !== 'internal') {
-            throw new UnableToProvideChecksum('Custom checksum algorithm is not supported', $path);
+        if ($algo !== 'etag') {
+            throw new ChecksumAlgoIsNotSupported();
         }
 
         try {

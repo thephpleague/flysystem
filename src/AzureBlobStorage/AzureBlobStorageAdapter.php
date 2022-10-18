@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AzureBlobStorage;
 
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -353,7 +354,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         $algo = $config->get('checksum_algo', 'md5');
 
         if ($algo !== 'md5') {
-            throw new UnableToProvideChecksum('Only md5 is supported', $path);
+            throw new ChecksumAlgoIsNotSupported();
         }
 
         try {
