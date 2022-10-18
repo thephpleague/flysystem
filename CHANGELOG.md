@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.9.0 - UNRELEASED
+
+- [Filesystem] Added ability to inject custom public URL generator into a filesystem.
+- [MountManager] added `checksum` and `publicUrl` methods
+
 ## 3.8.0 - 2022-10-18
 
 ### Added
