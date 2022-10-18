@@ -16,16 +16,18 @@ class Filesystem implements FilesystemOperator
     private FilesystemAdapter $adapter;
     private Config $config;
     private PathNormalizer $pathNormalizer;
-    private PublicUrlGenerator $publicUrlGenerator;
+    private ?PublicUrlGenerator $publicUrlGenerator;
 
     public function __construct(
         FilesystemAdapter $adapter,
         array $config = [],
         PathNormalizer $pathNormalizer = null,
+        PublicUrlGenerator $publicUrlGenerator = null,
     ) {
         $this->adapter = $adapter;
         $this->config = new Config($config);
         $this->pathNormalizer = $pathNormalizer ?: new WhitespacePathNormalizer();
+        $this->publicUrlGenerator = $publicUrlGenerator;
     }
 
     public function fileExists(string $location): bool
@@ -183,7 +185,7 @@ class Filesystem implements FilesystemOperator
     private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
     {
         if ($publicUrl = $this->config->get('public_url')) {
-            return $publicUrl instanceof PublicUrlGenerator ? $publicUrl : new PrefixPublicUrlGenerator($publicUrl);
+            return new PrefixPublicUrlGenerator($publicUrl);
         }
 
         if ($this->adapter instanceof PublicUrlGenerator) {

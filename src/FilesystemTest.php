@@ -444,12 +444,13 @@ class FilesystemTest extends TestCase
     {
         $filesystem = new Filesystem(
             new InMemoryFilesystemAdapter(),
-            ['public_url' => new class() implements PublicUrlGenerator {
+            [],
+            publicUrlGenerator: new class() implements PublicUrlGenerator {
                 public function publicUrl(string $path, Config $config): string
                 {
                     return 'custom/' . $path;
                 }
-            }],
+            },
         );
 
         self::assertSame('custom/file.txt', $filesystem->publicUrl('file.txt'));
