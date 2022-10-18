@@ -497,4 +497,31 @@ class MountManagerTest extends TestCase
 
         $this->mountManager->read('unknown://location.txt');
     }
+
+    /**
+     * @test
+     */
+    public function generate_public_url(): void
+    {
+        $mountManager = new MountManager([
+            'first' => new Filesystem($this->firstStubAdapter, ['public_url' => 'first.example.com']),
+            'second' => new Filesystem($this->secondStubAdapter, ['public_url' => 'second.example.com']),
+        ]);
+
+        $mountManager->write('first://file1.txt', 'content');
+        $mountManager->write('second://file2.txt', 'content');
+
+        $this->assertSame('first.example.com/file1.txt', $mountManager->publicUrl('first://file1.txt'));
+        $this->assertSame('second.example.com/file2.txt', $mountManager->publicUrl('second://file2.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function provide_checksum(): void
+    {
+        $this->mountManager->write('first://file.txt', 'content');
+
+        $this->assertSame('9a0364b9e99bb480dd25e1f0284c8555', $this->mountManager->checksum('first://file.txt'));
+    }
 }
