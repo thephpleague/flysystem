@@ -32,10 +32,6 @@ final class ShardedPrefixPublicUrlGenerator implements PublicUrlGenerator
 
     public function publicUrl(string $path, Config $config): string
     {
-        if (1 === count($this->prefixers)) {
-            return $this->prefixers[0]->prefixPath($path);
-        }
-
         $index = crc32($path) % $this->count;
 
         return $this->prefixers[$index]->prefixPath($path);
