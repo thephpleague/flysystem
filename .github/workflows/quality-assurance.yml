@@ -44,7 +44,7 @@ jobs:
             experimental: true
             phpunit-flags: '--no-coverage'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: docker-compose -f docker-compose.yml up -d
       - name: Start an SSH Agent
         uses: frankdejonge/use-ssh-agent@1.0.0
