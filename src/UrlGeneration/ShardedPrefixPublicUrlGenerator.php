@@ -9,11 +9,6 @@ use League\Flysystem\PathPrefixer;
 use function array_map;
 use function count;
 use function crc32;
-use function fmod;
-use function hash;
-use function hexdec;
-use function ltrim;
-use function mb_substr;
 
 final class ShardedPrefixPublicUrlGenerator implements PublicUrlGenerator
 {
