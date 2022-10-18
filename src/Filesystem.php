@@ -183,7 +183,7 @@ class Filesystem implements FilesystemOperator
     private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
     {
         if ($publicUrl = $this->config->get('public_url')) {
-            return new PrefixPublicUrlGenerator($publicUrl);
+            return $publicUrl instanceof PublicUrlGenerator ? $publicUrl : new PrefixPublicUrlGenerator($publicUrl);
         }
 
         if ($this->adapter instanceof PublicUrlGenerator) {
