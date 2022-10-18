@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace League\Flysystem;
 
 use Generator;
+use League\Flysystem\UrlGeneration\MultiPrefixPublicUrlGenerator;
 use League\Flysystem\UrlGeneration\PrefixPublicUrlGenerator;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use Throwable;
+
+use function is_array;
 
 class Filesystem implements FilesystemOperator
 {
@@ -185,7 +188,10 @@ class Filesystem implements FilesystemOperator
     private function resolvePublicUrlGenerator(): ?PublicUrlGenerator
     {
         if ($publicUrl = $this->config->get('public_url')) {
-            return new PrefixPublicUrlGenerator($publicUrl);
+            return match (true) {
+                is_array($publicUrl) => new MultiPrefixPublicUrlGenerator($publicUrl),
+                default => new PrefixPublicUrlGenerator($publicUrl),
+            };
         }
 
         if ($this->adapter instanceof PublicUrlGenerator) {
