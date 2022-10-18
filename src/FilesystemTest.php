@@ -447,17 +447,17 @@ class FilesystemTest extends TestCase
             ['public_url' => ['https://cdn1', 'https://cdn2']],
         );
 
-        $url1 = $filesystem->publicUrl('path1.txt');
+        $url1 = $filesystem->publicUrl('first-path1.txt');
         $url2 = $filesystem->publicUrl('path2.txt');
-        $url3 = $filesystem->publicUrl('path1.txt'); // deterministic
-        $url4 = $filesystem->publicUrl('/some/path.txt');
-        $url5 = $filesystem->publicUrl('some/path.txt'); // deterministic even with leading "/"
+        $url3 = $filesystem->publicUrl('first-path1.txt'); // deterministic
+        $url4 = $filesystem->publicUrl('/some/path-here.txt');
+        $url5 = $filesystem->publicUrl('some/path-here.txt'); // deterministic even with leading "/"
 
-        self::assertEquals('https://cdn1/path1.txt', $url1);
+        self::assertEquals('https://cdn1/first-path1.txt', $url1);
         self::assertEquals('https://cdn2/path2.txt', $url2);
-        self::assertEquals('https://cdn1/path1.txt', $url3);
-        self::assertEquals('https://cdn2/some/path.txt', $url4);
-        self::assertEquals('https://cdn2/some/path.txt', $url5);
+        self::assertEquals('https://cdn1/first-path1.txt', $url3);
+        self::assertEquals('https://cdn2/some/path-here.txt', $url4);
+        self::assertEquals('https://cdn2/some/path-here.txt', $url5);
     }
 
     /**
