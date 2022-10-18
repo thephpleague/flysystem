@@ -15,6 +15,7 @@ use AsyncAws\SimpleS3\SimpleS3Client;
 use Exception;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
@@ -114,7 +115,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
         /** @var AwsS3V3Adapter $adapter */
         $adapter = $this->adapter();
 
-        $this->expectException(UnableToProvideChecksum::class);
+        $this->expectException(ChecksumAlgoIsNotSupported::class);
 
         $adapter->checksum('something', new Config(['checksum_algo' => 'md5']));
     }

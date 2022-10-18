@@ -10,6 +10,7 @@ use Aws\S3\S3ClientInterface;
 use Exception;
 use Generator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
+use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
@@ -385,7 +386,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         /** @var AwsS3V3Adapter $adapter */
         $adapter = $this->adapter();
 
-        $this->expectException(UnableToProvideChecksum::class);
+        $this->expectException(ChecksumAlgoIsNotSupported::class);
 
         $adapter->checksum('something', new Config(['checksum_algo' => 'md5']));
     }

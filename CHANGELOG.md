@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.8.0 - 2022-10-17
+
+### Added
+
+- [ChecksumAlgoIsNotSupported] Exception to indicate a checksum is not supported by the checksum provider, filesystem will fall back to ad-hoc generation.
+
 ## 3.7.0 - 2022-10-17
 
 ### Added
