@@ -13,10 +13,7 @@ use function hexdec;
 use function ltrim;
 use function mb_substr;
 
-/**
- * @author Kevin Bond <kevinbond@gmail.com>
- */
-final class MultiPrefixPublicUrlGenerator implements PublicUrlGenerator
+final class ShardedPrefixPublicUrlGenerator implements PublicUrlGenerator
 {
     /** @var PathPrefixer[] */
     private array $prefixers;
