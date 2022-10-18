@@ -31,7 +31,7 @@ You can use the `hash_algos` function to see [which algorithms](https://www.php.
 
 ## Usage
 
-Public URLs can be generated using the `checksum` method.
+Checksums can be retrieved using the `checksum` method.
 
 ```php
 $checksum = $filesystem->checksum('path/to/file.txt');
