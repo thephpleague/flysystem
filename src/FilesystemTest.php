@@ -440,6 +440,24 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function custom_public_url_generator(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            ['public_url' => new class() implements PublicUrlGenerator {
+                public function publicUrl(string $path, Config $config): string
+                {
+                    return 'custom/' . $path;
+                }
+            }],
+        );
+
+        self::assertSame('custom/file.txt', $filesystem->publicUrl('file.txt'));
+    }
+
+    /**
+     * @test
+     */
     public function get_checksum_for_adapter_that_supports(): void
     {
         $this->filesystem->write('path.txt', 'foobar');
