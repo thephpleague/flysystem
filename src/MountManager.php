@@ -6,6 +6,7 @@ namespace League\Flysystem;
 
 use Throwable;
 
+use function method_exists;
 use function sprintf;
 
 class MountManager implements FilesystemOperator
@@ -248,6 +249,30 @@ class MountManager implements FilesystemOperator
             $source,
             $destination
         );
+    }
+
+    public function publicUrl(string $path, array $config = []): string
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($path);
+
+        if ( ! method_exists($filesystem, 'publicUrl')) {
+            throw new UnableToGeneratePublicUrl(sprintf('%s does not support generating public urls.', $filesystem::class), $path);
+        }
+
+        return $filesystem->publicUrl($path, $config);
+    }
+
+    public function checksum(string $path, array $config = []): string
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($path);
+
+        if ( ! method_exists($filesystem, 'checksum')) {
+            throw new UnableToProvideChecksum(sprintf('%s does not support providing checksums.', $filesystem::class), $path);
+        }
+
+        return $filesystem->checksum($path, $config);
     }
 
     private function mountFilesystems(array $filesystems): void
