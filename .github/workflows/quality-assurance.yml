@@ -33,15 +33,18 @@ jobs:
         php: [ '8.0', '8.1' ]
         composer-flags: [ '' ]
         experimental: [false]
+        phpstan: [true]
         phpunit-flags: [ '--coverage-text' ]
         include:
           - php: '8.0'
             composer-flags: '--prefer-lowest'
             experimental: false
+            phpstan: false
             phpunit-flags: '--no-coverage'
           - php: '8.2'
             composer-flags: '--ignore-platform-reqs'
             experimental: true
+            phpstan: false
             phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v3
@@ -62,7 +65,7 @@ jobs:
       - run: php test_files/wait_for_ftp.php 2122
       - run: COMPOSER_OPTS='${{ matrix.composer-flags }}' vendor/bin/phpunit ${{ matrix.phpunit-flags }}
       - run: vendor/bin/phpstan analyse
-        if: ${{ matrix.php == '8.0' }}
+        if: ${{ matrix.phpstan }}
       - run: vendor/bin/php-cs-fixer fix --diff --dry-run
         continue-on-error: true
         if: ${{ matrix.php == '8.0' }}
