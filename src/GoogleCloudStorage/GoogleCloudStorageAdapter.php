@@ -68,7 +68,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
      */
     private $mimeTypeDetector;
 
-    private static $algoToInfoMap = [
+    private static array $algoToInfoMap = [
         'md5' => 'md5Hash',
         'crc32c' => 'crc32c',
         'etag' => 'etag',

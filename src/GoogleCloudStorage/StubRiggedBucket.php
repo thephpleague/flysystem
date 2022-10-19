@@ -12,12 +12,12 @@ class StubRiggedBucket extends Bucket
 {
     private array $triggers = [];
 
-    public function failForObject($name, ?Throwable $throwable = null): void
+    public function failForObject(string $name, ?Throwable $throwable = null): void
     {
         $this->setupTrigger('object', $name, $throwable);
     }
 
-    public function failForUpload($name, ?Throwable $throwable = null): void
+    public function failForUpload(string $name, ?Throwable $throwable = null): void
     {
         $this->setupTrigger('upload', $name, $throwable);
     }

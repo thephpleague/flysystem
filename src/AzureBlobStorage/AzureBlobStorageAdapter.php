@@ -116,7 +116,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         return stream_get_contents($response);
     }
 
-    public function readStream($path)
+    public function readStream(string $path)
     {
         $location = $this->prefixer->prefixPath($path);
 
@@ -278,6 +278,9 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         $this->upload($path, $contents, $config);
     }
 
+    /**
+     * @param string|resource $contents
+     */
     private function upload(string $destination, $contents, Config $config): void
     {
         $resolved = $this->prefixer->prefixPath($destination);

@@ -50,6 +50,7 @@ class ReadOnlyFilesystemAdapterTest extends TestCase
 
         $this->expectException(UnableToWriteFile::class);
 
+        // @phpstan-ignore-next-line
         $adapter->writeStream('foo', 'content', new Config());
     }
 
