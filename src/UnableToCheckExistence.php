@@ -7,7 +7,7 @@ namespace League\Flysystem;
 use RuntimeException;
 use Throwable;
 
-class UnableToCheckExistence extends RuntimeException implements FilesystemOperationFailed
+final class UnableToCheckExistence extends RuntimeException implements FilesystemOperationFailed
 {
     public static function forLocation(string $path, Throwable $exception = null): static
     {
