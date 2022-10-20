@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace League\Flysystem\AdapterTestUtilities;
 
 use DateInterval;
-use DateTime;
 use DateTimeImmutable;
 use Generator;
 use League\Flysystem\ChecksumProvider;
@@ -27,7 +26,6 @@ use Throwable;
 use function file_get_contents;
 use function is_resource;
 use function iterator_to_array;
-use function var_dump;
 use const PHP_EOL;
 
 /**
