@@ -23,7 +23,6 @@ class AzureBlobStorageAdapterTest extends TestCase
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         $dsn = getenv('FLYSYSTEM_AZURE_DSN');
-        $dsn = 'DefaultEndpointsProtocol=https;AccountName=notpublicflysystemtests;AccountKey=B+Dm9IKyFvzr5TztsHcJqhF0jMpm2gR1v8OEsS0kgfftq6gnqgxcVJxF8peagofUwC/mOGbAgBSQ+AStnIXXPg==;EndpointSuffix=core.windows.net';
 
         if (empty($dsn)) {
             self::markTestSkipped('FLYSYSTEM_AZURE_DSN is not provided.');
