@@ -12,6 +12,8 @@ use AsyncAws\S3\ValueObject\AwsObject;
 use AsyncAws\S3\ValueObject\CommonPrefix;
 use AsyncAws\S3\ValueObject\ObjectIdentifier;
 use AsyncAws\SimpleS3\SimpleS3Client;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Generator;
 use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
@@ -32,13 +34,14 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
 use function trim;
 
-class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
+class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     /**
      * @var string[]
@@ -529,5 +532,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         }
 
         return trim($metadata['ETag'], '"');
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        return $this->client->getPresignedUrl($this->bucket, $location, DateTimeImmutable::createFromInterface($expiresAt));
     }
 }

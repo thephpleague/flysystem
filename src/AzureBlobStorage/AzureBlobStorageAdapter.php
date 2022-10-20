@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AzureBlobStorage;
 
+use DateTime;
+use DateTimeInterface;
 use League\Flysystem\ChecksumAlgoIsNotSupported;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
@@ -16,6 +18,7 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
@@ -23,20 +26,24 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Blob\BlobSharedAccessSignatureHelper;
 use MicrosoftAzure\Storage\Blob\Models\BlobProperties;
 use MicrosoftAzure\Storage\Blob\Models\CreateBlockBlobOptions;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
+use MicrosoftAzure\Storage\Common\Internal\Resources;
+use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use MicrosoftAzure\Storage\Common\Models\ContinuationToken;
 use Throwable;
 use function base64_decode;
 use function bin2hex;
 use function stream_get_contents;
 
-class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
+class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     /** @var string[] */
     private const META_OPTIONS = [
@@ -50,16 +57,12 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
     const ON_VISIBILITY_IGNORE = 'ignore';
 
     private BlobRestProxy $client;
-
     private MimeTypeDetector $mimeTypeDetector;
-
     private int $maxResultsForContentsListing;
-
     private string $container;
-
     private PathPrefixer $prefixer;
-
     private string $visibilityHandling;
+    private ?StorageServiceSettings $serviceSettings;
 
     public function __construct(
         BlobRestProxy $client,
@@ -68,6 +71,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         MimeTypeDetector $mimeTypeDetector = null,
         int $maxResultsForContentsListing = 5000,
         string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
+        StorageServiceSettings $serviceSettings = null,
     ) {
         $this->client = $client;
         $this->container = $container;
@@ -75,6 +79,7 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->maxResultsForContentsListing = $maxResultsForContentsListing;
         $this->visibilityHandling = $visibilityHandling;
+        $this->serviceSettings = $serviceSettings;
     }
 
     public function copy(string $source, string $destination, Config $config): void
@@ -372,5 +377,36 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         }
 
         return bin2hex(base64_decode($checksum));
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+    {
+        if ( ! $this->serviceSettings instanceof StorageServiceSettings) {
+            throw UnableToGenerateTemporaryUrl::noGeneratorConfigured(
+                $path,
+                'The $serviceSettings constructor parameter must be set to generate temporary URLs.',
+            );
+        }
+        $sas = new BlobSharedAccessSignatureHelper($this->serviceSettings->getName(), $this->serviceSettings->getKey());
+        $baseUrl = $this->publicUrl($path, $config);
+        $resourceName = $this->container . '/' . ltrim($this->prefixer->prefixPath($path), '/');
+        $token = $sas->generateBlobServiceSharedAccessSignatureToken(
+            Resources::RESOURCE_TYPE_BLOB,
+            $resourceName,
+            'r', // read
+            DateTime::createFromInterface($expiresAt),
+            $config->get('signed_start', ''),
+            $config->get('signed_ip', ''),
+            $config->get('signed_protocol', 'https'),
+            $config->get('signed_identifier', ''),
+            $config->get('cache_control', ''),
+            $config->get('content_deposition', ''),
+            $config->get('content_encoding', ''),
+            $config->get('content_language', ''),
+            $config->get('content_type', ''),
+        );
+
+        return "$baseUrl?$token";
+
     }
 }

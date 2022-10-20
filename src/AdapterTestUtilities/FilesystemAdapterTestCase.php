@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use DateInterval;
+use DateTime;
+use DateTimeImmutable;
 use Generator;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
@@ -17,12 +20,14 @@ use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 use function file_get_contents;
 use function is_resource;
 use function iterator_to_array;
+use function var_dump;
 use const PHP_EOL;
 
 /**
@@ -788,6 +793,26 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $adapter->write('some/path.txt', 'public contents', new Config(['visibility' => 'public']));
 
         $url = $adapter->publicUrl('some/path.txt', new Config());
+        $contents = file_get_contents($url);
+
+        self::assertEquals('public contents', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_temporary_url(): void
+    {
+        $adapter = $this->adapter();
+
+        if ( ! $adapter instanceof TemporaryUrlGenerator) {
+            $this->markTestSkipped('Adapter does not supply temporary URls');
+        }
+
+        $adapter->write('some/private.txt', 'public contents', new Config(['visibility' => 'private']));
+
+        $expiresAt = (new DateTimeImmutable())->add(DateInterval::createFromDateString('1 minute'));
+        $url = $adapter->temporaryUrl('some/private.txt', $expiresAt, new Config());
         $contents = file_get_contents($url);
 
         self::assertEquals('public contents', $contents);

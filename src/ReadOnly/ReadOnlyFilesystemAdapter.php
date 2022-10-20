@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\ReadOnly;
 
+use DateTimeInterface;
 use League\Flysystem\CalculateChecksumFromStream;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
@@ -12,12 +13,14 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToGeneratePublicUrl;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 
-class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
+class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     use CalculateChecksumFromStream;
 
@@ -126,5 +129,14 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
         }
 
         return $this->calculateChecksumFromStream($path, $config);
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+    {
+        if ( ! $this->adapter instanceof TemporaryUrlGenerator) {
+            throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
+        }
+
+        return $this->adapter->temporaryUrl($path, $expiresAt, $config);
     }
 }

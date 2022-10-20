@@ -10,6 +10,7 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\Visibility;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
+use MicrosoftAzure\Storage\Common\Internal\StorageServiceSettings;
 use function getenv;
 
 /**
@@ -22,14 +23,21 @@ class AzureBlobStorageAdapterTest extends TestCase
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         $dsn = getenv('FLYSYSTEM_AZURE_DSN');
+        $dsn = 'DefaultEndpointsProtocol=https;AccountName=notpublicflysystemtests;AccountKey=B+Dm9IKyFvzr5TztsHcJqhF0jMpm2gR1v8OEsS0kgfftq6gnqgxcVJxF8peagofUwC/mOGbAgBSQ+AStnIXXPg==;EndpointSuffix=core.windows.net';
 
         if (empty($dsn)) {
             self::markTestSkipped('FLYSYSTEM_AZURE_DSN is not provided.');
         }
 
         $client = BlobRestProxy::createBlobService($dsn);
+        $serviceSettings = StorageServiceSettings::createFromConnectionString($dsn);
 
-        return new AzureBlobStorageAdapter($client, self::CONTAINER_NAME, 'ci');
+        return new AzureBlobStorageAdapter(
+            $client,
+            self::CONTAINER_NAME,
+            'ci',
+            serviceSettings: $serviceSettings,
+        );
     }
 
     /**

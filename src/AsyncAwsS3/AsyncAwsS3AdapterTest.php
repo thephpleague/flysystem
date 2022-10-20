@@ -23,7 +23,6 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
-use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\Visibility;
 
@@ -98,11 +97,13 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             self::markTestSkipped('No AWS credentials present for testing.');
         }
 
-        return static::$s3Client = new SimpleS3Client([
+        static::$s3Client = new SimpleS3Client([
             'accessKeyId' => $key,
             'accessKeySecret' => $secret,
             'region' => $region,
         ]);
+
+        return static::$s3Client;
     }
 
 
