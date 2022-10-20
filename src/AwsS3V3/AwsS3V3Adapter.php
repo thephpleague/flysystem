@@ -23,6 +23,7 @@ use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToGeneratePublicUrl;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
@@ -542,15 +543,19 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
     {
-        $options = $config->get('get_object_options', []);
-        $command = $this->client->getCommand('GetObject', [
-            'Bucket' => $this->bucket,
-            'Key' => $this->prefixer->prefixPath($path),
-        ] + $options);
+        try {
+            $options = $config->get('get_object_options', []);
+            $command = $this->client->getCommand('GetObject', [
+                    'Bucket' => $this->bucket,
+                    'Key' => $this->prefixer->prefixPath($path),
+                ] + $options);
 
-        $presignedRequestOptions = $config->get('presigned_request_options', []);
-        $request = $this->client->createPresignedRequest($command, $expiresAt, $presignedRequestOptions);
+            $presignedRequestOptions = $config->get('presigned_request_options', []);
+            $request = $this->client->createPresignedRequest($command, $expiresAt, $presignedRequestOptions);
 
-        return (string) $request->getUri();
+            return (string)$request->getUri();
+        } catch (Throwable $exception) {
+            throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
+        }
     }
 }

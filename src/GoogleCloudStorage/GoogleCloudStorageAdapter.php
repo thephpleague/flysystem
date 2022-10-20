@@ -21,6 +21,7 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
@@ -411,6 +412,10 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     {
         $location = $this->prefixer->prefixPath($path);
 
-        return $this->bucket->object($location)->signedUrl($expiresAt, $config->get('gcp_signing_options', []));
+        try {
+            return $this->bucket->object($location)->signedUrl($expiresAt, $config->get('gcp_signing_options', []));
+        } catch (Throwable $exception) {
+            throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
+        }
     }
 }

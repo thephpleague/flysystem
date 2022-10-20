@@ -387,26 +387,30 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
                 'The $serviceSettings constructor parameter must be set to generate temporary URLs.',
             );
         }
-        $sas = new BlobSharedAccessSignatureHelper($this->serviceSettings->getName(), $this->serviceSettings->getKey());
-        $baseUrl = $this->publicUrl($path, $config);
-        $resourceName = $this->container . '/' . ltrim($this->prefixer->prefixPath($path), '/');
-        $token = $sas->generateBlobServiceSharedAccessSignatureToken(
-            Resources::RESOURCE_TYPE_BLOB,
-            $resourceName,
-            'r', // read
-            DateTime::createFromInterface($expiresAt),
-            $config->get('signed_start', ''),
-            $config->get('signed_ip', ''),
-            $config->get('signed_protocol', 'https'),
-            $config->get('signed_identifier', ''),
-            $config->get('cache_control', ''),
-            $config->get('content_deposition', ''),
-            $config->get('content_encoding', ''),
-            $config->get('content_language', ''),
-            $config->get('content_type', ''),
-        );
 
-        return "$baseUrl?$token";
+        try {
+            $sas = new BlobSharedAccessSignatureHelper($this->serviceSettings->getName(), $this->serviceSettings->getKey());
+            $baseUrl = $this->publicUrl($path, $config);
+            $resourceName = $this->container . '/' . ltrim($this->prefixer->prefixPath($path), '/');
+            $token = $sas->generateBlobServiceSharedAccessSignatureToken(
+                Resources::RESOURCE_TYPE_BLOB,
+                $resourceName,
+                'r', // read
+                DateTime::createFromInterface($expiresAt),
+                $config->get('signed_start', ''),
+                $config->get('signed_ip', ''),
+                $config->get('signed_protocol', 'https'),
+                $config->get('signed_identifier', ''),
+                $config->get('cache_control', ''),
+                $config->get('content_deposition', ''),
+                $config->get('content_encoding', ''),
+                $config->get('content_language', ''),
+                $config->get('content_type', ''),
+            );
 
+            return "$baseUrl?$token";
+        } catch (Throwable $exception) {
+            throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
+        }
     }
 }
