@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.10.1 - 2022-10-21
+
+### Fixed
+
+- [Filesystem] Added missing constructor argument to allow temporary URL generator injection.
+
 ## 3.10.0 - 2022-10-21
 
 ### Added
