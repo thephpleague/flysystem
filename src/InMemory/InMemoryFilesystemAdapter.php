@@ -23,8 +23,6 @@ use function strpos;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
-    const DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST = '______DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST';
-
     /**
      * @var InMemoryFile[]
      */
@@ -107,7 +105,6 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $filePath = rtrim($path, '/') . '/' . self::DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST;
         $this->write($filePath, '', $config);
     }
 
@@ -213,11 +210,6 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                             yield new DirectoryAttributes(trim($prefix . $dirPath, '/'));
                         }
                     }
-                }
-
-                $dummyFilename = self::DUMMY_FILE_FOR_FORCED_LISTING_IN_FLYSYSTEM_TEST;
-                if (substr($path, -strlen($dummyFilename)) === $dummyFilename) {
-                    continue;
                 }
 
                 if ($deep === true || strpos($subPath, '/') === false) {
