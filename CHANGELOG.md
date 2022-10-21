@@ -1,5 +1,18 @@
 # Changelog
 
+## 3.10.0 - 2022-10-21
+
+### Added
+
+- [Filesystem] added `temporaryUrl` method
+- [AsyncAWS] added `temporaryUrl` method
+- [AWS S3] added `temporaryUrl` method
+- [Azure Blob Storage] added `temporaryUrl` method
+- [MountManager] added `temporaryUrl` method
+- [Google Cloud Storage] added `temporaryUrl` method
+- [ReadOnly] added `temporaryUrl` method
+- [PathPrefixing] added `temporaryUrl` method
+
 ## 3.9.0 - 2022-10-18
 
 ### Added
