@@ -9,6 +9,7 @@ Flysystem:
 Usage:
     Filesystem API: '/docs/usage/filesystem-api/'
     Public URLs: '/docs/usage/public-urls/'
+    Temporary URLs: '/docs/usage/temporary-urls/'
     Checksums: '/docs/usage/checksums/'
     Directory Listings: '/docs/usage/directory-listings/'
     Exception Handling: '/docs/usage/exception-handling/'
