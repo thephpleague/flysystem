@@ -29,11 +29,13 @@ class Filesystem implements FilesystemOperator
         array $config = [],
         PathNormalizer $pathNormalizer = null,
         PublicUrlGenerator $publicUrlGenerator = null,
+        TemporaryUrlGenerator $temporaryUrlGenerator = null,
     ) {
         $this->adapter = $adapter;
         $this->config = new Config($config);
         $this->pathNormalizer = $pathNormalizer ?: new WhitespacePathNormalizer();
         $this->publicUrlGenerator = $publicUrlGenerator;
+        $this->temporaryUrlGenerator = $temporaryUrlGenerator;
     }
 
     public function fileExists(string $location): bool

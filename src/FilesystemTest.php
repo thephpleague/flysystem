@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-use Aws\S3\S3Client;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Generator;
 use IteratorAggregate;
-use League\Flysystem\AwsS3V3\AwsS3V3Adapter;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
@@ -554,6 +555,40 @@ class FilesystemTest extends TestCase
         $this->expectException(UnableToProvideChecksum::class);
 
         $filesystem->checksum('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function generating_temporary_urls(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            temporaryUrlGenerator: new class() implements TemporaryUrlGenerator {
+                public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+                {
+                    return 'https://flysystem.thephpleague.com/' . $path . '?exporesAt=' . $expiresAt->format('U');
+                }
+            }
+        );
+
+        $now = \time();
+        $temporaryUrl = $filesystem->temporaryUrl('some/file.txt', new DateTimeImmutable('@' . $now));
+        $expectedUrl = 'https://flysystem.thephpleague.com/some/file.txt?exporesAt=' . $now;
+
+        self::assertEquals($expectedUrl, $temporaryUrl);
+    }
+
+    /**
+     * @test
+     */
+    public function not_being_able_to_generate_temporary_urls(): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter());
+
+        $this->expectException(UnableToGenerateTemporaryUrl::class);
+
+        $filesystem->temporaryUrl('some/file.txt', new DateTimeImmutable());
     }
 
     /**
