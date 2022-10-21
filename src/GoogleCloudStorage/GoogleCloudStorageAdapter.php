@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\GoogleCloudStorage;
 
+use DateTimeInterface;
 use Google\Cloud\Core\Exception\NotFoundException;
 use Google\Cloud\Storage\Bucket;
 use Google\Cloud\Storage\StorageObject;
@@ -20,6 +21,7 @@ use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
@@ -27,6 +29,7 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
@@ -41,7 +44,7 @@ use function rtrim;
 use function sprintf;
 use function strlen;
 
-class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
+class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     /**
      * @var Bucket
@@ -403,5 +406,16 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         }
 
         return bin2hex(base64_decode($checksum));
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        try {
+            return $this->bucket->object($location)->signedUrl($expiresAt, $config->get('gcp_signing_options', []));
+        } catch (Throwable $exception) {
+            throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
+        }
     }
 }

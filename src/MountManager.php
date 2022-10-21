@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use DateTimeInterface;
 use Throwable;
 
 use function method_exists;
@@ -261,6 +262,18 @@ class MountManager implements FilesystemOperator
         }
 
         return $filesystem->publicUrl($path, $config);
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, array $config = []): string
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($path);
+
+        if ( ! method_exists($filesystem, 'temporaryUrl')) {
+            throw new UnableToGenerateTemporaryUrl(sprintf('%s does not support generating public urls.', $filesystem::class), $path);
+        }
+
+        return $filesystem->temporaryUrl($path, $expiresAt, $config);
     }
 
     public function checksum(string $path, array $config = []): string

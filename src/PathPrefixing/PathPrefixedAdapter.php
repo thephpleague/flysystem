@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\PathPrefixing;
 
+use DateTimeInterface;
 use Generator;
 use League\Flysystem\CalculateChecksumFromStream;
 use League\Flysystem\ChecksumProvider;
@@ -16,15 +17,17 @@ use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToGeneratePublicUrl;
+use League\Flysystem\UnableToGenerateTemporaryUrl;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
+use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 use Throwable;
 
-class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider
+class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     use CalculateChecksumFromStream;
 
@@ -208,5 +211,14 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
         }
 
         return $this->calculateChecksumFromStream($path, $config);
+    }
+
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
+    {
+        if ( ! $this->adapter instanceof TemporaryUrlGenerator) {
+            throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
+        }
+
+        return $this->adapter->temporaryUrl($path, $expiresAt, $config);
     }
 }
