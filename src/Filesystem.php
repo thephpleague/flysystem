@@ -180,7 +180,7 @@ class Filesystem implements FilesystemOperator
         $generator = $this->temporaryUrlGenerator ?: $this->adapter;
 
         if ($generator instanceof TemporaryUrlGenerator) {
-            return $this->temporaryUrlGenerator->temporaryUrl($path, $expiresAt, $this->config->extend($config));
+            return $generator->temporaryUrl($path, $expiresAt, $this->config->extend($config));
         }
 
         throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
