@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.10.2 - 2022-10-25
+
+### Fixed
+
+- [Filesystem] Ensure adapter is used for exposing temporary URLs.
+
 ## 3.10.1 - 2022-10-21
 
 ### Fixed
