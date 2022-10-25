@@ -7,10 +7,11 @@ about: Do you have a new feature in mind?
 
 <!-- Fill in the relevant information below to help triage your issue. -->
 
-|    Q        |   A
-|------------ | ------
-| New Feature | yes/no
-| BC Break    | yes/no
+| Q                 | A       |
+|-------------------|---------|
+| Flysystem Version | x.y.z   |
+| Adapter Name      | example |
+| Adapter version   | x.y.z   |
 
 #### Scenario / Use-case
 
