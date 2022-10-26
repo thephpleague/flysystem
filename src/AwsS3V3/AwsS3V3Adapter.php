@@ -91,78 +91,25 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         'VersionId',
     ];
 
-    /**
-     * @var S3ClientInterface
-     */
-    private $client;
-
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var string
-     */
-    private $bucket;
-
-    /**
-     * @var VisibilityConverter
-     */
-    private $visibility;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
-
-    /**
-     * @var array
-     */
-    private $options;
-
-    /**
-     * @var bool
-     */
-    private $streamReads;
-
-    /**
-     * @var string[]
-     */
-    private array $forwardedOptions;
-
-    /**
-     * @var string[]
-     */
-    private array $metadataFields;
-
-    /**
-     * @var string[]
-     */
-    private array $multipartUploadOptions;
+    private PathPrefixer $prefixer;
+    private VisibilityConverter $visibility;
+    private MimeTypeDetector $mimeTypeDetector;
 
     public function __construct(
-        S3ClientInterface $client,
-        string $bucket,
+        private S3ClientInterface $client,
+        private string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null,
         MimeTypeDetector $mimeTypeDetector = null,
-        array $options = [],
-        bool $streamReads = true,
-        array $forwardedOptions = self::AVAILABLE_OPTIONS,
-        array $metadataFields = self::EXTRA_METADATA_FIELDS,
-        array $multipartUploadOptions = self::MUP_AVAILABLE_OPTIONS,
+        private array $options = [],
+        private bool $streamReads = true,
+        private array $forwardedOptions = self::AVAILABLE_OPTIONS,
+        private array $metadataFields = self::EXTRA_METADATA_FIELDS,
+        private array $multipartUploadOptions = self::MUP_AVAILABLE_OPTIONS,
     ) {
-        $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
-        $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
-        $this->options = $options;
-        $this->streamReads = $streamReads;
-        $this->forwardedOptions = $forwardedOptions;
-        $this->metadataFields = $metadataFields;
-        $this->multipartUploadOptions = $multipartUploadOptions;
     }
 
     public function fileExists(string $path): bool

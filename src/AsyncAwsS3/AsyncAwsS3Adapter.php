@@ -84,30 +84,9 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         'VersionId',
     ];
 
-    /**
-     * @var S3Client
-     */
-    private $client;
-
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var string
-     */
-    private $bucket;
-
-    /**
-     * @var VisibilityConverter
-     */
-    private $visibility;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
+    private PathPrefixer $prefixer;
+    private VisibilityConverter $visibility;
+    private MimeTypeDetector $mimeTypeDetector;
 
     /**
      * @var array|string[]
@@ -123,17 +102,15 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
      * @param S3Client|SimpleS3Client $client Uploading of files larger than 5GB is only supported with SimpleS3Client
      */
     public function __construct(
-        S3Client $client,
-        string $bucket,
+        private S3Client $client,
+        private string $bucket,
         string $prefix = '',
         VisibilityConverter $visibility = null,
         MimeTypeDetector $mimeTypeDetector = null,
         array $forwardedOptions = self::AVAILABLE_OPTIONS,
         array $metadataFields = self::EXTRA_METADATA_FIELDS,
     ) {
-        $this->client = $client;
         $this->prefixer = new PathPrefixer($prefix);
-        $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
         $this->forwardedOptions = $forwardedOptions;
