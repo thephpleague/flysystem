@@ -8,25 +8,17 @@ use ZipArchive;
 
 class StubZipArchiveProvider implements ZipArchiveProvider
 {
-    /**
-     * @var FilesystemZipArchiveProvider
-     */
-    private $provider;
+    private FilesystemZipArchiveProvider $provider;
 
-    /**
-     * @var string
-     */
-    private $filename;
 
     /**
      * @var StubZipArchive
      */
     private $archive;
 
-    public function __construct(string $filename, int $localDirectoryPermissions = 0700)
+    public function __construct(private string $filename, int $localDirectoryPermissions = 0700)
     {
         $this->provider = new FilesystemZipArchiveProvider($filename, $localDirectoryPermissions);
-        $this->filename = $filename;
     }
 
     public function createZipArchive(): ZipArchive

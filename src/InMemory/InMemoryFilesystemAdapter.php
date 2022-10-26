@@ -28,21 +28,13 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
     /**
      * @var InMemoryFile[]
      */
-    private $files = [];
+    private array $files = [];
+    private MimeTypeDetector $mimeTypeDetector;
 
-    /**
-     * @var string
-     */
-    private $defaultVisibility;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
-
-    public function __construct(string $defaultVisibility = Visibility::PUBLIC, MimeTypeDetector $mimeTypeDetector = null)
-    {
-        $this->defaultVisibility = $defaultVisibility;
+    public function __construct(
+        private string $defaultVisibility = Visibility::PUBLIC,
+        MimeTypeDetector $mimeTypeDetector = null
+    ) {
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 

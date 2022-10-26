@@ -8,30 +8,11 @@ use ZipArchive;
 
 class StubZipArchive extends ZipArchive
 {
-    /**
-     * @var bool
-     */
-    private $failNextDirectoryCreation = false;
-
-    /**
-     * @var bool
-     */
-    private $failNextWrite = false;
-
-    /**
-     * @var bool
-     */
-    private $failNextDeleteName = false;
-
-    /**
-     * @var bool
-     */
-    private $failWhenSettingVisibility = false;
-
-    /**
-     * @var bool
-     */
-    private $failWhenDeletingAnIndex = false;
+    private bool $failNextDirectoryCreation = false;
+    private bool $failNextWrite = false;
+    private bool $failNextDeleteName = false;
+    private bool $failWhenSettingVisibility = false;
+    private bool $failWhenDeletingAnIndex = false;
 
     public function failNextDirectoryCreation(): void
     {

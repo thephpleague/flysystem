@@ -9,43 +9,13 @@ use League\Flysystem\Visibility;
 
 class PortableVisibilityConverter implements VisibilityConverter
 {
-    /**
-     * @var int
-     */
-    private $filePublic;
-
-    /**
-     * @var int
-     */
-    private $filePrivate;
-
-    /**
-     * @var int
-     */
-    private $directoryPublic;
-
-    /**
-     * @var int
-     */
-    private $directoryPrivate;
-
-    /**
-     * @var string
-     */
-    private $defaultForDirectories;
-
     public function __construct(
-        int $filePublic = 0644,
-        int $filePrivate = 0600,
-        int $directoryPublic = 0755,
-        int $directoryPrivate = 0700,
-        string $defaultForDirectories = Visibility::PRIVATE
+        private int $filePublic = 0644,
+        private int $filePrivate = 0600,
+        private int $directoryPublic = 0755,
+        private int $directoryPrivate = 0700,
+        private string $defaultForDirectories = Visibility::PRIVATE
     ) {
-        $this->filePublic = $filePublic;
-        $this->filePrivate = $filePrivate;
-        $this->directoryPublic = $directoryPublic;
-        $this->directoryPrivate = $directoryPrivate;
-        $this->defaultForDirectories = $defaultForDirectories;
     }
 
     public function forFile(string $visibility): int
