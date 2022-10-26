@@ -8,110 +8,23 @@ use const FTP_BINARY;
 
 class FtpConnectionOptions
 {
-    /**
-     * @var string
-     */
-    private $host;
-
-    /**
-     * @var string
-     */
-    private $root;
-
-    /**
-     * @var string
-     */
-    private $username;
-
-    /**
-     * @var string
-     */
-    private $password;
-
-    /**
-     * @var int
-     */
-    private $port;
-
-    /**
-     * @var bool
-     */
-    private $ssl;
-
-    /**
-     * @var int
-     */
-    private $timeout;
-
-    /**
-     * @var bool
-     */
-    private $utf8;
-
-    /**
-     * @var bool
-     */
-    private $passive;
-
-    /**
-     * @var int
-     */
-    private $transferMode;
-
-    /**
-     * @var string|null
-     */
-    private $systemType;
-
-    /**
-     * @var bool|null
-     */
-    private $ignorePassiveAddress;
-
-    /**
-     * @var bool
-     */
-    private $enableTimestampsOnUnixListings;
-
-    /**
-     * @var bool
-     */
-    private $recurseManually;
-
-    private ?bool $useRawListOptions;
-
     public function __construct(
-        string $host,
-        string $root,
-        string $username,
-        string $password,
-        int $port = 21,
-        bool $ssl = false,
-        int $timeout = 90,
-        bool $utf8 = false,
-        bool $passive = true,
-        int $transferMode = FTP_BINARY,
-        ?string $systemType = null,
-        ?bool $ignorePassiveAddress = null,
-        bool $enableTimestampsOnUnixListings = false,
-        bool $recurseManually = false,
-        ?bool $useRawListOptions = null,
+        private string $host,
+        private string $root,
+        private string $username,
+        private string $password,
+        private int $port = 21,
+        private bool $ssl = false,
+        private int $timeout = 90,
+        private bool $utf8 = false,
+        private bool $passive = true,
+        private int $transferMode = FTP_BINARY,
+        private ?string $systemType = null,
+        private ?bool $ignorePassiveAddress = null,
+        private bool $enableTimestampsOnUnixListings = false,
+        private bool $recurseManually = false,
+        private ?bool $useRawListOptions = null,
     ) {
-        $this->host = $host;
-        $this->root = $root;
-        $this->username = $username;
-        $this->password = $password;
-        $this->port = $port;
-        $this->ssl = $ssl;
-        $this->timeout = $timeout;
-        $this->utf8 = $utf8;
-        $this->passive = $passive;
-        $this->transferMode = $transferMode;
-        $this->systemType = $systemType;
-        $this->ignorePassiveAddress = $ignorePassiveAddress;
-        $this->enableTimestampsOnUnixListings = $enableTimestampsOnUnixListings;
-        $this->recurseManually = $recurseManually;
-        $this->useRawListOptions = $useRawListOptions;
     }
 
     public function host(): string

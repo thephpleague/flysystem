@@ -46,10 +46,8 @@ use function strlen;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
-    private Bucket $bucket;
     private PathPrefixer $prefixer;
     private VisibilityHandler $visibilityHandler;
-    private string $defaultVisibility;
     private MimeTypeDetector $mimeTypeDetector;
 
     private static array $algoToInfoMap = [
@@ -59,16 +57,14 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     ];
 
     public function __construct(
-        Bucket $bucket,
+        private Bucket $bucket,
         string $prefix = '',
         VisibilityHandler $visibilityHandler = null,
-        string $defaultVisibility = Visibility::PRIVATE,
+        private string $defaultVisibility = Visibility::PRIVATE,
         MimeTypeDetector $mimeTypeDetector = null
     ) {
-        $this->bucket = $bucket;
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
-        $this->defaultVisibility = $defaultVisibility;
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
 

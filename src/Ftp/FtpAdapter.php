@@ -47,8 +47,8 @@ class FtpAdapter implements FilesystemAdapter
     private PathPrefixer $prefixer;
     private VisibilityConverter $visibilityConverter;
     private ?bool $isPureFtpdServer = null;
-    private ?bool $useRawListOptions = null;
-    private ?string $systemType = null;
+    private ?bool $useRawListOptions;
+    private ?string $systemType;
     private MimeTypeDetector $mimeTypeDetector;
 
     private ?string $rootDirectory = null;
@@ -60,6 +60,7 @@ class FtpAdapter implements FilesystemAdapter
         VisibilityConverter $visibilityConverter = null,
         MimeTypeDetector $mimeTypeDetector = null
     ) {
+        $this->systemType = $this->connectionOptions->systemType();
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();

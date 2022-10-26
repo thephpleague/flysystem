@@ -31,16 +31,14 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
 {
     use CalculateChecksumFromStream;
 
-    protected FilesystemAdapter $adapter;
     private PathPrefixer $prefix;
 
-    public function __construct(FilesystemAdapter $adapter, string $prefix)
+    public function __construct(private FilesystemAdapter $adapter, string $prefix)
     {
         if ($prefix === '') {
             throw new \InvalidArgumentException('The prefix must not be empty.');
         }
 
-        $this->adapter = $adapter;
         $this->prefix = new PathPrefixer($prefix);
     }
 

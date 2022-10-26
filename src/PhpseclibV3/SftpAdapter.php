@@ -31,33 +31,16 @@ use function rtrim;
 
 class SftpAdapter implements FilesystemAdapter
 {
-    /**
-     * @var ConnectionProvider
-     */
-    private $connectionProvider;
-
-    /**
-     * @var VisibilityConverter
-     */
-    private $visibilityConverter;
-
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
+    private VisibilityConverter $visibilityConverter;
+    private PathPrefixer $prefixer;
+    private MimeTypeDetector $mimeTypeDetector;
 
     public function __construct(
-        ConnectionProvider $connectionProvider,
+        private ConnectionProvider $connectionProvider,
         string $root,
         VisibilityConverter $visibilityConverter = null,
         MimeTypeDetector $mimeTypeDetector = null
     ) {
-        $this->connectionProvider = $connectionProvider;
         $this->prefixer = new PathPrefixer($root);
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
