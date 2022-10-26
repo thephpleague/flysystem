@@ -15,16 +15,10 @@ use Traversable;
 class DirectoryListing implements IteratorAggregate
 {
     /**
-     * @var iterable<T>
-     */
-    private $listing;
-
-    /**
      * @param iterable<T> $listing
      */
-    public function __construct(iterable $listing)
+    public function __construct(private iterable $listing)
     {
-        $this->listing = $listing;
     }
 
     public function filter(callable $filter): DirectoryListing

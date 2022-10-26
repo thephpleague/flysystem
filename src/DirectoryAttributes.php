@@ -7,38 +7,15 @@ namespace League\Flysystem;
 class DirectoryAttributes implements StorageAttributes
 {
     use ProxyArrayAccessToProperties;
+    private string $type = StorageAttributes::TYPE_DIRECTORY;
 
-    /**
-     * @var string
-     */
-    private $type = StorageAttributes::TYPE_DIRECTORY;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var string|null
-     */
-    private $visibility;
-
-    /**
-     * @var int|null
-     */
-    private $lastModified;
-
-    /**
-     * @var array
-     */
-    private $extraMetadata;
-
-    public function __construct(string $path, ?string $visibility = null, ?int $lastModified = null, array $extraMetadata = [])
+    public function __construct(
+        private string $path,
+        private ?string $visibility = null,
+        private ?int $lastModified = null,
+        private array $extraMetadata = [])
     {
-        $this->path = trim($path, '/');
-        $this->visibility = $visibility;
-        $this->lastModified = $lastModified;
-        $this->extraMetadata = $extraMetadata;
+        $this->path = trim($this->path, '/');
     }
 
     public function path(): string
@@ -48,7 +25,7 @@ class DirectoryAttributes implements StorageAttributes
 
     public function type(): string
     {
-        return StorageAttributes::TYPE_DIRECTORY;
+        return $this->type;
     }
 
     public function visibility(): ?string

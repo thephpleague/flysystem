@@ -9,24 +9,12 @@ use ZipArchive;
 class FilesystemZipArchiveProvider implements ZipArchiveProvider
 {
     /**
-     * @var string
-     */
-    private $filename;
-
-    /**
-     * @var int
-     */
-    private $localDirectoryPermissions;
-
-    /**
      * @var bool
      */
     private $parentDirectoryCreated = false;
 
-    public function __construct(string $filename, int $localDirectoryPermissions = 0700)
+    public function __construct(private string $filename, private int $localDirectoryPermissions = 0700)
     {
-        $this->filename = $filename;
-        $this->localDirectoryPermissions = $localDirectoryPermissions;
     }
 
     public function createZipArchive(): ZipArchive

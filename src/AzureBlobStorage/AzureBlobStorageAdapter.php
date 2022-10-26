@@ -56,30 +56,20 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
     const ON_VISIBILITY_THROW_ERROR = 'throw';
     const ON_VISIBILITY_IGNORE = 'ignore';
 
-    private BlobRestProxy $client;
     private MimeTypeDetector $mimeTypeDetector;
-    private int $maxResultsForContentsListing;
-    private string $container;
     private PathPrefixer $prefixer;
-    private string $visibilityHandling;
-    private ?StorageServiceSettings $serviceSettings;
 
     public function __construct(
-        BlobRestProxy $client,
-        string $container,
+        private BlobRestProxy $client,
+        private string $container,
         string $prefix = '',
         MimeTypeDetector $mimeTypeDetector = null,
-        int $maxResultsForContentsListing = 5000,
-        string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
-        StorageServiceSettings $serviceSettings = null,
+        private int $maxResultsForContentsListing = 5000,
+        private string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
+        private ?StorageServiceSettings $serviceSettings = null,
     ) {
-        $this->client = $client;
-        $this->container = $container;
         $this->prefixer = new PathPrefixer($prefix);
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
-        $this->maxResultsForContentsListing = $maxResultsForContentsListing;
-        $this->visibilityHandling = $visibilityHandling;
-        $this->serviceSettings = $serviceSettings;
     }
 
     public function copy(string $source, string $destination, Config $config): void

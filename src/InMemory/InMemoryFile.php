@@ -12,20 +12,9 @@ use finfo;
  */
 class InMemoryFile
 {
-    /**
-     * @var string
-     */
-    private $contents;
-
-    /**
-     * @var int
-     */
-    private $lastModified;
-
-    /**
-     * @var string
-     */
-    private $visibility;
+    private string $contents = '';
+    private int $lastModified = 0;
+    private ?string $visibility = null;
 
     public function updateContents(string $contents, ?int $timestamp): void
     {

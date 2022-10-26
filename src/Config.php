@@ -11,14 +11,8 @@ class Config
     public const OPTION_VISIBILITY = 'visibility';
     public const OPTION_DIRECTORY_VISIBILITY = 'directory_visibility';
 
-    /**
-     * @var array
-     */
-    private $options;
-
-    public function __construct(array $options = [])
+    public function __construct(private array $options = [])
     {
-        $this->options = $options;
     }
 
     /**

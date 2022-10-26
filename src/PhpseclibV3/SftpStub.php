@@ -14,7 +14,7 @@ class SftpStub extends SFTP
     /**
      * @var array<string,bool>
      */
-    private $tripWires = [];
+    private array $tripWires = [];
 
     public function failOnChmod(string $filename): void
     {

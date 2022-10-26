@@ -58,35 +58,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
      */
     public const DISALLOW_LINKS = 0002;
 
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var int
-     */
-    private $writeFlags;
-
-    /**
-     * @var int
-     */
-    private $linkHandling;
-
-    /**
-     * @var VisibilityConverter
-     */
-    private $visibility;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
-
-    /**
-     * @var string
-     */
-    private $rootLocation;
+    private PathPrefixer $prefixer;
+    private VisibilityConverter $visibility;
+    private MimeTypeDetector $mimeTypeDetector;
 
     /**
      * @var bool
@@ -96,16 +70,13 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     public function __construct(
         string $location,
         VisibilityConverter $visibility = null,
-        int $writeFlags = LOCK_EX,
-        int $linkHandling = self::DISALLOW_LINKS,
+        private int $writeFlags = LOCK_EX,
+        private int $linkHandling = self::DISALLOW_LINKS,
         MimeTypeDetector $mimeTypeDetector = null,
         bool $lazyRootCreation = false,
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
-        $this->writeFlags = $writeFlags;
-        $this->linkHandling = $linkHandling;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
-        $this->rootLocation = $location;
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FallbackMimeTypeDetector(new FinfoMimeTypeDetector());
 
         if ( ! $lazyRootCreation) {
@@ -119,7 +90,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             return;
         }
 
-        $this->ensureDirectoryExists($this->rootLocation, $this->visibility->defaultForDirectories());
+        $this->ensureDirectoryExists($this->prefixer->prefixPath('/'), $this->visibility->defaultForDirectories());
     }
 
     public function write(string $path, string $contents, Config $config): void

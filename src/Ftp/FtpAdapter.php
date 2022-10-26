@@ -37,63 +37,30 @@ class FtpAdapter implements FilesystemAdapter
     private const SYSTEM_TYPE_WINDOWS = 'windows';
     private const SYSTEM_TYPE_UNIX = 'unix';
 
-    /**
-     * @var FtpConnectionOptions
-     */
-    private $connectionOptions;
-
-    /**
-     * @var FtpConnectionProvider
-     */
-    private $connectionProvider;
-
-    /**
-     * @var ConnectivityChecker
-     */
-    private $connectivityChecker;
+    private FtpConnectionProvider $connectionProvider;
+    private ConnectivityChecker $connectivityChecker;
 
     /**
      * @var resource|false|\FTP\Connection
      */
-    private $connection = false;
-
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var VisibilityConverter
-     */
-    private $visibilityConverter;
-
-    /**
-     * @var bool|null
-     */
-    private $isPureFtpdServer;
-
-    private ?bool $useRawListOptions = null;
-
-    /**
-     * @var null|string
-     */
-    private $systemType;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
+    private mixed $connection = false;
+    private PathPrefixer $prefixer;
+    private VisibilityConverter $visibilityConverter;
+    private ?bool $isPureFtpdServer = null;
+    private ?bool $useRawListOptions;
+    private ?string $systemType;
+    private MimeTypeDetector $mimeTypeDetector;
 
     private ?string $rootDirectory = null;
 
     public function __construct(
-        FtpConnectionOptions $connectionOptions,
+        private FtpConnectionOptions $connectionOptions,
         FtpConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
         VisibilityConverter $visibilityConverter = null,
         MimeTypeDetector $mimeTypeDetector = null
     ) {
-        $this->connectionOptions = $connectionOptions;
+        $this->systemType = $this->connectionOptions->systemType();
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
         $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();

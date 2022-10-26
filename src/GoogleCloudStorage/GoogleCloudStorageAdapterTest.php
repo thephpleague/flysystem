@@ -13,8 +13,6 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 
-use function file_get_contents;
-
 /**
  * @group gcs
  */

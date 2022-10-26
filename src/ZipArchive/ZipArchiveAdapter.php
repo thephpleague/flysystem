@@ -33,17 +33,12 @@ use function stream_copy_to_stream;
 
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
-    /** @var PathPrefixer */
-    private $pathPrefixer;
-    /** @var MimeTypeDetector */
-    private $mimeTypeDetector;
-    /** @var VisibilityConverter */
-    private $visibility;
-    /** @var ZipArchiveProvider */
-    private $zipArchiveProvider;
+    private PathPrefixer $pathPrefixer;
+    private MimeTypeDetector$mimeTypeDetector;
+    private VisibilityConverter $visibility;
 
     public function __construct(
-        ZipArchiveProvider $zipArchiveProvider,
+        private ZipArchiveProvider $zipArchiveProvider,
         string $root = '',
         ?MimeTypeDetector $mimeTypeDetector = null,
         ?VisibilityConverter $visibility = null
@@ -51,7 +46,6 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         $this->pathPrefixer = new PathPrefixer(ltrim($root, '/'));
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->visibility = $visibility ?? new PortableVisibilityConverter();
-        $this->zipArchiveProvider = $zipArchiveProvider;
     }
 
     public function fileExists(string $path): bool
