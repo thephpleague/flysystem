@@ -46,30 +46,11 @@ use function strlen;
 
 class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
-    /**
-     * @var Bucket
-     */
-    private $bucket;
-
-    /**
-     * @var PathPrefixer
-     */
-    private $prefixer;
-
-    /**
-     * @var VisibilityHandler
-     */
-    private $visibilityHandler;
-
-    /**
-     * @var string
-     */
-    private $defaultVisibility;
-
-    /**
-     * @var MimeTypeDetector
-     */
-    private $mimeTypeDetector;
+    private Bucket $bucket;
+    private PathPrefixer $prefixer;
+    private VisibilityHandler $visibilityHandler;
+    private string $defaultVisibility;
+    private MimeTypeDetector $mimeTypeDetector;
 
     private static array $algoToInfoMap = [
         'md5' => 'md5Hash',
