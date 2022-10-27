@@ -164,7 +164,10 @@ class FtpAdapter implements FilesystemAdapter
             throw UnableToWriteFile::atLocation($path, 'writing the file failed');
         }
 
-        if ( ! $visibility = $config->get(Config::OPTION_VISIBILITY)) {
+        $visibility = $config->get(Config::OPTION_VISIBILITY);
+        if ( ! $visibility
+            || $visibility === $this->visibility($location)->visibility()
+        ) {
             return;
         }
 
