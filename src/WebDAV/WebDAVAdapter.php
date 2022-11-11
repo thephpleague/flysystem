@@ -219,7 +219,7 @@ class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 
             $directoryParts[] = $directory;
             $directoryPath = implode('/', $directoryParts);
-            $location = $this->encodePath($directoryPath);
+            $location = $this->encodePath($directoryPath) . '/';
 
             if ($this->directoryExists($this->prefixer->stripDirectoryPrefix($directoryPath))) {
                 continue;
