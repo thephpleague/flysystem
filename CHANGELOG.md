@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.10.3 - 2022-11-14
+
+### Fixed
+
+- [Local] Handle checksum errors without message (#1590)
+
 ## 3.10.2 - 2022-10-25
 
 ### Fixed
