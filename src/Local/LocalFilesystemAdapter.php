@@ -421,7 +421,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $checksum = @hash_file($algo, $location);
 
         if ($checksum === false) {
-            throw new UnableToProvideChecksum(error_get_last()['message'], $path);
+            throw new UnableToProvideChecksum(error_get_last()['message'] ?? '', $path);
         }
 
         return $checksum;
