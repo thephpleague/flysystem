@@ -208,7 +208,7 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
             return $this->adapter->checksum($path, $config);
         }
 
-        return $this->calculateChecksumFromStream($path, $config);
+        return $this->calculateChecksumFromStream($this->prefix->prefixPath($path), $config);
     }
 
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
@@ -217,6 +217,6 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
             throw UnableToGenerateTemporaryUrl::noGeneratorConfigured($path);
         }
 
-        return $this->adapter->temporaryUrl($path, $expiresAt, $config);
+        return $this->adapter->temporaryUrl($this->prefix->prefixPath($path), $expiresAt, $config);
     }
 }
