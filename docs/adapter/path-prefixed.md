@@ -5,7 +5,7 @@ permalink: /docs/adapter/path-prefixing/
 ---
 
 Any filesystem adapter can be scoped down to a prefixed path
-using the `League\Flysystem\PathPrefixng\PathPrefixedAdapter`.
+using the `League\Flysystem\PathPrefixing\PathPrefixedAdapter`.
 
 ## Installation:
 
