@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.10.4 - 2022-11-26
+
+### Changed
+
+- [I became a dad, meet Tim](https://twitter.com/frankdejonge/status/1594966175108177921)
+
+### Fixed
+
+- [PathPrefixing] ensure `checksum` and `temporaryUrl` are prefixed
+- [WebDAV] ensure directory creation uses trailing slashes for paths
+
 ## 3.10.3 - 2022-11-14
 
 ### Fixed
