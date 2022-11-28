@@ -13,7 +13,8 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "League\\Flysystem\\": "src"
+            "League\\Flysystem\\": "src",
+            "League\\Flysystem\\ReadOnly\\": "src/ReadOnlyFilesystem/DeprecatedReadOnly"
         }
     },
     "require": {
