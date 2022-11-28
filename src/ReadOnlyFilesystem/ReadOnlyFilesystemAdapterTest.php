@@ -1,6 +1,6 @@
 <?php
 
-namespace League\Flysystem\ReadOnly;
+namespace League\Flysystem\ReadOnlyFilesystem;
 
 use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;

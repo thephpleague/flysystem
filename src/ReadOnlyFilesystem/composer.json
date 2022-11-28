@@ -6,7 +6,8 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "League\\Flysystem\\ReadOnly\\": ""
+            "League\\Flysystem\\ReadOnly\\": "DeprecatedReadOnly",
+            "League\\Flysystem\\ReadOnlyFilesystem\\": ""
         }
     },
     "require": {
