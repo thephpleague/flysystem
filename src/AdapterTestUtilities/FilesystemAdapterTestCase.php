@@ -273,16 +273,21 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function deleting_a_file(): void
+    public function a_file_exists_only_when_it_is_written_and_not_deleted(): void
     {
         $this->runScenario(function() {
             $adapter = $this->adapter();
-            $this->givenWeHaveAnExistingFile('path.txt', 'contents');
 
+            // does not exist before creation
+            self::assertFalse($adapter->fileExists('path.txt'));
+
+            // a file exists after creation
+            $this->givenWeHaveAnExistingFile('path.txt');
+            self::assertTrue($adapter->fileExists('path.txt'));
+
+            // a file no longer exists after creation
             $adapter->delete('path.txt');
-            $fileExists = $adapter->fileExists('path.txt');
-
-            $this->assertFalse($fileExists);
+            self::assertFalse($adapter->fileExists('path.txt'));
         });
     }
 
