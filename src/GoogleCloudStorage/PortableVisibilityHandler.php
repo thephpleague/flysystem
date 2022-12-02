@@ -12,35 +12,17 @@ use League\Flysystem\Visibility;
 class PortableVisibilityHandler implements VisibilityHandler
 {
     public const NO_PREDEFINED_VISIBILITY = 'noPredefinedVisibility';
-
     public const ACL_PUBLIC_READ = 'publicRead';
     public const ACL_AUTHENTICATED_READ = 'authenticatedRead';
     public const ACL_PRIVATE = 'private';
     public const ACL_PROJECT_PRIVATE = 'projectPrivate';
 
-    /**
-     * @var string
-     */
-    private $entity;
-
-    /**
-     * @var string
-     */
-    private $predefinedPublicAcl;
-
-    /**
-     * @var string
-     */
-    private $predefinedPrivateAcl;
 
     public function __construct(
-        string $entity = 'allUsers',
-        string $predefinedPublicAcl = self::ACL_PUBLIC_READ,
-        string $predefinedPrivateAcl = self::ACL_PROJECT_PRIVATE
+        private string $entity = 'allUsers',
+        private string $predefinedPublicAcl = self::ACL_PUBLIC_READ,
+        private string $predefinedPrivateAcl = self::ACL_PROJECT_PRIVATE
     ) {
-        $this->entity = $entity;
-        $this->predefinedPublicAcl = $predefinedPublicAcl;
-        $this->predefinedPrivateAcl = $predefinedPrivateAcl;
     }
 
     public function setVisibility(StorageObject $object, string $visibility): void

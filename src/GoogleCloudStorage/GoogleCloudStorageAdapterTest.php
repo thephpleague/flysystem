@@ -12,6 +12,7 @@ use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
+use function getenv;
 
 /**
  * @group gcs
@@ -31,6 +32,16 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
         static::$prefixer = new PathPrefixer(static::$adapterPrefix);
     }
 
+    protected static function bucketName(): string|array|false
+    {
+        return 'flysystem';
+    }
+
+    protected static function visibilityHandler(): VisibilityHandler
+    {
+        return new PortableVisibilityHandler();
+    }
+
     public function prefixPath(string $path): string
     {
         return static::$prefixer->prefixPath($path);
@@ -48,15 +59,19 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
         }
 
         $clientOptions = [
-            'projectId' => 'flysystem-testing',
+            'projectId' => getenv('GOOGLE_CLOUD_PROJECT'),
             'keyFilePath' => __DIR__ . '/../../google-cloud-service-account.json',
         ];
         $storageClient = new StubStorageClient($clientOptions);
         /** @var StubRiggedBucket $bucket */
-        $bucket = $storageClient->bucket('flysystem');
+        $bucket = $storageClient->bucket(self::bucketName());
         static::$bucket = $bucket;
 
-        return new GoogleCloudStorageAdapter($bucket, static::$adapterPrefix);
+        return new GoogleCloudStorageAdapter(
+            $bucket,
+            static::$adapterPrefix,
+            visibilityHandler: self::visibilityHandler(),
+        );
     }
 
     /**

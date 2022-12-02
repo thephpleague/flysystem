@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\GoogleCloudStorage;
 
 use Google\Cloud\Storage\StorageClient;
+use function in_array;
 
 class StubStorageClient extends StorageClient
 {
@@ -22,12 +23,15 @@ class StubStorageClient extends StorageClient
 
     public function bucket($name, $userProject = false)
     {
-        if ($name === 'flysystem' && ! $this->riggedBucket) {
-            $this->riggedBucket = new StubRiggedBucket($this->connection, 'flysystem', [
+        $knownBuckets = ['flysystem', 'no-acl-bucket-for-ci'];
+        $isKnownBucket = in_array($name, $knownBuckets);
+
+        if ($isKnownBucket && ! $this->riggedBucket) {
+            $this->riggedBucket = new StubRiggedBucket($this->connection, $name, [
                 'requesterProjectId' => $this->projectId,
             ]);
         }
 
-        return $name === 'flysystem' ? $this->riggedBucket : parent::bucket($name, $userProject);
+        return $isKnownBucket ? $this->riggedBucket : parent::bucket($name, $userProject);
     }
 }
