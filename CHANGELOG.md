@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.11.0 - 2022-12-02
+
+### Added
+
+- [Google Cloud Storage] Added `UniformBucketLevelAccessVisibility` to allow buckets with uniform bucket-level access policies.
+
 ## 3.10.4 - 2022-11-26
 
 ### Changed
