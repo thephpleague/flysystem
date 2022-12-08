@@ -29,7 +29,7 @@ final class PathPrefixer
     public function stripPrefix(string $path): string
     {
         /* @var string */
-        return substr($path, strlen($this->prefix));
+        return substr($path, (int)strpos($path, $this->prefix) + strlen($this->prefix));
     }
 
     public function stripDirectoryPrefix(string $path): string
