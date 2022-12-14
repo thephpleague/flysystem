@@ -8,7 +8,7 @@ use function rtrim;
 use function strlen;
 use function substr;
 
-final class PathPrefixer
+final class PathPrefixer implements Prefixer
 {
     /**
      * @var string

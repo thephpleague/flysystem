@@ -13,6 +13,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\Prefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -74,7 +75,7 @@ class AwsS3V3Adapter implements FilesystemAdapter
     private $client;
 
     /**
-     * @var PathPrefixer
+     * @var Prefixer
      */
     private $prefixer;
 
@@ -110,10 +111,11 @@ class AwsS3V3Adapter implements FilesystemAdapter
         VisibilityConverter $visibility = null,
         MimeTypeDetector $mimeTypeDetector = null,
         array $options = [],
-        bool $streamReads = true
+        bool $streamReads = true,
+        ?Prefixer $prefixer = null
     ) {
         $this->client = $client;
-        $this->prefixer = new PathPrefixer($prefix);
+        $this->prefixer = $prefixer ?? new PathPrefixer($prefix);
         $this->bucket = $bucket;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();

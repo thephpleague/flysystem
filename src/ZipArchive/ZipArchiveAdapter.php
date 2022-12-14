@@ -10,6 +10,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\Prefixer;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -34,7 +35,7 @@ use function stream_with_contents;
 
 final class ZipArchiveAdapter implements FilesystemAdapter
 {
-    /** @var PathPrefixer */
+    /** @var Prefixer */
     private $pathPrefixer;
     /** @var MimeTypeDetector */
     private $mimeTypeDetector;
@@ -47,9 +48,10 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         ZipArchiveProvider $zipArchiveProvider,
         string $root = '',
         ?MimeTypeDetector $mimeTypeDetector = null,
-        ?VisibilityConverter $visibility = null
+        ?VisibilityConverter $visibility = null,
+        ?Prefixer $prefixer = null
     ) {
-        $this->pathPrefixer = new PathPrefixer($root);
+        $this->pathPrefixer = $prefixer ?? new PathPrefixer($root);
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->visibility = $visibility ?? new PortableVisibilityConverter();
         $this->zipArchiveProvider = $zipArchiveProvider;

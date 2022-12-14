@@ -12,6 +12,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\Prefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -34,7 +35,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
     private $bucket;
 
     /**
-     * @var PathPrefixer
+     * @var Prefixer
      */
     private $prefixer;
 
@@ -58,10 +59,11 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter
         string $prefix = '',
         VisibilityHandler $visibilityHandler = null,
         string $defaultVisibility = Visibility::PRIVATE,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        ?Prefixer $prefixer = null
     ) {
         $this->bucket = $bucket;
-        $this->prefixer = new PathPrefixer($prefix);
+        $this->prefixer = $prefixer ?? new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
         $this->defaultVisibility = $defaultVisibility;
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();

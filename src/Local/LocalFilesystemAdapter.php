@@ -15,6 +15,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\Prefixer;
 use League\Flysystem\SymbolicLinkEncountered;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
@@ -57,7 +58,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter
     public const DISALLOW_LINKS = 0002;
 
     /**
-     * @var PathPrefixer
+     * @var Prefixer
      */
     private $prefixer;
 
@@ -86,9 +87,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter
         VisibilityConverter $visibility = null,
         int $writeFlags = LOCK_EX,
         int $linkHandling = self::DISALLOW_LINKS,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        ?Prefixer $prefixer = null
     ) {
-        $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
+        $this->prefixer = $prefixer ?? new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $this->writeFlags = $writeFlags;
         $this->linkHandling = $linkHandling;
         $this->visibility = $visibility ?: new PortableVisibilityConverter();

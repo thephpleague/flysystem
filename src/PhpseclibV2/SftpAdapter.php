@@ -10,6 +10,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\Prefixer;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
@@ -38,7 +39,7 @@ class SftpAdapter implements FilesystemAdapter
     private $visibilityConverter;
 
     /**
-     * @var PathPrefixer
+     * @var Prefixer
      */
     private $prefixer;
 
@@ -51,10 +52,11 @@ class SftpAdapter implements FilesystemAdapter
         ConnectionProvider $connectionProvider,
         string $root,
         VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        ?Prefixer $prefixer = null
     ) {
         $this->connectionProvider = $connectionProvider;
-        $this->prefixer = new PathPrefixer($root);
+        $this->prefixer = $prefixer ?? new PathPrefixer($root);
         $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
     }
