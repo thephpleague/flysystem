@@ -165,6 +165,20 @@ abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function list_root_directory(): void
+    {
+        $this->givenWeHaveAnExistingFile('a.txt');
+        $this->givenWeHaveAnExistingFile('one/a.txt');
+        $this->givenWeHaveAnExistingFile('one/b.txt');
+        $this->givenWeHaveAnExistingFile('two/a.txt');
+
+        $this->assertCount(6, $this->adapter()->listContents('', true));
+        $this->assertCount(3, $this->adapter()->listContents('', false));
+    }
+
+    /**
+     * @test
+     */
     public function failing_to_create_a_directory(): void
     {
         static::$archiveProvider->stubbedZipArchive()->failNextDirectoryCreation();
