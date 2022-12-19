@@ -407,7 +407,13 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     private function isAtRootDirectory(string $directoryRoot, string $path): bool
     {
-        return $directoryRoot === (rtrim(dirname($path), '/') . '/');
+        $dirname = dirname($path);
+
+        if ('' === $directoryRoot && '.' === $dirname) {
+            return true;
+        }
+
+        return $directoryRoot === (rtrim($dirname, '/') . '/');
     }
 
     private function setVisibilityAttribute(string $statsName, string $visibility, ZipArchive $archive): bool
