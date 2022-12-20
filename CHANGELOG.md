@@ -1,5 +1,17 @@
 # Changelog
 
+## 3.12.0 - 2022-12-20
+
+### Added
+
+- [Core] Chained public URL generation strategy
+
+### Fixed
+
+- [WebDAV] Handle cases where the content listing returns entries with URL prefixes.
+- [Local] Ensure correct implicit root creations happens on windows.
+- [ZipArchive] Fix incorrect zip contents listing for top-level directory.
+
 ## 3.11.0 - 2022-12-02
 
 ### Added
