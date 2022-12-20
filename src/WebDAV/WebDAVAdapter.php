@@ -36,7 +36,6 @@ use function fclose;
 use function implode;
 use function parse_url;
 use function rawurldecode;
-use function var_dump;
 
 class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
