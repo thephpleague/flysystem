@@ -184,7 +184,7 @@ class MountManager implements FilesystemOperator
         try {
             $filesystem->delete($path);
         } catch (UnableToDeleteFile $exception) {
-            throw UnableToDeleteFile::atLocation($location, '', $exception);
+            throw UnableToDeleteFile::atLocation($location, $exception->reason(), $exception);
         }
     }
 
@@ -196,7 +196,7 @@ class MountManager implements FilesystemOperator
         try {
             $filesystem->deleteDirectory($path);
         } catch (UnableToDeleteDirectory $exception) {
-            throw UnableToDeleteDirectory::atLocation($location, '', $exception);
+            throw UnableToDeleteDirectory::atLocation($location, $exception->reason(), $exception);
         }
     }
 
