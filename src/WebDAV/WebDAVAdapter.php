@@ -34,7 +34,6 @@ use function dirname;
 use function explode;
 use function fclose;
 use function implode;
-use function var_dump;
 
 class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 {
