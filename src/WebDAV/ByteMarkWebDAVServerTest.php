@@ -11,7 +11,7 @@ class ByteMarkWebDAVServerTest extends WebDAVAdapterTestCase
 {
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        $client = new Client(['baseUri' => 'http://localhost:4080/', 'userName' => 'alice', 'password' => 'secret1234']);
+        $client = new UrlPrefixingClientStub(['baseUri' => 'http://localhost:4080/', 'userName' => 'alice', 'password' => 'secret1234']);
 
         return new WebDAVAdapter($client, manualCopy: true, manualMove: true);
     }

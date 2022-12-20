@@ -5,4 +5,5 @@
 .gitignore export-ignore
 **/*Test.php export-ignore
 **/*TestCase.php export-ignore
+**/*Stub.php export-ignore
 resources export-ignore
