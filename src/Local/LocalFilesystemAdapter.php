@@ -61,6 +61,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     private PathPrefixer $prefixer;
     private VisibilityConverter $visibility;
     private MimeTypeDetector $mimeTypeDetector;
+    private string $rootLocation;
 
     /**
      * @var bool
@@ -76,7 +77,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         bool $lazyRootCreation = false,
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
-        $this->visibility = $visibility ?: new PortableVisibilityConverter();
+        $visibility ??= new PortableVisibilityConverter();
+        $this->visibility = $visibility;
+        $this->rootLocation = $location;
         $this->mimeTypeDetector = $mimeTypeDetector ?: new FallbackMimeTypeDetector(new FinfoMimeTypeDetector());
 
         if ( ! $lazyRootCreation) {
@@ -90,7 +93,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             return;
         }
 
-        $this->ensureDirectoryExists($this->prefixer->prefixPath('/'), $this->visibility->defaultForDirectories());
+        $this->ensureDirectoryExists($this->rootLocation, $this->visibility->defaultForDirectories());
     }
 
     public function write(string $path, string $contents, Config $config): void
