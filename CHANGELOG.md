@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.12.1 - 2023-01-06
+
+### Fixed
+
+- [AWS S3] Use doesObjectExistV2 to prevent false positive respomnses.
+
 ## 3.12.0 - 2022-12-20
 
 ### Added
