@@ -28,7 +28,7 @@
         "phpunit/phpunit": "^9.5.11",
         "phpstan/phpstan": "^0.12.26",
         "phpseclib/phpseclib": "^3.0.14",
-        "aws/aws-sdk-php": "^3.198.1",
+        "aws/aws-sdk-php": "^3.220.0",
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.5",
         "google/cloud-storage": "^1.23",
