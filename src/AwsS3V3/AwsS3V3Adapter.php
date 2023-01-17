@@ -115,7 +115,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
     public function fileExists(string $path): bool
     {
         try {
-            return $this->client->doesObjectExistV2($this->bucket, $this->prefixer->prefixPath($path), $this->options);
+            return $this->client->doesObjectExistV2($this->bucket, $this->prefixer->prefixPath($path), false, $this->options);
         } catch (Throwable $exception) {
             throw UnableToCheckFileExistence::forLocation($path, $exception);
         }
