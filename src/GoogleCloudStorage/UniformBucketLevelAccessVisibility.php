@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\GoogleCloudStorage;
 
-use Google\Cloud\Core\Exception\NotFoundException;
-use Google\Cloud\Storage\Acl;
 use Google\Cloud\Storage\StorageObject;
 
 class UniformBucketLevelAccessVisibility implements VisibilityHandler
