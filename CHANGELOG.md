@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.12.2 - 2023-01-19
+
+### Fixed
+
+- [AWS S3] Corrected param order for doesObjectExistV2 call
+
 ## 3.12.1 - 2023-01-06
 
 ### Fixed
