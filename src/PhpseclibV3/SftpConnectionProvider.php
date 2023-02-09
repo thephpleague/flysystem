@@ -163,7 +163,7 @@ class SftpConnectionProvider implements ConnectionProvider
 
     private function loadPrivateKey(): AsymmetricKey
     {
-        if ("---" !== substr($this->privateKey, 0, 3) && is_file($this->privateKey)) {
+        if (("---" !== substr($this->privateKey, 0, 3) || "PuTTY" !== substr($this->privateKey, 0, 5)) && is_file($this->privateKey)) {
             $this->privateKey = file_get_contents($this->privateKey);
         }
 
