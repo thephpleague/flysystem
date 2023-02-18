@@ -1,6 +1,12 @@
 # Changelog
 
-## 3.12.2 - 2023-01-19
+## 3.12.3 - 2023-02-18
+
+### Fixed
+
+- [Google Cloud Storage] Fixed ACL error for uniform bucker ACL copy operations.
+- 
+- ## 3.12.2 - 2023-01-19
 
 ### Fixed
 
