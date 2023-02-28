@@ -19,7 +19,7 @@ $server->addPlugin(new Sabre\DAV\Browser\Plugin());
 
 if (strpos($_SERVER['REQUEST_URI'], 'unknown-mime-type.md5') === false) {
     $guesser = new Sabre\DAV\Browser\GuessContentType();
-    $guesser->extensionMap['svg'] = 'image/svg';
+    $guesser->extensionMap['svg'] = 'image/svg+xml';
     $server->addPlugin($guesser);
 }
 
