@@ -21,6 +21,10 @@ class DirectoryListing implements IteratorAggregate
     {
     }
 
+    /**
+     * @param callable(T):bool $filter
+     * @return static<T>
+     */
     public function filter(callable $filter): DirectoryListing
     {
         $generator = (static function (iterable $listing) use ($filter): Generator {
@@ -34,6 +38,12 @@ class DirectoryListing implements IteratorAggregate
         return new DirectoryListing($generator);
     }
 
+    /**
+     * @template O
+     * @param callable(T):O $mapper
+     *
+     * @return static<O>
+     */
     public function map(callable $mapper): DirectoryListing
     {
         $generator = (static function (iterable $listing) use ($mapper): Generator {
@@ -45,6 +55,9 @@ class DirectoryListing implements IteratorAggregate
         return new DirectoryListing($generator);
     }
 
+    /**
+     * @return static<T>
+     */
     public function sortByPath(): DirectoryListing
     {
         $listing = $this->toArray();
