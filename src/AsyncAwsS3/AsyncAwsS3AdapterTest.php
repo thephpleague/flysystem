@@ -369,10 +369,16 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
-            $adapter->createDirectory('directory', new Config());
-            $listing = iterator_to_array($adapter->listContents('directory', true));
+            $adapter->write('directory/file.txt', '', new Config());
+            $adapter->createDirectory('empty', new Config());
+            $adapter->createDirectory('nested/nested', new Config());
+            $listing1 = iterator_to_array($adapter->listContents('directory', true));
+            $listing2 = iterator_to_array($adapter->listContents('empty', true));
+            $listing3 = iterator_to_array($adapter->listContents('nested', true));
 
-            self::assertCount(0, $listing);
+            self::assertCount(1, $listing1);
+            self::assertCount(0, $listing2);
+            self::assertCount(1, $listing3);
         });
     }
 
