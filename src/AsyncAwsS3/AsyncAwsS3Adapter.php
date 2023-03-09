@@ -285,7 +285,13 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         $listing = $this->retrievePaginatedListing($options);
 
         foreach ($listing as $item) {
-            yield $this->mapS3ObjectMetadata($item);
+            $item = $this->mapS3ObjectMetadata($item);
+
+            if ("{$item->path()}/" === $prefix) {
+                continue;
+            }
+
+            yield $item;
         }
     }
 
