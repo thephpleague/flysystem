@@ -274,6 +274,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function listContents(string $path, bool $deep): iterable
     {
+        $path = trim($path, '/');
         $prefix = trim($this->prefixer->prefixPath($path), '/');
         $prefix = empty($prefix) ? '' : $prefix . '/';
         $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
@@ -287,7 +288,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         foreach ($listing as $item) {
             $item = $this->mapS3ObjectMetadata($item);
 
-            if ("{$item->path()}/" === $prefix) {
+            if ($item->path() === $path) {
                 continue;
             }
 
