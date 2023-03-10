@@ -186,7 +186,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
             return;
         }
 
-        $this->client->deleteObjects(['Bucket' => $this->bucket, 'Delete' => ['Objects' => $objects]]);
+        foreach (array_chunk($objects, 1000) as $chunk) {
+            $this->client->deleteObjects([
+                'Bucket' => $this->bucket,
+                'Delete' => ['Objects' => $chunk],
+            ]);
+        }
     }
 
     public function createDirectory(string $path, Config $config): void
