@@ -133,7 +133,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
 
         $mimeType = $adapter->mimeType('file.svg');
 
-        $this->assertStringStartsWith('image/svg', $mimeType->mimeType());
+        $this->assertStringStartsWith('image/svg+xml', $mimeType->mimeType());
     }
 
     /**

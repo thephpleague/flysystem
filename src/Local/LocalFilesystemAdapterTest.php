@@ -530,7 +530,7 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
             (string) file_get_contents(__DIR__ . '/../AdapterTestUtilities/test_files/flysystem.svg'),
             new Config()
         );
-        $this->assertStringStartsWith('image/svg', $adapter->mimeType('flysystem.svg')->mimeType());
+        $this->assertStringStartsWith('image/svg+xml', $adapter->mimeType('flysystem.svg')->mimeType());
     }
 
     /**

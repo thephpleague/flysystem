@@ -491,7 +491,7 @@ abstract class FilesystemAdapterTestCase extends TestCase
 
             $mimetype = $this->adapter()->mimeType('file.svg')->mimeType();
 
-            $this->assertStringStartsWith('image/svg', $mimetype);
+            $this->assertStringStartsWith('image/svg+xml', $mimetype);
         });
     }
 
