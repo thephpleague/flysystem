@@ -8,9 +8,9 @@ declare(strict_types=1);
  *  - All required dependencies of the extracted packages MUST be
  *    present in the main composer.json's require(-dev) section.
  *  - Dependency constraints of extracted packages may not exclude
- *    the constraints of the main package and visa versa.
+ *    the constraints of the main package and vice versa.
  *  - The provided target release argument must be satisfiable by
- *    all of the extracted packages' core dependency constraint.
+ *    all the extracted packages' core dependency constraint.
  */
 
 use Composer\Semver\Comparator;
