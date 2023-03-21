@@ -294,7 +294,10 @@ class FtpAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = $this->read($path);
+            $contents = '';
+            if( ! is_a($this->mimeTypeDetector, 'ExtensionMimeTypeDetector' )) {
+                $contents = $this->read($path);
+            }
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
