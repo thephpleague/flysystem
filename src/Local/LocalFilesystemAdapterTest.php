@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
-use Iterator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
 use League\Flysystem\Filesystem;
@@ -26,7 +25,6 @@ use League\Flysystem\Visibility;
 use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
-use RuntimeException;
 use Traversable;
 use function file_get_contents;
 use function file_put_contents;
@@ -37,6 +35,7 @@ use function mkdir;
 use function strnatcasecmp;
 use function symlink;
 use function usort;
+use function var_dump;
 use const LOCK_EX;
 
 /**
@@ -389,6 +388,8 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
          * @var StorageAttributes $publicFileAttributes
          */
         [$privateDirectoryAttributes, $publicFileAttributes, $publicDirectoryAttributes, $privateFileAttributes] = $listing;
+
+        var_dump($listing);
 
         $this->assertEquals('public', $publicDirectoryAttributes->visibility());
         $this->assertEquals('private', $privateFileAttributes->visibility());

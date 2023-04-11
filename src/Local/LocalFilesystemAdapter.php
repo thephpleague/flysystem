@@ -207,6 +207,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
 
         foreach ($iterator as $fileInfo) {
             $pathName = $fileInfo->getPathname();
+
             try {
                 if ($fileInfo->isLink()) {
                     if ($this->linkHandling & self::SKIP_LINKS) {
@@ -215,7 +216,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
                     throw SymbolicLinkEncountered::atLocation($pathName);
                 }
 
-                $path = $this->prefixer->stripPrefix($path);
+                $path = $this->prefixer->stripPrefix($pathName);
                 $lastModified = $fileInfo->getMTime();
                 $isDirectory = $fileInfo->isDir();
                 $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
