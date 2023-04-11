@@ -35,7 +35,6 @@ use function mkdir;
 use function strnatcasecmp;
 use function symlink;
 use function usort;
-use function var_dump;
 use const LOCK_EX;
 
 /**

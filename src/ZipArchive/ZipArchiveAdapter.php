@@ -21,7 +21,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
-use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
@@ -42,7 +41,8 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         private ZipArchiveProvider $zipArchiveProvider,
         string $root = '',
         ?MimeTypeDetector $mimeTypeDetector = null,
-        ?VisibilityConverter $visibility = null
+        ?VisibilityConverter $visibility = null,
+        private bool $detectMimeTypeUsingPath = false,
     ) {
         $this->pathPrefixer = new PathPrefixer(ltrim($root, '/'));
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
@@ -235,8 +235,9 @@ final class ZipArchiveAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = $this->mimeTypeDetector instanceof ExtensionMimeTypeDetector ? '' : $this->read($path);
-            $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
+            $mimetype = $this->detectMimeTypeUsingPath
+                ? $this->mimeTypeDetector->detectMimeTypeFromPath($path)
+                : $this->mimeTypeDetector->detectMimeType($path, $this->read($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }

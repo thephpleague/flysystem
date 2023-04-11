@@ -23,7 +23,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
-use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
@@ -59,7 +58,8 @@ class FtpAdapter implements FilesystemAdapter
         FtpConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
         VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null
+        MimeTypeDetector $mimeTypeDetector = null,
+        private bool $detectMimeTypeUsingPath = false,
     ) {
         $this->systemType = $this->connectionOptions->systemType();
         $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
@@ -295,8 +295,9 @@ class FtpAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = $this->mimeTypeDetector instanceof ExtensionMimeTypeDetector ? '' : $this->read($path);
-            $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
+            $mimetype = $this->detectMimeTypeUsingPath
+                ? $this->mimeTypeDetector->detectMimeTypeFromPath($path)
+                : $this->mimeTypeDetector->detectMimeType($path, $this->read($path));
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
         }
