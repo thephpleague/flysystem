@@ -87,7 +87,6 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertTrue($adapter->fileExists('a/path.txt'));
         $this->assertFalse($adapter->fileExists('a/b/path.txt'));
         $this->assertFalse($adapter->fileExists('a/b/c/path.txt'));
-//        var_dump(iterator_to_array($adapter->listContents('', false)));
     }
 
     /**

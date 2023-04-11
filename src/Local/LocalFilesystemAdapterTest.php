@@ -389,8 +389,6 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
          */
         [$privateDirectoryAttributes, $publicFileAttributes, $publicDirectoryAttributes, $privateFileAttributes] = $listing;
 
-        var_dump($listing);
-
         $this->assertEquals('public', $publicDirectoryAttributes->visibility());
         $this->assertEquals('private', $privateFileAttributes->visibility());
         $this->assertEquals('private', $privateDirectoryAttributes->visibility());
