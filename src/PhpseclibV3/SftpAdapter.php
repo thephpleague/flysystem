@@ -22,6 +22,7 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
+use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use phpseclib3\Net\SFTP;
@@ -226,10 +227,7 @@ class SftpAdapter implements FilesystemAdapter
     public function mimeType(string $path): FileAttributes
     {
         try {
-            $contents = '';
-            if( ! is_a($this->mimeTypeDetector, 'ExtensionMimeTypeDetector' )) {
-                $contents = $this->read($path);
-            }
+            $contents = $this->mimeTypeDetector instanceof ExtensionMimeTypeDetector ? '' : $this->read($path);
             $mimetype = $this->mimeTypeDetector->detectMimeType($path, $contents);
         } catch (Throwable $exception) {
             throw UnableToRetrieveMetadata::mimeType($path, $exception->getMessage(), $exception);
