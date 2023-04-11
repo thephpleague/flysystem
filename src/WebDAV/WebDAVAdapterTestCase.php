@@ -44,6 +44,19 @@ abstract class WebDAVAdapterTestCase extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function creating_a_directory_with_leading_and_trailing_slashes(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->createDirectory('/some/directory/', new Config);
+
+            self::assertTrue($adapter->directoryExists('/some/directory/'));
+        });
+    }
+
+    /**
+     * @test
+     */
     public function copying_a_file(): void
     {
         $this->runScenario(function () {
