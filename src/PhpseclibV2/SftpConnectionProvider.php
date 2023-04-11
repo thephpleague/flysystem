@@ -85,7 +85,8 @@ class SftpConnectionProvider implements ConnectionProvider
         int $timeout = 10,
         int $maxTries = 4,
         string $hostFingerprint = null,
-        ConnectivityChecker $connectivityChecker = null
+        ConnectivityChecker $connectivityChecker = null,
+        private bool $disableStatCache = true,
     ) {
         $this->host = $host;
         $this->username = $username;
@@ -127,7 +128,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private function setupConnection(): SFTP
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
-        $connection->disableStatCache();
+        $this->disableStatCache && $connection->disableStatCache();
 
         try {
             $this->checkFingerprint($connection);

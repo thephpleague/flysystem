@@ -41,7 +41,8 @@ class SftpConnectionProvider implements ConnectionProvider
         private int $maxTries = 4,
         private ?string $hostFingerprint = null,
         ConnectivityChecker $connectivityChecker = null,
-        private array $preferredAlgorithms = []
+        private array $preferredAlgorithms = [],
+        private bool $disableStatCache = true,
     ) {
         $this->connectivityChecker = $connectivityChecker ?: new SimpleConnectivityChecker();
     }
@@ -74,7 +75,7 @@ class SftpConnectionProvider implements ConnectionProvider
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
         $connection->setPreferredAlgorithms($this->preferredAlgorithms);
-        $connection->disableStatCache();
+        $this->disableStatCache && $connection->disableStatCache();
 
         try {
             $this->checkFingerprint($connection);
