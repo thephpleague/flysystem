@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.14.0 - 2023-04-11
+
+### Added
+
+- Made disabling stat cache configurable for SFTP adapters.
+
 ## 3.13.0 - 2023-04-11
 
 ### Fixed
