@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.13.0 - 2023-04-11
+
+### Fixed
+
+- AsyncAwsS3 object deletion now chunks per 100 objects to prevent memory exhaustion
+- AsyncAwsS3 now disregards top-level directories from listings
+- LocalAdapter now deals with file deletions during directory listings gracefully.
+
+### Added
+
+- DirectoryListing now supports correct phpstan for map and filter methods. 
+- FTP/SFTP added config option to detect the mime-type using the path alone (prevents a read)
+- SFTP now supports PuTTY style private keys
+- 
+
 ## 3.12.3 - 2023-02-18
 
 ### Fixed
