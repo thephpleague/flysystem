@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use Iterator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
+use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\SymbolicLinkEncountered;
@@ -19,10 +21,12 @@ use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
+use League\Flysystem\UnixVisibility\VisibilityConverter;
 use League\Flysystem\Visibility;
 use League\MimeTypeDetection\EmptyExtensionToMimeTypeMap;
 use League\MimeTypeDetection\ExtensionMimeTypeDetector;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
+use RuntimeException;
 use Traversable;
 use function file_get_contents;
 use function file_put_contents;
@@ -40,7 +44,7 @@ use const LOCK_EX;
  */
 class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
 {
-    private const ROOT = __DIR__ . '/test-root';
+    public const ROOT = __DIR__ . '/test-root';
 
     protected function setUp(): void
     {
@@ -122,6 +126,53 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $this->assertFileExists(static::ROOT . '/file.txt');
         $contents = file_get_contents(static::ROOT . '/file.txt');
         $this->assertEquals('contents', $contents);
+    }
+
+    /**
+     * @test
+     * @see https://github.com/thephpleague/flysystem/issues/1606
+     */
+    public function deleting_a_file_during_contents_listing(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT, visibility: new class() implements VisibilityConverter {
+            private VisibilityConverter $visibility;
+
+            public function __construct()
+            {
+                $this->visibility = new PortableVisibilityConverter();
+            }
+
+            public function forFile(string $visibility): int
+            {
+                return $this->visibility->forFile($visibility);
+            }
+
+            public function forDirectory(string $visibility): int
+            {
+                return $this->visibility->forDirectory($visibility);
+            }
+
+            public function inverseForFile(int $visibility): string
+            {
+                unlink(LocalFilesystemAdapterTest::ROOT . '/file-1.txt');
+                return $this->visibility->inverseForFile($visibility);
+            }
+
+            public function inverseForDirectory(int $visibility): string
+            {
+                return $this->visibility->inverseForDirectory($visibility);
+            }
+
+            public function defaultForDirectories(): int
+            {
+                return $this->visibility->defaultForDirectories();
+            }
+        });
+        $filesystem = new Filesystem($adapter);
+
+        $filesystem->write('/file-1.txt', 'something');
+        $listing = $filesystem->listContents('/')->toArray();
+        self::assertCount(0, $listing);
     }
 
     /**

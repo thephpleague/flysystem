@@ -31,6 +31,7 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
+use Throwable;
 use function chmod;
 use function clearstatcache;
 use function dirname;
@@ -205,25 +206,32 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $iterator = $deep ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
 
         foreach ($iterator as $fileInfo) {
-            if ($fileInfo->isLink()) {
-                if ($this->linkHandling & self::SKIP_LINKS) {
-                    continue;
+            $pathName = $fileInfo->getPathname();
+            try {
+                if ($fileInfo->isLink()) {
+                    if ($this->linkHandling & self::SKIP_LINKS) {
+                        continue;
+                    }
+                    throw SymbolicLinkEncountered::atLocation($pathName);
                 }
-                throw SymbolicLinkEncountered::atLocation($fileInfo->getPathname());
+
+                $path = $this->prefixer->stripPrefix($path);
+                $lastModified = $fileInfo->getMTime();
+                $isDirectory = $fileInfo->isDir();
+                $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
+                $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
+
+                yield $isDirectory ? new DirectoryAttributes(str_replace('\\', '/', $path), $visibility, $lastModified) : new FileAttributes(
+                    str_replace('\\', '/', $path),
+                    $fileInfo->getSize(),
+                    $visibility,
+                    $lastModified
+                );
+            } catch (Throwable $exception) {
+                if (file_exists($pathName)) {
+                    throw $exception;
+                }
             }
-
-            $path = $this->prefixer->stripPrefix($fileInfo->getPathname());
-            $lastModified = $fileInfo->getMTime();
-            $isDirectory = $fileInfo->isDir();
-            $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
-            $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
-
-            yield $isDirectory ? new DirectoryAttributes(str_replace('\\', '/', $path), $visibility, $lastModified) : new FileAttributes(
-                str_replace('\\', '/', $path),
-                $fileInfo->getSize(),
-                $visibility,
-                $lastModified
-            );
         }
     }
 
