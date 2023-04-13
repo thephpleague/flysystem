@@ -42,6 +42,7 @@ for which ever storage is right for you.
 * **[Sharepoint 365 / One Drive (Using MS Graph)](https://github.com/shitware-ltd/flysystem-msgraph)**
 * **[OneDrive](https://github.com/doerffler/flysystem-onedrive)**
 * **[Dropbox](https://github.com/spatie/flysystem-dropbox)**
+* **[ReplicateAdapter](https://github.com/ajgarlag/flysystem-replicate)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/v2/docs/advanced/creating-an-adapter/) yourself.
 
