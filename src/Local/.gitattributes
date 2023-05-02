@@ -4,3 +4,4 @@
 .gitattributes export-ignore
 .gitignore export-ignore
 **/*Test.php export-ignore
+README.md export-ignore

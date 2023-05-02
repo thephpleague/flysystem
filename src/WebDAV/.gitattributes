@@ -7,3 +7,4 @@
 **/*TestCase.php export-ignore
 **/*Stub.php export-ignore
 resources export-ignore
+README.md export-ignore

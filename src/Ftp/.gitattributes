@@ -5,3 +5,4 @@
 .gitignore export-ignore
 **/*Test.php export-ignore
 **/*TestCase.php export-ignore
+README.md export-ignore
