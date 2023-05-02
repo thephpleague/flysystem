@@ -6,4 +6,4 @@
 composer require league/flysystem-local
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/local/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/local/).

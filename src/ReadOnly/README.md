@@ -6,4 +6,4 @@
 composer require league/flysystem-read-only
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/read-only/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/read-only/).

@@ -6,4 +6,4 @@
 composer require league/flysystem-path-prefixing
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/path-prefixing/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/path-prefixing/).

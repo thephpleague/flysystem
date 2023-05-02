@@ -8,4 +8,4 @@
 composer require league/flysystem-sftp
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/sftp/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/sftp/).

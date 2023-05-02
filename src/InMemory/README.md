@@ -6,4 +6,4 @@
 composer require league/flysystem-memory
 ```
 
-View the [documentation](https://flysystem.thephpleague.com/v2/docs/adapter/in-memory/).
+View the [documentation](https://flysystem.thephpleague.com/docs/adapter/in-memory/).
