@@ -18,6 +18,7 @@
     },
     "require": {
         "php": "^8.0.2",
+        "league/flysystem-local":  "^3.0.0",
         "league/mime-type-detection": "^1.0.0"
     },
     "require-dev": {
@@ -48,6 +49,19 @@
         {
             "name": "Frank de Jonge",
             "email": "info@frankdejonge.nl"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "league/flysystem-local",
+                "version": "3.0.0",
+                "dist": {
+                    "type": "path",
+                    "url": "src/Local"
+                }
+            }
         }
     ]
 }

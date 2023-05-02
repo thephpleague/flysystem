@@ -21,6 +21,11 @@
             "target": "git@github.com:thephpleague/flysystem-memory.git"
         },
         {
+            "name": "local",
+            "directory": "src/Local",
+            "target": "git@github.com:thephpleague/flysystem-local.git"
+        },
+        {
             "name": "ziparchive",
             "directory": "src/ZipArchive",
             "target": "git@github.com:thephpleague/flysystem-ziparchive.git"
