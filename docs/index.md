@@ -42,7 +42,7 @@ for which ever storage is right for you.
 * **[Google Cloud Storage](/docs/adapter/google-cloud-storage/)**
 * **[Azure Blob Storage](/docs/adapter/azure-blob-storage/)**
 * **[WebDAV](/docs/adapter/webdav/)**
-* **[ZipArchive](/docs/adapter/ziparchive/)**
+* **[ZipArchive](/docs/adapter/zip-archive/)**
 
 ### Third party Adapters
 
