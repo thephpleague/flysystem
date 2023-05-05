@@ -33,6 +33,7 @@ for which ever storage is right for you.
 * **[Google Cloud Storage](https://flysystem.thephpleague.com/docs/adapter/google-cloud-storage/)**
 * **[Azure Blob Storage](https://flysystem.thephpleague.com/docs/adapter/azure-blob-storage/)**
 * **[WebDAV](https://flysystem.thephpleague.com/docs/adapter/webdav/)**
+* **[ZipArchive](https://flysystem.thephpleague.com/docs/adapter/zip-archive/)**
 
 ### Third party Adapters
 
