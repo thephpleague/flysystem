@@ -29,6 +29,7 @@ Official Adapters:
     SFTP (V2): '/docs/adapter/sftp-v2/'
     SFTP (V3): '/docs/adapter/sftp-v3/'
     WebDAV: '/docs/adapter/webdav/'
+    ZipArchive: '/docs/adapter/zip-archive/'
 
 Community Adapters:
     GitLab: '/docs/adapter/gitlab/'
