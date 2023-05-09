@@ -50,18 +50,5 @@
             "name": "Frank de Jonge",
             "email": "info@frankdejonge.nl"
         }
-    ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "league/flysystem-local",
-                "version": "3.0.0",
-                "dist": {
-                    "type": "path",
-                    "url": "src/Local"
-                }
-            }
-        }
     ]
 }
