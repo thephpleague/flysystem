@@ -226,6 +226,19 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function copying_a_directory(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->createDirectory('/source_directory', new Config());
+        $adapter->write('/source_directory/a', 'contents', new Config());
+        $adapter->copy('/source_directory', '/target_directory', new Config());
+        $this->assertTrue($adapter->fileExists('/target_directory/a'));
+        $this->assertTrue($adapter->fileExists('/source_directory/a'));
+    }
+
+    /**
+     * @test
+     */
     public function trying_to_copy_a_non_existing_file(): void
     {
         $this->expectException(UnableToCopyFile::class);

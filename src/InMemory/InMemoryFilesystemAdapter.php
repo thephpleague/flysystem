@@ -19,7 +19,9 @@ use League\MimeTypeDetection\MimeTypeDetector;
 
 use function array_keys;
 use function rtrim;
+use function strlen;
 use function strpos;
+use function substr;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
@@ -237,13 +239,28 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         $source = $this->preparePath($source);
         $destination = $this->preparePath($destination);
 
-        if ( ! $this->fileExists($source)) {
-            throw UnableToCopyFile::fromLocationTo($source, $destination);
-        }
-
         $lastModified = $config->get('timestamp', time());
 
-        $this->files[$destination] = $this->files[$source]->withLastModified($lastModified);
+        if ($this->fileExists($source)) {
+            $this->files[$destination] = $this->files[$source]->withLastModified($lastModified);
+            return;
+        }
+
+        if ($this->directoryExists($source)) {
+            $sourcePrefix = rtrim($source, '/') . '/';
+            $destinationPrefix = rtrim($destination, '/') . '/';
+
+            foreach (array_keys($this->files) as $path) {
+                if (strpos($path, $sourcePrefix) === 0) {
+                    $newPath = $destinationPrefix . substr($path, strlen($sourcePrefix));
+                    $this->files[$newPath] = $this->files[$path]->withLastModified($lastModified);
+                }
+            }
+
+            return;
+        }
+
+        throw UnableToCopyFile::fromLocationTo($source, $destination);
     }
 
     private function preparePath(string $path): string
