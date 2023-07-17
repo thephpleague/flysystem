@@ -338,11 +338,18 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
 
         $archive = $this->zipArchiveProvider->createZipArchive();
+
+        if ($archive->locateName($this->pathPrefixer->prefixPath($destination)) !== false) {
+            $this->delete($destination);
+            $this->copy($source, $destination, $config);
+            $this->delete($source);
+            return;
+        }
+
         $renamed = $archive->renameName(
             $this->pathPrefixer->prefixPath($source),
             $this->pathPrefixer->prefixPath($destination)
         );
-
         if ($renamed === false) {
             throw UnableToMoveFile::fromLocationTo($source, $destination);
         }
