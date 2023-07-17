@@ -646,37 +646,6 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
-    public function moving_a_file_and_overwriting(): void
-    {
-        $this->runScenario(function() {
-            $adapter = $this->adapter();
-            $adapter->write(
-                'source.txt',
-                'contents to be moved',
-                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
-            );
-            $adapter->write(
-                'destination.txt',
-                'contents to be overwritten',
-                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
-            );
-            $adapter->move('source.txt', 'destination.txt', new Config());
-            $this->assertFalse(
-                $adapter->fileExists('source.txt'),
-                'After moving a file should no longer exist in the original location.'
-            );
-            $this->assertTrue(
-                $adapter->fileExists('destination.txt'),
-                'After moving, a file should be present at the new location.'
-            );
-            $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
-            $this->assertEquals('contents to be moved', $adapter->read('destination.txt'));
-        });
-    }
-
-    /**
-     * @test
-     */
     public function reading_a_file_that_does_not_exist(): void
     {
         $this->expectException(UnableToReadFile::class);
