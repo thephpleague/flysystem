@@ -193,18 +193,6 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file_with_collision(): void
-    {
-        $this->expectException(UnableToMoveFile::class);
-        $adapter = $this->adapter();
-        $adapter->write('path.txt', 'contents', new Config());
-        $adapter->write('new-path.txt', 'contents', new Config());
-        $adapter->move('path.txt', 'new-path.txt', new Config());
-    }
-
-    /**
-     * @test
-     */
     public function trying_to_move_a_non_existing_file(): void
     {
         $this->expectException(UnableToMoveFile::class);
@@ -299,6 +287,75 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
         $earlier = 50;
         $adapter->copy('file.txt', 'new_file.txt', new Config(['timestamp' => $earlier]));
         $this->assertEquals($earlier, $adapter->lastModified('new_file.txt')->lastModified());
+    }
+
+    /**
+     * @test
+     * @fixme Move to FilesystemAdapterTestCase once all adapters pass
+     */
+    public function moving_a_file_and_overwriting(): void
+    {
+        $this->runScenario(function() {
+            $adapter = $this->adapter();
+            $adapter->write(
+                'source.txt',
+                'contents to be moved',
+                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+            );
+            $adapter->write(
+                'destination.txt',
+                'contents to be overwritten',
+                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+            );
+            $adapter->move('source.txt', 'destination.txt', new Config());
+            $this->assertFalse(
+                $adapter->fileExists('source.txt'),
+                'After moving a file should no longer exist in the original location.'
+            );
+            $this->assertTrue(
+                $adapter->fileExists('destination.txt'),
+                'After moving, a file should be present at the new location.'
+            );
+            $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
+            $this->assertEquals('contents to be moved', $adapter->read('destination.txt'));
+        });
+    }
+
+    /**
+     * @test
+     * @fixme Move to FilesystemAdapterTestCase once all adapters pass
+     */
+    public function moving_a_directory_and_overwriting(): void
+    {
+        $this->runScenario(function() {
+            $adapter = $this->adapter();
+            $config = new Config();
+
+            $adapter->createDirectory('move_and_overwrite_source', $config);
+            $adapter->write('move_and_overwrite_source/a', 'a', $config);
+
+            $adapter->createDirectory('move_and_overwrite_target', $config);
+            $adapter->write('move_and_overwrite_target/b', 'b', $config);
+
+            $adapter->move('move_and_overwrite_source', 'move_and_overwrite_target', $config);
+
+            $this->assertFalse(
+                $adapter->directoryExists('move_and_overwrite_source'),
+                'Source directory should not exist'
+            );
+            $this->assertTrue(
+                $adapter->directoryExists('move_and_overwrite_target'),
+                'Target directory should exist'
+            );
+            $this->assertTrue(
+                $adapter->fileExists('move_and_overwrite_target/a'),
+                'Source files not moved'
+            );
+            $this->assertFalse(
+                $adapter->fileExists('move_and_overwrite_target/b'),
+                'Target files not deleted'
+            );
+        });
     }
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
