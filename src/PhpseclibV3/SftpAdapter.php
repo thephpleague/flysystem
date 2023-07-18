@@ -328,11 +328,6 @@ class SftpAdapter implements FilesystemAdapter
             if ($connection->rename($sourceLocation, $destinationLocation)) {
                 return;
             }
-        } elseif ($connection->is_dir($destinationLocation)) {
-            $this->deleteDirectory($destination);
-            if ($connection->rename($sourceLocation, $destinationLocation)) {
-                return;
-            }
         }
 
         throw UnableToMoveFile::fromLocationTo($source, $destination);
