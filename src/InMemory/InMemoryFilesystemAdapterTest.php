@@ -214,19 +214,6 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_directory(): void
-    {
-        $adapter = $this->adapter();
-        $adapter->createDirectory('/source_directory', new Config());
-        $adapter->write('/source_directory/a', 'contents', new Config());
-        $adapter->copy('/source_directory', '/target_directory', new Config());
-        $this->assertTrue($adapter->fileExists('/target_directory/a'));
-        $this->assertTrue($adapter->fileExists('/source_directory/a'));
-    }
-
-    /**
-     * @test
-     */
     public function trying_to_copy_a_non_existing_file(): void
     {
         $this->expectException(UnableToCopyFile::class);
@@ -318,43 +305,6 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
             );
             $this->assertEquals(Visibility::PUBLIC, $adapter->visibility('destination.txt')->visibility());
             $this->assertEquals('contents to be moved', $adapter->read('destination.txt'));
-        });
-    }
-
-    /**
-     * @test
-     * @fixme Move to FilesystemAdapterTestCase once all adapters pass
-     */
-    public function moving_a_directory_and_overwriting(): void
-    {
-        $this->runScenario(function() {
-            $adapter = $this->adapter();
-            $config = new Config();
-
-            $adapter->createDirectory('move_and_overwrite_source', $config);
-            $adapter->write('move_and_overwrite_source/a', 'a', $config);
-
-            $adapter->createDirectory('move_and_overwrite_target', $config);
-            $adapter->write('move_and_overwrite_target/b', 'b', $config);
-
-            $adapter->move('move_and_overwrite_source', 'move_and_overwrite_target', $config);
-
-            $this->assertFalse(
-                $adapter->directoryExists('move_and_overwrite_source'),
-                'Source directory should not exist'
-            );
-            $this->assertTrue(
-                $adapter->directoryExists('move_and_overwrite_target'),
-                'Target directory should exist'
-            );
-            $this->assertTrue(
-                $adapter->fileExists('move_and_overwrite_target/a'),
-                'Source files not moved'
-            );
-            $this->assertFalse(
-                $adapter->fileExists('move_and_overwrite_target/b'),
-                'Target files not deleted'
-            );
         });
     }
 
