@@ -291,6 +291,35 @@ abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         $this->adapter()->setVisibility('path.txt', Visibility::PUBLIC);
     }
 
+    /**
+     * @test
+     */
+    public function checking_if_root_exists_checks_if_file_exists(): void
+    {
+        $adapter = $this->adapter();
+
+        $this->assertFalse($adapter->directoryExists(''));
+
+        $adapter->write('foo.txt', 'content', new Config());
+
+        $this->assertTrue($adapter->directoryExists(''));
+    }
+
+    /**
+     * @test
+     */
+    public function deleting_root_deletes_file(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('foo.txt', 'content', new Config());
+
+        $this->assertFileExists(self::ARCHIVE);
+
+        $adapter->deleteDirectory('');
+
+        $this->assertFileDoesNotExist(self::ARCHIVE);
+    }
+
     protected static function removeZipArchive(): void
     {
         if ( ! file_exists(self::ARCHIVE)) {
