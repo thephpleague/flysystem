@@ -528,11 +528,10 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
     {
         try {
-            $options = $config->get('get_object_options', []);
-            $request = new GetObjectRequest(array_merge($options, [
+            $request = new GetObjectRequest([
                 'Bucket' => $this->bucket,
                 'Key' => $this->prefixer->prefixPath($path),
-            ]));
+            ] + $config->get('get_object_options', []));
 
             return $this->client->presign($request, DateTimeImmutable::createFromInterface($expiresAt));
         } catch (Throwable $exception) {
