@@ -51,10 +51,10 @@ class S3ClientStub extends SimpleS3Client
      */
     private $stagedResult = [];
 
-    public function __construct(SimpleS3Client $client)
+    public function __construct(SimpleS3Client $client, $configuration = [])
     {
         $this->actualClient = $client;
-        parent::__construct([], null, new MockHttpClient());
+        parent::__construct($configuration, null, new MockHttpClient());
     }
 
     public function throwExceptionWhenExecutingCommand(string $commandName, Exception $exception = null): void

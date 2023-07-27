@@ -38,6 +38,8 @@
         "sabre/dav": "^4.3.1"
     },
     "conflict": {
+        "async-aws/core": "<1.19.0",
+        "async-aws/s3": "<1.14.0",
         "symfony/http-client": "<5.2",
         "guzzlehttp/ringphp": "<1.1.1",
         "guzzlehttp/guzzle": "<7.0",

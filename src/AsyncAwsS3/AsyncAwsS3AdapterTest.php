@@ -25,6 +25,7 @@ use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\Visibility;
+use function getenv;
 use function iterator_to_array;
 
 /**
@@ -51,6 +52,23 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
      * @var S3ClientStub
      */
     private static $stubS3Client;
+
+    private static function awsConfig(): array
+    {
+        $key = getenv('FLYSYSTEM_AWS_S3_KEY');
+        $secret = getenv('FLYSYSTEM_AWS_S3_SECRET');
+        $region = getenv('FLYSYSTEM_AWS_S3_REGION') ?: 'eu-central-1';
+
+        if ( ! $key || ! $secret) {
+            self::markTestSkipped('No AWS credentials present for testing.');
+        }
+
+        return [
+            'accessKeyId' => $key,
+            'accessKeySecret' => $secret,
+            'region' => $region,
+        ];
+    }
 
     protected function setUp(): void
     {
@@ -89,20 +107,13 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             return static::$s3Client;
         }
 
-        $key = getenv('FLYSYSTEM_AWS_S3_KEY');
-        $secret = getenv('FLYSYSTEM_AWS_S3_SECRET');
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
-        $region = getenv('FLYSYSTEM_AWS_S3_REGION') ?: 'eu-central-1';
 
-        if ( ! $key || ! $secret || ! $bucket) {
+        if ( ! $bucket) {
             self::markTestSkipped('No AWS credentials present for testing.');
         }
 
-        static::$s3Client = new SimpleS3Client([
-            'accessKeyId' => $key,
-            'accessKeySecret' => $secret,
-            'region' => $region,
-        ]);
+        static::$s3Client = new SimpleS3Client(self::awsConfig());
 
         return static::$s3Client;
     }
@@ -384,7 +395,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
 
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
-        static::$stubS3Client = new S3ClientStub(static::s3Client());
+        static::$stubS3Client = new S3ClientStub(static::s3Client(), self::awsConfig());
         /** @var string $bucket */
         $bucket = getenv('FLYSYSTEM_AWS_S3_BUCKET');
         $prefix = getenv('FLYSYSTEM_AWS_S3_PREFIX') ?: static::$adapterPrefix;
