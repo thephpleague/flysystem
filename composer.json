@@ -40,7 +40,7 @@
     "conflict": {
         "async-aws/core": "<1.19.0",
         "async-aws/s3": "<1.14.0",
-        "symfony/http-client": "<5.2",
+        "symfony/http-client": "<6.3.1",
         "guzzlehttp/ringphp": "<1.1.1",
         "guzzlehttp/guzzle": "<7.0",
         "aws/aws-sdk-php": "3.209.31 || 3.210.0",
