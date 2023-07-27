@@ -6,6 +6,7 @@ namespace League\Flysystem\AsyncAwsS3;
 
 use AsyncAws\Core\Exception\Http\ClientException;
 use AsyncAws\Core\Stream\ResultStream;
+use AsyncAws\S3\Input\GetObjectRequest;
 use AsyncAws\S3\Result\HeadObjectOutput;
 use AsyncAws\S3\S3Client;
 use AsyncAws\S3\ValueObject\AwsObject;
@@ -526,10 +527,14 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string
     {
-        $location = $this->prefixer->prefixPath($path);
-
         try {
-            return $this->client->getPresignedUrl($this->bucket, $location, DateTimeImmutable::createFromInterface($expiresAt));
+            $options = $config->get('get_object_options', []);
+            $request = new GetObjectRequest(array_merge($options, [
+                'Bucket' => $this->bucket,
+                'Key' => $this->prefixer->prefixPath($path),
+            ]));
+
+            return $this->client->presign($request, DateTimeImmutable::createFromInterface($expiresAt));
         } catch (Throwable $exception) {
             throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
         }
