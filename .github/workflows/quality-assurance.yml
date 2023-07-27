@@ -1,5 +1,8 @@
 ---
 name: Quality Assurance
+concurrency:
+  group: flysystem
+  cancel-in-progress: true
 on:
   push:
     paths:
