@@ -55,7 +55,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
         /** @var SftpStub $connection */
         $connection = static::connectionProvider()->provideConnection();
         $this->connection = $connection;
-        $this->connection->reset();
+        $this->connection->resetTripWires();
     }
 
     /**
