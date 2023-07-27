@@ -205,10 +205,10 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
     public function checksum(string $path, Config $config): string
     {
         if ($this->adapter instanceof ChecksumProvider) {
-            return $this->adapter->checksum($path, $config);
+            return $this->adapter->checksum($this->prefix->prefixPath($path), $config);
         }
 
-        return $this->calculateChecksumFromStream($this->prefix->prefixPath($path), $config);
+        return $this->calculateChecksumFromStream($path, $config);
     }
 
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, Config $config): string

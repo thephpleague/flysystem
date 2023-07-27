@@ -2,6 +2,7 @@
 
 namespace League\Flysystem\PathPrefixing;
 
+use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use League\Flysystem\UnableToGeneratePublicUrl;
@@ -93,6 +94,37 @@ class PathPrefixedAdapterTest extends TestCase
         $url = $prefixedAdapter->publicUrl('/path.txt', new Config());
 
         self::assertEquals('memory://prefix/path.txt', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function calculate_checksum_using_decorated_adapter(): void
+    {
+        $adapter = new class() extends InMemoryFilesystemAdapter implements ChecksumProvider {
+            public function checksum(string $path, Config $config): string
+            {
+                return hash('md5', $this->read($path));
+            }
+        };
+
+        $prefixedAdapter = new PathPrefixedAdapter($adapter, 'prefix');
+        $prefixedAdapter->write('foo.txt', 'bla', new Config);
+
+        self::assertEquals('128ecf542a35ac5270a87dc740918404', $prefixedAdapter->checksum('foo.txt', new Config()));
+    }
+
+    /**
+     * @test
+     */
+    public function calculate_checksum_using_current_adapter(): void
+    {
+        $adapter = new InMemoryFilesystemAdapter();
+        $prefixedAdapter = new PathPrefixedAdapter($adapter, 'prefix');
+        $prefixedAdapter->write('foo.txt', 'bla', new Config);
+
+        self::assertEquals('128ecf542a35ac5270a87dc740918404', hash('md5', 'bla'));
+        self::assertEquals('128ecf542a35ac5270a87dc740918404', $prefixedAdapter->checksum('foo.txt', new Config()));
     }
 
     /**
