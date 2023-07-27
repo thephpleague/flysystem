@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.16.0 - 2023-08-27
+
+### Added
+
+- [AsyncAws] Allow specifying `get_object_options` for temporary URL generation
+
+### Fixed
+
+- [ZipArchive] override on move
+- [PathPrefixing]  [#1686](https://github.com/thephpleague/flysystem/issues/1686)
+
 ## 3.15.1 - 2023-05-04
 
 ### Fixed
