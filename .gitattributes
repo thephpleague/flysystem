@@ -1,6 +1,8 @@
 * text=auto
 
 /.docker export-ignore
+/.dockerignore export-ignore
+/docker-compose.yml export-ignore
 /config.subsplit-publish.json export-ignore
 /.editorconfig export-ignore
 /.php-cs-fixer.dist.php export-ignore
