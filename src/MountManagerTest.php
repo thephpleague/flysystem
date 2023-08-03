@@ -124,7 +124,7 @@ class MountManagerTest extends TestCase
         $this->mountManager->{$method}('first://location.txt');
     }
 
-    public function dpMetadataRetrieverMethods(): iterable
+    public static function dpMetadataRetrieverMethods(): iterable
     {
         yield 'mimeType' => ['mimeType', UnableToRetrieveMetadata::mimeType('location.txt')];
         yield 'fileSize' => ['fileSize', UnableToRetrieveMetadata::fileSize('location.txt')];

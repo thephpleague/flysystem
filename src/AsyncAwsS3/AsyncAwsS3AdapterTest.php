@@ -232,7 +232,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
         $adapter->{$getterName}('filename.txt');
     }
 
-    public function dpFailingMetadataGetters(): iterable
+    public static function dpFailingMetadataGetters(): iterable
     {
         yield "mimeType" => [UnableToRetrieveMetadata::mimeType('filename.txt'), 'mimeType'];
         yield "lastModified" => [UnableToRetrieveMetadata::lastModified('filename.txt'), 'lastModified'];

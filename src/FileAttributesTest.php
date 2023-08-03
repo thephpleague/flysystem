@@ -94,7 +94,7 @@ class FileAttributesTest extends TestCase
         $this->assertEquals($attributes, $newAttributes);
     }
 
-    public function data_provider_for_json_transformation(): Generator
+    public static function data_provider_for_json_transformation(): Generator
     {
         yield [new FileAttributes('path.txt', 1234, Visibility::PRIVATE, $now = time(), 'plain/text', ['key' => 'value'])];
         yield [new FileAttributes('another.txt')];
