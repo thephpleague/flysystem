@@ -260,7 +260,7 @@ class FtpAdapter implements FilesystemAdapter
         $mode = $this->visibilityConverter->forFile($visibility);
 
         if ( ! @ftp_chmod($this->connection(), $mode, $location)) {
-            $message = error_get_last()['message'];
+            $message = error_get_last()['message'] ?? '';
             throw UnableToSetVisibility::atLocation($path, $message);
         }
     }

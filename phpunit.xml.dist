@@ -8,17 +8,14 @@
     <php>
         <env name="FLYSYSTEM_TEST_SFTP" value="yes" />
     </php>
-    <filter>
-        <whitelist>
-            <directory>src/</directory>
-            <exclude>
-                <directory suffix="Test.php">src/</directory>
-            </exclude>
-        </whitelist>
-    </filter>
     <groups>
         <exclude>
             <group>legacy</group>
         </exclude>
     </groups>
+    <coverage>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </coverage>
 </phpunit>

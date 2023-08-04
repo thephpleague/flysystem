@@ -33,7 +33,7 @@ class WhitespacePathNormalizerTest extends TestCase
     /**
      * @return array<array<string>>
      */
-    public function pathProvider(): array
+    public static function pathProvider(): array
     {
         return [
             ['.', ''],
@@ -78,7 +78,7 @@ class WhitespacePathNormalizerTest extends TestCase
         $this->normalizer->normalizePath($path);
     }
 
-    public function dpFunkyWhitespacePaths(): iterable
+    public static function dpFunkyWhitespacePaths(): iterable
     {
         return [["some\0/path.txt"], ["s\x09i.php"]];
     }
@@ -86,7 +86,7 @@ class WhitespacePathNormalizerTest extends TestCase
     /**
      * @return array<array<string>>
      */
-    public function invalidPathProvider(): array
+    public static function invalidPathProvider(): array
     {
         return [
             ['something/../../../hehe'],

@@ -7,7 +7,7 @@ namespace League\Flysystem\ZipArchive;
 /**
  * @group zip
  */
-final class PrefixedRootZipArchiveAdapterTest extends ZipArchiveAdapterTest
+final class PrefixedRootZipArchiveAdapterTest extends ZipArchiveAdapterTestCase
 {
     protected static function getRoot(): string
     {

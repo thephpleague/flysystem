@@ -38,7 +38,7 @@ class ReadOnlyFilesystemAdapterTest extends TestCase
         $this->assertInstanceOf(FileAttributes::class, $adapter->mimeType('foo/bar.txt'));
         $this->assertInstanceOf(FileAttributes::class, $adapter->lastModified('foo/bar.txt'));
         $this->assertInstanceOf(FileAttributes::class, $adapter->fileSize('foo/bar.txt'));
-        $this->assertCount(1, $adapter->listContents('foo', true));
+        $this->assertCount(1, iterator_to_array($adapter->listContents('foo', true)));
     }
 
     /**

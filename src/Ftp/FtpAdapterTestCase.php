@@ -118,7 +118,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingWriteFailure(): Generator
+    public static function scenariosCausingWriteFailure(): Generator
     {
         yield "Not being able to create the parent directory" => [function () {
             mock_function('ftp_mkdir', false);
@@ -153,7 +153,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingDirectoryDeleteFailure(): Generator
+    public static function scenariosCausingDirectoryDeleteFailure(): Generator
     {
         yield "ftp_delete failure" => [function () {
             mock_function('ftp_delete', false);
@@ -195,7 +195,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosCausingCopyFailure(): Generator
+    public static function scenariosCausingCopyFailure(): Generator
     {
         yield "failing to read" => [function () {
             mock_function('ftp_fget', false);

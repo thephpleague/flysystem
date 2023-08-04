@@ -71,7 +71,7 @@ class FilesystemTest extends TestCase
         $this->filesystem->writeStream('path.txt', $input);
     }
 
-    public function invalidStreamInput(): Generator
+    public static function invalidStreamInput(): Generator
     {
         $handle = tmpfile();
         fclose($handle);
@@ -308,7 +308,7 @@ class FilesystemTest extends TestCase
         $scenario($this->filesystem);
     }
 
-    public function scenariosCausingPathTraversal(): Generator
+    public static function scenariosCausingPathTraversal(): Generator
     {
         yield [function (FilesystemOperator $filesystem) {
             $filesystem->delete('../path.txt');

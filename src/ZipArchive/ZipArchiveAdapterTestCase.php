@@ -22,7 +22,7 @@ use function iterator_to_array;
 /**
  * @group zip
  */
-abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
+abstract class ZipArchiveAdapterTestCase extends FilesystemAdapterTestCase
 {
     private const ARCHIVE = __DIR__ . '/test.zip';
 
@@ -97,7 +97,7 @@ abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         });
     }
 
-    public function scenariosThatCauseWritesToFail(): Generator
+    public static function scenariosThatCauseWritesToFail(): Generator
     {
         yield "writing a file fails when writing" => [function () {
             static::$archiveProvider->stubbedZipArchive()->failNextWrite();
@@ -172,8 +172,8 @@ abstract class ZipArchiveAdapterTest extends FilesystemAdapterTestCase
         $this->givenWeHaveAnExistingFile('one/b.txt');
         $this->givenWeHaveAnExistingFile('two/a.txt');
 
-        $this->assertCount(6, $this->adapter()->listContents('', true));
-        $this->assertCount(3, $this->adapter()->listContents('', false));
+        $this->assertCount(6, iterator_to_array($this->adapter()->listContents('', true)));
+        $this->assertCount(3, iterator_to_array($this->adapter()->listContents('', false)));
     }
 
     /**

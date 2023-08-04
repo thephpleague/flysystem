@@ -724,16 +724,6 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         return new LocalFilesystemAdapter(static::ROOT);
     }
 
-    public static function assertFileDoesNotExist(string $filename, string $message = ''): void
-    {
-        if (is_callable('parent::assertFileDoesNotExist')) {
-            // PHPUnit 9+
-            parent::assertFileDoesNotExist($filename, $message);
-        } else {
-            self::assertFileNotExists($filename, $message);
-        }
-    }
-
     /**
      * @test
      */
@@ -746,15 +736,5 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $checksum = $adapter->checksum('path.txt', new Config(['checksum_algo' => 'crc32c']));
 
         $this->assertSame('0d5f5c7f', $checksum);
-    }
-
-    public static function assertDirectoryDoesNotExist(string $directory, string $message = ''): void
-    {
-        if (is_callable('parent::assertDirectoryDoesNotExist')) {
-            // PHPUnit 9+
-            parent::assertDirectoryDoesNotExist($directory, $message);
-        } else {
-            self::assertDirectoryNotExists($directory, $message);
-        }
     }
 }

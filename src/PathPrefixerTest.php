@@ -39,7 +39,7 @@ class PathPrefixerTest extends TestCase
         $this->assertEquals($expectedPath, $prefixedPath);
     }
 
-    public function dpRootPaths(): iterable
+    public static function dpRootPaths(): iterable
     {
         yield "unix-style root path" => ['/', '/', 'path.txt', '/path.txt'];
         yield "windows-style root path" => ['\\', '\\', 'path.txt', '\\path.txt'];
