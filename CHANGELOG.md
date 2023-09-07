@@ -9,6 +9,7 @@
 ### Fixed
 
 - [ZipArchive] override on move
+- [WebDAV] encode path for propfind actions
 - [PathPrefixing]  [#1686](https://github.com/thephpleague/flysystem/issues/1686)
 
 ## 3.15.1 - 2023-05-04
