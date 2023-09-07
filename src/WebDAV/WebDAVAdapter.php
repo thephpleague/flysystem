@@ -428,7 +428,7 @@ class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 
     private function propFind(string $path, string $section, string $property): mixed
     {
-        $location = $this->prefixer->prefixPath($path);
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
             $result = $this->client->propFind($location, [$property]);
