@@ -33,8 +33,8 @@
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.5",
         "google/cloud-storage": "^1.23",
-        "async-aws/s3": "^1.5",
-        "async-aws/simple-s3": "^1.1",
+        "async-aws/s3": "^1.5 || ^2.0",
+        "async-aws/simple-s3": "^1.1 || ^2.0",
         "sabre/dav": "^4.3.1"
     },
     "conflict": {
