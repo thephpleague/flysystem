@@ -45,8 +45,11 @@ jobs:
             phpstan: false
             phpunit-flags: '--no-coverage'
           - php: '8.2'
-            composer-flags: '--ignore-platform-reqs'
-            experimental: true
+            experimental: false
+            phpstan: false
+            phpunit-flags: '--no-coverage'
+          - php: '8.3'
+            experimental: false
             phpstan: false
             phpunit-flags: '--no-coverage'
     steps:
