@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.17.0 - 2023-10-05
+
+###
+
+- [AsyncAWS] Added support for version 2.0 of async-aws/{s3,simple-s3}
+
 ## 3.16.0 - 2023-09-07
 
 ### Added
