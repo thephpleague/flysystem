@@ -46,6 +46,6 @@ class FallbackMimeTypeDetector implements MimeTypeDetector
             return $mimeType;
         }
 
-        return $this->detector->detectMimeTypeFromPath($path);
+        return $this->detector->detectMimeTypeFromPath($path) ?? $mimeType;
     }
 }
