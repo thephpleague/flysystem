@@ -164,9 +164,12 @@ class SftpAdapter implements FilesystemAdapter
         /** @var resource $readStream */
         $readStream = fopen('php://temp', 'w+');
 
-        if ( ! $connection->get($location, $readStream)) {
+        try {
+            if ( ! $connection->get($location, $readStream)) {
+                throw UnableToReadFile::fromLocation($path);
+            }
+        } finally {
             fclose($readStream);
-            throw UnableToReadFile::fromLocation($path);
         }
 
         rewind($readStream);
