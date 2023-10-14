@@ -1,0 +1,150 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\$connection of method League\\\\Flysystem\\\\Ftp\\\\FtpAdapter\\:\\:resolveConnectionRoot\\(\\) has invalid type FTP\\\\Connection\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Unsafe access to private property League\\\\Flysystem\\\\GoogleCloudStorage\\\\GoogleCloudStorageAdapter\\:\\:\\$algoToInfoMap through static\\:\\:\\.$#"
+			count: 1
+			path: src/GoogleCloudStorage/GoogleCloudStorageAdapter.php
+
+		-
+			message: "#^Unsafe access to private property League\\\\Flysystem\\\\GoogleCloudStorage\\\\GoogleCloudStorageAdapterTest\\:\\:\\$adapterPrefix through static\\:\\:\\.$#"
+			count: 3
+			path: src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php
+
+		-
+			message: "#^Unsafe access to private property League\\\\Flysystem\\\\GoogleCloudStorage\\\\GoogleCloudStorageAdapterTest\\:\\:\\$bucket through static\\:\\:\\.$#"
+			count: 5
+			path: src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php
+
+		-
+			message: "#^Unsafe access to private property League\\\\Flysystem\\\\GoogleCloudStorage\\\\GoogleCloudStorageAdapterTest\\:\\:\\$prefixer through static\\:\\:\\.$#"
+			count: 3
+			path: src/GoogleCloudStorage/GoogleCloudStorageAdapterTest.php
+
+		-
+			message: "#^Offset 2 does not exist on array\\{League\\\\Flysystem\\\\FilesystemOperator, string\\}\\.$#"
+			count: 1
+			path: src/MountManager.php
+
+		-
+			message: "#^Unsafe access to private property League\\\\Flysystem\\\\ZipArchive\\\\ZipArchiveAdapterTestCase\\:\\:\\$archiveProvider through static\\:\\:\\.$#"
+			count: 10
+			path: src/ZipArchive/ZipArchiveAdapterTestCase.php
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_chdir expects FTP\\\\Connection, resource given\\.$#"
+			count: 2
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_chmod expects FTP\\\\Connection, resource given\\.$#"
+			count: 2
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_delete expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_fget expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_fput expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_mdtm expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_mkdir expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_raw expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_rawlist expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_rename expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_rmdir expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_size expects FTP\\\\Connection, resource given\\.$#"
+			count: 2
+			path: src/Ftp/FtpAdapter.php
+
+		-
+			message: "#^Method League\\\\Flysystem\\\\Ftp\\\\FtpConnectionProvider\\:\\:createConnectionResource\\(\\) should return resource but returns FTP\\\\Connection\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_close expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_login expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_pasv expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_raw expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_set_option expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProvider.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_close expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/FtpConnectionProviderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_raw expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/NoopCommandConnectivityChecker.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_close expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/NoopCommandConnectivityCheckerTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_rawlist expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/RawListFtpConnectivityChecker.php
+
+		-
+			message: "#^Parameter \\#1 \\$ftp of function ftp_close expects FTP\\\\Connection, resource given\\.$#"
+			count: 1
+			path: src/Ftp/RawListFtpConnectivityCheckerTest.php
