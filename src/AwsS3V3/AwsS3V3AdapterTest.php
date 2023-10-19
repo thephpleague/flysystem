@@ -157,6 +157,20 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->assertEquals('something/1/also/here.txt', $file->path());
     }
 
+    public function moving_to_same_destination(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('source.txt', 'contents to be copied', new Config());
+        static::$stubS3Client->failOnNextCopy();
+
+        $adapter->move('source.txt', 'source.txt', new Config());
+
+        $this->assertTrue(
+            $adapter->fileExists('source.txt'),
+            'After moving a file to the same place the file should still exist.'
+        );
+    }
+
     /**
      * @test
      */

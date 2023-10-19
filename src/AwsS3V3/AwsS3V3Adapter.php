@@ -406,7 +406,10 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
     {
         try {
             $this->copy($source, $destination, $config);
-            $this->delete($source);
+            
+            if($destination !== $source){
+                $this->delete($source);
+            }
         } catch (FilesystemOperationFailed $exception) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         }
