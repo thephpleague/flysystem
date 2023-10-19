@@ -123,9 +123,17 @@ class Filesystem implements FilesystemOperator
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
-        }
+            $resolutionStrategy = $this->config->get(
+                Config::OPTION_MOVE_DESTINATION_SAME_AS_SOURCE,
+                ResolveSameSourceAndDestinationConflict::TRY,
+            );
 
+            if ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::FAIL) {
+                throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::IGNORE) {
+                return;
+            }
+        }
         $this->adapter->move($from, $to, $this->config->extend($config));
     }
 
@@ -135,7 +143,16 @@ class Filesystem implements FilesystemOperator
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
+            $resolutionStrategy = $this->config->get(
+                Config::OPTION_COPY_DESTINATION_SAME_AS_SOURCE,
+                ResolveSameSourceAndDestinationConflict::TRY,
+            );
+
+            if ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::FAIL) {
+                throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::IGNORE) {
+                return;
+            }
         }
 
         $this->adapter->copy($from, $to, $this->config->extend($config));

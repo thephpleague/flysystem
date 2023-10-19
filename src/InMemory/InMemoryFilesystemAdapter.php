@@ -221,15 +221,15 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
 
     public function move(string $source, string $destination, Config $config): void
     {
-        $source = $this->preparePath($source);
-        $destination = $this->preparePath($destination);
+        $sourcePath = $this->preparePath($source);
+        $destinationPath = $this->preparePath($destination);
 
         if ( ! $this->fileExists($source) || $this->fileExists($destination)) {
             throw UnableToMoveFile::fromLocationTo($source, $destination);
         }
 
-        $this->files[$destination] = $this->files[$source];
-        unset($this->files[$source]);
+        $this->files[$destinationPath] = $this->files[$sourcePath];
+        unset($this->files[$sourcePath]);
     }
 
     public function copy(string $source, string $destination, Config $config): void
