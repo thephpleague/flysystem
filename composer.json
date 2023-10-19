@@ -27,7 +27,7 @@
         "ext-ftp": "*",
         "microsoft/azure-storage-blob": "^1.1",
         "phpunit/phpunit": "^9.5.11|^10.0",
-        "phpstan/phpstan": "^0.12.26",
+        "phpstan/phpstan": "^1.10",
         "phpseclib/phpseclib": "^3.0.14",
         "aws/aws-sdk-php": "^3.220.0",
         "composer/semver": "^3.0",

@@ -1,3 +1,5 @@
+includes:
+    - phpstan-baseline.neon
 parameters:
     level: 6
     paths:
@@ -7,7 +9,7 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
     scanFiles:
         - src/AdapterTestUtilities/test-functions.php
-    excludes_analyse:
+    excludePaths:
         - src/AdapterTestUtilities/
         - src/AsyncAwsS3
         - src/AwsS3V3
