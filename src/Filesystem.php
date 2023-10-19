@@ -119,20 +119,27 @@ class Filesystem implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->move(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
+            throw UnableToMoveFile::because('Source and destination are the same', $source, $destination);
+        }
+
+        $this->adapter->move($from, $to, $this->config->extend($config));
     }
 
     public function copy(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->copy(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
+        }
+
+        $this->adapter->copy($from, $to, $this->config->extend($config));
     }
 
     public function lastModified(string $path): int

@@ -483,6 +483,26 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function copying_from_and_to_the_same_location_fails(): void
+    {
+        $this->expectExceptionObject(UnableToMoveFile::sourceAndDestinationAreTheSame('from.txt', 'from.txt'));
+
+        $this->filesystem->move('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function moving_from_and_to_the_same_location_fails(): void
+    {
+        $this->expectExceptionObject(UnableToCopyFile::sourceAndDestinationAreTheSame('from.txt', 'from.txt'));
+
+        $this->filesystem->copy('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
     public function get_checksum_for_adapter_that_supports(): void
     {
         $this->filesystem->write('path.txt', 'foobar');
