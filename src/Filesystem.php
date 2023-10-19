@@ -119,11 +119,12 @@ class Filesystem implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
+        $config = $this->config->extend($config);
         $from = $this->pathNormalizer->normalizePath($source);
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            $resolutionStrategy = $this->config->get(
+            $resolutionStrategy = $config->get(
                 Config::OPTION_MOVE_DESTINATION_SAME_AS_SOURCE,
                 ResolveSameSourceAndDestinationConflict::TRY,
             );
@@ -134,16 +135,18 @@ class Filesystem implements FilesystemOperator
                 return;
             }
         }
-        $this->adapter->move($from, $to, $this->config->extend($config));
+
+        $this->adapter->move($from, $to, $config);
     }
 
     public function copy(string $source, string $destination, array $config = []): void
     {
+        $config = $this->config->extend($config);
         $from = $this->pathNormalizer->normalizePath($source);
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            $resolutionStrategy = $this->config->get(
+            $resolutionStrategy = $config->get(
                 Config::OPTION_COPY_DESTINATION_SAME_AS_SOURCE,
                 ResolveSameSourceAndDestinationConflict::TRY,
             );
@@ -155,7 +158,7 @@ class Filesystem implements FilesystemOperator
             }
         }
 
-        $this->adapter->copy($from, $to, $this->config->extend($config));
+        $this->adapter->copy($from, $to, $config);
     }
 
     public function lastModified(string $path): int
