@@ -124,14 +124,11 @@ class Filesystem implements FilesystemOperator
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            $resolutionStrategy = $config->get(
-                Config::OPTION_MOVE_DESTINATION_SAME_AS_SOURCE,
-                ResolveSameSourceAndDestinationConflict::TRY,
-            );
+            $resolutionStrategy = $config->get(Config::OPTION_MOVE_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
 
-            if ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::FAIL) {
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
                 throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
-            } elseif ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::IGNORE) {
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
                 return;
             }
         }
@@ -146,14 +143,11 @@ class Filesystem implements FilesystemOperator
         $to = $this->pathNormalizer->normalizePath($destination);
 
         if ($from === $to) {
-            $resolutionStrategy = $config->get(
-                Config::OPTION_COPY_DESTINATION_SAME_AS_SOURCE,
-                ResolveSameSourceAndDestinationConflict::TRY,
-            );
+            $resolutionStrategy = $config->get(Config::OPTION_COPY_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
 
-            if ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::FAIL) {
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
                 throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
-            } elseif ($resolutionStrategy === ResolveSameSourceAndDestinationConflict::IGNORE) {
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
                 return;
             }
         }

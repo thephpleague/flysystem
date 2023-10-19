@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-class ResolveSameSourceAndDestinationConflict
+class ResolveIdenticalPathConflict
 {
     public const IGNORE = 'ignore';
     public const FAIL = 'fail';

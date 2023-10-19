@@ -621,8 +621,8 @@ class FilesystemTest extends TestCase
         $filesystem = new Filesystem(
             new InMemoryFilesystemAdapter(),
             [
-                Config::OPTION_COPY_DESTINATION_SAME_AS_SOURCE => ResolveSameSourceAndDestinationConflict::IGNORE,
-                Config::OPTION_MOVE_DESTINATION_SAME_AS_SOURCE => ResolveSameSourceAndDestinationConflict::IGNORE,
+                Config::OPTION_COPY_IDENTICAL_PATH => ResolveIdenticalPathConflict::IGNORE,
+                Config::OPTION_MOVE_IDENTICAL_PATH => ResolveIdenticalPathConflict::IGNORE,
             ]
         );
 
@@ -638,7 +638,7 @@ class FilesystemTest extends TestCase
         $filesystem = new Filesystem(
             new InMemoryFilesystemAdapter(),
             [
-                Config::OPTION_MOVE_DESTINATION_SAME_AS_SOURCE => ResolveSameSourceAndDestinationConflict::FAIL,
+                Config::OPTION_MOVE_IDENTICAL_PATH => ResolveIdenticalPathConflict::FAIL,
             ]
         );
 
@@ -654,7 +654,7 @@ class FilesystemTest extends TestCase
         $filesystem = new Filesystem(
             new InMemoryFilesystemAdapter(),
             [
-                Config::OPTION_COPY_DESTINATION_SAME_AS_SOURCE => ResolveSameSourceAndDestinationConflict::FAIL,
+                Config::OPTION_COPY_IDENTICAL_PATH => ResolveIdenticalPathConflict::FAIL,
             ]
         );
 
