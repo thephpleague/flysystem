@@ -124,7 +124,6 @@ class Filesystem implements FilesystemOperator
 
         if ($from === $to) {
             throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
-            throw UnableToMoveFile::because('Source and destination are the same', $source, $destination);
         }
 
         $this->adapter->move($from, $to, $this->config->extend($config));
