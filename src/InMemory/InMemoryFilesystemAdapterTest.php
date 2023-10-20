@@ -214,6 +214,52 @@ class InMemoryFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function moving_a_directory_successfully(): void
+    {
+        $adapter = $this->adapter();
+        $adapter->write('a/first_file.txt', 'contents1', new Config());
+        $adapter->write('a/second_file.txt', 'contents2', new Config());
+        $adapter->move('a', 'b', new Config());
+
+        $this->assertTrue($adapter->fileExists('b/first_file.txt'));
+        $this->assertTrue($adapter->fileExists('b/second_file.txt'));
+        $this->assertFalse($adapter->fileExists('a/first_file.txt'));
+        $this->assertFalse($adapter->fileExists('a/second_file.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function trying_to_move_a_directory_with_file_collision(): void
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $adapter = $this->adapter();
+        $adapter->write('a/path.txt', 'contents1', new Config());
+        $adapter->write('b', 'contents2', new Config());
+        $adapter->move('a', 'b', new Config());
+
+        $this->assertEquals('contents2', $adapter->read('b'));
+        $this->assertTrue($adapter->fileExists('a/path.txt'));
+    }
+
+    /**
+     * @test
+     */
+    public function trying_to_move_a_directory_with_directory_collision(): void
+    {
+        $this->expectException(UnableToMoveFile::class);
+        $adapter = $this->adapter();
+        $adapter->write('a/path.txt', 'contents1', new Config());
+        $adapter->write('b/path-new.txt', 'contents2', new Config());
+        $adapter->move('a', 'b', new Config());
+
+        $this->assertEquals('contents2', $adapter->read('b/path-new.txt'));
+        $this->assertTrue($adapter->fileExists('a/path.txt'));
+    }
+
+    /**
+     * @test
+     */
     public function copying_a_file_successfully(): void
     {
         $adapter = $this->adapter();
