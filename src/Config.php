@@ -8,6 +8,8 @@ use function array_merge;
 
 class Config
 {
+    public const OPTION_COPY_IDENTICAL_PATH = 'copy_destination_same_as_source';
+    public const OPTION_MOVE_IDENTICAL_PATH = 'move_destination_same_as_source';
     public const OPTION_VISIBILITY = 'visibility';
     public const OPTION_DIRECTORY_VISIBILITY = 'directory_visibility';
 

@@ -119,20 +119,40 @@ class Filesystem implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->move(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $config = $this->config->extend($config);
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            $resolutionStrategy = $config->get(Config::OPTION_MOVE_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
+
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
+                throw UnableToMoveFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
+                return;
+            }
+        }
+
+        $this->adapter->move($from, $to, $config);
     }
 
     public function copy(string $source, string $destination, array $config = []): void
     {
-        $this->adapter->copy(
-            $this->pathNormalizer->normalizePath($source),
-            $this->pathNormalizer->normalizePath($destination),
-            $this->config->extend($config)
-        );
+        $config = $this->config->extend($config);
+        $from = $this->pathNormalizer->normalizePath($source);
+        $to = $this->pathNormalizer->normalizePath($destination);
+
+        if ($from === $to) {
+            $resolutionStrategy = $config->get(Config::OPTION_COPY_IDENTICAL_PATH, ResolveIdenticalPathConflict::TRY);
+
+            if ($resolutionStrategy === ResolveIdenticalPathConflict::FAIL) {
+                throw UnableToCopyFile::sourceAndDestinationAreTheSame($source, $destination);
+            } elseif ($resolutionStrategy === ResolveIdenticalPathConflict::IGNORE) {
+                return;
+            }
+        }
+
+        $this->adapter->copy($from, $to, $config);
     }
 
     public function lastModified(string $path): int

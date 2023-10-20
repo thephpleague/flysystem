@@ -19,6 +19,11 @@ final class UnableToMoveFile extends RuntimeException implements FilesystemOpera
      */
     private $destination;
 
+    public static function sourceAndDestinationAreTheSame(string $source, string $destination): UnableToMoveFile
+    {
+        return UnableToMoveFile::because('Source and destination are the same', $source, $destination);
+    }
+
     public function source(): string
     {
         return $this->source;
@@ -36,6 +41,19 @@ final class UnableToMoveFile extends RuntimeException implements FilesystemOpera
     ): UnableToMoveFile {
         $message = $previous?->getMessage() ?? "Unable to move file from $sourcePath to $destinationPath";
         $e = new static($message, 0, $previous);
+        $e->source = $sourcePath;
+        $e->destination = $destinationPath;
+
+        return $e;
+    }
+
+    public static function because(
+        string $reason,
+        string $sourcePath,
+        string $destinationPath,
+    ): UnableToMoveFile {
+        $message = "Unable to move file from $sourcePath to $destinationPath, because $reason";
+        $e = new static($message);
         $e->source = $sourcePath;
         $e->destination = $destinationPath;
 

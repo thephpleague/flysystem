@@ -483,6 +483,26 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function copying_from_and_to_the_same_location_fails(): void
+    {
+        $this->expectExceptionObject(UnableToCopyFile::fromLocationTo('from.txt', 'from.txt'));
+
+        $this->filesystem->copy('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function moving_from_and_to_the_same_location_fails(): void
+    {
+        $this->expectExceptionObject(UnableToMoveFile::fromLocationTo('from.txt', 'from.txt'));
+
+        $this->filesystem->move('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
     public function get_checksum_for_adapter_that_supports(): void
     {
         $this->filesystem->write('path.txt', 'foobar');
@@ -589,6 +609,57 @@ class FilesystemTest extends TestCase
         $this->expectException(UnableToGenerateTemporaryUrl::class);
 
         $filesystem->temporaryUrl('some/file.txt', new DateTimeImmutable());
+    }
+
+    /**
+     * @test
+     */
+    public function ignoring_same_paths_for_move_and_copy(): void
+    {
+        $this->expectNotToPerformAssertions();
+
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            [
+                Config::OPTION_COPY_IDENTICAL_PATH => ResolveIdenticalPathConflict::IGNORE,
+                Config::OPTION_MOVE_IDENTICAL_PATH => ResolveIdenticalPathConflict::IGNORE,
+            ]
+        );
+
+        $filesystem->move('from.txt', 'from.txt');
+        $filesystem->copy('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_same_paths_for_move(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            [
+                Config::OPTION_MOVE_IDENTICAL_PATH => ResolveIdenticalPathConflict::FAIL,
+            ]
+        );
+
+        $this->expectExceptionObject(UnableToMoveFile::fromLocationTo('from.txt', 'from.txt'));
+        $filesystem->move('from.txt', 'from.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_same_paths_for_copy(): void
+    {
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            [
+                Config::OPTION_COPY_IDENTICAL_PATH => ResolveIdenticalPathConflict::FAIL,
+            ]
+        );
+
+        $this->expectExceptionObject(UnableToCopyFile::fromLocationTo('from.txt', 'from.txt'));
+        $filesystem->copy('from.txt', 'from.txt');
     }
 
     /**
