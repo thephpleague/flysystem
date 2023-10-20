@@ -1,8 +1,14 @@
 # Changelog
 
+## 3.18.0 - 2023-10-05
+
+### Added
+
+- Configuration option to specify how to handle same path copy/move operations (#1715)
+
 ## 3.17.0 - 2023-10-05
 
-###
+### Added
 
 - [AsyncAWS] Added support for version 2.0 of async-aws/{s3,simple-s3}
 
