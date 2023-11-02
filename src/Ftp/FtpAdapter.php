@@ -611,7 +611,7 @@ class FtpAdapter implements FilesystemAdapter
             if ($mode !== false && @ftp_chmod($connection, $mode, $location) === false) {
                 throw UnableToCreateDirectory::atLocation(
                     $dirPath,
-                    'unable to chmod the directory: ' . error_get_last()['message'] ?? 'reason unknown'
+                    'unable to chmod the directory: ' . (error_get_last()['message'] ?? 'reason unknown'),
                 );
             }
         }
