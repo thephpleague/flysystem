@@ -57,6 +57,50 @@ class MountManagerTest extends TestCase
     /**
      * @test
      */
+    public function copying_without_retaining_visibility(): void
+    {
+        // arrange
+        $firstFilesystemAdapter = new InMemoryFilesystemAdapter();
+        $secondFilesystemAdapter = new InMemoryFilesystemAdapter();
+        $mountManager = new MountManager([
+            'first' => new Filesystem($firstFilesystemAdapter, ['visibility' => 'public']),
+            'second' => new Filesystem($secondFilesystemAdapter, ['visibility' => 'private']),
+        ], ['retain_visibility' => false]);
+
+        // act
+        $mountManager->write('first://file.txt', 'contents');
+        $mountManager->copy('first://file.txt', 'second://file.txt');
+
+        // assert
+        $visibility = $mountManager->visibility('second://file.txt');
+        self::assertEquals('private', $visibility);
+    }
+
+    /**
+     * @test
+     */
+    public function copying_while_retaining_visibility(): void
+    {
+        // arrange
+        $firstFilesystemAdapter = new InMemoryFilesystemAdapter();
+        $secondFilesystemAdapter = new InMemoryFilesystemAdapter();
+        $mountManager = new MountManager([
+            'first' => new Filesystem($firstFilesystemAdapter, ['visibility' => 'public']),
+            'second' => new Filesystem($secondFilesystemAdapter, ['visibility' => 'private']),
+        ], ['retain_visibility' => true]);
+
+        // act
+        $mountManager->write('first://file.txt', 'contents');
+        $mountManager->copy('first://file.txt', 'second://file.txt');
+
+        // assert
+        $visibility = $mountManager->visibility('second://file.txt');
+        self::assertEquals('public', $visibility);
+    }
+
+    /**
+     * @test
+     */
     public function writing_a_file(): void
     {
         $this->mountManager->write('first://file.txt', 'content');
