@@ -539,6 +539,20 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function moving_a_file_with_visibility(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT, new PortableVisibilityConverter());
+        $adapter->write('first.txt', 'contents', new Config());
+        $this->assertFileExists(static::ROOT . '/first.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/first.txt', 0644);
+        $adapter->move('first.txt', 'second.txt', new Config(['visibility' => 'private']));
+        $this->assertFileExists(static::ROOT . '/second.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/second.txt', 0600);
+    }
+
+    /**
+     * @test
+     */
     public function not_being_able_to_move_a_file(): void
     {
         $this->expectException(UnableToMoveFile::class);
@@ -556,6 +570,20 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter->copy('first.txt', 'second.txt', new Config());
         $this->assertFileExists(static::ROOT . '/second.txt');
         $this->assertFileExists(static::ROOT . '/first.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_with_visibility(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT, new PortableVisibilityConverter());
+        $adapter->write('first.txt', 'contents', new Config());
+        $adapter->copy('first.txt', 'second.txt', new Config(['visibility' => 'private']));
+        $this->assertFileExists(static::ROOT . '/first.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/first.txt', 0644);
+        $this->assertFileExists(static::ROOT . '/second.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/second.txt', 0600);
     }
 
     /**
