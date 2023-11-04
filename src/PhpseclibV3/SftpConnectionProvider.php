@@ -44,7 +44,7 @@ class SftpConnectionProvider implements ConnectionProvider
         private array $preferredAlgorithms = [],
         private bool $disableStatCache = true,
     ) {
-        $this->connectivityChecker = $connectivityChecker ?: new SimpleConnectivityChecker();
+        $this->connectivityChecker = $connectivityChecker ?? new SimpleConnectivityChecker();
     }
 
     public function provideConnection(): SFTP

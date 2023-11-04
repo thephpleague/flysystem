@@ -19,7 +19,7 @@ class InMemoryFile
     public function updateContents(string $contents, ?int $timestamp): void
     {
         $this->contents = $contents;
-        $this->lastModified = $timestamp ?: time();
+        $this->lastModified = $timestamp ?? time();
     }
 
     public function lastModified(): int

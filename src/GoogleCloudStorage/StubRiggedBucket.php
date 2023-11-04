@@ -38,7 +38,7 @@ class StubRiggedBucket extends Bucket
 
     private function setupTrigger(string $method, string $name, ?Throwable $throwable): void
     {
-        $this->triggers[$method][$name] = $throwable ?: new LogicException('unknown error');
+        $this->triggers[$method][$name] = $throwable ?? new LogicException('unknown error');
     }
 
     private function pushTrigger(string $method, string $name): void

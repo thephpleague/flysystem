@@ -97,7 +97,7 @@ class SftpConnectionProvider implements ConnectionProvider
         $this->port = $port;
         $this->timeout = $timeout;
         $this->hostFingerprint = $hostFingerprint;
-        $this->connectivityChecker = $connectivityChecker ?: new SimpleConnectivityChecker();
+        $this->connectivityChecker = $connectivityChecker ?? new SimpleConnectivityChecker();
         $this->maxTries = $maxTries;
     }
 

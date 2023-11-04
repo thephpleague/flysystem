@@ -62,10 +62,10 @@ class FtpAdapter implements FilesystemAdapter
         private bool $detectMimeTypeUsingPath = false,
     ) {
         $this->systemType = $this->connectionOptions->systemType();
-        $this->connectionProvider = $connectionProvider ?: new FtpConnectionProvider();
-        $this->connectivityChecker = $connectivityChecker ?: new NoopCommandConnectivityChecker();
-        $this->visibilityConverter = $visibilityConverter ?: new PortableVisibilityConverter();
-        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->connectionProvider = $connectionProvider ?? new FtpConnectionProvider();
+        $this->connectivityChecker = $connectivityChecker ?? new NoopCommandConnectivityChecker();
+        $this->visibilityConverter = $visibilityConverter ?? new PortableVisibilityConverter();
+        $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->useRawListOptions = $connectionOptions->useRawListOptions();
     }
 
