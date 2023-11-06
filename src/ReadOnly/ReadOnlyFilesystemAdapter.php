@@ -6,7 +6,7 @@ use DateTimeInterface;
 use League\Flysystem\CalculateChecksumFromStream;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
-use League\Flysystem\FileAttributes;
+use League\Flysystem\DecoratedAdapter;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
@@ -20,23 +20,9 @@ use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
 
-class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
+class ReadOnlyFilesystemAdapter extends DecoratedAdapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumProvider, TemporaryUrlGenerator
 {
     use CalculateChecksumFromStream;
-
-    public function __construct(private FilesystemAdapter $adapter)
-    {
-    }
-
-    public function fileExists(string $path): bool
-    {
-        return $this->adapter->fileExists($path);
-    }
-
-    public function directoryExists(string $path): bool
-    {
-        return $this->adapter->directoryExists($path);
-    }
 
     public function write(string $path, string $contents, Config $config): void
     {
@@ -46,16 +32,6 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function writeStream(string $path, $contents, Config $config): void
     {
         throw UnableToWriteFile::atLocation($path, 'This is a readonly adapter.');
-    }
-
-    public function read(string $path): string
-    {
-        return $this->adapter->read($path);
-    }
-
-    public function readStream(string $path)
-    {
-        return $this->adapter->readStream($path);
     }
 
     public function delete(string $path): void
@@ -76,31 +52,6 @@ class ReadOnlyFilesystemAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function setVisibility(string $path, string $visibility): void
     {
         throw UnableToSetVisibility::atLocation($path, 'This is a readonly adapter.');
-    }
-
-    public function visibility(string $path): FileAttributes
-    {
-        return $this->adapter->visibility($path);
-    }
-
-    public function mimeType(string $path): FileAttributes
-    {
-        return $this->adapter->mimeType($path);
-    }
-
-    public function lastModified(string $path): FileAttributes
-    {
-        return $this->adapter->lastModified($path);
-    }
-
-    public function fileSize(string $path): FileAttributes
-    {
-        return $this->adapter->fileSize($path);
-    }
-
-    public function listContents(string $path, bool $deep): iterable
-    {
-        return $this->adapter->listContents($path, $deep);
     }
 
     public function move(string $source, string $destination, Config $config): void
