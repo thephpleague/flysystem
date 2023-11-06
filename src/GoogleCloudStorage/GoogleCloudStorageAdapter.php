@@ -64,8 +64,8 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->prefixer = new PathPrefixer($prefix);
-        $this->visibilityHandler = $visibilityHandler ?: new PortableVisibilityHandler();
-        $this->mimeTypeDetector = $mimeTypeDetector ?: new FinfoMimeTypeDetector();
+        $this->visibilityHandler = $visibilityHandler ?? new PortableVisibilityHandler();
+        $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
     }
 
     public function publicUrl(string $path, Config $config): string

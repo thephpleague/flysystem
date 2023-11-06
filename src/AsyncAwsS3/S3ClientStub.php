@@ -59,7 +59,7 @@ class S3ClientStub extends SimpleS3Client
 
     public function throwExceptionWhenExecutingCommand(string $commandName, Exception $exception = null): void
     {
-        $this->stagedExceptions[$commandName] = $exception ?: new NetworkException();
+        $this->stagedExceptions[$commandName] = $exception ?? new NetworkException();
     }
 
     public function stageResultForCommand(string $commandName, Result $result): void

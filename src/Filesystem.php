@@ -29,7 +29,7 @@ class Filesystem implements FilesystemOperator
         private ?TemporaryUrlGenerator $temporaryUrlGenerator = null,
     ) {
         $this->config = new Config($config);
-        $this->pathNormalizer = $pathNormalizer ?: new WhitespacePathNormalizer();
+        $this->pathNormalizer = $pathNormalizer ?? new WhitespacePathNormalizer();
     }
 
     public function fileExists(string $location): bool
@@ -183,7 +183,7 @@ class Filesystem implements FilesystemOperator
     public function publicUrl(string $path, array $config = []): string
     {
         $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator()
-            ?: throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
+            ?? throw UnableToGeneratePublicUrl::noGeneratorConfigured($path);
         $config = $this->config->extend($config);
 
         return $this->publicUrlGenerator->publicUrl($path, $config);
@@ -191,7 +191,7 @@ class Filesystem implements FilesystemOperator
 
     public function temporaryUrl(string $path, DateTimeInterface $expiresAt, array $config = []): string
     {
-        $generator = $this->temporaryUrlGenerator ?: $this->adapter;
+        $generator = $this->temporaryUrlGenerator ?? $this->adapter;
 
         if ($generator instanceof TemporaryUrlGenerator) {
             return $generator->temporaryUrl($path, $expiresAt, $this->config->extend($config));

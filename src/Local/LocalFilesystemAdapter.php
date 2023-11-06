@@ -81,7 +81,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $visibility ??= new PortableVisibilityConverter();
         $this->visibility = $visibility;
         $this->rootLocation = $location;
-        $this->mimeTypeDetector = $mimeTypeDetector ?: new FallbackMimeTypeDetector(new FinfoMimeTypeDetector());
+        $this->mimeTypeDetector = $mimeTypeDetector ?? new FallbackMimeTypeDetector(new FinfoMimeTypeDetector());
 
         if ( ! $lazyRootCreation) {
             $this->ensureRootDirectoryExists();

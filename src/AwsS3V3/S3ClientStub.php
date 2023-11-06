@@ -71,7 +71,7 @@ class S3ClientStub implements S3ClientInterface
 
     public function throwExceptionWhenExecutingCommand(string $commandName, S3Exception $exception = null): void
     {
-        $this->stagedExceptions[$commandName] = $exception ?: new S3Exception($commandName, new Command($commandName));
+        $this->stagedExceptions[$commandName] = $exception ?? new S3Exception($commandName, new Command($commandName));
     }
 
     public function throw500ExceptionWhenExecutingCommand(string $commandName): void
