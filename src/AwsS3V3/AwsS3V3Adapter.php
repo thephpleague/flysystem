@@ -415,8 +415,11 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            /** @var string $visibility */
-            $visibility = $config->get(Config::OPTION_VISIBILITY) ?: $this->visibility($source)->visibility();
+            $visibility = $config->get(Config::OPTION_VISIBILITY);
+
+            if ($visibility === null && $config->get('retain_visibility', true)) {
+                $visibility = $this->visibility($source)->visibility();
+            }
         } catch (Throwable $exception) {
             throw UnableToCopyFile::fromLocationTo(
                 $source,
@@ -431,7 +434,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
                 $this->prefixer->prefixPath($source),
                 $this->bucket,
                 $this->prefixer->prefixPath($destination),
-                $this->visibility->visibilityToAcl($visibility),
+                $this->visibility->visibilityToAcl($visibility ?: 'private'),
                 $this->createOptionsFromConfig($config)['params']
             );
         } catch (Throwable $exception) {

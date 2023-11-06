@@ -348,11 +348,17 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function copy(string $source, string $destination, Config $config): void
     {
         try {
-            /** @var string $visibility */
-            $visibility = $this->visibility($source)->visibility();
+            $visibility = $config->get(Config::OPTION_VISIBILITY);
+
+            if ($visibility === null && $config->get('retain_visibility', true)) {
+                $visibility = $this->visibility($source)->visibility();
+            }
+
             $prefixedSource = $this->prefixer->prefixPath($source);
             $options = ['name' => $this->prefixer->prefixPath($destination)];
-            $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl($visibility);
+            $predefinedAcl = $this->visibilityHandler->visibilityToPredefinedAcl(
+                $visibility ?: PortableVisibilityHandler::NO_PREDEFINED_VISIBILITY
+            );
 
             if ($predefinedAcl !== PortableVisibilityHandler::NO_PREDEFINED_VISIBILITY) {
                 $options['predefinedAcl'] = $predefinedAcl;
