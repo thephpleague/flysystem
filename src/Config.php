@@ -36,4 +36,14 @@ class Config
     {
         return new Config($this->options + $defaults);
     }
+
+    public function toArray(): array
+    {
+        return $this->options;
+    }
+
+    public function withSetting(string $property, mixed $setting): Config
+    {
+        return $this->extend([$property => $setting]);
+    }
 }
