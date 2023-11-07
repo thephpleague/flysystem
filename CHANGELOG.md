@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.19.0 - 2023-11-07
+
+### Added
+
+- Configuration option to specify if visibility should be retained during copy/move operations
+- InMemoryFilesystemAdapter now supports visibility changes on move and copy.
+- Default visibility options are ignored when moving/copying while respecting visibility retention settings.
+- Local filesystem implementation now allows setting visibility on move and copy.
+
 ## 3.18.0 - 2023-10-05
 
 ### Added
