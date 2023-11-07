@@ -119,9 +119,7 @@ class Filesystem implements FilesystemOperator
 
     public function move(string $source, string $destination, array $config = []): void
     {
-        $config = $this->config
-            ->extend([Config::OPTION_VISIBILITY => null])
-            ->extend($config);
+        $config = $this->config->withoutSettings(Config::OPTION_VISIBILITY)->extend($config);
         $from = $this->pathNormalizer->normalizePath($source);
         $to = $this->pathNormalizer->normalizePath($destination);
 
@@ -140,9 +138,7 @@ class Filesystem implements FilesystemOperator
 
     public function copy(string $source, string $destination, array $config = []): void
     {
-        $config = $this->config
-            ->extend([Config::OPTION_VISIBILITY => null])
-            ->extend($config);
+        $config = $this->config->withoutSettings(Config::OPTION_VISIBILITY)->extend($config);
         $from = $this->pathNormalizer->normalizePath($source);
         $to = $this->pathNormalizer->normalizePath($destination);
 
