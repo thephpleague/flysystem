@@ -674,4 +674,157 @@ class FilesystemTest extends TestCase
 
         $filesystem->checksum('foo');
     }
+
+    /**
+     * @test
+     * @dataProvider fileMoveOrCopyScenarios
+     */
+    public function moving_a_file_with_visibility_scenario(
+        array $mainConfig,
+        array $moveConfig,
+        ?string $writeVisibility,
+        string $expectedVisibility
+    ): void {
+        // arrange
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            $mainConfig
+        );
+        $writeConfig = $writeVisibility ? ['visibility' => $writeVisibility] : [];
+        $filesystem->write('from.txt', 'contents', $writeConfig);
+
+        // act
+        $filesystem->move('from.txt', 'to.txt', $moveConfig);
+
+        // assert
+        $this->assertEquals($expectedVisibility, $filesystem->visibility('to.txt'));
+    }
+
+    /**
+     * @test
+     * @dataProvider fileMoveOrCopyScenarios
+     */
+    public function copying_a_file_with_visibility_scenario(
+        array $mainConfig,
+        array $copyConfig,
+        ?string $writeVisibility,
+        string $expectedVisibility
+    ): void {
+        // arrange
+        $filesystem = new Filesystem(
+            new InMemoryFilesystemAdapter(),
+            $mainConfig
+        );
+        $writeConfig = $writeVisibility ? ['visibility' => $writeVisibility] : [];
+        $filesystem->write('from.txt', 'contents', $writeConfig);
+
+        // act
+        $filesystem->copy('from.txt', 'to.txt', $copyConfig);
+
+        // assert
+        $this->assertEquals($expectedVisibility, $filesystem->visibility('to.txt'));
+    }
+
+    public static function fileMoveOrCopyScenarios(): iterable
+    {
+        yield 'retain visibility, write default, default private' => [
+            ['retain_visibility' => true, 'visibility' => 'private'],
+            [],
+            null,
+            'private'
+        ];
+        yield 'retain visibility, write default, default public' => [
+            ['retain_visibility' => true, 'visibility' => 'public'],
+            [],
+            null,
+            'public'
+        ];
+        yield 'retain visibility, write public, default private' => [
+            ['retain_visibility' => true, 'visibility' => 'private'],
+            [],
+            'public',
+            'public'
+        ];
+        yield 'retain visibility, write private, default public' => [
+            ['retain_visibility' => true, 'visibility' => 'public'],
+            [],
+            'private',
+            'private'
+        ];
+
+        yield 'retain visibility, write default, default private, execute public' => [
+            ['retain_visibility' => true, 'visibility' => 'private'],
+            ['visibility' => 'public'],
+            null,
+            'public'
+        ];
+        yield 'retain visibility, write default, default public, execute private' => [
+            ['retain_visibility' => true, 'visibility' => 'public'],
+            ['visibility' => 'private'],
+            null,
+            'private'
+        ];
+        yield 'retain visibility, write public, default private, execute private' => [
+            ['retain_visibility' => true, 'visibility' => 'private'],
+            ['visibility' => 'private'],
+            'public',
+            'private'
+        ];
+        yield 'retain visibility, write private, default public, execute public' => [
+            ['retain_visibility' => true, 'visibility' => 'public'],
+            ['visibility' => 'public'],
+            'private',
+            'public'
+        ];
+
+        yield 'do not retain visibility, write default, default private' => [
+            ['retain_visibility' => false, 'visibility' => 'private'],
+            [],
+            null,
+            'private'
+        ];
+        yield 'do not retain visibility, write default, default public' => [
+            ['retain_visibility' => false, 'visibility' => 'public'],
+            [],
+            null,
+            'public'
+        ];
+        yield 'do not retain visibility, write public, default private' => [
+            ['retain_visibility' => false, 'visibility' => 'private'],
+            [],
+            'public',
+            'private'
+        ];
+        yield 'do not retain visibility, write private, default public' => [
+            ['retain_visibility' => false, 'visibility' => 'public'],
+            [],
+            'private',
+            'public'
+        ];
+
+        yield 'do not retain visibility, write default, default private, execute public' => [
+            ['retain_visibility' => false, 'visibility' => 'private'],
+            ['visibility' => 'public'],
+            null,
+            'public'
+        ];
+        yield 'do not retain visibility, write default, default public, execute private' => [
+            ['retain_visibility' => false, 'visibility' => 'public'],
+            ['visibility' => 'private'],
+            null,
+            'private'
+        ];
+        yield 'do not retain visibility, write public, default private, execute public' => [
+            ['retain_visibility' => false, 'visibility' => 'private'],
+            ['visibility' => 'public'],
+            'public',
+            'public'
+        ];
+        yield 'do not retain visibility, write private, default public, execute private' => [
+            ['retain_visibility' => false, 'visibility' => 'public'],
+            ['visibility' => 'private'],
+            'private',
+            'private'
+        ];
+    }
 }
