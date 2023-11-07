@@ -7,8 +7,12 @@ redirect_from:
     - /docs/adapter/memory/
 ---
 
-Interacting with the local filesystem through Flysystem can be done
+This adapter keeps the filesystem completely in memory. This is useful
+when you need a filesystem, but don’t want it persisted. It can be done
 by using the `League\Flysystem\InMemory\InMemoryFilesystemAdapter`.
+
+This adapter can be used in tests as a test double and removes much of
+the need to mock your Flysystem dependency.
 
 ## Installation:
 
