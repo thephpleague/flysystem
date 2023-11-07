@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use function array_diff_key;
+use function array_flip;
 use function array_merge;
 
 class Config
@@ -45,5 +47,10 @@ class Config
     public function withSetting(string $property, mixed $setting): Config
     {
         return $this->extend([$property => $setting]);
+    }
+
+    public function withoutSettings(string ...$settings): Config
+    {
+        return new Config(array_diff_key($this->options, array_flip($settings)));
     }
 }

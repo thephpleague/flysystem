@@ -53,4 +53,19 @@ class ConfigTest extends TestCase
         $this->assertEquals('set', $withDefaults->get('option'));
         $this->assertEquals('default', $withDefaults->get('other'));
     }
+
+    /**
+     * @test
+     */
+    public function extending_without_settings(): void
+    {
+        // arrange
+        $config = new Config(['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4]);
+
+        // act
+        $withoutSetting = $config->withoutSettings('b', 'd');
+
+        // assert
+        $this->assertEquals(['a' => 1, 'c' => 3], $withoutSetting->toArray());
+    }
 }
