@@ -30,6 +30,7 @@ class PathPrefixerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dpRootPaths
      */
     public function an_absolute_root_path_is_supported(string $rootPath, string $separator, string $path, string $expectedPath): void

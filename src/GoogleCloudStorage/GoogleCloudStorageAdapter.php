@@ -39,7 +39,6 @@ use function array_key_exists;
 use function base64_decode;
 use function bin2hex;
 use function count;
-use function in_array;
 use function rtrim;
 use function sprintf;
 use function strlen;

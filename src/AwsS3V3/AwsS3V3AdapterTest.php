@@ -19,13 +19,11 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
-use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
 use RuntimeException;
 
-use function file_get_contents;
 use function getenv;
 use function iterator_to_array;
 
@@ -125,6 +123,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @see https://github.com/thephpleague/flysystem-aws-s3-v3/issues/291
      */
     public function issue_291(): void
@@ -226,6 +225,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider dpFailingMetadataGetters
      */
     public function failing_to_retrieve_metadata(Exception $exception, string $getterName): void
@@ -264,6 +264,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider casesWhereHttpStreamingInfluencesSeekability
      */
     public function streaming_reads_are_not_seekable_and_non_streaming_are(bool $streaming, bool $seekable): void
@@ -290,6 +291,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider casesWhereHttpStreamingInfluencesSeekability
      */
     public function configuring_http_streaming_via_options(bool $streaming): void
@@ -306,6 +308,7 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider casesWhereHttpStreamingInfluencesSeekability
      */
     public function use_globally_configured_options(bool $streaming): void

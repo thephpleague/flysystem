@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace League\Flysystem\WebDAV;
 
 use League\Flysystem\FilesystemAdapter;
-use Sabre\DAV\Client;
 
 class ByteMarkWebDAVServerTest extends WebDAVAdapterTestCase
 {

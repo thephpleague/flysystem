@@ -85,6 +85,7 @@ class FileAttributesTest extends TestCase
 
     /**
      * @dataProvider data_provider_for_json_transformation
+     *
      * @test
      */
     public function json_transformations(FileAttributes $attributes): void

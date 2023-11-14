@@ -20,6 +20,7 @@ class WhitespacePathNormalizerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider  pathProvider
      */
     public function path_normalizing(string $input, string $expected): void
@@ -60,6 +61,7 @@ class WhitespacePathNormalizerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidPathProvider
      */
     public function guarding_against_path_traversal(string $input): void
@@ -70,6 +72,7 @@ class WhitespacePathNormalizerTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider dpFunkyWhitespacePaths
      */
     public function rejecting_funky_whitespace(string $path): void

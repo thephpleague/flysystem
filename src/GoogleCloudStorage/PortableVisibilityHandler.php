@@ -17,7 +17,6 @@ class PortableVisibilityHandler implements VisibilityHandler
     public const ACL_PRIVATE = 'private';
     public const ACL_PROJECT_PRIVATE = 'projectPrivate';
 
-
     public function __construct(
         private string $entity = 'allUsers',
         private string $predefinedPublicAcl = self::ACL_PUBLIC_READ,

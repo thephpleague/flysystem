@@ -21,6 +21,7 @@ use function iterator_to_array;
 
 /**
  * @group ftp
+ *
  * @codeCoverageIgnore
  */
 abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
@@ -84,6 +85,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @see https://github.com/thephpleague/flysystem/issues/1522
      */
     public function reading_a_file_twice_for_issue_1522(): void
@@ -100,6 +102,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider scenariosCausingWriteFailure
      */
     public function failing_to_write_a_file(callable $scenario): void
@@ -139,6 +142,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider scenariosCausingDirectoryDeleteFailure
      */
     public function scenarios_causing_directory_deletion_to_fail(callable $scenario): void
@@ -166,6 +170,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider scenariosCausingCopyFailure
      */
     public function failing_to_copy(callable $scenario): void
@@ -243,6 +248,7 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @runInSeparateProcess
      */
     public function receiving_a_windows_listing(): void

@@ -82,6 +82,7 @@ abstract class ZipArchiveAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider scenariosThatCauseWritesToFail
      */
     public function scenarios_that_cause_writing_a_file_to_fail(callable $scenario): void
@@ -293,11 +294,12 @@ abstract class ZipArchiveAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @fixme Move to FilesystemAdapterTestCase once all adapters pass
      */
     public function moving_a_file_and_overwriting(): void
     {
-        $this->runScenario(function() {
+        $this->runScenario(function () {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',

@@ -14,8 +14,7 @@ final class ChainedPublicUrlGeneratorTest extends TestCase
     public function can_generate_url_for_supported_generator(): void
     {
         $generator = new ChainedPublicUrlGenerator([
-            new class() implements PublicUrlGenerator
-            {
+            new class() implements PublicUrlGenerator {
                 public function publicUrl(string $path, Config $config): string
                 {
                     throw new UnableToGeneratePublicUrl('not supported', $path);
@@ -33,8 +32,7 @@ final class ChainedPublicUrlGeneratorTest extends TestCase
     public function no_supported_generator_found_throws_exception(): void
     {
         $generator = new ChainedPublicUrlGenerator([
-            new class() implements PublicUrlGenerator
-            {
+            new class() implements PublicUrlGenerator {
                 public function publicUrl(string $path, Config $config): string
                 {
                     throw new UnableToGeneratePublicUrl('not supported', $path);

@@ -118,8 +118,6 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
         return static::$s3Client;
     }
 
-
-
     /**
      * @test
      */
@@ -219,6 +217,7 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
      * @dataProvider dpFailingMetadataGetters
      */
     public function failing_to_retrieve_metadata(Exception $exception, string $getterName): void

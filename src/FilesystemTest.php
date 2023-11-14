@@ -60,6 +60,7 @@ class FilesystemTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider invalidStreamInput
      *
      * @param mixed $input
@@ -300,6 +301,7 @@ class FilesystemTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider scenariosCausingPathTraversal
      */
     public function protecting_against_path_traversals(callable $scenario): void
@@ -377,7 +379,7 @@ class FilesystemTest extends TestCase
     public function listing_exceptions_are_uniformely_represented(): void
     {
         $filesystem = new Filesystem(
-            new class () extends InMemoryFilesystemAdapter {
+            new class() extends InMemoryFilesystemAdapter {
                 public function listContents(string $path, bool $deep): iterable
                 {
                     yield from parent::listContents($path, $deep);
@@ -398,7 +400,7 @@ class FilesystemTest extends TestCase
     public function failing_to_create_a_public_url(): void
     {
         $filesystem = new Filesystem(
-            new class () extends InMemoryFilesystemAdapter implements PublicUrlGenerator {
+            new class() extends InMemoryFilesystemAdapter implements PublicUrlGenerator {
                 public function publicUrl(string $path, Config $config): string
                 {
                     throw new UnableToGeneratePublicUrl('No reason', $path);
@@ -677,6 +679,7 @@ class FilesystemTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider fileMoveOrCopyScenarios
      */
     public function moving_a_file_with_visibility_scenario(
@@ -702,6 +705,7 @@ class FilesystemTest extends TestCase
 
     /**
      * @test
+     *
      * @dataProvider fileMoveOrCopyScenarios
      */
     public function copying_a_file_with_visibility_scenario(

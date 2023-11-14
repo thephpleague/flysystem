@@ -10,7 +10,6 @@ class StubZipArchiveProvider implements ZipArchiveProvider
 {
     private FilesystemZipArchiveProvider $provider;
 
-
     /**
      * @var StubZipArchive
      */

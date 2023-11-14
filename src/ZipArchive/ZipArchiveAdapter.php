@@ -343,6 +343,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
             $this->delete($destination);
             $this->copy($source, $destination, $config);
             $this->delete($source);
+
             return;
         }
 

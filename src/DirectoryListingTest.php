@@ -112,6 +112,7 @@ class DirectoryListingTest extends TestCase
 
     /**
      * @test
+     *
      * @description this ensures that the output of a sorted listing is iterable
      *
      * @see https://github.com/thephpleague/flysystem/issues/1342

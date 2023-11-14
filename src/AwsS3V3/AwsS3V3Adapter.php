@@ -503,7 +503,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
             $presignedRequestOptions = $config->get('presigned_request_options', []);
             $request = $this->client->createPresignedRequest($command, $expiresAt, $presignedRequestOptions);
 
-            return (string)$request->getUri();
+            return (string) $request->getUri();
         } catch (Throwable $exception) {
             throw UnableToGenerateTemporaryUrl::dueToError($path, $exception);
         }

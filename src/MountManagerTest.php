@@ -156,7 +156,9 @@ class MountManagerTest extends TestCase
 
     /**
      * @description This test method is so ugly, but I don't have the energy to create a nice test for every single one of these method.
+     *
      * @test
+     *
      * @dataProvider dpMetadataRetrieverMethods
      */
     public function failing_a_one_param_method(string $method, FilesystemOperationFailed $exception): void
