@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.20.0 - 2023-11-14
+
+### Changed
+
+- Normalise paths for public and temporary URLs (#1727)
+
 ## 3.19.0 - 2023-11-07
 
 ### Added
