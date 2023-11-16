@@ -296,7 +296,7 @@ class MountManager implements FilesystemOperator
         return $filesystem->checksum($path, $this->config->extend($config)->toArray());
     }
 
-    private function mountFilesystems(array $filesystems): void
+    public function mountFilesystems(array $filesystems): void
     {
         foreach ($filesystems as $key => $filesystem) {
             $this->guardAgainstInvalidMount($key, $filesystem);
