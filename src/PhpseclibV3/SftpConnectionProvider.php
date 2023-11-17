@@ -125,6 +125,12 @@ class SftpConnectionProvider implements ConnectionProvider
         } elseif ($this->useAgent) {
             $this->authenticateWithAgent($connection);
         } elseif ( ! $connection->login($this->username, $this->password)) {
+            if (UnableToConnect::matches($connection->getLastError())) {
+                throw UnableToConnect::disconnected(
+                    $connection->getLastError()
+                );
+            }
+
             throw UnableToAuthenticate::withPassword();
         }
     }
