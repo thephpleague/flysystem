@@ -417,7 +417,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $visibility = $config->get(Config::OPTION_VISIBILITY);
 
-            if ($visibility === null && $config->get('retain_visibility', true)) {
+            if ($visibility === null && $config->get(Config::OPTION_RETAIN_VISIBILITY, true)) {
                 $visibility = $this->visibility($source)->visibility();
             }
         } catch (Throwable $exception) {

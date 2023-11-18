@@ -373,7 +373,7 @@ class MountManager implements FilesystemOperator
         array $config,
     ): void {
         $config = $this->config->extend($config);
-        $retainVisibility = (bool) $config->get('retain_visibility', true);
+        $retainVisibility = (bool) $config->get(Config::OPTION_RETAIN_VISIBILITY, true);
         $visibility = $config->get('visibility');
 
         try {
