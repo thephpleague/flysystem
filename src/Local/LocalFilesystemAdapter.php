@@ -272,7 +272,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
 
         $visibility = $config->get(
             Config::OPTION_VISIBILITY,
-            $config->get('retain_visibility', true)
+            $config->get(Config::OPTION_RETAIN_VISIBILITY, true)
                 ? $this->visibility($source)->visibility()
                 : null,
         );

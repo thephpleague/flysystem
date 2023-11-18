@@ -373,8 +373,8 @@ class MountManager implements FilesystemOperator
         array $config,
     ): void {
         $config = $this->config->extend($config);
-        $retainVisibility = (bool) $config->get('retain_visibility', true);
-        $visibility = $config->get('visibility');
+        $retainVisibility = (bool) $config->get(Config::OPTION_RETAIN_VISIBILITY, true);
+        $visibility = $config->get(Config::OPTION_VISIBILITY);
 
         try {
             if ($visibility == null && $retainVisibility) {
@@ -382,7 +382,7 @@ class MountManager implements FilesystemOperator
             }
 
             $stream = $sourceFilesystem->readStream($sourcePath);
-            $destinationFilesystem->writeStream($destinationPath, $stream, $visibility ? compact('visibility') : []);
+            $destinationFilesystem->writeStream($destinationPath, $stream, $visibility ? compact(Config::OPTION_VISIBILITY) : []);
         } catch (UnableToRetrieveMetadata | UnableToReadFile | UnableToWriteFile $exception) {
             throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
         }

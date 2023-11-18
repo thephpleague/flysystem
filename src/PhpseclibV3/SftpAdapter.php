@@ -329,7 +329,7 @@ class SftpAdapter implements FilesystemAdapter
             $readStream = $this->readStream($source);
             $visibility = $config->get(Config::OPTION_VISIBILITY);
 
-            if ($visibility === null && $config->get('retain_visibility', true)) {
+            if ($visibility === null && $config->get(Config::OPTION_RETAIN_VISIBILITY, true)) {
                 $config = $config->withSetting(Config::OPTION_VISIBILITY, $this->visibility($source)->visibility());
             }
 
