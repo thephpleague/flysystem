@@ -4,7 +4,7 @@
 
 ### Changes
 
-- Retain visibility on local copy for local FS, in line with other adapter (#1730) by @jnoordsij 
+- Retain visibility on local copy for local FS, in line with other adapter (#1730) by @jnoordsij
 
 ## 3.20.0 - 2023-11-14
 
