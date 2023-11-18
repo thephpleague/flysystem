@@ -592,6 +592,23 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function copying_a_file_retaining_visibility(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT, new PortableVisibilityConverter());
+        $adapter->write('first.txt', 'contents', new Config(['visibility' => 'private']));
+        $adapter->copy('first.txt', 'retain.txt', new Config());
+        $adapter->copy('first.txt', 'do-not-retain.txt', new Config(['retain_visibility' => false]));
+        $this->assertFileExists(static::ROOT . '/first.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/first.txt', 0600);
+        $this->assertFileExists(static::ROOT . '/retain.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/retain.txt', 0600);
+        $this->assertFileExists(static::ROOT . '/do-not-retain.txt');
+        $this->assertFileHasPermissions(static::ROOT . '/do-not-retain.txt', 0644);
+    }
+
+    /**
+     * @test
+     */
     public function not_being_able_to_copy_a_file(): void
     {
         $this->expectException(UnableToCopyFile::class);
