@@ -270,7 +270,14 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             throw UnableToCopyFile::because(error_get_last()['message'] ?? 'unknown', $source, $destination);
         }
 
-        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
+        $visibility = $config->get(
+            Config::OPTION_VISIBILITY,
+            $config->get('retain_visibility', true)
+                ? $this->visibility($source)->visibility()
+                : null,
+        );
+
+        if ($visibility) {
             $this->setVisibility($destination, (string) $visibility);
         }
     }
