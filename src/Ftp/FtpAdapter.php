@@ -251,7 +251,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function createDirectory(string $path, Config $config): void
     {
-        $this->ensureDirectoryExists($path, $config->get('directory_visibility', $config->get('visibility')));
+        $this->ensureDirectoryExists($path, $config->get(Config::OPTION_DIRECTORY_VISIBILITY, $config->get(Config::OPTION_VISIBILITY)));
     }
 
     public function setVisibility(string $path, string $visibility): void

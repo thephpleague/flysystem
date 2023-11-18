@@ -197,8 +197,8 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function createDirectory(string $path, Config $config): void
     {
-        $defaultVisibility = $config->get('directory_visibility', $this->visibility->defaultForDirectories());
-        $config = $config->withDefaults(['visibility' => $defaultVisibility]);
+        $defaultVisibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY, $this->visibility->defaultForDirectories());
+        $config = $config->withDefaults([Config::OPTION_VISIBILITY => $defaultVisibility]);
         $this->upload(rtrim($path, '/') . '/', '', $config);
     }
 
