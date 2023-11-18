@@ -95,6 +95,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         }
 
         $this->ensureDirectoryExists($this->rootLocation, $this->visibility->defaultForDirectories());
+        $this->rootLocationIsSetup = true;
     }
 
     public function write(string $path, string $contents, Config $config): void
