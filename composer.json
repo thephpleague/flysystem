@@ -28,7 +28,7 @@
         "microsoft/azure-storage-blob": "^1.1",
         "phpunit/phpunit": "^9.5.11|^10.0",
         "phpstan/phpstan": "^1.10",
-        "phpseclib/phpseclib": "^3.0.14",
+        "phpseclib/phpseclib": "^3.0.34",
         "aws/aws-sdk-php": "^3.220.0",
         "composer/semver": "^3.0",
         "friendsofphp/php-cs-fixer": "^3.5",
