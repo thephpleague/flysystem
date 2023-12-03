@@ -1,10 +1,9 @@
 # Changelog
 
-## 3.21.0 - 2023-12-03
+## 3.22.0 - 2023-12-03
 
 ### Changes
 
-- Retain visibility on local copy for local FS, in line with other adapter (#1730) by @jnoordsij
 - Prevent double directory creation with lazy root creation for Local filesystem.
 
 ### Fixes
@@ -16,6 +15,12 @@
 
 - MountManager::extend allows for immutable dynamic extension of the mount manager.
 - Added a new abstract DecoratedAdapter for easier decoration of adapters by @jnoordsij
+
+## 3.21.0 - 2023-11-18
+
+### Changes
+
+- Retain visibility on local copy for local FS, in line with other adapter (#1730) by @jnoordsij
 
 ## 3.20.0 - 2023-11-14
 
