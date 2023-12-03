@@ -79,6 +79,58 @@ class MountManagerTest extends TestCase
     /**
      * @test
      */
+    public function extending_without_new_mounts_is_equal_but_not_the_same(): void
+    {
+        $mountManager = $this->mountManager->extend([]);
+
+        $this->assertNotSame($this->mountManager, $mountManager);
+        $this->assertEquals($this->mountManager, $mountManager);
+    }
+
+    /**
+     * @test
+     */
+    public function extending_with_new_mounts_is_not_equal(): void
+    {
+        $mountManager = $this->mountManager->extend([
+            'third' => new Filesystem(new InMemoryFilesystemAdapter()),
+        ]);
+
+        $this->assertNotEquals($this->mountManager, $mountManager);
+    }
+
+    /**
+     * @test
+     */
+    public function extending_exposes_a_usable_mount_on_the_extension(): void
+    {
+        $mountManager = $this->mountManager->extend([
+            'third' => new Filesystem(new InMemoryFilesystemAdapter()),
+        ]);
+
+        $mountManager->write('third://path.txt', 'this');
+        $contents = $mountManager->read('third://path.txt');
+
+        $this->assertEquals('this', $contents);
+    }
+
+    /**
+     * @test
+     */
+    public function extending_does_not_mount_on_the_original_mount_manager(): void
+    {
+        $this->mountManager->extend([
+            'third' => new Filesystem(new InMemoryFilesystemAdapter()),
+        ]);
+
+        $this->expectException(UnableToResolveFilesystemMount::class);
+
+        $this->mountManager->write('third://path.txt', 'this');
+    }
+
+    /**
+     * @test
+     */
     public function copying_while_retaining_visibility(): void
     {
         // arrange

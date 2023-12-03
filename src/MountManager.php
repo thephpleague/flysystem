@@ -33,6 +33,18 @@ class MountManager implements FilesystemOperator
         $this->config = new Config($config);
     }
 
+    /**
+     * @param array<string,FilesystemOperator> $filesystems
+     */
+    public function extend(array $filesystems, array $config = []): MountManager
+    {
+        $clone = clone $this;
+        $clone->config = $this->config->extend($config);
+        $clone->mountFilesystems($filesystems);
+
+        return $clone;
+    }
+
     public function fileExists(string $location): bool
     {
         /** @var FilesystemOperator $filesystem */
@@ -329,7 +341,7 @@ class MountManager implements FilesystemOperator
     /**
      * @param string $path
      *
-     * @return array{0:FilesystemOperator, 1:string}
+     * @return array{0:FilesystemOperator, 1:string, 2:string}
      */
     private function determineFilesystemAndPath(string $path): array
     {
