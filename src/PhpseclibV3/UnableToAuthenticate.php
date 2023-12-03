@@ -9,18 +9,31 @@ use RuntimeException;
 
 class UnableToAuthenticate extends RuntimeException implements FilesystemException
 {
-    public static function withPassword(): UnableToAuthenticate
+    private ?string $connectionError;
+
+    public function __construct(string $message, string $lastError = null)
     {
-        return new UnableToAuthenticate('Unable to authenticate using a password.');
+        parent::__construct($message);
+        $this->connectionError = $lastError;
     }
 
-    public static function withPrivateKey(): UnableToAuthenticate
+    public static function withPassword(string $lastError = null): UnableToAuthenticate
     {
-        return new UnableToAuthenticate('Unable to authenticate using a private key.');
+        return new UnableToAuthenticate('Unable to authenticate using a password.', $lastError);
     }
 
-    public static function withSshAgent(): UnableToAuthenticate
+    public static function withPrivateKey(string $lastError = null): UnableToAuthenticate
     {
-        return new UnableToAuthenticate('Unable to authenticate using an SSH agent.');
+        return new UnableToAuthenticate('Unable to authenticate using a private key.', $lastError);
+    }
+
+    public static function withSshAgent(string $lastError = null): UnableToAuthenticate
+    {
+        return new UnableToAuthenticate('Unable to authenticate using an SSH agent.', $lastError);
+    }
+
+    public function connectionError(): ?string
+    {
+        return $this->connectionError;
     }
 }

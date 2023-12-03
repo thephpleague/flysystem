@@ -51,17 +51,29 @@ class SftpConnectionProvider implements ConnectionProvider
     {
         $tries = 0;
         start:
+        $tries++;
 
-        $connection = $this->connection instanceof SFTP
-            ? $this->connection
-            : $this->setupConnection();
+        try {
+            $connection = $this->connection instanceof SFTP
+                ? $this->connection
+                : $this->setupConnection();
+        } catch (Throwable $exception) {
+            if ($tries <= $this->maxTries) {
+                goto start;
+            }
+
+            if ($exception instanceof FilesystemException) {
+                throw $exception;
+            }
+
+            throw UnableToConnectToSftpHost::atHostname($this->host, $exception);
+        }
 
         if ( ! $this->connectivityChecker->isConnected($connection)) {
             $connection->disconnect();
             $this->connection = null;
 
-            if ($tries < $this->maxTries) {
-                $tries++;
+            if ($tries <= $this->maxTries) {
                 goto start;
             }
 
@@ -82,10 +94,7 @@ class SftpConnectionProvider implements ConnectionProvider
             $this->authenticate($connection);
         } catch (Throwable $exception) {
             $connection->disconnect();
-
-            if ($exception instanceof FilesystemException) {
-                throw $exception;
-            }
+            throw $exception;
         }
 
         return $connection;
@@ -124,8 +133,15 @@ class SftpConnectionProvider implements ConnectionProvider
             $this->authenticateWithPrivateKey($connection);
         } elseif ($this->useAgent) {
             $this->authenticateWithAgent($connection);
-        } elseif ( ! $connection->login($this->username, $this->password)) {
-            throw UnableToAuthenticate::withPassword();
+        } else {
+            $this->authenticateWithUsernameAndPassword($connection);
+        }
+    }
+
+    private function authenticateWithUsernameAndPassword(SFTP $connection): void
+    {
+        if ( ! $connection->login($this->username, $this->password)) {
+            throw UnableToAuthenticate::withPassword($connection->getLastError());
         }
     }
 
@@ -159,7 +175,7 @@ class SftpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        throw UnableToAuthenticate::withPrivateKey();
+        throw UnableToAuthenticate::withPrivateKey($connection->getLastError());
     }
 
     private function loadPrivateKey(): AsymmetricKey
@@ -175,7 +191,7 @@ class SftpConnectionProvider implements ConnectionProvider
 
             return PublicKeyLoader::load($this->privateKey);
         } catch (NoKeyLoadedException $exception) {
-            throw new UnableToLoadPrivateKey();
+            throw new UnableToLoadPrivateKey(null, $exception);
         }
     }
 
@@ -184,7 +200,7 @@ class SftpConnectionProvider implements ConnectionProvider
         $agent = new Agent();
 
         if ( ! $connection->login($this->username, $agent)) {
-            throw UnableToAuthenticate::withSshAgent();
+            throw UnableToAuthenticate::withSshAgent($connection->getLastError());
         }
     }
 }
