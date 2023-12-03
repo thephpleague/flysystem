@@ -383,7 +383,7 @@ class SftpConnectionProviderTest extends TestCase
         } catch (Throwable $exception) {
             if (($expected === null || is_a($exception, $expected) === false) && $tries < 10) {
                 $tries++;
-//                sleep($tries);
+                sleep($tries);
                 goto start;
             }
 

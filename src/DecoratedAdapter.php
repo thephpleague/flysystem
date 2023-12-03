@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-use League\Flysystem\Config;
-use League\Flysystem\FileAttributes;
-
 abstract class DecoratedAdapter implements FilesystemAdapter
 {
     public function __construct(protected FilesystemAdapter $adapter)
