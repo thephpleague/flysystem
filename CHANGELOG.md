@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.23.0 - 2023-12-04
+
+### Fixed
+
+- Fixed upstream regression caused by resolving inconclusive mime-type.
+
+### Added
+
+- Made inconclusive mime-type resolving configurable on the local adapter.
+
 ## 3.22.0 - 2023-12-03
 
 ### Changes
