@@ -633,6 +633,41 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function failing_to_get_the_mimetype(): void
+    {
+        $adapter = new LocalFilesystemAdapter(static::ROOT);
+        $adapter->write(
+            'file.unknown',
+            '',
+            new Config()
+        );
+
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $adapter->mimeType('file.unknown');
+    }
+
+    /**
+     * @test
+     */
+    public function allowing_inconclusive_mime_type(): void
+    {
+        $adapter = new LocalFilesystemAdapter(
+            location: static::ROOT,
+            useInconclusiveMimeTypeFallback: true,
+        );
+        $adapter->write(
+            'file.unknown',
+            '',
+            new Config()
+        );
+
+        $this->assertEquals('application/x-empty', $adapter->mimeType('file.unknown')->mimeType());
+    }
+
+    /**
+     * @test
+     */
     public function fetching_unknown_mime_type_of_a_file(): void
     {
         $this->useAdapter(new LocalFilesystemAdapter(self::ROOT, null, LOCK_EX, LocalFilesystemAdapter::DISALLOW_LINKS, new ExtensionMimeTypeDetector(new EmptyExtensionToMimeTypeMap())));
