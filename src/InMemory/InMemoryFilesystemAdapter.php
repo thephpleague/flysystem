@@ -9,6 +9,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\UnableToCopyFile;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -82,6 +83,10 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
+        if (empty($path) || $this->directoryExists($path)) {
+            throw UnableToDeleteFile::atLocation($path);
+        }
+
         unset($this->files[$this->preparePath($path)]);
     }
 
