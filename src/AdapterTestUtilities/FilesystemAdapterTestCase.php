@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use League\Flysystem\UnableToDeleteFile;
 use const PHP_EOL;
 use DateInterval;
 use DateTimeImmutable;
@@ -870,5 +871,51 @@ abstract class FilesystemAdapterTestCase extends TestCase
         $this->expectException(UnableToProvideChecksum::class);
 
         $adapter->checksum('dir', new Config());
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_delete_directory_over_delete(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+
+            $adapter->write(
+                'test/text.txt',
+                'contents',
+                new Config()
+            );
+
+            $this->assertTrue($adapter->fileExists('test/text.txt'));
+
+            $this->expectException(UnableToDeleteFile::class);
+            $adapter->delete('test/');
+
+            $this->assertTrue($adapter->fileExists('test/text.txt'));
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function cannot_delete_with_empty_path(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+
+            $adapter->write(
+                'test/text.txt',
+                'contents',
+                new Config()
+            );
+
+            $this->assertTrue($adapter->fileExists('test/text.txt'));
+
+            $this->expectException(UnableToDeleteFile::class);
+            $adapter->delete('');
+
+            $this->assertTrue($adapter->fileExists('test/text.txt'));
+        });
     }
 }
