@@ -15,6 +15,7 @@ use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -176,9 +177,24 @@ class SftpAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
+        if (empty($path)) {
+            throw UnableToDeleteFile::atLocation($path);
+        }
+
+        $fileExists = $this->fileExists($path);
+
+        if ($fileExists === false) {
+            if ($this->directoryExists($path)) {
+                throw UnableToDeleteFile::atLocation($path);
+            }
+
+            return;
+        }
+
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $connection->delete($location);
+
+        $connection->delete($location, false);
     }
 
     public function deleteDirectory(string $path): void
