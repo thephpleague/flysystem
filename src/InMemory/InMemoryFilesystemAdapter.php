@@ -20,7 +20,6 @@ use League\MimeTypeDetection\MimeTypeDetector;
 
 use function array_keys;
 use function rtrim;
-use function strpos;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
@@ -217,7 +216,7 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
                     continue;
                 }
 
-                if ($deep === true || !str_contains($subPath, '/')) {
+                if ($deep === true || ! str_contains($subPath, '/')) {
                     yield new FileAttributes(ltrim($filePath, '/'), $file->fileSize(), $file->visibility(), $file->lastModified(), $file->mimeType());
                 }
             }

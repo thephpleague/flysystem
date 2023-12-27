@@ -169,7 +169,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
             $itemPath = $stats['name'];
 
-            if (!str_starts_with($itemPath, $prefixedPath)) {
+            if ( ! str_starts_with($itemPath, $prefixedPath)) {
                 continue;
             }
 

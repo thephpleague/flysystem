@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
-use League\Flysystem\UnableToDeleteFile;
 use const PHP_EOL;
 use DateInterval;
 use DateTimeImmutable;
@@ -15,6 +14,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
+use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToProvideChecksum;
 use League\Flysystem\UnableToReadFile;
