@@ -7,6 +7,9 @@ use Sabre\DAV\Client;
 
 class UrlPrefixingClientStub extends Client
 {
+    /**
+     * @param string $url
+     */
     public function propFind($url, array $properties, $depth = 0): array
     {
         $response = parent::propFind($url, $properties, $depth);
