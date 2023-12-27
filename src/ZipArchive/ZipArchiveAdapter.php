@@ -132,6 +132,20 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
     public function delete(string $path): void
     {
+        if (empty($path) || \str_ends_with($path, '/')) {
+            throw UnableToDeleteFile::atLocation($path);
+        }
+
+        $fileExists = $this->fileExists($path);
+
+        if ($fileExists === false) {
+            if ($this->directoryExists($path)) {
+                throw UnableToDeleteFile::atLocation($path);
+            }
+
+            return;
+        }
+
         $prefixedPath = $this->pathPrefixer->prefixPath($path);
         $zipArchive = $this->zipArchiveProvider->createZipArchive();
         $success = $zipArchive->locateName($prefixedPath) === false || $zipArchive->deleteName($prefixedPath);
@@ -155,7 +169,7 @@ final class ZipArchiveAdapter implements FilesystemAdapter
 
             $itemPath = $stats['name'];
 
-            if (strpos($itemPath, $prefixedPath) !== 0) {
+            if (!str_starts_with($itemPath, $prefixedPath)) {
                 continue;
             }
 
