@@ -176,6 +176,16 @@ class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
 
     public function delete(string $path): void
     {
+        $fileExists = $this->fileExists($path);
+
+        if ($fileExists === false) {
+            if ($this->directoryExists($path)) {
+                throw UnableToDeleteFile::atLocation($path);
+            }
+
+            return;
+        }
+
         $location = $this->encodePath($this->prefixer->prefixPath($path));
 
         try {
