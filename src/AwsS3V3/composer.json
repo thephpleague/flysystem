@@ -12,7 +12,7 @@
         "php": "^8.0.2",
         "league/flysystem": "^3.10.0",
         "league/mime-type-detection": "^1.0.0",
-        "aws/aws-sdk-php": "^3.220.0"
+        "aws/aws-sdk-php": "^3.295.10"
     },
     "conflict": {
         "guzzlehttp/ringphp": "<1.1.1",
