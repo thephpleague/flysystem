@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.23.1 - 2024-01-26
+
+### Changes
+
+- Updated license year
+
 ## 3.23.0 - 2023-12-04
 
 ### Fixed
