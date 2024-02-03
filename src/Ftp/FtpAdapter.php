@@ -634,9 +634,10 @@ class FtpAdapter implements FilesystemAdapter
 
     public function directoryExists(string $path): bool
     {
+        $location = $this->prefixer()->prefixPath($path);
         $connection = $this->connection();
 
-        return @ftp_chdir($connection, $path) === true;
+        return @ftp_chdir($connection, $location) === true;
     }
 
     /**
