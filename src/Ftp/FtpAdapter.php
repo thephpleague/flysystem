@@ -275,7 +275,7 @@ class FtpAdapter implements FilesystemAdapter
 
         $object = @ftp_raw($this->connection(), 'STAT ' . $location);
 
-        if (empty($object) || count($object) < 3 || substr($object[1], 0, 5) === "ftpd:") {
+        if (empty($object) || count($object) < 3 || str_starts_with($object[1], "ftpd:")) {
             throw UnableToRetrieveMetadata::create($path, $type, error_get_last()['message'] ?? '');
         }
 
@@ -450,7 +450,7 @@ class FtpAdapter implements FilesystemAdapter
 
     private function listingItemIsDirectory(string $permissions): bool
     {
-        return substr($permissions, 0, 1) === 'd';
+        return str_starts_with($permissions, 'd');
     }
 
     private function normalizeUnixTimestamp(string $month, string $day, string $timeOrYear): int
@@ -459,14 +459,12 @@ class FtpAdapter implements FilesystemAdapter
             $year = $timeOrYear;
             $hour = '00';
             $minute = '00';
-            $seconds = '00';
         } else {
             $year = date('Y');
             [$hour, $minute] = explode(':', $timeOrYear);
-            $seconds = '00';
         }
 
-        $dateTime = DateTime::createFromFormat('Y-M-j-G:i:s', "{$year}-{$month}-{$day}-{$hour}:{$minute}:{$seconds}");
+        $dateTime = DateTime::createFromFormat('Y-M-j-G:i:s', "$year-$month-$day-$hour:$minute:00");
 
         return $dateTime->getTimestamp();
     }
@@ -484,7 +482,7 @@ class FtpAdapter implements FilesystemAdapter
         $parts = str_split($permissions, 3);
 
         // convert the groups
-        $mapper = function ($part) {
+        $mapper = static function ($part) {
             return array_sum(str_split($part));
         };
 
@@ -492,11 +490,6 @@ class FtpAdapter implements FilesystemAdapter
         return octdec(implode('', array_map($mapper, $parts)));
     }
 
-    /**
-     * @inheritdoc
-     *
-     * @param string $directory
-     */
     private function listDirectoryContentsRecursive(string $directory): Generator
     {
         $location = $this->prefixer()->prefixPath($directory);
@@ -583,9 +576,6 @@ class FtpAdapter implements FilesystemAdapter
         $this->ensureDirectoryExists($dirname, $visibility);
     }
 
-    /**
-     * @param string $dirname
-     */
     private function ensureDirectoryExists(string $dirname, ?string $visibility): void
     {
         $connection = $this->connection();
