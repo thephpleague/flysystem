@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.24.0 - 2024-02-04
+
+### Fixes
+
+- Updated method signatures to match upgraded dependency signatures for overrides (#1748, #1746)
+- Added missing path prefixing in FTP implementation (#1747)
+
+### Changes
+
+- Updated string assertions to use PHP 8 functions (#1750, #1749))
+
 ## 3.23.1 - 2024-01-26
 
 ### Changes
