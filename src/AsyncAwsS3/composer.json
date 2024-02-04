@@ -15,11 +15,10 @@
         "async-aws/s3": "^1.5 || ^2.0"
     },
     "require-dev": {
-        "async-aws/simple-s3": "^1.1 || ^2.0"
+        "async-aws/simple-s3": "^2.1"
     },
     "conflict": {
-        "symfony/http-client": "<5.2",
-        "async-aws/simple-s3": "<1.1"
+        "symfony/http-client": "<5.2"
     },
     "license": "MIT",
     "authors": [

@@ -181,7 +181,7 @@ class S3ClientStub extends SimpleS3Client
         return $this->actualClient->getUrl($bucket, $key);
     }
 
-    public function getPresignedUrl(string $bucket, string $key, ?DateTimeImmutable $expires = null): string
+    public function getPresignedUrl(string $bucket, string $key, ?DateTimeImmutable $expires = null, ?string $versionId = null): string
     {
         return $this->actualClient->getPresignedUrl($bucket, $key, $expires);
     }
