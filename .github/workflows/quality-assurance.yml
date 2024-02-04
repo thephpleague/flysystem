@@ -17,6 +17,8 @@ on:
     branches:
       - 2.x
       - 3.x
+  schedule:
+    - cron: "5 1 * * *"
 
 env:
   FLYSYSTEM_AWS_S3_KEY: '${{ secrets.FLYSYSTEM_AWS_S3_KEY }}'
