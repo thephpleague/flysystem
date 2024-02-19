@@ -47,6 +47,11 @@ class SftpAdapter implements FilesystemAdapter
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
     }
 
+    public function getConnectionProvider(): ConnectionProvider
+    {
+        return $this->connectionProvider;
+    }
+
     public function fileExists(string $path): bool
     {
         $location = $this->prefixer->prefixPath($path);

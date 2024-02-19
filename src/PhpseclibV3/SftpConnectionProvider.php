@@ -47,6 +47,11 @@ class SftpConnectionProvider implements ConnectionProvider
         $this->connectivityChecker = $connectivityChecker ?? new SimpleConnectivityChecker();
     }
 
+    public function disconnect(): void
+    {
+        $this->connection?->disconnect();
+    }
+
     public function provideConnection(): SFTP
     {
         $tries = 0;
