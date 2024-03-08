@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use Ftp\StubConnectionProvider;
 use Generator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -36,6 +37,11 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
      * @var ConnectivityCheckerThatCanFail
      */
     protected static $connectivityChecker;
+
+    /**
+     * @var StubConnectionProvider
+     */
+    protected static $connectionProvider;
 
     /**
      * @after
