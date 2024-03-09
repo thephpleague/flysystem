@@ -32,15 +32,9 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
-    /**
-     * @var ConnectivityCheckerThatCanFail
-     */
-    protected static $connectivityChecker;
+    protected static ConnectivityCheckerThatCanFail $connectivityChecker;
 
-    /**
-     * @var StubConnectionProvider
-     */
-    protected static $connectionProvider;
+    protected static ?StubConnectionProvider $connectionProvider;
 
     /**
      * @after
