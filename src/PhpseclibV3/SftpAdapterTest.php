@@ -233,7 +233,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
 
     private static function connectionProvider(): StubSftpConnectionProvider
     {
-        if ( ! static::$connectionProvider instanceof StubSftpConnectionProvider) {
+        if ( ! static::$connectionProvider instanceof ConnectionProvider) {
             static::$connectionProvider = new StubSftpConnectionProvider('localhost', 'foo', 'pass', 2222);
         }
 
