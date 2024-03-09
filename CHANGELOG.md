@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.25.0 - 2024-03-09
+
+### Added
+
+- [MountManager] added ability to (dangerously) mount additional filesystems
+- [FTP] added `disconnect` method to proactively close connections
+- [SFTP V3] added `disconnect` method to proactively close connections
+
 ## 3.24.0 - 2024-02-04
 
 ### Fixes
