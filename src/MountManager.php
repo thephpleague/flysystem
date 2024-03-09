@@ -34,6 +34,15 @@ class MountManager implements FilesystemOperator
     }
 
     /**
+     * It is not recommended to mount filesystems after creation because interacting
+     * with the Mount Manager becomes unpredictable. Use this as an escape hatch.
+     */
+    public function dangerouslyMountFilesystems(string $key, FilesystemOperator $filesystem): void
+    {
+        $this->mountFilesystem($key, $filesystem);
+    }
+
+    /**
      * @param array<string,FilesystemOperator> $filesystems
      */
     public function extend(array $filesystems, array $config = []): MountManager
@@ -156,15 +165,15 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    public function visibility(string $location): string
+    public function visibility(string $path): string
     {
         /** @var FilesystemOperator $filesystem */
-        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+        [$filesystem, $location] = $this->determineFilesystemAndPath($path);
 
         try {
-            return $filesystem->visibility($path);
+            return $filesystem->visibility($location);
         } catch (UnableToRetrieveMetadata $exception) {
-            throw UnableToRetrieveMetadata::visibility($location, $exception->reason(), $exception);
+            throw UnableToRetrieveMetadata::visibility($path, $exception->reason(), $exception);
         }
     }
 
@@ -318,11 +327,7 @@ class MountManager implements FilesystemOperator
         }
     }
 
-    /**
-     * @param mixed $key
-     * @param mixed $filesystem
-     */
-    private function guardAgainstInvalidMount($key, $filesystem): void
+    private function guardAgainstInvalidMount(mixed $key, mixed $filesystem): void
     {
         if ( ! is_string($key)) {
             throw UnableToMountFilesystem::becauseTheKeyIsNotValid($key);

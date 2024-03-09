@@ -557,6 +557,18 @@ class MountManagerTest extends TestCase
     /**
      * @test
      */
+    public function dangerously_mounting_additional_filesystems(): void
+    {
+        $this->firstFilesystem->write('contents.txt', 'file contents');
+
+        $this->mountManager->dangerouslyMountFilesystems('unknown', $this->firstFilesystem);
+
+        $this->assertTrue($this->mountManager->fileExists('unknown://contents.txt'));
+    }
+
+    /**
+     * @test
+     */
     public function guarding_against_valid_mount_identifiers(): void
     {
         $this->expectException(UnableToMountFilesystem::class);
