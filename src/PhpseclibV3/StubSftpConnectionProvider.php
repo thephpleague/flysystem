@@ -25,6 +25,7 @@ class StubSftpConnectionProvider implements ConnectionProvider
     {
         if ($this->connection) {
             $this->connection->disconnect();
+            $this->connection = null;
         }
     }
 
