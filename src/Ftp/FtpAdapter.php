@@ -30,6 +30,7 @@ use Throwable;
 use function error_clear_last;
 use function error_get_last;
 use function ftp_chdir;
+use function ftp_close;
 use function is_string;
 
 class FtpAdapter implements FilesystemAdapter
@@ -37,7 +38,7 @@ class FtpAdapter implements FilesystemAdapter
     private const SYSTEM_TYPE_WINDOWS = 'windows';
     private const SYSTEM_TYPE_UNIX = 'unix';
 
-    private FtpConnectionProvider $connectionProvider;
+    private ConnectionProvider $connectionProvider;
     private ConnectivityChecker $connectivityChecker;
 
     /**
@@ -55,7 +56,7 @@ class FtpAdapter implements FilesystemAdapter
 
     public function __construct(
         private FtpConnectionOptions $connectionOptions,
-        FtpConnectionProvider $connectionProvider = null,
+        ConnectionProvider $connectionProvider = null,
         ConnectivityChecker $connectivityChecker = null,
         VisibilityConverter $visibilityConverter = null,
         MimeTypeDetector $mimeTypeDetector = null,
@@ -74,10 +75,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     public function __destruct()
     {
-        if ($this->hasFtpConnection()) {
-            @ftp_close($this->connection);
-        }
-        $this->connection = false;
+        $this->disconnect();
     }
 
     /**
@@ -102,6 +100,14 @@ class FtpAdapter implements FilesystemAdapter
         ftp_chdir($this->connection, $this->rootDirectory);
 
         return $this->connection;
+    }
+
+    public function disconnect(): void
+    {
+        if ($this->hasFtpConnection()) {
+            @ftp_close($this->connection);
+        }
+        $this->connection = false;
     }
 
     private function isPureFtpdServer(): bool

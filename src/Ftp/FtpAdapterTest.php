@@ -26,8 +26,13 @@ class FtpAdapterTest extends FtpAdapterTestCase
        ]);
 
         static::$connectivityChecker = new ConnectivityCheckerThatCanFail(new NoopCommandConnectivityChecker());
+        static::$connectionProvider = new StubConnectionProvider(new FtpConnectionProvider());
 
-        return new FtpAdapter($options, null, static::$connectivityChecker);
+        return new FtpAdapter(
+            $options,
+            static::$connectionProvider,
+            static::$connectivityChecker,
+        );
     }
 
     /**
@@ -45,9 +50,24 @@ class FtpAdapterTest extends FtpAdapterTestCase
         unset($reflection);
 
         $this->assertTrue(false !== ftp_pwd($connection));
-        unset($adapter);
+        $adapter->__destruct();
         static::clearFilesystemAdapterCache();
         $this->assertFalse((new NoopCommandConnectivityChecker())->isConnected($connection));
+    }
+
+    /**
+     * @test
+     */
+    public function it_can_disconnect(): void
+    {
+        /** @var FtpAdapter $adapter */
+        $adapter = $this->adapter();
+
+        $this->assertFalse($adapter->fileExists('not-existing.file'));
+
+        self::assertTrue(static::$connectivityChecker->isConnected(static::$connectionProvider->connection));
+        $adapter->disconnect();
+        self::assertFalse(static::$connectivityChecker->isConnected(static::$connectionProvider->connection));
     }
 
     /**

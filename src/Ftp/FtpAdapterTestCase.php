@@ -32,10 +32,9 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
         $this->retryOnException(UnableToConnectToFtpHost::class);
     }
 
-    /**
-     * @var ConnectivityCheckerThatCanFail
-     */
-    protected static $connectivityChecker;
+    protected static ConnectivityCheckerThatCanFail $connectivityChecker;
+
+    protected static ?StubConnectionProvider $connectionProvider;
 
     /**
      * @after
@@ -43,6 +42,12 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function resetFunctionMocks(): void
     {
         reset_function_mocks();
+    }
+
+    public static function clearFilesystemAdapterCache(): void
+    {
+        parent::clearFilesystemAdapterCache();
+        static::$connectionProvider = null;
     }
 
     /**

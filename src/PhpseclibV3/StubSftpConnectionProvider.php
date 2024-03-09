@@ -9,9 +9,9 @@ use phpseclib3\Net\SFTP;
 class StubSftpConnectionProvider implements ConnectionProvider
 {
     /**
-     * @var SftpStub
+     * @var SftpStub|null
      */
-    private $connection;
+    public $connection;
 
     public function __construct(
         private string $host,
@@ -21,9 +21,16 @@ class StubSftpConnectionProvider implements ConnectionProvider
     ) {
     }
 
+    public function disconnect(): void
+    {
+        if ($this->connection) {
+            $this->connection->disconnect();
+        }
+    }
+
     public function provideConnection(): SFTP
     {
-        if ( ! $this->connection instanceof SFTP) {
+        if ( ! $this->connection instanceof SFTP || ! $this->connection->isConnected()) {
             $connection = new SftpStub($this->host, $this->port);
             $connection->login($this->username, $this->password);
 

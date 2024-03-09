@@ -26,7 +26,7 @@ class NoopCommandConnectivityCheckerTest extends TestCase
     {
         $options = FtpConnectionOptions::fromArray([
            'host' => 'localhost',
-           'port' => 2122,
+           'port' => 2121,
            'root' => '/home/foo/upload',
            'username' => 'foo',
            'password' => 'pass',
