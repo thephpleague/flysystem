@@ -15,6 +15,9 @@ use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
+use League\Flysystem\UnableToDeleteDirectory;
+use League\Flysystem\UnableToDeleteFile;
+use League\Flysystem\UnableToListContents;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
@@ -27,20 +30,22 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use phpseclib3\Net\SFTP;
 use Throwable;
 
+use UnexpectedValueException;
 use function rtrim;
 
 class SftpAdapter implements FilesystemAdapter
 {
+    private const UNEXPECTED_SFTP_PACKET_MESSAGE = 'SFTP server respond an unexpected packet.';
     private VisibilityConverter $visibilityConverter;
-    private PathPrefixer $prefixer;
-    private MimeTypeDetector $mimeTypeDetector;
+    private PathPrefixer        $prefixer;
+    private MimeTypeDetector    $mimeTypeDetector;
 
     public function __construct(
         private ConnectionProvider $connectionProvider,
-        string $root,
-        VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null,
-        private bool $detectMimeTypeUsingPath = false,
+        string                     $root,
+        VisibilityConverter        $visibilityConverter = null,
+        MimeTypeDetector           $mimeTypeDetector = null,
+        private bool               $detectMimeTypeUsingPath = false,
     ) {
         $this->prefixer = new PathPrefixer($root);
         $this->visibilityConverter = $visibilityConverter ?? new PortableVisibilityConverter();
@@ -50,9 +55,12 @@ class SftpAdapter implements FilesystemAdapter
     public function fileExists(string $path): bool
     {
         $location = $this->prefixer->prefixPath($path);
-
+        $connection = $this->connectionProvider->provideConnection();
         try {
-            return $this->connectionProvider->provideConnection()->is_file($location);
+            return $connection->is_file($location);
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToCheckFileExistence::forLocation($path, $exception);
         } catch (Throwable $exception) {
             throw UnableToCheckFileExistence::forLocation($path, $exception);
         }
@@ -66,9 +74,12 @@ class SftpAdapter implements FilesystemAdapter
     public function directoryExists(string $path): bool
     {
         $location = $this->prefixer->prefixDirectoryPath($path);
-
+        $connection = $this->connectionProvider->provideConnection();
         try {
-            return $this->connectionProvider->provideConnection()->is_dir($location);
+            return $connection->is_dir($location);
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         } catch (Throwable $exception) {
             throw UnableToCheckDirectoryExistence::forLocation($path, $exception);
         }
@@ -85,14 +96,19 @@ class SftpAdapter implements FilesystemAdapter
     {
         $this->ensureParentDirectoryExists($path, $config);
         $connection = $this->connectionProvider->provideConnection();
-        $location = $this->prefixer->prefixPath($path);
+        try {
+            $location = $this->prefixer->prefixPath($path);
 
-        if ( ! $connection->put($location, $contents, SFTP::SOURCE_STRING)) {
-            throw UnableToWriteFile::atLocation($path, 'not able to write the file');
-        }
+            if ( ! $connection->put($location, $contents, SFTP::SOURCE_STRING)) {
+                throw UnableToWriteFile::atLocation($path, $connection->getLastSFTPError());
+            }
 
-        if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
-            $this->setVisibility($path, $visibility);
+            if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
+                $this->setVisibility($path, $visibility);
+            }
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToWriteFile::atLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
         }
     }
 
@@ -114,16 +130,21 @@ class SftpAdapter implements FilesystemAdapter
         $location = $this->prefixer->prefixPath($directory);
         $connection = $this->connectionProvider->provideConnection();
 
-        if ($connection->is_dir($location)) {
-            return;
-        }
+        try {
+            if ($connection->is_dir($location)) {
+                return;
+            }
 
-        $mode = $visibility ? $this->visibilityConverter->forDirectory(
-            $visibility
-        ) : $this->visibilityConverter->defaultForDirectories();
+            $mode = $visibility ? $this->visibilityConverter->forDirectory(
+                $visibility
+            ) : $this->visibilityConverter->defaultForDirectories();
 
-        if ( ! $connection->mkdir($location, $mode, true) && ! $connection->is_dir($location)) {
-            throw UnableToCreateDirectory::atLocation($directory);
+            if ( ! $connection->mkdir($location, $mode, true) && ! $connection->is_dir($location)) {
+                throw UnableToCreateDirectory::atLocation($directory, $connection->getLastSFTPError());
+            }
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToCreateDirectory::atLocation($directory, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
         }
     }
 
@@ -153,13 +174,20 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $contents = $connection->get($location);
+        try {
+            $contents = $connection->get($location);
 
-        if ( ! is_string($contents)) {
-            throw UnableToReadFile::fromLocation($path);
+            if ( ! is_string($contents)) {
+                throw UnableToReadFile::fromLocation($path, $connection->getLastSFTPError());
+            }
+
+            return $contents;
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToReadFile::fromLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
+        } catch (Throwable $exception) {
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
-
-        return $contents;
     }
 
     public function readStream(string $path)
@@ -169,29 +197,49 @@ class SftpAdapter implements FilesystemAdapter
         /** @var resource $readStream */
         $readStream = fopen('php://temp', 'w+');
 
-        if ( ! $connection->get($location, $readStream)) {
+        try {
+            if ( ! $connection->get($location, $readStream)) {
+                fclose($readStream);
+                throw UnableToReadFile::fromLocation($path, $connection->getLastSFTPError());
+            }
+
+            rewind($readStream);
+
+            return $readStream;
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
             fclose($readStream);
-            throw UnableToReadFile::fromLocation($path);
+            throw UnableToReadFile::fromLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
+        } catch (Throwable $exception) {
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
-
-        rewind($readStream);
-
-        return $readStream;
     }
 
     public function delete(string $path): void
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $connection->delete($location);
+        try {
+            $connection->delete($location);
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToDeleteFile::atLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
+        } catch (Throwable $exception) {
+            throw UnableToDeleteFile::atLocation($path, $exception->getMessage(), $exception);
+        }
     }
 
     public function deleteDirectory(string $path): void
     {
         $location = rtrim($this->prefixer->prefixPath($path), '/') . '/';
         $connection = $this->connectionProvider->provideConnection();
-        $connection->delete($location);
-        $connection->rmdir($location);
+        try {
+            $connection->delete($location);
+            $connection->rmdir($location);
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToDeleteDirectory::atLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
+        }
     }
 
     public function createDirectory(string $path, Config $config): void
@@ -205,8 +253,13 @@ class SftpAdapter implements FilesystemAdapter
         $connection = $this->connectionProvider->provideConnection();
         $mode = $this->visibilityConverter->forFile($visibility);
 
-        if ( ! $connection->chmod($mode, $location, false)) {
-            throw UnableToSetVisibility::atLocation($path);
+        try {
+            if ( ! $connection->chmod($mode, $location, false)) {
+                throw UnableToSetVisibility::atLocation($path, $connection->getLastSFTPError());
+            }
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToSetVisibility::atLocation($path, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
         }
     }
 
@@ -214,19 +267,24 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $stat = $connection->stat($location);
+        try {
+            $stat = $connection->stat($location);
 
-        if ( ! is_array($stat)) {
-            throw UnableToRetrieveMetadata::create($path, $type);
+            if ( ! is_array($stat)) {
+                throw UnableToRetrieveMetadata::create($path, $type);
+            }
+
+            $attributes = $this->convertListingToAttributes($path, $stat);
+
+            if ( ! $attributes instanceof FileAttributes) {
+                throw UnableToRetrieveMetadata::create($path, $type, 'path is not a file');
+            }
+
+            return $attributes;
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToRetrieveMetadata::create($path, $type, self::UNEXPECTED_SFTP_PACKET_MESSAGE, $exception);
         }
-
-        $attributes = $this->convertListingToAttributes($path, $stat);
-
-        if ( ! $attributes instanceof FileAttributes) {
-            throw UnableToRetrieveMetadata::create($path, $type, 'path is not a file');
-        }
-
-        return $attributes;
     }
 
     public function mimeType(string $path): FileAttributes
@@ -264,29 +322,34 @@ class SftpAdapter implements FilesystemAdapter
     public function listContents(string $path, bool $deep): iterable
     {
         $connection = $this->connectionProvider->provideConnection();
-        $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
-        $listing = $connection->rawlist($location, false);
+        try {
+            $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
+            $listing = $connection->rawlist($location, false);
 
-        if (false === $listing) {
-            return;
-        }
-
-        foreach ($listing as $filename => $attributes) {
-            if ($filename === '.' || $filename === '..') {
-                continue;
+            if (false === $listing) {
+                return;
             }
 
-            // Ensure numeric keys are strings.
-            $filename = (string) $filename;
-            $path = $this->prefixer->stripPrefix($location . ltrim($filename, '/'));
-            $attributes = $this->convertListingToAttributes($path, $attributes);
-            yield $attributes;
+            foreach ($listing as $filename => $attributes) {
+                if ($filename === '.' || $filename === '..') {
+                    continue;
+                }
 
-            if ($deep && $attributes->isDir()) {
-                foreach ($this->listContents($attributes->path(), true) as $child) {
-                    yield $child;
+                // Ensure numeric keys are strings.
+                $filename = (string) $filename;
+                $path = $this->prefixer->stripPrefix($location . ltrim($filename, '/'));
+                $attributes = $this->convertListingToAttributes($path, $attributes);
+                yield $attributes;
+
+                if ($deep && $attributes->isDir()) {
+                    foreach ($this->listContents($attributes->path(), true) as $child) {
+                        yield $child;
+                    }
                 }
             }
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToListContents::atLocation($path, $deep, $exception);
         }
     }
 
@@ -319,12 +382,17 @@ class SftpAdapter implements FilesystemAdapter
 
         try {
             $this->ensureParentDirectoryExists($destination, $config);
+
+            if ( ! $connection->rename($sourceLocation, $destinationLocation)) {
+                throw UnableToMoveFile::fromLocationTo($source, $destination);
+            }
+        } catch (UnableToMoveFile $exception) {
+            throw $exception;
+        } catch (UnexpectedValueException $exception) {
+            $connection->disconnect();
+            throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
         } catch (Throwable $exception) {
             throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
-        }
-
-        if ( ! $connection->rename($sourceLocation, $destinationLocation)) {
-            throw UnableToMoveFile::fromLocationTo($source, $destination);
         }
     }
 
