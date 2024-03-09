@@ -75,10 +75,7 @@ class FtpAdapter implements FilesystemAdapter
      */
     public function __destruct()
     {
-        if ($this->hasFtpConnection()) {
-            @ftp_close($this->connection);
-        }
-        $this->connection = false;
+        $this->disconnect();
     }
 
     /**
@@ -108,8 +105,9 @@ class FtpAdapter implements FilesystemAdapter
     public function disconnect(): void
     {
         if ($this->hasFtpConnection()) {
-            ftp_close($this->connection);
+            @ftp_close($this->connection);
         }
+        $this->connection = false;
     }
 
     private function isPureFtpdServer(): bool

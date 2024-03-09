@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
-use Ftp\StubConnectionProvider;
 use Generator;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
 use League\Flysystem\Config;
@@ -49,6 +48,12 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
     public function resetFunctionMocks(): void
     {
         reset_function_mocks();
+    }
+
+    public static function clearFilesystemAdapterCache(): void
+    {
+        parent::clearFilesystemAdapterCache();
+        static::$connectionProvider = null;
     }
 
     /**
