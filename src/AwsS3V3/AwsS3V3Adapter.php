@@ -46,12 +46,13 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
      */
     public const AVAILABLE_OPTIONS = [
         'ACL',
+        'AddContentMD5',
         'CacheControl',
+        'ChecksumAlgorithm',
         'ContentDisposition',
         'ContentEncoding',
         'ContentLength',
         'ContentType',
-        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
@@ -68,7 +69,6 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         'StorageClass',
         'Tagging',
         'WebsiteRedirectLocation',
-        'ChecksumAlgorithm',
     ];
     /**
      * @var string[]

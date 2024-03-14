@@ -50,12 +50,13 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
      */
     public const AVAILABLE_OPTIONS = [
         'ACL',
+        'AddContentMD5',
         'CacheControl',
+        'ChecksumAlgorithm',
         'ContentDisposition',
         'ContentEncoding',
         'ContentLength',
         'ContentType',
-        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
@@ -72,7 +73,6 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         'StorageClass',
         'Tagging',
         'WebsiteRedirectLocation',
-        'ChecksumAlgorithm',
     ];
 
     /**
