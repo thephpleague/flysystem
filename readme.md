@@ -45,6 +45,7 @@ for which ever storage is right for you.
 * **[Dropbox](https://github.com/spatie/flysystem-dropbox)**
 * **[ReplicateAdapter](https://github.com/ajgarlag/flysystem-replicate)**
 * **[Uploadcare](https://github.com/vormkracht10/flysystem-uploadcare)**
+* **[Useful adapters (FallbackAdapter, LogAdapter, ReadWriteAdapter, RetryAdapter)](https://github.com/ElGigi/FlysystemUsefulAdapters)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/docs/advanced/creating-an-adapter/) yourself.
 
