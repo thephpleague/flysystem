@@ -38,8 +38,8 @@ class SftpAdapter implements FilesystemAdapter
     public function __construct(
         private ConnectionProvider $connectionProvider,
         string $root,
-        VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null,
+        ?VisibilityConverter $visibilityConverter = null,
+        ?MimeTypeDetector $mimeTypeDetector = null,
         private bool $detectMimeTypeUsingPath = false,
     ) {
         $this->prefixer = new PathPrefixer($root);

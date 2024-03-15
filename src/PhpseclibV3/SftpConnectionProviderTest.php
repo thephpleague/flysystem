@@ -373,7 +373,7 @@ class SftpConnectionProviderTest extends TestCase
      *
      * @throws Throwable
      */
-    public function runWithRetries(callable $scenario, string $expected = null): void
+    public function runWithRetries(callable $scenario, ?string $expected = null): void
     {
         $tries = 0;
         start:

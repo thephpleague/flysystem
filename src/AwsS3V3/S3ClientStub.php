@@ -69,7 +69,7 @@ class S3ClientStub implements S3ClientInterface
         $this->throwExceptionWhenExecutingCommand('CopyObject');
     }
 
-    public function throwExceptionWhenExecutingCommand(string $commandName, S3Exception $exception = null): void
+    public function throwExceptionWhenExecutingCommand(string $commandName, ?S3Exception $exception = null): void
     {
         $this->stagedExceptions[$commandName] = $exception ?? new S3Exception($commandName, new Command($commandName));
     }

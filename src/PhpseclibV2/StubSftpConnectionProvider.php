@@ -39,7 +39,7 @@ class StubSftpConnectionProvider implements ConnectionProvider
     public function __construct(
         string $host,
         string $username,
-        string $password = null,
+        ?string $password = null,
         int $port = 22
     ) {
         $this->host = $host;

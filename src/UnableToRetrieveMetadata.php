@@ -24,27 +24,27 @@ final class UnableToRetrieveMetadata extends RuntimeException implements Filesys
      */
     private $reason;
 
-    public static function lastModified(string $location, string $reason = '', Throwable $previous = null): self
+    public static function lastModified(string $location, string $reason = '', ?Throwable $previous = null): self
     {
         return static::create($location, FileAttributes::ATTRIBUTE_LAST_MODIFIED, $reason, $previous);
     }
 
-    public static function visibility(string $location, string $reason = '', Throwable $previous = null): self
+    public static function visibility(string $location, string $reason = '', ?Throwable $previous = null): self
     {
         return static::create($location, FileAttributes::ATTRIBUTE_VISIBILITY, $reason, $previous);
     }
 
-    public static function fileSize(string $location, string $reason = '', Throwable $previous = null): self
+    public static function fileSize(string $location, string $reason = '', ?Throwable $previous = null): self
     {
         return static::create($location, FileAttributes::ATTRIBUTE_FILE_SIZE, $reason, $previous);
     }
 
-    public static function mimeType(string $location, string $reason = '', Throwable $previous = null): self
+    public static function mimeType(string $location, string $reason = '', ?Throwable $previous = null): self
     {
         return static::create($location, FileAttributes::ATTRIBUTE_MIME_TYPE, $reason, $previous);
     }
 
-    public static function create(string $location, string $type, string $reason = '', Throwable $previous = null): self
+    public static function create(string $location, string $type, string $reason = '', ?Throwable $previous = null): self
     {
         $e = new static("Unable to retrieve the $type for file at location: $location. {$reason}", 0, $previous);
         $e->reason = $reason;
