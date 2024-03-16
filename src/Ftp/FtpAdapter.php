@@ -56,10 +56,10 @@ class FtpAdapter implements FilesystemAdapter
 
     public function __construct(
         private FtpConnectionOptions $connectionOptions,
-        ConnectionProvider $connectionProvider = null,
-        ConnectivityChecker $connectivityChecker = null,
-        VisibilityConverter $visibilityConverter = null,
-        MimeTypeDetector $mimeTypeDetector = null,
+        ?ConnectionProvider $connectionProvider = null,
+        ?ConnectivityChecker $connectivityChecker = null,
+        ?VisibilityConverter $visibilityConverter = null,
+        ?MimeTypeDetector $mimeTypeDetector = null,
         private bool $detectMimeTypeUsingPath = false,
     ) {
         $this->systemType = $this->connectionOptions->systemType();

@@ -77,15 +77,15 @@ class SftpConnectionProvider implements ConnectionProvider
     public function __construct(
         string $host,
         string $username,
-        string $password = null,
-        string $privateKey = null,
-        string $passphrase = null,
+        ?string $password = null,
+        ?string $privateKey = null,
+        ?string $passphrase = null,
         int $port = 22,
         bool $useAgent = false,
         int $timeout = 10,
         int $maxTries = 4,
-        string $hostFingerprint = null,
-        ConnectivityChecker $connectivityChecker = null,
+        ?string $hostFingerprint = null,
+        ?ConnectivityChecker $connectivityChecker = null,
         private bool $disableStatCache = true,
     ) {
         $this->host = $host;

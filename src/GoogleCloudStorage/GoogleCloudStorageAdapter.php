@@ -58,9 +58,9 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function __construct(
         private Bucket $bucket,
         string $prefix = '',
-        VisibilityHandler $visibilityHandler = null,
+        ?VisibilityHandler $visibilityHandler = null,
         private string $defaultVisibility = Visibility::PRIVATE,
-        MimeTypeDetector $mimeTypeDetector = null
+        ?MimeTypeDetector $mimeTypeDetector = null
     ) {
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?? new PortableVisibilityHandler();

@@ -40,7 +40,7 @@ class SftpConnectionProvider implements ConnectionProvider
         private int $timeout = 10,
         private int $maxTries = 4,
         private ?string $hostFingerprint = null,
-        ConnectivityChecker $connectivityChecker = null,
+        ?ConnectivityChecker $connectivityChecker = null,
         private array $preferredAlgorithms = [],
         private bool $disableStatCache = true,
     ) {

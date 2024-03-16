@@ -57,7 +57,7 @@ class S3ClientStub extends SimpleS3Client
         parent::__construct($configuration, null, new MockHttpClient());
     }
 
-    public function throwExceptionWhenExecutingCommand(string $commandName, Exception $exception = null): void
+    public function throwExceptionWhenExecutingCommand(string $commandName, ?Exception $exception = null): void
     {
         $this->stagedExceptions[$commandName] = $exception ?? new NetworkException();
     }
