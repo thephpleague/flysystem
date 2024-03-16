@@ -87,6 +87,7 @@ class SftpConnectionProvider implements ConnectionProvider
     {
         if ($this->connection) {
             $this->connection->disconnect();
+            $this->connection = null;
         }
     }
 
