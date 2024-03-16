@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.25.1 - 2024-03-16
+
+### Fixed
+
+- Cleanup connection instance after disconnecting SFTP connection.
+- Fix upcoming PHP 8.4 deprecations (#1772) 
+
 ## 3.25.0 - 2024-03-09
 
 ### Added
