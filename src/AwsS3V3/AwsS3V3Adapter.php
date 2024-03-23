@@ -51,7 +51,6 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         'ContentEncoding',
         'ContentLength',
         'ContentType',
-        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
