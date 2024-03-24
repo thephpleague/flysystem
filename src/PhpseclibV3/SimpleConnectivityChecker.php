@@ -9,10 +9,32 @@ use Throwable;
 
 class SimpleConnectivityChecker implements ConnectivityChecker
 {
+    public function __construct(
+        private bool $usePing = false,
+    ) {
+    }
+
+    public static function create(): SimpleConnectivityChecker
+    {
+        return new SimpleConnectivityChecker();
+    }
+
+    public function withUsingPing(bool $usePing): SimpleConnectivityChecker
+    {
+        $clone = clone $this;
+        $clone->usePing = $usePing;
+
+        return $clone;
+    }
+
     public function isConnected(SFTP $connection): bool
     {
         if ( ! $connection->isConnected()) {
             return false;
+        }
+
+        if ( ! $this->usePing) {
+            return true;
         }
 
         try {
