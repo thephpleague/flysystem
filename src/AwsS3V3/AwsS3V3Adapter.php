@@ -51,7 +51,6 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         'ContentEncoding',
         'ContentLength',
         'ContentType',
-        'ContentMD5',
         'Expires',
         'GrantFullControl',
         'GrantRead',
@@ -77,6 +76,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
      * @var string[]
      */
     public const MUP_AVAILABLE_OPTIONS = [
+        'add_content_md5',
         'before_upload',
         'concurrency',
         'mup_threshold',
