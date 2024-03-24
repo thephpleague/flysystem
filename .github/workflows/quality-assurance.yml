@@ -54,6 +54,10 @@ jobs:
             experimental: false
             phpstan: false
             phpunit-flags: '--no-coverage'
+          - php: '8.4'
+            experimental: true
+            phpstan: false
+            phpunit-flags: '--no-coverage'
     steps:
       - uses: actions/checkout@v4
       - run: docker-compose -f docker-compose.yml up -d
