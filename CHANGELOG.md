@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.26.0 - 2024-03-24
+## 3.26.0 - 2024-03-25
 
 ### Fixed
 
@@ -9,6 +9,7 @@
 ### Added 
 
 - Add `add_content_md5` option to AWS S3 (#1774)
+- Added AWS SSE-C options (#1773)
 
 ## 3.25.1 - 2024-03-16
 
