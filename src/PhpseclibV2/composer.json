@@ -9,7 +9,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "league/flysystem": "^3.0.0",
+        "league/flysystem": "^4.0.0",
         "league/mime-type-detection": "^1.0.0",
         "phpseclib/phpseclib": "^2.0"
     },

@@ -9,10 +9,6 @@ use DateTimeInterface;
 /**
  * This interface contains everything to read from and inspect
  * a filesystem. All methods containing are non-destructive.
- *
- * @method string publicUrl(string $path, array $config = []) Will be added in 4.0
- * @method string temporaryUrl(string $path, DateTimeInterface $expiresAt, array $config = []) Will be added in 4.0
- * @method string checksum(string $path, array $config = []) Will be added in 4.0
  */
 interface FilesystemReader
 {
@@ -82,4 +78,22 @@ interface FilesystemReader
      * @throws FilesystemException
      */
     public function visibility(string $path): string;
+
+    /**
+     * @throws UnableToGeneratePublicUrl
+     * @throws FilesystemException
+     */
+    public function publicUrl(string $path, array $config = []): string;
+
+    /**
+     * @throws UnableToGeneratePublicUrl
+     * @throws FilesystemException
+     */
+    public function temporaryUrl(string $path, DateTimeInterface $expiresAt, array $config = []): string;
+
+    /**
+     * @throws UnableToGeneratePublicUrl
+     * @throws FilesystemException
+     */
+    public function checksum(string $path, array $config = []): string;
 }

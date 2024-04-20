@@ -10,7 +10,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "league/flysystem": "^3.10.0",
+        "league/flysystem": "^4.0.0",
         "league/mime-type-detection": "^1.0.0",
         "async-aws/s3": "^1.5 || ^2.0"
     },
