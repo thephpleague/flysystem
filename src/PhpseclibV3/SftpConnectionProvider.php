@@ -35,7 +35,7 @@ class SftpConnectionProvider implements ConnectionProvider
         private ?string $password = null,
         private ?string $privateKey = null,
         private ?string $passphrase = null,
-        private int $port = 22,
+        private $port = 22,
         private bool $useAgent = false,
         private int $timeout = 10,
         private int $maxTries = 4,
