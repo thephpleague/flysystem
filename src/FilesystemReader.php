@@ -80,6 +80,12 @@ interface FilesystemReader
     public function visibility(string $path): string;
 
     /**
+     * @throws UnableToRetrieveMetadata
+     * @throws FilesystemException
+     */
+    public function metadata(string $path): StorageAttributes;
+
+    /**
      * @throws UnableToGeneratePublicUrl
      * @throws FilesystemException
      */

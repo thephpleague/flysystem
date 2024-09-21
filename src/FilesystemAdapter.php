@@ -95,6 +95,12 @@ interface FilesystemAdapter
     public function fileSize(string $path): FileAttributes;
 
     /**
+     * @throws UnableToRetrieveMetadata
+     * @throws FilesystemException
+     */
+    public function metadata(string $path): StorageAttributes;
+
+    /**
      * @return iterable<StorageAttributes>
      *
      * @throws FilesystemException

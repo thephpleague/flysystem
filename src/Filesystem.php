@@ -181,6 +181,11 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->visibility($this->pathNormalizer->normalizePath($path))->visibility();
     }
 
+    public function metadata(string $path): StorageAttributes
+    {
+        return $this->adapter->metadata($this->pathNormalizer->normalizePath($path));
+    }
+
     public function publicUrl(string $path, array $config = []): string
     {
         $this->publicUrlGenerator ??= $this->resolvePublicUrlGenerator()

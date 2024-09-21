@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Local;
 
+use League\Flysystem\StorageAttributes;
+use function octdec;
+use function sprintf;
+use function str_replace;
+use function substr;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -134,6 +139,13 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         }
     }
 
+    public function metadata(string $path): StorageAttributes
+    {
+        $location = $this->prefixer->prefixPath($path);
+
+        return $this->mapFileInfo(new SplFileInfo($location));
+    }
+
     public function delete(string $path): void
     {
         $location = $this->prefixer->prefixPath($path);
@@ -211,35 +223,40 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $iterator = $deep ? $this->listDirectoryRecursively($location) : $this->listDirectory($location);
 
         foreach ($iterator as $fileInfo) {
-            $pathName = $fileInfo->getPathname();
-
             try {
-                if ($fileInfo->isLink()) {
-                    if ($this->linkHandling & self::SKIP_LINKS) {
-                        continue;
-                    }
-                    throw SymbolicLinkEncountered::atLocation($pathName);
-                }
-
-                $path = $this->prefixer->stripPrefix($pathName);
-                $lastModified = $fileInfo->getMTime();
-                $isDirectory = $fileInfo->isDir();
-                $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
-                $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
-
-                yield $isDirectory ? new DirectoryAttributes(str_replace('\\', '/', $path), $visibility, $lastModified) : new FileAttributes(
-                    str_replace('\\', '/', $path),
-                    $fileInfo->getSize(),
-                    $visibility,
-                    $lastModified
-                );
+                yield $this->mapFileInfo($fileInfo);
             } catch (Throwable $exception) {
-                if (file_exists($pathName)) {
+                if (file_exists($fileInfo->getFilename())) {
                     throw $exception;
                 }
             }
         }
     }
+
+    private function mapFileInfo(SplFileInfo $fileInfo): StorageAttributes | false {
+        $pathName = $fileInfo->getPathname();
+
+        if ($fileInfo->isLink()) {
+            if ($this->linkHandling & self::SKIP_LINKS) {
+                return false;
+            }
+
+            throw SymbolicLinkEncountered::atLocation($pathName);
+        }
+
+        $path = $this->prefixer->stripPrefix($pathName);
+        $lastModified = $fileInfo->getMTime();
+        $isDirectory = $fileInfo->isDir();
+        $permissions = octdec(substr(sprintf('%o', $fileInfo->getPerms()), -4));
+        $visibility = $isDirectory ? $this->visibility->inverseForDirectory($permissions) : $this->visibility->inverseForFile($permissions);
+
+        return $isDirectory ? new DirectoryAttributes(str_replace('\\', '/', $path), $visibility, $lastModified) : new FileAttributes(
+            str_replace('\\', '/', $path),
+            $fileInfo->getSize(),
+            $visibility,
+            $lastModified
+        );
+}
 
     public function move(string $source, string $destination, Config $config): void
     {
