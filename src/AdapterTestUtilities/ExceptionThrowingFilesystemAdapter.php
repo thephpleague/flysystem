@@ -8,6 +8,7 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperationFailed;
+use League\Flysystem\StorageAttributes;
 
 class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
 {
@@ -50,6 +51,13 @@ class ExceptionThrowingFilesystemAdapter implements FilesystemAdapter
         $this->throwStagedException(__METHOD__, $path);
 
         return $this->adapter->fileExists($path);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $this->throwStagedException(__METHOD__, $path);
+
+        return $this->adapter->metadata($path);
     }
 
     public function write(string $path, string $contents, Config $config): void

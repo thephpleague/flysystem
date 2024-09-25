@@ -9,7 +9,6 @@ use function octdec;
 use function sprintf;
 use function str_replace;
 use function substr;
-use function var_dump;
 use const DIRECTORY_SEPARATOR;
 use const LOCK_EX;
 use DirectoryIterator;
@@ -240,7 +239,6 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
 
     private function mapFileInfo(SplFileInfo $fileInfo): StorageAttributes | false {
         $pathName = $fileInfo->getPathname();
-        var_dump($fileInfo->isLink(), $this->linkHandling & self::SKIP_LINKS);
 
         if ($fileInfo->isLink()) {
             if ($this->linkHandling & self::SKIP_LINKS) {

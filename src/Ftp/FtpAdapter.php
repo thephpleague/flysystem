@@ -35,7 +35,6 @@ use function ftp_chdir;
 use function ftp_close;
 use function is_string;
 use function preg_match;
-use function var_dump;
 
 class FtpAdapter implements FilesystemAdapter
 {
