@@ -8,6 +8,7 @@ use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToReadFile;
@@ -17,8 +18,11 @@ use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 
+use function array_key_exists;
 use function array_keys;
+use function ltrim;
 use function rtrim;
+use function trim;
 
 class InMemoryFilesystemAdapter implements FilesystemAdapter
 {
@@ -175,6 +179,28 @@ class InMemoryFilesystemAdapter implements FilesystemAdapter
         }
 
         return new FileAttributes($path, $this->files[$path]->fileSize());
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $location = $this->preparePath($path);
+
+        if (array_key_exists($location, $this->files)) {
+            $file = $this->files[$location];
+
+            return new FileAttributes(ltrim($location, '/'), $file->fileSize(), $file->visibility(), $file->lastModified(), $file->mimeType());
+        }
+
+        $dirPath = rtrim($location, '/') . '/';
+        $paths = array_keys($this->files);
+
+        foreach ($paths as $storedPath) {
+            if (str_starts_with($storedPath, $location)) {
+                return new DirectoryAttributes(trim($dirPath, '/'));
+            }
+        }
+
+        throw UnableToRetrieveMetadata::metadata($path, 'file does not exist');
     }
 
     public function listContents(string $path, bool $deep): iterable

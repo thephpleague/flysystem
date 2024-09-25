@@ -8,6 +8,7 @@ use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\DecoratedAdapter;
 use League\Flysystem\FilesystemAdapter;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;

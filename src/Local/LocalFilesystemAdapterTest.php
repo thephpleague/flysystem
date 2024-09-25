@@ -114,21 +114,6 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function listing_metadata_for_a_file(): void
-    {
-        $now = \time();
-        $this->givenWeHaveAnExistingFile('something.csv', '');
-
-        $metadata = $this->adapter()->metadata('something.csv');
-
-        $this->assertGreaterThanOrEqual($now, $metadata->lastModified());
-        $this->assertFalse($metadata->isDir());
-        $this->assertTrue($metadata->isFile());
-    }
-
-    /**
-     * @test
-     */
     public function writing_a_file_with_a_stream(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);

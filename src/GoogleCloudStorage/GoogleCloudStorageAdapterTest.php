@@ -28,7 +28,7 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
 
     public static function setUpBeforeClass(): void
     {
-        static::$adapterPrefix = 'frank-ci'; // . bin2hex(random_bytes(10));
+        static::$adapterPrefix = 'frank-ci/' . bin2hex(random_bytes(10));
         static::$prefixer = new PathPrefixer(static::$adapterPrefix);
     }
 

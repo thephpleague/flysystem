@@ -13,6 +13,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -345,6 +346,11 @@ class AzureBlobStorageAdapter implements FilesystemAdapter, PublicUrlGenerator, 
         $location = $this->prefixer->prefixPath($path);
 
         return $this->client->getBlobUrl($this->container, $location);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        return $this->fetchMetadata($this->prefixer->prefixPath($path));
     }
 
     public function checksum(string $path, Config $config): string

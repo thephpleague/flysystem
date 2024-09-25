@@ -295,6 +295,20 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         }
     }
 
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+
+        try {
+            $result = $this->client->headObject($arguments);
+            $result->resolve();
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::create($path, StorageAttributes::ATTRIBUTE_METADATA, $exception->getMessage(), $exception);
+        }
+
+        return $this->mapS3ObjectMetadata($result, $path);
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $path = trim($path, '/');

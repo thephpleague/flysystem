@@ -83,7 +83,7 @@ interface FilesystemReader
      * @throws UnableToRetrieveMetadata
      * @throws FilesystemException
      */
-    public function metadata(string $path): StorageAttributes;
+    public function metadata(string $path, array $config = []): StorageAttributes;
 
     /**
      * @throws UnableToGeneratePublicUrl

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use FTP\Connection;
+
 class StubConnectionProvider implements ConnectionProvider
 {
     public mixed $connection;
@@ -11,7 +13,7 @@ class StubConnectionProvider implements ConnectionProvider
     {
     }
 
-    public function createConnection(FtpConnectionOptions $options)
+    public function createConnection(FtpConnectionOptions $options): Connection
     {
         return $this->connection = $this->provider->createConnection($options);
     }

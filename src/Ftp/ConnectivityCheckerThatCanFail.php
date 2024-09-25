@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use FTP\Connection;
+
 class ConnectivityCheckerThatCanFail implements ConnectivityChecker
 {
     private bool $failNextCall = false;
@@ -17,10 +19,7 @@ class ConnectivityCheckerThatCanFail implements ConnectivityChecker
         $this->failNextCall = true;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function isConnected($connection): bool
+    public function isConnected(Connection $connection): bool
     {
         if ($this->failNextCall) {
             $this->failNextCall = false;

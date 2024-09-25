@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\Ftp;
 
 use DateTime;
+use FTP\Connection;
 use Generator;
 use League\Flysystem\Config;
 use League\Flysystem\DirectoryAttributes;
@@ -33,6 +34,8 @@ use function error_get_last;
 use function ftp_chdir;
 use function ftp_close;
 use function is_string;
+use function preg_match;
+use function var_dump;
 
 class FtpAdapter implements FilesystemAdapter
 {
@@ -43,7 +46,7 @@ class FtpAdapter implements FilesystemAdapter
     private ConnectivityChecker $connectivityChecker;
 
     /**
-     * @var resource|false|\FTP\Connection
+     * @var false|\FTP\Connection
      */
     private mixed $connection = false;
     private PathPrefixer $prefixer;
@@ -79,10 +82,7 @@ class FtpAdapter implements FilesystemAdapter
         $this->disconnect();
     }
 
-    /**
-     * @return resource
-     */
-    private function connection()
+    private function connection(): Connection
     {
         start:
         if ( ! $this->hasFtpConnection()) {
@@ -347,17 +347,34 @@ class FtpAdapter implements FilesystemAdapter
         return new FileAttributes($path, $fileSize);
     }
 
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $location = $this->prefixer()->prefixPath($path);
+        $connection = $this->connection();
+        if ($path === '' || @ftp_chdir($connection, $location) === true) {
+            return new DirectoryAttributes($path);
+        }
+
+        $object = ftp_raw($connection, 'STAT ' . $this->escapePath($location));
+
+        if ( ! $object || count($object) < 3 || str_starts_with($object[1], 'ftpd:')) {
+            throw UnableToRetrieveMetadata::metadata($path, 'No result found');
+        }
+
+        return $this->normalizeObject($object[1], '');
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $path = ltrim($path, '/');
         $path = $path === '' ? $path : trim($path, '/') . '/';
 
         if ($deep && $this->connectionOptions->recurseManually()) {
-            yield from $this->listDirectoryContentsRecursive($path);
+            yield from $this->listDirectoryContentsRecursive($path, $this->connection());
         } else {
             $location = $this->prefixer()->prefixPath($path);
             $options = $deep ? '-alnR' : '-aln';
-            $listing = $this->ftpRawlist($options, $location);
+            $listing = $this->ftpRawlist($options, $location, $this->connection());
             yield from $this->normalizeListing($listing, $path);
         }
     }
@@ -499,10 +516,13 @@ class FtpAdapter implements FilesystemAdapter
         return octdec(implode('', array_map($mapper, $parts)));
     }
 
-    private function listDirectoryContentsRecursive(string $directory): Generator
+    /**
+     * @param resource|Connection $connection
+     */
+    private function listDirectoryContentsRecursive(string $directory, $connection): Generator
     {
         $location = $this->prefixer()->prefixPath($directory);
-        $listing = $this->ftpRawlist('-aln', $location);
+        $listing = $this->ftpRawlist('-aln', $location, $connection);
         /** @var StorageAttributes[] $listing */
         $listing = $this->normalizeListing($listing, $directory);
 
@@ -513,7 +533,7 @@ class FtpAdapter implements FilesystemAdapter
                 continue;
             }
 
-            $children = $this->listDirectoryContentsRecursive($item->path());
+            $children = $this->listDirectoryContentsRecursive($item->path(), $connection);
 
             foreach ($children as $child) {
                 yield $child;
@@ -521,10 +541,9 @@ class FtpAdapter implements FilesystemAdapter
         }
     }
 
-    private function ftpRawlist(string $options, string $path): array
+    private function ftpRawlist(string $options, string $path, Connection $connection): array
     {
         $path = rtrim($path, '/') . '/';
-        $connection = $this->connection();
 
         if ($this->isPureFtpdServer()) {
             $path = str_replace(' ', '\ ', $path);

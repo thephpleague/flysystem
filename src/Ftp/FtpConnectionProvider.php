@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use FTP\Connection;
 use const FTP_USEPASVADDRESS;
 use function error_clear_last;
 use function error_get_last;
@@ -11,11 +12,9 @@ use function error_get_last;
 class FtpConnectionProvider implements ConnectionProvider
 {
     /**
-     * @return resource
-     *
      * @throws FtpConnectionException
      */
-    public function createConnection(FtpConnectionOptions $options)
+    public function createConnection(FtpConnectionOptions $options): Connection
     {
         $connection = $this->createConnectionResource(
             $options->host(),
@@ -37,10 +36,7 @@ class FtpConnectionProvider implements ConnectionProvider
         return $connection;
     }
 
-    /**
-     * @return resource
-     */
-    private function createConnectionResource(string $host, int $port, int $timeout, bool $ssl)
+    private function createConnectionResource(string $host, int $port, int $timeout, bool $ssl): Connection
     {
         error_clear_last();
         $connection = $ssl ? @ftp_ssl_connect($host, $port, $timeout) : @ftp_connect($host, $port, $timeout);
@@ -52,20 +48,14 @@ class FtpConnectionProvider implements ConnectionProvider
         return $connection;
     }
 
-    /**
-     * @param resource $connection
-     */
-    private function authenticate(FtpConnectionOptions $options, $connection): void
+    private function authenticate(FtpConnectionOptions $options, Connection $connection): void
     {
         if ( ! @ftp_login($connection, $options->username(), $options->password())) {
             throw new UnableToAuthenticate();
         }
     }
 
-    /**
-     * @param resource $connection
-     */
-    private function enableUtf8Mode(FtpConnectionOptions $options, $connection): void
+    private function enableUtf8Mode(FtpConnectionOptions $options, Connection $connection): void
     {
         if ( ! $options->utf8()) {
             return;
@@ -80,10 +70,7 @@ class FtpConnectionProvider implements ConnectionProvider
         }
     }
 
-    /**
-     * @param resource $connection
-     */
-    private function ignorePassiveAddress(FtpConnectionOptions $options, $connection): void
+    private function ignorePassiveAddress(FtpConnectionOptions $options, Connection $connection): void
     {
         $ignorePassiveAddress = $options->ignorePassiveAddress();
 
@@ -96,10 +83,7 @@ class FtpConnectionProvider implements ConnectionProvider
         }
     }
 
-    /**
-     * @param resource $connection
-     */
-    private function makeConnectionPassive(FtpConnectionOptions $options, $connection): void
+    private function makeConnectionPassive(FtpConnectionOptions $options, Connection $connection): void
     {
         if ( ! @ftp_pasv($connection, $options->passive())) {
             throw new UnableToMakeConnectionPassive(

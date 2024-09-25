@@ -11,7 +11,7 @@
         }
     },
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "ext-fileinfo": "*",
         "league/flysystem": "^4.0.0"
     },

@@ -9,6 +9,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -30,6 +31,7 @@ use Throwable;
 
 use function array_key_exists;
 use function array_shift;
+use function count;
 use function dirname;
 use function explode;
 use function fclose;
@@ -274,6 +276,34 @@ class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
         $fileSize = (int) $this->propFind($path, 'file_size', '{DAV:}getcontentlength');
 
         return new FileAttributes($path, fileSize: $fileSize);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $location = $this->encodePath($this->prefixer->prefixPath($path));
+        $response = $this->client->propFind($location, self::FIND_PROPERTIES);
+
+        if (count($response) === 0) {
+            $location = $this->encodePath($this->prefixer->prefixDirectoryPath($path));
+            $response = $this->client->propFind($location, self::FIND_PROPERTIES);
+        }
+
+        if (count($response) === 0) {
+            throw UnableToRetrieveMetadata::metadata($path, 'no file/directory found');
+        }
+
+        $response = $this->normalizeObject($response);
+
+        if ($this->propsIsDirectory($response)) {
+            return new DirectoryAttributes($path, lastModified: $response['last_modified'] ?? null);
+        }
+
+        return new FileAttributes(
+            $path,
+            fileSize:     $response['file_size'] ?? null,
+            lastModified: $response['last_modified'] ?? null,
+            mimeType:     $response['mime_type'] ?? null,
+        );
     }
 
     public function listContents(string $path, bool $deep): iterable

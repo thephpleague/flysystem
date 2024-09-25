@@ -9,6 +9,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -275,6 +276,21 @@ class GridFSAdapter implements FilesystemAdapter
         }
 
         return $this->mapFileAttributes($file);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $file = $this->findFile($path);
+
+        if ($file !== null) {
+            return $this->mapFileAttributes($file);
+        }
+
+        if ($this->directoryExists($path)) {
+            return new DirectoryAttributes($path);
+        }
+
+        throw UnableToRetrieveMetadata::metadata($path, 'file does not exist');
     }
 
     public function listContents(string $path, bool $deep): iterable

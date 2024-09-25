@@ -6,7 +6,7 @@
         }
     },
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "league/flysystem": "^4.0.0",
         "microsoft/azure-storage-blob": "^1.1"
     },

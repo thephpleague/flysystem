@@ -286,16 +286,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
     private function fetchFileMetadata(string $path, string $type): FileAttributes
     {
-        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-        $command = $this->client->getCommand('HeadObject', $arguments);
-
-        try {
-            $result = $this->client->execute($command);
-        } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
-        }
-
-        $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
+        $attributes = $this->fetchMetadata($path, $type);
 
         if ( ! $attributes instanceof FileAttributes) {
             throw UnableToRetrieveMetadata::create($path, $type, '');
@@ -370,6 +361,25 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         }
 
         return $attributes;
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        return $this->fetchMetadata($path, StorageAttributes::ATTRIBUTE_METADATA);
+    }
+
+    private function fetchMetadata(string $path, string $type): StorageAttributes
+    {
+        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
+        $command = $this->client->getCommand('HeadObject', $arguments);
+
+        try {
+            $result = $this->client->execute($command);
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
+        }
+
+        return $this->mapS3ObjectMetadata($result->toArray(), $path);
     }
 
     public function listContents(string $path, bool $deep): iterable

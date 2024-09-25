@@ -27,6 +27,7 @@ use League\MimeTypeDetection\MimeTypeDetector;
 use phpseclib3\Net\SFTP;
 use Throwable;
 
+use function is_array;
 use function rtrim;
 
 class SftpAdapter implements FilesystemAdapter
@@ -260,6 +261,19 @@ class SftpAdapter implements FilesystemAdapter
     public function visibility(string $path): FileAttributes
     {
         return $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_VISIBILITY);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $location = $this->prefixer->prefixPath($path);
+        $connection = $this->connectionProvider->provideConnection();
+        $stat = $connection->stat($location);
+
+        if ( ! is_array($stat)) {
+            throw UnableToRetrieveMetadata::metadata($path, 'no result returned');
+        }
+
+        return $this->convertListingToAttributes($path, $stat);
     }
 
     public function listContents(string $path, bool $deep): iterable

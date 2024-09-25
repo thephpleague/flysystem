@@ -10,6 +10,7 @@ use League\Flysystem\DirectoryAttributes;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCopyFile;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
@@ -279,6 +280,32 @@ final class ZipArchiveAdapter implements FilesystemAdapter
         }
 
         return new FileAttributes($path, $stats['size'], null, null);
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $archive = $this->zipArchiveProvider->createZipArchive();
+        $stats = $archive->statName($this->pathPrefixer->prefixPath($path))
+            ?: $archive->statName($this->pathPrefixer->prefixDirectoryPath($path));
+
+        if ($stats === false) {
+            throw UnableToRetrieveMetadata::metadata($path, 'no file/directory found');
+        }
+
+        $itemPath = $stats['name'];
+
+        return $this->isDirectoryPath($itemPath)
+            ? new DirectoryAttributes(
+                $this->pathPrefixer->stripDirectoryPrefix($itemPath),
+                null,
+                $stats['mtime']
+            )
+            : new FileAttributes(
+                $this->pathPrefixer->stripPrefix($itemPath),
+                $stats['size'],
+                null,
+                $stats['mtime']
+            );
     }
 
     public function listContents(string $path, bool $deep): iterable

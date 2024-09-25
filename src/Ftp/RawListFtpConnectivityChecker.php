@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use FTP\Connection;
 use ValueError;
 
 class RawListFtpConnectivityChecker implements ConnectivityChecker
@@ -11,11 +12,11 @@ class RawListFtpConnectivityChecker implements ConnectivityChecker
     /**
      * @inheritDoc
      */
-    public function isConnected($connection): bool
+    public function isConnected(Connection $connection): bool
     {
         try {
             return $connection !== false && @ftp_rawlist($connection, './') !== false;
-        } catch (ValueError $errror) {
+        } catch (ValueError) {
             return false;
         }
     }

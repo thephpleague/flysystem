@@ -20,6 +20,11 @@ abstract class DecoratedAdapter implements FilesystemAdapter
         return $this->adapter->directoryExists($path);
     }
 
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        return $this->adapter->metadata($path, $config);
+    }
+
     public function write(string $path, string $contents, Config $config): void
     {
         $this->adapter->write($path, $contents, $config);

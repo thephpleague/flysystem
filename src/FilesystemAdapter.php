@@ -98,7 +98,7 @@ interface FilesystemAdapter
      * @throws UnableToRetrieveMetadata
      * @throws FilesystemException
      */
-    public function metadata(string $path): StorageAttributes;
+    public function metadata(string $path, Config $config): StorageAttributes;
 
     /**
      * @return iterable<StorageAttributes>

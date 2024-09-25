@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem\Ftp;
 
+use FTP\Connection;
+
 interface ConnectivityChecker
 {
-    /**
-     * @param resource $connection
-     */
-    public function isConnected($connection): bool;
+    public function isConnected(Connection $connection): bool;
 }

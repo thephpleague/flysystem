@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AdapterTestUtilities;
 
+use function debug_backtrace;
+use function fwrite;
+use function get_class;
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
 use const PHP_EOL;
 use const STDOUT;
 use League\Flysystem\FilesystemException;
@@ -68,6 +72,9 @@ trait RetryOnTestException
             return;
         }
 
+        $prevCaller = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS|DEBUG_BACKTRACE_PROVIDE_OBJECT)[1];
+        $className = get_class($prevCaller['object']);
+        $caller = "$className::{$prevCaller['function']}";
         $firstTryAt = \time();
         $lastTryAt = $firstTryAt + 60;
 
@@ -80,7 +87,8 @@ trait RetryOnTestException
                 if ( ! $exception instanceof $this->exceptionTypeToRetryOn) {
                     throw $exception;
                 }
-                fwrite(STDOUT, 'Retrying ...' . PHP_EOL);
+                fwrite(STDOUT, $exception . PHP_EOL);
+                fwrite(STDOUT, "Retrying $caller..." . PHP_EOL);
                 sleep($this->timeoutForExceptionRetry);
             }
         }

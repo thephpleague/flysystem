@@ -305,6 +305,17 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         return new FileAttributes($path, $fileSize, null, $lastModified, $mimeType, $info);
     }
 
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $prefixedPath = $this->prefixer->prefixPath($path);
+
+        try {
+            return  $this->storageObjectToStorageAttributes($this->bucket->object($prefixedPath));
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::metadata($path, $exception->getMessage(), $exception);
+        }
+    }
+
     public function listContents(string $path, bool $deep): iterable
     {
         $prefixedPath = $this->prefixer->prefixPath($path);

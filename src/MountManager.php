@@ -287,10 +287,6 @@ class MountManager implements FilesystemOperator
         /** @var FilesystemOperator $filesystem */
         [$filesystem, $path] = $this->determineFilesystemAndPath($path);
 
-        if ( ! method_exists($filesystem, 'publicUrl')) {
-            throw new UnableToGeneratePublicUrl(sprintf('%s does not support generating public urls.', $filesystem::class), $path);
-        }
-
         return $filesystem->publicUrl($path, $config);
     }
 
@@ -298,10 +294,6 @@ class MountManager implements FilesystemOperator
     {
         /** @var FilesystemOperator $filesystem */
         [$filesystem, $path] = $this->determineFilesystemAndPath($path);
-
-        if ( ! method_exists($filesystem, 'temporaryUrl')) {
-            throw new UnableToGenerateTemporaryUrl(sprintf('%s does not support generating public urls.', $filesystem::class), $path);
-        }
 
         return $filesystem->temporaryUrl($path, $expiresAt, $this->config->extend($config)->toArray());
     }
@@ -311,11 +303,15 @@ class MountManager implements FilesystemOperator
         /** @var FilesystemOperator $filesystem */
         [$filesystem, $path] = $this->determineFilesystemAndPath($path);
 
-        if ( ! method_exists($filesystem, 'checksum')) {
-            throw new UnableToProvideChecksum(sprintf('%s does not support providing checksums.', $filesystem::class), $path);
-        }
-
         return $filesystem->checksum($path, $this->config->extend($config)->toArray());
+    }
+
+    public function metadata(string $path, array $config = []): StorageAttributes
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($path);
+
+        return $filesystem->metadata($path, $this->config->extend($config)->toArray());
     }
 
     private function mountFilesystems(array $filesystems): void

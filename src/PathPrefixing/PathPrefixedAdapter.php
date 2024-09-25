@@ -10,6 +10,7 @@ use League\Flysystem\Config;
 use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\PathPrefixer;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckDirectoryExistence;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToCopyFile;
@@ -65,6 +66,13 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
         foreach ($this->adapter->listContents($this->prefix->prefixPath($location), $deep) as $attributes) {
             yield $attributes->withPath($this->prefix->stripPrefix($attributes->path()));
         }
+    }
+
+    public function metadata(string $path, Config $config): StorageAttributes
+    {
+        $attributes = $this->adapter->metadata($this->prefix->prefixPath($path), $config);
+
+        return $attributes->withPath($this->prefix->stripPrefix($attributes->path()));
     }
 
     public function fileExists(string $location): bool
