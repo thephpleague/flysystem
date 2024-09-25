@@ -214,10 +214,7 @@ class FtpAdapter implements FilesystemAdapter
         $this->deleteFile($path, $connection);
     }
 
-    /**
-     * @param resource $connection
-     */
-    private function deleteFile(string $path, $connection): void
+    private function deleteFile(string $path, Connection $connection): void
     {
         $location = $this->prefixer()->prefixPath($path);
         $success = @ftp_delete($connection, $location);
