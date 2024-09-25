@@ -230,7 +230,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
                     yield $item;
                 }
             } catch (Throwable $exception) {
-                if (file_exists($fileInfo->getFilename())) {
+                if ($exception instanceof SymbolicLinkEncountered || file_exists($fileInfo->getFilename())) {
                     throw $exception;
                 }
             }
