@@ -280,17 +280,17 @@ class GridFSAdapter implements FilesystemAdapter
 
     public function metadata(string $path, Config $config): StorageAttributes
     {
-        $file = $this->findFile($path);
-
-        if ($file !== null) {
-            return $this->mapFileAttributes($file);
-        }
-
         if ($this->directoryExists($path)) {
             return new DirectoryAttributes($path);
         }
 
-        throw UnableToRetrieveMetadata::metadata($path, 'file does not exist');
+        $file = $this->findFile($path);
+
+        if ($file === null) {
+            throw UnableToRetrieveMetadata::metadata($path, 'file does not exist');
+        }
+
+        return $this->mapFileAttributes($file);
     }
 
     public function listContents(string $path, bool $deep): iterable
