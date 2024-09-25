@@ -6,11 +6,6 @@
             "target": "git@github.com:thephpleague/flysystem-ftp.git"
         },
         {
-            "name": "sftp",
-            "directory": "src/PhpseclibV2",
-            "target": "git@github.com:thephpleague/flysystem-sftp.git"
-        },
-        {
             "name": "sftp-v3",
             "directory": "src/PhpseclibV3",
             "target": "git@github.com:thephpleague/flysystem-sftp-v3.git"
