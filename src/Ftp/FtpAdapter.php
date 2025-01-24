@@ -356,7 +356,7 @@ class FtpAdapter implements FilesystemAdapter
             yield from $this->listDirectoryContentsRecursive($path);
         } else {
             $location = $this->prefixer()->prefixPath($path);
-            $options = $deep ? '-alnR' : '-aln';
+            $options = $deep ? '-alnRT' : '-alnT';
             $listing = $this->ftpRawlist($options, $location);
             yield from $this->normalizeListing($listing, $path);
         }
@@ -426,20 +426,21 @@ class FtpAdapter implements FilesystemAdapter
     private function normalizeUnixObject(string $item, string $base): StorageAttributes
     {
         $item = preg_replace('#\s+#', ' ', trim($item), 7);
-        $parts = explode(' ', $item, 9);
+        $parts = explode(' ', $item, 10);
 
-        if (count($parts) !== 9) {
+        if (count($parts) !== 10) {
             throw new InvalidListResponseReceived("Metadata can't be parsed from item '$item' , not enough parts.");
         }
 
-        [$permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $timeOrYear, $name] = $parts;
+        [$permissions, /* $number */, /* $owner */, /* $group */, $size, $month, $day, $time, $year, $name] = $parts;
         $isDirectory = $this->listingItemIsDirectory($permissions);
         $permissions = $this->normalizePermissions($permissions);
         $path = $base === '' ? $name : rtrim($base, '/') . '/' . $name;
         $lastModified = $this->connectionOptions->timestampsOnUnixListingsEnabled() ? $this->normalizeUnixTimestamp(
             $month,
             $day,
-            $timeOrYear
+            $time,
+            $year
         ) : null;
 
         if ($isDirectory) {
@@ -460,16 +461,9 @@ class FtpAdapter implements FilesystemAdapter
         return str_starts_with($permissions, 'd');
     }
 
-    private function normalizeUnixTimestamp(string $month, string $day, string $timeOrYear): int
+    private function normalizeUnixTimestamp(string $month, string $day, string $time, string $year): int
     {
-        if (is_numeric($timeOrYear)) {
-            $year = $timeOrYear;
-            $hour = '00';
-            $minute = '00';
-        } else {
-            $year = date('Y');
-            [$hour, $minute] = explode(':', $timeOrYear);
-        }
+        [$hour, $minute, $seconds] = explode(':', $time);
 
         $dateTime = DateTime::createFromFormat('Y-M-j-G:i:s', "$year-$month-$day-$hour:$minute:00");
 
