@@ -357,7 +357,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
             'ACL' => $this->visibility->visibilityToAcl($visibility ?: 'private'),
             'Bucket' => $this->bucket,
             'Key' => $this->prefixer->prefixPath($destination),
-            'CopySource' => $this->bucket . '/' . $this->prefixer->prefixPath($source),
+            'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
         ];
 
         try {
