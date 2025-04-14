@@ -389,6 +389,27 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function copying_a_file_with_non_ascii_characters(): void
+    {
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $adapter->write(
+                'ıÇöü🤔.txt',
+                'contents to be copied',
+                new Config()
+            );
+
+            $adapter->copy('ıÇöü🤔.txt', 'ıÇöü🤔_copy.txt', new Config());
+
+            $this->assertTrue($adapter->fileExists('ıÇöü🤔.txt'));
+            $this->assertTrue($adapter->fileExists('ıÇöü🤔_copy.txt'));
+            $this->assertEquals('contents to be copied', $adapter->read('ıÇöü🤔_copy.txt'));
+        });
+    }
+
+    /**
+     * @test
+     */
     public function top_level_directory_excluded_from_listing(): void
     {
         $this->runScenario(function () {
