@@ -208,6 +208,29 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function delete_directory_replaces_special_characters_by_xml_entity_codes(): void
+    {
+        $this->runScenario(function () {
+            $directory = 'to-delete';
+            $object = sprintf('/%s/\'\"&<>.txt', $directory);
+
+            $adapter = $this->adapter();
+            $adapter->write(
+                $object,
+                '',
+                new Config()
+            );
+
+            $adapter->deleteDirectory($directory);
+
+            $this->assertFalse($adapter->fileExists($object));
+            $this->assertFalse($adapter->directoryExists($directory));
+        });
+    }
+
+    /**
+     * @test
+     */
     public function fetching_unknown_mime_type_of_a_file(): void
     {
         $this->adapter();

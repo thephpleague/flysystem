@@ -188,7 +188,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
             foreach ($result->getContents() as $item) {
                 $key = $item->getKey();
                 if (null !== $key) {
-                    $objects[] = new ObjectIdentifier(['Key' => $key]);
+                    $objects[] = $this->createObjectIdentifierForXmlRequest($key);
                 }
             }
 
@@ -525,6 +525,17 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         } catch (Throwable $exception) {
             throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
+    }
+
+    private function createObjectIdentifierForXmlRequest(string $key): ObjectIdentifier
+    {
+        $escapedKey = htmlentities($key, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+
+        if ($escapedKey === '') {
+            throw new \RuntimeException(sprintf('Cannot escape key "%s" for XML request, htmlentities() returned an empty string.', $key));
+        }
+
+        return new ObjectIdentifier(['Key' => $escapedKey]);
     }
 
     public function publicUrl(string $path, Config $config): string
