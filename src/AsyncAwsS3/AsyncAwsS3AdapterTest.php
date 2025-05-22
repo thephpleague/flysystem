@@ -9,8 +9,10 @@ use AsyncAws\Core\Exception\Http\NetworkException;
 use AsyncAws\Core\Test\Http\SimpleMockedResponse;
 use AsyncAws\Core\Test\ResultMockFactory;
 use AsyncAws\S3\Result\HeadObjectOutput;
+use AsyncAws\S3\Result\ListObjectsV2Output;
 use AsyncAws\S3\Result\PutObjectOutput;
 use AsyncAws\S3\S3Client;
+use AsyncAws\S3\ValueObject\AwsObject;
 use AsyncAws\SimpleS3\SimpleS3Client;
 use Exception;
 use League\Flysystem\AdapterTestUtilities\FilesystemAdapterTestCase;
@@ -21,6 +23,7 @@ use League\Flysystem\FileAttributes;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
+use League\Flysystem\UnableToDeleteDirectory;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToListContents;
 use League\Flysystem\UnableToMoveFile;
@@ -226,6 +229,37 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
             $this->assertFalse($adapter->fileExists($object));
             $this->assertFalse($adapter->directoryExists($directory));
         });
+    }
+
+    /**
+     * @test
+     */
+    public function delete_directory_throws_exception_if_object_key_can_not_be_escaped_correctly(): void
+    {
+        $listObjectsMock = $this->getMockBuilder(ListObjectsV2Output::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getContents'])
+            ->getMock();
+
+        $listObjectsMock->expects(self::once())
+            ->method('getContents')
+            ->willReturn([new AwsObject(['Key' => "\x8F.txt"])]);
+
+        $s3Client = $this->getMockBuilder(S3Client::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['ListObjectsV2'])
+            ->getMock();
+
+        $s3Client->expects(self::once())
+            ->method('ListObjectsV2')
+            ->willReturn($listObjectsMock);
+
+        $filesystem = new AsyncAwsS3Adapter($s3Client, 'my-bucket');
+
+        $this->expectException(UnableToDeleteDirectory::class);
+        $this->expectExceptionMessageMatches('/htmlentities\(\) returned an empty string/');
+
+        $filesystem->deleteDirectory('directory/containing/objects/with/un-escapable/key');
     }
 
     /**
