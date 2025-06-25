@@ -337,14 +337,14 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     public function fileExists(string $location): bool
     {
         $location = $this->prefixer->prefixPath($location);
-
+        clearstatcache();
         return is_file($location);
     }
 
     public function directoryExists(string $location): bool
     {
         $location = $this->prefixer->prefixPath($location);
-
+        clearstatcache();
         return is_dir($location);
     }
 
@@ -423,6 +423,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     public function lastModified(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
+        clearstatcache();
         error_clear_last();
         $lastModified = @filemtime($location);
 
@@ -436,6 +437,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     public function fileSize(string $path): FileAttributes
     {
         $location = $this->prefixer->prefixPath($path);
+        clearstatcache();
         error_clear_last();
 
         if (is_file($location) && ($fileSize = @filesize($location)) !== false) {
