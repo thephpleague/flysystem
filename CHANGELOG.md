@@ -1,10 +1,15 @@
 # Changelog
 
-## 3.30.0 - 2024-12-10
+## 3.30.0 - 2025-06-25
 
 ### Changes
 
 - [MongoDB] Allow v2
+- [AsyncAWS] Encode/decode object identifiers
+- [GoogleCloudStorage] Add option to stream responses
+- [Local] Clear stat cache consistently
+- [SFTP] Add option to disconnect connections on destruction
+- [WebDAV] Deal with 405 case when trying to create a directory that already exists.
 
 ## 3.29.1 - 2024-10-08
 
