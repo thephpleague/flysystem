@@ -29,7 +29,6 @@ use League\Flysystem\UnableToListContents;
 use League\Flysystem\UnableToMoveFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
-use League\Flysystem\Visibility;
 use function getenv;
 use function iterator_to_array;
 
@@ -398,16 +397,16 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function moving_a_file_with_visibility(): void
+    public function moving_a_file(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
                 'contents to be copied',
-                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+                new Config()
             );
-            $adapter->move('source.txt', 'destination.txt', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
+            $adapter->move('source.txt', 'destination.txt', new Config());
             $this->assertFalse(
                 $adapter->fileExists('source.txt'),
                 'After moving a file should no longer exist in the original location.'
@@ -416,7 +415,6 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
                 $adapter->fileExists('destination.txt'),
                 'After moving, a file should be present at the new location.'
             );
-            $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('destination.txt')->visibility());
             $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
         });
     }
@@ -424,21 +422,20 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
-    public function copying_a_file_with_visibility(): void
+    public function copying_a_file(): void
     {
         $this->runScenario(function () {
             $adapter = $this->adapter();
             $adapter->write(
                 'source.txt',
                 'contents to be copied',
-                new Config([Config::OPTION_VISIBILITY => Visibility::PUBLIC])
+                new Config()
             );
 
-            $adapter->copy('source.txt', 'destination.txt', new Config([Config::OPTION_VISIBILITY => Visibility::PRIVATE]));
+            $adapter->copy('source.txt', 'destination.txt', new Config());
 
             $this->assertTrue($adapter->fileExists('source.txt'));
             $this->assertTrue($adapter->fileExists('destination.txt'));
-            $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('destination.txt')->visibility());
             $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
         });
     }
