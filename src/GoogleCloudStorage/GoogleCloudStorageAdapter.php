@@ -311,7 +311,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         $prefixes = $options = [];
 
         if ( ! empty($prefixedPath)) {
-            $options = ['prefix' => sprintf('%s/', rtrim($prefixedPath, '/'))];
+            $options = ['prefix' => $prefixedPath];
         }
 
         if ($deep === false) {
