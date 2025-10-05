@@ -57,6 +57,10 @@ jobs:
             phpstan: false
             phpunit-flags: '--no-coverage'
           - php: '8.4'
+            experimental: false
+            phpstan: false
+            phpunit-flags: '--no-coverage'
+          - php: '8.5'
             experimental: true
             phpstan: false
             phpunit-flags: '--no-coverage'
