@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.30.1 - 2025-10-20
+
+### Fixes
+
+- Ensure listing directories called "0" do not produce unfiltered listings.
+
 ## 3.30.0 - 2025-06-25
 
 ### Changes
