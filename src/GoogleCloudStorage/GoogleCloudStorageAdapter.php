@@ -310,7 +310,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         $prefixedPath = $this->prefixer->prefixPath($path);
         $prefixes = $options = [];
 
-        if ( ! empty($prefixedPath)) {
+        if ($prefixedPath !== '') {
             $options = ['prefix' => sprintf('%s/', rtrim($prefixedPath, '/'))];
         }
 

@@ -375,7 +375,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
     public function listContents(string $path, bool $deep): iterable
     {
         $prefix = trim($this->prefixer->prefixPath($path), '/');
-        $prefix = empty($prefix) ? '' : $prefix . '/';
+        $prefix = $prefix === '' ? '' : $prefix . '/';
         $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
 
         if ($deep === false) {

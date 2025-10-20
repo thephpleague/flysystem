@@ -299,7 +299,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
     {
         $path = trim($path, '/');
         $prefix = trim($this->prefixer->prefixPath($path), '/');
-        $prefix = empty($prefix) ? '' : $prefix . '/';
+        $prefix = $prefix === '' ? '' : $prefix . '/';
         $options = ['Bucket' => $this->bucket, 'Prefix' => $prefix];
 
         if (false === $deep) {
