@@ -228,6 +228,21 @@ abstract class FilesystemAdapterTestCase extends TestCase
     /**
      * @test
      */
+    public function listing_a_directory_named_0(): void
+    {
+        $this->givenWeHaveAnExistingFile('0/path.txt');
+        $this->givenWeHaveAnExistingFile('1/path.txt');
+
+        $this->runScenario(function () {
+            $listing = iterator_to_array($this->adapter()->listContents('0', false));
+
+            $this->assertCount(1, $listing);
+        });
+    }
+
+    /**
+     * @test
+     */
     public function reading_a_file(): void
     {
         $this->givenWeHaveAnExistingFile('path.txt', 'contents');
