@@ -252,6 +252,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
+        error_clear_last();
         if ( ! @rename($sourcePath, $destinationPath)) {
             throw UnableToMoveFile::because(error_get_last()['message'] ?? 'unknown reason', $source, $destination);
         }
@@ -271,6 +272,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             $this->resolveDirectoryVisibility($config->get(Config::OPTION_DIRECTORY_VISIBILITY))
         );
 
+        error_clear_last();
         if ($sourcePath !== $destinationPath && ! @copy($sourcePath, $destinationPath)) {
             throw UnableToCopyFile::because(error_get_last()['message'] ?? 'unknown', $source, $destination);
         }
