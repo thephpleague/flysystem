@@ -92,6 +92,7 @@ class SftpConnectionProviderTest extends TestCase
         $resetConnection = $provider->resetConnection();
 
         $this->assertNotSame($connection, $resetConnection);
+        $this->assertSame($resetConnection, $provider->provideConnection());
     }
 
     /**
