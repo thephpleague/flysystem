@@ -127,7 +127,7 @@ class SftpConnectionProvider implements ConnectionProvider
         }
     }
 
-    private function getFingerprintFromPublicKey(string $publicKey): string
+    public function getFingerprintFromPublicKey(string $publicKey): string
     {
         $content = explode(' ', $publicKey, 3);
         $algo = $content[0] === 'ssh-rsa' ? 'md5' : 'sha512';
