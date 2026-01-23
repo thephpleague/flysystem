@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.31.0 - 2026-01-23
+
+### Changes
+
+- [AsyncAwsS3] Allow V3
+
 ## 3.30.2 - 2025-11-10
 
 ### Fixes
