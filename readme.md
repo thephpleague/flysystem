@@ -48,7 +48,7 @@ for which ever storage is right for you.
 * **[Uploadcare](https://github.com/vormkracht10/flysystem-uploadcare)**
 * **[Useful adapters (FallbackAdapter, LogAdapter, ReadWriteAdapter, RetryAdapter)](https://github.com/ElGigi/FlysystemUsefulAdapters)**
 * **[Metadata Cache](https://github.com/jgivoni/flysystem-cache-adapter)**
-
+* **[Migration adapter (lazy)](https://github.com/antonsacred/flysystem-lazy-migration-adapter)**
 
 You can always [create an adapter](https://flysystem.thephpleague.com/docs/advanced/creating-an-adapter/) yourself.
 
