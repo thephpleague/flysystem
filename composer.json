@@ -18,9 +18,11 @@
     },
     "require": {
         "php": "^8.0.2",
-        "league/flysystem-local":  "^3.0.0",
         "league/mime-type-detection": "^1.0.0"
     },
+    "suggests":{
+		"league/flysystem-local":  "^3.0.0"
+	},
     "require-dev": {
         "ext-zip": "*",
         "ext-fileinfo": "*",
