@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.32.0 - 2026-02-25
+
+### Changes
+
+- [AwsS3V3] Allow SSE-C options when fetching file metadata
+
 ## 3.31.0 - 2026-01-23
 
 ### Changes
