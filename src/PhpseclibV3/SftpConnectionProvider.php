@@ -126,7 +126,7 @@ class SftpConnectionProvider implements ConnectionProvider
             : [$this->hostFingerprint];
 
         foreach ($expectedFingerprints as $expectedFingerprint) {
-            if (0 !== strcasecmp($expectedFingerprint, $fingerprint)) {
+            if (0 === strcasecmp($expectedFingerprint, $fingerprint)) {
                 return;
             }
         }
