@@ -39,7 +39,7 @@ class SftpConnectionProvider implements ConnectionProvider
         private bool $useAgent = false,
         private int $timeout = 10,
         private int $maxTries = 4,
-        private ?string $hostFingerprint = null,
+        private string|array|null $hostFingerprint = null,
         ?ConnectivityChecker $connectivityChecker = null,
         private array $preferredAlgorithms = [],
         private bool $disableStatCache = true,
@@ -121,10 +121,17 @@ class SftpConnectionProvider implements ConnectionProvider
         }
 
         $fingerprint = $this->getFingerprintFromPublicKey($publicKey);
+        $expectedFingerprints = is_array($this->hostFingerprint)
+            ? $this->hostFingerprint
+            : [$this->hostFingerprint];
 
-        if (0 !== strcasecmp($this->hostFingerprint, $fingerprint)) {
-            throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
+        foreach ($expectedFingerprints as $expectedFingerprint) {
+            if (0 === strcasecmp($expectedFingerprint, $fingerprint)) {
+                return;
+            }
         }
+
+        throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
     }
 
     private function getFingerprintFromPublicKey(string $publicKey): string

@@ -228,6 +228,31 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
+    public function verifying_multiple_fingerprints(): void
+    {
+        $key = file_get_contents(__DIR__ . '/../../test_files/sftp/ssh_host_ed25519_key.pub');
+        $fingerPrint = $this->computeFingerPrint($key);
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'hostFingerprint' => ['invalid:fingerprint', $fingerPrint],
+            ]
+        );
+
+        $connection = null;
+        $this->runWithRetries(function () use ($provider, &$connection) {
+            $connection = $provider->provideConnection();
+        });
+        $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     */
     public function providing_an_invalid_fingerprint(): void
     {
         $this->expectException(UnableToEstablishAuthenticityOfHost::class);
