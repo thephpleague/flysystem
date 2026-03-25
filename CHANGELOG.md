@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.33.0 - 2026-03-25
+
+### Changes
+
+- [SFTP V3] Add support for multiple fingerprints (#1893)
+
 ## 3.32.0 - 2026-02-25
 
 ### Changes
