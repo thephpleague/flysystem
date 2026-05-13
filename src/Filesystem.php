@@ -254,7 +254,7 @@ class Filesystem implements FilesystemOperator
             throw new InvalidStreamProvided(
                 "Invalid stream provided, expected stream resource, received " . gettype($contents)
             );
-        } elseif ($type = get_resource_type($contents) !== 'stream') {
+        } elseif (($type = get_resource_type($contents)) !== 'stream') {
             throw new InvalidStreamProvided(
                 "Invalid stream provided, expected stream resource, received resource of type " . $type
             );
