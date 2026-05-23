@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\TestCase;
 
 class WhitespacePathNormalizerTest extends TestCase
@@ -42,6 +43,20 @@ class WhitespacePathNormalizerTest extends TestCase
         $double = $this->normalizer->normalizePath($this->normalizer->normalizePath($input));
         $this->assertEquals($expected, $result);
         $this->assertEquals($expected, $double);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider  relativePathProvider
+     */
+    public function not_allowing_relative_path_traversal_through_configuration(string $input): void
+    {
+        $filesystem = new Filesystem(new InMemoryFilesystemAdapter(), ['allow_relative_path_traversal' => false]);
+
+        $this->expectExceptionObject(PathTraversalDetected::forPath($input));
+
+        $filesystem->write($input, 'foobar');
     }
 
     /**

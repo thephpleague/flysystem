@@ -30,7 +30,7 @@ class Filesystem implements FilesystemOperator
         private ?TemporaryUrlGenerator $temporaryUrlGenerator = null,
     ) {
         $this->config = new Config($config);
-        $this->pathNormalizer = $pathNormalizer ?? new WhitespacePathNormalizer($this->config->get('allow_relative_paths', true));
+        $this->pathNormalizer = $pathNormalizer ?? new WhitespacePathNormalizer($this->config->get('allow_relative_path_traversal', true));
     }
 
     public function fileExists(string $location): bool

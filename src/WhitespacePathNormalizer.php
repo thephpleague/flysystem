@@ -14,9 +14,9 @@ class WhitespacePathNormalizer implements PathNormalizer
 {
     private bool $allowRelativePaths;
 
-    public function __construct(bool $allowRelativePaths = true)
+    public function __construct(bool $allowRelativePathTraversal = true)
     {
-        $this->allowRelativePaths = $allowRelativePaths;
+        $this->allowRelativePaths = $allowRelativePathTraversal;
     }
 
     public function normalizePath(string $path): string
