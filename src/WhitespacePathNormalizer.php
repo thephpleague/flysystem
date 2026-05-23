@@ -4,37 +4,42 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+use function array_pop;
+use function explode;
+use function implode;
+use function preg_match;
+use function str_replace;
+
 class WhitespacePathNormalizer implements PathNormalizer
 {
+    private bool $allowRelativePaths;
+
+    public function __construct(bool $allowRelativePaths = true)
+    {
+        $this->allowRelativePaths = $allowRelativePaths;
+    }
+
     public function normalizePath(string $path): string
     {
-        $path = str_replace('\\', '/', $path);
-        $this->rejectFunkyWhiteSpace($path);
+        $unixPath = str_replace('\\', '/', $path);
 
-        return $this->normalizeRelativePath($path);
-    }
-
-    private function rejectFunkyWhiteSpace(string $path): void
-    {
-        if (preg_match('#\p{C}+#u', $path)) {
+        if (preg_match('#\p{C}+#u', $unixPath)) {
             throw CorruptedPathDetected::forPath($path);
         }
-    }
 
-    private function normalizeRelativePath(string $path): string
-    {
         $parts = [];
 
-        foreach (explode('/', $path) as $part) {
+        foreach (explode('/', $unixPath) as $part) {
             switch ($part) {
                 case '':
                 case '.':
                     break;
 
                 case '..':
-                    if (empty($parts)) {
+                    if ($this->allowRelativePaths === false || empty($parts)) {
                         throw PathTraversalDetected::forPath($path);
                     }
+
                     array_pop($parts);
                     break;
 

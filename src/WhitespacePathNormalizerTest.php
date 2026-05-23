@@ -32,6 +32,33 @@ class WhitespacePathNormalizerTest extends TestCase
     }
 
     /**
+     * @test
+     *
+     * @dataProvider  relativePathProvider
+     */
+    public function relative_path_normalizing(string $input, string $expected): void
+    {
+        $result = $this->normalizer->normalizePath($input);
+        $double = $this->normalizer->normalizePath($this->normalizer->normalizePath($input));
+        $this->assertEquals($expected, $result);
+        $this->assertEquals($expected, $double);
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider  relativePathProvider
+     */
+    public function rejecting_relative_paths(string $input): void
+    {
+        $this->normalizer = new WhitespacePathNormalizer(false);
+
+        $this->expectExceptionObject(PathTraversalDetected::forPath($input));
+
+        $this->normalizer->normalizePath($input);
+    }
+
+    /**
      * @return array<array<string>>
      */
     public static function pathProvider(): array
@@ -40,13 +67,9 @@ class WhitespacePathNormalizerTest extends TestCase
             ['.', ''],
             ['/path/to/dir/.', 'path/to/dir'],
             ['/dirname/', 'dirname'],
-            ['dirname/..', ''],
-            ['dirname/../', ''],
             ['dirname./', 'dirname.'],
             ['dirname/./', 'dirname'],
             ['dirname/.', 'dirname'],
-            ['./dir/../././', ''],
-            ['/something/deep/../../dirname', 'dirname'],
             ['00004869/files/other/10-75..stl', '00004869/files/other/10-75..stl'],
             ['/dirname//subdir///subsubdir', 'dirname/subdir/subsubdir'],
             ['\dirname\\\\subdir\\\\\\subsubdir', 'dirname/subdir/subsubdir'],
@@ -55,6 +78,19 @@ class WhitespacePathNormalizerTest extends TestCase
             ['C:\\\\dirname\subdir\\\\subsubdir', 'C:/dirname/subdir/subsubdir'],
             ['example/path/..txt', 'example/path/..txt'],
             ['\\example\\path.txt', 'example/path.txt'],
+        ];
+    }
+
+    /**
+     * @return array<array<string>>
+     */
+    public static function relativePathProvider(): array
+    {
+        return [
+            ['dirname/..', ''],
+            ['dirname/../', ''],
+            ['./dir/../././', ''],
+            ['/something/deep/../../dirname', 'dirname'],
             ['\\example\\..\\path.txt', 'path.txt'],
         ];
     }
