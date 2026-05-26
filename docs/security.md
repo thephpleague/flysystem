@@ -23,7 +23,7 @@ the bug reporter and the relevant project maintainers).
 Here are the steps:
 
 1. The person discovering an issue (the reporter) privately reports it to
-   <a href="mailto:security@flysystem.io">security@flysystem.io</a>.
+   <a href="mailto:info+flysystem@frankdejonge.nl">info+flysystem@frankdejonge.nl</a>.
 2. The security team will reply to the reporter within two business days to acknowledge receipt.
 3. The security team will investigate the report.
 4. If the report is rejected, the process will stop. If accepted, the process continues.
