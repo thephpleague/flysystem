@@ -12,7 +12,7 @@ To make this concrete. Provided your adapter has a configured root path of '/doc
 `$fs->read('../outside.txt')`, there will be a path traversal exception thrown. However, when calling
 `$fs->read('deeper/../inside.txt')`, the path will be resolved to '/documents/inside.txt' and the file will be read.
 
-This security feature is implemented across most adapters and enforced by the Filesystem class. This is why you should
+This security feature is implemented across all adapters and enforced by the Filesystem class. This is why you should
 never interact with an adapter directly, but always through the Filesystem instance to ensure security and consistency.
 
 
