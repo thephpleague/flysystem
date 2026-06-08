@@ -168,8 +168,16 @@ class Filesystem implements FilesystemOperator
 
     public function mimeType(string $path): string
     {
-        return $this->adapter->mimeType($this->pathNormalizer->normalizePath($path))->mimeType();
+        $normalizedPath = $this->pathNormalizer->normalizePath($path);
+        $attributes = $this->adapter->mimeType($normalizedPath);
+
+        if ($attributes->mimeType() === null) {
+            throw UnableToRetrieveMetadata::mimeType($path);
+        }
+
+        return $attributes->mimeType();
     }
+
 
     public function setVisibility(string $path, string $visibility): void
     {
