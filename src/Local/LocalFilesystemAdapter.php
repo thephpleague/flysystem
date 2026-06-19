@@ -90,7 +90,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $visibility ??= new PortableVisibilityConverter();
         $this->visibility = $visibility;
-        $this->rootLocation = $location;
+        $this->rootLocation = $this->prefixer->prefixDirectoryPath('');
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FallbackMimeTypeDetector(
             detector: new FinfoMimeTypeDetector(),
             useInconclusiveMimeTypeFallback: $useInconclusiveMimeTypeFallback,
