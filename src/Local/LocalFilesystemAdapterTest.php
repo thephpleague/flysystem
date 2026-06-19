@@ -776,6 +776,181 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
         $adapter->readStream('path.txt');
     }
 
+    /**
+     * @test
+     */
+    public function file_exists_does_not_warm_up_by_default(): void
+    {
+        mock_function('glob', 'should never be called');
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->fileExists('path.txt');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function file_exists_warms_up_dentry_cache(): void
+    {
+        mock_function('glob', 'should be called');
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->fileExists('path.txt');
+        $this->assertSame(return_mocked_value('glob'), null);
+    }
+
+    /**
+     * @test
+     */
+    public function directory_exists_does_not_warm_up_by_default(): void
+    {
+        mock_function('glob', 'should never be called');
+        $adapter = $this->adapter();
+        $adapter->createDirectory('path', new Config());
+        $adapter->directoryExists('path');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function directory_exists_warms_up_dentry_cache(): void
+    {
+        mock_function('glob', 'should be called');
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->createDirectory('path', new Config());
+        $adapter->directoryExists('path');
+        $this->assertSame(return_mocked_value('glob'), null);
+    }
+
+    /**
+     * @test
+     */
+    public function directory_exists_does_not_warm_up_dentry_cache_for_root(): void
+    {
+        mock_function('glob', 'should never be called');
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->directoryExists(DIRECTORY_SEPARATOR);
+        $adapter->directoryExists('');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_visibility_doesnt_warm_dentry_and_attribute_cache_by_default(): void
+    {
+        mock_function('glob', 'should never be called');
+        mock_function('fopen', 'should never be called');
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->visibility('path.txt');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+        $this->assertSame(return_mocked_value('fopen'), 'should never be called');
+
+        mock_function('glob', 'should never be called');
+        mock_function('opendir', 'should never be called');
+        $adapter->createDirectory('path', new Config());
+        $adapter->visibility('path');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+        $this->assertSame(return_mocked_value('opendir'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_visibility_warms_dentry_and_attribute_cache(): void
+    {
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        mock_function('glob', 'should be called');
+        mock_function('fopen', \fopen(self::ROOT . DIRECTORY_SEPARATOR . 'path.txt', 'r'));
+        $adapter->visibility('path.txt');
+        $this->assertSame(return_mocked_value('glob'), null);
+        $this->assertSame(return_mocked_value('fopen'), null);
+
+        $adapter->createDirectory('path', new Config());
+        mock_function('glob', 'should be called');
+        mock_function('opendir', \opendir(self::ROOT . DIRECTORY_SEPARATOR . 'path'));
+        $adapter->visibility('path');
+        $this->assertSame(return_mocked_value('glob'), null);
+        $this->assertSame(return_mocked_value('opendir'), null);
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_last_modified_doesnt_warm_dentry_and_attribute_cache_by_default(): void
+    {
+        mock_function('glob', 'should never be called');
+        mock_function('fopen', 'should never be called');
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->lastModified('path.txt');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+        $this->assertSame(return_mocked_value('fopen'), 'should never be called');
+
+        mock_function('glob', 'should never be called');
+        mock_function('opendir', 'should never be called');
+        $adapter->createDirectory('path', new Config());
+        $adapter->lastModified('path');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+        $this->assertSame(return_mocked_value('opendir'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_last_modified_warms_dentry_and_attribute_cache(): void
+    {
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        mock_function('glob', 'should be called');
+        mock_function('fopen', \fopen(self::ROOT . DIRECTORY_SEPARATOR . 'path.txt', 'r'));
+        $adapter->lastModified('path.txt');
+        $this->assertSame(return_mocked_value('glob'), null);
+        $this->assertSame(return_mocked_value('fopen'), null);
+
+        $adapter->createDirectory('path', new Config());
+        mock_function('glob', 'should be called');
+        mock_function('opendir', \opendir(self::ROOT . DIRECTORY_SEPARATOR . 'path'));
+        $adapter->lastModified('path');
+        $this->assertSame(return_mocked_value('glob'), null);
+        $this->assertSame(return_mocked_value('opendir'), null);
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_file_size_doesnt_warm_dentry_and_attribute_cache_by_default(): void
+    {
+        mock_function('glob', 'should never be called');
+        mock_function('fopen', 'should never be called');
+        $adapter = $this->adapter();
+        $adapter->write('path.txt', 'contents', new Config());
+        $adapter->fileSize('path.txt');
+        $this->assertSame(return_mocked_value('glob'), 'should never be called');
+        $this->assertSame(return_mocked_value('fopen'), 'should never be called');
+    }
+
+    /**
+     * @test
+     */
+    public function retrieving_file_size_warms_dentry_and_attribute_cache(): void
+    {
+        $adapter = $this->createFsCacheClearingFilesystemAdapter();
+        $adapter->write('path.txt', 'contents', new Config());
+
+        mock_function('glob', 'should be called');
+        mock_function('fopen', \fopen(self::ROOT . DIRECTORY_SEPARATOR . 'path.txt', 'r'));
+        $adapter->fileSize('path.txt');
+        $this->assertSame(return_mocked_value('glob'), null);
+        $this->assertSame(return_mocked_value('fopen'), null);
+    }
+
     /* //////////////////////
     // These are the utils //
     ////////////////////// */
@@ -805,6 +980,11 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     protected static function createFilesystemAdapter(): FilesystemAdapter
     {
         return new LocalFilesystemAdapter(static::ROOT);
+    }
+
+    protected static function createFsCacheClearingFilesystemAdapter(): FilesystemAdapter
+    {
+        return new LocalFilesystemAdapter(static::ROOT, clearFsStatCache: true);
     }
 
     /**
