@@ -272,6 +272,23 @@ class FilesystemTest extends TestCase
 
         $this->assertEquals('text/plain', $mimeType);
     }
+    
+    /**
+     * @test
+     */
+    public function test_mime_type_throws_when_null_is_returned(): void
+    {
+        $adapter = $this->createMock(FilesystemAdapter::class);
+
+        $adapter->method('mimeType')
+            ->willReturn(new FileAttributes('foo.txt', null, null, null, null));
+
+        $filesystem = new Filesystem($adapter);
+
+        $this->expectException(UnableToRetrieveMetadata::class);
+
+        $filesystem->mimeType('foo.txt');
+    }
 
     /**
      * @test
