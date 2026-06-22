@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.34.0 - 2026-05-26
+
+### Added
+
+- [Filesystem] Add ability to disable relative path resolution inside the configured root path.
+
 ## 3.33.0 - 2026-03-25
 
 ### Changes
