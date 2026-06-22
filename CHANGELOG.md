@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.35.0 - 2026-06-22
+
+- [Filesystem] Guard against null mime-type return at Filesystem level (#1901)
+
 ## 3.34.0 - 2026-05-26
 
 ### Added
