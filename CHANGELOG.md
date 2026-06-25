@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.35.1 - 2026-06-25
+
+- [AwsS3V3] Remove lock file from artefact.
+
 ## 3.35.0 - 2026-06-22
 
 - [Filesystem] Guard against null mime-type return at Filesystem level (#1901)
