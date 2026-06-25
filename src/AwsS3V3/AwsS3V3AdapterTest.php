@@ -459,6 +459,28 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         });
     }
 
+    /**
+     * @test
+     */
+    public function copying_a_file_with_acls(): void
+    {
+        $this->runScenario(function () {
+            $aclConfig = new Config(['ACL' => 'bucket-owner-full-control'])
+            $adapter = $this->adapter();
+            $adapter->write(
+                'source.txt',
+                'contents to be copied',
+                $aclConfig
+            );
+
+            $adapter->copy('source.txt', 'destination.txt', $aclConfig);
+
+            $this->assertTrue($adapter->fileExists('source.txt'));
+            $this->assertTrue($adapter->fileExists('destination.txt'));
+            $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
+        });
+    }
+
     protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
     {
         static::$stubS3Client = new S3ClientStub(static::s3Client());

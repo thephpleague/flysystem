@@ -441,6 +441,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
         $options = $this->createOptionsFromConfig($config);
         $options['MetadataDirective'] = $config->get('MetadataDirective', 'COPY');
+        $acl = $options['params']['ACL'] ?? $this->determineAcl($config);
 
         try {
             $this->client->copy(
@@ -448,7 +449,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
                 $this->prefixer->prefixPath($source),
                 $this->bucket,
                 $this->prefixer->prefixPath($destination),
-                $this->visibility->visibilityToAcl($visibility ?: 'private'),
+                $acl
                 $options,
             );
         } catch (Throwable $exception) {
