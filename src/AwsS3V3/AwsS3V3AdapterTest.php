@@ -459,6 +459,26 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         });
     }
 
+    /**
+     * @test
+     */
+    public function copying_a_file_with_an_explicit_acl(): void
+    {
+        $adapter = $this->adapter();
+        $prefixer = new PathPrefixer(static::$adapterPrefix);
+        $prefixedPath = $prefixer->prefixPath('destination.txt');
+
+        $adapter->write('source.txt', 'contents', new Config());
+        $adapter->copy('source.txt', 'destination.txt', new Config(['ACL' => 'bucket-owner-full-control']));
+
+        $arguments = ['Bucket' => getenv('FLYSYSTEM_AWS_S3_BUCKET'), 'Key' => $prefixedPath];
+        $command = static::$s3Client->getCommand('GetObjectAcl', $arguments);
+        $response = static::$s3Client->execute($command)->toArray();
+        $permission = $response['Grants'][0]['Permission'];
+
+        self::assertEquals('FULL_CONTROL', $permission);
+    }
+
     protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
     {
         static::$stubS3Client = new S3ClientStub(static::s3Client());
