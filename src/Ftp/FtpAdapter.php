@@ -87,7 +87,15 @@ class FtpAdapter implements FilesystemAdapter
         start:
         if ( ! $this->hasFtpConnection()) {
             $this->connection = $this->connectionProvider->createConnection($this->connectionOptions);
-            $this->rootDirectory = $this->resolveConnectionRoot($this->connection);
+
+            try {
+                $this->rootDirectory = $this->resolveConnectionRoot($this->connection);
+            } catch (Throwable $e) {
+                $this->connection = false;
+                $this->rootDirectory = null;
+                throw $e;
+            }
+
             $this->prefixer = new PathPrefixer($this->rootDirectory);
 
             return $this->connection;
