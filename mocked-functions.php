@@ -36,6 +36,60 @@ namespace League\Flysystem\Local {
 
         return return_mocked_value('filesize');
     }
+
+    function glob(...$arguments)
+    {
+        if ( ! is_mocked('glob')) {
+            return \glob(...$arguments);
+        }
+
+        return return_mocked_value('glob');
+    }
+
+    function fopen(...$arguments)
+    {
+        if ( ! is_mocked('fopen')) {
+            return \fopen(...$arguments);
+        }
+
+        return return_mocked_value('fopen');
+    }
+
+    function fclose(...$arguments)
+    {
+        if ( ! is_mocked('fclose')) {
+            return \fclose(...$arguments);
+        }
+
+        return return_mocked_value('fclose');
+    }
+
+    function opendir(...$arguments)
+    {
+        if ( ! is_mocked('opendir')) {
+            return \opendir(...$arguments);
+        }
+
+        return return_mocked_value('opendir');
+    }
+
+    function closedir(...$arguments)
+    {
+        if ( ! is_mocked('closedir')) {
+            return \closedir(...$arguments);
+        }
+
+        return return_mocked_value('closedir');
+    }
+
+    function readdir(...$arguments)
+    {
+        if ( ! is_mocked('readdir')) {
+            return \readdir(...$arguments);
+        }
+
+        return return_mocked_value('readdir');
+    }
 }
 
 namespace League\Flysystem\InMemory {

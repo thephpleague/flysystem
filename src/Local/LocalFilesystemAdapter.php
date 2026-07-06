@@ -36,15 +36,18 @@ use SplFileInfo;
 use Throwable;
 use function chmod;
 use function clearstatcache;
+use function closedir;
 use function dirname;
 use function error_clear_last;
 use function error_get_last;
+use function fclose;
 use function file_exists;
 use function file_put_contents;
 use function hash_file;
 use function is_dir;
 use function is_file;
 use function mkdir;
+use function readdir;
 use function rename;
 
 class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
@@ -69,6 +72,11 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
      */
     private $rootLocationIsSetup = false;
 
+    /**
+     * @var bool
+     */
+    private $clearFsStatCache = false;
+
     public function __construct(
         string $location,
         ?VisibilityConverter $visibility = null,
@@ -77,15 +85,17 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         ?MimeTypeDetector $mimeTypeDetector = null,
         bool $lazyRootCreation = false,
         bool $useInconclusiveMimeTypeFallback = false,
+        bool $clearFsStatCache = false,
     ) {
         $this->prefixer = new PathPrefixer($location, DIRECTORY_SEPARATOR);
         $visibility ??= new PortableVisibilityConverter();
         $this->visibility = $visibility;
-        $this->rootLocation = $location;
+        $this->rootLocation = $this->prefixer->prefixDirectoryPath('');
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FallbackMimeTypeDetector(
             detector: new FinfoMimeTypeDetector(),
             useInconclusiveMimeTypeFallback: $useInconclusiveMimeTypeFallback,
         );
+        $this->clearFsStatCache = $clearFsStatCache;
 
         if ( ! $lazyRootCreation) {
             $this->ensureRootDirectoryExists();
@@ -340,6 +350,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     {
         $location = $this->prefixer->prefixPath($location);
         clearstatcache();
+        if ($this->clearFsStatCache) {
+            $this->warmDentryCache($location);
+        }
+
         return is_file($location);
     }
 
@@ -347,6 +361,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
     {
         $location = $this->prefixer->prefixPath($location);
         clearstatcache();
+        if ($this->clearFsStatCache) {
+            $this->warmDentryCache($location);
+        }
+
         return is_dir($location);
     }
 
@@ -385,6 +403,10 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $location = $this->prefixer->prefixPath($path);
         clearstatcache(false, $location);
         error_clear_last();
+        if ($this->clearFsStatCache) {
+            $this->warmAttributeCache($location);
+        }
+
         $fileperms = @fileperms($location);
 
         if ($fileperms === false) {
@@ -427,6 +449,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $location = $this->prefixer->prefixPath($path);
         clearstatcache();
         error_clear_last();
+        if ($this->clearFsStatCache) {
+            $this->warmAttributeCache($location);
+        }
         $lastModified = @filemtime($location);
 
         if ($lastModified === false) {
@@ -441,6 +466,9 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
         $location = $this->prefixer->prefixPath($path);
         clearstatcache();
         error_clear_last();
+        if ($this->clearFsStatCache) {
+            $this->warmAttributeCache($location);
+        }
 
         if (is_file($location) && ($fileSize = @filesize($location)) !== false) {
             return new FileAttributes($path, $fileSize);
@@ -483,5 +511,33 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
             $extraMessage = error_get_last()['message'] ?? '';
             throw UnableToSetVisibility::atLocation($this->prefixer->stripPrefix($location), $extraMessage);
         }
+    }
+
+    private function warmAttributeCache(string $location): void
+    {
+        $this->warmDentryCache($location);
+        $isFile = is_file($location);
+        $handle = match($isFile) {
+            true => @fopen($location, 'r'),
+            false => @opendir($location),
+        };
+        if ($handle === false) {
+            return;
+        }
+        if ($isFile) {
+            fclose($handle);
+        } else {
+            readdir($handle);
+            closedir($handle);
+        }
+    }
+
+    private function warmDentryCache(string $location): void
+    {
+        if ($location === $this->rootLocation) {
+            return;
+        }
+        // @phpstan-ignore function.resultUnused (does trigger a side effect, an NFS LOOKUP RPC)
+        glob(dirname($location));
     }
 }
