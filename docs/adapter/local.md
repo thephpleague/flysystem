@@ -66,6 +66,11 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 
 ### Visibility Converter
 
-If you want to learn more about the permissions for local adapters,
-read the [docs about unix visibility](/docs/usage/unix-visibility/) 
+When the local adapter creates a directory, the configured permissions are
+affected by the PHP process's `umask`. A common `umask` is `0022`, which turns
+configured permissions of `0770` into `0750`. Use PHP's [`umask()`
+function](https://www.php.net/manual/en/function.umask.php) to check or change
+the current value when the exact permissions matter.
 
+If you want to learn more about the permissions for local adapters,
+read the [docs about unix visibility](/docs/usage/unix-visibility/).
