@@ -19,6 +19,7 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
@@ -216,6 +217,22 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToDeleteFile::class);
 
         $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_read_a_file_exposes_the_reason(): void
+    {
+        $adapter = $this->adapter();
+        static::$stubS3Client->throwExceptionWhenExecutingCommand('GetObject');
+
+        try {
+            $adapter->read('path.txt');
+            $this->fail('Reading should have failed.');
+        } catch (UnableToReadFile $exception) {
+            $this->assertNotSame('', $exception->reason());
+        }
     }
 
     /**
