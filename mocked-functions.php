@@ -36,6 +36,15 @@ namespace League\Flysystem\Local {
 
         return return_mocked_value('filesize');
     }
+
+    function file_exists(...$arguments)
+    {
+        if ( ! is_mocked('file_exists')) {
+            return \file_exists(...$arguments);
+        }
+
+        return return_mocked_value('file_exists');
+    }
 }
 
 namespace League\Flysystem\InMemory {
