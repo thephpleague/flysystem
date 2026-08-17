@@ -191,7 +191,8 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['timeout'] ?? 10,
             $options['maxTries'] ?? 4,
             $options['hostFingerprint'] ?? null,
-            $options['connectivityChecker'] ?? null
+            $options['connectivityChecker'] ?? null,
+            $options['disableStatCache'] ?? true,
         );
     }
 

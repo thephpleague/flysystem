@@ -175,6 +175,7 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['hostFingerprint'] ?? null,
             $options['connectivityChecker'] ?? null,
             $options['preferredAlgorithms'] ?? [],
+            $options['disableStatCache'] ?? true,
         );
     }
 
