@@ -272,6 +272,19 @@ class LocalFilesystemAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function deleting_a_file_that_is_removed_by_another_process(): void
+    {
+        $this->givenWeHaveAnExistingFile('here.txt');
+        mock_function('unlink', false);
+        mock_function('file_exists', true, false);
+
+        $this->adapter()->delete('here.txt');
+        $this->assertTrue(true);
+    }
+
+    /**
+     * @test
+     */
     public function checking_if_a_file_exists(): void
     {
         $adapter = new LocalFilesystemAdapter(static::ROOT);
