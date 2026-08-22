@@ -55,7 +55,7 @@ $adapter = new LocalFilesystemAdapter(
     // Write flags
     LOCK_EX,
 
-    // How to deal with links, either DISALLOW_LINKS or SKIP_LINKS
+    // How to deal with links when listing directory contents, either DISALLOW_LINKS or SKIP_LINKS
     // Disallowing them causes exceptions when encountered
     LocalFilesystemAdapter::DISALLOW_LINKS
 );
@@ -68,4 +68,14 @@ $filesystem = new League\Flysystem\Filesystem($adapter);
 
 If you want to learn more about the permissions for local adapters,
 read the [docs about unix visibility](/docs/usage/unix-visibility/) 
+
+### Symlink Treatment
+
+Symlinks are a concept that are not supported by every adapter, that is why when a directory is listed symlinks have
+special treatment. By default, when they are encountered during listing, an exception is thrown. You can optionally
+configure the adapter to skip them during listing by passing LocalFilesystemAdapter::SKIP_LINKS in the constructor for
+the `$linkHandling` constructor parameter.
+
+When **reading** files, symlinks are treated in the same way PHP treats them, their content is read. No exception is
+thrown when link handling is configured to disallow links. The only difference is directory listing behaviour.
 
