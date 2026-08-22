@@ -1,6 +1,6 @@
 # Changelog
 
-## 3.35.3 - 2026-07-06
+## 3.35.3 - 2026-08-22
 
 - [Filesystem] Report broken utf-8 as corrupted path
 
