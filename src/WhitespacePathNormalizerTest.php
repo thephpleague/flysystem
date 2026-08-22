@@ -134,7 +134,7 @@ class WhitespacePathNormalizerTest extends TestCase
 
     public static function dpFunkyWhitespacePaths(): iterable
     {
-        return [["some\0/path.txt"], ["s\x09i.php"]];
+        return [["some\0/path.txt"], ["s\x09i.php"], ["foo\x80\x1bbar"]];
     }
 
     /**
