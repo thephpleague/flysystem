@@ -131,11 +131,13 @@ class FtpAdapterTest extends FtpAdapterTestCase
         try {
             $adapter->delete('something');
             $this->fail('The first attempt should have thrown an UnableToResolveConnectionRoot exception.');
-        } catch (UnableToResolveConnectionRoot $exception) {}
+        } catch (UnableToResolveConnectionRoot $exception) {
+        }
 
         $this->expectExceptionObject(UnableToResolveConnectionRoot::itDoesNotExist('/invalid/root'));
 
         $adapter->delete('something');
+    }
 
     /**
      * @test
