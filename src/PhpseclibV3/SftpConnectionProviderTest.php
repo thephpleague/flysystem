@@ -9,12 +9,14 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 use function base64_decode;
+use function base64_encode;
 use function class_exists;
 use function explode;
 use function getenv;
 use function hash;
 use function implode;
 use function is_a;
+use function rtrim;
 use function sleep;
 use function str_split;
 
@@ -223,6 +225,52 @@ class SftpConnectionProviderTest extends TestCase
             $connection = $provider->provideConnection();
         });
         $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    /**
+     * @test
+     * @dataProvider fingerprintFormatProvider
+     */
+    public function verifying_a_fingerprint_in_various_formats(callable $format): void
+    {
+        $key = file_get_contents(__DIR__ . '/../../test_files/sftp/ssh_host_ed25519_key.pub');
+        $rawKey = base64_decode(explode(' ', $key, 3)[1]);
+        $fingerPrint = $format($rawKey);
+
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+                'hostFingerprint' => $fingerPrint,
+            ]
+        );
+
+        $connection = null;
+        $this->runWithRetries(function () use ($provider, &$connection) {
+            $connection = $provider->provideConnection();
+        });
+        $this->assertInstanceOf(SFTP::class, $connection);
+    }
+
+    public static function fingerprintFormatProvider(): iterable
+    {
+        yield 'md5 hex (colon separated)' => [
+            fn (string $raw): string => implode(':', str_split(hash('md5', $raw), 2)),
+        ];
+        yield 'md5 prefixed' => [
+            fn (string $raw): string => 'MD5:' . implode(':', str_split(hash('md5', $raw), 2)),
+        ];
+        yield 'sha256 hex (no colons)' => [
+            fn (string $raw): string => hash('sha256', $raw),
+        ];
+        yield 'sha256 base64 (OpenSSH)' => [
+            fn (string $raw): string => 'SHA256:' . rtrim(base64_encode(hash('sha256', $raw, true)), '='),
+        ];
+        yield 'sha512 hex (legacy default)' => [
+            fn (string $raw): string => implode(':', str_split(hash('sha512', $raw), 2)),
+        ];
     }
 
     /**
