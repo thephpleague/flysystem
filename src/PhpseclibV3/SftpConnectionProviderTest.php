@@ -80,6 +80,26 @@ class SftpConnectionProviderTest extends TestCase
     /**
      * @test
      */
+    public function reset_connection(): void
+    {
+        $provider = SftpConnectionProvider::fromArray(
+            [
+                'host' => 'localhost',
+                'username' => 'foo',
+                'password' => 'pass',
+                'port' => 2222,
+            ]
+        );
+        $connection = $provider->provideConnection();
+        $resetConnection = $provider->resetConnection();
+
+        $this->assertNotSame($connection, $resetConnection);
+        $this->assertSame($resetConnection, $provider->provideConnection());
+    }
+
+    /**
+     * @test
+     */
     public function authenticating_with_a_private_key(): void
     {
         $provider = SftpConnectionProvider::fromArray([

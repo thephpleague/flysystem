@@ -96,6 +96,13 @@ class SftpConnectionProvider implements ConnectionProvider
         }
     }
 
+    public function resetConnection(): SFTP
+    {
+        $this->disconnect();
+
+        return $this->connection = $this->setupConnection();
+    }
+
     private function setupConnection(): SFTP
     {
         $connection = new SFTP($this->host, $this->port, $this->timeout);
