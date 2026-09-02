@@ -229,7 +229,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $this->client->execute($command);
         } catch (Throwable $exception) {
-            throw UnableToDeleteFile::atLocation($path, '', $exception);
+            throw UnableToDeleteFile::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -241,7 +241,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $this->client->deleteMatchingObjects($this->bucket, $prefix);
         } catch (Throwable $exception) {
-            throw UnableToDeleteDirectory::atLocation($path, '', $exception);
+            throw UnableToDeleteDirectory::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -264,7 +264,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $this->client->execute($command);
         } catch (Throwable $exception) {
-            throw UnableToSetVisibility::atLocation($path, '', $exception);
+            throw UnableToSetVisibility::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -276,7 +276,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $result = $this->client->execute($command);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path, '', $exception);
+            throw UnableToRetrieveMetadata::visibility($path, $exception->getMessage(), $exception);
         }
 
         $visibility = $this->visibility->aclToVisibility((array) $result->get('Grants'));
@@ -292,7 +292,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             $result = $this->client->execute($command);
         } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::create($path, $type, '', $exception);
+            throw UnableToRetrieveMetadata::create($path, $type, $exception->getMessage(), $exception);
         }
 
         $attributes = $this->mapS3ObjectMetadata($result->toArray(), $path);
@@ -441,6 +441,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
 
         $options = $this->createOptionsFromConfig($config);
         $options['MetadataDirective'] = $config->get('MetadataDirective', 'COPY');
+        $acl = $options['params']['ACL'] ?? $this->visibility->visibilityToAcl($visibility ?: 'private');
 
         try {
             $this->client->copy(
@@ -448,7 +449,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
                 $this->prefixer->prefixPath($source),
                 $this->bucket,
                 $this->prefixer->prefixPath($destination),
-                $this->visibility->visibilityToAcl($visibility ?: 'private'),
+                $acl,
                 $options,
             );
         } catch (Throwable $exception) {
@@ -469,7 +470,7 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         try {
             return $this->client->execute($command)->get('Body');
         } catch (Throwable $exception) {
-            throw UnableToReadFile::fromLocation($path, '', $exception);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
     }
 

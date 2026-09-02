@@ -39,7 +39,6 @@ use function clearstatcache;
 use function dirname;
 use function error_clear_last;
 use function error_get_last;
-use function file_exists;
 use function file_put_contents;
 use function hash_file;
 use function is_dir;
@@ -144,7 +143,7 @@ class LocalFilesystemAdapter implements FilesystemAdapter, ChecksumProvider
 
         error_clear_last();
 
-        if ( ! @unlink($location)) {
+        if ( ! @unlink($location) && file_exists($location)) {
             throw UnableToDeleteFile::atLocation($location, error_get_last()['message'] ?? '');
         }
     }

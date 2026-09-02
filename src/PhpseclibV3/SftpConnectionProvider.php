@@ -13,8 +13,13 @@ use phpseclib3\System\SSH\Agent;
 use Throwable;
 
 use function base64_decode;
-use function implode;
-use function str_split;
+use function bin2hex;
+use function hash;
+use function hash_equals;
+use function preg_match;
+use function rtrim;
+use function str_replace;
+use function strtolower;
 
 class SftpConnectionProvider implements ConnectionProvider
 {
@@ -120,13 +125,12 @@ class SftpConnectionProvider implements ConnectionProvider
             throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
         }
 
-        $fingerprint = $this->getFingerprintFromPublicKey($publicKey);
         $expectedFingerprints = is_array($this->hostFingerprint)
             ? $this->hostFingerprint
             : [$this->hostFingerprint];
 
         foreach ($expectedFingerprints as $expectedFingerprint) {
-            if (0 === strcasecmp($expectedFingerprint, $fingerprint)) {
+            if ($this->fingerprintMatchesPublicKey($expectedFingerprint, $publicKey)) {
                 return;
             }
         }
@@ -134,12 +138,40 @@ class SftpConnectionProvider implements ConnectionProvider
         throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
     }
 
-    private function getFingerprintFromPublicKey(string $publicKey): string
+    private function fingerprintMatchesPublicKey(string $expectedFingerprint, string $publicKey): bool
     {
         $content = explode(' ', $publicKey, 3);
-        $algo = $content[0] === 'ssh-rsa' ? 'md5' : 'sha512';
+        $binaryKey = base64_decode($content[1]);
 
-        return implode(':', str_split(hash($algo, base64_decode($content[1])), 2));
+        $algorithms = ['md5', 'sha1', 'sha256', 'sha512'];
+
+        if (preg_match('/^(md5|sha1|sha256|sha512):(.+)$/i', $expectedFingerprint, $matches)) {
+            $algorithms = [strtolower($matches[1])];
+            $expectedFingerprint = $matches[2];
+        }
+
+        foreach ($algorithms as $algorithm) {
+            $binaryHash = hash($algorithm, $binaryKey, true);
+
+            // Hex form: normalise by dropping the colon separators and lowercasing
+            // so both "AB:CD" and "abcd" match a lowercase hex digest.
+            $hexHash = bin2hex($binaryHash);
+            $expectedHex = strtolower(str_replace(':', '', $expectedFingerprint));
+
+            if (hash_equals($hexHash, $expectedHex)) {
+                return true;
+            }
+
+            // Base64 form (OpenSSH SHA256 style), tolerating stripped padding.
+            $base64Hash = rtrim(base64_encode($binaryHash), '=');
+            $expectedBase64 = rtrim($expectedFingerprint, '=');
+
+            if (hash_equals($base64Hash, $expectedBase64)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function authenticate(SFTP $connection): void
@@ -175,6 +207,7 @@ class SftpConnectionProvider implements ConnectionProvider
             $options['hostFingerprint'] ?? null,
             $options['connectivityChecker'] ?? null,
             $options['preferredAlgorithms'] ?? [],
+            $options['disableStatCache'] ?? true,
         );
     }
 

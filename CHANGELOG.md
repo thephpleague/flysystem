@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.35.3 - 2026-08-22
+
+- [Filesystem] Report broken utf-8 as corrupted path
+
+## 3.35.2 - 2026-07-06
+
+- [AwsS3V3] Let ACL config take precedence over visibility during copy (#1905) 
+
 ## 3.35.1 - 2026-06-25
 
 - [AwsS3V3] Remove lock file from artefact.

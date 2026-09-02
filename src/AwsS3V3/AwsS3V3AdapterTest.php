@@ -19,6 +19,7 @@ use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToCheckFileExistence;
 use League\Flysystem\UnableToDeleteFile;
 use League\Flysystem\UnableToMoveFile;
+use League\Flysystem\UnableToReadFile;
 use League\Flysystem\UnableToRetrieveMetadata;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\Visibility;
@@ -216,6 +217,22 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         $this->expectException(UnableToDeleteFile::class);
 
         $adapter->delete('path.txt');
+    }
+
+    /**
+     * @test
+     */
+    public function failing_to_read_a_file_exposes_the_reason(): void
+    {
+        $adapter = $this->adapter();
+        static::$stubS3Client->throwExceptionWhenExecutingCommand('GetObject');
+
+        try {
+            $adapter->read('path.txt');
+            $this->fail('Reading should have failed.');
+        } catch (UnableToReadFile $exception) {
+            $this->assertNotSame('', $exception->reason());
+        }
     }
 
     /**
@@ -457,6 +474,26 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
             $this->assertEquals(Visibility::PRIVATE, $adapter->visibility('destination.txt')->visibility());
             $this->assertEquals('contents to be copied', $adapter->read('destination.txt'));
         });
+    }
+
+    /**
+     * @test
+     */
+    public function copying_a_file_with_an_explicit_acl(): void
+    {
+        $adapter = $this->adapter();
+        $prefixer = new PathPrefixer(static::$adapterPrefix);
+        $prefixedPath = $prefixer->prefixPath('destination.txt');
+
+        $adapter->write('source.txt', 'contents', new Config());
+        $adapter->copy('source.txt', 'destination.txt', new Config(['ACL' => 'bucket-owner-full-control']));
+
+        $arguments = ['Bucket' => getenv('FLYSYSTEM_AWS_S3_BUCKET'), 'Key' => $prefixedPath];
+        $command = static::$s3Client->getCommand('GetObjectAcl', $arguments);
+        $response = static::$s3Client->execute($command)->toArray();
+        $permission = $response['Grants'][0]['Permission'];
+
+        self::assertEquals('FULL_CONTROL', $permission);
     }
 
     protected static function createFilesystemAdapter(bool $streaming = true, array $options = []): FilesystemAdapter
