@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.36.0 - 2026-09-02
+
+- [SFTP V3] Support multiple fingerprints for zero-downtime fingerprint changes.
+- [FTP] Unset connection when resolving the root failed.
+
 ## 3.35.3 - 2026-08-22
 
 - [Filesystem] Report broken utf-8 as corrupted path
