@@ -115,6 +115,33 @@ class FtpAdapterTest extends FtpAdapterTestCase
     /**
      * @test
      */
+    public function retrying_root_resolution_after_failure(): void
+    {
+        $options = FtpConnectionOptions::fromArray([
+            'host' => 'localhost',
+            'port' => 2121,
+            'timestampsOnUnixListingsEnabled' => true,
+            'root' => '/invalid/root',
+            'username' => 'foo',
+            'password' => 'pass',
+        ]);
+
+        $adapter = new FtpAdapter($options);
+
+        try {
+            $adapter->delete('something');
+            $this->fail('The first attempt should have thrown an UnableToResolveConnectionRoot exception.');
+        } catch (UnableToResolveConnectionRoot $exception) {
+        }
+
+        $this->expectExceptionObject(UnableToResolveConnectionRoot::itDoesNotExist('/invalid/root'));
+
+        $adapter->delete('something');
+    }
+
+    /**
+     * @test
+     */
     public function normalizing_a_unix_timestamp_without_year_uses_the_current_year(): void
     {
         $now = new \DateTime('2024-06-15 12:00:00');
