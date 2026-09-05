@@ -7,6 +7,9 @@ namespace League\Flysystem;
 use ArrayAccess;
 use JsonSerializable;
 
+/**
+ * @method string __toString() Stringable interface will be added in 4.0
+ */
 interface StorageAttributes extends JsonSerializable, ArrayAccess
 {
     public const ATTRIBUTE_PATH = 'path';
