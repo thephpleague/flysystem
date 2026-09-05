@@ -55,6 +55,8 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         'etag' => 'etag',
     ];
 
+    private const DEFAULT_PUBLIC_URL = 'https://storage.googleapis.com';
+
     public function __construct(
         private Bucket $bucket,
         string $prefix = '',
@@ -62,6 +64,7 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         private string $defaultVisibility = Visibility::PRIVATE,
         ?MimeTypeDetector $mimeTypeDetector = null,
         private bool $streamReads = false,
+        private ?string $publicUrl = null,
     ) {
         $this->prefixer = new PathPrefixer($prefix);
         $this->visibilityHandler = $visibilityHandler ?? new PortableVisibilityHandler();
@@ -71,8 +74,13 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
     public function publicUrl(string $path, Config $config): string
     {
         $location = $this->prefixer->prefixPath($path);
+        $baseUrl = rtrim($this->publicUrl ?? self::DEFAULT_PUBLIC_URL, '/');
 
-        return 'https://storage.googleapis.com/' . $this->bucket->name() . '/' . ltrim($location, '/');
+        if ($this->publicUrl !== null) {
+            return $baseUrl . '/' . ltrim($location, '/');
+        }
+
+        return $baseUrl . '/' . $this->bucket->name() . '/' . ltrim($location, '/');
     }
 
     public function fileExists(string $path): bool
