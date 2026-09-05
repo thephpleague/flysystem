@@ -41,7 +41,6 @@ use League\Flysystem\UnableToSetVisibility;
 use League\Flysystem\UnableToWriteFile;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\UrlGeneration\TemporaryUrlGenerator;
-use League\Flysystem\Visibility;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
 use Throwable;
@@ -53,7 +52,6 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
      * @var string[]
      */
     public const AVAILABLE_OPTIONS = [
-        'ACL',
         'CacheControl',
         'ContentDisposition',
         'ContentEncoding',
@@ -92,8 +90,10 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         'VersionId',
     ];
 
+    const ON_VISIBILITY_THROW_ERROR = 'throw';
+    const ON_VISIBILITY_IGNORE = 'ignore';
+
     private PathPrefixer $prefixer;
-    private VisibilityConverter $visibility;
     private MimeTypeDetector $mimeTypeDetector;
 
     /**
@@ -113,13 +113,12 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         private S3Client $client,
         private string $bucket,
         string $prefix = '',
-        ?VisibilityConverter $visibility = null,
         ?MimeTypeDetector $mimeTypeDetector = null,
+        private string $visibilityHandling = self::ON_VISIBILITY_THROW_ERROR,
         array $forwardedOptions = self::AVAILABLE_OPTIONS,
         array $metadataFields = self::EXTRA_METADATA_FIELDS,
     ) {
         $this->prefixer = new PathPrefixer($prefix);
-        $this->visibility = $visibility ?? new PortableVisibilityConverter();
         $this->mimeTypeDetector = $mimeTypeDetector ?? new FinfoMimeTypeDetector();
         $this->forwardedOptions = $forwardedOptions;
         $this->metadataFields = $metadataFields;
@@ -209,9 +208,6 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function createDirectory(string $path, Config $config): void
     {
-        $defaultVisibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY, $this->visibility->defaultForDirectories());
-        $config = $config->withDefaults([Config::OPTION_VISIBILITY => $defaultVisibility]);
-
         try {
             $this->upload(rtrim($path, '/') . '/', '', $config);
         } catch (Throwable $e) {
@@ -221,33 +217,14 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
 
     public function setVisibility(string $path, string $visibility): void
     {
-        $arguments = [
-            'Bucket' => $this->bucket,
-            'Key' => $this->prefixer->prefixPath($path),
-            'ACL' => $this->visibility->visibilityToAcl($visibility),
-        ];
-
-        try {
-            $this->client->putObjectAcl($arguments);
-        } catch (Throwable $exception) {
-            throw UnableToSetVisibility::atLocation($path, $exception->getMessage(), $exception);
+        if ($this->visibilityHandling === self::ON_VISIBILITY_THROW_ERROR) {
+            throw UnableToSetVisibility::atLocation($path, 'AWS S3 does not support this operation.');
         }
     }
 
     public function visibility(string $path): FileAttributes
     {
-        $arguments = ['Bucket' => $this->bucket, 'Key' => $this->prefixer->prefixPath($path)];
-
-        try {
-            $result = $this->client->getObjectAcl($arguments);
-            $grants = $result->getGrants();
-        } catch (Throwable $exception) {
-            throw UnableToRetrieveMetadata::visibility($path, $exception->getMessage(), $exception);
-        }
-
-        $visibility = $this->visibility->aclToVisibility($grants);
-
-        return new FileAttributes($path, null, $visibility);
+        throw UnableToRetrieveMetadata::visibility($path, 'AWS S3 does not support visibility');
     }
 
     public function mimeType(string $path): FileAttributes
@@ -343,18 +320,7 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
             return;
         }
 
-        try {
-            $visibility = $config->get(Config::OPTION_VISIBILITY);
-
-            if ($visibility === null && $config->get(Config::OPTION_RETAIN_VISIBILITY, true)) {
-                $visibility = $this->visibility($source)->visibility();
-            }
-        } catch (Throwable $exception) {
-            throw UnableToCopyFile::fromLocationTo($source, $destination, $exception);
-        }
-
         $arguments = [
-            'ACL' => $this->visibility->visibilityToAcl($visibility ?: 'private'),
             'Bucket' => $this->bucket,
             'Key' => $this->prefixer->prefixPath($destination),
             'CopySource' => rawurlencode($this->bucket . '/' . $this->prefixer->prefixPath($source)),
@@ -373,7 +339,6 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
     private function upload(string $path, $body, Config $config): void
     {
         $key = $this->prefixer->prefixPath($path);
-        $acl = $this->determineAcl($config);
         $options = $this->createOptionsFromConfig($config);
         $shouldDetermineMimetype = '' !== $body && ! \array_key_exists('ContentType', $options);
 
@@ -384,25 +349,17 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         try {
             if ($this->client instanceof SimpleS3Client) {
                 // Supports upload of files larger than 5GB
-                $this->client->upload($this->bucket, $key, $body, array_merge($options, ['ACL' => $acl]));
+                $this->client->upload($this->bucket, $key, $body, $options);
             } else {
                 $this->client->putObject(array_merge($options, [
                     'Bucket' => $this->bucket,
                     'Key' => $key,
                     'Body' => $body,
-                    'ACL' => $acl,
                 ]));
             }
         } catch (Throwable $exception) {
             throw UnableToWriteFile::atLocation($path, $exception->getMessage(), $exception);
         }
-    }
-
-    private function determineAcl(Config $config): string
-    {
-        $visibility = (string) $config->get(Config::OPTION_VISIBILITY, Visibility::PRIVATE);
-
-        return $this->visibility->visibilityToAcl($visibility);
     }
 
     private function createOptionsFromConfig(Config $config): array
