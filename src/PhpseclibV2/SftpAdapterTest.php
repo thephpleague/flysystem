@@ -207,6 +207,26 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function writing_a_file_creates_the_root_directory_when_it_is_missing(): void
+    {
+        $root = '/upload/missing-root-' . bin2hex(random_bytes(4));
+        $adapter = $this->useAdapter(new SftpAdapter(static::connectionProvider(), $root));
+
+        try {
+            $this->assertFalse($adapter->directoryExists(''), 'Precondition: root directory should not exist yet.');
+
+            $adapter->write('file.txt', 'contents', new Config());
+
+            $this->assertTrue($adapter->directoryExists(''));
+            $this->assertTrue($adapter->fileExists('file.txt'));
+        } finally {
+            $adapter->deleteDirectory('');
+        }
+    }
+
+    /**
+     * @test
+     */
     public function list_contents_directory_does_not_exist(): void
     {
         $contents = $this->adapter()->listContents('/does_not_exist', false);
