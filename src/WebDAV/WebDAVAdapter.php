@@ -285,7 +285,7 @@ class WebDAVAdapter implements FilesystemAdapter, PublicUrlGenerator
         array_shift($response);
 
         foreach ($response as $path => $object) {
-            $path = (string) parse_url(rawurldecode($path), PHP_URL_PATH);
+            $path = rawurldecode((string) parse_url($path, PHP_URL_PATH));
             $path = $this->prefixer->stripPrefix($path);
             $object = $this->normalizeObject($object);
 
