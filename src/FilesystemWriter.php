@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
+/**
+ * Writes, moves, copies and deletes the files and directories of a filesystem.
+ */
 interface FilesystemWriter
 {
     /**
