@@ -65,6 +65,8 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         'GrantRead',
         'GrantReadACP',
         'GrantWriteACP',
+        'IfMatch',
+        'IfNoneMatch',
         'Metadata',
         'MetadataDirective',
         'RequestPayer',
