@@ -178,4 +178,52 @@ class GoogleCloudStorageAdapterTest extends FilesystemAdapterTestCase
 
         $adapter->visibility('filename.txt');
     }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url_with_default_base(): void
+    {
+        $adapter = $this->adapter();
+
+        $url = $adapter->publicUrl('some/path.txt', new Config());
+
+        $this->assertStringStartsWith('https://storage.googleapis.com/', $url);
+        $this->assertStringContainsString('some/path.txt', $url);
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url_with_custom_base(): void
+    {
+        $adapter = new GoogleCloudStorageAdapter(
+            static::$bucket,
+            static::$adapterPrefix,
+            publicUrl: 'https://cdn.example.com',
+        );
+
+        $url = $adapter->publicUrl('some/path.txt', new Config());
+
+        $this->assertStringStartsWith('https://cdn.example.com/', $url);
+        $this->assertStringContainsString('some/path.txt', $url);
+        $this->assertStringNotContainsString(self::bucketName(), $url);
+    }
+
+    /**
+     * @test
+     */
+    public function generating_a_public_url_with_custom_base_trailing_slash(): void
+    {
+        $adapter = new GoogleCloudStorageAdapter(
+            static::$bucket,
+            static::$adapterPrefix,
+            publicUrl: 'https://cdn.example.com/',
+        );
+
+        $url = $adapter->publicUrl('some/path.txt', new Config());
+
+        $this->assertStringStartsWith('https://cdn.example.com/', $url);
+        $this->assertStringNotContainsString('//', rtrim($url, '/'));
+    }
 }
