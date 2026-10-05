@@ -41,7 +41,7 @@ jobs:
             phpunit-flags: '--no-coverage'
             upgrade-aws-sdk: 'yes'
           - php: '8.1'
-            composer-flags: '--ignore-platform-reqs'
+            composer-flags: ''
             experimental: true
             phpunit-flags: '--no-coverage'
             upgrade-aws-sdk: 'yes'
