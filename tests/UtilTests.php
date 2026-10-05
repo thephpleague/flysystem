@@ -49,7 +49,7 @@ class UtilTests extends TestCase
      */
     public function dbCorruptedPath()
     {
-        return [["some\0/path.txt"], ["s\x09i.php"]];
+        return [["some\0/path.txt"], ["s\x09i.php"], ["foo\x80\x1bbar"]];
     }
 
     public function mapProvider()
