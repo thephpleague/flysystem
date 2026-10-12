@@ -312,6 +312,30 @@ abstract class FtpAdapterTestCase extends FilesystemAdapterTestCase
 
     /**
      * @test
+     *
+     * @runInSeparateProcess
+     */
+    public function listing_a_unix_directory_entry_whose_name_ends_in_a_colon(): void
+    {
+        $response = [
+            'total 8',
+            'drwxr-xr-x   2 ftp      ftp          4096 May 19 07:32 C:',
+            '-rw-r--r--   1 ftp      ftp           409 May 19 07:32 sibling.txt',
+        ];
+        mock_function('ftp_rawlist', $response);
+
+        $this->runScenario(function () {
+            $adapter = $this->adapter();
+            $contents = iterator_to_array($adapter->listContents('/', false), false);
+
+            $this->assertCount(2, $contents);
+            $paths = array_map(fn (StorageAttributes $item) => $item->path(), $contents);
+            $this->assertSame(['C:', 'sibling.txt'], $paths);
+        });
+    }
+
+    /**
+     * @test
      */
     public function failing_to_get_the_file_size_of_a_directory(): void
     {
