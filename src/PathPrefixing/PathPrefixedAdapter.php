@@ -39,7 +39,7 @@ class PathPrefixedAdapter implements FilesystemAdapter, PublicUrlGenerator, Chec
             throw new \InvalidArgumentException('The prefix must not be empty.');
         }
 
-        $this->prefix = new PathPrefixer($prefix);
+        $this->prefix = new PathPrefixer(ltrim($prefix, '/'));
     }
 
     public function read(string $location): string
