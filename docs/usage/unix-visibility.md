@@ -38,7 +38,8 @@ $visibilityConverter = PortableVisibilityConverter::fromArray([
 ## Visibility Disclaimer
 
 Flysystem's visibility conversion is based on [POSIX file permissions](https://en.wikipedia.org/wiki/File_system_permissions).
-It uses hard comparison (`===`) to determine if a file is public or private and falls back when there is no match. This
-default means we cannot say a file is private. Checking the visibility of a file should NOT be used as an indication the
-file is fully public or fully private. It should also not be used to signal intent of wether or not the file is allowed
-to be accessed.
+Permissions that exactly match the configured public or private permissions map to that visibility. Other permissions
+are considered public when they include any of the bits the public permission has and the private permission lacks (for
+the defaults: group or other read access), and private otherwise. Checking the visibility of a file should NOT be used
+as an indication the file is fully public or fully private. It should also not be used to signal intent of wether or
+not the file is allowed to be accessed.
