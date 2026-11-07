@@ -45,7 +45,7 @@ class S3ClientStub implements S3ClientInterface
 
     public function __construct(S3ClientInterface $client)
     {
-        return $this->actualClient = $client;
+        $this->actualClient = $client;
     }
 
     public function throwDuringUpload(Throwable $throwable): void
