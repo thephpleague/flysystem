@@ -305,12 +305,15 @@ class GoogleCloudStorageAdapter implements FilesystemAdapter, PublicUrlGenerator
         return new FileAttributes($path, $fileSize, null, $lastModified, $mimeType, $info);
     }
 
-    public function listContents(string $path, bool $deep): iterable
+    public function listContents(string $path, bool $deep, array $options = []): iterable
     {
-        $prefixedPath = $this->prefixer->prefixPath($path);
-        $prefixes = $options = [];
+        $asPrefix = $options['listContentsAsPrefix'] ?? false;
 
-        if ($prefixedPath !== '') {
+        $prefixedPath = $this->prefixer->prefixPath($path);
+
+        if ($asPrefix) {
+            $options = ['prefix' => $prefixedPath];
+        } elseif ($prefixedPath !== '') {
             $options = ['prefix' => sprintf('%s/', rtrim($prefixedPath, '/'))];
         }
 
