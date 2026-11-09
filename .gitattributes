@@ -26,6 +26,7 @@
 /src/InMemory export-ignore
 /src/PhpseclibV2 export-ignore
 /src/PhpseclibV3 export-ignore
+/src/PhpseclibV4 export-ignore
 /src/AdapterTestUtilities export-ignore
 /src/AzureBlobStorage export-ignore
 /src/ZipArchive export-ignore

@@ -16,6 +16,11 @@
             "target": "git@github.com:thephpleague/flysystem-sftp-v3.git"
         },
         {
+            "name": "sftp-v4",
+            "directory": "src/PhpseclibV4",
+            "target": "git@github.com:thephpleague/flysystem-sftp-v4.git"
+        },
+        {
             "name": "memory",
             "directory": "src/InMemory",
             "target": "git@github.com:thephpleague/flysystem-memory.git"
