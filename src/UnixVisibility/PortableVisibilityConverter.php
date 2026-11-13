@@ -44,7 +44,7 @@ class PortableVisibilityConverter implements VisibilityConverter
             return Visibility::PRIVATE;
         }
 
-        return Visibility::PUBLIC; // default
+        return $this->inverseByPublicBits($visibility, $this->filePublic, $this->filePrivate);
     }
 
     public function inverseForDirectory(int $visibility): string
@@ -55,7 +55,18 @@ class PortableVisibilityConverter implements VisibilityConverter
             return Visibility::PRIVATE;
         }
 
-        return Visibility::PUBLIC; // default
+        return $this->inverseByPublicBits($visibility, $this->directoryPublic, $this->directoryPrivate);
+    }
+
+    private function inverseByPublicBits(int $visibility, int $public, int $private): string
+    {
+        $publicOnlyBits = $public & ~$private;
+
+        if ($publicOnlyBits === 0) {
+            return Visibility::PUBLIC; // default
+        }
+
+        return ($visibility & $publicOnlyBits) !== 0 ? Visibility::PUBLIC : Visibility::PRIVATE;
     }
 
     public function defaultForDirectories(): int
