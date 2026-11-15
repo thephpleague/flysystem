@@ -309,6 +309,19 @@ class MountManagerTest extends TestCase
     /**
      * @test
      */
+    public function checking_if_directories_are_empty(): void
+    {
+        $this->secondFilesystem->createDirectory('empty');
+        $this->secondFilesystem->write('nested/location.txt', 'contents');
+
+        $this->assertTrue($this->mountManager->directoryIsEmpty('second://empty'));
+        $this->assertFalse($this->mountManager->directoryIsEmpty('second://nested'));
+        $this->assertTrue($this->mountManager->directoryIsEmpty('second://not-existing'));
+    }
+
+    /**
+     * @test
+     */
     public function checking_existence_for_an_existing_file_using_has(): void
     {
         $this->secondFilesystem->write('location.txt', 'contents');

@@ -43,6 +43,15 @@ class Filesystem implements FilesystemOperator
         return $this->adapter->directoryExists($this->pathNormalizer->normalizePath($location));
     }
 
+    public function directoryIsEmpty(string $location): bool
+    {
+        foreach ($this->listContents($location) as $item) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function has(string $location): bool
     {
         $path = $this->pathNormalizer->normalizePath($location);
