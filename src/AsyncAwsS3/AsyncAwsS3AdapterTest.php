@@ -265,6 +265,51 @@ class AsyncAwsS3AdapterTest extends FilesystemAdapterTestCase
     /**
      * @test
      */
+    public function file_size_falls_back_to_listing_when_head_object_has_no_content_length(): void
+    {
+        $s3Client = $this->getMockBuilder(S3Client::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['headObject', 'listObjectsV2'])
+            ->getMock();
+        $s3Client->method('headObject')
+            ->willReturn(ResultMockFactory::create(HeadObjectOutput::class, ['ContentType' => 'text/plain']));
+        $s3Client->expects(self::once())
+            ->method('listObjectsV2')
+            ->with(['Bucket' => 'my-bucket', 'Prefix' => 'prefix/empty.txt', 'MaxKeys' => 1])
+            ->willReturn(ResultMockFactory::create(ListObjectsV2Output::class, [
+                'Contents' => [new AwsObject(['Key' => 'prefix/empty.txt', 'Size' => 0])],
+            ]));
+
+        $attributes = (new AsyncAwsS3Adapter($s3Client, 'my-bucket', 'prefix'))->fileSize('empty.txt');
+
+        $this->assertSame(0, $attributes->fileSize());
+        $this->assertSame('text/plain', $attributes->mimeType());
+    }
+
+    /**
+     * @test
+     */
+    public function file_size_fails_when_listing_does_not_contain_the_object(): void
+    {
+        $s3Client = $this->getMockBuilder(S3Client::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['headObject', 'listObjectsV2'])
+            ->getMock();
+        $s3Client->method('headObject')
+            ->willReturn(ResultMockFactory::create(HeadObjectOutput::class, []));
+        $s3Client->method('listObjectsV2')
+            ->willReturn(ResultMockFactory::create(ListObjectsV2Output::class, [
+                'Contents' => [new AwsObject(['Key' => 'empty.txt.bak', 'Size' => 10])],
+            ]));
+
+        $this->expectExceptionObject(UnableToRetrieveMetadata::fileSize('empty.txt'));
+
+        (new AsyncAwsS3Adapter($s3Client, 'my-bucket'))->fileSize('empty.txt');
+    }
+
+    /**
+     * @test
+     */
     public function fetching_unknown_mime_type_of_a_file(): void
     {
         $this->adapter();

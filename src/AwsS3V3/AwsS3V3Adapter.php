@@ -366,10 +366,38 @@ class AwsS3V3Adapter implements FilesystemAdapter, PublicUrlGenerator, ChecksumP
         $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
 
         if ($attributes->fileSize() === null) {
+            // Some proxies in front of S3-compatible storage drop Content-Length from HEAD responses for empty objects.
+            $attributes = new FileAttributes(
+                $path,
+                $this->fetchFileSizeFromListing($path),
+                $attributes->visibility(),
+                $attributes->lastModified(),
+                $attributes->mimeType(),
+                $attributes->extraMetadata()
+            );
+        }
+
+        if ($attributes->fileSize() === null) {
             throw UnableToRetrieveMetadata::fileSize($path);
         }
 
         return $attributes;
+    }
+
+    private function fetchFileSizeFromListing(string $path): ?int
+    {
+        $key = $this->prefixer->prefixPath($path);
+        $options = ['Bucket' => $this->bucket, 'Prefix' => $key, 'MaxKeys' => 1];
+
+        try {
+            $result = $this->client->execute($this->client->getCommand('ListObjectsV2', $options));
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::fileSize($path, $exception->getMessage(), $exception);
+        }
+
+        $object = $result->get('Contents')[0] ?? null;
+
+        return $object !== null && $object['Key'] === $key ? (int) $object['Size'] : null;
     }
 
     public function listContents(string $path, bool $deep): iterable
