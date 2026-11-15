@@ -277,10 +277,39 @@ class AsyncAwsS3Adapter implements FilesystemAdapter, PublicUrlGenerator, Checks
         $attributes = $this->fetchFileMetadata($path, FileAttributes::ATTRIBUTE_FILE_SIZE);
 
         if (null === $attributes->fileSize()) {
+            // Some proxies in front of S3-compatible storage drop Content-Length from HEAD responses for empty objects.
+            $attributes = new FileAttributes(
+                $path,
+                $this->fetchFileSizeFromListing($path),
+                $attributes->visibility(),
+                $attributes->lastModified(),
+                $attributes->mimeType(),
+                $attributes->extraMetadata()
+            );
+        }
+
+        if (null === $attributes->fileSize()) {
             throw UnableToRetrieveMetadata::fileSize($path);
         }
 
         return $attributes;
+    }
+
+    private function fetchFileSizeFromListing(string $path): ?int
+    {
+        $key = $this->prefixer->prefixPath($path);
+
+        try {
+            $result = $this->client->listObjectsV2(['Bucket' => $this->bucket, 'Prefix' => $key, 'MaxKeys' => 1]);
+
+            foreach ($result->getContents(true) as $object) {
+                return $object->getKey() === $key ? $object->getSize() : null;
+            }
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::fileSize($path, $exception->getMessage(), $exception);
+        }
+
+        return null;
     }
 
     public function directoryExists(string $path): bool
