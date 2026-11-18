@@ -37,7 +37,7 @@ class SftpAdapter implements FilesystemAdapter
 
     public function __construct(
         private ConnectionProvider $connectionProvider,
-        string $root,
+        private string $root,
         ?VisibilityConverter $visibilityConverter = null,
         ?MimeTypeDetector $mimeTypeDetector = null,
         private bool $detectMimeTypeUsingPath = false,
@@ -101,12 +101,17 @@ class SftpAdapter implements FilesystemAdapter
     {
         $parentDirectory = dirname($path);
 
+        /** @var string $visibility */
+        $visibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY);
+
         if ($parentDirectory === '' || $parentDirectory === '.') {
+            if ($this->root !== '') {
+                $this->makeDirectory('', $visibility);
+            }
+
             return;
         }
 
-        /** @var string $visibility */
-        $visibility = $config->get(Config::OPTION_DIRECTORY_VISIBILITY);
         $this->makeDirectory($parentDirectory, $visibility);
     }
 
