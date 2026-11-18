@@ -1,0 +1,30 @@
+---
+name: Close sub-split PRs
+
+on:
+  push:
+    branches:
+      - 2.x
+      - 3.x
+  pull_request:
+    branches:
+      - 2.x
+      - 3.x
+  schedule:
+    - cron: '30 7 * * *'
+
+jobs:
+  close_subsplit_prs:
+    runs-on: ubuntu-latest
+    name: Close sub-split PRs
+    steps:
+      - uses: frankdejonge/action-close-subsplit-pr@0.1.0
+        with:
+          close_pr: 'yes'
+          target_branch_match: '^(?!master).+$'
+          message: |
+            Hi :wave:,
+            
+            Thank you for contributing to Flysystem. Unfortunately, you've sent a PR to a read-only sub-split repository. 
+
+            All pull requests should be directed towards: https://github.com/thephpleague/flysystem
