@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-class DirectoryAttributes implements StorageAttributes
+class DirectoryAttributes implements StorageAttributes, \Stringable
 {
     use ProxyArrayAccessToProperties;
     private string $type = StorageAttributes::TYPE_DIRECTORY;
@@ -83,5 +83,10 @@ class DirectoryAttributes implements StorageAttributes
             StorageAttributes::ATTRIBUTE_LAST_MODIFIED => $this->lastModified,
             StorageAttributes::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
         ];
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%s(%s)', $this->type, $this->path);
     }
 }
