@@ -380,7 +380,7 @@ class FtpAdapter implements FilesystemAdapter
                 continue;
             }
 
-            if (preg_match('#^.*:$#', $item)) {
+            if (preg_match('#^\S+:$#', $item)) {
                 $base = preg_replace('~^\./*|:$~', '', $item);
                 continue;
             }
