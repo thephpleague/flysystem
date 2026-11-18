@@ -91,6 +91,18 @@ class MountManager implements FilesystemOperator
         }
     }
 
+    public function directoryIsEmpty(string $location): bool
+    {
+        /** @var FilesystemOperator $filesystem */
+        [$filesystem, $path] = $this->determineFilesystemAndPath($location);
+
+        foreach ($filesystem->listContents($path) as $item) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function read(string $location): string
     {
         /** @var FilesystemOperator $filesystem */

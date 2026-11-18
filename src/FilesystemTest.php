@@ -146,6 +146,21 @@ class FilesystemTest extends TestCase
     /**
      * @test
      */
+    public function checking_if_directories_are_empty(): void
+    {
+        $this->filesystem->createDirectory('empty-directory');
+        $this->filesystem->write('filled-directory/file.txt', 'contents');
+        $this->filesystem->createDirectory('directory-with-subdirectory/nested');
+
+        $this->assertTrue($this->filesystem->directoryIsEmpty('empty-directory'));
+        $this->assertFalse($this->filesystem->directoryIsEmpty('filled-directory'));
+        $this->assertFalse($this->filesystem->directoryIsEmpty('directory-with-subdirectory'));
+        $this->assertTrue($this->filesystem->directoryIsEmpty('not-existing-directory'));
+    }
+
+    /**
+     * @test
+     */
     public function deleting_a_file(): void
     {
         $this->filesystem->write('path.txt', 'content');
