@@ -5,12 +5,15 @@ namespace League\Flysystem\PathPrefixing;
 use League\Flysystem\ChecksumProvider;
 use League\Flysystem\Config;
 use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
+use League\Flysystem\StorageAttributes;
 use League\Flysystem\UnableToGeneratePublicUrl;
 use League\Flysystem\UrlGeneration\PublicUrlGenerator;
 use League\Flysystem\Visibility;
 use PHPUnit\Framework\TestCase;
 
+use function array_map;
 use function iterator_to_array;
+use function sort;
 
 class PathPrefixedAdapterTest extends TestCase
 {
@@ -137,5 +140,32 @@ class PathPrefixedAdapterTest extends TestCase
         $this->expectException(UnableToGeneratePublicUrl::class);
 
         $prefixedAdapter->publicUrl('/path.txt', new Config());
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider prefixes
+     */
+    public function listing_contents_strips_the_prefix_from_paths(string $prefix): void
+    {
+        $prefixedAdapter = new PathPrefixedAdapter(new InMemoryFilesystemAdapter(), $prefix);
+        $prefixedAdapter->write('dir/file.txt', 'contents', new Config());
+        $prefixedAdapter->write('file.txt', 'contents', new Config());
+
+        $paths = array_map(
+            fn (StorageAttributes $attributes) => $attributes->path(),
+            iterator_to_array($prefixedAdapter->listContents('', true), false),
+        );
+        sort($paths);
+
+        self::assertSame(['dir', 'dir/file.txt', 'file.txt'], $paths);
+    }
+
+    public static function prefixes(): iterable
+    {
+        yield 'prefix' => ['prefix'];
+        yield 'prefix with a leading slash' => ['/prefix'];
+        yield 'nested prefix with leading and trailing slashes' => ['/nested/prefix/'];
     }
 }
