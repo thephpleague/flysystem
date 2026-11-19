@@ -611,12 +611,14 @@ class FtpAdapter implements FilesystemAdapter
         $dirPath = '';
         $parts = explode('/', trim($dirname, '/'));
         $mode = $visibility ? $this->visibilityConverter->forDirectory($visibility) : false;
+        $original_directory = @ftp_pwd($connection);
 
         foreach ($parts as $part) {
             $dirPath .= '/' . $part;
             $location = $this->prefixer()->prefixPath($dirPath);
 
             if (@ftp_chdir($connection, $location)) {
+                @ftp_chdir($connection, $original_directory);
                 continue;
             }
 
