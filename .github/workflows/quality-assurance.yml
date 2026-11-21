@@ -76,7 +76,4 @@ jobs:
       - run: COMPOSER_OPTS='${{ matrix.composer-flags }}' vendor/bin/phpunit ${{ matrix.phpunit-flags }}
       - run: vendor/bin/phpstan analyse
         if: ${{ matrix.phpstan }}
-      - run: vendor/bin/php-cs-fixer fix --diff --dry-run
-        continue-on-error: true
-        if: ${{ matrix.php == '8.0' }}
 

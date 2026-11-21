@@ -10,7 +10,7 @@
         }
     },
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.0",
         "ext-ftp": "*",
         "league/flysystem": "^3.0.0",
         "league/mime-type-detection": "^1.0.0"
