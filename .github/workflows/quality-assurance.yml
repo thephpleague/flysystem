@@ -42,6 +42,14 @@ jobs:
         experimental: [false]
         phpstan: [true]
         phpunit-flags: [ '--coverage-text' ]
+        include:
+          # Only one phpseclib major can be installed at a time. The runs above resolve
+          # phpseclib 4 (src/PhpseclibV4), this one keeps src/PhpseclibV3 covered.
+          - php: '8.2'
+            composer-flags: '--with phpseclib/phpseclib:^3.0.36'
+            experimental: false
+            phpstan: true
+            phpunit-flags: '--coverage-text'
 #        include:
 #          - php: '8.2'
 #            experimental: false

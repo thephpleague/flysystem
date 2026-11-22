@@ -1,12 +1,12 @@
 <?php
 
-use League\Flysystem\PhpseclibV2\SftpConnectionProvider as V2Provider;
 use League\Flysystem\PhpseclibV3\SftpConnectionProvider as V3Provider;
-use phpseclib3\Net\SFTP;
+use League\Flysystem\PhpseclibV4\SftpConnectionProvider as V4Provider;
+use phpseclib4\Net\SFTP;
 
 include __DIR__ . '/../vendor/autoload.php';
 
-$providerName = class_exists(SFTP::class) ? V3Provider::class : V2Provider::class;
+$providerName = class_exists(SFTP::class) ? V4Provider::class : V3Provider::class;
 $connectionProvider = $providerName::fromArray(
     [
         'host' => 'localhost',

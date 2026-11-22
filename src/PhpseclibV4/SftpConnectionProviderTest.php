@@ -32,7 +32,7 @@ class SftpConnectionProviderTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         if ( ! class_exists(SFTP::class)) {
-            self::markTestIncomplete("No phpseclib v4 installed");
+            self::markTestSkipped("No phpseclib v4 installed");
         }
     }
 

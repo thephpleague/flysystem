@@ -26,7 +26,7 @@ class SftpAdapterTest extends FilesystemAdapterTestCase
     public static function setUpBeforeClass(): void
     {
         if ( ! class_exists(SFTP::class)) {
-            self::markTestIncomplete("No phpseclib v3 installed");
+            self::markTestSkipped("No phpseclib v3 installed");
         }
     }
 

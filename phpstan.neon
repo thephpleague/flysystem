@@ -17,6 +17,7 @@ parameters:
         - src/InMemory
         - src/PhpseclibV2
         - src/PhpseclibV3
+        - src/PhpseclibV4
     ignoreErrors:
         - '#invalid typehint type FTP\\Connection#'
         - '#FTP\\Connection not found#'
