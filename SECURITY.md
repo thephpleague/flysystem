@@ -40,7 +40,7 @@ Flysystem ships an attacker should not be able to escape out of the configured r
 
 Root paths are configured at the adapter level. Any path inside the root path can resolve relative paths. Breaking out
 of a sub-directory is NOT considered a vulnerability. If you wish to prevent path traversal attacks, configure the
-appropriate root path or disable relative path traveral.
+appropriate root path or disable relative path traversal.
 
 When relative path traversal is disabled, any relative path traversal IS be considered a vulnerability.
 
