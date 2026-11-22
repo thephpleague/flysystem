@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace League\Flysystem\PhpseclibV4;
 
 use League\Flysystem\FilesystemException;
-use phpseclib4\Crypt\Common\AsymmetricKey;
+use phpseclib4\Crypt\Common\PrivateKey;
 use phpseclib4\Crypt\PublicKeyLoader;
 use phpseclib4\Exception\NoKeyLoadedException;
 use phpseclib4\Net\SFTP;
@@ -121,7 +121,7 @@ class SftpConnectionProvider implements ConnectionProvider
 
         $publicKey = $connection->getServerPublicHostKey();
 
-        if ($publicKey === false) {
+        if ($publicKey === null) {
             throw UnableToEstablishAuthenticityOfHost::becauseTheAuthenticityCantBeEstablished($this->host);
         }
 
@@ -188,7 +188,7 @@ class SftpConnectionProvider implements ConnectionProvider
     private function authenticateWithUsernameAndPassword(SFTP $connection): void
     {
         if ( ! $connection->login($this->username, $this->password)) {
-            throw UnableToAuthenticate::withPassword($connection->getLastError());
+            throw UnableToAuthenticate::withPassword();
         }
     }
 
@@ -223,10 +223,10 @@ class SftpConnectionProvider implements ConnectionProvider
             return;
         }
 
-        throw UnableToAuthenticate::withPrivateKey($connection->getLastError());
+        throw UnableToAuthenticate::withPrivateKey();
     }
 
-    private function loadPrivateKey(): AsymmetricKey
+    private function loadPrivateKey(): PrivateKey
     {
         if (("---" !== substr($this->privateKey, 0, 3) || "PuTTY" !== substr($this->privateKey, 0, 5)) && is_file($this->privateKey)) {
             $this->privateKey = file_get_contents($this->privateKey);
@@ -234,10 +234,10 @@ class SftpConnectionProvider implements ConnectionProvider
 
         try {
             if ($this->passphrase !== null) {
-                return PublicKeyLoader::load($this->privateKey, $this->passphrase);
+                return PublicKeyLoader::loadPrivateKey($this->privateKey, $this->passphrase);
             }
 
-            return PublicKeyLoader::load($this->privateKey);
+            return PublicKeyLoader::loadPrivateKey($this->privateKey);
         } catch (NoKeyLoadedException $exception) {
             throw new UnableToLoadPrivateKey(null, $exception);
         }
@@ -248,7 +248,7 @@ class SftpConnectionProvider implements ConnectionProvider
         $agent = new Agent();
 
         if ( ! $connection->login($this->username, $agent)) {
-            throw UnableToAuthenticate::withSshAgent($connection->getLastError());
+            throw UnableToAuthenticate::withSshAgent();
         }
     }
 }

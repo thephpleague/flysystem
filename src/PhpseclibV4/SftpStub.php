@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace League\Flysystem\PhpseclibV4;
 
+use Closure;
+use phpseclib4\Exception\FileSystemException;
 use phpseclib4\Net\SFTP;
+use phpseclib4\Net\SFTP\StatusCode;
 
 /**
  * @internal This is only used for testing purposes.
@@ -22,14 +25,7 @@ class SftpStub extends SFTP
         $this->tripWires[$key] = true;
     }
 
-    /**
-     * @param int    $mode
-     * @param string $filename
-     * @param bool   $recursive
-     *
-     * @return bool|mixed
-     */
-    public function chmod($mode, $filename, $recursive = false)
+    public function chmod(string $filename, int $mode, bool $recursive = false): void
     {
         $key = $this->formatTripKey('chmod', $filename);
         $shouldTrip = $this->tripWires[$key] ?? false;
@@ -37,10 +33,10 @@ class SftpStub extends SFTP
         if ($shouldTrip) {
             unset($this->tripWires[$key]);
 
-            return false;
+            throw new FileSystemException('Error from server (SSH_FX_FAILURE)', StatusCode::FAILURE);
         }
 
-        return parent::chmod($mode, $filename, $recursive);
+        parent::chmod($filename, $mode, $recursive);
     }
 
     public function failOnPut(string $filename): void
@@ -50,31 +46,24 @@ class SftpStub extends SFTP
     }
 
     /**
-     * @param string          $remote_file
      * @param resource|string $data
-     * @param int             $mode
-     * @param int             $start
-     * @param int             $local_start
-     * @param null            $progressCallback
-     *
-     * @return bool
      */
     public function put(
-        $remote_file,
-        $data,
-        $mode = self::SOURCE_STRING,
-        $start = -1,
-        $local_start = -1,
-        $progressCallback = null
-    ) {
+        string $remote_file,
+        mixed $data,
+        int $mode = self::SOURCE_STRING,
+        int $start = -1,
+        int $local_start = -1,
+        ?Closure $progressCallback = null
+    ): void {
         $key = $this->formatTripKey('put', $remote_file);
         $shouldTrip = $this->tripWires[$key] ?? false;
 
         if ($shouldTrip) {
-            return false;
+            throw new FileSystemException('Error from server (SSH_FX_FAILURE)', StatusCode::FAILURE);
         }
 
-        return parent::put($remote_file, $data, $mode, $start, $local_start, $progressCallback);
+        parent::put($remote_file, $data, $mode, $start, $local_start, $progressCallback);
     }
 
     /**

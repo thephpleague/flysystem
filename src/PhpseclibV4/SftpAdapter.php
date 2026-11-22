@@ -24,7 +24,9 @@ use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
 use League\Flysystem\UnixVisibility\VisibilityConverter;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use League\MimeTypeDetection\MimeTypeDetector;
+use phpseclib4\Exception\FileSystemException as SftpFileSystemException;
 use phpseclib4\Net\SFTP;
+use phpseclib4\Net\SFTP\FileType;
 use Throwable;
 
 use function rtrim;
@@ -88,8 +90,10 @@ class SftpAdapter implements FilesystemAdapter
         $connection = $this->connectionProvider->provideConnection();
         $location = $this->prefixer->prefixPath($path);
 
-        if ( ! $connection->put($location, $contents, SFTP::SOURCE_STRING)) {
-            throw UnableToWriteFile::atLocation($path, 'not able to write the file');
+        try {
+            $connection->put($location, $contents, SFTP::SOURCE_STRING);
+        } catch (Throwable $exception) {
+            throw UnableToWriteFile::atLocation($path, 'not able to write the file', $exception);
         }
 
         if ($visibility = $config->get(Config::OPTION_VISIBILITY)) {
@@ -123,8 +127,12 @@ class SftpAdapter implements FilesystemAdapter
             $visibility
         ) : $this->visibilityConverter->defaultForDirectories();
 
-        if ( ! $connection->mkdir($location, $mode, true) && ! $connection->is_dir($location)) {
-            throw UnableToCreateDirectory::atLocation($directory);
+        try {
+            $connection->mkdir($location, $mode, true);
+        } catch (Throwable $exception) {
+            if ( ! $connection->is_dir($location)) {
+                throw UnableToCreateDirectory::atLocation($directory, $exception->getMessage(), $exception);
+            }
         }
     }
 
@@ -154,13 +162,12 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $contents = $connection->get($location);
 
-        if ( ! is_string($contents)) {
-            throw UnableToReadFile::fromLocation($path);
+        try {
+            return $connection->get($location);
+        } catch (Throwable $exception) {
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
-
-        return $contents;
     }
 
     public function readStream(string $path)
@@ -170,9 +177,11 @@ class SftpAdapter implements FilesystemAdapter
         /** @var resource $readStream */
         $readStream = fopen('php://temp', 'w+');
 
-        if ( ! $connection->get($location, $readStream)) {
+        try {
+            $connection->get($location, $readStream);
+        } catch (Throwable $exception) {
             fclose($readStream);
-            throw UnableToReadFile::fromLocation($path);
+            throw UnableToReadFile::fromLocation($path, $exception->getMessage(), $exception);
         }
 
         rewind($readStream);
@@ -192,7 +201,13 @@ class SftpAdapter implements FilesystemAdapter
         $location = rtrim($this->prefixer->prefixPath($path), '/') . '/';
         $connection = $this->connectionProvider->provideConnection();
         $connection->delete($location);
-        $connection->rmdir($location);
+
+        try {
+            $connection->rmdir($location);
+        } catch (SftpFileSystemException) {
+            // The recursive delete() above already removes the directory itself, so rmdir()
+            // usually fails here. phpseclib 3 returned false in that case, which was ignored too.
+        }
     }
 
     public function createDirectory(string $path, Config $config): void
@@ -206,8 +221,10 @@ class SftpAdapter implements FilesystemAdapter
         $connection = $this->connectionProvider->provideConnection();
         $mode = $this->visibilityConverter->forFile($visibility);
 
-        if ( ! $connection->chmod($mode, $location, false)) {
-            throw UnableToSetVisibility::atLocation($path);
+        try {
+            $connection->chmod($location, $mode, false);
+        } catch (Throwable $exception) {
+            throw UnableToSetVisibility::atLocation($path, $exception->getMessage(), $exception);
         }
     }
 
@@ -215,10 +232,11 @@ class SftpAdapter implements FilesystemAdapter
     {
         $location = $this->prefixer->prefixPath($path);
         $connection = $this->connectionProvider->provideConnection();
-        $stat = $connection->stat($location);
 
-        if ( ! is_array($stat)) {
-            throw UnableToRetrieveMetadata::create($path, $type);
+        try {
+            $stat = $connection->stat($location);
+        } catch (Throwable $exception) {
+            throw UnableToRetrieveMetadata::create($path, $type, $exception->getMessage(), $exception);
         }
 
         $attributes = $this->convertListingToAttributes($path, $stat);
@@ -266,9 +284,10 @@ class SftpAdapter implements FilesystemAdapter
     {
         $connection = $this->connectionProvider->provideConnection();
         $location = $this->prefixer->prefixPath(rtrim($path, '/')) . '/';
-        $listing = $connection->rawlist($location, false);
 
-        if (false === $listing) {
+        try {
+            $listing = $connection->rawlist($location, false);
+        } catch (SftpFileSystemException) {
             return;
         }
 
@@ -296,7 +315,7 @@ class SftpAdapter implements FilesystemAdapter
         $permissions = $attributes['mode'] & 0777;
         $lastModified = $attributes['mtime'] ?? null;
 
-        if (($attributes['type'] ?? null) === NET_SFTP_TYPE_DIRECTORY) {
+        if (($attributes['type'] ?? null) === FileType::DIRECTORY) {
             return new DirectoryAttributes(
                 ltrim($path, '/'),
                 $this->visibilityConverter->inverseForDirectory($permissions),
@@ -328,19 +347,23 @@ class SftpAdapter implements FilesystemAdapter
             return;
         }
 
-        if ($connection->rename($sourceLocation, $destinationLocation)) {
-            return;
-        }
+        try {
+            $connection->rename($sourceLocation, $destinationLocation);
 
-        // Overwrite existing file / dir
-        if ($connection->is_file($destinationLocation)) {
-            $this->delete($destination);
-            if ($connection->rename($sourceLocation, $destinationLocation)) {
-                return;
+            return;
+        } catch (Throwable $exception) {
+            // Overwrite existing file / dir
+            if ( ! $connection->is_file($destinationLocation)) {
+                throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
             }
         }
 
-        throw UnableToMoveFile::fromLocationTo($source, $destination);
+        try {
+            $this->delete($destination);
+            $connection->rename($sourceLocation, $destinationLocation);
+        } catch (Throwable $exception) {
+            throw UnableToMoveFile::fromLocationTo($source, $destination, $exception);
+        }
     }
 
     public function copy(string $source, string $destination, Config $config): void
