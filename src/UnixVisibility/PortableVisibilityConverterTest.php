@@ -78,6 +78,54 @@ class PortableVisibilityConverterTest extends TestCase
     /**
      * @test
      */
+    public function inversing_non_exact_permissions_for_a_file(): void
+    {
+        $interpreter = new PortableVisibilityConverter();
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForFile(0400));
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForFile(0700));
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForFile(0000));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0640));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0664));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0755));
+    }
+
+    /**
+     * @test
+     */
+    public function inversing_non_exact_permissions_for_a_directory(): void
+    {
+        $interpreter = new PortableVisibilityConverter();
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForDirectory(0500));
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForDirectory(0000));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0750));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0775));
+    }
+
+    /**
+     * @test
+     */
+    public function inversing_non_exact_permissions_with_custom_permissions(): void
+    {
+        $interpreter = new PortableVisibilityConverter(0640, 0600, 0750, 0700);
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForFile(0604));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0660));
+        $this->assertEquals(Visibility::PRIVATE, $interpreter->inverseForDirectory(0705));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0770));
+    }
+
+    /**
+     * @test
+     */
+    public function inversing_defaults_to_public_when_public_and_private_permissions_are_equal(): void
+    {
+        $interpreter = new PortableVisibilityConverter(0644, 0644, 0755, 0755);
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForFile(0600));
+        $this->assertEquals(Visibility::PUBLIC, $interpreter->inverseForDirectory(0700));
+    }
+
+    /**
+     * @test
+     */
     public function determining_default_for_directories(): void
     {
         $interpreter = new PortableVisibilityConverter();
