@@ -10,7 +10,8 @@ use IteratorAggregate;
 use Traversable;
 
 /**
- * @template T
+ * @template-covariant T of StorageAttributes
+ * @implements IteratorAggregate<T>
  */
 class DirectoryListing implements IteratorAggregate
 {
@@ -40,7 +41,7 @@ class DirectoryListing implements IteratorAggregate
     }
 
     /**
-     * @template R
+     * @template R of StorageAttributes
      *
      * @param callable(T): R $mapper
      *
