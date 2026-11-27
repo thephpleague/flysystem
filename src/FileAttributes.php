@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace League\Flysystem;
 
-class FileAttributes implements StorageAttributes
+class FileAttributes implements StorageAttributes, \Stringable
 {
     use ProxyArrayAccessToProperties;
     private string $type = StorageAttributes::TYPE_FILE;
@@ -96,5 +96,10 @@ class FileAttributes implements StorageAttributes
             StorageAttributes::ATTRIBUTE_MIME_TYPE => $this->mimeType,
             StorageAttributes::ATTRIBUTE_EXTRA_METADATA => $this->extraMetadata,
         ];
+    }
+
+    public function __toString(): string
+    {
+        return sprintf('%s(%s)', $this->type, $this->path);
     }
 }
