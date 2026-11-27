@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace League\Flysystem\AwsS3V3;
 
+use Aws\CommandInterface;
+use Aws\MockHandler;
 use Aws\Result;
 use Aws\S3\S3Client;
 use Aws\S3\S3ClientInterface;
@@ -233,6 +235,55 @@ class AwsS3V3AdapterTest extends FilesystemAdapterTestCase
         } catch (UnableToReadFile $exception) {
             $this->assertNotSame('', $exception->reason());
         }
+    }
+
+    /**
+     * @test
+     */
+    public function file_size_falls_back_to_listing_when_head_object_has_no_content_length(): void
+    {
+        $handler = new MockHandler([
+            new Result(['ContentType' => 'text/plain']),
+            function (CommandInterface $command) {
+                $this->assertSame('ListObjectsV2', $command->getName());
+                $this->assertSame('prefix/empty.txt', $command['Prefix']);
+                $this->assertSame(1, $command['MaxKeys']);
+
+                return new Result(['Contents' => [['Key' => 'prefix/empty.txt', 'Size' => 0]]]);
+            },
+        ]);
+
+        $attributes = $this->mockedAdapter($handler, 'prefix')->fileSize('empty.txt');
+
+        $this->assertSame(0, $attributes->fileSize());
+        $this->assertSame('text/plain', $attributes->mimeType());
+    }
+
+    /**
+     * @test
+     */
+    public function file_size_fails_when_listing_does_not_contain_the_object(): void
+    {
+        $handler = new MockHandler([
+            new Result([]),
+            new Result(['Contents' => [['Key' => 'empty.txt.bak', 'Size' => 10]]]),
+        ]);
+
+        $this->expectExceptionObject(UnableToRetrieveMetadata::fileSize('empty.txt'));
+
+        $this->mockedAdapter($handler)->fileSize('empty.txt');
+    }
+
+    private function mockedAdapter(MockHandler $handler, string $prefix = ''): AwsS3V3Adapter
+    {
+        $client = new S3Client([
+            'version' => 'latest',
+            'region' => 'eu-central-1',
+            'credentials' => ['key' => 'key', 'secret' => 'secret'],
+            'handler' => $handler,
+        ]);
+
+        return new AwsS3V3Adapter($client, 'my-bucket', $prefix);
     }
 
     /**
